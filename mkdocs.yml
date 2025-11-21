@@ -40,6 +40,7 @@ nav:
     - linux/modern-tools.md
     - linux/debugging.md
     - linux/filesystem-hierarchy.md
+    - linux/bash-wizardry.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
@@ -47,6 +48,8 @@ nav:
     - network/fundamentals.md
   - DevOps:
     - devops/docker-advanced.md
+    - devops/kubernetes-cka.md
+    - devops/git-sysops.md
   - Security:
     - security/certificates.md
     - security/exegol.md
