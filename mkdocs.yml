@@ -44,6 +44,8 @@ nav:
     - windows/index.md
   - Network:
     - network/fundamentals.md
+  - DevOps:
+    - devops/docker-advanced.md
   - Security:
     - security/certificates.md
   - Concepts:
