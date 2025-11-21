@@ -39,12 +39,11 @@ nav:
     - linux/productivity.md
     - linux/modern-tools.md
     - linux/debugging.md
-    - linux/filesystem-hierarchy.md
     - linux/bash-wizardry.md
     - linux/hardware.md
-    - linux/system-basics.md
-    - linux/boot-and-services.md
-    - linux/filesystem-and-storage.md
+    - Système & Boot:
+      - linux/boot-and-services.md
+      - linux/filesystem-and-storage.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
