@@ -48,6 +48,7 @@ nav:
       - linux/users-and-permissions.md
       - linux/package-management.md
       - linux/archives-compression.md
+      - linux/backup-transfer.md
     - Réseau & Sécurité:
       - linux/network-management.md
       - linux/ssh-hardening.md
