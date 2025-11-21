@@ -40,8 +40,6 @@ nav:
     - linux/modern-tools.md
     - linux/debugging.md
     - linux/bash-wizardry.md
-    - linux/text-processing.md
-    - linux/scripting-standards.md
     - linux/hardware.md
     - Système & Boot:
       - linux/boot-and-services.md
@@ -49,11 +47,14 @@ nav:
     - Administration Système:
       - linux/users-and-permissions.md
       - linux/package-management.md
-      - linux/automation-cron.md
     - Réseau & Sécurité:
       - linux/network-management.md
       - linux/ssh-hardening.md
       - linux/firewall-ufw.md
+    - Automatisation & Scripting:
+      - linux/automation-cron.md
+      - linux/text-processing.md
+      - linux/scripting-standards.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
