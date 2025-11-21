@@ -40,6 +40,7 @@ nav:
     - linux/modern-tools.md
     - linux/debugging.md
     - linux/bash-wizardry.md
+    - linux/text-processing.md
     - linux/hardware.md
     - Système & Boot:
       - linux/boot-and-services.md
