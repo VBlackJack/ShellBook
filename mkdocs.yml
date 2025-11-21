@@ -45,6 +45,7 @@ nav:
       - linux/boot-and-services.md
       - linux/filesystem-and-storage.md
     - linux/users-and-permissions.md
+    - linux/package-management.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
