@@ -54,6 +54,7 @@ nav:
     - Automatisation & Scripting:
       - linux/automation-cron.md
       - linux/text-processing.md
+      - linux/data-processing-advanced.md
       - linux/scripting-standards.md
     - Monitoring & Performance:
       - linux/logs-management.md
