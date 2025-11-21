@@ -48,6 +48,7 @@ nav:
     - devops/docker-advanced.md
   - Security:
     - security/certificates.md
+    - security/exegol.md
   - Concepts:
     - concepts/web-flow.md
     - concepts/databases.md
