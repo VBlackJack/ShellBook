@@ -44,6 +44,7 @@ nav:
     - Système & Boot:
       - linux/boot-and-services.md
       - linux/filesystem-and-storage.md
+    - linux/users-and-permissions.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
