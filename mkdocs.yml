@@ -52,6 +52,7 @@ nav:
     - devops/git-sysops.md
     - Ansible:
       - devops/ansible/fundamentals.md
+      - devops/ansible/playbooks.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
