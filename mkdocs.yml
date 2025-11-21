@@ -51,8 +51,6 @@ nav:
       - linux/network-management.md
       - linux/ssh-hardening.md
       - linux/firewall-ufw.md
-      - linux/web-servers.md
-      - linux/database-admin.md
     - Automatisation & Scripting:
       - linux/automation-cron.md
       - linux/text-processing.md
@@ -63,6 +61,9 @@ nav:
     - Sauvegarde & Transfert:
       - linux/archives-compression.md
       - linux/backup-transfer.md
+    - Services Hébergés:
+      - linux/web-servers.md
+      - linux/database-admin.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
