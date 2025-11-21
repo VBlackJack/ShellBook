@@ -70,6 +70,7 @@ nav:
   - Windows:
     - windows/index.md
     - windows/productivity.md
+    - windows/powershell-foundations.md
   - Network:
     - network/fundamentals.md
   - DevOps:
