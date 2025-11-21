@@ -36,6 +36,7 @@ nav:
   - Home: index.md
   - Linux:
     - linux/demo.md
+    - linux/productivity.md
   - Windows:
     - windows/index.md
   - Security:
