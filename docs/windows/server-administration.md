@@ -1,0 +1,402 @@
+# Windows Server & Package Mgmt
+
+`#windows-server` `#winget` `#chocolatey` `#active-directory`
+
+Administration Windows Server et gestion des paquets.
+
+---
+
+## Windows Server Core (Headless)
+
+### Pourquoi Server Core ?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              SERVER CORE vs DESKTOP EXPERIENCE               │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Server Core                    Desktop Experience           │
+│  ────────────                   ──────────────────           │
+│  ✓ Surface d'attaque réduite    ✗ Plus de composants         │
+│  ✓ Moins de mises à jour        ✗ Plus de patchs mensuels    │
+│  ✓ Consommation RAM réduite     ✗ GUI = ~2GB RAM en plus     │
+│  ✓ Pas de RDP accidentel        ✗ Tentant d'utiliser RDP     │
+│  ✓ Force l'automatisation       ✗ Encourage le "clic-clic"   │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Aspect | Server Core | Desktop Experience |
+|--------|-------------|-------------------|
+| GUI | Non (CLI/PowerShell) | Oui |
+| Taille disque | ~6 GB | ~10+ GB |
+| Patchs mensuels | Moins | Plus |
+| Administration | PowerShell, WAC, RSAT | GUI locale |
+| Cas d'usage | Production, Hyperviseurs | Legacy, Formation |
+
+### sconfig : Le Menu Magique
+
+Au démarrage de Server Core, lancez `sconfig` pour un menu de configuration rapide :
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 Server Configuration                         │
+├─────────────────────────────────────────────────────────────┤
+│  1) Domain/Workgroup                                        │
+│  2) Computer Name                                           │
+│  3) Add Local Administrator                                 │
+│  4) Configure Remote Management                             │
+│  5) Windows Update Settings                                 │
+│  6) Download and Install Updates                            │
+│  7) Remote Desktop                                          │
+│  8) Network Settings                                        │
+│  9) Date and Time                                          │
+│  10) Telemetry settings                                     │
+│  11) Windows Activation                                     │
+│  12) Log Off User                                          │
+│  13) Restart Server                                         │
+│  14) Shut Down Server                                       │
+│  15) Exit to Command Line                                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```powershell
+# Lancer sconfig
+sconfig
+
+# Option 8 : Configurer IP statique
+# Option 1 : Joindre un domaine
+# Option 6 : Installer les updates
+```
+
+### Installer des Rôles (PowerShell)
+
+```powershell
+# Lister les rôles disponibles
+Get-WindowsFeature
+
+# Lister les rôles installés
+Get-WindowsFeature | Where-Object Installed
+
+# Installer Active Directory Domain Services
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# Installer IIS (Web Server)
+Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+
+# Installer Hyper-V
+Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
+
+# Installer DNS
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+
+# Installer DHCP
+Install-WindowsFeature -Name DHCP -IncludeManagementTools
+
+# Supprimer un rôle
+Uninstall-WindowsFeature -Name Web-Server
+```
+
+---
+
+## Package Management
+
+### Fini les .exe et "Suivant > Suivant"
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      AVANT (2010)                            │
+│  1. Télécharger setup.exe                                   │
+│  2. Suivant > Suivant > J'accepte > Suivant > Installer     │
+│  3. Redémarrer                                              │
+│  4. Répéter x50 serveurs                                    │
+├─────────────────────────────────────────────────────────────┤
+│                    MAINTENANT (2024)                         │
+│  winget install Git.Git 7zip.7zip VSCode.VSCode -y          │
+│  ou                                                          │
+│  choco install git 7zip vscode -y                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Winget (Natif Microsoft)
+
+Winget est le gestionnaire de paquets officiel Microsoft (Windows 10/11, Server 2022+).
+
+```powershell
+# Rechercher un paquet
+winget search git
+winget search "visual studio"
+
+# Installer
+winget install Git.Git
+winget install Microsoft.VisualStudioCode
+winget install 7zip.7zip
+
+# Installation silencieuse
+winget install Git.Git --silent
+
+# Installer plusieurs paquets
+winget install Git.Git 7zip.7zip Notepad++.Notepad++ --silent
+
+# Mettre à jour un paquet
+winget upgrade Git.Git
+
+# Mettre à jour tous les paquets
+winget upgrade --all
+
+# Lister les paquets installés
+winget list
+
+# Désinstaller
+winget uninstall Git.Git
+
+# Exporter la liste (pour répliquer)
+winget export -o packages.json
+
+# Importer sur une autre machine
+winget import -i packages.json
+```
+
+### Chocolatey (Le Standard Historique)
+
+Chocolatey est le gestionnaire communautaire, plus mature et avec plus de paquets.
+
+```powershell
+# Installation de Chocolatey (en admin)
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# Rechercher
+choco search firefox
+
+# Installer
+choco install firefox -y
+choco install git 7zip vscode -y
+
+# Mettre à jour
+choco upgrade firefox -y
+choco upgrade all -y
+
+# Lister les paquets installés
+choco list
+
+# Désinstaller
+choco uninstall firefox -y
+
+# Installer une version spécifique
+choco install nodejs --version=18.17.0 -y
+```
+
+### Comparatif
+
+| Aspect | Winget | Chocolatey |
+|--------|--------|------------|
+| Origine | Microsoft | Communauté |
+| Paquets | ~5,000 | ~10,000+ |
+| Intégration | Natif Windows 11 | À installer |
+| Licence | Gratuit | Gratuit + Pro |
+| Serveur interne | Non | Oui (Pro) |
+
+!!! tip "Automatisation (Ansible/Terraform)"
+    Les deux supportent l'installation silencieuse, essentielle pour :
+
+    - **Ansible** : Module `win_chocolatey` ou `win_package`
+    - **Terraform** : Provisioner avec scripts PowerShell
+    - **DSC** : Configuration déclarative
+
+    ```yaml
+    # Ansible avec Chocolatey
+    - name: Install packages
+      win_chocolatey:
+        name:
+          - git
+          - 7zip
+          - vscode
+        state: present
+    ```
+
+---
+
+## Active Directory (Concepts Flash)
+
+### Les Termes Essentiels
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         FOREST                               │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    DOMAIN                              │  │
+│  │                  (corp.local)                          │  │
+│  │                                                        │  │
+│  │  ┌──────────────┐    ┌──────────────┐                 │  │
+│  │  │     DC01     │    │     DC02     │                 │  │
+│  │  │   (Primary)  │◄──►│  (Secondary) │                 │  │
+│  │  │  Kerberos    │    │  Réplication │                 │  │
+│  │  └──────────────┘    └──────────────┘                 │  │
+│  │                                                        │  │
+│  │  Users, Computers, Groups, GPOs                       │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Terme | Description |
+|-------|-------------|
+| **Domain Controller (DC)** | Serveur qui authentifie les utilisateurs via Kerberos. Stocke l'annuaire AD. |
+| **Forest** | Limite de sécurité ultime. Ensemble de domaines qui se font confiance. |
+| **Domain** | Unité d'administration. Ex: `corp.local`, `paris.corp.local` |
+| **OU (Organizational Unit)** | Dossier logique pour organiser users/computers. Cible des GPOs. |
+| **GPO (Group Policy Object)** | Règles de configuration déployées automatiquement (config, scripts, restrictions). |
+| **LDAP** | Protocole de requête de l'annuaire (port 389/636). |
+| **Kerberos** | Protocole d'authentification (tickets, pas de mot de passe sur le réseau). |
+
+### GPO : Le Config Management Natif
+
+```
+GPO = Configuration as Code (mais en GUI... ou ADMX)
+
+Exemples de GPOs :
+├── Désactiver USB sur les postes
+├── Configurer le proxy IE/Edge
+├── Déployer un fond d'écran corporate
+├── Mapper des lecteurs réseau
+├── Exécuter un script au login
+└── Forcer le verrouillage écran après 5 min
+```
+
+### Outils d'Administration
+
+| Outil | Type | Usage |
+|-------|------|-------|
+| **RSAT** | GUI locale | Consoles MMC (AD Users, DNS, DHCP, GPO) installées sur un poste admin |
+| **Windows Admin Center** | Web UI | Administration centralisée moderne (navigateur) |
+| **PowerShell AD Module** | CLI | Automatisation, scripts, requêtes en masse |
+
+```powershell
+# Installer RSAT (Windows 10/11)
+Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
+Add-WindowsCapability -Online -Name Rsat.Dns.Tools~~~~0.0.1.0
+Add-WindowsCapability -Online -Name Rsat.GroupPolicy.Management.Tools~~~~0.0.1.0
+
+# Module AD PowerShell
+Import-Module ActiveDirectory
+
+# Exemples de requêtes
+Get-ADUser -Filter * | Select-Object Name, Enabled
+Get-ADComputer -Filter * | Select-Object Name, LastLogonDate
+Get-ADGroup -Filter * | Select-Object Name, GroupScope
+```
+
+---
+
+## Services & Processus
+
+### Gestion des Services
+
+```powershell
+# Lister tous les services
+Get-Service
+
+# Filtrer par état
+Get-Service | Where-Object Status -eq "Running"
+Get-Service | Where-Object Status -eq "Stopped"
+
+# État d'un service spécifique
+Get-Service -Name wuauserv
+Get-Service -DisplayName "Windows Update"
+
+# Démarrer / Arrêter / Redémarrer
+Start-Service -Name wuauserv
+Stop-Service -Name wuauserv
+Restart-Service -Name wuauserv
+
+# Configurer le démarrage automatique
+Set-Service -Name wuauserv -StartupType Automatic
+Set-Service -Name wuauserv -StartupType Manual
+Set-Service -Name wuauserv -StartupType Disabled
+
+# Services avec leur type de démarrage
+Get-Service | Select-Object Name, Status, StartType
+
+# Dépendances d'un service
+Get-Service -Name wuauserv -DependentServices
+Get-Service -Name wuauserv -RequiredServices
+```
+
+### Gestion des Processus
+
+```powershell
+# Lister les processus
+Get-Process
+
+# Trier par utilisation CPU/RAM
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 10
+Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10 Name, @{N='RAM_MB';E={[int]($_.WorkingSet64/1MB)}}
+
+# Trouver un processus par nom
+Get-Process -Name notepad
+Get-Process -Name *chrome*
+
+# Tuer un processus
+Stop-Process -Name notepad
+Stop-Process -Name notepad -Force    # Force kill
+Stop-Process -Id 1234 -Force         # Par PID
+
+# Lancer un processus
+Start-Process notepad
+Start-Process "C:\Program Files\App\app.exe"
+Start-Process cmd -ArgumentList "/c", "dir" -NoNewWindow -Wait
+
+# Processus avec ligne de commande complète
+Get-CimInstance Win32_Process | Select-Object Name, ProcessId, CommandLine
+```
+
+### Services Critiques Windows
+
+| Service | Nom | Rôle |
+|---------|-----|------|
+| `wuauserv` | Windows Update | Mises à jour |
+| `W32Time` | Windows Time | Synchronisation NTP |
+| `Netlogon` | Netlogon | Auth domaine |
+| `DNS` | DNS Server | Résolution DNS (sur DC) |
+| `NTDS` | AD Domain Services | Base AD (sur DC) |
+| `WinRM` | Windows Remote Management | PowerShell Remoting |
+
+---
+
+## Quick Reference
+
+```powershell
+# === SERVER CORE ===
+sconfig                                    # Menu configuration
+
+# === RÔLES ===
+Get-WindowsFeature                         # Lister les rôles
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# === PACKAGE MANAGEMENT ===
+# Winget
+winget search git
+winget install Git.Git --silent
+winget upgrade --all
+
+# Chocolatey
+choco install git 7zip -y
+choco upgrade all -y
+
+# === SERVICES ===
+Get-Service -Name wuauserv                 # État
+Start-Service -Name wuauserv               # Démarrer
+Stop-Service -Name wuauserv                # Arrêter
+Set-Service -Name wuauserv -StartupType Automatic
+
+# === PROCESSUS ===
+Get-Process                                # Lister
+Get-Process | Sort-Object CPU -Desc | Select-Object -First 10
+Stop-Process -Name notepad -Force          # Tuer
+
+# === AD (si module installé) ===
+Import-Module ActiveDirectory
+Get-ADUser -Filter *
+Get-ADComputer -Filter *
+```
