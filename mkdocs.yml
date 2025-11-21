@@ -64,6 +64,7 @@ nav:
     - Services Hébergés:
       - linux/web-servers.md
       - linux/database-admin.md
+      - linux/virtualization-kvm.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
