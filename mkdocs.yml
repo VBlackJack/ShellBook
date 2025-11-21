@@ -44,6 +44,7 @@ nav:
     - linux/hardware.md
     - linux/system-basics.md
     - linux/boot-and-services.md
+    - linux/filesystem-and-storage.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
