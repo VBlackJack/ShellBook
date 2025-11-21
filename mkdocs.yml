@@ -51,7 +51,6 @@ nav:
       - linux/network-management.md
       - linux/ssh-hardening.md
       - linux/firewall-ufw.md
-      - linux/vpn-wireguard.md
     - Automatisation & Scripting:
       - linux/automation-cron.md
       - linux/text-processing.md
@@ -65,7 +64,9 @@ nav:
     - Services Hébergés:
       - linux/web-servers.md
       - linux/database-admin.md
+    - Infrastructure & Virtualisation:
       - linux/virtualization-kvm.md
+      - linux/vpn-wireguard.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
