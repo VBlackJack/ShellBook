@@ -39,6 +39,7 @@ nav:
     - linux/productivity.md
     - linux/modern-tools.md
     - linux/debugging.md
+    - linux/filesystem-hierarchy.md
   - Windows:
     - windows/index.md
   - Security:
