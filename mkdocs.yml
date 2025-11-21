@@ -77,11 +77,12 @@ nav:
   - Network:
     - network/fundamentals.md
   - DevOps:
-    - devops/docker-advanced.md
-    - devops/kubernetes-cka.md
-    - devops/kubernetes-survival.md
-    - devops/kubernetes-networking.md
     - devops/git-sysops.md
+    - devops/docker-advanced.md
+    - Kubernetes:
+      - devops/kubernetes-cka.md
+      - devops/kubernetes-survival.md
+      - devops/kubernetes-networking.md
     - Ansible:
       - devops/ansible/fundamentals.md
       - devops/ansible/playbooks.md
