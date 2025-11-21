@@ -52,6 +52,7 @@ nav:
       - linux/ssh-hardening.md
       - linux/firewall-ufw.md
       - linux/web-servers.md
+      - linux/database-admin.md
     - Automatisation & Scripting:
       - linux/automation-cron.md
       - linux/text-processing.md
