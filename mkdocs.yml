@@ -53,6 +53,7 @@ nav:
     - Ansible:
       - devops/ansible/fundamentals.md
       - devops/ansible/playbooks.md
+      - devops/ansible/industrialization.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
