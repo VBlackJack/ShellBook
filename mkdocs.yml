@@ -52,6 +52,8 @@ nav:
     - devops/git-sysops.md
   - Security:
     - security/certificates.md
+    - security/crypto-concepts.md
+    - security/openssl-cli.md
     - security/exegol.md
     - security/ctf-guide.md
     - security/essential-tools.md
