@@ -49,6 +49,7 @@ nav:
       - linux/package-management.md
       - linux/network-management.md
       - linux/ssh-hardening.md
+      - linux/firewall-ufw.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
