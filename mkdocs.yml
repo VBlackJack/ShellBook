@@ -1,0 +1,36 @@
+site_name: ShellBook
+site_description: SysOps Knowledge Base - Linux, Windows, K8s & Security
+site_author: SysOps Admin
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: deep purple
+    accent: cyan
+  features:
+    - content.code.copy
+    - navigation.tabs
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Linux:
+    - linux/demo.md
+  - Windows:
+    - windows/index.md
