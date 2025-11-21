@@ -94,6 +94,7 @@ nav:
       - devops/ansible/industrialization.md
       - devops/ansible/advanced-patterns.md
       - devops/ansible/cloud-integrations.md
+      - devops/ansible/testing-molecule.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
