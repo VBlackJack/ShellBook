@@ -79,6 +79,7 @@ nav:
   - DevOps:
     - devops/git-sysops.md
     - devops/docker-advanced.md
+    - devops/cicd-github-actions.md
     - Kubernetes:
       - devops/kubernetes-cka.md
       - devops/kubernetes-survival.md
