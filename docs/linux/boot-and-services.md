@@ -1,6 +1,6 @@
 # Boot Process & Systemd
 
-`#boot` `#systemd` `#grub` `#troubleshooting`
+`#boot` `#systemd` `#grub` `#troubleshooting` `#systemd-analyze`
 
 Complete reference for Linux boot sequence and service management.
 
