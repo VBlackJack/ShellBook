@@ -47,8 +47,6 @@ nav:
     - Administration Système:
       - linux/users-and-permissions.md
       - linux/package-management.md
-      - linux/archives-compression.md
-      - linux/backup-transfer.md
     - Réseau & Sécurité:
       - linux/network-management.md
       - linux/ssh-hardening.md
@@ -60,6 +58,9 @@ nav:
     - Monitoring & Performance:
       - linux/logs-management.md
       - linux/performance-analysis.md
+    - Sauvegarde & Transfert:
+      - linux/archives-compression.md
+      - linux/backup-transfer.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
