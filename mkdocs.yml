@@ -76,6 +76,7 @@ nav:
     - windows/active-directory.md
     - windows/windows-security.md
     - windows/ansible-windows.md
+    - windows/netsh-troubleshooting.md
   - Network:
     - network/fundamentals.md
   - DevOps:

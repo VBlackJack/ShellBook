@@ -364,6 +364,442 @@ Get-CimInstance Win32_Process | Select-Object Name, ProcessId, CommandLine
 
 ---
 
+## Administration Moderne : Windows Admin Center (WAC)
+
+### Qu'est-ce que WAC ?
+
+**Windows Admin Center = La Console Web pour Server Core**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   ÉVOLUTION DE L'ADMIN                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  2000-2012 : MMC Consoles (RSAT)                            │
+│  ────────────────────────────────                            │
+│  ✗ GUI locale uniquement                                    │
+│  ✗ Nécessite Windows sur le poste admin                     │
+│  ✗ Pas de gestion centralisée                               │
+│                                                              │
+│  2012-2019 : PowerShell Remoting                            │
+│  ──────────────────────────────                              │
+│  ✓ Gestion à distance                                       │
+│  ✗ CLI uniquement (pas user-friendly)                       │
+│                                                              │
+│  2019+ : Windows Admin Center (WAC)                         │
+│  ─────────────────────────────────────                       │
+│  ✓ Interface Web moderne (HTML5)                            │
+│  ✓ Gestion multi-serveurs centralisée                       │
+│  ✓ Extensions (Azure, Monitoring, etc.)                     │
+│  ✓ Fonctionne sur Server Core                               │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Installation
+
+**Deux modes de déploiement :**
+
+#### Mode 1 : Gateway (Production)
+
+**WAC installé sur un serveur dédié pour gérer tout le datacenter.**
+
+```powershell
+# Télécharger WAC (https://aka.ms/wacdownload)
+# Installation en mode Gateway
+msiexec /i WindowsAdminCenter.msi /qn /L*v log.txt ^
+  SME_PORT=443 ^
+  SSL_CERTIFICATE_OPTION=generate
+
+# Ou via PowerShell
+Start-Process msiexec.exe -ArgumentList @(
+  "/i", "WindowsAdminCenter.msi",
+  "/qn",
+  "SME_PORT=443",
+  "SSL_CERTIFICATE_OPTION=generate"
+) -Wait
+```
+
+**Accès :** `https://wac-server.corp.local`
+
+**Avantages :**
+- ✅ Gestion centralisée de tous les serveurs
+- ✅ Accès depuis n'importe quel navigateur
+- ✅ Certificat SSL centralisé
+- ✅ RBAC (délégation d'accès)
+
+#### Mode 2 : Local (Poste Admin)
+
+**WAC installé sur Windows 10/11 pour gérer quelques serveurs.**
+
+```powershell
+# Installation en mode Desktop
+msiexec /i WindowsAdminCenter.msi /qn /L*v log.txt ^
+  SME_PORT=6516 ^
+  SME_THUMBPRINT=auto
+
+# Accès local
+start https://localhost:6516
+```
+
+**Cas d'usage :**
+- Poste d'admin pour gérer 5-10 serveurs
+- Environnement de lab/test
+- Pas besoin de serveur dédié
+
+### Configuration Post-Installation
+
+```powershell
+# Autoriser WinRM sur les serveurs cibles
+Enable-PSRemoting -Force
+
+# Activer CredSSP (si nécessaire pour certaines tâches)
+Enable-WSManCredSSP -Role Server -Force
+
+# Ajouter WAC aux hôtes de confiance (sur les serveurs cibles)
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "wac-server.corp.local" -Force
+```
+
+### Fonctionnalités Clés
+
+**Dashboard centralisé :**
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **Server Manager** | Vue d'ensemble CPU/RAM/Disque en temps réel |
+| **Certificate Management** | Gestion des certificats SSL (création, renouvellement) |
+| **Firewall** | Configuration GUI du firewall (équivalent `wf.msc`) |
+| **Files & File Sharing** | Explorateur de fichiers web, gestion des partages SMB |
+| **Local Users & Groups** | Gestion des comptes locaux |
+| **Roles & Features** | Installation/désinstallation de rôles (GUI) |
+| **Updates** | Windows Update centralisé |
+| **PowerShell** | Console PowerShell intégrée au navigateur |
+| **Remote Desktop** | RDP directement dans le navigateur (HTML5) |
+
+### Extensions WAC
+
+**Étendre les fonctionnalités via des extensions :**
+
+```powershell
+# Lister les extensions disponibles
+Get-WACSoftwareUpdate
+
+# Installer une extension (via GUI)
+# Settings → Extensions → Available Extensions
+```
+
+**Extensions populaires :**
+
+| Extension | Usage |
+|-----------|-------|
+| **Azure Hybrid Services** | Intégration Azure Arc, Backup, Update Management |
+| **Active Directory** | Gestion AD (Users, Groups, OUs) via Web |
+| **DNS** | Gestion des zones DNS |
+| **DHCP** | Gestion des scopes DHCP |
+| **Storage Replica** | Réplication de stockage entre serveurs |
+| **Cluster Manager** | Gestion de clusters Failover |
+
+### Gestion des Certificats (Killer Feature)
+
+**Problème classique :** Certificat auto-signé expiré sur IIS/RDP.
+
+**Solution avec WAC :**
+
+1. Se connecter au serveur via WAC
+2. Aller dans **Settings → Access → SSL Certificate**
+3. Options :
+   - **Générer** un certificat auto-signé
+   - **Importer** un certificat existant (PFX)
+   - **Demander** un certificat via ACME (Let's Encrypt)
+
+```powershell
+# Automatiser avec PowerShell (Let's Encrypt via Posh-ACME)
+Install-Module -Name Posh-ACME
+New-PACertificate -Domain "web.corp.local" -AcceptTOS
+```
+
+### Avantages pour SecNumCloud
+
+| Exigence SecNumCloud | WAC Répond |
+|---------------------|-----------|
+| **Audit & Logs** | Tous les accès tracés (Event Viewer + Syslog) |
+| **RBAC** | Délégation granulaire (qui peut gérer quoi) |
+| **MFA** | Intégration Azure AD (avec Conditional Access) |
+| **Chiffrement** | HTTPS obligatoire (TLS 1.2+) |
+| **Gestion Centralisée** | Un seul point d'administration |
+
+!!! tip "Astuce : Intégration Azure Arc"
+    Connecter WAC à Azure Arc permet :
+
+    - **Update Management** : Centraliser les patchs de tous les serveurs on-prem
+    - **Azure Monitor** : Métriques et logs dans Azure
+    - **Azure Policy** : Appliquer des policies de conformité
+    - **Azure Backup** : Sauvegardes automatiques vers Azure
+
+---
+
+## Windows Server 2025 Features
+
+### Les Nouveautés Majeures
+
+**Windows Server 2025 = Focus sur Cloud Hybride & Sécurité**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           ÉVOLUTION WINDOWS SERVER                           │
+├─────────────────────────────────────────────────────────────┤
+│  2019 : Conteneurs, Storage Replica                         │
+│  2022 : Secured-core, Azure Arc                             │
+│  2025 : Hotpatching, SMB over QUIC, SSH Natif               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Feature 1 : Hotpatching (Game Changer)
+
+**Le Problème :**
+
+```
+Admin   : "On patche le serveur web ce soir"
+Business: "Mais on a une vente flash cette nuit !"
+Admin   : "Tant pis, reboot obligatoire pour les updates de sécurité"
+Business: "On perd 100k€ de CA pendant 10 minutes de downtime..."
+```
+
+**La Solution : Hotpatching**
+
+**Hotpatching = Mise à jour sans reboot**
+
+```powershell
+# Activer Hotpatching (nécessite Azure Arc)
+# 1. Connecter le serveur à Azure Arc
+azcmagent connect --tenant-id <TENANT_ID> --subscription-id <SUB_ID>
+
+# 2. Activer Hotpatch via Azure Portal
+# Settings → Update Management → Enable Hotpatch
+
+# 3. Les updates de sécurité s'appliquent sans reboot
+```
+
+**Comment ça marche :**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    HOTPATCH WORKFLOW                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. Azure Update Management détecte une CVE                 │
+│  2. Téléchargement du patch hotpatch-compatible             │
+│  3. Application en mémoire (patching du code en live)       │
+│  4. Processus redémarré (pas le serveur)                    │
+│  5. Serveur reste online                                    │
+│                                                              │
+│  Reboot requis uniquement tous les 3-6 mois                 │
+│  (pour les mises à jour majeures ou kernel)                 │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Limitations :**
+- Nécessite **Azure Arc** (connexion cloud)
+- Disponible uniquement sur **Datacenter Edition**
+- Pas pour toutes les mises à jour (kernel updates nécessitent reboot)
+
+**Bénéfices :**
+- ✅ 90%+ des patchs de sécurité sans reboot
+- ✅ Réduction du downtime planifié
+- ✅ Conformité SecNumCloud facilitée (patchs rapides)
+
+### Feature 2 : SSH Natif (OpenSSH Server)
+
+**Le Problème Historique :**
+
+```
+Admin Linux : "ssh user@serveur"  → Connecté en 1 seconde
+Admin Windows: "Télécharger PuTTY, configurer, lancer..."
+               "Ou activer WinRM/PSRemoting..."
+```
+
+**La Solution : OpenSSH Server Intégré**
+
+**OpenSSH est maintenant pré-installé et facile à activer.**
+
+```powershell
+# Vérifier si OpenSSH Server est installé
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH.Server*'
+
+# Installer si nécessaire (déjà présent sur Server 2025)
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# Activer et démarrer le service
+Start-Service sshd
+Set-Service -Name sshd -StartupType Automatic
+
+# Ouvrir le port firewall (automatique sur Server 2025)
+New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' `
+  -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+```
+
+**Connexion depuis Linux/macOS :**
+
+```bash
+# Connexion SSH classique
+ssh administrator@windows-server.corp.local
+
+# Avec clé SSH (recommandé)
+ssh -i ~/.ssh/id_rsa administrator@windows-server.corp.local
+
+# SCP pour transférer des fichiers
+scp file.txt administrator@windows-server.corp.local:C:\Temp\
+```
+
+**Configuration Avancée :**
+
+```powershell
+# Fichier de config SSH
+notepad C:\ProgramData\ssh\sshd_config
+
+# Options importantes
+# PasswordAuthentication yes      # Auth par mot de passe
+# PubkeyAuthentication yes         # Auth par clé SSH (recommandé)
+# PermitRootLogin no               # Interdire login direct admin
+
+# Redémarrer après modification
+Restart-Service sshd
+```
+
+**Authentification par Clé SSH :**
+
+```powershell
+# Sur le serveur Windows (en admin)
+# Créer le dossier .ssh
+mkdir C:\Users\Administrator\.ssh
+
+# Copier la clé publique (depuis Linux)
+# Sur Linux : ssh-copy-id administrator@windows-server
+# Ou manuellement :
+echo "ssh-rsa AAAAB3Nza..." >> C:\Users\Administrator\.ssh\authorized_keys
+
+# Permissions (importantes)
+icacls C:\Users\Administrator\.ssh\authorized_keys /inheritance:r
+icacls C:\Users\Administrator\.ssh\authorized_keys /grant "Administrator:F"
+icacls C:\Users\Administrator\.ssh\authorized_keys /remove "NT AUTHORITY\Authenticated Users"
+```
+
+**Avantages :**
+- ✅ Standard universel (compatibilité totale avec Linux/macOS)
+- ✅ Authentification par clé SSH (plus sûr que mot de passe)
+- ✅ SCP/SFTP natif pour transfert de fichiers
+- ✅ Pas besoin de PuTTY ou autre outil tiers
+
+!!! tip "Astuce : Shell par Défaut PowerShell"
+    Configurer PowerShell comme shell SSH par défaut :
+
+    ```powershell
+    New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" `
+      -Name DefaultShell `
+      -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" `
+      -PropertyType String -Force
+    ```
+
+### Feature 3 : SMB over QUIC (Révolutionnaire)
+
+**Le Problème : Partages de Fichiers via Internet**
+
+```
+Scénario classique :
+- Utilisateur en télétravail veut accéder à \\fileserver\share
+- SMB (port 445) bloqué par les FAI et dangereux sur Internet
+- Solution actuelle : VPN (lent, complexe, coûteux)
+```
+
+**La Solution : SMB over QUIC**
+
+**SMB over QUIC = SMB chiffré via UDP 443 (comme HTTPS)**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SMB TRADITIONNEL                          │
+│  Client ───TCP 445──→ Serveur                               │
+│  ✗ Port 445 bloqué sur Internet                             │
+│  ✗ Pas de chiffrement (sauf SMB 3.1.1)                      │
+│  ✗ Nécessite VPN                                            │
+├─────────────────────────────────────────────────────────────┤
+│                    SMB over QUIC                             │
+│  Client ───UDP 443──→ Serveur                               │
+│  ✓ Port 443 (comme HTTPS, jamais bloqué)                    │
+│  ✓ Chiffrement obligatoire (TLS 1.3)                        │
+│  ✓ Pas besoin de VPN                                        │
+│  ✓ Protocole QUIC (HTTP/3, ultra rapide)                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Configuration :**
+
+```powershell
+# Sur le serveur (File Server)
+# 1. Installer le rôle File Server
+Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
+
+# 2. Activer SMB over QUIC
+Install-WindowsFeature -Name FS-SMB-OverQUIC
+
+# 3. Créer un partage avec QUIC activé
+New-SmbShare -Name "QuicShare" -Path "C:\Shares\QuicShare" `
+  -EncryptData $true `
+  -QUICTransport $true
+
+# 4. Configurer le certificat (Let's Encrypt recommandé)
+# Le serveur doit avoir un certificat SSL valide
+# Le FQDN doit être résolvable publiquement
+```
+
+**Connexion depuis le client :**
+
+```powershell
+# Sur le client Windows 11
+# Connexion via QUIC (automatique si le serveur l'expose)
+net use Z: \\fileserver.corp.com\QuicShare
+
+# Vérifier que QUIC est utilisé
+Get-SmbConnection | Select-Object ServerName, TransportName
+
+# Output attendu
+# ServerName           TransportName
+# ----------           -------------
+# fileserver.corp.com  QUIC
+```
+
+**Cas d'Usage :**
+
+| Scénario | Avant (VPN) | Après (SMB over QUIC) |
+|----------|-------------|------------------------|
+| **Télétravail** | VPN obligatoire | Accès direct via Internet |
+| **Sites distants** | VPN site-to-site | Connexion directe sécurisée |
+| **Cloud Hybride** | ExpressRoute/VPN | Connexion publique chiffrée |
+| **Latence** | VPN overhead | QUIC ultra-rapide (UDP) |
+
+**Prérequis :**
+- Windows Server 2025 (File Server)
+- Windows 11 22H2+ (Client)
+- Certificat SSL valide sur le serveur
+- Port UDP 443 ouvert (firewall)
+
+**Avantages SecNumCloud :**
+- ✅ Chiffrement TLS 1.3 obligatoire
+- ✅ Authentification mutuelle (certificats client/serveur)
+- ✅ Pas d'exposition du port 445 sur Internet
+- ✅ Protocole moderne et performant (QUIC = HTTP/3)
+
+!!! warning "Attention : DNS Public Requis"
+    Le serveur SMB over QUIC doit avoir un FQDN résolvable publiquement :
+
+    ```
+    ✓ fileserver.company.com  (DNS public + certificat Let's Encrypt)
+    ✗ fileserver.local        (DNS interne uniquement)
+    ```
+
+---
+
 ## Quick Reference
 
 ```powershell

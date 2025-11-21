@@ -204,3 +204,297 @@ curl échoue ?     → Vérifier logs app, config, certificats SSL
   ↓ fonctionne
 Le problème est ailleurs (DNS, côté client, etc.)
 ```
+
+---
+
+## Architecture de Sécurité : La DMZ
+
+### Qu'est-ce qu'une DMZ ?
+
+**DMZ = Demilitarized Zone (Zone Démilitarisée)**
+
+**Analogie militaire :**
+- Entre deux pays en conflit, une zone tampon neutre sépare les frontières
+- Ni un pays ni l'autre n'a le contrôle total
+- C'est une zone de transition sécurisée
+
+**En réseau :**
+- Zone réseau intermédiaire entre Internet (non fiable) et le LAN interne (fiable)
+- Contient les serveurs publics (Web, Mail, DNS)
+- Isole le LAN des attaques directes depuis Internet
+
+### Schéma Conceptuel
+
+```mermaid
+flowchart TD
+    Internet[🌐 Internet<br/>Zone Non Fiable]
+    FW1[🔥 Firewall Externe<br/>Filtrage entrant/sortant]
+    DMZ[📦 DMZ<br/>Zone Semi-Fiable]
+    FW2[🔥 Firewall Interne<br/>Protection LAN]
+    LAN[🏢 LAN Interne<br/>Zone Fiable]
+
+    Internet -->|Trafic Public| FW1
+    FW1 -->|Règles Strictes| DMZ
+    DMZ -->|Accès Contrôlé| FW2
+    FW2 -->|Ressources Internes| LAN
+
+    subgraph DMZ_Zone[DMZ - Serveurs Exposés]
+        Web[🌐 Serveur Web<br/>80/443]
+        Mail[📧 Serveur Mail<br/>25/587/993]
+        DNS[🔎 DNS Public<br/>53]
+    end
+
+    FW1 --> DMZ_Zone
+    DMZ_Zone --> FW2
+
+    subgraph LAN_Zone[LAN - Ressources Critiques]
+        DB[(💾 Base de Données)]
+        AD[🔐 Active Directory]
+        FileServer[📁 Serveurs de Fichiers]
+        Users[👥 Postes Utilisateurs]
+    end
+
+    FW2 --> LAN_Zone
+
+    style Internet fill:#ff6b6b
+    style DMZ fill:#ffd93d
+    style LAN fill:#6bcf7f
+    style FW1 fill:#ff8c42
+    style FW2 fill:#ff8c42
+```
+
+### Pourquoi Une DMZ ?
+
+**Problème sans DMZ :**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              ARCHITECTURE SANS DMZ (DANGEREUX)               │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Internet → [Firewall] → LAN                                │
+│                           ├─ Serveur Web (accessible)        │
+│                           ├─ Base de données (exposée !)     │
+│                           ├─ Active Directory (vulnérable)   │
+│                           └─ Postes utilisateurs             │
+│                                                              │
+│  ❌ Problème : Si le serveur Web est compromis,             │
+│     l'attaquant a un accès direct au LAN interne !          │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Solution avec DMZ :**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                ARCHITECTURE AVEC DMZ (SÉCURISÉE)             │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Internet → [FW Externe] → DMZ → [FW Interne] → LAN         │
+│                             ├─ Web                           │
+│                             └─ Mail                          │
+│                                                              │
+│  ✓ Serveur Web compromis = Isolé dans la DMZ                │
+│  ✓ Attaquant ne peut PAS atteindre le LAN directement       │
+│  ✓ Second firewall protège les ressources critiques         │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Règles de Firewall Typiques
+
+#### Firewall Externe (Internet → DMZ)
+
+| Source | Destination | Port | Action | Justification |
+|--------|-------------|------|--------|---------------|
+| Internet | Serveur Web DMZ | 80, 443 | **ALLOW** | Accès public au site web |
+| Internet | Serveur Mail DMZ | 25, 587 | **ALLOW** | Réception d'emails |
+| Internet | DNS Public DMZ | 53 | **ALLOW** | Résolution DNS |
+| Internet | LAN Interne | ANY | **DENY** | Bloquer accès direct au LAN |
+| Internet | DMZ | Autres ports | **DENY** | Principe du moindre privilège |
+
+#### Firewall Interne (DMZ → LAN)
+
+| Source | Destination | Port | Action | Justification |
+|--------|-------------|------|--------|---------------|
+| Serveur Web DMZ | DB Serveur LAN | 3306, 5432 | **ALLOW** | Requêtes SQL (lecture seule si possible) |
+| Serveur Mail DMZ | AD Serveur LAN | 389, 636 | **ALLOW** | Vérification d'identité LDAP |
+| DMZ | Serveurs Fichiers LAN | 445 | **DENY** | Pas de partage SMB depuis DMZ |
+| DMZ | Postes Utilisateurs LAN | ANY | **DENY** | Isolation complète |
+| LAN | DMZ | 22, 3389 | **ALLOW** | Administration depuis le LAN |
+
+#### Firewall Interne (LAN → Internet)
+
+| Source | Destination | Port | Action | Justification |
+|--------|-------------|------|--------|---------------|
+| LAN | Internet | 80, 443 | **ALLOW** | Naviguation web, mises à jour |
+| LAN | Internet | 53 | **ALLOW** | Requêtes DNS |
+| Postes Utilisateurs | Internet | 22, 3389 | **DENY** | Bloquer SSH/RDP sortants (malware) |
+
+### Types de DMZ
+
+#### 1. DMZ Simple (3-Legs Firewall)
+
+**Un seul firewall avec 3 interfaces réseau.**
+
+```
+           ┌─────────────────┐
+Internet ──┤ eth0 (WAN)      │
+           │                 │
+           │   FIREWALL      │
+           │                 │
+DMZ ───────┤ eth1 (DMZ)      │
+           │                 │
+LAN ───────┤ eth2 (LAN)      │
+           └─────────────────┘
+```
+
+**Avantages :**
+- ✅ Moins coûteux (1 seul firewall)
+- ✅ Configuration centralisée
+
+**Inconvénients :**
+- ❌ Point de défaillance unique
+- ❌ Si le firewall est compromis, tout est exposé
+
+#### 2. DMZ Double Firewall (Dual Firewall)
+
+**Deux firewalls séparés.**
+
+```
+Internet → [Firewall Externe] → DMZ → [Firewall Interne] → LAN
+```
+
+**Avantages :**
+- ✅ Défense en profondeur (2 couches)
+- ✅ Si FW Externe compromis, FW Interne protège toujours le LAN
+- ✅ Conforme SecNumCloud (multi-layer security)
+
+**Inconvénients :**
+- ❌ Plus coûteux (2 firewalls)
+- ❌ Plus complexe à gérer
+
+### Serveurs Typiques en DMZ
+
+| Service | Port | Pourquoi en DMZ |
+|---------|------|-----------------|
+| **Serveur Web (Nginx/Apache)** | 80, 443 | Accessible publiquement, cible d'attaque fréquente |
+| **Serveur Mail (Postfix/Exchange)** | 25, 587, 993 | Reçoit des emails d'Internet (spam, malwares) |
+| **DNS Public (BIND)** | 53 | Répond aux requêtes DNS publiques |
+| **Reverse Proxy (Traefik/HAProxy)** | 80, 443 | Point d'entrée pour les APIs/Apps |
+| **Bastion/Jump Host** | 22, 3389 | Accès admin sécurisé (SSH/RDP) |
+| **VPN Gateway (OpenVPN/IPSec)** | 1194, 500 | Accès distant sécurisé |
+
+### Erreurs Classiques à Éviter
+
+!!! danger "❌ NE JAMAIS Exposer Directement le LAN"
+    **Erreur :** Ouvrir des ports depuis Internet directement vers le LAN (sans DMZ).
+
+    ```
+    # ❌ MAUVAIS (règle firewall dangereuse)
+    Source: Internet (0.0.0.0/0)
+    Destination: 192.168.1.50 (Serveur SQL LAN)
+    Port: 3306
+    Action: ALLOW
+
+    → Un attaquant peut scanner et exploiter le serveur SQL !
+    ```
+
+    **✓ Correct :** Le serveur Web en DMZ accède au SQL en LAN, pas Internet.
+
+!!! danger "❌ NE JAMAIS Permettre DMZ → LAN (Except Services Spécifiques)"
+    **Erreur :** Autoriser la DMZ à se connecter librement au LAN.
+
+    ```
+    # ❌ MAUVAIS
+    Source: DMZ (toute la zone)
+    Destination: LAN (toute la zone)
+    Port: ANY
+    Action: ALLOW
+
+    → Si un serveur DMZ est compromis, tout le LAN est accessible
+    ```
+
+    **✓ Correct :** Autoriser uniquement des flux spécifiques (Web → DB sur port 3306 uniquement).
+
+!!! warning "⚠️ Surveiller les Logs de Firewall"
+    **Les tentatives d'intrusion sont courantes :**
+
+    - Scanner de ports automatisés
+    - Brute force SSH
+    - Exploits de vulnérabilités connues
+
+    **Solution :** Centraliser les logs (Syslog, ELK, Splunk) et configurer des alertes.
+
+### Exemple Concret : Héberger un Site Web
+
+**Architecture complète :**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   SITE WEB SÉCURISÉ                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Internet                                                    │
+│     ↓                                                        │
+│  [Firewall Externe]                                          │
+│     ↓ (Ports 80/443 autorisés vers DMZ)                     │
+│  DMZ                                                         │
+│     ├─ Nginx (Reverse Proxy)                                │
+│     └─ Serveur Web (Apache/Node.js)                         │
+│     ↓ (Port 3306 autorisé vers LAN)                         │
+│  [Firewall Interne]                                          │
+│     ↓                                                        │
+│  LAN                                                         │
+│     └─ MySQL Database (192.168.1.10)                        │
+│                                                              │
+│  Flux de données :                                          │
+│  User → HTTPS (443) → Nginx (DMZ) → App (DMZ)               │
+│                                    → MySQL (LAN)             │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Règles Firewall :**
+
+```bash
+# Firewall Externe (pfSense/iptables)
+# Autoriser HTTPS depuis Internet vers Nginx (DMZ)
+iptables -A FORWARD -i eth0 -o eth1 -p tcp --dport 443 -d 10.0.1.10 -j ACCEPT
+
+# Firewall Interne
+# Autoriser MySQL depuis Nginx (DMZ) vers DB (LAN)
+iptables -A FORWARD -i eth1 -o eth2 -p tcp --dport 3306 -s 10.0.1.10 -d 192.168.1.10 -j ACCEPT
+
+# Bloquer tout le reste par défaut
+iptables -P FORWARD DROP
+```
+
+### Conformité SecNumCloud
+
+**Exigences SecNumCloud pour la DMZ :**
+
+| Exigence | Implémentation DMZ |
+|----------|-------------------|
+| **Segmentation Réseau** | DMZ sépare Internet du LAN (ISO 27001) |
+| **Défense en Profondeur** | Dual Firewall (externe + interne) |
+| **Moindre Privilège** | Règles firewall strictes (deny by default) |
+| **Audit & Logging** | Logs centralisés de tous les firewalls |
+| **Chiffrement** | TLS obligatoire (HTTPS, SMTPS, LDAPS) |
+
+!!! tip "Astuce : Tester Votre DMZ"
+    **Depuis Internet, essayez d'accéder directement au LAN :**
+
+    ```bash
+    # Depuis une IP publique (ou VPS test)
+    nmap -p 1-65535 <VOTRE_IP_PUBLIQUE>
+
+    # Vérifier que SEULS les ports DMZ sont ouverts
+    # Ports attendus : 80, 443, 25 (DMZ)
+    # Ports interdits : 445 (SMB LAN), 3389 (RDP LAN)
+    ```
+
+    Si vous voyez des ports LAN ouverts depuis Internet, **votre DMZ est mal configurée**.
+
+---
