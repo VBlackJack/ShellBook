@@ -43,6 +43,7 @@ nav:
     - linux/bash-wizardry.md
     - linux/hardware.md
     - linux/system-basics.md
+    - linux/boot-and-services.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
