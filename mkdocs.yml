@@ -95,6 +95,8 @@ nav:
       - devops/ansible/advanced-patterns.md
       - devops/ansible/cloud-integrations.md
       - devops/ansible/testing-molecule.md
+    - Terraform:
+      - devops/terraform/fundamentals.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
