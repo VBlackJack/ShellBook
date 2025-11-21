@@ -41,6 +41,7 @@ nav:
     - linux/debugging.md
     - linux/bash-wizardry.md
     - linux/text-processing.md
+    - linux/scripting-standards.md
     - linux/hardware.md
     - Système & Boot:
       - linux/boot-and-services.md
