@@ -81,6 +81,7 @@ nav:
   - DevOps:
     - devops/git-sysops.md
     - devops/docker-advanced.md
+    - devops/productivity-it-tools.md
     - CI/CD & Obs:
       - devops/cicd-github-actions.md
       - devops/observability-stack.md
