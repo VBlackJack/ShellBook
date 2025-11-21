@@ -90,6 +90,7 @@ nav:
       - devops/ansible/fundamentals.md
       - devops/ansible/playbooks.md
       - devops/ansible/industrialization.md
+      - devops/ansible/advanced-patterns.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
