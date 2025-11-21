@@ -39,6 +39,7 @@ nav:
     - linux/productivity.md
     - linux/modern-tools.md
     - linux/debugging.md
+    - linux/performance-analysis.md
     - linux/bash-wizardry.md
     - linux/hardware.md
     - Système & Boot:
