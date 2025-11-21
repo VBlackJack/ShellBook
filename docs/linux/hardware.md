@@ -1,33 +1,33 @@
-# Server Hardware Fundamentals
+# Principes Fondamentaux du Matériel Serveur
 
 `#hardware` `#bare-metal` `#power` `#acpi`
 
-Understanding the metal beneath the virtualization.
+Comprendre le métal sous la virtualisation.
 
 ---
 
-## Why Hardware Matters
+## Pourquoi le Matériel est Important
 
-!!! info "Even for Cloud Admins"
-    Understanding hardware helps you:
+!!! info "Même pour les Admins Cloud"
+    Comprendre le matériel vous aide à :
 
-    - Diagnose performance bottlenecks
-    - Right-size cloud instances
-    - Understand why "noisy neighbors" affect VMs
-    - Optimize for cost vs performance
-    - Troubleshoot bare-metal deployments
+    - Diagnostiquer les goulots d'étranglement de performance
+    - Dimensionner correctement les instances cloud
+    - Comprendre pourquoi les "noisy neighbors" affectent les VMs
+    - Optimiser pour le coût vs performance
+    - Dépanner les déploiements bare-metal
 
 ---
 
-## Power & Energy (PSU)
+## Alimentation & Énergie (PSU)
 
-### Redundancy (2x PSU)
+### Redondance (2x PSU)
 
-Production servers have **dual power supplies** for fault tolerance.
+Les serveurs de production ont des **alimentations doubles** pour la tolérance aux pannes.
 
 ```
 ┌─────────────────────────────────────────┐
-│              SERVER                      │
+│              SERVEUR                     │
 │  ┌─────────┐           ┌─────────┐      │
 │  │  PSU 1  │           │  PSU 2  │      │
 │  └────┬────┘           └────┬────┘      │
@@ -41,70 +41,70 @@ Production servers have **dual power supplies** for fault tolerance.
    └─────────┘           └─────────┘
 ```
 
-**Why dual PSUs:**
+**Pourquoi des PSU doubles :**
 
-| Scenario | Single PSU | Dual PSU |
+| Scénario | PSU Simple | PSU Double |
 |----------|------------|----------|
-| PSU failure | Server down | Continues running |
-| Circuit trip | Server down | Continues running |
-| Maintenance | Downtime required | Hot-swap capable |
+| Panne de PSU | Serveur arrêté | Continue de fonctionner |
+| Disjonction du circuit | Serveur arrêté | Continue de fonctionner |
+| Maintenance | Temps d'arrêt requis | Remplacement à chaud possible |
 
 !!! warning "Active-Active vs Active-Standby"
-    - **Active-Active:** Both PSUs share load (more efficient)
-    - **Active-Standby:** One PSU idle until failure (simpler)
+    - **Active-Active :** Les deux PSU partagent la charge (plus efficace)
+    - **Active-Standby :** Un PSU inactif jusqu'à la panne (plus simple)
 
 ---
 
-### Efficiency (80 Plus Certification)
+### Efficacité (Certification 80 Plus)
 
-PSUs waste energy as heat. Efficiency ratings indicate how much power reaches components.
+Les PSU gaspillent de l'énergie sous forme de chaleur. Les classifications d'efficacité indiquent quelle quantité d'énergie atteint les composants.
 
-| Certification | Efficiency @ 50% Load | Typical Use |
+| Certification | Efficacité @ 50% de Charge | Usage Typique |
 |---------------|----------------------|-------------|
 | 80 Plus | 80% | Budget |
-| Bronze | 85% | Entry-level servers |
-| Silver | 88% | Standard servers |
+| Bronze | 85% | Serveurs d'entrée de gamme |
+| Silver | 88% | Serveurs standard |
 | Gold | 90% | Enterprise |
-| Platinum | 92% | High-density DC |
+| Platinum | 92% | DC haute densité |
 | Titanium | 94% | Premium/HPC |
 
-**Example:** 1000W server with Gold PSU
-- Draws ~1111W from wall (90% efficient)
-- Wastes 111W as heat
+**Exemple :** Serveur 1000W avec PSU Gold
+- Consomme ~1111W du secteur (90% efficace)
+- Gaspille 111W en chaleur
 
-**At scale (1000 servers):**
-- Bronze: 176kW wasted
-- Titanium: 64kW wasted
-- Savings: 112kW → ~$100k/year
+**À grande échelle (1000 serveurs) :**
+- Bronze : 176kW gaspillés
+- Titanium : 64kW gaspillés
+- Économies : 112kW → ~100k$/an
 
 ---
 
-### Power Connectors
+### Connecteurs d'Alimentation
 
-| Connector | Purpose | Typical Wattage |
+| Connecteur | Usage | Puissance Typique |
 |-----------|---------|-----------------|
-| **24-pin ATX** | Motherboard main | N/A (required) |
-| **8-pin EPS** | CPU power | 150-300W per |
+| **24-pin ATX** | Carte mère principale | N/A (requis) |
+| **8-pin EPS** | Alimentation CPU | 150-300W par |
 | **6-pin PCIe** | GPU | 75W |
 | **8-pin PCIe** | GPU | 150W |
 | **6+2 pin PCIe** | GPU (flexible) | 75-150W |
 
 ```bash
-# Check power consumption on Linux
-cat /sys/class/power_supply/*/power_now  # Laptops
-ipmitool sensor | grep -i watt           # Servers with IPMI
+# Vérifier la consommation électrique sur Linux
+cat /sys/class/power_supply/*/power_now  # Portables
+ipmitool sensor | grep -i watt           # Serveurs avec IPMI
 ```
 
 ---
 
-## Cooling Strategies
+## Stratégies de Refroidissement
 
-### Air Cooling
+### Refroidissement par Air
 
-Standard for most servers. Fans push air through heatsinks.
+Standard pour la plupart des serveurs. Les ventilateurs poussent l'air à travers les dissipateurs thermiques.
 
 ```
-   INTAKE (Cold)              EXHAUST (Hot)
+   ENTRÉE (Froid)              ÉCHAPPEMENT (Chaud)
       │                           │
       ▼                           ▼
 ┌─────────────────────────────────────────┐
@@ -113,43 +113,43 @@ Standard for most servers. Fans push air through heatsinks.
 │ ████  │ ▓▓▓  │     │     │     │  ████  │
 └─────────────────────────────────────────┘
           ──────────────────►
-              AIRFLOW
+              FLUX D'AIR
 ```
 
-**Push vs Pull:**
+**Push vs Pull :**
 
-| Config | Description | Use Case |
+| Config | Description | Cas d'Usage |
 |--------|-------------|----------|
-| Push | Fans before heatsink | Standard |
-| Pull | Fans after heatsink | Tight spaces |
-| Push-Pull | Both sides | High TDP CPUs |
+| Push | Ventilateurs avant le dissipateur | Standard |
+| Pull | Ventilateurs après le dissipateur | Espaces restreints |
+| Push-Pull | Des deux côtés | CPU haute TDP |
 
 ---
 
-### Water/Liquid Cooling
+### Refroidissement par Eau/Liquide
 
-Used for high-density and HPC environments.
+Utilisé pour les environnements haute densité et HPC.
 
-**Advantages:**
+**Avantages :**
 
-- 1000x better heat transfer than air
-- Quieter operation
-- Higher density possible
-- Can handle 300W+ CPUs
+- Transfert de chaleur 1000x meilleur que l'air
+- Fonctionnement plus silencieux
+- Densité plus élevée possible
+- Peut gérer des CPU de 300W+
 
-**Disadvantages:**
+**Inconvénients :**
 
-- Cost
-- Complexity
-- Leak risk
+- Coût
+- Complexité
+- Risque de fuite
 - Maintenance
 
 ---
 
-### Datacenter Scale (Hot/Cold Aisle)
+### Échelle Datacenter (Allée Chaude/Froide)
 
 ```
-       COLD AISLE              HOT AISLE             COLD AISLE
+       ALLÉE FROIDE            ALLÉE CHAUDE          ALLÉE FROIDE
 ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
 │                  │    │                  │    │                  │
 │  ┌────┐  ┌────┐  │    │  ┌────┐  ┌────┐  │    │  ┌────┐  ┌────┐  │
@@ -158,7 +158,7 @@ Used for high-density and HPC environments.
 │  │ ►  │  │ ►  │  │    │  │    │  │    │  │    │  │ ◄  │  │ ◄  │  │
 │  └────┘  └────┘  │    │  └────┘  └────┘  │    │  └────┘  └────┘  │
 │                  │    │                  │    │                  │
-│   ▲ COLD AIR ▲   │    │   ▲ HOT AIR ▲    │    │   ▲ COLD AIR ▲   │
+│   ▲ AIR FROID ▲  │    │   ▲ AIR CHAUD ▲  │    │   ▲ AIR FROID ▲  │
 └──────────────────┘    └──────────────────┘    └──────────────────┘
         ▲                       │                       ▲
         │                       ▼                       │
@@ -168,93 +168,93 @@ Used for high-density and HPC environments.
                           └──────────┘
 ```
 
-**Containment strategies:**
+**Stratégies de confinement :**
 
-- Cold aisle containment (enclose cold)
-- Hot aisle containment (enclose hot, more common)
-- Chimney cabinets
+- Confinement d'allée froide (enfermer le froid)
+- Confinement d'allée chaude (enfermer le chaud, plus courant)
+- Armoires cheminées
 
 ---
 
-## Performance vs Economy
+## Performance vs Économie
 
-### C-States (CPU Sleep States)
+### C-States (États de Veille CPU)
 
-CPUs can enter sleep states to save power—but wake-up adds latency.
+Les CPU peuvent entrer dans des états de veille pour économiser l'énergie—mais le réveil ajoute de la latence.
 
-| State | Name | Power | Wake Latency |
+| État | Nom | Puissance | Latence de Réveil |
 |-------|------|-------|--------------|
-| C0 | Active | 100% | 0 |
+| C0 | Actif | 100% | 0 |
 | C1 | Halt | ~70% | ~1μs |
 | C1E | Enhanced Halt | ~60% | ~10μs |
 | C3 | Sleep | ~30% | ~50μs |
 | C6 | Deep Sleep | ~10% | ~100-200μs |
 
-!!! warning "Latency-Sensitive Workloads"
-    Deep C-States can cause latency spikes:
+!!! warning "Charges de Travail Sensibles à la Latence"
+    Les C-States profonds peuvent causer des pics de latence :
 
-    - Trading systems
-    - Real-time audio/video
-    - Gaming servers
-    - Database transactions
+    - Systèmes de trading
+    - Audio/vidéo en temps réel
+    - Serveurs de jeux
+    - Transactions de base de données
 
 ---
 
 ### ACPI (Advanced Configuration & Power Interface)
 
-The standard that lets Linux control hardware power management.
+Le standard qui permet à Linux de contrôler la gestion d'alimentation du matériel.
 
 ```bash
-# Check current CPU frequency
+# Vérifier la fréquence CPU actuelle
 cat /proc/cpuinfo | grep MHz
 
-# View available governors
+# Voir les governors disponibles
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
 
-# Current governor
+# Governor actuel
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
-# Set performance mode
+# Définir le mode performance
 echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 
-# Check C-state residency
+# Vérifier la résidence des C-states
 cat /sys/devices/system/cpu/cpu0/cpuidle/state*/name
 cat /sys/devices/system/cpu/cpu0/cpuidle/state*/time
 ```
 
-**CPU Governors:**
+**Governors CPU :**
 
-| Governor | Behavior | Use Case |
+| Governor | Comportement | Cas d'Usage |
 |----------|----------|----------|
-| `performance` | Max frequency always | Low-latency, HPC |
-| `powersave` | Min frequency always | Battery/efficiency |
-| `ondemand` | Scale with load (fast) | General purpose |
-| `conservative` | Scale with load (gradual) | Laptops |
-| `schedutil` | Kernel scheduler-based | Modern default |
+| `performance` | Fréquence max toujours | Faible latence, HPC |
+| `powersave` | Fréquence min toujours | Batterie/efficacité |
+| `ondemand` | Échelle avec la charge (rapide) | Usage général |
+| `conservative` | Échelle avec la charge (graduel) | Portables |
+| `schedutil` | Basé sur le planificateur du noyau | Défaut moderne |
 
 ---
 
-### Tuning for Performance
+### Optimisation pour la Performance
 
-**Disable C-States (BIOS or Kernel):**
+**Désactiver les C-States (BIOS ou Kernel) :**
 
 ```bash
-# Kernel boot parameter (GRUB)
-# Edit /etc/default/grub
+# Paramètre de démarrage du noyau (GRUB)
+# Éditer /etc/default/grub
 GRUB_CMDLINE_LINUX="intel_idle.max_cstate=0 processor.max_cstate=0"
 
-# Apply
+# Appliquer
 sudo update-grub
 sudo reboot
 ```
 
-**Force Performance Governor:**
+**Forcer le Governor Performance :**
 
 ```bash
-# Temporary
+# Temporaire
 sudo cpupower frequency-set -g performance
 
-# Persistent (systemd)
+# Persistant (systemd)
 # /etc/systemd/system/cpu-performance.service
 [Unit]
 Description=Set CPU Governor to Performance
@@ -267,7 +267,7 @@ ExecStart=/usr/bin/cpupower frequency-set -g performance
 WantedBy=multi-user.target
 ```
 
-**Disable Turbo Boost (for consistency):**
+**Désactiver le Turbo Boost (pour la cohérence) :**
 
 ```bash
 # Intel
@@ -279,35 +279,35 @@ echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost
 
 ---
 
-### Monitoring Tools
+### Outils de Surveillance
 
 ```bash
-# CPU frequency and governor
+# Fréquence CPU et governor
 cpupower frequency-info
 watch -n1 "cat /proc/cpuinfo | grep MHz"
 
-# Power consumption (Intel)
+# Consommation électrique (Intel)
 sudo turbostat --Summary --show Busy%,Bzy_MHz,PkgWatt
 
-# Temperature
-sensors                           # lm-sensors package
+# Température
+sensors                           # paquet lm-sensors
 cat /sys/class/thermal/thermal_zone*/temp
 
-# IPMI sensors (servers)
+# Capteurs IPMI (serveurs)
 ipmitool sensor list
 ipmitool sdr list
 ```
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
-| Task | Command |
+| Tâche | Commande |
 |------|---------|
-| Check CPU freq | `cat /proc/cpuinfo \| grep MHz` |
-| View governors | `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors` |
-| Set performance | `echo performance \| sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor` |
-| Check temperature | `sensors` |
-| Power monitoring | `sudo turbostat` |
-| IPMI sensors | `ipmitool sensor list` |
-| Disable turbo (Intel) | `echo 1 \| sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo` |
+| Vérifier fréquence CPU | `cat /proc/cpuinfo \| grep MHz` |
+| Voir les governors | `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors` |
+| Définir performance | `echo performance \| sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor` |
+| Vérifier température | `sensors` |
+| Surveillance puissance | `sudo turbostat` |
+| Capteurs IPMI | `ipmitool sensor list` |
+| Désactiver turbo (Intel) | `echo 1 \| sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo` |

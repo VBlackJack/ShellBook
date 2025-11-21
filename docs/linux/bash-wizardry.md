@@ -1,125 +1,125 @@
-# Bash Special Characters & Redirections
+# Caractères Spéciaux Bash & Redirections
 
 `#bash` `#shell` `#scripting`
 
-Master the magic symbols that make Bash powerful.
+Maîtriser les symboles magiques qui rendent Bash puissant.
 
 ---
 
-## The Dollar Signs
+## Les Signes Dollar
 
-### Exit Codes (`$?`)
+### Codes de Sortie (`$?`)
 
-Every command returns an exit code. Check it immediately after execution.
+Chaque commande retourne un code de sortie. Vérifiez-le immédiatement après l'exécution.
 
 ```bash
 ls /existing/path
-echo $?    # 0 = Success
+echo $?    # 0 = Succès
 
 ls /nonexistent/path
-echo $?    # 2 = Error (No such file)
+echo $?    # 2 = Erreur (Fichier inexistant)
 ```
 
-| Code | Meaning |
+| Code | Signification |
 |------|---------|
-| `0` | Success |
-| `1` | General error |
-| `2` | Misuse of shell command |
-| `126` | Permission denied |
-| `127` | Command not found |
-| `130` | Interrupted (Ctrl+C) |
+| `0` | Succès |
+| `1` | Erreur générale |
+| `2` | Mauvaise utilisation de commande shell |
+| `126` | Permission refusée |
+| `127` | Commande non trouvée |
+| `130` | Interrompu (Ctrl+C) |
 
 ```bash
-# Use in scripts
+# Utilisation dans les scripts
 if [ $? -eq 0 ]; then
-    echo "Command succeeded"
+    echo "Commande réussie"
 else
-    echo "Command failed"
+    echo "Commande échouée"
 fi
 
-# Or shorter
-command && echo "Success" || echo "Failed"
+# Ou plus court
+command && echo "Succès" || echo "Échec"
 ```
 
-### Script Arguments
+### Arguments de Script
 
 ```bash
 #!/bin/bash
-# Save as: myscript.sh
+# Sauvegarder sous : myscript.sh
 
-echo "Script name: $0"
-echo "First arg:   $1"
-echo "Second arg:  $2"
-echo "All args:    $@"
-echo "Arg count:   $#"
+echo "Nom du script: $0"
+echo "Premier arg:   $1"
+echo "Second arg:    $2"
+echo "Tous les args: $@"
+echo "Nombre args:   $#"
 ```
 
 ```bash
 ./myscript.sh hello world
 
 # Output:
-# Script name: ./myscript.sh
-# First arg:   hello
-# Second arg:  world
-# All args:    hello world
-# Arg count:   2
+# Nom du script: ./myscript.sh
+# Premier arg:   hello
+# Second arg:    world
+# Tous les args: hello world
+# Nombre args:   2
 ```
 
 | Variable | Description |
 |----------|-------------|
-| `$0` | Script name |
-| `$1` - `$9` | Positional arguments |
-| `${10}` | 10th+ argument (braces required) |
-| `$@` | All arguments (as separate strings) |
-| `$*` | All arguments (as single string) |
-| `$#` | Number of arguments |
-| `$$` | Current process PID |
-| `$!` | Last background process PID |
+| `$0` | Nom du script |
+| `$1` - `$9` | Arguments positionnels |
+| `${10}` | 10e+ argument (accolades requises) |
+| `$@` | Tous les arguments (comme chaînes séparées) |
+| `$*` | Tous les arguments (comme chaîne unique) |
+| `$#` | Nombre d'arguments |
+| `$$` | PID du processus actuel |
+| `$!` | PID du dernier processus en arrière-plan |
 
 ---
 
-## Redirections (The Plumbing)
+## Redirections (La Plomberie)
 
-### Output Redirection
+### Redirection de Sortie
 
 ```bash
-# Overwrite file (creates if not exists)
+# Écraser le fichier (crée si inexistant)
 echo "Hello" > file.txt
 
-# Append to file
+# Ajouter au fichier
 echo "World" >> file.txt
 
-# Redirect STDERR (2)
+# Rediriger STDERR (2)
 command 2> errors.log
 
-# Redirect STDOUT and STDERR to same file
+# Rediriger STDOUT et STDERR vers le même fichier
 command > output.log 2>&1
-command &> output.log    # Shorthand (Bash 4+)
+command &> output.log    # Raccourci (Bash 4+)
 
-# Discard output
+# Ignorer la sortie
 command > /dev/null 2>&1
-command &> /dev/null     # Shorthand
+command &> /dev/null     # Raccourci
 ```
 
-### Input Redirection
+### Redirection d'Entrée
 
 ```bash
-# Read from file
+# Lire depuis un fichier
 grep "pattern" < file.txt
 
-# Same as (but technically different)
+# Identique à (mais techniquement différent)
 grep "pattern" file.txt
 ```
 
 ### Pipes (`|`)
 
-Output of command A becomes input of command B.
+La sortie de la commande A devient l'entrée de la commande B.
 
 ```bash
-# Chain commands
+# Enchaîner les commandes
 cat /var/log/syslog | grep "error" | wc -l
 
-# Common patterns
+# Modèles courants
 ps aux | grep nginx
 history | tail -20
 df -h | grep /dev/sda
@@ -128,36 +128,36 @@ cat file.txt | sort | uniq
 
 ### Heredoc (`<< EOF`)
 
-Multi-line input. **Critical for generating config files in scripts.**
+Entrée multi-ligne. **Critique pour générer des fichiers de configuration dans les scripts.**
 
 ```bash
-# Basic heredoc
+# Heredoc basique
 cat << EOF
-This is line 1
-This is line 2
+Ceci est la ligne 1
+Ceci est la ligne 2
 Variable: $HOME
 EOF
 
-# Write to file
+# Écrire dans un fichier
 cat << EOF > /etc/myapp/config.conf
 server=localhost
 port=8080
 user=$USER
 EOF
 
-# Prevent variable expansion (quote EOF)
+# Empêcher l'expansion des variables (quoter EOF)
 cat << 'EOF' > script.sh
-echo $HOME    # Literal $HOME, not expanded
+echo $HOME    # $HOME littéral, non expansé
 EOF
 ```
 
-!!! tip "Heredoc in Scripts"
-    Perfect for:
+!!! tip "Heredoc dans les Scripts"
+    Parfait pour :
 
-    - Generating config files
-    - Multi-line SQL queries
-    - Creating scripts within scripts
-    - SSH remote commands
+    - Générer des fichiers de configuration
+    - Requêtes SQL multi-lignes
+    - Créer des scripts dans des scripts
+    - Commandes SSH distantes
 
     ```bash
     ssh user@server << 'EOF'
@@ -169,115 +169,115 @@ EOF
 
 ---
 
-## Control Operators
+## Opérateurs de Contrôle
 
 ### AND (`&&`)
 
-Run second command **ONLY if first succeeds** (exit code 0).
+Exécuter la seconde commande **UNIQUEMENT si la première réussit** (code de sortie 0).
 
 ```bash
-# Only deploy if tests pass
+# Déployer uniquement si les tests passent
 ./run_tests.sh && ./deploy.sh
 
-# Create dir and enter it
+# Créer un répertoire et y entrer
 mkdir myproject && cd myproject
 
-# Update and upgrade
+# Mise à jour et upgrade
 apt update && apt upgrade -y
 ```
 
 ### OR (`||`)
 
-Run second command **ONLY if first fails** (exit code != 0).
+Exécuter la seconde commande **UNIQUEMENT si la première échoue** (code de sortie != 0).
 
 ```bash
-# Fallback behavior
+# Comportement de secours
 ping -c 1 server1 || ping -c 1 server2
 
-# Default value pattern
-grep "config" file.txt || echo "Not found"
+# Modèle de valeur par défaut
+grep "config" file.txt || echo "Non trouvé"
 
-# Exit on failure
+# Sortir en cas d'échec
 cd /important/dir || exit 1
 ```
 
-### Combining AND/OR
+### Combiner AND/OR
 
 ```bash
-# Success message or error
-command && echo "Done!" || echo "Failed!"
+# Message de succès ou erreur
+command && echo "Terminé !" || echo "Échec !"
 
-# Ensure directory exists
+# S'assurer que le répertoire existe
 [ -d "$DIR" ] || mkdir -p "$DIR"
 
-# Try primary, fallback to secondary
-wget "$URL1" && echo "Downloaded from primary" || wget "$URL2"
+# Essayer primaire, sinon secondaire
+wget "$URL1" && echo "Téléchargé depuis primaire" || wget "$URL2"
 ```
 
-### Background (`&`)
+### Arrière-plan (`&`)
 
-Run command in background, don't block terminal.
+Exécuter la commande en arrière-plan, ne pas bloquer le terminal.
 
 ```bash
-# Run in background
+# Exécuter en arrière-plan
 ./long_task.sh &
 
-# Get its PID
+# Obtenir son PID
 echo $!
 
-# Run multiple in parallel
+# Exécuter plusieurs en parallèle
 ./task1.sh &
 ./task2.sh &
 ./task3.sh &
-wait    # Wait for all background jobs
+wait    # Attendre tous les jobs en arrière-plan
 
-# Disown (keeps running after terminal closes)
+# Détacher (continue après fermeture du terminal)
 ./server.sh &
 disown
 ```
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
-| Symbol | Name | Purpose |
+| Symbole | Nom | Usage |
 |--------|------|---------|
-| `$?` | Exit code | Previous command result |
-| `$1-$9` | Args | Script parameters |
-| `$@` | All args | Argument list |
-| `$#` | Arg count | Number of arguments |
-| `$$` | PID | Current process ID |
-| `>` | Redirect | Overwrite file |
-| `>>` | Append | Add to file |
-| `2>` | STDERR | Redirect errors |
-| `&>` | Both | STDOUT + STDERR |
-| `<` | Input | Read from file |
-| `<<` | Heredoc | Multi-line input |
-| `\|` | Pipe | Chain commands |
-| `&&` | AND | If success, then |
-| `\|\|` | OR | If failure, then |
-| `&` | Background | Don't block |
+| `$?` | Code de sortie | Résultat de la commande précédente |
+| `$1-$9` | Args | Paramètres du script |
+| `$@` | Tous les args | Liste d'arguments |
+| `$#` | Nombre args | Nombre d'arguments |
+| `$$` | PID | ID du processus actuel |
+| `>` | Rediriger | Écraser le fichier |
+| `>>` | Ajouter | Ajouter au fichier |
+| `2>` | STDERR | Rediriger les erreurs |
+| `&>` | Les deux | STDOUT + STDERR |
+| `<` | Entrée | Lire depuis fichier |
+| `<<` | Heredoc | Entrée multi-ligne |
+| `\|` | Pipe | Enchaîner les commandes |
+| `&&` | AND | Si succès, alors |
+| `\|\|` | OR | Si échec, alors |
+| `&` | Arrière-plan | Ne pas bloquer |
 
 ---
 
-## Practical Examples
+## Exemples Pratiques
 
 ```bash
 #!/bin/bash
-# Backup script with proper error handling
+# Script de sauvegarde avec gestion d'erreur appropriée
 
 BACKUP_DIR="/backup"
 SOURCE="/var/www"
 DATE=$(date +%Y%m%d)
 
-# Ensure backup dir exists
+# S'assurer que le répertoire de sauvegarde existe
 [ -d "$BACKUP_DIR" ] || mkdir -p "$BACKUP_DIR"
 
-# Create backup, log errors
+# Créer la sauvegarde, logger les erreurs
 tar -czf "$BACKUP_DIR/www_$DATE.tar.gz" "$SOURCE" 2>> /var/log/backup.log \
-    && echo "Backup successful" \
-    || { echo "Backup failed"; exit 1; }
+    && echo "Sauvegarde réussie" \
+    || { echo "Sauvegarde échouée"; exit 1; }
 
-# Cleanup old backups (keep last 7)
+# Nettoyer les anciennes sauvegardes (garder les 7 dernières)
 find "$BACKUP_DIR" -name "*.tar.gz" -mtime +7 -delete
 ```

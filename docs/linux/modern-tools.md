@@ -1,100 +1,100 @@
-# Modern Replacements (Legacy vs New)
+# Remplacements Modernes (Legacy vs Nouveau)
 
-Stop using deprecated `net-tools`. Switch to `iproute2` and modern alternatives.
+Arrêtez d'utiliser les `net-tools` obsolètes. Passez à `iproute2` et aux alternatives modernes.
 
 ---
 
-## Network Commands: net-tools → iproute2
+## Commandes Réseau : net-tools → iproute2
 
-!!! danger "Deprecation Warning"
-    `net-tools` (ifconfig, netstat, route) is deprecated and unmaintained since 2001.
-    Use `iproute2` for modern kernels and features.
+!!! danger "Avertissement de Dépréciation"
+    `net-tools` (ifconfig, netstat, route) est déprécié et non maintenu depuis 2001.
+    Utilisez `iproute2` pour les noyaux modernes et les nouvelles fonctionnalités.
 
-| Legacy (net-tools) | Modern (iproute2) | Purpose |
+| Legacy (net-tools) | Moderne (iproute2) | Usage |
 |--------------------|-------------------|---------|
-| `ifconfig` | `ip addr` / `ip a` | Show IP addresses |
-| `ifconfig eth0 up` | `ip link set eth0 up` | Enable interface |
-| `netstat -tulpn` | `ss -tulpn` | Show listening ports |
-| `netstat -an` | `ss -an` | All connections |
-| `route -n` | `ip route` / `ip r` | Show routing table |
-| `route add` | `ip route add` | Add route |
-| `arp -a` | `ip neigh` | ARP table |
-| `hostname -I` | `ip -br addr` | Brief IP summary |
+| `ifconfig` | `ip addr` / `ip a` | Afficher les adresses IP |
+| `ifconfig eth0 up` | `ip link set eth0 up` | Activer l'interface |
+| `netstat -tulpn` | `ss -tulpn` | Afficher les ports en écoute |
+| `netstat -an` | `ss -an` | Toutes les connexions |
+| `route -n` | `ip route` / `ip r` | Afficher la table de routage |
+| `route add` | `ip route add` | Ajouter une route |
+| `arp -a` | `ip neigh` | Table ARP |
+| `hostname -I` | `ip -br addr` | Résumé IP concis |
 
-### Quick Examples
+### Exemples Rapides
 
 ```bash
-# Show all IPs (brief format)
+# Afficher toutes les IPs (format concis)
 ip -br addr
 
-# Show only IPv4
+# Afficher uniquement IPv4
 ip -4 addr
 
-# Show listening TCP/UDP with process names
+# Afficher TCP/UDP en écoute avec noms de processus
 ss -tulpn
 
-# Show established connections
+# Afficher les connexions établies
 ss -t state established
 ```
 
 ---
 
-## Process Monitoring: top → htop/btop
+## Monitoring Processus : top → htop/btop
 
-| Tool | Install | Features |
+| Outil | Installation | Fonctionnalités |
 |------|---------|----------|
-| `top` | Built-in | Basic, no mouse support |
-| `htop` | `apt install htop` | Colors, mouse, tree view, kill processes |
-| `btop` | `apt install btop` | Modern UI, graphs, themes |
+| `top` | Intégré | Basique, pas de souris |
+| `htop` | `apt install htop` | Couleurs, souris, vue arbre, kill processus |
+| `btop` | `apt install btop` | UI moderne, graphiques, thèmes |
 
 ```bash
-# Install modern alternatives
+# Installer les alternatives modernes
 sudo apt install htop btop    # Debian/Ubuntu
 sudo dnf install htop btop    # RHEL/Fedora
 ```
 
-!!! tip "htop Shortcuts"
-    - `F5` → Tree view
-    - `F6` → Sort by column
-    - `F9` → Kill process
-    - `t` → Toggle tree
-    - `H` → Hide user threads
+!!! tip "Raccourcis htop"
+    - `F5` → Vue arbre
+    - `F6` → Trier par colonne
+    - `F9` → Tuer le processus
+    - `t` → Basculer arbre
+    - `H` → Masquer les threads utilisateur
 
 ---
 
-## File Search: find → fd
+## Recherche de Fichiers : find → fd
 
-`fd` is a fast, user-friendly alternative to `find`.
+`fd` est une alternative rapide et conviviale à `find`.
 
-| Task | find | fd |
+| Tâche | find | fd |
 |------|------|-----|
-| Find by name | `find . -name "*.log"` | `fd ".log$"` |
-| Case insensitive | `find . -iname "*.LOG"` | `fd -i ".log$"` |
-| Find directories | `find . -type d -name config` | `fd -t d config` |
-| Exclude dir | `find . -path ./node_modules -prune -o -name "*.js"` | `fd -E node_modules ".js$"` |
+| Chercher par nom | `find . -name "*.log"` | `fd ".log$"` |
+| Insensible à la casse | `find . -iname "*.LOG"` | `fd -i ".log$"` |
+| Trouver répertoires | `find . -type d -name config` | `fd -t d config` |
+| Exclure répertoire | `find . -path ./node_modules -prune -o -name "*.js"` | `fd -E node_modules ".js$"` |
 
 ```bash
-# Install fd
-sudo apt install fd-find      # Debian/Ubuntu (binary: fdfind)
+# Installer fd
+sudo apt install fd-find      # Debian/Ubuntu (binaire: fdfind)
 sudo dnf install fd-find      # RHEL/Fedora
 
-# Create alias if needed
+# Créer un alias si nécessaire
 alias fd='fdfind'
 ```
 
 ---
 
-## Text Search: grep → ripgrep
+## Recherche de Texte : grep → ripgrep
 
-`ripgrep` (`rg`) is significantly faster than `grep` for large codebases.
+`ripgrep` (`rg`) est significativement plus rapide que `grep` pour les grandes bases de code.
 
 ```bash
-# Install
+# Installer
 sudo apt install ripgrep
 
-# Usage
-rg "pattern"                  # Recursive by default
-rg -i "error"                 # Case insensitive
-rg -t py "import"             # Only Python files
-rg --hidden "secret"          # Include hidden files
+# Utilisation
+rg "pattern"                  # Récursif par défaut
+rg -i "error"                 # Insensible à la casse
+rg -t py "import"             # Seulement fichiers Python
+rg --hidden "secret"          # Inclure fichiers cachés
 ```

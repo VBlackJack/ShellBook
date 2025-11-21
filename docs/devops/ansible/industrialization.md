@@ -1,59 +1,59 @@
-# Industrializing Ansible: Roles & Vault
+# Industrialiser Ansible : Roles & Vault
 
 `#ansible` `#security` `#jinja2` `#roles`
 
-Scale your automation with proper structure and security.
+Faire passer votre automatisation à l'échelle avec une structure et une sécurité appropriées.
 
 ---
 
-## Roles (The Structure)
+## Roles (La Structure)
 
-!!! tip "Don't put everything in one file"
-    A 500-line playbook is unmaintainable. Roles provide reusable, modular organization.
+!!! tip "Ne mettez pas tout dans un seul fichier"
+    Un playbook de 500 lignes est impossible à maintenir. Les roles fournissent une organisation modulaire et réutilisable.
 
-### Create a Role
+### Créer un Role
 
 ```bash
-# Generate standard role structure
+# Générer la structure standard d'un role
 ansible-galaxy init my_role
 
-# Or with custom path
+# Ou avec un chemin personnalisé
 ansible-galaxy init roles/nginx
 ```
 
-### Role Directory Structure
+### Structure de Répertoire d'un Role
 
 ```
 roles/
 └── nginx/
     ├── defaults/
-    │   └── main.yml      # Default variables (lowest priority)
+    │   └── main.yml      # Variables par défaut (priorité la plus basse)
     ├── files/
-    │   └── nginx.conf    # Static files to copy
+    │   └── nginx.conf    # Fichiers statiques à copier
     ├── handlers/
     │   └── main.yml      # Handlers (restart, reload)
     ├── meta/
-    │   └── main.yml      # Role metadata, dependencies
+    │   └── main.yml      # Métadonnées du role, dépendances
     ├── tasks/
-    │   └── main.yml      # Main task list (entry point)
+    │   └── main.yml      # Liste principale des tasks (point d'entrée)
     ├── templates/
-    │   └── site.conf.j2  # Jinja2 templates
+    │   └── site.conf.j2  # Templates Jinja2
     ├── vars/
-    │   └── main.yml      # Role variables (high priority)
+    │   └── main.yml      # Variables du role (priorité haute)
     └── README.md
 ```
 
-| Directory | Purpose |
+| Répertoire | Objectif |
 |-----------|---------|
-| `tasks/` | Main logic (required) |
-| `handlers/` | Triggered actions (restart services) |
-| `templates/` | Jinja2 files (.j2) |
-| `files/` | Static files to copy |
-| `vars/` | Role variables (high priority) |
-| `defaults/` | Default values (low priority, overridable) |
-| `meta/` | Dependencies, metadata |
+| `tasks/` | Logique principale (requis) |
+| `handlers/` | Actions déclenchées (redémarrer les services) |
+| `templates/` | Fichiers Jinja2 (.j2) |
+| `files/` | Fichiers statiques à copier |
+| `vars/` | Variables du role (priorité haute) |
+| `defaults/` | Valeurs par défaut (priorité basse, surchargeable) |
+| `meta/` | Dépendances, métadonnées |
 
-### Using Roles
+### Utiliser les Roles
 
 ```yaml
 # site.yml
@@ -65,10 +65,10 @@ roles/
   roles:
     - common           # roles/common/
     - nginx            # roles/nginx/
-    - { role: app, app_port: 8080 }  # With variables
+    - { role: app, app_port: 8080 }  # Avec des variables
 ```
 
-### Role with Tags and Conditions
+### Role avec Tags et Conditions
 
 ```yaml
 roles:
@@ -82,9 +82,9 @@ roles:
       pg_version: 15
 ```
 
-### Example Role: nginx
+### Exemple de Role : nginx
 
-**roles/nginx/tasks/main.yml:**
+**roles/nginx/tasks/main.yml :**
 
 ```yaml
 ---
@@ -109,7 +109,7 @@ roles:
     enabled: yes
 ```
 
-**roles/nginx/handlers/main.yml:**
+**roles/nginx/handlers/main.yml :**
 
 ```yaml
 ---
@@ -124,7 +124,7 @@ roles:
     state: restarted
 ```
 
-**roles/nginx/defaults/main.yml:**
+**roles/nginx/defaults/main.yml :**
 
 ```yaml
 ---
@@ -135,27 +135,27 @@ nginx_port: 80
 
 ---
 
-## Jinja2 Templates (Flexibility)
+## Templates Jinja2 (Flexibilité)
 
-Generate dynamic configuration files with variables, loops, and conditions.
+Générer des fichiers de configuration dynamiques avec variables, boucles et conditions.
 
-### Basic Syntax
+### Syntaxe de Base
 
-| Syntax | Purpose | Example |
+| Syntaxe | Objectif | Exemple |
 |--------|---------|---------|
-| `{{ var }}` | Print variable | `{{ nginx_port }}` |
-| `{% ... %}` | Logic (if, for) | `{% if enabled %}` |
-| `{# ... #}` | Comment | `{# This is ignored #}` |
-| `{{ var \| filter }}` | Apply filter | `{{ name \| upper }}` |
+| `{{ var }}` | Afficher une variable | `{{ nginx_port }}` |
+| `{% ... %}` | Logique (if, for) | `{% if enabled %}` |
+| `{# ... #}` | Commentaire | `{# Ceci est ignoré #}` |
+| `{{ var \| filter }}` | Appliquer un filtre | `{{ name \| upper }}` |
 
 ### Variables
 
 ```jinja
-# Basic variable
+# Variable basique
 server_name {{ ansible_hostname }};
 listen {{ nginx_port | default(80) }};
 
-# Accessing nested data
+# Accès aux données imbriquées
 {{ user.name }}
 {{ servers[0].ip }}
 
@@ -173,54 +173,54 @@ worker_processes {{ ansible_processor_vcpus }};
 worker_processes 1;
 {% endif %}
 
-{# Inline condition #}
+{# Condition inline #}
 debug = {{ 'true' if debug_mode else 'false' }}
 
-{# Check if variable is defined #}
+{# Vérifier si une variable est définie #}
 {% if custom_config is defined %}
 include {{ custom_config }};
 {% endif %}
 ```
 
-### Loops
+### Boucles
 
 ```jinja
-# Simple loop
+# Boucle simple
 {% for server in upstream_servers %}
 server {{ server }};
 {% endfor %}
 
-# Loop with index
+# Boucle avec index
 {% for user in users %}
 # User {{ loop.index }}: {{ user.name }}
 {% endfor %}
 
-# Loop with condition
+# Boucle avec condition
 {% for vhost in vhosts if vhost.enabled %}
 include /etc/nginx/sites-enabled/{{ vhost.name }}.conf;
 {% endfor %}
 
-# Dictionary loop
+# Boucle sur un dictionnaire
 {% for key, value in settings.items() %}
 {{ key }} = {{ value }};
 {% endfor %}
 ```
 
-### Filters
+### Filtres
 
 ```jinja
-# String manipulation
+# Manipulation de chaînes
 {{ name | lower }}
 {{ name | upper }}
 {{ name | capitalize }}
 {{ path | basename }}
 {{ path | dirname }}
 
-# Default values
+# Valeurs par défaut
 {{ port | default(8080) }}
-{{ config | default('none', true) }}  # Also for empty strings
+{{ config | default('none', true) }}  # Aussi pour les chaînes vides
 
-# Lists
+# Listes
 {{ servers | join(', ') }}
 {{ items | length }}
 {{ items | first }}
@@ -233,20 +233,20 @@ include /etc/nginx/sites-enabled/{{ vhost.name }}.conf;
 {{ data | to_yaml }}
 {{ data | to_nice_json(indent=2) }}
 
-# Math
+# Mathématiques
 {{ value | int }}
 {{ price | float }}
 {{ values | sum }}
 {{ values | max }}
 ```
 
-### Complete Template Example
+### Exemple de Template Complet
 
-**templates/nginx.conf.j2:**
+**templates/nginx.conf.j2 :**
 
 ```jinja
 # {{ ansible_managed }}
-# Generated on {{ ansible_date_time.iso8601 }}
+# Généré le {{ ansible_date_time.iso8601 }}
 
 user www-data;
 worker_processes {{ nginx_worker_processes | default('auto') }};
@@ -282,41 +282,41 @@ http {
 
 ---
 
-## Ansible Vault (Security)
+## Ansible Vault (Sécurité)
 
-!!! danger "NEVER commit cleartext passwords to Git"
-    Use Ansible Vault to encrypt sensitive data: passwords, API keys, certificates.
+!!! danger "NE commitez JAMAIS de mots de passe en clair dans Git"
+    Utilisez Ansible Vault pour chiffrer les données sensibles : mots de passe, clés API, certificats.
 
-### Create Encrypted File
+### Créer un Fichier Chiffré
 
 ```bash
-# Create new encrypted file
+# Créer un nouveau fichier chiffré
 ansible-vault create secrets.yml
 
-# Encrypt existing file
+# Chiffrer un fichier existant
 ansible-vault encrypt secrets.yml
 
-# Decrypt file
+# Déchiffrer un fichier
 ansible-vault decrypt secrets.yml
 ```
 
-### Edit & View
+### Éditer & Visualiser
 
 ```bash
-# Edit encrypted file (decrypts in memory)
+# Éditer un fichier chiffré (déchiffre en mémoire)
 ansible-vault edit secrets.yml
 
-# View contents without editing
+# Voir le contenu sans éditer
 ansible-vault view secrets.yml
 
-# Change password
+# Changer le mot de passe
 ansible-vault rekey secrets.yml
 ```
 
-### Encrypted File Structure
+### Structure du Fichier Chiffré
 
 ```yaml
-# secrets.yml (before encryption)
+# secrets.yml (avant chiffrement)
 ---
 db_password: SuperSecret123!
 api_key: sk-1234567890abcdef
@@ -326,27 +326,27 @@ ssl_private_key: |
   -----END PRIVATE KEY-----
 ```
 
-After encryption, file contains:
+Après chiffrement, le fichier contient :
 
 ```
 $ANSIBLE_VAULT;1.1;AES256
-3832666538653...encrypted data...
+3832666538653...données chiffrées...
 ```
 
-### Running with Vault
+### Exécution avec Vault
 
 ```bash
-# Prompt for password
+# Demander le mot de passe
 ansible-playbook site.yml --ask-vault-pass
 
-# Password from file
+# Mot de passe depuis un fichier
 ansible-playbook site.yml --vault-password-file ~/.vault_pass
 
-# Multiple vault passwords
+# Plusieurs mots de passe vault
 ansible-playbook site.yml --vault-id dev@~/.vault_dev --vault-id prod@~/.vault_prod
 ```
 
-### Using Encrypted Variables
+### Utiliser les Variables Chiffrées
 
 ```yaml
 # playbook.yml
@@ -355,7 +355,7 @@ ansible-playbook site.yml --vault-id dev@~/.vault_dev --vault-id prod@~/.vault_p
   become: yes
   vars_files:
     - vars/main.yml
-    - vars/secrets.yml      # Encrypted file
+    - vars/secrets.yml      # Fichier chiffré
 
   tasks:
     - name: Configure database
@@ -363,16 +363,16 @@ ansible-playbook site.yml --vault-id dev@~/.vault_dev --vault-id prod@~/.vault_p
         src: db.conf.j2
         dest: /etc/myapp/db.conf
       vars:
-        password: "{{ db_password }}"  # From secrets.yml
+        password: "{{ db_password }}"  # Depuis secrets.yml
 ```
 
-### Encrypt Single Variable
+### Chiffrer une Variable Unique
 
 ```bash
-# Encrypt a string
+# Chiffrer une chaîne
 ansible-vault encrypt_string 'SuperSecret123!' --name 'db_password'
 
-# Output (paste into vars file):
+# Sortie (à coller dans le fichier vars) :
 db_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   6138653033326...
@@ -380,16 +380,16 @@ db_password: !vault |
 
 ---
 
-## Best Practices
+## Bonnes Pratiques
 
-### Project Layout
+### Structure de Projet
 
 ```
 ansible-project/
-├── ansible.cfg              # Local config
+├── ansible.cfg              # Config locale
 ├── inventory/
 │   ├── production/
-│   │   ├── hosts            # Production servers
+│   │   ├── hosts            # Serveurs de production
 │   │   └── group_vars/
 │   │       └── all.yml
 │   └── staging/
@@ -397,7 +397,7 @@ ansible-project/
 │       └── group_vars/
 │           └── all.yml
 ├── group_vars/
-│   ├── all.yml              # Variables for all hosts
+│   ├── all.yml              # Variables pour tous les hôtes
 │   ├── webservers.yml
 │   └── databases.yml
 ├── host_vars/
@@ -408,15 +408,15 @@ ansible-project/
 │   ├── postgresql/
 │   └── app/
 ├── playbooks/
-│   ├── site.yml             # Master playbook
+│   ├── site.yml             # Playbook maître
 │   ├── webservers.yml
 │   └── databases.yml
-├── files/                   # Global static files
-├── templates/               # Global templates
-└── requirements.yml         # Role dependencies
+├── files/                   # Fichiers statiques globaux
+├── templates/               # Templates globaux
+└── requirements.yml         # Dépendances de roles
 ```
 
-### Optimized ansible.cfg
+### ansible.cfg Optimisé
 
 ```ini
 [defaults]
@@ -426,22 +426,22 @@ remote_user = deploy
 private_key_file = ~/.ssh/ansible_key
 
 # Performance
-forks = 10                    # Parallel hosts (default: 5)
-gathering = smart             # Cache facts
+forks = 10                    # Hôtes parallèles (défaut : 5)
+gathering = smart             # Mettre en cache les facts
 fact_caching = jsonfile
 fact_caching_connection = /tmp/ansible_facts
-fact_caching_timeout = 86400  # 24 hours
+fact_caching_timeout = 86400  # 24 heures
 
-# Output
-stdout_callback = yaml        # Readable output
+# Sortie
+stdout_callback = yaml        # Sortie lisible
 display_skipped_hosts = False
 
-# Security
-host_key_checking = False     # For automation (less secure)
+# Sécurité
+host_key_checking = False     # Pour l'automation (moins sécurisé)
 vault_password_file = ~/.vault_pass
 
 [ssh_connection]
-pipelining = True             # Faster execution
+pipelining = True             # Exécution plus rapide
 control_path = /tmp/ansible-%%h-%%r
 ssh_args = -o ControlMaster=auto -o ControlPersist=60s
 
@@ -451,20 +451,20 @@ become_method = sudo
 become_ask_pass = False
 ```
 
-### Performance Tips
+### Astuces de Performance
 
-| Setting | Impact |
+| Paramètre | Impact |
 |---------|--------|
-| `forks = 10` | Run on 10 hosts in parallel |
-| `pipelining = True` | Reduce SSH operations |
-| `gathering = smart` | Don't re-gather facts |
-| `strategy: free` | Don't wait for slowest host |
+| `forks = 10` | Exécuter sur 10 hôtes en parallèle |
+| `pipelining = True` | Réduire les opérations SSH |
+| `gathering = smart` | Ne pas re-collecter les facts |
+| `strategy: free` | Ne pas attendre l'hôte le plus lent |
 
 ```yaml
-# In playbook for async tasks
+# Dans le playbook pour les tasks asynchrones
 - name: Long running task
   command: /usr/bin/long_task
-  async: 3600        # Max runtime
+  async: 3600        # Durée max d'exécution
   poll: 0            # Fire and forget
   register: task_result
 
@@ -479,7 +479,7 @@ become_ask_pass = False
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # Roles
@@ -492,7 +492,7 @@ ansible-vault edit secrets.yml
 ansible-vault encrypt_string 'secret' --name 'var_name'
 ansible-playbook site.yml --ask-vault-pass
 
-# Run with options
+# Exécuter avec options
 ansible-playbook site.yml -i inventory/prod --limit webservers
 ansible-playbook site.yml --tags "config,deploy" --skip-tags "debug"
 ansible-playbook site.yml --check --diff

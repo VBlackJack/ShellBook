@@ -1,6 +1,6 @@
-# Windows Commands
+# Commandes Windows
 
-Windows administration commands and PowerShell scripts.
+Commandes d'administration Windows et scripts PowerShell.
 
-!!! note "Coming Soon"
-    Content will be added progressively.
+!!! note "Bientôt Disponible"
+    Le contenu sera ajouté progressivement.

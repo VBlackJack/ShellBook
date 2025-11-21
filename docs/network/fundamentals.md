@@ -1,206 +1,206 @@
-# Network Survival Kit
+# Kit de Survie Réseau
 
 `#cidr` `#tcp-ip` `#load-balancing`
 
-Essential networking concepts every DevOps and SysAdmin must know.
+Concepts réseau essentiels que tout DevOps et SysAdmin doit connaître.
 
 ---
 
-## CIDR Cheat Sheet
+## Aide-mémoire CIDR
 
-| CIDR | Subnet Mask | Total IPs | Usable IPs | Use Case |
+| CIDR | Subnet Mask | Total IPs | IPs Utilisables | Cas d'Usage |
 |------|-------------|-----------|------------|----------|
-| `/32` | 255.255.255.255 | 1 | 1 | Single host (firewall rules) |
-| `/31` | 255.255.255.254 | 2 | 2 | Point-to-point links |
-| `/30` | 255.255.255.252 | 4 | 2 | Router interconnects |
-| `/29` | 255.255.255.248 | 8 | 6 | Small office |
-| `/28` | 255.255.255.240 | 16 | 14 | Small network |
-| `/27` | 255.255.255.224 | 32 | 30 | Medium network |
-| `/26` | 255.255.255.192 | 64 | 62 | Large subnet |
-| `/25` | 255.255.255.128 | 128 | 126 | Half a /24 |
-| `/24` | 255.255.255.0 | 256 | 254 | Standard LAN |
-| `/16` | 255.255.0.0 | 65,536 | 65,534 | Large VPC/Corporate |
-| `/8` | 255.0.0.0 | 16,777,216 | 16,777,214 | Massive networks |
+| `/32` | 255.255.255.255 | 1 | 1 | Hôte unique (règles firewall) |
+| `/31` | 255.255.255.254 | 2 | 2 | Liens point-à-point |
+| `/30` | 255.255.255.252 | 4 | 2 | Interconnexions de routeurs |
+| `/29` | 255.255.255.248 | 8 | 6 | Petit bureau |
+| `/28` | 255.255.255.240 | 16 | 14 | Petit réseau |
+| `/27` | 255.255.255.224 | 32 | 30 | Réseau moyen |
+| `/26` | 255.255.255.192 | 64 | 62 | Grand sous-réseau |
+| `/25` | 255.255.255.128 | 128 | 126 | Moitié d'un /24 |
+| `/24` | 255.255.255.0 | 256 | 254 | LAN standard |
+| `/16` | 255.255.0.0 | 65,536 | 65,534 | Grand VPC/Entreprise |
+| `/8` | 255.0.0.0 | 16,777,216 | 16,777,214 | Réseaux massifs |
 
-!!! tip "Quick Math"
-    Usable IPs = 2^(32-CIDR) - 2 (network + broadcast addresses)
+!!! tip "Calcul Rapide"
+    IPs utilisables = 2^(32-CIDR) - 2 (adresses réseau + broadcast)
 
     ```bash
-    # Calculate subnet info
+    # Calculer les infos de sous-réseau
     ipcalc 192.168.1.0/24
     ```
 
 ---
 
-## The "Weird" IPs
+## Les IPs "Bizarres"
 
 !!! info "127.0.0.1 - Localhost"
-    The loopback address. Traffic never leaves your machine.
+    L'adresse de bouclage. Le trafic ne quitte jamais votre machine.
 
-    - `127.0.0.1` - IPv4 loopback
-    - `::1` - IPv6 loopback
-    - Entire `127.0.0.0/8` range is reserved for loopback
+    - `127.0.0.1` - Bouclage IPv4
+    - `::1` - Bouclage IPv6
+    - La plage entière `127.0.0.0/8` est réservée pour le bouclage
 
-!!! danger "169.254.x.x - APIPA (Your DHCP is Dead)"
+!!! danger "169.254.x.x - APIPA (Votre DHCP est Mort)"
     **Automatic Private IP Addressing** (Link-Local)
 
-    If you see this IP, your device **failed to get an address from DHCP**.
+    Si vous voyez cette IP, votre appareil **n'a pas réussi à obtenir une adresse depuis le DHCP**.
 
     ```bash
     $ ip addr
-    inet 169.254.47.123/16  # ← DHCP server is unreachable!
+    inet 169.254.47.123/16  # ← Le serveur DHCP est injoignable !
     ```
 
-    **Debugging steps:**
+    **Étapes de débogage :**
     ```bash
-    # Check DHCP service
+    # Vérifier le service DHCP
     systemctl status dhcpd
 
-    # Request new lease
+    # Demander un nouveau bail
     sudo dhclient -v eth0
 
-    # Check network cable/connectivity
+    # Vérifier le câble réseau/connectivité
     ethtool eth0
     ```
 
 !!! warning "100.64.0.0/10 - CGNAT (Carrier-Grade NAT)"
-    Shared address space used by ISPs (RFC 6598).
+    Espace d'adressage partagé utilisé par les FAI (RFC 6598).
 
-    Common on:
+    Courant sur :
 
-    - Mobile networks (4G/5G)
-    - Some residential ISPs
-    - Cloud providers (internal)
+    - Réseaux mobiles (4G/5G)
+    - Certains FAI résidentiels
+    - Fournisseurs cloud (interne)
 
-    **Implication:** You're behind double NAT. Port forwarding won't work.
+    **Implication :** Vous êtes derrière un double NAT. Le port forwarding ne fonctionnera pas.
 
-### Private IP Ranges (RFC 1918)
+### Plages IP Privées (RFC 1918)
 
-| Range | CIDR | Typical Use |
+| Plage | CIDR | Usage Typique |
 |-------|------|-------------|
-| 10.0.0.0 - 10.255.255.255 | 10.0.0.0/8 | Large enterprises, AWS VPCs |
-| 172.16.0.0 - 172.31.255.255 | 172.16.0.0/12 | Medium networks, Docker default |
-| 192.168.0.0 - 192.168.255.255 | 192.168.0.0/16 | Home/small office LANs |
+| 10.0.0.0 - 10.255.255.255 | 10.0.0.0/8 | Grandes entreprises, VPCs AWS |
+| 172.16.0.0 - 172.31.255.255 | 172.16.0.0/12 | Réseaux moyens, Docker par défaut |
+| 192.168.0.0 - 192.168.255.255 | 192.168.0.0/16 | LANs domestiques/petits bureaux |
 
 ---
 
-## Load Balancing: L4 vs L7
+## Load Balancing : L4 vs L7
 
-| Feature | Layer 4 (Transport) | Layer 7 (Application) |
+| Fonctionnalité | Layer 4 (Transport) | Layer 7 (Application) |
 |---------|---------------------|------------------------|
-| **OSI Layer** | TCP/UDP | HTTP/HTTPS |
-| **Speed** | Very fast | Slower (inspects content) |
-| **Intelligence** | Dumb (IP + Port only) | Smart (URL, headers, cookies) |
-| **SSL/TLS** | Passthrough (encrypted) | Termination (decrypted) |
-| **Routing decisions** | Source IP, Dest Port | URL path, Host header, Cookies |
-| **Use case** | Database, TCP services | Web apps, API gateways |
-| **Examples** | HAProxy (TCP mode), NLB | Nginx, HAProxy (HTTP), ALB |
+| **Couche OSI** | TCP/UDP | HTTP/HTTPS |
+| **Vitesse** | Très rapide | Plus lent (inspecte le contenu) |
+| **Intelligence** | Basique (IP + Port seulement) | Intelligent (URL, headers, cookies) |
+| **SSL/TLS** | Passthrough (chiffré) | Termination (déchiffré) |
+| **Décisions de routage** | IP source, Port destination | Chemin URL, Header Host, Cookies |
+| **Cas d'usage** | Database, services TCP | Applications web, API gateways |
+| **Exemples** | HAProxy (mode TCP), NLB | Nginx, HAProxy (HTTP), ALB |
 
-### L4 Load Balancer
+### Load Balancer L4
 
 ```
-Client → [L4 LB] → Server
+Client → [L4 LB] → Serveur
          ↓
-    Routes by IP:Port
-    Cannot see HTTP content
+    Route par IP:Port
+    Ne peut pas voir le contenu HTTP
     SSL passthrough
 ```
 
-### L7 Load Balancer
+### Load Balancer L7
 
 ```
-Client → [L7 LB] → Server
+Client → [L7 LB] → Serveur
          ↓
     SSL Termination
-    Inspects HTTP headers
-    Routes by URL: /api → backend-api
-                   /web → backend-web
+    Inspecte les headers HTTP
+    Route par URL : /api → backend-api
+                    /web → backend-web
 ```
 
-!!! example "When to use which?"
-    - **L4:** MySQL, Redis, raw TCP, when you need SSL passthrough
-    - **L7:** Web apps, REST APIs, when you need URL-based routing
+!!! example "Quand utiliser lequel ?"
+    - **L4 :** MySQL, Redis, TCP brut, quand vous avez besoin de SSL passthrough
+    - **L7 :** Applications web, APIs REST, quand vous avez besoin de routage basé sur URL
 
 ---
 
-## The Debugging Pyramid
+## La Pyramide de Débogage
 
-Debug network issues layer by layer, from bottom to top.
+Déboguer les problèmes réseau couche par couche, de bas en haut.
 
-=== "Layer 3 - ICMP (Is the host alive?)"
+=== "Layer 3 - ICMP (L'hôte est-il vivant ?)"
 
     ```bash
-    # Basic connectivity test
+    # Test de connectivité basique
     ping -c 4 google.com
 
-    # With timeout
+    # Avec timeout
     ping -c 1 -W 2 192.168.1.1
 
-    # Trace the route
+    # Tracer la route
     traceroute google.com
-    mtr google.com  # Better interactive version
+    mtr google.com  # Meilleure version interactive
     ```
 
-    **If ping fails:**
+    **Si ping échoue :**
 
-    - Host is down
-    - Firewall blocking ICMP
-    - Routing issue
+    - L'hôte est éteint
+    - Firewall bloquant ICMP
+    - Problème de routage
 
-=== "Layer 4 - TCP (Is the port open?)"
+=== "Layer 4 - TCP (Le port est-il ouvert ?)"
 
     ```bash
-    # Test TCP port with nc (netcat)
+    # Tester un port TCP avec nc (netcat)
     nc -zv google.com 443
     nc -zv 192.168.1.1 22
 
-    # Using telnet
+    # Utiliser telnet
     telnet google.com 80
 
-    # Test multiple ports
+    # Tester plusieurs ports
     nc -zv google.com 80 443 8080
 
-    # With timeout
+    # Avec timeout
     nc -zv -w 3 google.com 443
     ```
 
-    **If port is closed:**
+    **Si le port est fermé :**
 
-    - Service not running
-    - Firewall blocking port
-    - Service bound to wrong interface
+    - Service non démarré
+    - Firewall bloquant le port
+    - Service lié à la mauvaise interface
 
-=== "Layer 7 - HTTP (Is the app responding?)"
+=== "Layer 7 - HTTP (L'application répond-elle ?)"
 
     ```bash
-    # Check HTTP response headers
+    # Vérifier les headers de réponse HTTP
     curl -I https://google.com
 
-    # Full response with timing
+    # Réponse complète avec timing
     curl -w "@curl-format.txt" -o /dev/null -s https://google.com
 
-    # Check specific endpoint
+    # Vérifier un endpoint spécifique
     curl -I https://api.example.com/health
 
-    # With verbose SSL info
+    # Avec infos SSL verbose
     curl -vI https://example.com
     ```
 
-    **Response codes:**
+    **Codes de réponse :**
 
-    - `2xx` - Success
-    - `3xx` - Redirect
-    - `4xx` - Client error (check your request)
-    - `5xx` - Server error (check backend logs)
+    - `2xx` - Succès
+    - `3xx` - Redirection
+    - `4xx` - Erreur client (vérifier votre requête)
+    - `5xx` - Erreur serveur (vérifier les logs backend)
 
-### Quick Debug Flow
+### Flux de Débogage Rapide
 
 ```
-ping fails?     → Check routing, firewall, host status
-  ↓ works
-nc port fails?  → Check service, firewall rules, binding
-  ↓ works
-curl fails?     → Check app logs, config, SSL certs
-  ↓ works
-Problem is elsewhere (DNS, client-side, etc.)
+ping échoue ?     → Vérifier routage, firewall, état de l'hôte
+  ↓ fonctionne
+nc port échoue ?  → Vérifier service, règles firewall, binding
+  ↓ fonctionne
+curl échoue ?     → Vérifier logs app, config, certificats SSL
+  ↓ fonctionne
+Le problème est ailleurs (DNS, côté client, etc.)
 ```

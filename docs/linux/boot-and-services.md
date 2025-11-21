@@ -1,8 +1,8 @@
-# Boot Process & Systemd
+# Processus de Boot & Systemd
 
 `#boot` `#systemd` `#grub` `#troubleshooting` `#systemd-analyze`
 
-Complete reference for Linux boot sequence and service management.
+Référence complète pour la séquence de boot Linux et la gestion des services.
 
 ---
 
@@ -111,7 +111,7 @@ systemd-analyze
 
 ---
 
-## GRUB2 Configuration
+## Configuration GRUB2
 
 ### Fichiers de Configuration
 
@@ -201,12 +201,12 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg   # RHEL/CentOS
 ┌─────────────────────────────────────────────────────────────┐
 │                        SYSTEMD                               │
 ├─────────────────────────────────────────────────────────────┤
-│  systemctl     │  Service/Unit management                    │
-│  journalctl    │  Log management                             │
-│  systemd-analyze │  Performance analysis                     │
-│  hostnamectl   │  Hostname management                        │
-│  timedatectl   │  Time/timezone management                   │
-│  loginctl      │  Session management                         │
+│  systemctl     │  Gestion Service/Unit                       │
+│  journalctl    │  Gestion des logs                           │
+│  systemd-analyze │  Analyse de performance                   │
+│  hostnamectl   │  Gestion du hostname                        │
+│  timedatectl   │  Gestion heure/timezone                     │
+│  loginctl      │  Gestion des sessions                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -379,7 +379,7 @@ graphical.target @15.801s
 
 ---
 
-## Journald : Survival Kit
+## Journald : Kit de Survie
 
 ### Syntaxe de Base
 
@@ -488,7 +488,7 @@ journalctl --no-pager
 # Format JSON
 journalctl -o json-pretty
 
-# Kernel messages uniquement
+# Messages kernel uniquement
 journalctl -k
 
 # Output inversé (récent en premier)
@@ -526,15 +526,15 @@ journalctl -u nginx --since today > /tmp/nginx_logs.txt
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
-# Boot analysis
+# Analyse de boot
 systemd-analyze                    # Temps total
 systemd-analyze blame              # Services lents
 systemd-analyze critical-chain     # Chemin critique
 
-# Service management
+# Gestion des services
 systemctl status nginx             # État
 systemctl enable --now nginx       # Enable + Start
 systemctl mask service             # Bloquer complètement
@@ -544,7 +544,7 @@ systemctl get-default              # Target actuelle
 systemctl set-default multi-user.target
 
 # Logs
-journalctl -u nginx -f             # Follow service
+journalctl -u nginx -f             # Suivre service
 journalctl -b -p err               # Erreurs ce boot
 journalctl --since "1 hour ago"    # Dernière heure
 

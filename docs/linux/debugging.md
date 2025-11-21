@@ -1,191 +1,191 @@
-# System Debugging & Logs
+# Débogage Système & Logs
 
-Essential commands for troubleshooting Linux systems.
+Commandes essentielles pour dépanner les systèmes Linux.
 
 ---
 
-## Systemd Logs (journalctl)
+## Logs Systemd (journalctl)
 
-### View Service Logs
+### Voir les Logs d'un Service
 
 ```bash
-# Logs for a specific service
+# Logs pour un service spécifique
 journalctl -u nginx
 journalctl -u ssh
 
-# Follow logs in real-time
+# Suivre les logs en temps réel
 journalctl -u nginx -f
 
-# Last 100 lines
+# Les 100 dernières lignes
 journalctl -u nginx -n 100
 ```
 
-### Time-Based Filtering
+### Filtrage par Temps
 
 ```bash
-# Since 1 hour ago
+# Depuis 1 heure
 journalctl --since "1 hour ago"
 
-# Since specific time
+# Depuis un moment spécifique
 journalctl --since "2024-01-15 10:00:00"
 
-# Time range
+# Plage temporelle
 journalctl --since "2024-01-15" --until "2024-01-16"
 
-# Since last boot
+# Depuis le dernier démarrage
 journalctl -b
 
-# Previous boot
+# Démarrage précédent
 journalctl -b -1
 ```
 
-### Filter by Priority
+### Filtrer par Priorité
 
 ```bash
-# Errors only
+# Erreurs uniquement
 journalctl -p err
 
-# Errors and warnings
+# Erreurs et avertissements
 journalctl -p warning
 
-# Priority levels: emerg, alert, crit, err, warning, notice, info, debug
+# Niveaux de priorité : emerg, alert, crit, err, warning, notice, info, debug
 ```
 
 | Option | Description |
 |--------|-------------|
-| `-u <service>` | Filter by systemd unit |
-| `-f` | Follow (like tail -f) |
-| `-n <N>` | Show last N lines |
-| `-p <level>` | Filter by priority |
-| `-b` | Current boot only |
-| `--since` | Start time filter |
-| `--no-pager` | Output without pagination |
+| `-u <service>` | Filtrer par unité systemd |
+| `-f` | Suivre (comme tail -f) |
+| `-n <N>` | Afficher les N dernières lignes |
+| `-p <level>` | Filtrer par priorité |
+| `-b` | Démarrage actuel uniquement |
+| `--since` | Filtre de temps de début |
+| `--no-pager` | Sortie sans pagination |
 
 ---
 
-## File & Port Inspection (lsof)
+## Inspection de Fichiers & Ports (lsof)
 
-### Find Process Using a Port
+### Trouver le Processus Utilisant un Port
 
 ```bash
-# What's using port 80?
+# Qui utilise le port 80 ?
 lsof -i :80
 
-# What's using port 443? (TCP only)
+# Qui utilise le port 443 ? (TCP uniquement)
 lsof -i TCP:443
 
-# All network connections
+# Toutes les connexions réseau
 lsof -i
 
-# All listening ports
+# Tous les ports en écoute
 lsof -i -P -n | grep LISTEN
 ```
 
-### Find Open Files
+### Trouver les Fichiers Ouverts
 
 ```bash
-# Files opened by a user
+# Fichiers ouverts par un utilisateur
 lsof -u root
 lsof -u www-data
 
-# Files opened by a process
+# Fichiers ouverts par un processus
 lsof -p 1234
 
-# Who has this file open?
+# Qui a ce fichier ouvert ?
 lsof /var/log/syslog
 
-# Files in a directory
+# Fichiers dans un répertoire
 lsof +D /var/log/
 ```
 
-!!! tip "Alternative: ss + fuser"
+!!! tip "Alternative : ss + fuser"
     ```bash
-    # Find process on port
+    # Trouver le processus sur un port
     ss -tulpn | grep :80
 
-    # Kill process using a file
+    # Tuer le processus utilisant un fichier
     fuser -k /var/lock/lockfile
     ```
 
 ---
 
-## Kernel Messages (dmesg)
+## Messages du Noyau (dmesg)
 
 ```bash
-# Human-readable timestamps
+# Timestamps lisibles
 dmesg -T
 
-# Follow kernel messages
+# Suivre les messages du noyau
 dmesg -w
 
-# Filter by level
+# Filtrer par niveau
 dmesg --level=err,warn
 
-# Filter by facility
+# Filtrer par facility
 dmesg -f kern
 
-# Clear ring buffer (requires root)
+# Effacer le ring buffer (nécessite root)
 dmesg -c
 ```
 
-### Common Use Cases
+### Cas d'Usage Courants
 
 ```bash
-# USB device issues
+# Problèmes de périphérique USB
 dmesg -T | grep -i usb
 
-# Disk errors
+# Erreurs de disque
 dmesg -T | grep -iE "(sda|nvme|error|fail)"
 
-# Memory issues
+# Problèmes de mémoire
 dmesg -T | grep -iE "(oom|memory|killed)"
 ```
 
 ---
 
-## The Nuclear Option (strace)
+## L'Option Nucléaire (strace)
 
-!!! danger "Performance Impact"
-    `strace` significantly slows down traced processes.
-    **Never use on high-load production systems** without understanding the impact.
-    Consider `perf` or `eBPF` tools for production debugging.
+!!! danger "Impact sur les Performances"
+    `strace` ralentit significativement les processus tracés.
+    **Ne jamais utiliser sur des systèmes de production à forte charge** sans comprendre l'impact.
+    Considérez `perf` ou les outils `eBPF` pour le débogage en production.
 
-### Basic Usage
+### Usage de Base
 
 ```bash
-# Trace a running process
+# Tracer un processus en cours
 strace -p <PID>
 
-# Trace a command
+# Tracer une commande
 strace ls -la
 
-# Trace with timestamps
+# Tracer avec timestamps
 strace -t -p <PID>
 
-# Trace specific syscalls only
+# Tracer uniquement des syscalls spécifiques
 strace -e open,read,write -p <PID>
 
-# Summary of syscalls
+# Résumé des syscalls
 strace -c ls -la
 ```
 
-### Practical Examples
+### Exemples Pratiques
 
 ```bash
-# Why is this process stuck?
+# Pourquoi ce processus est-il bloqué ?
 strace -p $(pgrep -f "stuck_process")
 
-# What files is this accessing?
+# Quels fichiers sont accédés ?
 strace -e openat -p <PID>
 
-# Network activity
+# Activité réseau
 strace -e network -p <PID>
 
-# Save output to file
+# Sauvegarder la sortie dans un fichier
 strace -o /tmp/trace.log -p <PID>
 ```
 
-!!! tip "Alternatives for Production"
-    - `ltrace` - Library call tracing
-    - `perf trace` - Lower overhead
-    - `bpftrace` - eBPF-based, minimal impact
+!!! tip "Alternatives pour la Production"
+    - `ltrace` - Traçage des appels de bibliothèque
+    - `perf trace` - Overhead plus faible
+    - `bpftrace` - Basé sur eBPF, impact minimal

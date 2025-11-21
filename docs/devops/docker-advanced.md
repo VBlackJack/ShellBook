@@ -1,28 +1,28 @@
-# Docker Pro Tips & Hacks
+# Astuces & Hacks Docker Pro
 
 `#docker` `#productivity` `#security`
 
-Advanced Docker features that will save you hours of work.
+Fonctionnalités avancées de Docker qui vous feront gagner des heures de travail.
 
 ---
 
-## Tip 1: Instant Scaffolding (`docker init`)
+## Astuce 1: Scaffolding Instantané (`docker init`)
 
-Stop writing Dockerfiles from scratch. Let Docker generate them for you.
+Arrêtez d'écrire des Dockerfiles from scratch. Laissez Docker les générer pour vous.
 
 ```bash
-cd my-project
+cd mon-projet
 docker init
 ```
 
-**What it does:**
+**Ce que ça fait:**
 
-- Detects your project language (Python, Node, Go, Rust, etc.)
-- Generates optimized `Dockerfile` with best practices
-- Creates `compose.yaml` for local development
-- Adds `.dockerignore` file
+- Détecte le langage de votre projet (Python, Node, Go, Rust, etc.)
+- Génère un `Dockerfile` optimisé avec les bonnes pratiques
+- Crée un `compose.yaml` pour le développement local
+- Ajoute un fichier `.dockerignore`
 
-**Example output:**
+**Exemple de sortie:**
 
 ```
 ? What application platform does your project use? Python
@@ -34,20 +34,20 @@ docker init
 ✔ Created .dockerignore
 ```
 
-!!! tip "Works with existing projects"
-    Run `docker init` in any existing project directory. It analyzes your code and generates appropriate configs.
+!!! tip "Fonctionne avec les projets existants"
+    Exécuter `docker init` dans n'importe quel répertoire de projet existant. Il analyse votre code et génère les configs appropriées.
 
 ---
 
-## Tip 2: Hot Reloading (`docker compose watch`)
+## Astuce 2: Hot Reloading (`docker compose watch`)
 
-Replace complex volume mounts with native file sync for development.
+Remplacer les montages de volumes complexes par une synchronisation de fichiers native pour le développement.
 
 ```bash
 docker compose watch
 ```
 
-**compose.yaml configuration:**
+**Configuration compose.yaml:**
 
 ```yaml
 services:
@@ -57,91 +57,91 @@ services:
       - "3000:3000"
     develop:
       watch:
-        # Sync files without rebuild
+        # Synchroniser les fichiers sans rebuild
         - action: sync
           path: ./src
           target: /app/src
 
-        # Sync and restart container
+        # Synchroniser et redémarrer le container
         - action: sync+restart
           path: ./config
           target: /app/config
 
-        # Rebuild on dependency changes
+        # Rebuild lors de changements de dépendances
         - action: rebuild
           path: ./package.json
 ```
 
-**Actions explained:**
+**Actions expliquées:**
 
-| Action | Behavior |
+| Action | Comportement |
 |--------|----------|
-| `sync` | Copy files to container (hot reload) |
-| `sync+restart` | Copy files and restart container |
-| `rebuild` | Trigger full image rebuild |
+| `sync` | Copier les fichiers vers le container (hot reload) |
+| `sync+restart` | Copier les fichiers et redémarrer le container |
+| `rebuild` | Déclencher un rebuild complet de l'image |
 
-!!! warning "Replaces bind mounts"
-    `docker compose watch` is cleaner than volume mounts for development:
+!!! warning "Remplace les bind mounts"
+    `docker compose watch` est plus propre que les montages de volumes pour le développement:
 
-    - No permission issues
-    - Better performance on macOS/Windows
-    - Selective sync (ignore node_modules)
+    - Pas de problèmes de permissions
+    - Meilleures performances sur macOS/Windows
+    - Synchronisation sélective (ignorer node_modules)
 
 ---
 
-## Tip 3: Debugging Distroless (`docker debug`)
+## Astuce 3: Déboguer Distroless (`docker debug`)
 
-**Problem:** Your production container has no shell, no bash, no tools. How do you debug?
+**Problème:** Votre container de production n'a pas de shell, pas de bash, pas d'outils. Comment déboguer?
 
 ```bash
-# This fails on distroless/minimal images
-docker exec -it my-container /bin/sh
+# Ça échoue sur les images distroless/minimales
+docker exec -it mon-container /bin/sh
 # Error: executable file not found
 ```
 
-**Solution:** Docker Debug attaches a debugging toolkit.
+**Solution:** Docker Debug attache un toolkit de débogage.
 
 ```bash
 docker debug <container_id>
 ```
 
-**What you get:**
+**Ce que vous obtenez:**
 
-- Full shell access (even on distroless)
-- vim, curl, wget, netcat pre-installed
-- Process inspection tools
-- Network debugging utilities
+- Accès shell complet (même sur distroless)
+- vim, curl, wget, netcat pré-installés
+- Outils d'inspection de processus
+- Utilitaires de débogage réseau
 
 ```bash
-# Debug a running container
-docker debug my-api-container
+# Déboguer un container en cours d'exécution
+docker debug mon-api-container
 
-# Debug with a specific image as toolkit
-docker debug --shell bash my-container
+# Déboguer avec une image spécifique comme toolkit
+docker debug --shell bash mon-container
 
-# Debug a stopped container
-docker debug --platform linux/amd64 my-container
+# Déboguer un container arrêté
+docker debug --platform linux/amd64 mon-container
 ```
 
-!!! info "How it works"
-    Docker Debug creates a sidecar container that shares the target container's namespaces (PID, network, filesystem) without modifying the original image.
+!!! info "Comment ça marche"
+    Docker Debug crée un container sidecar qui partage les namespaces du container cible (PID, réseau, filesystem) sans modifier l'image originale.
 
 ---
 
-## Tip 4: Security Scanning (`docker scout`)
+## Astuce 4: Scan de Sécurité (`docker scout`)
 
-Built-in CVE scanning and remediation recommendations.
+Scan CVE intégré et recommandations de remédiation.
 
-### Quick Vulnerability Overview
+### Aperçu Rapide des Vulnérabilités
 
 ```bash
-# Scan current directory's image
+# Scanner l'image du répertoire actuel
 docker scout quickview
 
-# Scan specific image
+# Scanner une image spécifique
 docker scout quickview nginx:latest
 
-# Output example:
+# Exemple de sortie:
 #   Target     │ nginx:latest
 #   Digest     │ sha256:abc123...
 #   Base Image │ debian:bookworm-slim
@@ -152,29 +152,29 @@ docker scout quickview nginx:latest
 #     Medium:   12
 ```
 
-### Get Fix Recommendations
+### Obtenir les Recommandations de Correctifs
 
 ```bash
-# Get upgrade recommendations
+# Obtenir les recommandations de mise à jour
 docker scout recommendations nginx:latest
 
-# Output example:
+# Exemple de sortie:
 #   Recommended fixes:
 #   ✓ Update base image from debian:bookworm-slim to debian:bookworm-slim@sha256:...
 #     Fixes: CVE-2024-1234 (Critical), CVE-2024-5678 (High)
 ```
 
-### Compare Images
+### Comparer les Images
 
 ```bash
-# Compare two image versions
+# Comparer deux versions d'image
 docker scout compare nginx:1.24 nginx:1.25
 
-# See what changed (new CVEs, fixed CVEs)
+# Voir ce qui a changé (nouvelles CVE, CVE corrigées)
 ```
 
-!!! danger "CI/CD Integration"
-    Add Scout to your pipeline to fail builds on critical CVEs:
+!!! danger "Intégration CI/CD"
+    Ajouter Scout à votre pipeline pour faire échouer les builds sur des CVE critiques:
 
     ```yaml
     - name: Scan for vulnerabilities
@@ -184,17 +184,17 @@ docker scout compare nginx:1.24 nginx:1.25
 
 ---
 
-## Tip 5: GUI Apps in Containers (X11 Forwarding)
+## Astuce 5: Applications GUI dans les Containers (Forwarding X11)
 
-Run graphical applications (browsers, IDEs, games) inside containers.
+Exécuter des applications graphiques (navigateurs, IDEs, jeux) dans des containers.
 
-### Linux Setup
+### Configuration Linux
 
 ```bash
-# Allow X11 connections
+# Autoriser les connexions X11
 xhost +local:docker
 
-# Run Firefox in container
+# Exécuter Firefox dans un container
 docker run -it --rm \
   -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -202,109 +202,109 @@ docker run -it --rm \
   jess/firefox
 ```
 
-### macOS Setup (XQuartz)
+### Configuration macOS (XQuartz)
 
 ```bash
-# 1. Install XQuartz
+# 1. Installer XQuartz
 brew install --cask xquartz
 
-# 2. Enable network connections in XQuartz preferences
+# 2. Activer les connexions réseau dans les préférences XQuartz
 # XQuartz → Preferences → Security → "Allow connections from network clients"
 
-# 3. Restart and allow connections
+# 3. Redémarrer et autoriser les connexions
 xhost +localhost
 
-# 4. Run with DISPLAY pointing to host
+# 4. Exécuter avec DISPLAY pointant vers l'hôte
 docker run -it --rm \
   -e DISPLAY=host.docker.internal:0 \
   jess/firefox
 ```
 
-### Windows Setup (VcXsrv)
+### Configuration Windows (VcXsrv)
 
 ```powershell
-# 1. Install VcXsrv
-# 2. Run XLaunch with "Disable access control" checked
+# 1. Installer VcXsrv
+# 2. Lancer XLaunch avec "Disable access control" coché
 
-# 3. Run container
+# 3. Exécuter le container
 docker run -it --rm `
   -e DISPLAY=host.docker.internal:0 `
   jess/firefox
 ```
 
-!!! tip "Popular GUI Containers"
-    - `jess/firefox` - Firefox browser
-    - `linuxserver/firefox` - Firefox with VNC
-    - `linuxserver/chromium` - Chromium browser
-    - `kasmweb/*` - Browser isolation (enterprise)
+!!! tip "Containers GUI Populaires"
+    - `jess/firefox` - Navigateur Firefox
+    - `linuxserver/firefox` - Firefox avec VNC
+    - `linuxserver/chromium` - Navigateur Chromium
+    - `kasmweb/*` - Isolation de navigateur (entreprise)
 
 ---
 
-## Tip 6: Multi-Arch Speed (`docker build --builder cloud`)
+## Astuce 6: Vitesse Multi-Arch (`docker build --builder cloud`)
 
-**Problem:** Building x86/amd64 images on Apple Silicon (ARM) is painfully slow due to QEMU emulation.
+**Problème:** Builder des images x86/amd64 sur Apple Silicon (ARM) est très lent à cause de l'émulation QEMU.
 
 ```bash
-# This is SLOW on M1/M2 Mac (emulation)
+# C'est LENT sur Mac M1/M2 (émulation)
 docker build --platform linux/amd64 -t myapp .
 ```
 
-**Solution:** Offload builds to Docker Build Cloud.
+**Solution:** Délocaliser les builds vers Docker Build Cloud.
 
 ```bash
-# Create cloud builder
+# Créer un cloud builder
 docker buildx create --driver cloud myorg/mybuilder
 
-# Build using cloud (native speed for all architectures)
+# Builder en utilisant le cloud (vitesse native pour toutes les architectures)
 docker build --builder cloud-myorg-mybuilder \
   --platform linux/amd64,linux/arm64 \
   -t myapp:latest .
 ```
 
-### Benefits
+### Avantages
 
-| Local Build (Emulated) | Cloud Build (Native) |
+| Build Local (Émulé) | Build Cloud (Natif) |
 |------------------------|----------------------|
 | 10-20 minutes | 1-2 minutes |
-| CPU at 100% | Local CPU idle |
-| Single arch at a time | Multi-arch parallel |
+| CPU à 100% | CPU local inactif |
+| Une arch à la fois | Multi-arch parallèle |
 
-### Setup
+### Configuration
 
 ```bash
-# Login to Docker Hub
+# Se connecter à Docker Hub
 docker login
 
-# Create cloud builder (requires Docker subscription)
+# Créer un cloud builder (nécessite un abonnement Docker)
 docker buildx create --driver cloud <org>/<builder-name>
 
-# Use it
+# L'utiliser
 docker buildx use cloud-<org>-<builder-name>
 ```
 
-!!! info "Free Tier Available"
-    Docker Build Cloud has a free tier with limited build minutes. Perfect for occasional multi-arch builds.
+!!! info "Free Tier Disponible"
+    Docker Build Cloud a un tier gratuit avec des minutes de build limitées. Parfait pour des builds multi-arch occasionnels.
 
 ---
 
-## Bonus: Quick Reference
+## Bonus: Référence Rapide
 
 ```bash
-# Prune everything (reclaim disk space)
+# Nettoyer tout (récupérer de l'espace disque)
 docker system prune -a --volumes
 
-# See real-time resource usage
+# Voir l'utilisation des ressources en temps réel
 docker stats
 
-# Copy files from container
+# Copier des fichiers depuis un container
 docker cp container:/path/file ./local/
 
-# Export container filesystem
+# Exporter le filesystem d'un container
 docker export container > container.tar
 
-# Inspect image layers
+# Inspecter les couches d'une image
 docker history --no-trunc myimage
 
-# Run one-off command in new container
+# Exécuter une commande ponctuelle dans un nouveau container
 docker run --rm -it alpine sh
 ```

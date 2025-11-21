@@ -1,272 +1,272 @@
-# The 7 Database Types
+# Les 7 Types de Bases de Données
 
 `#sql` `#nosql` `#architecture` `#redis`
 
-A practical guide to choosing the right database for your use case.
+Un guide pratique pour choisir la bonne base de données selon votre cas d'usage.
 
 ---
 
-!!! tip "Quick Decision Guide"
-    - **Need ACID/Money?** → Relational (PostgreSQL, MySQL)
-    - **Need Speed/Cache?** → Key-Value (Redis, Memcached)
-    - **Need Flexibility/JSON?** → Document (MongoDB, CouchDB)
-    - **Need Analytics/Logs?** → Columnar (ClickHouse, BigQuery)
-    - **Need Metrics/IoT?** → Time Series (Prometheus, InfluxDB)
-    - **Need Relationships?** → Graph (Neo4j, DGraph)
-    - **Need AI/Embeddings?** → Vector (Pinecone, Milvus)
+!!! tip "Guide de Décision Rapide"
+    - **Besoin ACID/Argent ?** → Relationnelle (PostgreSQL, MySQL)
+    - **Besoin Vitesse/Cache ?** → Key-Value (Redis, Memcached)
+    - **Besoin Flexibilité/JSON ?** → Document (MongoDB, CouchDB)
+    - **Besoin Analytics/Logs ?** → Columnar (ClickHouse, BigQuery)
+    - **Besoin Metrics/IoT ?** → Time Series (Prometheus, InfluxDB)
+    - **Besoin Relations ?** → Graph (Neo4j, DGraph)
+    - **Besoin AI/Embeddings ?** → Vector (Pinecone, Milvus)
 
 ---
 
-## 1. Relational (SQL)
+## 1. Relationnelle (SQL)
 
-**Concept:** Structured data in tables with rows and columns, enforcing relationships via foreign keys.
+**Concept :** Données structurées en tables avec lignes et colonnes, appliquant des relations via des clés étrangères.
 
-**Best For:**
+**Idéale Pour :**
 
-- Financial transactions (ACID compliance)
-- User accounts & authentication
-- E-commerce orders
-- Any data requiring strong consistency
+- Transactions financières (conformité ACID)
+- Comptes utilisateurs & authentification
+- Commandes e-commerce
+- Toute donnée nécessitant une forte cohérence
 
-**Pros:**
+**Avantages :**
 
-- ACID guarantees (Atomicity, Consistency, Isolation, Durability)
-- Mature ecosystem, SQL is universal
-- Complex queries with JOINs
-- Strong data integrity
+- Garanties ACID (Atomicity, Consistency, Isolation, Durability)
+- Écosystème mature, SQL est universel
+- Requêtes complexes avec JOINs
+- Forte intégrité des données
 
-**Cons:**
+**Inconvénients :**
 
-- Vertical scaling is expensive
-- Schema changes can be painful
-- Not ideal for unstructured data
+- Mise à l'échelle verticale coûteuse
+- Changements de schéma peuvent être douloureux
+- Pas idéale pour données non structurées
 
-**Tools:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle
+**Outils :** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle
 
 ---
 
 ## 2. Document Store
 
-**Concept:** Stores data as flexible JSON/BSON documents. No fixed schema required.
+**Concept :** Stocke les données sous forme de documents JSON/BSON flexibles. Pas de schéma fixe requis.
 
-**Best For:**
+**Idéal Pour :**
 
-- User profiles with varying fields
-- Content management systems
-- Product catalogs
-- Rapid prototyping
+- Profils utilisateurs avec champs variables
+- Systèmes de gestion de contenu
+- Catalogues produits
+- Prototypage rapide
 
-**Pros:**
+**Avantages :**
 
-- Schema flexibility (add fields anytime)
-- Horizontal scaling built-in
-- Natural fit for JSON APIs
-- Good developer experience
+- Flexibilité du schéma (ajouter des champs à tout moment)
+- Mise à l'échelle horizontale intégrée
+- Adaptation naturelle aux APIs JSON
+- Bonne expérience développeur
 
-**Cons:**
+**Inconvénients :**
 
-- No JOINs (denormalization required)
-- Weaker consistency guarantees
-- Can lead to data duplication
+- Pas de JOINs (dénormalisation requise)
+- Garanties de cohérence plus faibles
+- Peut conduire à la duplication de données
 
-**Tools:** MongoDB, CouchDB, Amazon DocumentDB, Firestore
+**Outils :** MongoDB, CouchDB, Amazon DocumentDB, Firestore
 
 ---
 
 ## 3. Key-Value Store
 
-**Concept:** Simple key-to-value mapping. Think of it as a giant distributed hash map.
+**Concept :** Simple mapping clé-vers-valeur. Pensez-y comme une gigantesque hash map distribuée.
 
-**Best For:**
+**Idéal Pour :**
 
-- Session storage
-- Caching layer
-- Real-time leaderboards
+- Stockage de sessions
+- Couche de cache
+- Tableaux de classement en temps réel
 - Rate limiting
 - Feature flags
 
-**Pros:**
+**Avantages :**
 
-- Extremely fast (sub-millisecond)
-- Simple API (GET, SET, DELETE)
-- Horizontal scaling
-- Perfect for ephemeral data
+- Extrêmement rapide (sous-milliseconde)
+- API simple (GET, SET, DELETE)
+- Mise à l'échelle horizontale
+- Parfait pour données éphémères
 
-**Cons:**
+**Inconvénients :**
 
-- No complex queries
-- Limited data modeling
-- Usually in-memory (data loss risk)
+- Pas de requêtes complexes
+- Modélisation de données limitée
+- Généralement en mémoire (risque de perte de données)
 
-**Tools:** Redis, Memcached, Amazon ElastiCache, etcd
+**Outils :** Redis, Memcached, Amazon ElastiCache, etcd
 
-!!! warning "Redis as Sidecar"
-    Redis is typically used as a **caching layer** alongside a primary database, not as the sole data store.
+!!! warning "Redis en Sidecar"
+    Redis est typiquement utilisé comme **couche de cache** à côté d'une base de données primaire, pas comme seul stockage de données.
 
     ```
-    Client → Redis (cache hit?) → PostgreSQL (if miss)
+    Client → Redis (cache hit ?) → PostgreSQL (si miss)
     ```
 
 ---
 
 ## 4. Columnar (Wide-Column)
 
-**Concept:** Data stored by columns instead of rows. Optimized for analytical queries on large datasets.
+**Concept :** Données stockées par colonnes au lieu de lignes. Optimisé pour les requêtes analytiques sur de grands ensembles de données.
 
-**Best For:**
+**Idéal Pour :**
 
-- Analytics dashboards
-- Log aggregation
+- Tableaux de bord analytiques
+- Agrégation de logs
 - Business intelligence
 - Data warehousing
-- OLAP workloads
+- Workloads OLAP
 
-**Pros:**
+**Avantages :**
 
-- Blazing fast aggregations (SUM, AVG, COUNT)
-- Excellent compression (similar values together)
-- Handles petabytes of data
-- Parallel query execution
+- Agrégations ultra-rapides (SUM, AVG, COUNT)
+- Excellente compression (valeurs similaires ensemble)
+- Gère des pétaoctets de données
+- Exécution de requêtes parallèle
 
-**Cons:**
+**Inconvénients :**
 
-- Slow for single-row lookups
-- Not for transactional workloads
-- Complex setup
+- Lent pour recherches de lignes individuelles
+- Pas pour workloads transactionnels
+- Configuration complexe
 
-**Tools:** ClickHouse, Apache Cassandra, Google BigQuery, Amazon Redshift, Apache HBase
+**Outils :** ClickHouse, Apache Cassandra, Google BigQuery, Amazon Redshift, Apache HBase
 
 ---
 
 ## 5. Time Series
 
-**Concept:** Optimized for time-stamped data points. Built-in downsampling and retention policies.
+**Concept :** Optimisé pour les points de données horodatés. Politiques de downsampling et de rétention intégrées.
 
-**Best For:**
+**Idéal Pour :**
 
-- Infrastructure metrics (CPU, memory, disk)
-- IoT sensor data
-- Financial tick data
-- Application performance monitoring
-- Log timestamps
+- Métriques d'infrastructure (CPU, mémoire, disque)
+- Données de capteurs IoT
+- Données tick financières
+- Monitoring de performance applicative
+- Timestamps de logs
 
-**Pros:**
+**Avantages :**
 
-- Extreme compression (delta encoding)
-- Built-in retention policies
-- Optimized for time-range queries
-- Native downsampling
+- Compression extrême (delta encoding)
+- Politiques de rétention intégrées
+- Optimisé pour requêtes par plage de temps
+- Downsampling natif
 
-**Cons:**
+**Inconvénients :**
 
-- Limited query flexibility
-- Not for general-purpose storage
-- Specialized use case
+- Flexibilité de requête limitée
+- Pas pour stockage général
+- Cas d'usage spécialisé
 
-**Tools:** Prometheus, InfluxDB, TimescaleDB, VictoriaMetrics, QuestDB
+**Outils :** Prometheus, InfluxDB, TimescaleDB, VictoriaMetrics, QuestDB
 
-!!! info "Compression Magic"
-    Time series DBs use **delta encoding**: instead of storing `[100, 101, 102, 103]`, they store `[100, +1, +1, +1]`.
+!!! info "Magie de la Compression"
+    Les BDs time series utilisent **delta encoding** : au lieu de stocker `[100, 101, 102, 103]`, elles stockent `[100, +1, +1, +1]`.
 
-    Result: 10-100x compression vs SQL for metrics data.
+    Résultat : compression 10-100x vs SQL pour les données de métriques.
 
 ---
 
 ## 6. Graph
 
-**Concept:** Data as nodes (entities) and edges (relationships). Query by traversing connections.
+**Concept :** Données sous forme de nœuds (entités) et arêtes (relations). Requête par traversée de connexions.
 
-**Best For:**
+**Idéal Pour :**
 
-- Social networks (friends-of-friends)
-- Recommendation engines
-- Fraud detection
-- Knowledge graphs
-- Network topology
+- Réseaux sociaux (amis d'amis)
+- Moteurs de recommandation
+- Détection de fraude
+- Graphes de connaissance
+- Topologie réseau
 
-**Pros:**
+**Avantages :**
 
-- Fast relationship traversal
-- Natural for connected data
-- Flexible schema
-- Powerful pattern matching
+- Traversée rapide de relations
+- Naturel pour données connectées
+- Schéma flexible
+- Pattern matching puissant
 
-**Cons:**
+**Inconvénients :**
 
-- Steep learning curve (Cypher, Gremlin)
-- Not for tabular data
-- Scaling can be challenging
+- Courbe d'apprentissage raide (Cypher, Gremlin)
+- Pas pour données tabulaires
+- Mise à l'échelle peut être difficile
 
-**Tools:** Neo4j, Amazon Neptune, ArangoDB, DGraph, TigerGraph
+**Outils :** Neo4j, Amazon Neptune, ArangoDB, DGraph, TigerGraph
 
 ---
 
 ## 7. Vector
 
-**Concept:** Stores high-dimensional vectors (embeddings) for similarity search. The AI/ML database.
+**Concept :** Stocke des vecteurs haute dimension (embeddings) pour recherche de similarité. La base de données AI/ML.
 
-**Best For:**
+**Idéal Pour :**
 
-- Semantic search
-- LLM context retrieval (RAG)
-- Image similarity
-- Recommendation systems
-- Anomaly detection
+- Recherche sémantique
+- Récupération de contexte LLM (RAG)
+- Similarité d'images
+- Systèmes de recommandation
+- Détection d'anomalies
 
-**Pros:**
+**Avantages :**
 
-- Approximate nearest neighbor search
-- Essential for AI applications
-- Handles millions of vectors
-- Integrates with embedding models
+- Recherche de voisins les plus proches approximatifs
+- Essentiel pour applications AI
+- Gère des millions de vecteurs
+- Intégration avec modèles d'embeddings
 
-**Cons:**
+**Inconvénients :**
 
-- New technology (less mature)
-- Requires understanding of embeddings
-- Index building can be slow
+- Technologie nouvelle (moins mature)
+- Nécessite compréhension des embeddings
+- Construction d'index peut être lente
 
-**Tools:** Pinecone, Milvus, Weaviate, Qdrant, Chroma, pgvector
+**Outils :** Pinecone, Milvus, Weaviate, Qdrant, Chroma, pgvector
 
-!!! tip "Vector DBs & LLMs"
-    Vector databases are the backbone of **RAG (Retrieval-Augmented Generation)**.
+!!! tip "BDs Vector & LLMs"
+    Les bases de données vectorielles sont la colonne vertébrale du **RAG (Retrieval-Augmented Generation)**.
 
     ```
-    User Query → Embed → Vector Search → Context → LLM → Response
+    Requête Utilisateur → Embed → Vector Search → Contexte → LLM → Réponse
     ```
 
 ---
 
-## Comparison Table
+## Tableau Comparatif
 
-| Type | Data Structure | Scalability | Query Language | Typical Use Case |
+| Type | Structure de Données | Scalabilité | Langage de Requête | Cas d'Usage Typique |
 |------|----------------|-------------|----------------|------------------|
-| **Relational** | Tables (rows/cols) | Vertical | SQL | Transactions, ACID |
-| **Document** | JSON documents | Horizontal | JSON queries | Flexible schemas |
-| **Key-Value** | Key → Value | Horizontal | GET/SET | Caching, sessions |
-| **Columnar** | Column families | Horizontal | SQL-like | Analytics, OLAP |
-| **Time Series** | Timestamp → Value | Horizontal | PromQL, InfluxQL | Metrics, IoT |
-| **Graph** | Nodes + Edges | Varies | Cypher, Gremlin | Relationships |
-| **Vector** | Embeddings | Horizontal | Similarity search | AI/ML, search |
+| **Relationnelle** | Tables (lignes/cols) | Verticale | SQL | Transactions, ACID |
+| **Document** | Documents JSON | Horizontale | Requêtes JSON | Schémas flexibles |
+| **Key-Value** | Clé → Valeur | Horizontale | GET/SET | Cache, sessions |
+| **Columnar** | Familles de colonnes | Horizontale | SQL-like | Analytics, OLAP |
+| **Time Series** | Timestamp → Valeur | Horizontale | PromQL, InfluxQL | Metrics, IoT |
+| **Graph** | Nœuds + Arêtes | Variable | Cypher, Gremlin | Relations |
+| **Vector** | Embeddings | Horizontale | Recherche similarité | AI/ML, recherche |
 
 ---
 
-## Pro Tips
+## Astuces de Pro
 
-!!! example "Multi-Database Architecture"
-    Modern systems often combine multiple database types:
+!!! example "Architecture Multi-Database"
+    Les systèmes modernes combinent souvent plusieurs types de bases de données :
 
     ```
-    PostgreSQL  → Source of truth (users, orders)
+    PostgreSQL  → Source de vérité (utilisateurs, commandes)
          ↓
-    Redis       → Cache layer (sessions, hot data)
+    Redis       → Couche de cache (sessions, données chaudes)
          ↓
-    ClickHouse  → Analytics (dashboards, reports)
+    ClickHouse  → Analytics (tableaux de bord, rapports)
          ↓
-    Pinecone    → AI search (semantic queries)
+    Pinecone    → Recherche AI (requêtes sémantiques)
     ```
 
-!!! warning "Don't Over-Engineer"
-    Start with PostgreSQL. It handles JSON (document), has extensions for time series (TimescaleDB), and even vector search (pgvector).
+!!! warning "Ne Sur-ingéniérez Pas"
+    Commencez par PostgreSQL. Il gère le JSON (document), a des extensions pour time series (TimescaleDB), et même la recherche vectorielle (pgvector).
 
-    Add specialized databases only when PostgreSQL becomes a bottleneck.
+    Ajoutez des bases de données spécialisées seulement quand PostgreSQL devient un goulot d'étranglement.

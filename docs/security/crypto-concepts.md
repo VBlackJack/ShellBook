@@ -1,8 +1,8 @@
-# Cryptography Fundamentals & Vocabulary
+# Fondamentaux de la Cryptographie & Vocabulaire
 
 `#crypto` `#security` `#theory`
 
-Master the concepts before the commands.
+Maîtriser les concepts avant les commandes.
 
 ---
 
@@ -23,96 +23,96 @@ Master the concepts before the commands.
 
 ---
 
-## The 3 Pillars
+## Les 3 Piliers
 
-| Concept | Reversible | Uses Keys | Goal | Examples |
+| Concept | Réversible | Utilise Clés | Objectif | Exemples |
 |---------|------------|-----------|------|----------|
-| **Encryption** | ✅ Yes | ✅ Yes | Confidentiality | AES, RSA, ChaCha20 |
-| **Hashing** | ❌ No | ❌ No | Integrity, Auth | SHA256, bcrypt, MD5 |
-| **Encoding** | ✅ Yes | ❌ No | Transport, Format | Base64, Hex, URL |
+| **Encryption** | ✅ Oui | ✅ Oui | Confidentialité | AES, RSA, ChaCha20 |
+| **Hashing** | ❌ Non | ❌ Non | Intégrité, Auth | SHA256, bcrypt, MD5 |
+| **Encoding** | ✅ Oui | ❌ Non | Transport, Format | Base64, Hex, URL |
 
 ### Encryption (Chiffrement)
 
-Transform data so only authorized parties can read it.
+Transformer les données pour que seules les parties autorisées puissent les lire.
 
 ```
-Plaintext + Key → [Encryption] → Ciphertext
-Ciphertext + Key → [Decryption] → Plaintext
+Plaintext + Clé → [Encryption] → Ciphertext
+Ciphertext + Clé → [Decryption] → Plaintext
 ```
 
-**Use cases:**
+**Cas d'usage :**
 
-- File protection
-- Network traffic (TLS/HTTPS)
-- Disk encryption
-- Messaging (E2E)
+- Protection de fichiers
+- Trafic réseau (TLS/HTTPS)
+- Chiffrement de disque
+- Messagerie (E2E)
 
 ---
 
 ### Hashing (Hachage)
 
-One-way transformation producing a fixed-size "fingerprint."
+Transformation unidirectionnelle produisant une "empreinte" de taille fixe.
 
 ```
-Data → [Hash Function] → Fixed-size Digest
+Données → [Fonction Hash] → Digest de taille fixe
 
 "Hello" → SHA256 → 2cf24dba5fb0a30e26e83b2ac5b9e29e...
-"Hello!" → SHA256 → 33d7c290db4c... (completely different!)
+"Hello!" → SHA256 → 33d7c290db4c... (complètement différent !)
 ```
 
-**Properties:**
+**Propriétés :**
 
-- **Deterministic:** Same input = same output
-- **One-way:** Cannot reverse hash to get original
-- **Avalanche effect:** Small change = completely different hash
-- **Collision resistant:** Hard to find two inputs with same hash
+- **Déterministe :** Même entrée = même sortie
+- **Sens unique :** Impossible d'inverser le hash pour obtenir l'original
+- **Effet avalanche :** Petit changement = hash complètement différent
+- **Résistance aux collisions :** Difficile de trouver deux entrées avec le même hash
 
-**Use cases:**
+**Cas d'usage :**
 
-- Password storage (with salt!)
-- File integrity verification
-- Digital signatures
+- Stockage de mots de passe (avec salt !)
+- Vérification d'intégrité de fichiers
+- Signatures numériques
 - Blockchain
 
 ---
 
 ### Encoding (Encodage)
 
-Format transformation for transport or compatibility. **NOT security!**
+Transformation de format pour le transport ou la compatibilité. **PAS de sécurité !**
 
 ```
-Binary → [Base64] → ASCII text
-ASCII → [Hex] → Hexadecimal string
+Binaire → [Base64] → Texte ASCII
+ASCII → [Hex] → Chaîne hexadécimale
 ```
 
-!!! warning "Encoding ≠ Security"
-    Base64 is **not encryption**. It's just a format change.
-    Anyone can decode it instantly.
+!!! warning "Encoding ≠ Sécurité"
+    Base64 n'est **pas du chiffrement**. C'est juste un changement de format.
+    N'importe qui peut le décoder instantanément.
 
     ```bash
-    # "Secret" in Base64
+    # "Secret" en Base64
     echo "U2VjcmV0" | base64 -d
-    # Output: Secret
+    # Sortie: Secret
     ```
 
-**Use cases:**
+**Cas d'usage :**
 
-- Email attachments (MIME)
+- Pièces jointes email (MIME)
 - URLs (URL encoding)
-- JSON with binary data
-- Certificates (PEM format)
+- JSON avec données binaires
+- Certificats (format PEM)
 
 ---
 
-## Symmetric vs Asymmetric
+## Symétrique vs Asymétrique
 
-### Symmetric Encryption (Chiffrement Symétrique)
+### Encryption Symétrique (Chiffrement Symétrique)
 
-**One shared secret key** for both encryption and decryption.
+**Une clé secrète partagée** pour le chiffrement et le déchiffrement.
 
 ```
         ┌─────────────┐
-        │  Same Key   │
+        │  Même Clé   │
         └──────┬──────┘
                │
     ┌──────────┴──────────┐
@@ -122,115 +122,115 @@ ASCII → [Hex] → Hexadecimal string
 Plaintext → Ciphertext → Plaintext
 ```
 
-| Pros | Cons |
+| Avantages | Inconvénients |
 |------|------|
-| Very fast | Key distribution problem |
-| Efficient for large data | If key leaked, all compromised |
-| Simple implementation | Need secure channel to share key |
+| Très rapide | Problème de distribution de clé |
+| Efficace pour grandes données | Si clé fuitée, tout compromis |
+| Implémentation simple | Besoin d'un canal sécurisé pour partager la clé |
 
-**Algorithms:** AES-256, ChaCha20, 3DES (deprecated)
+**Algorithmes :** AES-256, ChaCha20, 3DES (déprécié)
 
-**Use cases:**
+**Cas d'usage :**
 
-- File encryption
-- Disk encryption (LUKS, BitLocker)
-- VPN tunnels (after key exchange)
+- Chiffrement de fichiers
+- Chiffrement de disque (LUKS, BitLocker)
+- Tunnels VPN (après échange de clé)
 
 ---
 
-### Asymmetric Encryption (Chiffrement Asymétrique)
+### Encryption Asymétrique (Chiffrement Asymétrique)
 
-**Key pair:** Public key + Private key
+**Paire de clés :** Clé publique + Clé privée
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                  KEY PAIR                        │
+│                  PAIRE DE CLÉS                   │
 ├─────────────────────┬───────────────────────────┤
-│    Public Key       │     Private Key           │
-│    (shareable)      │     (SECRET!)             │
+│    Clé Publique     │     Clé Privée            │
+│    (partageable)    │     (SECRET !)            │
 └─────────────────────┴───────────────────────────┘
 ```
 
-#### For Encryption (Confidentiality)
+#### Pour Encryption (Confidentialité)
 
-**Public key encrypts → Private key decrypts**
+**Clé publique chiffre → Clé privée déchiffre**
 
 ```
-Alice wants to send secret to Bob:
+Alice veut envoyer un secret à Bob :
 
-1. Bob shares his PUBLIC key with Alice
-2. Alice encrypts message with Bob's PUBLIC key
-3. Only Bob's PRIVATE key can decrypt it
+1. Bob partage sa clé PUBLIQUE avec Alice
+2. Alice chiffre le message avec la clé PUBLIQUE de Bob
+3. Seule la clé PRIVÉE de Bob peut le déchiffrer
 
     Alice                           Bob
       │                              │
-      │ ◄── Bob's Public Key ───────┤
+      │ ◄── Clé Publique de Bob ────┤
       │                              │
-      ├─── Encrypted Message ──────► │
-      │    (only Bob can read)       │
+      ├─── Message Chiffré ─────────► │
+      │    (seul Bob peut lire)      │
 ```
 
-#### For Signatures (Authentication)
+#### Pour Signatures (Authentification)
 
-**Private key signs → Public key verifies**
+**Clé privée signe → Clé publique vérifie**
 
 ```
-Bob wants to prove he wrote a message:
+Bob veut prouver qu'il a écrit un message :
 
-1. Bob signs message with his PRIVATE key
-2. Anyone with Bob's PUBLIC key can verify
-3. Only Bob could have created that signature
+1. Bob signe le message avec sa clé PRIVÉE
+2. N'importe qui avec la clé PUBLIQUE de Bob peut vérifier
+3. Seul Bob a pu créer cette signature
 
-    Bob                            Anyone
+    Bob                            N'importe qui
       │                              │
-      ├─── Message + Signature ────► │
+      ├─── Message + Signature ─────► │
       │                              │
-      │ ◄── Verify with Public Key ──┤
-      │    "Yes, Bob signed this"    │
+      │ ◄── Vérifier avec Clé Publique ──┤
+      │    "Oui, Bob a signé ceci"   │
 ```
 
-| Pros | Cons |
+| Avantages | Inconvénients |
 |------|------|
-| No key distribution problem | Much slower than symmetric |
-| Digital signatures | Limited data size |
-| Non-repudiation | Complex mathematics |
+| Pas de problème de distribution de clé | Beaucoup plus lent que symétrique |
+| Signatures numériques | Taille de données limitée |
+| Non-répudiation | Mathématiques complexes |
 
-**Algorithms:** RSA, ECDSA, Ed25519
+**Algorithmes :** RSA, ECDSA, Ed25519
 
 ---
 
-## Hybrid Encryption (Real World)
+## Encryption Hybride (Monde Réel)
 
-Modern systems combine both: **asymmetric for key exchange, symmetric for data.**
+Les systèmes modernes combinent les deux : **asymétrique pour l'échange de clé, symétrique pour les données.**
 
 ```
-TLS/HTTPS Handshake:
+Handshake TLS/HTTPS :
 
-1. Client & Server use ASYMMETRIC crypto
-   to securely exchange a session key
+1. Client & Serveur utilisent la crypto ASYMÉTRIQUE
+   pour échanger de manière sécurisée une clé de session
 
-2. All further communication uses SYMMETRIC
-   encryption with that session key (fast!)
+2. Toute communication ultérieure utilise l'encryption SYMÉTRIQUE
+   avec cette clé de session (rapide !)
 
 ┌──────────────────────────────────────────┐
-│  Asymmetric (RSA/ECDH)                   │
-│  └─► Exchange symmetric key              │
+│  Asymétrique (RSA/ECDH)                  │
+│  └─► Échanger la clé symétrique          │
 │                                          │
-│  Symmetric (AES-256-GCM)                 │
-│  └─► Encrypt all traffic (fast)          │
+│  Symétrique (AES-256-GCM)                │
+│  └─► Chiffrer tout le trafic (rapide)   │
 └──────────────────────────────────────────┘
 ```
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
-| Question | Answer |
+| Question | Réponse |
 |----------|--------|
-| Need confidentiality? | Encryption |
-| Need to verify integrity? | Hashing |
-| Need to prove identity? | Digital Signature |
-| Need fast bulk encryption? | Symmetric (AES) |
-| Need key exchange? | Asymmetric (RSA/ECDH) |
-| Need password storage? | Hashing + Salt (bcrypt) |
-| Need to transport binary? | Encoding (Base64) |
+| Besoin de confidentialité ? | Encryption |
+| Besoin de vérifier l'intégrité ? | Hashing |
+| Besoin de prouver l'identité ? | Digital Signature |
+| Besoin de chiffrement en masse rapide ? | Symétrique (AES) |
+| Besoin d'échange de clé ? | Asymétrique (RSA/ECDH) |
+| Besoin de stockage de mot de passe ? | Hashing + Salt (bcrypt) |
+| Besoin de transporter du binaire ? | Encoding (Base64) |

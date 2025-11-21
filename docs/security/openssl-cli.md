@@ -1,291 +1,291 @@
-# OpenSSL CLI Cheatsheet
+# Aide-Mémoire OpenSSL CLI
 
 `#openssl` `#cli` `#commands`
 
-Essential OpenSSL commands for daily security operations.
+Commandes OpenSSL essentielles pour les opérations de sécurité quotidiennes.
 
 ---
 
-## Encoding & Decoding
+## Encodage & Décodage
 
 ### Base64
 
 ```bash
-# Encode string
+# Encoder une chaîne
 echo -n "Xavki" | openssl base64
-# Output: WGF2a2k=
+# Sortie : WGF2a2k=
 
-# Decode
+# Décoder
 echo "WGF2a2k=" | openssl base64 -d
-# Output: Xavki
+# Sortie : Xavki
 
-# Encode file
+# Encoder un fichier
 openssl base64 -in file.bin -out file.b64
 
-# Decode file
+# Décoder un fichier
 openssl base64 -d -in file.b64 -out file.bin
 ```
 
-### Hex Encoding
+### Encodage Hexadécimal
 
 ```bash
-# String to hex
+# Chaîne vers hex
 echo -n "Hello" | xxd -p
-# Output: 48656c6c6f
+# Sortie : 48656c6c6f
 
-# Hex to string
+# Hex vers chaîne
 echo "48656c6c6f" | xxd -r -p
-# Output: Hello
+# Sortie : Hello
 ```
 
 ---
 
-## Hashing (Checksums)
+## Hachage (Checksums)
 
 ```bash
-# SHA256 (recommended)
+# SHA256 (recommandé)
 echo -n "data" | openssl dgst -sha256
-# Output: SHA2-256(stdin)= 3a6eb0790f39ac87...
+# Sortie : SHA2-256(stdin)= 3a6eb0790f39ac87...
 
 # SHA512
 echo -n "data" | openssl dgst -sha512
 
-# MD5 (deprecated, but still used for checksums)
+# MD5 (déprécié, mais toujours utilisé pour les checksums)
 echo -n "data" | openssl dgst -md5
 
-# Hash a file
+# Hacher un fichier
 openssl dgst -sha256 file.txt
 
-# Output raw binary (no hex)
+# Sortie binaire brute (pas hex)
 openssl dgst -sha256 -binary file.txt > file.sha256
 
-# Verify file integrity
+# Vérifier l'intégrité d'un fichier
 sha256sum -c checksums.txt
 ```
 
-### Available Algorithms
+### Algorithmes Disponibles
 
 ```bash
-# List all digest algorithms
+# Lister tous les algorithmes de digest
 openssl list -digest-algorithms
 
-# Common ones:
-# -md5        (128-bit, broken, avoid for security)
-# -sha1       (160-bit, deprecated)
-# -sha256     (256-bit, recommended)
+# Courants :
+# -md5        (128-bit, cassé, éviter pour la sécurité)
+# -sha1       (160-bit, déprécié)
+# -sha256     (256-bit, recommandé)
 # -sha384     (384-bit)
 # -sha512     (512-bit)
-# -sha3-256   (SHA-3 family)
+# -sha3-256   (famille SHA-3)
 ```
 
 ---
 
-## Symmetric Encryption (File Encryption)
+## Chiffrement Symétrique (Chiffrement de Fichiers)
 
-### Encrypt a File
+### Chiffrer un Fichier
 
 ```bash
-# AES-256-CBC with password (interactive prompt)
+# AES-256-CBC avec mot de passe (invite interactive)
 openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc
 
-# With password on command line (less secure)
+# Avec mot de passe en ligne de commande (moins sécurisé)
 openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc -pass pass:MyPassword
 
-# With password from file
+# Avec mot de passe depuis un fichier
 openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc -pass file:password.txt
 ```
 
-### Decrypt a File
+### Déchiffrer un Fichier
 
 ```bash
-# Decrypt (will prompt for password)
+# Déchiffrer (demandera le mot de passe)
 openssl enc -d -aes-256-cbc -pbkdf2 -in secret.enc -out secret.txt
 
-# With password
+# Avec mot de passe
 openssl enc -d -aes-256-cbc -pbkdf2 -in secret.enc -out secret.txt -pass pass:MyPassword
 ```
 
-### Options Explained
+### Options Expliquées
 
-| Option | Purpose |
+| Option | Objectif |
 |--------|---------|
-| `-aes-256-cbc` | Algorithm (AES 256-bit, CBC mode) |
-| `-salt` | Add random salt (prevents rainbow tables) |
-| `-pbkdf2` | Use PBKDF2 key derivation (recommended) |
-| `-iter 100000` | Iterations for PBKDF2 (slower = more secure) |
-| `-in` | Input file |
-| `-out` | Output file |
-| `-d` | Decrypt mode |
-| `-pass` | Password source |
+| `-aes-256-cbc` | Algorithme (AES 256-bit, mode CBC) |
+| `-salt` | Ajouter un salt aléatoire (empêche les rainbow tables) |
+| `-pbkdf2` | Utiliser la dérivation de clé PBKDF2 (recommandé) |
+| `-iter 100000` | Itérations pour PBKDF2 (plus lent = plus sécurisé) |
+| `-in` | Fichier d'entrée |
+| `-out` | Fichier de sortie |
+| `-d` | Mode déchiffrement |
+| `-pass` | Source du mot de passe |
 
-### List Available Ciphers
+### Lister les Ciphers Disponibles
 
 ```bash
 openssl enc -list
 
-# Recommended ciphers:
-# -aes-256-cbc     (AES 256-bit, CBC mode)
-# -aes-256-gcm     (AES 256-bit, GCM mode - authenticated)
-# -chacha20        (ChaCha20 stream cipher)
+# Ciphers recommandés :
+# -aes-256-cbc     (AES 256-bit, mode CBC)
+# -aes-256-gcm     (AES 256-bit, mode GCM - authentifié)
+# -chacha20        (Cipher stream ChaCha20)
 ```
 
-!!! tip "Always Use Salt and PBKDF2"
+!!! tip "Toujours Utiliser Salt et PBKDF2"
     ```bash
-    # Good
+    # Bon
     openssl enc -aes-256-cbc -salt -pbkdf2 -iter 100000 ...
 
-    # Bad (vulnerable)
+    # Mauvais (vulnérable)
     openssl enc -aes-256-cbc ...
     ```
 
 ---
 
-## Asymmetric Keys (RSA)
+## Clés Asymétriques (RSA)
 
-### Generate RSA Private Key
+### Générer une Clé Privée RSA
 
 ```bash
-# Generate 4096-bit RSA private key
+# Générer une clé privée RSA 4096-bit
 openssl genrsa -out private.pem 4096
 
-# With passphrase protection
+# Avec protection par passphrase
 openssl genrsa -aes256 -out private.pem 4096
 ```
 
-### Extract Public Key
+### Extraire la Clé Publique
 
 ```bash
-# Extract public key from private key
+# Extraire la clé publique de la clé privée
 openssl rsa -in private.pem -pubout -out public.pem
 
-# View public key
+# Voir la clé publique
 openssl rsa -in private.pem -pubout -text
 ```
 
-### View Key Details
+### Voir les Détails de la Clé
 
 ```bash
-# View private key details
+# Voir les détails de la clé privée
 openssl rsa -in private.pem -text -noout
 
-# View public key details
+# Voir les détails de la clé publique
 openssl rsa -pubin -in public.pem -text -noout
 ```
 
-!!! info "Foundation of SSH and HTTPS"
-    These RSA keys are the same format used by:
+!!! info "Fondation de SSH et HTTPS"
+    Ces clés RSA sont au même format que celles utilisées par :
 
-    - **SSH:** `~/.ssh/id_rsa` (private) and `~/.ssh/id_rsa.pub` (public)
-    - **TLS/HTTPS:** Server private key + certificate
+    - **SSH :** `~/.ssh/id_rsa` (privée) et `~/.ssh/id_rsa.pub` (publique)
+    - **TLS/HTTPS :** Clé privée du serveur + certificat
 
 ---
 
-## Asymmetric Encryption (RSA)
+## Chiffrement Asymétrique (RSA)
 
 ```bash
-# Encrypt file with public key
+# Chiffrer un fichier avec la clé publique
 openssl rsautl -encrypt -pubin -inkey public.pem -in secret.txt -out secret.enc
 
-# Decrypt with private key
+# Déchiffrer avec la clé privée
 openssl rsautl -decrypt -inkey private.pem -in secret.enc -out secret.txt
 
-# Using pkeyutl (newer, recommended)
+# Utiliser pkeyutl (plus récent, recommandé)
 openssl pkeyutl -encrypt -pubin -inkey public.pem -in secret.txt -out secret.enc
 openssl pkeyutl -decrypt -inkey private.pem -in secret.enc -out secret.txt
 ```
 
-!!! warning "RSA Size Limitation"
-    RSA can only encrypt data smaller than the key size minus padding.
-    For 4096-bit key: max ~470 bytes.
+!!! warning "Limitation de Taille RSA"
+    RSA ne peut chiffrer que des données plus petites que la taille de la clé moins le padding.
+    Pour une clé 4096-bit : max ~470 octets.
 
-    **For larger files:** Encrypt with symmetric key, then encrypt the key with RSA.
+    **Pour les fichiers plus volumineux :** Chiffrer avec une clé symétrique, puis chiffrer la clé avec RSA.
 
 ---
 
-## Digital Signatures
+## Signatures Numériques
 
-### Sign a File
+### Signer un Fichier
 
 ```bash
-# Create signature
+# Créer une signature
 openssl dgst -sha256 -sign private.pem -out signature.bin file.txt
 
-# Create signature (base64 encoded)
+# Créer une signature (encodée en base64)
 openssl dgst -sha256 -sign private.pem file.txt | openssl base64 > signature.b64
 ```
 
-### Verify Signature
+### Vérifier une Signature
 
 ```bash
-# Verify signature
+# Vérifier la signature
 openssl dgst -sha256 -verify public.pem -signature signature.bin file.txt
-# Output: Verified OK
+# Sortie : Verified OK
 
-# Verify base64 signature
+# Vérifier une signature base64
 openssl base64 -d -in signature.b64 -out signature.bin
 openssl dgst -sha256 -verify public.pem -signature signature.bin file.txt
 ```
 
 ---
 
-## Random Data Generation
+## Génération de Données Aléatoires
 
 ```bash
-# Generate 32 random bytes (hex)
+# Générer 32 octets aléatoires (hex)
 openssl rand -hex 32
 
-# Generate 32 random bytes (base64)
+# Générer 32 octets aléatoires (base64)
 openssl rand -base64 32
 
-# Generate random bytes to file
+# Générer des octets aléatoires dans un fichier
 openssl rand -out random.bin 256
 
-# Generate password-safe random string
+# Générer une chaîne aléatoire sûre pour les mots de passe
 openssl rand -base64 24 | tr -d '=/+' | cut -c1-16
 ```
 
 ---
 
-## Quick Reference Table
+## Tableau de Référence Rapide
 
-| Task | Command |
+| Tâche | Commande |
 |------|---------|
-| Base64 encode | `echo -n "text" \| openssl base64` |
-| Base64 decode | `echo "dGV4dA==" \| openssl base64 -d` |
-| SHA256 hash | `openssl dgst -sha256 file.txt` |
-| Encrypt file (symmetric) | `openssl enc -aes-256-cbc -salt -pbkdf2 -in f.txt -out f.enc` |
-| Decrypt file | `openssl enc -d -aes-256-cbc -pbkdf2 -in f.enc -out f.txt` |
-| Generate RSA key | `openssl genrsa -out private.pem 4096` |
-| Extract public key | `openssl rsa -in private.pem -pubout -out public.pem` |
-| Sign file | `openssl dgst -sha256 -sign private.pem -out sig.bin file` |
-| Verify signature | `openssl dgst -sha256 -verify public.pem -signature sig.bin file` |
-| Random bytes | `openssl rand -hex 32` |
+| Encoder en Base64 | `echo -n "text" \| openssl base64` |
+| Décoder Base64 | `echo "dGV4dA==" \| openssl base64 -d` |
+| Hash SHA256 | `openssl dgst -sha256 file.txt` |
+| Chiffrer un fichier (symétrique) | `openssl enc -aes-256-cbc -salt -pbkdf2 -in f.txt -out f.enc` |
+| Déchiffrer un fichier | `openssl enc -d -aes-256-cbc -pbkdf2 -in f.enc -out f.txt` |
+| Générer une clé RSA | `openssl genrsa -out private.pem 4096` |
+| Extraire la clé publique | `openssl rsa -in private.pem -pubout -out public.pem` |
+| Signer un fichier | `openssl dgst -sha256 -sign private.pem -out sig.bin file` |
+| Vérifier une signature | `openssl dgst -sha256 -verify public.pem -signature sig.bin file` |
+| Octets aléatoires | `openssl rand -hex 32` |
 
 ---
 
-## Practical Examples
+## Exemples Pratiques
 
-### Secure File Transfer
+### Transfert Sécurisé de Fichier
 
 ```bash
-# Sender: Encrypt file for recipient
+# Expéditeur : Chiffrer le fichier pour le destinataire
 openssl rand -out session.key 32
 openssl enc -aes-256-cbc -salt -pbkdf2 -in data.tar.gz -out data.enc -pass file:session.key
 openssl pkeyutl -encrypt -pubin -inkey recipient_public.pem -in session.key -out session.key.enc
 
-# Send: data.enc + session.key.enc
+# Envoyer : data.enc + session.key.enc
 
-# Recipient: Decrypt
+# Destinataire : Déchiffrer
 openssl pkeyutl -decrypt -inkey my_private.pem -in session.key.enc -out session.key
 openssl enc -d -aes-256-cbc -pbkdf2 -in data.enc -out data.tar.gz -pass file:session.key
 ```
 
-### Quick Password Generator
+### Générateur Rapide de Mot de Passe
 
 ```bash
-# 16-character alphanumeric password
+# Mot de passe alphanumérique de 16 caractères
 openssl rand -base64 12
 
-# 32-character hex password
+# Mot de passe hex de 32 caractères
 openssl rand -hex 16
 ```

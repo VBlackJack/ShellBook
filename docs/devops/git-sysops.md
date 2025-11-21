@@ -1,16 +1,16 @@
-# Git for SysAdmins
+# Git pour SysAdmins
 
 `#git` `#ops` `#versioning`
 
-Why every SysAdmin needs Git, even if you never write "real" code.
+Pourquoi chaque SysAdmin a besoin de Git, même si vous n'écrivez jamais de "vrai" code.
 
 ---
 
-## Why Git? The 5 Pillars
+## Pourquoi Git? Les 5 Piliers
 
 ### 1. Backup
 
-!!! danger "The Old Way"
+!!! danger "L'Ancienne Méthode"
     ```
     script.sh
     script_backup.sh
@@ -20,64 +20,64 @@ Why every SysAdmin needs Git, even if you never write "real" code.
     script_final_v2_WORKING_monday.sh
     ```
 
-**With Git:**
+**Avec Git:**
 
 ```bash
 git init
 git add script.sh
 git commit -m "Initial version"
 
-# Make changes...
+# Faire des changements...
 git commit -am "Add error handling"
 
-# Made a mistake? Go back
+# Une erreur? Revenir en arrière
 git log --oneline
 git checkout abc123 -- script.sh
 ```
 
-No more lost scripts on crashed disks. Push to remote = instant backup.
+Plus de scripts perdus sur des disques crashés. Push vers le remote = backup instantané.
 
 ---
 
-### 2. Sharing
+### 2. Partage
 
-**Without Git:**
+**Sans Git:**
 
-- Email attachments with different versions
-- USB drives passed around
-- "Can you send me the latest?"
-- "Which version is production?"
+- Pièces jointes email avec différentes versions
+- Clés USB qui circulent
+- "Tu peux m'envoyer la dernière version?"
+- "Quelle version est en production?"
 
-**With Git:**
+**Avec Git:**
 
 ```bash
-# Clone the repo, get everything
+# Cloner le repo, tout récupérer
 git clone git@github.com:team/scripts.git
 
-# Everyone has the same version
-# Everyone knows what's current
+# Tout le monde a la même version
+# Tout le monde sait quelle est la version actuelle
 ```
 
 ---
 
 ### 3. Collaboration
 
-Multiple people can work on the same files without overwriting each other.
+Plusieurs personnes peuvent travailler sur les mêmes fichiers sans s'écraser mutuellement.
 
 ```bash
-# Alice works on feature A
+# Alice travaille sur la feature A
 git checkout -b feature-a
-# ... makes changes ...
+# ... fait des changements ...
 git commit -am "Add monitoring script"
 git push origin feature-a
 
-# Bob works on feature B (same time)
+# Bob travaille sur la feature B (en même temps)
 git checkout -b feature-b
-# ... makes changes ...
+# ... fait des changements ...
 git commit -am "Add backup script"
 git push origin feature-b
 
-# Both merge to main without conflicts
+# Les deux fusionnent vers main sans conflits
 git checkout main
 git merge feature-a
 git merge feature-b
@@ -87,77 +87,77 @@ git merge feature-b
 
 ### 4. Documentation
 
-**Commit messages = "Why I did this"**
+**Messages de commit = "Pourquoi j'ai fait ça"**
 
 ```bash
 git log --oneline
 
-# Good commits tell a story:
+# Les bons commits racontent une histoire:
 # a1b2c3d fix: nginx config for TLS 1.3 (CVE-2024-1234)
 # d4e5f6g feat: add automated backup script
 # g7h8i9j refactor: split monolithic script into modules
 # j1k2l3m docs: add runbook for incident response
 ```
 
-**Blame = "Who did this and when?"**
+**Blame = "Qui a fait ça et quand?"**
 
 ```bash
-# Find who changed line 42 and why
+# Trouver qui a changé la ligne 42 et pourquoi
 git blame nginx.conf
 
-# Output:
+# Sortie:
 # a1b2c3d (Alice 2024-01-15) ssl_protocols TLSv1.2 TLSv1.3;
 ```
 
 ---
 
-### 5. CI/CD Gateway
+### 5. Passerelle CI/CD
 
-Git is the trigger for modern automation.
+Git est le déclencheur de l'automatisation moderne.
 
 ```
-Push to Git → CI/CD Pipeline → Automated Deployment
+Push vers Git → Pipeline CI/CD → Déploiement Automatisé
 
-Examples:
-- Push Ansible playbook → Auto-run on servers
+Exemples:
+- Push playbook Ansible → Auto-exécution sur serveurs
 - Push Terraform → Auto-apply infrastructure
-- Push config change → Auto-deploy to production
+- Push changement config → Auto-déploiement en production
 ```
 
 ---
 
-## The SysAdmin Use Cases
+## Cas d'Usage pour SysAdmin
 
-### Versioning /etc/ Configs
+### Versionner les Configs /etc/
 
 ```bash
-# Initialize git in /etc (careful!)
+# Initialiser git dans /etc (prudence!)
 cd /etc
 sudo git init
 sudo git add nginx/ ssh/
 sudo git commit -m "Initial config snapshot"
 
-# After changes
+# Après des changements
 sudo git diff
 sudo git commit -am "Harden SSH config"
 
-# Oops, broke something?
+# Oups, quelque chose est cassé?
 sudo git checkout HEAD~1 -- ssh/sshd_config
 sudo systemctl restart sshd
 ```
 
-!!! tip "Use etckeeper"
-    `etckeeper` automates Git tracking of `/etc/`:
+!!! tip "Utiliser etckeeper"
+    `etckeeper` automatise le tracking Git de `/etc/`:
 
     ```bash
     sudo apt install etckeeper
     sudo etckeeper init
-    # Now /etc/ is auto-committed on package changes
+    # Maintenant /etc/ est auto-committé lors des changements de paquets
     ```
 
 ---
 
-### Managing Ansible Playbooks
+### Gérer les Playbooks Ansible
 
 ```
 ansible-repo/
@@ -174,7 +174,7 @@ ansible-repo/
 ```
 
 ```bash
-# .gitignore for Ansible
+# .gitignore pour Ansible
 *.retry
 *.pyc
 .vault_pass
@@ -183,24 +183,24 @@ inventory/secrets.yml
 
 ---
 
-### Terraform State (Carefully!)
+### State Terraform (Avec Précaution!)
 
 ```bash
-# .gitignore for Terraform
+# .gitignore pour Terraform
 *.tfstate
 *.tfstate.*
 .terraform/
-*.tfvars      # May contain secrets!
+*.tfvars      # Peut contenir des secrets!
 
-# DO commit
+# À commiter
 *.tf
 terraform.lock.hcl
 ```
 
-!!! warning "State Files"
-    **Never commit tfstate to Git!**
+!!! warning "Fichiers State"
+    **Ne jamais commiter tfstate dans Git!**
 
-    Use remote backends instead:
+    Utiliser des backends distants à la place:
 
     - S3 + DynamoDB (AWS)
     - Azure Blob Storage
@@ -208,7 +208,7 @@ terraform.lock.hcl
 
 ---
 
-### Script Library
+### Bibliothèque de Scripts
 
 ```
 scripts/
@@ -226,69 +226,69 @@ scripts/
 
 ---
 
-## Essential Git Commands for SysOps
+## Commandes Git Essentielles pour SysOps
 
 ```bash
-# Setup
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
+# Configuration
+git config --global user.name "Votre Nom"
+git config --global user.email "vous@exemple.com"
 
-# Daily workflow
-git status              # What changed?
-git diff               # Show changes
-git add .              # Stage all
+# Workflow quotidien
+git status              # Qu'est-ce qui a changé?
+git diff               # Afficher les changements
+git add .              # Stager tout
 git commit -m "msg"    # Commit
 git push               # Upload
 
-# Viewing history
-git log --oneline      # Compact history
-git log -p             # With diffs
-git blame file         # Who changed what
+# Voir l'historique
+git log --oneline      # Historique compact
+git log -p             # Avec les diffs
+git blame file         # Qui a changé quoi
 
-# Undoing mistakes
-git checkout -- file   # Discard local changes
-git reset HEAD~1       # Undo last commit (keep changes)
-git revert abc123      # Create undo commit
+# Annuler des erreurs
+git checkout -- file   # Abandonner les changements locaux
+git reset HEAD~1       # Annuler le dernier commit (garder changements)
+git revert abc123      # Créer un commit d'annulation
 
-# Branching
-git branch feature     # Create branch
-git checkout feature   # Switch to branch
-git checkout -b feature # Create + switch
-git merge feature      # Merge into current
+# Branches
+git branch feature     # Créer une branche
+git checkout feature   # Basculer vers une branche
+git checkout -b feature # Créer + basculer
+git merge feature      # Fusionner dans la branche actuelle
 
 # Remote
-git clone URL          # Download repo
-git pull               # Get latest
-git push               # Upload changes
-git remote -v          # Show remotes
+git clone URL          # Télécharger le repo
+git pull               # Récupérer la dernière version
+git push               # Upload les changements
+git remote -v          # Afficher les remotes
 ```
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
-| Command | Purpose |
+| Commande | Objectif |
 |---------|---------|
-| `git init` | Initialize new repo |
-| `git clone <url>` | Copy remote repo |
-| `git status` | Show current state |
-| `git add .` | Stage all changes |
-| `git commit -m "msg"` | Save snapshot |
-| `git push` | Upload to remote |
-| `git pull` | Download from remote |
-| `git log --oneline` | View history |
-| `git diff` | Show unstaged changes |
-| `git checkout -- <file>` | Discard changes |
-| `git branch <name>` | Create branch |
-| `git merge <branch>` | Merge branch |
-| `git blame <file>` | Show line history |
+| `git init` | Initialiser nouveau repo |
+| `git clone <url>` | Copier un repo distant |
+| `git status` | Afficher l'état actuel |
+| `git add .` | Stager tous les changements |
+| `git commit -m "msg"` | Sauvegarder un snapshot |
+| `git push` | Upload vers le remote |
+| `git pull` | Télécharger depuis le remote |
+| `git log --oneline` | Voir l'historique |
+| `git diff` | Afficher changements non stagés |
+| `git checkout -- <file>` | Abandonner les changements |
+| `git branch <name>` | Créer une branche |
+| `git merge <branch>` | Fusionner une branche |
+| `git blame <file>` | Afficher l'historique des lignes |
 
 ---
 
-!!! success "Start Today"
-    You don't need to be a developer to benefit from Git.
+!!! success "Commencer Aujourd'hui"
+    Vous n'avez pas besoin d'être développeur pour bénéficier de Git.
 
-    1. Pick one directory (scripts, configs)
+    1. Choisir un répertoire (scripts, configs)
     2. `git init`
-    3. Make it a habit: change → commit → push
-    4. Thank yourself in 6 months
+    3. En faire une habitude: changement → commit → push
+    4. Se remercier dans 6 mois

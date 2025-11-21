@@ -1,69 +1,69 @@
-# The 6 Pillars of DevOps
+# Les 6 Piliers du DevOps
 
 `#devops` `#architecture` `#culture`
 
-Don't get lost in the tools. There are only **6 problems to solve**.
+Ne vous perdez pas dans les outils. Il n'y a que **6 problèmes à résoudre**.
 
 ---
 
 ## 1. Configuration Management
 
-**Concept:** Ensure every server is configured identically, every time, without manual intervention. Infrastructure as Code.
+**Concept :** Garantir que chaque serveur est configuré de manière identique, à chaque fois, sans intervention manuelle. Infrastructure as Code.
 
-!!! tip "The Restaurant Analogy: The Recipe"
-    A chef doesn't improvise every dish. They follow a **standardized recipe** to ensure consistency.
+!!! tip "L'Analogie du Restaurant : La Recette"
+    Un chef n'improvise pas chaque plat. Il suit une **recette standardisée** pour garantir la cohérence.
 
-    Config management is your recipe book—same ingredients, same steps, same result on every server.
+    Configuration management est votre livre de recettes - mêmes ingrédients, mêmes étapes, même résultat sur chaque serveur.
 
-**Problem Solved:** "Works on my machine" syndrome, configuration drift, manual setup errors.
+**Problème résolu :** Syndrome "ça marche sur ma machine", dérive de configuration, erreurs de configuration manuelle.
 
-**Leading Tools:**
+**Outils Leaders :**
 
-| Tool | Type | Best For |
+| Outil | Type | Idéal Pour |
 |------|------|----------|
-| **Ansible** | Agentless, Push | Simple automation, multi-OS |
-| **Terraform** | Declarative | Cloud infrastructure provisioning |
-| **Puppet** | Agent-based, Pull | Large enterprise environments |
-| **Chef** | Agent-based, Ruby DSL | Complex configurations |
-| **SaltStack** | Hybrid | Event-driven automation |
+| **Ansible** | Agentless, Push | Automatisation simple, multi-OS |
+| **Terraform** | Déclaratif | Provisionnement d'infrastructure cloud |
+| **Puppet** | Agent-based, Pull | Environnements d'entreprise larges |
+| **Chef** | Agent-based, Ruby DSL | Configurations complexes |
+| **SaltStack** | Hybride | Automatisation événementielle |
 
 ---
 
 ## 2. Containers
 
-**Concept:** Package applications with all dependencies into isolated, portable units that run identically everywhere.
+**Concept :** Empaqueter les applications avec toutes les dépendances dans des unités isolées et portables qui s'exécutent de manière identique partout.
 
-!!! tip "The Restaurant Analogy: The Pre-packaged Meal"
-    Instead of cooking from scratch, you receive a **pre-packaged meal** that just needs heating.
+!!! tip "L'Analogie du Restaurant : Le Repas Pré-emballé"
+    Au lieu de cuisiner à partir de zéro, vous recevez un **repas pré-emballé** qui nécessite juste d'être réchauffé.
 
-    Containers ship everything needed—no missing ingredients, no "but I don't have that spice" problems.
+    Les containers livrent tout ce qui est nécessaire - pas d'ingrédients manquants, pas de problème "je n'ai pas cette épice".
 
-**Problem Solved:** Dependency hell, environment inconsistencies, "it works on my laptop."
+**Problème résolu :** Enfer des dépendances, incohérences d'environnement, "ça marche sur mon laptop".
 
-**Leading Tools:**
+**Outils Leaders :**
 
-| Tool | Purpose |
+| Outil | Objectif |
 |------|---------|
-| **Docker** | Container runtime (industry standard) |
-| **Podman** | Rootless, daemonless alternative |
-| **containerd** | Low-level runtime (used by K8s) |
-| **Buildah** | Build OCI images without daemon |
-| **Kaniko** | Build images in Kubernetes |
+| **Docker** | Runtime de containers (standard de l'industrie) |
+| **Podman** | Alternative sans root, sans daemon |
+| **containerd** | Runtime de bas niveau (utilisé par K8s) |
+| **Buildah** | Construire des images OCI sans daemon |
+| **Kaniko** | Construire des images dans Kubernetes |
 
 ---
 
 ## 3. CI/CD (Continuous Integration / Continuous Delivery)
 
-**Concept:** Automate the build, test, and deployment pipeline. Every code change triggers an automated workflow.
+**Concept :** Automatiser le pipeline de build, test et déploiement. Chaque changement de code déclenche un workflow automatisé.
 
-!!! tip "The Restaurant Analogy: The Kitchen Assembly Line"
-    Orders come in, and the **assembly line** takes over—prep station, grill station, plating, delivery.
+!!! tip "L'Analogie du Restaurant : La Chaîne d'Assemblage de Cuisine"
+    Les commandes arrivent, et la **chaîne d'assemblage** prend le relais - station de préparation, station de grill, dressage, livraison.
 
-    CI/CD is your automated kitchen: code in, tested artifact out, deployed to production.
+    CI/CD est votre cuisine automatisée : code en entrée, artefact testé en sortie, déployé en production.
 
-**Problem Solved:** Manual deployments, integration bugs discovered late, slow release cycles.
+**Problème résolu :** Déploiements manuels, bugs d'intégration découverts tard, cycles de release lents.
 
-**Pipeline Stages:**
+**Étapes du Pipeline :**
 
 ```
 Code → Build → Test → Security Scan → Deploy → Monitor
@@ -72,135 +72,135 @@ Code → Build → Test → Security Scan → Deploy → Monitor
                E2E     Container
 ```
 
-**Leading Tools:**
+**Outils Leaders :**
 
-| Tool | Type | Best For |
+| Outil | Type | Idéal Pour |
 |------|------|----------|
-| **GitLab CI** | Integrated | Full DevOps platform |
-| **GitHub Actions** | Cloud-native | GitHub-centric workflows |
-| **Jenkins** | Self-hosted | Flexibility, plugins |
-| **ArgoCD** | GitOps | Kubernetes deployments |
-| **Tekton** | Cloud-native | Kubernetes-native pipelines |
+| **GitLab CI** | Intégré | Plateforme DevOps complète |
+| **GitHub Actions** | Cloud-native | Workflows centrés sur GitHub |
+| **Jenkins** | Auto-hébergé | Flexibilité, plugins |
+| **ArgoCD** | GitOps | Déploiements Kubernetes |
+| **Tekton** | Cloud-native | Pipelines natifs Kubernetes |
 
 ---
 
 ## 4. Orchestration
 
-**Concept:** Manage the lifecycle of containers at scale—scheduling, scaling, networking, and self-healing.
+**Concept :** Gérer le cycle de vie des containers à grande échelle - planification, mise à l'échelle, réseau et auto-réparation.
 
-!!! tip "The Restaurant Analogy: The Head Waiter"
-    The **head waiter** decides which table gets which server, balances workloads, and reassigns staff when someone calls in sick.
+!!! tip "L'Analogie du Restaurant : Le Maître d'Hôtel"
+    Le **maître d'hôtel** décide quelle table obtient quel serveur, équilibre les charges de travail, et réassigne le personnel quand quelqu'un appelle malade.
 
-    Orchestration places your containers, balances load, and replaces failed instances automatically.
+    L'orchestration place vos containers, équilibre la charge, et remplace les instances défaillantes automatiquement.
 
-**Problem Solved:** Manual container management, scaling decisions, service discovery, failover.
+**Problème résolu :** Gestion manuelle des containers, décisions de mise à l'échelle, découverte de services, basculement.
 
-**Key Capabilities:**
+**Capacités Clés :**
 
-- **Scheduling:** Place containers on appropriate nodes
-- **Scaling:** Add/remove replicas based on load
-- **Self-healing:** Restart failed containers
-- **Service discovery:** Containers find each other
-- **Rolling updates:** Zero-downtime deployments
+- **Scheduling :** Placer les containers sur les nœuds appropriés
+- **Scaling :** Ajouter/supprimer des réplicas selon la charge
+- **Self-healing :** Redémarrer les containers défaillants
+- **Service discovery :** Les containers se trouvent entre eux
+- **Rolling updates :** Déploiements sans temps d'arrêt
 
-**Leading Tools:**
+**Outils Leaders :**
 
-| Tool | Complexity | Best For |
+| Outil | Complexité | Idéal Pour |
 |------|------------|----------|
-| **Kubernetes (K8s)** | High | Production, any scale |
-| **Docker Swarm** | Low | Simple orchestration |
-| **Nomad** | Medium | Multi-workload (containers + VMs) |
-| **Amazon ECS** | Medium | AWS-native container management |
-| **OpenShift** | High | Enterprise Kubernetes |
+| **Kubernetes (K8s)** | Élevée | Production, toute échelle |
+| **Docker Swarm** | Faible | Orchestration simple |
+| **Nomad** | Moyenne | Multi-workload (containers + VMs) |
+| **Amazon ECS** | Moyenne | Gestion de containers native AWS |
+| **OpenShift** | Élevée | Kubernetes d'entreprise |
 
 ---
 
 ## 5. Cloud
 
-**Concept:** On-demand infrastructure that scales elastically. Pay for what you use, provision in minutes instead of months.
+**Concept :** Infrastructure à la demande qui évolue de manière élastique. Payez ce que vous utilisez, provisionnez en minutes au lieu de mois.
 
-!!! tip "The Restaurant Analogy: Freelance Staff"
-    During rush hour, you call in **freelance staff**. When it's quiet, you send them home.
+!!! tip "L'Analogie du Restaurant : Personnel Freelance"
+    Pendant les heures de pointe, vous appelez du **personnel freelance**. Quand c'est calme, vous les renvoyez chez eux.
 
-    Cloud provides elastic capacity—spin up 100 servers for Black Friday, scale down to 10 on Monday.
+    Le cloud fournit une capacité élastique - lancez 100 serveurs pour le Black Friday, réduisez à 10 le lundi.
 
-**Problem Solved:** Capacity planning, hardware procurement delays, underutilized servers.
+**Problème résolu :** Planification de capacité, délais d'approvisionnement matériel, serveurs sous-utilisés.
 
-**Service Models:**
+**Modèles de Service :**
 
-| Model | You Manage | Provider Manages | Example |
+| Modèle | Vous Gérez | Fournisseur Gère | Exemple |
 |-------|------------|------------------|---------|
-| **IaaS** | OS, Apps, Data | Hardware, Network | EC2, GCE |
-| **PaaS** | Apps, Data | OS, Runtime | Heroku, App Engine |
-| **SaaS** | Data only | Everything else | Gmail, Salesforce |
-| **FaaS** | Code only | Everything else | Lambda, Cloud Functions |
+| **IaaS** | OS, Apps, Données | Matériel, Réseau | EC2, GCE |
+| **PaaS** | Apps, Données | OS, Runtime | Heroku, App Engine |
+| **SaaS** | Données seulement | Tout le reste | Gmail, Salesforce |
+| **FaaS** | Code seulement | Tout le reste | Lambda, Cloud Functions |
 
-**Leading Providers:**
+**Fournisseurs Leaders :**
 
-| Provider | Strength |
+| Fournisseur | Force |
 |----------|----------|
-| **AWS** | Breadth of services, market leader |
-| **Azure** | Enterprise integration, hybrid cloud |
-| **GCP** | Data/ML, Kubernetes-native |
-| **OVH** | European sovereignty (SecNumCloud) |
-| **Scaleway** | European, developer-friendly |
+| **AWS** | Étendue des services, leader du marché |
+| **Azure** | Intégration d'entreprise, cloud hybride |
+| **GCP** | Data/ML, natif Kubernetes |
+| **OVH** | Souveraineté européenne (SecNumCloud) |
+| **Scaleway** | Européen, orienté développeurs |
 
 ---
 
 ## 6. Observability
 
-**Concept:** Understand what's happening inside your systems through metrics, logs, and traces. Debug production issues effectively.
+**Concept :** Comprendre ce qui se passe à l'intérieur de vos systèmes via des métriques, des logs et des traces. Déboguer efficacement les problèmes de production.
 
-!!! tip "The Restaurant Analogy: The Quality Inspector"
-    The **quality inspector** checks every dish, monitors kitchen temperatures, and alerts when something's wrong.
+!!! tip "L'Analogie du Restaurant : L'Inspecteur Qualité"
+    L'**inspecteur qualité** vérifie chaque plat, surveille les températures de cuisine, et alerte quand quelque chose ne va pas.
 
-    Observability gives you eyes into production—is the app healthy? Why is it slow? Where did that request fail?
+    L'observabilité vous donne des yeux sur la production - l'app est-elle saine ? Pourquoi est-elle lente ? Où cette requête a-t-elle échoué ?
 
-**Problem Solved:** Blind deployments, slow incident response, "I don't know why it's down."
+**Problème résolu :** Déploiements à l'aveugle, réponse lente aux incidents, "je ne sais pas pourquoi c'est en panne".
 
-**The Three Pillars:**
+**Les Trois Piliers :**
 
-| Pillar | What | Tool Examples |
+| Pilier | Quoi | Exemples d'Outils |
 |--------|------|---------------|
-| **Metrics** | Numerical measurements over time | Prometheus, Datadog, Grafana |
-| **Logs** | Event records with context | ELK Stack, Loki, Splunk |
-| **Traces** | Request flow across services | Jaeger, Zipkin, Tempo |
+| **Metrics** | Mesures numériques au fil du temps | Prometheus, Datadog, Grafana |
+| **Logs** | Enregistrements d'événements avec contexte | ELK Stack, Loki, Splunk |
+| **Traces** | Flux de requête à travers les services | Jaeger, Zipkin, Tempo |
 
-**Leading Stacks:**
+**Stacks Leaders :**
 
 ```
-Prometheus + Grafana + Alertmanager    → Metrics & Alerting
-ELK (Elasticsearch + Logstash + Kibana) → Log aggregation
-Grafana Loki                           → Lightweight logs
-Jaeger / Tempo                         → Distributed tracing
+Prometheus + Grafana + Alertmanager    → Métriques & Alerting
+ELK (Elasticsearch + Logstash + Kibana) → Agrégation de logs
+Grafana Loki                           → Logs légers
+Jaeger / Tempo                         → Tracing distribué
 ```
 
 ---
 
-## Summary Table
+## Tableau Récapitulatif
 
-| Pillar | Problem Solved | Analogy | Key Tool |
+| Pilier | Problème Résolu | Analogie | Outil Clé |
 |--------|----------------|---------|----------|
-| **Configuration Mgmt** | Consistency, drift | The Recipe | Ansible, Terraform |
-| **Containers** | Dependency isolation | Pre-packaged Meal | Docker |
-| **CI/CD** | Manual deployments | Assembly Line | GitLab CI, GitHub Actions |
-| **Orchestration** | Container lifecycle | Head Waiter | Kubernetes |
-| **Cloud** | Elasticity, scaling | Freelance Staff | AWS, Azure, GCP |
-| **Observability** | Visibility, debugging | Quality Inspector | Prometheus, Grafana |
+| **Configuration Mgmt** | Cohérence, dérive | La Recette | Ansible, Terraform |
+| **Containers** | Isolation des dépendances | Repas Pré-emballé | Docker |
+| **CI/CD** | Déploiements manuels | Chaîne d'Assemblage | GitLab CI, GitHub Actions |
+| **Orchestration** | Cycle de vie des containers | Maître d'Hôtel | Kubernetes |
+| **Cloud** | Élasticité, mise à l'échelle | Personnel Freelance | AWS, Azure, GCP |
+| **Observability** | Visibilité, débogage | Inspecteur Qualité | Prometheus, Grafana |
 
 ---
 
-!!! example "The Full Picture"
+!!! example "Vue d'Ensemble"
     ```
-    Code → CI/CD Pipeline → Container Image → Registry
+    Code → Pipeline CI/CD → Image Container → Registry
                                     ↓
-    Cloud Infrastructure ← Terraform/Ansible
+    Infrastructure Cloud ← Terraform/Ansible
                                     ↓
-    Kubernetes Cluster → Deploys Containers
+    Cluster Kubernetes → Déploie les Containers
                                     ↓
-    Prometheus/Grafana → Monitors Everything
+    Prometheus/Grafana → Surveille Tout
     ```
 
-!!! warning "Tools Change, Concepts Don't"
-    Jenkins may be replaced by GitLab CI. Docker Swarm lost to Kubernetes.
-    But the **6 pillars remain constant**. Master the concepts, adapt to the tools.
+!!! warning "Les Outils Changent, Pas les Concepts"
+    Jenkins peut être remplacé par GitLab CI. Docker Swarm a perdu face à Kubernetes.
+    Mais les **6 piliers restent constants**. Maîtrisez les concepts, adaptez-vous aux outils.

@@ -1,10 +1,10 @@
-# Secure SSH Keys
+# Clés SSH Sécurisées
 
-## Generate a Secure SSH Key Pair
+## Générer une Paire de Clés SSH Sécurisée
 
-!!! info "ANSSI Recommendation"
-    According to ANSSI guidelines, RSA keys must be **minimum 3072 bits** for secure operations.
-    Ed25519 is preferred when supported.
+!!! info "Recommandation ANSSI"
+    Selon les directives ANSSI, les clés RSA doivent faire **minimum 3072 bits** pour des opérations sécurisées.
+    Ed25519 est préféré lorsque supporté.
 
 ### RSA 4096 bits
 
@@ -20,7 +20,7 @@
     ssh-keygen -t rsa -b 4096 -C "user@domain.com" -f "$env:USERPROFILE\.ssh\id_rsa_secure"
     ```
 
-### Ed25519 (Recommended)
+### Ed25519 (Recommandé)
 
 === "Bash (Linux/macOS)"
 
@@ -36,5 +36,5 @@
 
 ---
 
-!!! warning "Security"
-    Always set a strong passphrase when generating SSH keys.
+!!! warning "Sécurité"
+    Toujours définir une phrase de passe forte lors de la génération de clés SSH.

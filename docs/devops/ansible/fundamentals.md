@@ -1,16 +1,16 @@
-# Ansible Fundamentals
+# Fondamentaux d'Ansible
 
 `#ansible` `#iac` `#python` `#ssh`
 
-Infrastructure as Code with zero agents.
+Infrastructure as Code sans agents.
 
 ---
 
-## Core Concepts (The "Why")
+## Concepts Fondamentaux (Le "Pourquoi")
 
-### Agentless Architecture
+### Architecture Sans Agent
 
-**No software to install on targets.** Ansible uses SSH (Linux) or WinRM (Windows).
+**Aucun logiciel à installer sur les cibles.** Ansible utilise SSH (Linux) ou WinRM (Windows).
 
 ```
 ┌─────────────────┐         SSH          ┌─────────────────┐
@@ -21,62 +21,62 @@ Infrastructure as Code with zero agents.
 
 | Ansible | Chef/Puppet |
 |---------|-------------|
-| Agentless (SSH) | Requires agent |
-| Push model | Pull model |
-| Python on control | Ruby ecosystem |
-| Simple YAML | DSL to learn |
+| Sans agent (SSH) | Nécessite un agent |
+| Modèle push | Modèle pull |
+| Python sur le contrôleur | Écosystème Ruby |
+| YAML simple | DSL à apprendre |
 
 ---
 
 ### Push vs Pull
 
-**Push (Ansible):** You decide when to apply changes.
+**Push (Ansible):** Vous décidez quand appliquer les changements.
 
 ```bash
-# You run this when ready
+# Vous exécutez ceci quand vous êtes prêt
 ansible-playbook deploy.yml
 ```
 
-**Pull (Puppet/Chef):** Agents poll for changes periodically.
+**Pull (Puppet/Chef):** Les agents interrogent périodiquement les changements.
 
 ```
-Agent checks every 30min → applies drift
+L'agent vérifie toutes les 30min → applique la dérive
 ```
 
-!!! tip "Push = Control"
-    Push model gives you explicit control over **when** changes happen.
-    No surprise updates at 3 AM.
+!!! tip "Push = Contrôle"
+    Le modèle push vous donne un contrôle explicite sur **quand** les changements se produisent.
+    Pas de mises à jour surprises à 3h du matin.
 
 ---
 
-### Idempotence (Critical Concept)
+### Idempotence (Concept Critique)
 
-!!! important "Running twice = same result"
-    An idempotent task only makes changes if needed.
+!!! important "Exécuter deux fois = même résultat"
+    Une task idempotente ne fait des changements que si nécessaire.
 
     ```yaml
-    # First run: installs nginx
-    # Second run: "ok" (already installed, no change)
+    # Première exécution : installe nginx
+    # Deuxième exécution : "ok" (déjà installé, aucun changement)
     - name: Install nginx
       apt:
         name: nginx
         state: present
     ```
 
-**Why it matters:**
+**Pourquoi c'est important :**
 
-- Safe to re-run playbooks
-- Self-healing (drift correction)
-- No "oops I ran it twice" disasters
+- Réexécuter les playbooks en toute sécurité
+- Auto-réparation (correction de la dérive)
+- Pas de désastre "oups je l'ai exécuté deux fois"
 
-**Non-idempotent (dangerous):**
+**Non-idempotent (dangereux) :**
 
 ```yaml
-# BAD: Appends every time you run!
+# MAUVAIS : Ajoute à chaque exécution !
 - name: Add line to file
   shell: echo "config=value" >> /etc/app.conf
 
-# GOOD: Only adds if not present
+# BON : N'ajoute que si absent
 - name: Add line to file
   lineinfile:
     path: /etc/app.conf
@@ -85,32 +85,32 @@ Agent checks every 30min → applies drift
 
 ---
 
-## Installation & Setup
+## Installation & Configuration
 
-### Install Ansible
+### Installer Ansible
 
 ```bash
-# Recommended: pip (latest version)
+# Recommandé : pip (dernière version)
 pip install ansible
 
-# Or with pipx (isolated)
+# Ou avec pipx (isolé)
 pipx install ansible
 
-# Verify
+# Vérifier
 ansible --version
 ```
 
-!!! warning "Avoid apt/yum for Ansible"
-    Distribution packages are often outdated.
-    Use `pip` for the latest features and modules.
+!!! warning "Évitez apt/yum pour Ansible"
+    Les paquets de distribution sont souvent obsolètes.
+    Utilisez `pip` pour les dernières fonctionnalités et modules.
 
 ---
 
-### Inventory File (`hosts`)
+### Fichier Inventory (`hosts`)
 
-List your managed servers. Supports INI or YAML format.
+Listez vos serveurs gérés. Supporte le format INI ou YAML.
 
-**INI Format (simple):**
+**Format INI (simple) :**
 
 ```ini
 # inventory/hosts
@@ -133,7 +133,7 @@ ansible_user=deploy
 ansible_python_interpreter=/usr/bin/python3
 ```
 
-**YAML Format:**
+**Format YAML :**
 
 ```yaml
 # inventory/hosts.yml
@@ -156,7 +156,7 @@ all:
 
 ### Configuration (`ansible.cfg`)
 
-Place in project root or `~/.ansible.cfg`.
+Placer à la racine du projet ou dans `~/.ansible.cfg`.
 
 ```ini
 # ansible.cfg
@@ -181,161 +181,161 @@ pipelining = True
 control_path = /tmp/ansible-%%h-%%r
 ```
 
-| Setting | Purpose |
+| Paramètre | Objectif |
 |---------|---------|
-| `host_key_checking = False` | Skip SSH "Are you sure?" prompts |
-| `pipelining = True` | Faster execution (fewer SSH connections) |
-| `gathering = smart` | Cache facts, don't gather every time |
+| `host_key_checking = False` | Ignorer les invites SSH "Are you sure?" |
+| `pipelining = True` | Exécution plus rapide (moins de connexions SSH) |
+| `gathering = smart` | Mettre en cache les facts, ne pas les collecter à chaque fois |
 
 !!! warning "host_key_checking"
-    Disabling is convenient for automation but reduces security.
-    In production, use `known_hosts` management instead.
+    Désactiver est pratique pour l'automatisation mais réduit la sécurité.
+    En production, utilisez plutôt la gestion de `known_hosts`.
 
 ---
 
-## Authentication (SSH)
+## Authentification (SSH)
 
-Ansible uses your SSH keys. No special setup needed.
+Ansible utilise vos clés SSH. Aucune configuration spéciale nécessaire.
 
-### Prepare SSH Access
+### Préparer l'accès SSH
 
 ```bash
-# Generate key if needed
+# Générer une clé si nécessaire
 ssh-keygen -t ed25519 -C "ansible@control"
 
-# Copy to all managed nodes
+# Copier vers tous les nœuds gérés
 ssh-copy-id user@web1.example.com
 ssh-copy-id user@web2.example.com
 ssh-copy-id user@db1.example.com
 
-# Test SSH access
+# Tester l'accès SSH
 ssh user@web1.example.com "hostname"
 ```
 
-### Test Ansible Connection
+### Tester la connexion Ansible
 
 ```bash
-# The "Hello World" of Ansible
+# Le "Hello World" d'Ansible
 ansible all -m ping -i inventory/hosts
 
-# Output:
+# Sortie :
 # web1.example.com | SUCCESS => {
 #     "changed": false,
 #     "ping": "pong"
 # }
 ```
 
-!!! tip "Passwordless Sudo"
-    For `become` (sudo) to work without prompts:
+!!! tip "Sudo sans mot de passe"
+    Pour que `become` (sudo) fonctionne sans invites :
 
     ```bash
-    # On target servers, add to /etc/sudoers.d/ansible
+    # Sur les serveurs cibles, ajouter dans /etc/sudoers.d/ansible
     deploy ALL=(ALL) NOPASSWD: ALL
     ```
 
 ---
 
-## Ad-Hoc Commands (The CLI)
+## Commandes Ad-Hoc (La CLI)
 
-Run one-off commands without writing a playbook.
+Exécuter des commandes ponctuelles sans écrire de playbook.
 
-### Syntax
+### Syntaxe
 
 ```bash
 ansible <pattern> -m <module> -a "<arguments>" [options]
 ```
 
-### Essential Examples
+### Exemples Essentiels
 
 ```bash
-# Ping all hosts
+# Ping tous les hôtes
 ansible all -m ping
 
-# Run shell command
+# Exécuter une commande shell
 ansible all -m shell -a "uptime"
 ansible webservers -m shell -a "df -h"
 
-# Check memory on databases
+# Vérifier la mémoire sur les bases de données
 ansible databases -m shell -a "free -m"
 
-# Install package (with sudo)
+# Installer un paquet (avec sudo)
 ansible webservers -m apt -a "name=nginx state=present" --become
 
-# Start service
+# Démarrer un service
 ansible webservers -m service -a "name=nginx state=started enabled=yes" --become
 
-# Copy file
+# Copier un fichier
 ansible all -m copy -a "src=/local/file.conf dest=/etc/app/file.conf" --become
 
-# Create user
+# Créer un utilisateur
 ansible all -m user -a "name=deploy state=present" --become
 
-# Gather facts
+# Collecter les facts
 ansible web1.example.com -m setup
 
-# Reboot servers (careful!)
+# Redémarrer les serveurs (prudence !)
 ansible webservers -m reboot --become
 ```
 
-### Targeting Hosts
+### Cibler les hôtes
 
 ```bash
-# All hosts
+# Tous les hôtes
 ansible all -m ping
 
-# Specific group
+# Groupe spécifique
 ansible webservers -m ping
 
-# Multiple groups
+# Plusieurs groupes
 ansible 'webservers:databases' -m ping
 
-# Exclude group
+# Exclure un groupe
 ansible 'all:!databases' -m ping
 
-# Single host
+# Hôte unique
 ansible web1.example.com -m ping
 
-# Pattern matching
+# Correspondance de motif
 ansible '*.example.com' -m ping
 ansible 'web*' -m ping
 ```
 
-### Common Options
+### Options Courantes
 
-| Option | Purpose |
+| Option | Objectif |
 |--------|---------|
-| `-i <inventory>` | Specify inventory file |
-| `-m <module>` | Module to use |
-| `-a "<args>"` | Module arguments |
-| `--become` / `-b` | Use sudo |
-| `--become-user` | Sudo to specific user |
-| `-k` | Ask for SSH password |
-| `-K` | Ask for sudo password |
-| `-v` / `-vvv` | Verbose output |
-| `--check` | Dry run (no changes) |
-| `--diff` | Show file changes |
+| `-i <inventory>` | Spécifier le fichier inventory |
+| `-m <module>` | Module à utiliser |
+| `-a "<args>"` | Arguments du module |
+| `--become` / `-b` | Utiliser sudo |
+| `--become-user` | Sudo vers un utilisateur spécifique |
+| `-k` | Demander le mot de passe SSH |
+| `-K` | Demander le mot de passe sudo |
+| `-v` / `-vvv` | Sortie verbeuse |
+| `--check` | Dry run (aucun changement) |
+| `--diff` | Afficher les changements de fichiers |
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
-# Test connectivity
+# Tester la connectivité
 ansible all -m ping
 
-# Run command
+# Exécuter une commande
 ansible all -m shell -a "command"
 
-# Install package
+# Installer un paquet
 ansible all -m apt -a "name=pkg state=present" -b
 
-# Copy file
+# Copier un fichier
 ansible all -m copy -a "src=X dest=Y" -b
 
-# Start service
+# Démarrer un service
 ansible all -m service -a "name=X state=started" -b
 
-# Gather facts
+# Collecter les facts
 ansible host -m setup
 
 # Dry run
@@ -344,7 +344,7 @@ ansible-playbook playbook.yml --check --diff
 
 ---
 
-## Project Structure (Best Practice)
+## Structure de Projet (Bonne Pratique)
 
 ```
 ansible-project/

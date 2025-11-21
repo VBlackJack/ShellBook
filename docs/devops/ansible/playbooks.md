@@ -1,32 +1,32 @@
-# Mastering Playbooks
+# Maîtriser les Playbooks
 
 `#yaml` `#automation` `#modules`
 
-From ad-hoc commands to repeatable automation.
+Des commandes ad-hoc à l'automatisation répétable.
 
 ---
 
-## Anatomy of a Playbook
+## Anatomie d'un Playbook
 
-A playbook is a YAML file describing the desired state of your systems.
+Un playbook est un fichier YAML décrivant l'état souhaité de vos systèmes.
 
 ```yaml
 ---
 # playbook.yml
 
-- name: Configure webservers        # Play name (descriptive)
-  hosts: webservers                 # Target group from inventory
-  become: yes                       # Use sudo
-  gather_facts: yes                 # Collect system info
+- name: Configure webservers        # Nom du play (descriptif)
+  hosts: webservers                 # Groupe cible depuis l'inventory
+  become: yes                       # Utiliser sudo
+  gather_facts: yes                 # Collecter les infos système
 
-  vars:                             # Variables for this play
+  vars:                             # Variables pour ce play
     app_port: 8080
     app_user: www-data
 
-  tasks:                            # List of actions
-    - name: Install nginx           # Task name (shows in output)
-      apt:                          # Module to use
-        name: nginx                 # Module arguments
+  tasks:                            # Liste d'actions
+    - name: Install nginx           # Nom de la task (affiché dans la sortie)
+      apt:                          # Module à utiliser
+        name: nginx                 # Arguments du module
         state: present
         update_cache: yes
 
@@ -36,58 +36,58 @@ A playbook is a YAML file describing the desired state of your systems.
         state: started
         enabled: yes
 
-  handlers:                         # Triggered by notify
+  handlers:                         # Déclenché par notify
     - name: Restart nginx
       service:
         name: nginx
         state: restarted
 ```
 
-### Key Elements
+### Éléments Clés
 
-| Element | Purpose |
+| Élément | Objectif |
 |---------|---------|
-| `name` | Human-readable description |
-| `hosts` | Target servers (from inventory) |
-| `become` | Escalate privileges (sudo) |
-| `gather_facts` | Collect system info (ansible_* vars) |
-| `vars` | Define variables |
-| `tasks` | List of actions to perform |
-| `handlers` | Actions triggered by changes |
+| `name` | Description lisible par l'humain |
+| `hosts` | Serveurs cibles (depuis l'inventory) |
+| `become` | Élever les privilèges (sudo) |
+| `gather_facts` | Collecter les infos système (vars ansible_*) |
+| `vars` | Définir les variables |
+| `tasks` | Liste d'actions à effectuer |
+| `handlers` | Actions déclenchées par les changements |
 
-### Running a Playbook
+### Exécuter un Playbook
 
 ```bash
-# Basic run
+# Exécution basique
 ansible-playbook playbook.yml -i inventory/hosts
 
-# Dry run (check mode)
+# Dry run (mode check)
 ansible-playbook playbook.yml --check --diff
 
-# Limit to specific hosts
+# Limiter à des hôtes spécifiques
 ansible-playbook playbook.yml --limit web1.example.com
 
-# With extra variables
+# Avec des variables supplémentaires
 ansible-playbook playbook.yml -e "app_port=9000"
 
-# Verbose output
-ansible-playbook playbook.yml -v    # or -vv, -vvv
+# Sortie verbeuse
+ansible-playbook playbook.yml -v    # ou -vv, -vvv
 ```
 
 ---
 
-## Essential Modules Cheatsheet
+## Aide-Mémoire des Modules Essentiels
 
-=== "System"
+=== "Système"
 
-    ### service (Manage services)
+    ### service (Gérer les services)
 
     ```yaml
     - name: Start and enable nginx
       service:
         name: nginx
         state: started      # started, stopped, restarted, reloaded
-        enabled: yes        # Start on boot
+        enabled: yes        # Démarrer au boot
 
     - name: Restart service
       service:
@@ -95,7 +95,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         state: restarted
     ```
 
-    ### systemd (More control)
+    ### systemd (Plus de contrôle)
 
     ```yaml
     - name: Reload systemd daemon
@@ -109,7 +109,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         enabled: yes
     ```
 
-    ### user (Manage users)
+    ### user (Gérer les utilisateurs)
 
     ```yaml
     - name: Create deploy user
@@ -117,7 +117,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         name: deploy
         shell: /bin/bash
         groups: sudo,docker
-        append: yes              # Don't remove from other groups
+        append: yes              # Ne pas retirer des autres groupes
         create_home: yes
         state: present
 
@@ -127,7 +127,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
     ```
 
-    ### group (Manage groups)
+    ### group (Gérer les groupes)
 
     ```yaml
     - name: Create app group
@@ -137,19 +137,19 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         state: present
     ```
 
-=== "Files"
+=== "Fichiers"
 
-    ### copy (Static files)
+    ### copy (Fichiers statiques)
 
     ```yaml
     - name: Copy config file
       copy:
-        src: files/nginx.conf      # Local source
+        src: files/nginx.conf      # Source locale
         dest: /etc/nginx/nginx.conf
         owner: root
         group: root
         mode: '0644'
-        backup: yes                # Keep backup of original
+        backup: yes                # Garder une sauvegarde de l'original
 
     - name: Copy content directly
       copy:
@@ -161,7 +161,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         dest: /etc/nginx/sites-available/default
     ```
 
-    ### template (Dynamic files with Jinja2)
+    ### template (Fichiers dynamiques avec Jinja2)
 
     ```yaml
     - name: Deploy config from template
@@ -173,16 +173,16 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
       notify: Restart app
     ```
 
-    **Template file (app.conf.j2):**
+    **Fichier template (app.conf.j2) :**
     ```jinja
-    # Managed by Ansible
+    # Géré par Ansible
     server_name={{ ansible_hostname }}
     listen_port={{ app_port | default(8080) }}
     workers={{ ansible_processor_vcpus * 2 }}
     environment={{ env }}
     ```
 
-    ### file (Permissions, directories, symlinks)
+    ### file (Permissions, répertoires, liens symboliques)
 
     ```yaml
     - name: Create directory
@@ -211,7 +211,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         state: absent
     ```
 
-    ### lineinfile (Edit single line)
+    ### lineinfile (Éditer une seule ligne)
 
     ```yaml
     - name: Ensure line in file
@@ -223,7 +223,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
       notify: Restart SSH
     ```
 
-=== "Packages"
+=== "Paquets"
 
     ### apt (Debian/Ubuntu)
 
@@ -236,13 +236,13 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
           - git
         state: present
         update_cache: yes
-        cache_valid_time: 3600    # Don't update if < 1 hour old
+        cache_valid_time: 3600    # Ne pas mettre à jour si < 1h
 
     - name: Remove package
       apt:
         name: apache2
         state: absent
-        purge: yes                # Remove config files too
+        purge: yes                # Supprimer aussi les fichiers de config
 
     - name: Upgrade all packages
       apt:
@@ -266,7 +266,7 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
         state: present
     ```
 
-    ### package (Generic - auto-detects)
+    ### package (Générique - auto-détection)
 
     ```yaml
     - name: Install package (any distro)
@@ -277,13 +277,13 @@ ansible-playbook playbook.yml -v    # or -vv, -vvv
 
 ---
 
-## Handlers (The "Magic")
+## Handlers (La "Magie")
 
-Handlers run **only when notified** by a task that made changes.
+Les handlers s'exécutent **uniquement quand notifiés** par une task qui a fait des changements.
 
-**Problem:** You don't want to restart Nginx on every playbook run—only when config changes.
+**Problème :** Vous ne voulez pas redémarrer Nginx à chaque exécution du playbook—uniquement quand la config change.
 
-**Solution:** Handlers!
+**Solution :** Les handlers !
 
 ```yaml
 ---
@@ -296,13 +296,13 @@ Handlers run **only when notified** by a task that made changes.
       copy:
         src: nginx.conf
         dest: /etc/nginx/nginx.conf
-      notify: Restart nginx          # Trigger handler if changed
+      notify: Restart nginx          # Déclencher le handler si changé
 
     - name: Copy site config
       template:
         src: site.conf.j2
         dest: /etc/nginx/sites-available/mysite
-      notify:                        # Can notify multiple handlers
+      notify:                        # Peut notifier plusieurs handlers
         - Reload nginx
         - Clear cache
 
@@ -323,24 +323,24 @@ Handlers run **only when notified** by a task that made changes.
         state: absent
 ```
 
-### Handler Behavior
+### Comportement des Handlers
 
-| Scenario | Handler Runs? |
+| Scénario | Le handler s'exécute ? |
 |----------|---------------|
-| Task changed something | ✅ Yes (at end of play) |
-| Task made no changes | ❌ No |
-| Multiple tasks notify same handler | ✅ Once (deduplicated) |
-| Playbook fails before end | ❌ No (unless `--force-handlers`) |
+| La task a changé quelque chose | ✅ Oui (à la fin du play) |
+| La task n'a fait aucun changement | ❌ Non |
+| Plusieurs tasks notifient le même handler | ✅ Une fois (dédupliqué) |
+| Le playbook échoue avant la fin | ❌ Non (sauf `--force-handlers`) |
 
 ```bash
-# Force handlers even on failure
+# Forcer les handlers même en cas d'échec
 ansible-playbook playbook.yml --force-handlers
 ```
 
-!!! tip "Handlers Run at End"
-    Handlers are queued and run **at the end of the play**, not immediately.
+!!! tip "Les handlers s'exécutent à la fin"
+    Les handlers sont mis en file d'attente et s'exécutent **à la fin du play**, pas immédiatement.
 
-    To run immediately, use `meta: flush_handlers`:
+    Pour exécuter immédiatement, utilisez `meta: flush_handlers` :
 
     ```yaml
     - name: Copy config
@@ -357,9 +357,9 @@ ansible-playbook playbook.yml --force-handlers
 
 ---
 
-## Real-World Example
+## Exemple Concret
 
-Complete playbook: Install Nginx, deploy custom page, ensure running.
+Playbook complet : Installer Nginx, déployer une page personnalisée, s'assurer qu'il tourne.
 
 ```yaml
 ---
@@ -374,7 +374,7 @@ Complete playbook: Install Nginx, deploy custom page, ensure running.
     nginx_port: 80
 
   tasks:
-    # ============== Install ==============
+    # ============== Installation ==============
     - name: Install Nginx
       apt:
         name: nginx
@@ -382,7 +382,7 @@ Complete playbook: Install Nginx, deploy custom page, ensure running.
         update_cache: yes
       tags: install
 
-    # ============== Configure ==============
+    # ============== Configuration ==============
     - name: Create web root directory
       file:
         path: /var/www/mysite
@@ -434,7 +434,7 @@ Complete playbook: Install Nginx, deploy custom page, ensure running.
         state: reloaded
 ```
 
-**templates/index.html.j2:**
+**templates/index.html.j2 :**
 
 ```html
 <!DOCTYPE html>
@@ -444,14 +444,14 @@ Complete playbook: Install Nginx, deploy custom page, ensure running.
 </head>
 <body>
     <h1>{{ site_title }}</h1>
-    <p>Deployed by Ansible on {{ ansible_hostname }}</p>
-    <p>Server IP: {{ ansible_default_ipv4.address }}</p>
-    <p>Date: {{ ansible_date_time.iso8601 }}</p>
+    <p>Déployé par Ansible sur {{ ansible_hostname }}</p>
+    <p>IP du serveur : {{ ansible_default_ipv4.address }}</p>
+    <p>Date : {{ ansible_date_time.iso8601 }}</p>
 </body>
 </html>
 ```
 
-**templates/nginx-site.conf.j2:**
+**templates/nginx-site.conf.j2 :**
 
 ```nginx
 server {
@@ -467,32 +467,32 @@ server {
 }
 ```
 
-### Run It
+### Exécution
 
 ```bash
-# Full deployment
+# Déploiement complet
 ansible-playbook deploy_nginx.yml
 
-# Only update content
+# Mettre à jour uniquement le contenu
 ansible-playbook deploy_nginx.yml --tags content
 
-# Check mode first
+# Mode check d'abord
 ansible-playbook deploy_nginx.yml --check --diff
 ```
 
 ---
 
-## Module Quick Reference
+## Référence Rapide des Modules
 
-| Task | Module | Key Arguments |
+| Tâche | Module | Arguments Clés |
 |------|--------|---------------|
-| Install package | `apt` / `yum` | `name`, `state` |
-| Manage service | `service` | `name`, `state`, `enabled` |
-| Copy file | `copy` | `src`, `dest`, `mode` |
+| Installer un paquet | `apt` / `yum` | `name`, `state` |
+| Gérer un service | `service` | `name`, `state`, `enabled` |
+| Copier un fichier | `copy` | `src`, `dest`, `mode` |
 | Template | `template` | `src`, `dest` |
-| Create dir | `file` | `path`, `state=directory` |
-| Edit line | `lineinfile` | `path`, `regexp`, `line` |
-| Run command | `shell` / `command` | `cmd` |
-| Download file | `get_url` | `url`, `dest` |
-| Git clone | `git` | `repo`, `dest`, `version` |
-| Manage user | `user` | `name`, `groups`, `state` |
+| Créer un répertoire | `file` | `path`, `state=directory` |
+| Éditer une ligne | `lineinfile` | `path`, `regexp`, `line` |
+| Exécuter une commande | `shell` / `command` | `cmd` |
+| Télécharger un fichier | `get_url` | `url`, `dest` |
+| Cloner avec Git | `git` | `repo`, `dest`, `version` |
+| Gérer un utilisateur | `user` | `name`, `groups`, `state` |

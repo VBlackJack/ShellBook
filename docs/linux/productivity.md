@@ -1,86 +1,86 @@
-# Terminal Productivity & Tricks
+# Productivité Terminal & Astuces
 
-Master these shortcuts to navigate and work faster in any Linux environment.
+Maîtrisez ces raccourcis pour naviguer et travailler plus vite dans n'importe quel environnement Linux.
 
 ---
 
-## Navigation Shortcuts
+## Raccourcis de Navigation
 
-### Toggle Previous Directory
+### Basculer vers le Répertoire Précédent
 
 ```bash
 cd /var/log
 cd /etc/nginx
-cd -          # Returns to /var/log
-cd -          # Returns to /etc/nginx
+cd -          # Retourne vers /var/log
+cd -          # Retourne vers /etc/nginx
 ```
 
-### Stack Navigation (pushd/popd)
+### Navigation par Pile (pushd/popd)
 
 ```bash
-pushd /var/log      # Push current dir to stack, cd to /var/log
-pushd /etc/nginx    # Push /var/log to stack, cd to /etc/nginx
-pushd /home/user    # Push /etc/nginx to stack
+pushd /var/log      # Empile le répertoire actuel, cd vers /var/log
+pushd /etc/nginx    # Empile /var/log, cd vers /etc/nginx
+pushd /home/user    # Empile /etc/nginx
 
-dirs -v             # View stack with indexes
-popd                # Return to /etc/nginx
-popd                # Return to /var/log
+dirs -v             # Afficher la pile avec index
+popd                # Retourner vers /etc/nginx
+popd                # Retourner vers /var/log
 ```
 
-| Command | Description |
+| Commande | Description |
 |---------|-------------|
-| `pushd <dir>` | Save current location and jump to `<dir>` |
-| `popd` | Return to last saved location |
-| `dirs -v` | Show directory stack |
-| `cd ~2` | Jump to stack position 2 (zsh) |
+| `pushd <dir>` | Sauvegarder la position actuelle et aller vers `<dir>` |
+| `popd` | Retourner à la dernière position sauvegardée |
+| `dirs -v` | Afficher la pile de répertoires |
+| `cd ~2` | Aller à la position 2 de la pile (zsh) |
 
 ---
 
-## History Manipulation
+## Manipulation de l'Historique
 
-| Shortcut | Description |
+| Raccourci | Description |
 |----------|-------------|
-| ++ctrl+r++ | Reverse search through history |
-| `!!` | Repeat last command |
-| `sudo !!` | Run last command with sudo |
-| `!$` | Last argument of previous command |
-| `!*` | All arguments of previous command |
-| `!ssh` | Run last command starting with `ssh` |
-| `!42` | Run command #42 from history |
+| ++ctrl+r++ | Recherche inversée dans l'historique |
+| `!!` | Répéter la dernière commande |
+| `sudo !!` | Exécuter la dernière commande avec sudo |
+| `!$` | Dernier argument de la commande précédente |
+| `!*` | Tous les arguments de la commande précédente |
+| `!ssh` | Exécuter la dernière commande commençant par `ssh` |
+| `!42` | Exécuter la commande #42 de l'historique |
 
-### Reverse Search (CTRL+R)
+### Recherche Inversée (CTRL+R)
 
 ```
 (reverse-i-search)`nginx': systemctl restart nginx
 ```
 
-- ++ctrl+r++ again → cycle through matches
-- ++enter++ → execute
-- ++ctrl+g++ → cancel
+- ++ctrl+r++ à nouveau → parcourir les résultats
+- ++enter++ → exécuter
+- ++ctrl+g++ → annuler
 
 ---
 
-## Safety Aliases
+## Alias de Sécurité
 
 === "Bash (~/.bashrc)"
 
     ```bash
-    # Safety nets - always ask before destructive actions
+    # Filets de sécurité - toujours demander avant action destructive
     alias rm='rm -i'
     alias cp='cp -i'
     alias mv='mv -i'
 
-    # Verbose operations
+    # Opérations verbeuses
     alias mkdir='mkdir -pv'
     alias chmod='chmod -v'
     alias chown='chown -v'
 
-    # Colorized output
+    # Sortie colorisée
     alias ls='ls --color=auto'
     alias ll='ls -lahF'
     alias grep='grep --color=auto'
 
-    # Quick navigation
+    # Navigation rapide
     alias ..='cd ..'
     alias ...='cd ../..'
     alias ....='cd ../../..'
@@ -89,33 +89,33 @@ popd                # Return to /var/log
 === "Zsh (~/.zshrc)"
 
     ```zsh
-    # Safety nets
+    # Filets de sécurité
     alias rm='rm -i'
     alias cp='cp -i'
     alias mv='mv -i'
 
-    # Verbose operations
+    # Opérations verbeuses
     alias mkdir='mkdir -pv'
 
-    # Colorized output
+    # Sortie colorisée
     alias ls='ls --color=auto'
     alias ll='ls -lahF'
     alias grep='grep --color=auto'
 
-    # Zsh extras
+    # Extras Zsh
     alias reload='source ~/.zshrc'
     alias path='echo $PATH | tr ":" "\n"'
     ```
 
-!!! tip "Pro Tip: Custom Config File"
-    Keep your aliases in a separate `~/.bashrc_custom` file:
+!!! tip "Astuce Pro : Fichier de Config Personnalisé"
+    Conservez vos alias dans un fichier `~/.bashrc_custom` séparé :
 
     ```bash
-    # In ~/.bashrc, add at the end:
+    # Dans ~/.bashrc, ajouter à la fin :
     [ -f ~/.bashrc_custom ] && source ~/.bashrc_custom
     ```
 
-    This keeps your customizations portable and separated from system defaults.
+    Cela garde vos personnalisations portables et séparées des paramètres système.
 
-!!! warning "Bypass Alias"
-    To run the original command without alias: `\rm file` or `command rm file`
+!!! warning "Contourner un Alias"
+    Pour exécuter la commande originale sans alias : `\rm file` ou `command rm file`
