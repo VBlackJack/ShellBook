@@ -51,6 +51,7 @@ nav:
     - security/certificates.md
     - security/exegol.md
     - security/ctf-guide.md
+    - security/essential-tools.md
   - Concepts:
     - concepts/web-flow.md
     - concepts/databases.md
