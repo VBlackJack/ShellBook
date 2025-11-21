@@ -1,123 +1,121 @@
-# Linux Terminal Productivity
+# Terminal Productivity & Tricks
 
-Essential shortcuts and aliases to save time daily.
+Master these shortcuts to navigate and work faster in any Linux environment.
 
 ---
 
-## Navigation & History
+## Navigation Shortcuts
+
+### Toggle Previous Directory
+
+```bash
+cd /var/log
+cd /etc/nginx
+cd -          # Returns to /var/log
+cd -          # Returns to /etc/nginx
+```
+
+### Stack Navigation (pushd/popd)
+
+```bash
+pushd /var/log      # Push current dir to stack, cd to /var/log
+pushd /etc/nginx    # Push /var/log to stack, cd to /etc/nginx
+pushd /home/user    # Push /etc/nginx to stack
+
+dirs -v             # View stack with indexes
+popd                # Return to /etc/nginx
+popd                # Return to /var/log
+```
+
+| Command | Description |
+|---------|-------------|
+| `pushd <dir>` | Save current location and jump to `<dir>` |
+| `popd` | Return to last saved location |
+| `dirs -v` | Show directory stack |
+| `cd ~2` | Jump to stack position 2 (zsh) |
+
+---
+
+## History Manipulation
 
 | Shortcut | Description |
 |----------|-------------|
-| `cd -` | Return to previous directory |
-| `cd ~` | Go to home directory |
-| `!!` | Re-run last command |
-| `sudo !!` | Re-run last command with sudo (lifesaver!) |
+| ++ctrl+r++ | Reverse search through history |
+| `!!` | Repeat last command |
+| `sudo !!` | Run last command with sudo |
 | `!$` | Last argument of previous command |
-| `!^` | First argument of previous command |
 | `!*` | All arguments of previous command |
-| `!n` | Run command number `n` from history |
-| `!string` | Run last command starting with `string` |
+| `!ssh` | Run last command starting with `ssh` |
+| `!42` | Run command #42 from history |
 
 ### Reverse Search (CTRL+R)
 
-Press ++ctrl+r++ and start typing to search through command history.
-
 ```
-(reverse-i-search)`ssh': ssh user@server.example.com
+(reverse-i-search)`nginx': systemctl restart nginx
 ```
 
-- Press ++ctrl+r++ again to cycle through matches
-- Press ++enter++ to execute
-- Press ++ctrl+g++ to cancel
+- ++ctrl+r++ again → cycle through matches
+- ++enter++ → execute
+- ++ctrl+g++ → cancel
 
 ---
 
-## Useful Aliases
+## Safety Aliases
 
 === "Bash (~/.bashrc)"
 
     ```bash
-    # Navigation
-    alias ll='ls -lahF --color=auto'
-    alias la='ls -A'
-    alias ..='cd ..'
-    alias ...='cd ../..'
-
-    # Safety nets
+    # Safety nets - always ask before destructive actions
     alias rm='rm -i'
     alias cp='cp -i'
     alias mv='mv -i'
 
-    # Colorized output
-    alias grep='grep --color=auto'
-    alias diff='diff --color=auto'
-
-    # Create parent directories
+    # Verbose operations
     alias mkdir='mkdir -pv'
+    alias chmod='chmod -v'
+    alias chown='chown -v'
 
-    # Quick clear
-    alias c='clear'
-    alias h='history'
+    # Colorized output
+    alias ls='ls --color=auto'
+    alias ll='ls -lahF'
+    alias grep='grep --color=auto'
+
+    # Quick navigation
+    alias ..='cd ..'
+    alias ...='cd ../..'
+    alias ....='cd ../../..'
     ```
 
 === "Zsh (~/.zshrc)"
 
     ```zsh
-    # Navigation
-    alias ll='ls -lahF --color=auto'
-    alias la='ls -A'
-    alias ..='cd ..'
-    alias ...='cd ../..'
-    alias ....='cd ../../..'
-
     # Safety nets
     alias rm='rm -i'
     alias cp='cp -i'
     alias mv='mv -i'
 
-    # Colorized output
-    alias grep='grep --color=auto'
-    alias diff='diff --color=auto'
-
-    # Create parent directories
+    # Verbose operations
     alias mkdir='mkdir -pv'
 
-    # Zsh specific
+    # Colorized output
+    alias ls='ls --color=auto'
+    alias ll='ls -lahF'
+    alias grep='grep --color=auto'
+
+    # Zsh extras
     alias reload='source ~/.zshrc'
+    alias path='echo $PATH | tr ":" "\n"'
     ```
 
-!!! note "Apply Changes"
-    After editing, reload your shell config:
-    ```bash
-    source ~/.bashrc  # or ~/.zshrc
-    ```
-
----
-
-## Real-World Scenarios
-
-!!! tip "Safety First"
-    **Always add interactive flags** to destructive commands in your aliases:
+!!! tip "Pro Tip: Custom Config File"
+    Keep your aliases in a separate `~/.bashrc_custom` file:
 
     ```bash
-    alias rm='rm -i'   # Prompt before every removal
-    alias cp='cp -i'   # Prompt before overwrite
-    alias mv='mv -i'   # Prompt before overwrite
+    # In ~/.bashrc, add at the end:
+    [ -f ~/.bashrc_custom ] && source ~/.bashrc_custom
     ```
 
-    This simple habit has saved countless files from accidental deletion.
+    This keeps your customizations portable and separated from system defaults.
 
-    To bypass temporarily: `\rm filename` (backslash ignores alias).
-
-!!! example "Quick Server Check"
-    Create a system overview alias:
-    ```bash
-    alias sysinfo='echo "=== DISK ===" && df -h && echo "=== MEM ===" && free -h && echo "=== LOAD ===" && uptime'
-    ```
-
-!!! warning "Production Servers"
-    On critical servers, consider adding this to root's `.bashrc`:
-    ```bash
-    alias rm='rm -I --preserve-root'
-    ```
-    The `-I` flag prompts once before removing more than 3 files.
+!!! warning "Bypass Alias"
+    To run the original command without alias: `\rm file` or `command rm file`

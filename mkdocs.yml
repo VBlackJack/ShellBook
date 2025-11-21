@@ -37,6 +37,8 @@ nav:
   - Linux:
     - linux/demo.md
     - linux/productivity.md
+    - linux/modern-tools.md
+    - linux/debugging.md
   - Windows:
     - windows/index.md
   - Security:
