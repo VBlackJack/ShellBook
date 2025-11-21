@@ -105,6 +105,7 @@ nav:
     - security/exegol.md
     - security/ctf-guide.md
     - security/essential-tools.md
+    - security/hashicorp-vault.md
   - Concepts:
     - concepts/web-flow.md
     - concepts/databases.md
