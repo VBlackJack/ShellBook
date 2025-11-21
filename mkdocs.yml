@@ -80,6 +80,7 @@ nav:
     - devops/docker-advanced.md
     - devops/kubernetes-cka.md
     - devops/kubernetes-survival.md
+    - devops/kubernetes-networking.md
     - devops/git-sysops.md
     - Ansible:
       - devops/ansible/fundamentals.md
