@@ -73,6 +73,7 @@ nav:
     - windows/powershell-foundations.md
     - windows/server-administration.md
     - windows/active-directory.md
+    - windows/windows-security.md
   - Network:
     - network/fundamentals.md
   - DevOps:
