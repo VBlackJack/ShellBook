@@ -48,3 +48,4 @@ nav:
     - security/certificates.md
   - Concepts:
     - concepts/web-flow.md
+    - concepts/databases.md
