@@ -1,6 +1,6 @@
 # Storage & Filesystem Hierarchy
 
-`#fhs` `#lvm` `#disk` `#partitioning`
+`#fhs` `#lvm` `#disk` `#partitioning` `#inodes`
 
 Organisation des fichiers et gestion avancée du stockage.
 
