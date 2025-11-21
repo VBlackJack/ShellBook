@@ -41,6 +41,7 @@ nav:
     - linux/debugging.md
     - linux/filesystem-hierarchy.md
     - linux/bash-wizardry.md
+    - linux/hardware.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
