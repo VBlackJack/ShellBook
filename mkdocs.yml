@@ -91,6 +91,7 @@ nav:
       - devops/ansible/playbooks.md
       - devops/ansible/industrialization.md
       - devops/ansible/advanced-patterns.md
+      - devops/ansible/cloud-integrations.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
