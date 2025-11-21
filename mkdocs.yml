@@ -39,7 +39,6 @@ nav:
     - linux/productivity.md
     - linux/modern-tools.md
     - linux/debugging.md
-    - linux/performance-analysis.md
     - linux/bash-wizardry.md
     - linux/hardware.md
     - Système & Boot:
@@ -48,7 +47,6 @@ nav:
     - Administration Système:
       - linux/users-and-permissions.md
       - linux/package-management.md
-      - linux/logs-management.md
     - Réseau & Sécurité:
       - linux/network-management.md
       - linux/ssh-hardening.md
@@ -57,6 +55,9 @@ nav:
       - linux/automation-cron.md
       - linux/text-processing.md
       - linux/scripting-standards.md
+    - Monitoring & Performance:
+      - linux/logs-management.md
+      - linux/performance-analysis.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
