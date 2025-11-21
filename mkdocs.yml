@@ -50,6 +50,7 @@ nav:
   - Security:
     - security/certificates.md
     - security/exegol.md
+    - security/ctf-guide.md
   - Concepts:
     - concepts/web-flow.md
     - concepts/databases.md
