@@ -42,6 +42,7 @@ nav:
     - linux/filesystem-hierarchy.md
   - Windows:
     - windows/index.md
+    - windows/productivity.md
   - Network:
     - network/fundamentals.md
   - DevOps:
