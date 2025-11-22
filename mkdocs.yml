@@ -190,6 +190,7 @@ nav:
         - Module 2 - Branches: formations/devops-foundation/02-module.md
         - Module 3 - CI/CD: formations/devops-foundation/03-module.md
         - Module 4 - Qualité: formations/devops-foundation/04-module.md
+        - Module 5 - TP Final: formations/devops-foundation/05-tp-final.md
     - 🛡️ Sécurité & Conformité:
       - 🔐 Hardening Linux:
         - Introduction: formations/linux-hardening/index.md
