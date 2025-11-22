@@ -1,3 +1,12 @@
+---
+tags:
+  - debugging
+  - systemd
+  - journalctl
+  - logs
+  - troubleshooting
+---
+
 # Débogage Système & Logs
 
 Commandes essentielles pour dépanner les systèmes Linux.

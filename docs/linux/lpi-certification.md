@@ -248,10 +248,10 @@ flowchart LR
 
 | Domaine | Guides ShellBook |
 |---------|------------------|
-| **Système de Fichiers** | [Filesystem & Storage](filesystem-and-storage.md) • [LVM](lvm-raid.md) |
+| **Système de Fichiers** | [Filesystem & Storage](filesystem-and-storage.md) |
 | **Réseau** | [Network Management](network-management.md) • [Firewall UFW](firewall-ufw.md) |
-| **Services** | [Nginx](nginx-webserver.md) • [MariaDB](mariadb-mysql.md) |
-| **Automatisation** | [Cron & Systemd Timers](cron-systemd-timers.md) |
+| **Services** | [Web Servers](web-servers.md) • [Database Admin](database-admin.md) |
+| **Automatisation** | [Automation Cron](automation-cron.md) |
 | **Performance** | [Performance Analysis](performance-analysis.md) • [Debugging](debugging.md) |
 
 ---

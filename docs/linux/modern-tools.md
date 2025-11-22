@@ -1,3 +1,12 @@
+---
+tags:
+  - iproute2
+  - net-tools
+  - modern-tools
+  - network
+  - migration
+---
+
 # Remplacements Modernes (Legacy vs Nouveau)
 
 Arrêtez d'utiliser les `net-tools` obsolètes. Passez à `iproute2` et aux alternatives modernes.

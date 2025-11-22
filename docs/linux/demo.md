@@ -1,3 +1,11 @@
+---
+tags:
+  - ssh
+  - security
+  - keys
+  - encryption
+---
+
 # Clés SSH Sécurisées
 
 ## Générer une Paire de Clés SSH Sécurisée

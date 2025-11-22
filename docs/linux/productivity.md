@@ -1,3 +1,12 @@
+---
+tags:
+  - productivity
+  - terminal
+  - shortcuts
+  - bash
+  - tips
+---
+
 # Productivité Terminal & Astuces
 
 Maîtrisez ces raccourcis pour naviguer et travailler plus vite dans n'importe quel environnement Linux.
