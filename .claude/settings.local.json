@@ -4,7 +4,11 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(done)",
+      "Bash(rg:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:vblackjack.github.io)"
     ],
     "deny": [],
     "ask": []
