@@ -1,4 +1,4 @@
-# IT-Tools: The DevOps Swiss Army Knife
+# IT-Tools : Le Couteau Suisse DevOps
 
 `#productivity` `#docker` `#tools` `#self-hosted` `#security`
 

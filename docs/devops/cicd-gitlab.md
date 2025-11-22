@@ -1,4 +1,4 @@
-# GitLab CI: The On-Premise Standard
+# GitLab CI : Le Standard On-Premise
 
 `#gitlab-ci` `#pipeline` `#docker` `#runner` `#yaml`
 
