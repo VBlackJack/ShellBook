@@ -73,6 +73,7 @@ nav:
     - windows/productivity.md
     - windows/powershell-foundations.md
     - windows/server-administration.md
+    - windows/update-management.md
     - windows/active-directory.md
     - windows/windows-security.md
     - windows/ansible-windows.md
@@ -85,11 +86,14 @@ nav:
     - devops/productivity-it-tools.md
     - CI/CD & Obs:
       - devops/cicd-github-actions.md
+      - devops/cicd-gitlab.md
       - devops/observability-stack.md
+      - devops/observability-advanced.md
     - Kubernetes:
       - devops/kubernetes-cka.md
       - devops/kubernetes-survival.md
       - devops/kubernetes-networking.md
+      - devops/gitops-argocd.md
     - Ansible:
       - devops/ansible/fundamentals.md
       - devops/ansible/playbooks.md
