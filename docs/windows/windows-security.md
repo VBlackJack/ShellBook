@@ -1041,6 +1041,488 @@ Get-WinEvent -FilterHashtable @{
 
 ---
 
+## Hardening Serveur (Checklist ANSSI)
+
+### Surface d'Attaque : Désactiver Services Inutiles
+
+**Principe :** Réduire la surface d'attaque en désactivant les services qui ne sont pas nécessaires.
+
+```powershell
+# ============================================================
+# Services à désactiver sur un serveur (baseline ANSSI)
+# ============================================================
+
+# Print Spooler (vecteur d'attaque PrintNightmare)
+Stop-Service -Name Spooler -Force
+Set-Service -Name Spooler -StartupType Disabled
+
+# Xbox Services (inutile sur un serveur)
+Get-Service -Name "Xbox*" | Stop-Service -Force
+Get-Service -Name "Xbox*" | Set-Service -StartupType Disabled
+
+# Bluetooth (inutile sur serveur datacenter)
+Stop-Service -Name "bthserv" -Force
+Set-Service -Name "bthserv" -StartupType Disabled
+
+# Remote Registry (accès distant au registre = risque)
+Stop-Service -Name "RemoteRegistry" -Force
+Set-Service -Name "RemoteRegistry" -StartupType Disabled
+
+# Windows Media Player Network Sharing (inutile)
+Stop-Service -Name "WMPNetworkSvc" -Force -ErrorAction SilentlyContinue
+Set-Service -Name "WMPNetworkSvc" -StartupType Disabled -ErrorAction SilentlyContinue
+
+# Vérifier l'état
+$servicesToDisable = @("Spooler", "XblAuthManager", "XblGameSave", "XboxGipSvc", "XboxNetApiSvc", "bthserv", "RemoteRegistry", "WMPNetworkSvc")
+Get-Service -Name $servicesToDisable -ErrorAction SilentlyContinue |
+    Select-Object Name, Status, StartType
+```
+
+**Résultat attendu :**
+
+```
+Name              Status  StartType
+----              ------  ---------
+Spooler           Stopped Disabled
+bthserv           Stopped Disabled
+RemoteRegistry    Stopped Disabled
+```
+
+### Tâches Planifiées : Désactiver les Tâches par Défaut
+
+**Certaines tâches planifiées Windows peuvent être exploitées ou fuiter des informations :**
+
+```powershell
+# Désactiver les tâches de télémétrie Microsoft
+Get-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience\" |
+    Disable-ScheduledTask
+
+Get-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program\" |
+    Disable-ScheduledTask
+
+# Désactiver les tâches de diagnostics non critiques
+Disable-ScheduledTask -TaskName "Microsoft Compatibility Appraiser" -TaskPath "\Microsoft\Windows\Application Experience\"
+Disable-ScheduledTask -TaskName "ProgramDataUpdater" -TaskPath "\Microsoft\Windows\Application Experience\"
+Disable-ScheduledTask -TaskName "Consolidator" -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program\"
+Disable-ScheduledTask -TaskName "UsbCeip" -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program\"
+
+# Lister les tâches désactivées
+Get-ScheduledTask | Where-Object {$_.State -eq "Disabled"} |
+    Select-Object TaskName, TaskPath, State
+```
+
+!!! tip "Services Critiques à NE PAS Désactiver"
+    **Ne JAMAIS désactiver :**
+    - `DNS Client` (dnscache) - Résolution DNS
+    - `Netlogon` - Authentification domaine
+    - `Windows Time` (W32Time) - Synchronisation horaire (critique pour Kerberos)
+    - `Windows Defender Antivirus Service` (WinDefend)
+    - `Windows Event Log` (EventLog)
+
+### Protocoles Faibles : Désactiver SMBv1, LLMNR, NBT-NS
+
+**Ces protocoles sont obsolètes et exploitables par des attaquants (Responder, EternalBlue).**
+
+#### 1. Désactiver SMBv1 (WannaCry/EternalBlue)
+
+```powershell
+# Vérifier l'état de SMBv1
+Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
+
+# Désactiver SMBv1 (Client + Serveur)
+Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
+
+# Via DISM (alternative)
+dism /online /Disable-Feature /FeatureName:SMB1Protocol /NoRestart
+
+# Vérifier la configuration
+Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol
+
+# Output attendu :
+# EnableSMB1Protocol
+# ------------------
+# False
+
+# Redémarrer le serveur pour appliquer
+Restart-Computer -Force
+```
+
+#### 2. Désactiver LLMNR (Empêcher Responder Poisoning)
+
+```powershell
+# Désactiver LLMNR via registre
+New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" `
+    -Name "EnableMulticast" -Value 0 -Type DWord
+
+# Vérifier
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast"
+
+# Output :
+# EnableMulticast : 0
+```
+
+#### 3. Désactiver NBT-NS (NetBIOS Name Service)
+
+```powershell
+# Désactiver NBT-NS sur toutes les interfaces réseau
+$Adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.TcpipNetbiosOptions -ne $null }
+foreach ($Adapter in $Adapters) {
+    $Adapter.SetTcpipNetbios(2)  # 0=Default, 1=Enable, 2=Disable
+}
+
+# Vérifier
+Get-WmiObject Win32_NetworkAdapterConfiguration |
+    Where-Object { $_.IPEnabled -eq $true } |
+    Select-Object Description, TcpipNetbiosOptions
+
+# Output attendu :
+# Description                          TcpipNetbiosOptions
+# -----------                          -------------------
+# Intel(R) Ethernet Connection         2  (Disabled)
+```
+
+**Via GPO (recommandé en entreprise) :**
+
+```
+GPO Path: Computer Configuration → Preferences → Windows Settings → Registry
+
+Créer ces clés :
+
+1. LLMNR :
+   Hive: HKEY_LOCAL_MACHINE
+   Key Path: SOFTWARE\Policies\Microsoft\Windows NT\DNSClient
+   Value Name: EnableMulticast
+   Value Type: REG_DWORD
+   Value Data: 0
+
+2. NBT-NS :
+   Hive: HKEY_LOCAL_MACHINE
+   Key Path: SYSTEM\CurrentControlSet\Services\NetBT\Parameters
+   Value Name: NodeType
+   Value Type: REG_DWORD
+   Value Data: 2
+```
+
+### Chiffrement : Forcer AES-256 pour Kerberos
+
+**Windows supporte encore RC4 par défaut, qui est faible. Forcer AES-256.**
+
+```powershell
+# Forcer AES-256 pour Kerberos (désactiver RC4 et DES)
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" -Force | Out-Null
+
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" `
+    -Name "SupportedEncryptionTypes" -Value 0x18 -Type DWord
+
+# Valeurs :
+# 0x1  = DES-CBC-CRC (OBSOLÈTE)
+# 0x2  = DES-CBC-MD5 (OBSOLÈTE)
+# 0x4  = RC4-HMAC (FAIBLE)
+# 0x8  = AES128-CTS-HMAC-SHA1-96
+# 0x10 = AES256-CTS-HMAC-SHA1-96
+# 0x18 = AES128 + AES256 (RECOMMANDÉ)
+
+# Vérifier
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" `
+    -Name "SupportedEncryptionTypes"
+
+# Output :
+# SupportedEncryptionTypes : 24 (0x18 = AES128 + AES256)
+```
+
+**Appliquer via GPO :**
+
+```
+GPO Path: Computer Configuration → Policies → Windows Settings
+          → Security Settings → Local Policies → Security Options
+
+Paramètre :
+└── Network security: Configure encryption types allowed for Kerberos
+    ✅ AES128_HMAC_SHA1
+    ✅ AES256_HMAC_SHA1
+    ❌ DES_CBC_CRC
+    ❌ DES_CBC_MD5
+    ❌ RC4_HMAC_MD5
+    ❌ Future encryption types
+```
+
+### Chiffrement : Désactiver TLS 1.0 et TLS 1.1
+
+**TLS 1.0/1.1 sont obsolètes et vulnérables (BEAST, POODLE). Forcer TLS 1.2/1.3.**
+
+```powershell
+# ============================================================
+# Désactiver TLS 1.0
+# ============================================================
+
+# Client
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" `
+    -Name "Enabled" -Value 0 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" `
+    -Name "DisabledByDefault" -Value 1 -Type DWord
+
+# Serveur
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" `
+    -Name "Enabled" -Value 0 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" `
+    -Name "DisabledByDefault" -Value 1 -Type DWord
+
+# ============================================================
+# Désactiver TLS 1.1
+# ============================================================
+
+# Client
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" `
+    -Name "Enabled" -Value 0 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" `
+    -Name "DisabledByDefault" -Value 1 -Type DWord
+
+# Serveur
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" `
+    -Name "Enabled" -Value 0 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" `
+    -Name "DisabledByDefault" -Value 1 -Type DWord
+
+# ============================================================
+# Activer TLS 1.2 (obligatoire)
+# ============================================================
+
+# Client
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client" `
+    -Name "Enabled" -Value 1 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client" `
+    -Name "DisabledByDefault" -Value 0 -Type DWord
+
+# Serveur
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" `
+    -Name "Enabled" -Value 1 -Type DWord
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" `
+    -Name "DisabledByDefault" -Value 0 -Type DWord
+
+# Redémarrer pour appliquer
+Restart-Computer -Force
+```
+
+**Tester TLS après redémarrage :**
+
+```powershell
+# Tester avec PowerShell (doit utiliser TLS 1.2)
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri "https://www.howsmyssl.com/a/check" | Select-Object -ExpandProperty Content | ConvertFrom-Json
+
+# Output attendu :
+# tls_version : TLS 1.2
+```
+
+### Audit : Activer Process Creation (Event ID 4688)
+
+**Event ID 4688 = Création de processus avec ligne de commande complète.**
+
+```powershell
+# Activer l'audit de création de processus
+auditpol /set /subcategory:"Process Creation" /success:enable
+
+# Activer la capture de la ligne de commande dans les logs 4688
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" `
+    -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1 -Type DWord
+
+# Vérifier la configuration
+auditpol /get /category:*
+
+# Output attendu (extrait) :
+# System Audit Policy
+# Category/Subcategory                      Setting
+# Detailed Tracking
+#   Process Creation                        Success
+```
+
+**Via GPO :**
+
+```
+GPO Path 1: Computer Configuration → Policies → Windows Settings
+            → Security Settings → Advanced Audit Policy Configuration
+            → System Audit Policies → Detailed Tracking
+
+Paramètre :
+└── Audit Process Creation → ✅ Success
+
+GPO Path 2: Computer Configuration → Policies → Administrative Templates
+            → System → Audit Process Creation
+
+Paramètre :
+└── Include command line in process creation events → ✅ Enabled
+```
+
+**Tester :**
+
+```powershell
+# Exécuter une commande
+whoami
+
+# Lire les logs Event ID 4688
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Security'
+    Id = 4688
+} -MaxEvents 5 | Select-Object TimeCreated, Message
+
+# Output attendu :
+# TimeCreated          Message
+# -----------          -------
+# 2024-01-15 14:32:11  A new process has been created.
+#                      Process Name: C:\Windows\System32\whoami.exe
+#                      Process Command Line: whoami
+#                      Creator Process: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+```
+
+### Session : Déconnexion Automatique RDP après Inactivité
+
+**Éviter les sessions RDP ouvertes indéfiniment (risque de hijacking).**
+
+```powershell
+# Déconnexion automatique après 15 minutes d'inactivité
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" `
+    -Name "MaxIdleTime" -Value 900000 -Type DWord  # 15 min en millisecondes (15 * 60 * 1000)
+
+# Déconnexion automatique après 2 heures de session totale
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" `
+    -Name "MaxConnectionTime" -Value 7200000 -Type DWord  # 2 heures en ms
+
+# Déconnexion automatique des sessions déconnectées après 5 minutes
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" `
+    -Name "MaxDisconnectionTime" -Value 300000 -Type DWord  # 5 min en ms
+
+# Vérifier
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" |
+    Select-Object MaxIdleTime, MaxConnectionTime, MaxDisconnectionTime
+```
+
+**Via GPO :**
+
+```
+GPO Path: Computer Configuration → Policies → Administrative Templates
+          → Windows Components → Remote Desktop Services
+          → Remote Desktop Session Host → Session Time Limits
+
+Paramètres :
+├── Set time limit for active but idle Remote Desktop Services sessions
+│   → ✅ Enabled : 15 minutes
+├── Set time limit for active Remote Desktop Services sessions
+│   → ✅ Enabled : 2 hours
+└── Set time limit for disconnected sessions
+    → ✅ Enabled : 5 minutes
+```
+
+**Tester :**
+
+```powershell
+# Voir les sessions RDP actives
+query user
+
+# Output :
+# USERNAME              SESSIONNAME        ID  STATE   IDLE TIME  LOGON TIME
+# >admin                rdp-tcp#0           1  Active          .  1/15/2024 2:00 PM
+#  jdupont              rdp-tcp#1           2  Active      00:16  1/15/2024 1:45 PM
+
+# Après 15 minutes d'inactivité, la session de jdupont sera déconnectée automatiquement
+```
+
+### Checklist Complète ANSSI (Résumé)
+
+| Catégorie | Action | Commande/GPO | Priorité |
+|-----------|--------|--------------|----------|
+| **Services** | Désactiver Print Spooler | `Set-Service Spooler -StartupType Disabled` | 🔴 Critique |
+| **Services** | Désactiver Remote Registry | `Set-Service RemoteRegistry -StartupType Disabled` | 🔴 Critique |
+| **Protocoles** | Désactiver SMBv1 | `Disable-WindowsOptionalFeature -FeatureName SMB1Protocol` | 🔴 Critique |
+| **Protocoles** | Désactiver LLMNR | Clé registre `EnableMulticast=0` | 🔴 Critique |
+| **Protocoles** | Désactiver NBT-NS | `SetTcpipNetbios(2)` | 🔴 Critique |
+| **Chiffrement** | Forcer AES-256 Kerberos | GPO "Configure encryption types" | 🟠 Important |
+| **Chiffrement** | Désactiver TLS 1.0/1.1 | Clés registre SCHANNEL | 🟠 Important |
+| **Audit** | Activer Event ID 4688 | `auditpol /set /subcategory:"Process Creation"` | 🟠 Important |
+| **Session** | Déconnexion auto RDP 15min | GPO "Session Time Limits" | 🟡 Recommandé |
+| **Tâches** | Désactiver télémétrie | `Disable-ScheduledTask -TaskPath "\Microsoft\Windows\CEIP\"` | 🟡 Recommandé |
+
+**Script PowerShell d'Application Automatique :**
+
+```powershell
+# ============================================================
+# Script de Hardening ANSSI - Windows Server
+# Compatible : Server 2019, 2022, 2025
+# ============================================================
+
+Write-Host "[+] Début du hardening ANSSI..." -ForegroundColor Green
+
+# 1. Désactiver services inutiles
+Write-Host "[*] Désactivation des services..." -ForegroundColor Yellow
+$servicesToDisable = @("Spooler", "RemoteRegistry", "bthserv")
+foreach ($svc in $servicesToDisable) {
+    Stop-Service -Name $svc -Force -ErrorAction SilentlyContinue
+    Set-Service -Name $svc -StartupType Disabled -ErrorAction SilentlyContinue
+    Write-Host "    [OK] $svc désactivé" -ForegroundColor Green
+}
+
+# 2. Désactiver SMBv1
+Write-Host "[*] Désactivation de SMBv1..." -ForegroundColor Yellow
+Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
+Write-Host "    [OK] SMBv1 désactivé" -ForegroundColor Green
+
+# 3. Désactiver LLMNR
+Write-Host "[*] Désactivation de LLMNR..." -ForegroundColor Yellow
+New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Value 0
+Write-Host "    [OK] LLMNR désactivé" -ForegroundColor Green
+
+# 4. Désactiver NBT-NS
+Write-Host "[*] Désactivation de NBT-NS..." -ForegroundColor Yellow
+$Adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object { $_.TcpipNetbiosOptions -ne $null }
+foreach ($Adapter in $Adapters) {
+    $Adapter.SetTcpipNetbios(2)
+}
+Write-Host "    [OK] NBT-NS désactivé" -ForegroundColor Green
+
+# 5. Forcer AES-256 Kerberos
+Write-Host "[*] Configuration Kerberos AES-256..." -ForegroundColor Yellow
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" -Name "SupportedEncryptionTypes" -Value 0x18
+Write-Host "    [OK] Kerberos AES-256 activé" -ForegroundColor Green
+
+# 6. Désactiver TLS 1.0/1.1
+Write-Host "[*] Désactivation TLS 1.0/1.1..." -ForegroundColor Yellow
+# TLS 1.0
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -Name "Enabled" -Value 0
+# TLS 1.1
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "Enabled" -Value 0
+Write-Host "    [OK] TLS 1.0/1.1 désactivés" -ForegroundColor Green
+
+# 7. Activer audit Process Creation
+Write-Host "[*] Activation Event ID 4688..." -ForegroundColor Yellow
+auditpol /set /subcategory:"Process Creation" /success:enable
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1
+Write-Host "    [OK] Event ID 4688 activé" -ForegroundColor Green
+
+# 8. Configurer timeouts RDP
+Write-Host "[*] Configuration timeouts RDP..." -ForegroundColor Yellow
+New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name "MaxIdleTime" -Value 900000
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name "MaxDisconnectionTime" -Value 300000
+Write-Host "    [OK] Timeouts RDP configurés" -ForegroundColor Green
+
+Write-Host "[+] Hardening ANSSI terminé avec succès !" -ForegroundColor Green
+Write-Host "[!] REDÉMARRAGE REQUIS pour appliquer tous les changements" -ForegroundColor Red
+```
+
+---
+
 ## Quick Reference
 
 ```powershell

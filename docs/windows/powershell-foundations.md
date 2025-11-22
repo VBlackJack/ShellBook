@@ -382,3 +382,446 @@ select = Select-Object
 sort   = Sort-Object
 gm     = Get-Member
 ```
+
+---
+
+## Scripting PKI & AD
+
+### Contexte : Générer un CSR Manuellement
+
+Dans certains environnements (SecNumCloud, réseaux isolés), **l'auto-enrollment de certificats** (via GPO et Active Directory Certificate Services) n'est pas toujours disponible ou souhaitable.
+
+**Cas d'usage typiques :**
+
+| Scénario | Raison |
+|----------|--------|
+| **LDAPS sur 389 Directory Server** | Serveur Linux n'ayant pas accès à ADCS |
+| **Certificat pour serveur DMZ** | Isolation réseau stricte (pas de connectivité AD directe) |
+| **Certificate Authority externe** | CSR doit être soumis à une CA publique (Sectigo, DigiCert) |
+| **Certificat wildcard** | Auto-enrollment ne supporte pas les wildcards (*.mycorp.com) |
+| **Validation manuelle** | Politique de sécurité exigeant une revue humaine de chaque CSR |
+
+**Solution :** Générer un **CSR (Certificate Signing Request)** manuellement avec `certreq` et un fichier `.inf`.
+
+!!! tip "Pépite pour admins Windows"
+    `certreq` est **l'outil natif Windows** pour gérer les certificats sans installer OpenSSL.
+    Il utilise le **Cryptographic API (CAPI)** de Windows et s'intègre parfaitement avec IIS, LDAP, et autres services.
+
+---
+
+### Script : Generate_LDAPS_CSR.ps1
+
+**Objectif :** Générer un CSR pour activer LDAPS (LDAP over SSL) sur un contrôleur de domaine.
+
+=== "Generate_LDAPS_CSR.ps1"
+
+    ```powershell
+    <#
+    .SYNOPSIS
+        Génère un CSR (Certificate Signing Request) pour LDAPS avec certreq.
+
+    .DESCRIPTION
+        Script pour créer un fichier de requête INF et générer un CSR
+        sans utiliser l'auto-enrollment Active Directory.
+
+    .PARAMETER ServerFQDN
+        FQDN du serveur LDAP (ex: srv-dc-01.mycorp.internal)
+
+    .PARAMETER OutputPath
+        Répertoire de sortie pour les fichiers .inf et .csr
+
+    .EXAMPLE
+        .\Generate_LDAPS_CSR.ps1 -ServerFQDN "srv-dc-01.mycorp.internal" -OutputPath "C:\Temp"
+
+    .NOTES
+        Auteur : SysOps Team MyCorp
+        Prérequis : Exécuter en tant qu'Administrateur local
+        Le certificat résultant sera stocké dans LocalMachine\My
+    #>
+
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ServerFQDN,
+
+        [Parameter(Mandatory = $false)]
+        [string]$OutputPath = "C:\Temp\PKI"
+    )
+
+    # Créer le répertoire de sortie si inexistant
+    if (-not (Test-Path $OutputPath)) {
+        New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
+        Write-Host "[+] Répertoire créé : $OutputPath" -ForegroundColor Green
+    }
+
+    # Extraire le hostname et domaine
+    $Hostname = $ServerFQDN.Split('.')[0]
+    $Domain = $ServerFQDN.Substring($ServerFQDN.IndexOf('.') + 1)
+
+    # Chemins des fichiers
+    $InfFile = Join-Path $OutputPath "$Hostname-LDAPS.inf"
+    $CsrFile = Join-Path $OutputPath "$Hostname-LDAPS.csr"
+
+    Write-Host "[*] Génération du fichier INF : $InfFile" -ForegroundColor Cyan
+
+    # Contenu du fichier .inf
+    $InfContent = @"
+[Version]
+Signature="`$Windows NT`$"
+
+[NewRequest]
+; === Informations du Sujet ===
+Subject = "CN=$ServerFQDN,O=MyCorp,L=Paris,C=FR"
+
+; === Paramètres de la Clé Privée ===
+KeySpec = 1
+KeyLength = 4096
+Exportable = FALSE
+MachineKeySet = TRUE
+SMIME = FALSE
+PrivateKeyArchive = FALSE
+UserProtected = FALSE
+UseExistingKeySet = FALSE
+ProviderName = "Microsoft RSA SChannel Cryptographic Provider"
+ProviderType = 12
+RequestType = PKCS10
+KeyUsage = 0xa0
+
+; KeyUsage = 0xa0 signifie :
+;   CERT_DIGITAL_SIGNATURE_KEY_USAGE = 0x80
+;   CERT_KEY_ENCIPHERMENT_KEY_USAGE = 0x20
+
+; === Algorithme de Hachage ===
+HashAlgorithm = SHA256
+
+[EnhancedKeyUsageExtension]
+OID=1.3.6.1.5.5.7.3.1     ; Server Authentication
+OID=1.3.6.1.5.5.7.3.2     ; Client Authentication
+
+[Extensions]
+; === Subject Alternative Name (SAN) ===
+2.5.29.17 = "{text}"
+_continue_ = "dns=$ServerFQDN&"
+_continue_ = "dns=$Hostname&"
+_continue_ = "dns=crl.mycorp.com&"
+
+; Ajouter l'adresse IP si nécessaire (décommenter et adapter)
+; _continue_ = "ipaddress=10.0.1.10&"
+
+[RequestAttributes]
+CertificateTemplate = WebServer
+; Alternative pour LDAPS : CertificateTemplate = DirectoryEmailReplication
+"@
+
+    # Écrire le fichier .inf
+    Set-Content -Path $InfFile -Value $InfContent -Encoding ASCII
+    Write-Host "[+] Fichier INF créé : $InfFile" -ForegroundColor Green
+
+    # Générer le CSR avec certreq
+    Write-Host "[*] Génération du CSR avec certreq..." -ForegroundColor Cyan
+    $certreqOutput = certreq -new $InfFile $CsrFile 2>&1
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "[+] CSR généré avec succès : $CsrFile" -ForegroundColor Green
+
+        # Afficher le contenu du CSR
+        Write-Host "`n[*] Contenu du CSR (à soumettre à la CA) :" -ForegroundColor Cyan
+        Get-Content $CsrFile | Write-Host -ForegroundColor Yellow
+
+        # Vérifier le CSR
+        Write-Host "`n[*] Vérification du CSR avec certutil..." -ForegroundColor Cyan
+        certutil -dump $CsrFile
+
+        Write-Host "`n[✓] Prochaines étapes :" -ForegroundColor Green
+        Write-Host "  1. Soumettre le CSR ($CsrFile) à votre Certificate Authority (CA)"
+        Write-Host "  2. Télécharger le certificat signé (format .cer ou .crt)"
+        Write-Host "  3. Installer le certificat avec : certreq -accept <certificat.cer>"
+        Write-Host "  4. Vérifier l'installation : Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -like '*$ServerFQDN*'"
+
+    } else {
+        Write-Error "❌ Échec de la génération du CSR"
+        Write-Host "Sortie de certreq :" -ForegroundColor Red
+        $certreqOutput | ForEach-Object { Write-Host $_ -ForegroundColor Red }
+    }
+    ```
+
+=== "Fichier INF (Explication Détaillée)"
+
+    ```ini
+    [Version]
+    Signature="$Windows NT$"
+    # Signature obligatoire pour les fichiers INF Windows
+
+    [NewRequest]
+    # === Informations du Sujet (Distinguished Name) ===
+    Subject = "CN=srv-dc-01.mycorp.internal,O=MyCorp,L=Paris,C=FR"
+    # CN = Common Name (FQDN du serveur)
+    # O  = Organization
+    # L  = Locality (ville)
+    # C  = Country (code ISO 2 lettres)
+
+    # === Paramètres Cryptographiques ===
+    KeySpec = 1
+    # 1 = AT_KEYEXCHANGE (pour SSL/TLS)
+    # 2 = AT_SIGNATURE (pour signatures numériques)
+
+    KeyLength = 4096
+    # Longueur de la clé RSA (minimum 2048, recommandé 4096 pour ANSSI)
+
+    Exportable = FALSE
+    # TRUE  = La clé privée peut être exportée (PFX)
+    # FALSE = La clé reste dans le TPM/HSM (plus sécurisé)
+
+    MachineKeySet = TRUE
+    # TRUE  = Clé stockée au niveau machine (LocalMachine\My)
+    # FALSE = Clé stockée pour l'utilisateur courant (CurrentUser\My)
+
+    ProviderName = "Microsoft RSA SChannel Cryptographic Provider"
+    ProviderType = 12
+    # Provider pour SSL/TLS (SChannel)
+    # Autres options : "Microsoft Enhanced Cryptographic Provider v1.0"
+
+    RequestType = PKCS10
+    # Format standard pour les CSR
+
+    KeyUsage = 0xa0
+    # 0xa0 = 0x80 (Digital Signature) + 0x20 (Key Encipherment)
+    # Requis pour SSL/TLS server authentication
+
+    HashAlgorithm = SHA256
+    # Minimum SHA256 (ANSSI), éviter SHA1 (déprécié)
+
+    # === Extensions ===
+    [EnhancedKeyUsageExtension]
+    OID=1.3.6.1.5.5.7.3.1     ; Server Authentication (TLS/SSL Server)
+    OID=1.3.6.1.5.5.7.3.2     ; Client Authentication (TLS/SSL Client)
+
+    [Extensions]
+    # Subject Alternative Name (SAN) - CRITIQUE pour SSL/TLS moderne
+    2.5.29.17 = "{text}"
+    _continue_ = "dns=srv-dc-01.mycorp.internal&"
+    _continue_ = "dns=srv-dc-01&"
+    _continue_ = "dns=crl.mycorp.com&"
+
+    # Le SAN peut inclure :
+    # - dns=hostname.domain.com    (noms DNS)
+    # - ipaddress=10.0.1.10        (adresses IP)
+    # - upn=user@domain.com        (User Principal Name)
+
+    [RequestAttributes]
+    CertificateTemplate = WebServer
+    # Template de certificat (si utilisation d'une CA Microsoft interne)
+    # Options courantes :
+    #   - WebServer : Pour IIS, LDAPS, services HTTPS
+    #   - DirectoryEmailReplication : Spécifique pour LDAPS sur DC
+    #   - Computer : Certificat machine générique
+    ```
+
+---
+
+### Utilisation Pratique
+
+**1. Exécuter le script**
+
+```powershell
+# Générer un CSR pour srv-dc-01.mycorp.internal
+.\Generate_LDAPS_CSR.ps1 -ServerFQDN "srv-dc-01.mycorp.internal" -OutputPath "C:\Temp\PKI"
+
+# Sortie :
+# [+] Répertoire créé : C:\Temp\PKI
+# [*] Génération du fichier INF : C:\Temp\PKI\srv-dc-01-LDAPS.inf
+# [+] Fichier INF créé : C:\Temp\PKI\srv-dc-01-LDAPS.inf
+# [*] Génération du CSR avec certreq...
+# [+] CSR généré avec succès : C:\Temp\PKI\srv-dc-01-LDAPS.csr
+```
+
+**2. Soumettre le CSR à la CA**
+
+=== "CA Microsoft Interne (via Web Enrollment)"
+
+    ```powershell
+    # Méthode 1 : Interface Web
+    # Aller sur https://srv-ca-01.mycorp.internal/certsrv
+    # -> Request a certificate
+    # -> Advanced certificate request
+    # -> Coller le contenu de srv-dc-01-LDAPS.csr
+    # -> Sélectionner template "Web Server"
+    # -> Submit
+
+    # Méthode 2 : Ligne de commande (sur le serveur CA)
+    certreq -submit -config "srv-ca-01.mycorp.internal\MyCorp-CA" C:\Temp\PKI\srv-dc-01-LDAPS.csr
+    ```
+
+=== "CA Publique (Sectigo, DigiCert, Let's Encrypt)"
+
+    ```powershell
+    # 1. Copier le CSR
+    Get-Content C:\Temp\PKI\srv-dc-01-LDAPS.csr | Set-Clipboard
+
+    # 2. Soumettre via l'interface web de la CA publique
+    # Sectigo : https://secure.sectigo.com/products/ssl
+    # DigiCert : https://www.digicert.com/account/
+    # Let's Encrypt : Utiliser win-acme ou certbot-win
+
+    # 3. Télécharger le certificat signé (format .cer ou .crt)
+    ```
+
+**3. Installer le certificat signé**
+
+```powershell
+# Une fois le certificat reçu de la CA (ex: srv-dc-01-LDAPS.cer)
+certreq -accept C:\Temp\PKI\srv-dc-01-LDAPS.cer
+
+# Vérifier l'installation
+Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -like "*srv-dc-01*" }
+
+# Sortie attendue :
+# Thumbprint                                Subject
+# ----------                                -------
+# A1B2C3D4E5F6...                           CN=srv-dc-01.mycorp.internal, O=MyCorp, L=Paris, C=FR
+
+# Vérifier la chaîne de certification complète
+$cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -like "*srv-dc-01*"
+$cert | Select-Object Thumbprint, Subject, NotBefore, NotAfter, Issuer
+```
+
+**4. Configurer LDAPS avec le certificat**
+
+```powershell
+# Le certificat LDAPS doit répondre à ces critères :
+# - Subject CN = FQDN du DC
+# - Enhanced Key Usage : Server Authentication (1.3.6.1.5.5.7.3.1)
+# - Stocké dans LocalMachine\My
+# - Chaîne de certification complète installée (Root + Intermediate CA)
+
+# Vérifier LDAPS
+Test-NetConnection -ComputerName srv-dc-01.mycorp.internal -Port 636
+
+# Si OK, tester avec ldp.exe (GUI)
+ldp.exe
+# Connection > Connect > srv-dc-01.mycorp.internal : 636 (cocher SSL)
+
+# Ou avec PowerShell
+$LDAPConnection = New-Object System.DirectoryServices.Protocols.LdapConnection("srv-dc-01.mycorp.internal:636")
+$LDAPConnection.SessionOptions.SecureSocketLayer = $true
+$LDAPConnection.Bind()
+# Si succès : LDAPS fonctionne !
+```
+
+---
+
+### Cas Avancés : CSR pour Wildcard et Multi-SAN
+
+**CSR Wildcard (*.mycorp.com)**
+
+```powershell
+# Modifier la section Subject du fichier .inf
+Subject = "CN=*.mycorp.com,O=MyCorp,L=Paris,C=FR"
+
+# Dans [Extensions], ajouter le wildcard au SAN
+[Extensions]
+2.5.29.17 = "{text}"
+_continue_ = "dns=*.mycorp.com&"
+_continue_ = "dns=mycorp.com&"
+```
+
+!!! warning "Limitation Auto-Enrollment"
+    Les certificats wildcard **ne peuvent PAS** être générés via auto-enrollment GPO.
+    Il faut **obligatoirement** passer par un CSR manuel ou une API de CA.
+
+**CSR Multi-SAN (Load Balancer, Proxy)**
+
+```powershell
+# Exemple : certificat pour HAProxy avec plusieurs backends
+[Extensions]
+2.5.29.17 = "{text}"
+_continue_ = "dns=lb.mycorp.com&"
+_continue_ = "dns=web01.mycorp.com&"
+_continue_ = "dns=web02.mycorp.com&"
+_continue_ = "dns=api.mycorp.com&"
+_continue_ = "ipaddress=10.0.1.100&"
+_continue_ = "ipaddress=10.0.1.101&"
+```
+
+---
+
+### Troubleshooting
+
+**Erreur : "The request contains no certificate template information"**
+
+```powershell
+# La CA nécessite un template, modifier [RequestAttributes]
+[RequestAttributes]
+CertificateTemplate = WebServer
+# Ou retirer complètement si CA publique externe
+```
+
+**Erreur : "Keyset does not exist" lors de certreq -accept**
+
+```powershell
+# Le CSR n'a pas été généré sur cette machine ou a été supprimé
+# Solution : Regénérer le CSR sur la machine cible (srv-dc-01)
+
+# Vérifier les requests en attente
+certutil -store -v request
+
+# Supprimer une ancienne request orpheline
+certutil -delstore request <RequestId>
+```
+
+**Le certificat n'apparaît pas dans LocalMachine\My**
+
+```powershell
+# Vérifier que le CSR a bien été généré sur cette machine
+certutil -store request
+
+# Forcer le refresh du magasin de certificats
+certutil -pulse
+
+# Vérifier manuellement
+mmc
+# File > Add/Remove Snap-in > Certificates > Computer Account > Local Computer
+# Navigate to Personal > Certificates
+```
+
+**LDAPS ne fonctionne pas après installation du certificat**
+
+```powershell
+# 1. Vérifier que le certificat a les bons critères
+$cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -like "*srv-dc-01*"
+$cert.EnhancedKeyUsageList
+# Doit contenir : Server Authentication (1.3.6.1.5.5.7.3.1)
+
+# 2. Vérifier la chaîne de certification
+certutil -verify $cert.Thumbprint
+
+# 3. Redémarrer le service Active Directory Domain Services
+Restart-Service NTDS -Force
+
+# 4. Vérifier les logs Event Viewer
+# Applications and Services Logs > Directory Service
+# Event ID 1220 : LDAPS bind succeeded
+# Event ID 1221 : LDAPS bind failed (voir détails de l'erreur)
+```
+
+---
+
+### Checklist Déploiement LDAPS
+
+- [ ] Générer le CSR avec `Generate_LDAPS_CSR.ps1`
+- [ ] Vérifier le CSR avec `certutil -dump <csr-file>`
+- [ ] Soumettre le CSR à la CA (interne ou publique)
+- [ ] Télécharger le certificat signé (.cer)
+- [ ] Installer le certificat avec `certreq -accept <cer-file>`
+- [ ] Vérifier la présence dans `Cert:\LocalMachine\My`
+- [ ] Vérifier la chaîne de certification complète (Root + Intermediate)
+- [ ] Tester le port 636 avec `Test-NetConnection -Port 636`
+- [ ] Tester LDAPS avec `ldp.exe` ou PowerShell
+- [ ] Configurer les clients LDAP pour utiliser LDAPS (port 636)
+- [ ] Documenter la date d'expiration et créer une alerte de renouvellement
+
+!!! success "Production Ready"
+    Avec cette méthode, vous pouvez générer des CSR pour **n'importe quel service Windows** :
+    IIS, LDAPS, RDP, SQL Server, Exchange, etc.
+    Le fichier `.inf` est **entièrement personnalisable** selon vos besoins PKI.

@@ -501,6 +501,452 @@ az rest --method get --url \
 
 ---
 
+## Stratégie de Patch Management : Le Pattern "36 Heures"
+
+### Concept : Déploiement Échelonné par Criticité
+
+**Le Pattern "36 Heures" = Déploiement progressif des patchs sur 5 groupes avec délais calculés pour garantir la continuité de service.**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│               DÉPLOIEMENT STANDARD (RISQUÉ)                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Tous les serveurs patchés en même temps :                  │
+│  ✗ Un patch défectueux = TOUS les serveurs crashent         │
+│  ✗ Pas de rollback possible                                 │
+│  ✗ Downtime total de l'infrastructure                       │
+│                                                              │
+│  Résultat : Catastrophe si patch problématique              │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│               DÉPLOIEMENT ÉCHELONNÉ (PATTERN 36H)            │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Groupes successifs avec délais :                           │
+│  1. Tester sur groupe pilote (Groupe 1)                     │
+│  2. Observer 4 heures (détection problèmes)                 │
+│  3. Si OK → Continuer les autres groupes                    │
+│  4. Si KO → STOP, rollback, patcher seulement Groupe 1      │
+│                                                              │
+│  Résultat : Limitation du blast radius                      │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Avantages :**
+- ✅ **Limitation du risque** : Si un patch pose problème, seul le Groupe 0/1 est impacté
+- ✅ **Observation progressive** : 4-12h entre chaque groupe pour détecter les anomalies
+- ✅ **Rollback contrôlé** : Possibilité d'arrêter le déploiement avant d'impacter toute l'infra
+- ✅ **Compliance SecNumCloud** : Délai maximal de 36h respecté pour les patchs critiques
+
+### Les 5 Groupes de Déploiement
+
+| Groupe | Timing | Serveurs | Auto Reboot | Criticité | Monitoring |
+|--------|--------|----------|-------------|-----------|------------|
+| **Groupe 0 (Pilote)** | H+0 (Mardi 02:00) | DC Primaires (PDC) | ❌ Non | 🔴 Critique | ✅ 24/7 |
+| **Groupe 1 (Infrastructure Core)** | H+4 (Mardi 06:00) | DC Secondaires | ⚠️ Fenêtre | 🔴 Critique | ✅ 24/7 |
+| **Groupe 2 (Services Infrastructure)** | H+12 (Mardi 14:00) | PKI, WSUS, DNS, DHCP | ✅ Oui | 🟠 Important | ✅ Business hours |
+| **Groupe 3 (Applications)** | H+24 (Mercredi 02:00) | Serveurs Web, App, DB | ✅ Oui | 🟡 Standard | ⚠️ Alertes |
+| **Groupe 4 (Périphérie)** | H+36 (Mercredi 14:00) | Gateways, Bastions, VPN | ✅ Oui | 🟢 Low | ⚠️ Alertes |
+
+**Détails des Groupes :**
+
+#### Groupe 0 : DC Primaires (PDC) - H+0
+
+**Serveurs :**
+- `srv-dc-pdc-01.corp.internal` (PDC Emulator FSMO)
+- Tout Domain Controller avec rôle FSMO critique
+
+**Politique :**
+```powershell
+# PAS de reboot automatique (contrôle manuel requis)
+# Patch + Observation + Reboot manuel en heures creuses
+
+# Configuration PSWindowsUpdate
+$Group0Servers = @("srv-dc-pdc-01")
+Invoke-Command -ComputerName $Group0Servers -ScriptBlock {
+    Install-WindowsUpdate -AcceptAll -IgnoreReboot -Verbose
+}
+
+# Vérifier les patchs installés
+Invoke-Command -ComputerName $Group0Servers -ScriptBlock {
+    Get-WUHistory -MaxDate (Get-Date).AddDays(-1) |
+        Select-Object Date, Title, Result
+}
+
+# Reboot MANUEL après validation (fenêtre maintenance)
+# Restart-Computer -ComputerName "srv-dc-pdc-01" -Force
+```
+
+**Pourquoi aucun reboot auto ?**
+- Le PDC est critique pour l'authentification Kerberos
+- Un reboot raté = authentification impossible pour TOUT le domaine
+- Nécessite présence admin pour validation
+
+#### Groupe 1 : DC Secondaires - H+4
+
+**Serveurs :**
+- `srv-dc-02.corp.internal`
+- `srv-dc-03.corp.internal`
+- DC secondaires sans rôle FSMO critique
+
+**Politique :**
+```powershell
+$Group1Servers = @("srv-dc-02", "srv-dc-03")
+
+# Scheduled Task (Mardi 06:00)
+$Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Tuesday -At 06:00
+$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument @"
+-NoProfile -ExecutionPolicy Bypass -Command "
+    Install-Module PSWindowsUpdate -Force -ErrorAction SilentlyContinue;
+    Import-Module PSWindowsUpdate;
+    Install-WindowsUpdate -AcceptAll -AutoReboot -Verbose
+"
+"@
+
+Register-ScheduledTask -TaskName "Patch-Group1-DCs" -Trigger $Trigger -Action $Action -User "SYSTEM" -Force
+```
+
+**Observation :**
+- Observer les logs pendant 4h après reboot
+- Vérifier la réplication AD : `repadmin /replsummary`
+- Si OK → Continuer Groupe 2
+
+#### Groupe 2 : Services Infrastructure - H+12
+
+**Serveurs :**
+- `srv-pki-01.corp.internal` (PKI/CA)
+- `srv-wsus-01.corp.internal` (WSUS)
+- `srv-dns-01.corp.internal` (DNS standalone)
+- `srv-dhcp-01.corp.internal` (DHCP)
+
+**Politique :**
+```powershell
+$Group2Servers = @("srv-pki-01", "srv-wsus-01", "srv-dns-01", "srv-dhcp-01")
+
+# Scheduled Task (Mardi 14:00)
+$Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Tuesday -At 14:00
+$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument @"
+-NoProfile -ExecutionPolicy Bypass -Command "
+    Install-Module PSWindowsUpdate -Force -ErrorAction SilentlyContinue;
+    Import-Module PSWindowsUpdate;
+    Install-WindowsUpdate -AcceptAll -AutoReboot -Verbose
+"
+"@
+
+Register-ScheduledTask -TaskName "Patch-Group2-Infrastructure" -Trigger $Trigger -Action $Action -User "SYSTEM" -Force
+```
+
+**Particularité PKI :**
+```powershell
+# Sur srv-pki-01 : Arrêter le service CA avant patch
+Invoke-Command -ComputerName "srv-pki-01" -ScriptBlock {
+    Stop-Service -Name "CertSvc" -Force
+    Install-WindowsUpdate -AcceptAll -IgnoreReboot
+    # Reboot manuel après validation
+}
+```
+
+#### Groupe 3 : Serveurs Applications - H+24
+
+**Serveurs :**
+- `srv-web-01.corp.internal` (IIS)
+- `srv-app-01.corp.internal` (Application servers)
+- `srv-sql-01.corp.internal` (SQL Server)
+
+**Politique :**
+```powershell
+$Group3Servers = @("srv-web-01", "srv-app-01", "srv-sql-01")
+
+# Scheduled Task (Mercredi 02:00)
+$Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Wednesday -At 02:00
+$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument @"
+-NoProfile -ExecutionPolicy Bypass -Command "
+    Install-Module PSWindowsUpdate -Force -ErrorAction SilentlyContinue;
+    Import-Module PSWindowsUpdate;
+    Install-WindowsUpdate -AcceptAll -AutoReboot -NotCategory 'Drivers' -Verbose
+"
+"@
+
+Register-ScheduledTask -TaskName "Patch-Group3-Applications" -Trigger $Trigger -Action $Action -User "SYSTEM" -Force
+```
+
+**Particularité SQL Server :**
+```powershell
+# Exclure les CU SQL Server du patch automatique (gestion manuelle)
+Invoke-Command -ComputerName "srv-sql-01" -ScriptBlock {
+    Install-WindowsUpdate -AcceptAll -AutoReboot `
+        -NotTitle "SQL Server" `
+        -NotCategory "Drivers"
+}
+```
+
+#### Groupe 4 : Gateways & Bastions - H+36
+
+**Serveurs :**
+- `srv-gateway-01.corp.internal` (Gateway VPN)
+- `srv-bastion-01.corp.internal` (Bastion RDP)
+- `srv-proxy-01.corp.internal` (Proxy internet)
+
+**Politique :**
+```powershell
+$Group4Servers = @("srv-gateway-01", "srv-bastion-01", "srv-proxy-01")
+
+# Scheduled Task (Mercredi 14:00)
+$Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Wednesday -At 14:00
+$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument @"
+-NoProfile -ExecutionPolicy Bypass -Command "
+    Install-Module PSWindowsUpdate -Force -ErrorAction SilentlyContinue;
+    Import-Module PSWindowsUpdate;
+    Install-WindowsUpdate -AcceptAll -AutoReboot -Verbose
+"
+"@
+
+Register-ScheduledTask -TaskName "Patch-Group4-Perimeter" -Trigger $Trigger -Action $Action -User "SYSTEM" -Force
+```
+
+**Pourquoi en dernier ?**
+- Les gateways sont critiques pour l'accès distant
+- Si problème détecté sur Groupe 0-3, on peut skip le Groupe 4
+- Délai de 36h laisse le temps de tester tous les services
+
+### Timeline Visuelle (36 Heures)
+
+```
+Mardi 02:00         Mardi 06:00         Mardi 14:00         Mercredi 02:00      Mercredi 14:00
+    │                   │                   │                    │                    │
+    ▼                   ▼                   ▼                    ▼                    ▼
+┌───────┐           ┌───────┐           ┌───────┐           ┌───────┐           ┌───────┐
+│ G0    │  +4h →    │ G1    │  +8h →    │ G2    │  +12h →   │ G3    │  +12h →   │ G4    │
+│ PDC   │           │ DC    │           │ PKI   │           │ Web   │           │ GW    │
+│       │           │ Sec   │           │ WSUS  │           │ App   │           │ VPN   │
+│ MANUAL│           │ AUTO  │           │ AUTO  │           │ AUTO  │           │ AUTO  │
+└───────┘           └───────┘           └───────┘           └───────┘           └───────┘
+    │                   │                   │                    │                    │
+    └─────── Observer ──┴──── Observer ────┴──── Observer ─────┴──── Observer ──────┘
+            (4 heures)        (8 heures)         (12 heures)         (12 heures)
+
+Délai total : 36 heures (Mardi 02:00 → Mercredi 14:00)
+```
+
+### Script d'Automatisation Complet
+
+```powershell
+# ============================================================
+# Script de Configuration du Pattern 36 Heures
+# Compatible : Windows Server 2019, 2022, 2025
+# ============================================================
+
+# Définir les groupes de serveurs
+$PatchGroups = @{
+    "Group0_PDC" = @{
+        Servers = @("srv-dc-pdc-01")
+        Day = "Tuesday"
+        Hour = "02:00"
+        AutoReboot = $false
+    }
+    "Group1_DCs" = @{
+        Servers = @("srv-dc-02", "srv-dc-03")
+        Day = "Tuesday"
+        Hour = "06:00"
+        AutoReboot = $true
+    }
+    "Group2_Infrastructure" = @{
+        Servers = @("srv-pki-01", "srv-wsus-01", "srv-dns-01", "srv-dhcp-01")
+        Day = "Tuesday"
+        Hour = "14:00"
+        AutoReboot = $true
+    }
+    "Group3_Applications" = @{
+        Servers = @("srv-web-01", "srv-app-01", "srv-sql-01")
+        Day = "Wednesday"
+        Hour = "02:00"
+        AutoReboot = $true
+    }
+    "Group4_Perimeter" = @{
+        Servers = @("srv-gateway-01", "srv-bastion-01", "srv-proxy-01")
+        Day = "Wednesday"
+        Hour = "14:00"
+        AutoReboot = $true
+    }
+}
+
+# Créer les tâches planifiées pour chaque groupe
+foreach ($GroupName in $PatchGroups.Keys) {
+    $Group = $PatchGroups[$GroupName]
+
+    Write-Host "[+] Configuration du groupe : $GroupName" -ForegroundColor Green
+    Write-Host "    Serveurs : $($Group.Servers -join ', ')" -ForegroundColor Yellow
+    Write-Host "    Planning : $($Group.Day) à $($Group.Hour)" -ForegroundColor Yellow
+
+    # Paramètres de reboot
+    if ($Group.AutoReboot) {
+        $RebootParam = "-AutoReboot"
+    } else {
+        $RebootParam = "-IgnoreReboot"
+    }
+
+    # Créer le trigger
+    $Trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek $Group.Day -At $Group.Hour
+
+    # Créer l'action
+    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument @"
+-NoProfile -ExecutionPolicy Bypass -Command "
+    `$LogFile = 'C:\Logs\Patching\$GroupName-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.log'
+    New-Item -Path (Split-Path `$LogFile) -ItemType Directory -Force | Out-Null
+
+    Start-Transcript -Path `$LogFile
+
+    Write-Host '[+] Démarrage du patching pour $GroupName'
+
+    # Installer PSWindowsUpdate si absent
+    if (-not (Get-Module -ListAvailable -Name PSWindowsUpdate)) {
+        Install-Module PSWindowsUpdate -Force -Scope AllUsers
+    }
+
+    Import-Module PSWindowsUpdate
+
+    # Lister les mises à jour disponibles
+    Write-Host '[*] Mises à jour disponibles :'
+    Get-WindowsUpdate
+
+    # Installer les mises à jour
+    Install-WindowsUpdate -AcceptAll $RebootParam -NotCategory 'Drivers' -Verbose
+
+    Write-Host '[+] Patching terminé pour $GroupName'
+
+    Stop-Transcript
+"
+"@
+
+    # Enregistrer la tâche
+    Register-ScheduledTask -TaskName "Patch-$GroupName" `
+        -Trigger $Trigger `
+        -Action $Action `
+        -User "SYSTEM" `
+        -RunLevel Highest `
+        -Force
+
+    Write-Host "    [OK] Tâche planifiée créée : Patch-$GroupName" -ForegroundColor Green
+}
+
+Write-Host "`n[+] Configuration du Pattern 36 Heures terminée !" -ForegroundColor Green
+Write-Host "[!] Vérifier les tâches planifiées : Get-ScheduledTask -TaskName 'Patch-*'" -ForegroundColor Cyan
+```
+
+### Monitoring & Alerting
+
+**Créer un dashboard de suivi du patching :**
+
+```powershell
+# Script de monitoring post-patching (à exécuter après chaque groupe)
+function Get-PatchingStatus {
+    param(
+        [string[]]$Servers
+    )
+
+    $Results = @()
+
+    foreach ($Server in $Servers) {
+        try {
+            $LastBoot = Invoke-Command -ComputerName $Server -ScriptBlock {
+                (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+            }
+
+            $PendingReboot = Invoke-Command -ComputerName $Server -ScriptBlock {
+                Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending"
+            }
+
+            $LastPatches = Invoke-Command -ComputerName $Server -ScriptBlock {
+                Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 3
+            }
+
+            $Results += [PSCustomObject]@{
+                Server = $Server
+                LastBoot = $LastBoot
+                PendingReboot = $PendingReboot
+                LastPatches = ($LastPatches.HotFixID -join ', ')
+                Status = if ($PendingReboot) { "⚠️ Reboot Pending" } else { "✅ OK" }
+            }
+        }
+        catch {
+            $Results += [PSCustomObject]@{
+                Server = $Server
+                LastBoot = "N/A"
+                PendingReboot = "N/A"
+                LastPatches = "N/A"
+                Status = "❌ Unreachable"
+            }
+        }
+    }
+
+    return $Results
+}
+
+# Utilisation après chaque groupe
+$Group1Status = Get-PatchingStatus -Servers @("srv-dc-02", "srv-dc-03")
+$Group1Status | Format-Table -AutoSize
+
+# Export pour reporting
+$Group1Status | Export-Csv -Path "C:\Reports\Patching-Group1-$(Get-Date -Format 'yyyyMMdd').csv" -NoTypeInformation
+```
+
+### Rollback : Que Faire si un Patch Pose Problème ?
+
+**Scénario : Un patch du Groupe 1 cause des problèmes (ex: DC ne redémarre pas).**
+
+```powershell
+# 1. STOP immédiat du déploiement
+Get-ScheduledTask -TaskName "Patch-*" | Disable-ScheduledTask
+
+# 2. Identifier le patch problématique
+Invoke-Command -ComputerName "srv-dc-02" -ScriptBlock {
+    Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 5
+}
+
+# 3. Désinstaller le patch (si identifié)
+$ProblematicKB = "KB5034441"
+wusa /uninstall /kb:$ProblematicKB /quiet /norestart
+
+# 4. Masquer le patch pour éviter la réinstallation
+Hide-WindowsUpdate -KBArticleID $ProblematicKB -Confirm:$false
+
+# 5. Attendre le hotfix Microsoft avant de continuer
+# Ne PAS déployer sur Groupe 2/3/4 tant que le problème n'est pas résolu
+```
+
+### Cas Particuliers : Patchs d'Urgence (Zero-Day)
+
+**Scénario : Microsoft publie un patch critique pour une CVE exploitée en production.**
+
+```powershell
+# Déploiement d'urgence (SKIP le pattern 36h)
+# Appliquer IMMÉDIATEMENT sur TOUS les serveurs
+
+$AllServers = @(
+    "srv-dc-pdc-01", "srv-dc-02", "srv-dc-03",
+    "srv-pki-01", "srv-wsus-01", "srv-web-01",
+    "srv-app-01", "srv-sql-01", "srv-gateway-01"
+)
+
+# Patch d'urgence (ex: PrintNightmare CVE-2021-34527)
+$EmergencyKB = "KB5004945"
+
+Invoke-Command -ComputerName $AllServers -ScriptBlock {
+    param($KB)
+
+    # Installer uniquement le KB d'urgence
+    Get-WindowsUpdate -KBArticleID $KB | Install-WindowsUpdate -AcceptAll -AutoReboot
+
+} -ArgumentList $EmergencyKB
+
+# Monitoring post-déploiement
+Get-PatchingStatus -Servers $AllServers | Format-Table -AutoSize
+```
+
+---
+
 ## Tableau Récapitulatif : Legacy vs Modern
 
 | Aspect | Legacy (2019/2022) | Modern (2025) |

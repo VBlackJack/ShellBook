@@ -68,6 +68,8 @@ nav:
     - Infrastructure & Virtualisation:
       - linux/virtualization-kvm.md
       - linux/vpn-wireguard.md
+      - linux/ldap-389ds.md
+      - linux/secure-file-exchange.md
   - Windows:
     - windows/index.md
     - windows/productivity.md
@@ -105,6 +107,7 @@ nav:
       - devops/terraform/fundamentals.md
     - Infrastructure & Network:
       - devops/modern-networking.md
+      - devops/database-ha.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
