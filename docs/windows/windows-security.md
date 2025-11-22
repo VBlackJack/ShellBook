@@ -921,6 +921,607 @@ Get-WinEvent -LogName "Microsoft-Windows-BitLocker/BitLocker Management" |
 
 ---
 
+## PKI : Bootstrap Certificat (Offline)
+
+### Le Problème : "Chicken & Egg"
+
+**Scénario classique dans les environnements SecNumCloud :**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PROBLÈME "CHICKEN & EGG"                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. Nouvelle machine Windows (non jointe au domaine)        │
+│  2. Pour rejoindre le domaine → Besoin de se connecter au VPN│
+│  3. Pour se connecter au VPN → Besoin d'un certificat machine│
+│  4. Pour obtenir un certificat → Besoin de l'auto-enrollment AD│
+│  5. Pour l'auto-enrollment → Besoin d'être joint au domaine │
+│                                                              │
+│  ➜ Boucle impossible !                                      │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│                      SOLUTION : BOOTSTRAP                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. Générer un CSR manuellement (certreq + fichier .inf)    │
+│  2. Soumettre le CSR à la CA (via processus offline)        │
+│  3. Installer le certificat signé sur la machine            │
+│  4. La machine peut maintenant se connecter au VPN           │
+│  5. Une fois connectée au VPN → Jointure au domaine         │
+│  6. Auto-enrollment activé → Rotation automatique des certs │
+│                                                              │
+│  ✓ Le certificat "bootstrap" permet l'amorçage du cycle     │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+!!! tip "Cas d'usage typiques"
+    - **Postes nomades** : Laptops devant se connecter au VPN avant la jointure domaine
+    - **Serveurs DMZ** : Isolation réseau stricte (pas d'accès direct à l'AD)
+    - **Zero Trust** : Authentification par certificat obligatoire (pas de VPN username/password)
+    - **Provisioning automatique** : Scripts de déploiement Ansible/Terraform nécessitant un certificat initial
+
+---
+
+### Template INF : ECDSA P-384 (ANSSI Recommandé)
+
+**Pourquoi ECDSA P-384 ?**
+
+| Critère | RSA 4096 | ECDSA P-384 (Recommandé ANSSI) |
+|---------|----------|-------------------------------|
+| **Sécurité équivalente** | 4096 bits | 384 bits (même niveau de sécurité) |
+| **Taille de la clé** | 4096 bits | 384 bits (10x plus compact) |
+| **Performance CPU** | Lent (génération & signature) | Rapide (moins de calculs) |
+| **Taille du certificat** | ~2 KB | ~500 octets |
+| **Support matériel** | Universel | TPM 2.0+ (natif) |
+| **Standard ANSSI** | Acceptable | **Recommandé** (SecNumCloud) |
+
+!!! success "ECDSA P-384 : Standard Moderne"
+    ECDSA (Elliptic Curve Digital Signature Algorithm) avec courbe P-384 offre une sécurité équivalente à RSA 7680 bits avec une clé de seulement 384 bits. C'est le choix recommandé par l'ANSSI pour les infrastructures SecNumCloud.
+
+**Fichier INF pour Bootstrap Certificate :**
+
+```ini
+[Version]
+Signature="$Windows NT$"
+
+[NewRequest]
+; === Informations du Sujet ===
+; IMPORTANT : Le FQDN doit être ANTICIPÉ (la machine n'est pas encore jointe au domaine)
+Subject = "CN=WKS-LAPTOP-01.corp.mycorp.internal,O=MyCorp,C=FR"
+
+; === Algorithme de Clé : ECDSA P-384 (ANSSI) ===
+KeyAlgorithm = ECDSA
+KeyLength = 384
+; Courbes supportées :
+;   - ECDSA_P256 (256 bits) : Acceptable
+;   - ECDSA_P384 (384 bits) : RECOMMANDÉ ANSSI
+;   - ECDSA_P521 (521 bits) : Maximum (overkill)
+
+; === Paramètres de la Clé Privée ===
+Exportable = FALSE
+; FALSE = La clé privée reste dans le TPM (sécurité maximale)
+; TRUE  = Exportable en PFX (uniquement si migration nécessaire)
+
+MachineKeySet = TRUE
+; TRUE  = Certificat machine (stocké dans LocalMachine\My)
+; FALSE = Certificat utilisateur (stocké dans CurrentUser\My)
+; CRITIQUE : MachineKeySet=TRUE est OBLIGATOIRE pour :
+;   - VPN Machine Authentication
+;   - Services système (IIS, LDAPS, etc.)
+;   - Authentification avant logon utilisateur
+
+ProviderName = "Microsoft Software Key Storage Provider"
+; Pour TPM 2.0, utiliser : "Microsoft Platform Crypto Provider"
+; Cela force le stockage de la clé dans le TPM matériel
+
+RequestType = PKCS10
+; Format standard pour les CSR
+
+KeyUsage = 0xa0
+; 0xa0 = 0x80 (Digital Signature) + 0x20 (Key Encipherment)
+; Requis pour l'authentification TLS/SSL client
+
+; === Algorithme de Hachage ===
+HashAlgorithm = SHA384
+; SHA384 est recommandé avec ECDSA P-384 (cohérence de sécurité)
+; SHA256 est acceptable mais SHA384 est préféré
+
+; === Extensions : Enhanced Key Usage (EKU) ===
+[EnhancedKeyUsageExtension]
+OID=1.3.6.1.5.5.7.3.2     ; Client Authentication (VPN, 802.1X)
+OID=1.3.6.1.5.5.7.3.1     ; Server Authentication (optionnel, si dual-use)
+
+; Client Authentication (1.3.6.1.5.5.7.3.2) est OBLIGATOIRE pour :
+;   - VPN Client (IPsec, SSL VPN, WireGuard)
+;   - 802.1X Network Access Control (NAC)
+;   - Mutual TLS (mTLS) authentication
+
+; === Extensions : Subject Alternative Name (SAN) ===
+[Extensions]
+2.5.29.17 = "{text}"
+_continue_ = "dns=WKS-LAPTOP-01.corp.mycorp.internal&"
+_continue_ = "dns=WKS-LAPTOP-01&"
+
+; Le SAN doit inclure :
+;   - FQDN complet (dns=hostname.domain.com)
+;   - Hostname court (dns=hostname) pour compatibilité
+
+[RequestAttributes]
+; Ne PAS spécifier de CertificateTemplate pour un bootstrap offline
+; Le template sera appliqué par la CA lors de la signature manuelle
+```
+
+**Explications détaillées :**
+
+| Paramètre | Valeur | Justification |
+|-----------|--------|---------------|
+| `KeyAlgorithm = ECDSA` | ECDSA | Courbes elliptiques (moderne, rapide, compact) |
+| `KeyLength = 384` | 384 bits | Courbe P-384 (ANSSI recommandé, équivalent RSA 7680 bits) |
+| `Exportable = FALSE` | Non exportable | Clé privée protégée dans TPM (impossible à voler) |
+| `MachineKeySet = TRUE` | Machine | Certificat accessible par les services système (VPN, IIS) |
+| `KeyUsage = 0xa0` | Digital Signature + Key Encipherment | Requis pour authentification TLS client/serveur |
+| `HashAlgorithm = SHA384` | SHA-384 | Cohérence avec ECDSA P-384 (niveau de sécurité équivalent) |
+| `OID 1.3.6.1.5.5.7.3.2` | Client Authentication | **OBLIGATOIRE** pour VPN et 802.1X |
+
+---
+
+### Workflow PowerShell
+
+#### Bloc A : Génération du CSR
+
+**Fonction automatisée pour générer le CSR avec ECDSA P-384 :**
+
+```powershell
+function New-BootstrapCSR {
+    <#
+    .SYNOPSIS
+        Génère un CSR bootstrap pour certificat machine (ECDSA P-384).
+
+    .DESCRIPTION
+        Crée un fichier .inf dynamiquement et génère un CSR avec certreq.
+        Le certificat résultant permet l'authentification VPN AVANT la jointure domaine.
+
+    .PARAMETER Hostname
+        Nom court de la machine (ex: WKS-LAPTOP-01)
+
+    .PARAMETER DomainFQDN
+        FQDN du domaine (ex: corp.mycorp.internal)
+        IMPORTANT : Doit être le domaine cible (même si la machine n'est pas encore jointe)
+
+    .PARAMETER OutputPath
+        Répertoire de sortie pour les fichiers .inf et .req
+
+    .EXAMPLE
+        New-BootstrapCSR -Hostname "WKS-LAPTOP-01" -DomainFQDN "corp.mycorp.internal" -OutputPath "C:\Temp"
+
+    .NOTES
+        Auteur : SecOps Team MyCorp
+        Prérequis : Exécuter en tant qu'Administrateur local
+        TPM 2.0 recommandé (pour stockage sécurisé de la clé)
+    #>
+
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Hostname,
+
+        [Parameter(Mandatory = $true)]
+        [ValidatePattern("^[a-z0-9\-\.]+\.[a-z]{2,}$")]
+        [string]$DomainFQDN,
+
+        [Parameter(Mandatory = $false)]
+        [string]$OutputPath = "C:\Temp\Bootstrap"
+    )
+
+    # Créer le répertoire de sortie
+    if (-not (Test-Path $OutputPath)) {
+        New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
+        Write-Host "[+] Répertoire créé : $OutputPath" -ForegroundColor Green
+    }
+
+    # Construire le FQDN complet (ANTICIPÉ)
+    $MachineFQDN = "$Hostname.$DomainFQDN"
+
+    # Chemins des fichiers
+    $InfFile = Join-Path $OutputPath "$Hostname-Bootstrap.inf"
+    $ReqFile = Join-Path $OutputPath "$Hostname-Bootstrap.req"
+
+    Write-Host "[*] Génération du fichier INF pour $MachineFQDN..." -ForegroundColor Cyan
+
+    # Contenu du fichier .inf (ECDSA P-384)
+    $InfContent = @"
+[Version]
+Signature="`$Windows NT`$"
+
+[NewRequest]
+Subject = "CN=$MachineFQDN,O=MyCorp,C=FR"
+
+; === ECDSA P-384 (ANSSI Recommandé) ===
+KeyAlgorithm = ECDSA
+KeyLength = 384
+Exportable = FALSE
+MachineKeySet = TRUE
+ProviderName = "Microsoft Software Key Storage Provider"
+RequestType = PKCS10
+KeyUsage = 0xa0
+HashAlgorithm = SHA384
+
+[EnhancedKeyUsageExtension]
+OID=1.3.6.1.5.5.7.3.2     ; Client Authentication (VPN)
+OID=1.3.6.1.5.5.7.3.1     ; Server Authentication (optionnel)
+
+[Extensions]
+2.5.29.17 = "{text}"
+_continue_ = "dns=$MachineFQDN&"
+_continue_ = "dns=$Hostname&"
+"@
+
+    # Écrire le fichier .inf
+    Set-Content -Path $InfFile -Value $InfContent -Encoding ASCII
+    Write-Host "[+] Fichier INF créé : $InfFile" -ForegroundColor Green
+
+    # Générer le CSR avec certreq
+    Write-Host "[*] Génération du CSR avec certreq..." -ForegroundColor Cyan
+    $certreqOutput = certreq -new $InfFile $ReqFile 2>&1
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "[+] CSR généré avec succès : $ReqFile" -ForegroundColor Green
+
+        # Afficher le contenu du CSR
+        Write-Host "`n[*] Contenu du CSR (à soumettre à la CA) :" -ForegroundColor Cyan
+        Get-Content $ReqFile | Write-Host -ForegroundColor Yellow
+
+        # Vérifier le CSR
+        Write-Host "`n[*] Vérification du CSR..." -ForegroundColor Cyan
+        certutil -dump $ReqFile
+
+        Write-Host "`n[✓] Prochaines étapes :" -ForegroundColor Green
+        Write-Host "  1. Transférer le fichier CSR vers une machine avec accès à la CA" -ForegroundColor White
+        Write-Host "     (ex: via clé USB, partage réseau temporaire, ou email sécurisé)" -ForegroundColor Gray
+        Write-Host "  2. Soumettre le CSR à la CA interne (certreq -submit ou Web Enrollment)" -ForegroundColor White
+        Write-Host "  3. Télécharger le certificat signé (format .cer)" -ForegroundColor White
+        Write-Host "  4. Utiliser Install-BootstrapCertificate pour installer le certificat" -ForegroundColor White
+
+    } else {
+        Write-Error "❌ Échec de la génération du CSR"
+        Write-Host "Sortie de certreq :" -ForegroundColor Red
+        $certreqOutput | ForEach-Object { Write-Host $_ -ForegroundColor Red }
+    }
+}
+```
+
+!!! tip "FQDN Anticipé : Planification Critique"
+    **Le FQDN doit être déterminé AVANT la génération du CSR !**
+
+    Si votre politique de nommage est `WKS-LAPTOP-01.corp.mycorp.internal`, vous DEVEZ spécifier exactement ce FQDN dans le CSR, même si la machine n'est pas encore jointe au domaine.
+
+    **Mauvaise pratique :** Générer un CSR avec le hostname court (`WKS-LAPTOP-01`) puis changer le nom après jointure → Le certificat ne matchera plus !
+
+    **Bonne pratique :** Planifier le FQDN complet en amont (via convention de nommage stricte).
+
+**Utilisation :**
+
+```powershell
+# Générer un CSR pour WKS-LAPTOP-01.corp.mycorp.internal
+New-BootstrapCSR -Hostname "WKS-LAPTOP-01" -DomainFQDN "corp.mycorp.internal" -OutputPath "C:\Temp\Bootstrap"
+
+# Sortie :
+# [+] Répertoire créé : C:\Temp\Bootstrap
+# [*] Génération du fichier INF pour WKS-LAPTOP-01.corp.mycorp.internal...
+# [+] Fichier INF créé : C:\Temp\Bootstrap\WKS-LAPTOP-01-Bootstrap.inf
+# [*] Génération du CSR avec certreq...
+# [+] CSR généré avec succès : C:\Temp\Bootstrap\WKS-LAPTOP-01-Bootstrap.req
+#
+# [*] Contenu du CSR (à soumettre à la CA) :
+# -----BEGIN NEW CERTIFICATE REQUEST-----
+# MIIBYDCCAQcCAQAwRjELMAkGA1UEBhMCRlIxDzANBgNVBAoTBk15Q29ycDEmMCQG
+# ...
+# -----END NEW CERTIFICATE REQUEST-----
+```
+
+---
+
+#### Bloc B : Installation du Certificat
+
+**Fonction pour installer le certificat signé et vérifier les EKU :**
+
+```powershell
+function Install-BootstrapCertificate {
+    <#
+    .SYNOPSIS
+        Installe un certificat bootstrap et vérifie les EKU pour VPN.
+
+    .DESCRIPTION
+        Installe le certificat signé par la CA et vérifie que :
+        - Le certificat est bien dans LocalMachine\My
+        - L'EKU "Client Authentication" (1.3.6.1.5.5.7.3.2) est présent
+        - La chaîne de certification est valide
+
+    .PARAMETER CertificatePath
+        Chemin vers le fichier .cer (certificat signé par la CA)
+
+    .EXAMPLE
+        Install-BootstrapCertificate -CertificatePath "C:\Temp\WKS-LAPTOP-01-Bootstrap.cer"
+
+    .NOTES
+        Auteur : SecOps Team MyCorp
+        Prérequis : Exécuter en tant qu'Administrateur local
+        Le CSR doit avoir été généré sur CETTE machine (sinon keyset error)
+    #>
+
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({Test-Path $_})]
+        [string]$CertificatePath
+    )
+
+    Write-Host "[*] Installation du certificat bootstrap..." -ForegroundColor Cyan
+
+    # Installer le certificat avec certreq -accept
+    $certreqOutput = certreq -accept $CertificatePath 2>&1
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "[+] Certificat installé avec succès !" -ForegroundColor Green
+
+        # Extraire le Subject CN du certificat
+        $CertInfo = certutil -dump $CertificatePath | Out-String
+        if ($CertInfo -match 'Subject:.*CN=([^,]+)') {
+            $SubjectCN = $matches[1]
+            Write-Host "[*] Subject CN : $SubjectCN" -ForegroundColor Cyan
+        }
+
+        # Vérifier la présence du certificat dans LocalMachine\My
+        Write-Host "`n[*] Vérification dans LocalMachine\My..." -ForegroundColor Cyan
+        $InstalledCert = Get-ChildItem Cert:\LocalMachine\My | Where-Object {
+            $_.Subject -like "*$SubjectCN*"
+        } | Select-Object -First 1
+
+        if ($InstalledCert) {
+            Write-Host "[+] Certificat trouvé dans LocalMachine\My" -ForegroundColor Green
+            Write-Host "    Thumbprint  : $($InstalledCert.Thumbprint)" -ForegroundColor Gray
+            Write-Host "    Subject     : $($InstalledCert.Subject)" -ForegroundColor Gray
+            Write-Host "    Issuer      : $($InstalledCert.Issuer)" -ForegroundColor Gray
+            Write-Host "    NotBefore   : $($InstalledCert.NotBefore)" -ForegroundColor Gray
+            Write-Host "    NotAfter    : $($InstalledCert.NotAfter)" -ForegroundColor Gray
+
+            # Vérifier les Enhanced Key Usages (EKU)
+            Write-Host "`n[*] Vérification des Enhanced Key Usages (EKU)..." -ForegroundColor Cyan
+
+            $ClientAuthOID = "1.3.6.1.5.5.7.3.2"  # Client Authentication
+            $ServerAuthOID = "1.3.6.1.5.5.7.3.1"  # Server Authentication
+
+            $EKUs = $InstalledCert.EnhancedKeyUsageList
+            $HasClientAuth = $EKUs | Where-Object { $_.ObjectId -eq $ClientAuthOID }
+            $HasServerAuth = $EKUs | Where-Object { $_.ObjectId -eq $ServerAuthOID }
+
+            if ($HasClientAuth) {
+                Write-Host "[+] Client Authentication (1.3.6.1.5.5.7.3.2) : ✓ PRÉSENT" -ForegroundColor Green
+                Write-Host "    → Certificat valide pour VPN Client" -ForegroundColor Gray
+            } else {
+                Write-Warning "⚠️  Client Authentication MANQUANT ! Le VPN peut ne pas fonctionner."
+            }
+
+            if ($HasServerAuth) {
+                Write-Host "[+] Server Authentication (1.3.6.1.5.5.7.3.1) : ✓ PRÉSENT" -ForegroundColor Green
+            }
+
+            # Vérifier la chaîne de certification
+            Write-Host "`n[*] Vérification de la chaîne de certification..." -ForegroundColor Cyan
+            $ChainStatus = $InstalledCert.Verify()
+
+            if ($ChainStatus) {
+                Write-Host "[+] Chaîne de certification valide ✓" -ForegroundColor Green
+            } else {
+                Write-Warning "⚠️  Chaîne de certification invalide ! Vérifier que les CA Root/Intermediate sont installées."
+                Write-Host "    Installer les certificats CA dans Cert:\LocalMachine\Root et Cert:\LocalMachine\CA" -ForegroundColor Yellow
+            }
+
+            # Résumé
+            Write-Host "`n[✓] Installation terminée avec succès !" -ForegroundColor Green
+            Write-Host "`n[*] Prochaines étapes :" -ForegroundColor Cyan
+            Write-Host "  1. Configurer le client VPN pour utiliser l'authentification par certificat" -ForegroundColor White
+            Write-Host "  2. Se connecter au VPN avec le certificat machine" -ForegroundColor White
+            Write-Host "  3. Rejoindre le domaine Active Directory (Add-Computer)" -ForegroundColor White
+            Write-Host "  4. Activer l'auto-enrollment via GPO pour les futurs renouvellements" -ForegroundColor White
+
+        } else {
+            Write-Error "❌ Certificat non trouvé dans LocalMachine\My après installation !"
+            Write-Host "Vérifier manuellement avec : Get-ChildItem Cert:\LocalMachine\My" -ForegroundColor Yellow
+        }
+
+    } else {
+        Write-Error "❌ Échec de l'installation du certificat"
+        Write-Host "Sortie de certreq :" -ForegroundColor Red
+        $certreqOutput | ForEach-Object { Write-Host $_ -ForegroundColor Red }
+
+        Write-Host "`n[!] Erreurs courantes :" -ForegroundColor Yellow
+        Write-Host "  - 'Keyset does not exist' : Le CSR n'a pas été généré sur CETTE machine" -ForegroundColor Gray
+        Write-Host "  - 'Cannot find object'    : Fichier .cer corrompu ou format invalide" -ForegroundColor Gray
+        Write-Host "  - 'Access denied'         : Exécuter en tant qu'Administrateur" -ForegroundColor Gray
+    }
+}
+```
+
+**Utilisation :**
+
+```powershell
+# Après avoir récupéré le certificat signé de la CA
+Install-BootstrapCertificate -CertificatePath "C:\Temp\WKS-LAPTOP-01-Bootstrap.cer"
+
+# Sortie attendue :
+# [*] Installation du certificat bootstrap...
+# [+] Certificat installé avec succès !
+# [*] Subject CN : WKS-LAPTOP-01.corp.mycorp.internal
+#
+# [*] Vérification dans LocalMachine\My...
+# [+] Certificat trouvé dans LocalMachine\My
+#     Thumbprint  : A1B2C3D4E5F6789012345678901234567890ABCD
+#     Subject     : CN=WKS-LAPTOP-01.corp.mycorp.internal, O=MyCorp, C=FR
+#     Issuer      : CN=MyCorp-CA, DC=corp, DC=mycorp, DC=internal
+#     NotBefore   : 2025-01-22 10:00:00
+#     NotAfter    : 2026-01-22 10:00:00
+#
+# [*] Vérification des Enhanced Key Usages (EKU)...
+# [+] Client Authentication (1.3.6.1.5.5.7.3.2) : ✓ PRÉSENT
+#     → Certificat valide pour VPN Client
+# [+] Server Authentication (1.3.6.1.5.5.7.3.1) : ✓ PRÉSENT
+#
+# [*] Vérification de la chaîne de certification...
+# [+] Chaîne de certification valide ✓
+#
+# [✓] Installation terminée avec succès !
+```
+
+---
+
+### Workflow Complet : Du CSR à la Connexion VPN
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   WORKFLOW BOOTSTRAP PKI                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  [ÉTAPE 1 : Génération CSR - Machine Offline]               │
+│  ───────────────────────────────────────────                │
+│  PS> New-BootstrapCSR -Hostname "WKS-01" `                  │
+│         -DomainFQDN "corp.mycorp.internal"                   │
+│                                                              │
+│  Output : WKS-01-Bootstrap.req (fichier CSR)                │
+│                                                              │
+│  [ÉTAPE 2 : Transfert CSR - USB/Email Sécurisé]             │
+│  ────────────────────────────────────────────                │
+│  Copier le fichier .req vers une machine avec accès CA      │
+│                                                              │
+│  [ÉTAPE 3 : Soumission CA - Machine avec Accès AD]          │
+│  ──────────────────────────────────────────────              │
+│  Option A : Web Enrollment                                   │
+│    → https://srv-ca-01.corp.mycorp.internal/certsrv         │
+│    → Advanced Request → Submit CSR                           │
+│                                                              │
+│  Option B : Ligne de commande                                │
+│    PS> certreq -submit -config "srv-ca-01\MyCorp-CA" `      │
+│           WKS-01-Bootstrap.req WKS-01-Bootstrap.cer          │
+│                                                              │
+│  [ÉTAPE 4 : Transfert Certificat - USB/Email Sécurisé]      │
+│  ───────────────────────────────────────────────             │
+│  Copier le fichier .cer vers la machine offline             │
+│                                                              │
+│  [ÉTAPE 5 : Installation - Machine Offline]                 │
+│  ────────────────────────────────────────────                │
+│  PS> Install-BootstrapCertificate `                          │
+│         -CertificatePath "WKS-01-Bootstrap.cer"              │
+│                                                              │
+│  [ÉTAPE 6 : Configuration VPN]                              │
+│  ──────────────────────────────                              │
+│  - Client VPN : Utiliser "Machine Certificate"              │
+│  - Sélectionner le certificat dans LocalMachine\My          │
+│  - Se connecter au VPN                                       │
+│                                                              │
+│  [ÉTAPE 7 : Jointure Domaine]                               │
+│  ─────────────────────────────                               │
+│  PS> Add-Computer -DomainName "corp.mycorp.internal" `      │
+│         -Credential (Get-Credential) -Restart                │
+│                                                              │
+│  [ÉTAPE 8 : Auto-Enrollment (Post-Jointure)]                │
+│  ────────────────────────────────────────────                │
+│  - GPO appliquée automatiquement                             │
+│  - Certificats futurs gérés via auto-enrollment             │
+│  - Le certificat bootstrap peut être révoqué après 30 jours │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Troubleshooting
+
+**Erreur : "Keyset does not exist" lors de certreq -accept**
+
+```powershell
+# Cause : Le CSR n'a pas été généré sur cette machine
+# Solution : Le CSR et l'installation doivent être sur la MÊME machine
+
+# Vérifier les requests en attente
+certutil -store request
+
+# Si la request n'existe pas : regénérer le CSR sur cette machine
+New-BootstrapCSR -Hostname "WKS-01" -DomainFQDN "corp.mycorp.internal"
+```
+
+**Le certificat est installé mais le VPN refuse la connexion**
+
+```powershell
+# Vérifier que l'EKU "Client Authentication" est présent
+$Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -like "*WKS-01*"
+$Cert.EnhancedKeyUsageList
+
+# Output attendu :
+# FriendlyName                            ObjectId
+# ------------                            --------
+# Client Authentication                   1.3.6.1.5.5.7.3.2
+
+# Si manquant : Le certificat a été émis sans le bon template
+# Regénérer le CSR avec le bon EKU dans le fichier .inf
+```
+
+**Erreur : "Cannot find certificate request" après certreq -new**
+
+```powershell
+# Cause : Le fichier .inf contient une erreur de syntaxe
+# Vérifier le fichier .inf
+
+Get-Content "C:\Temp\Bootstrap\WKS-01-Bootstrap.inf"
+
+# Erreurs courantes :
+# - Guillemets manquants dans Signature="$Windows NT$"
+# - Espaces dans les valeurs OID
+# - Encodage du fichier (doit être ASCII, pas UTF-8 BOM)
+
+# Regénérer le fichier avec Set-Content -Encoding ASCII
+```
+
+**Le FQDN du certificat ne correspond pas après la jointure domaine**
+
+```powershell
+# Problème : La machine a été jointe avec un nom différent
+# Exemple : CSR pour "WKS-LAPTOP-01.corp.mycorp.internal"
+#           Mais jointure avec "WKS-01.corp.mycorp.internal"
+
+# Solution 1 : Renommer la machine AVANT l'installation du certificat
+Rename-Computer -NewName "WKS-LAPTOP-01" -Force -Restart
+
+# Solution 2 : Révoquer le certificat et en générer un nouveau
+# (après la jointure domaine, utiliser l'auto-enrollment)
+```
+
+---
+
+### Checklist Bootstrap Certificate
+
+- [ ] Planifier le FQDN complet (ex: `WKS-LAPTOP-01.corp.mycorp.internal`)
+- [ ] Générer le CSR avec `New-BootstrapCSR` (ECDSA P-384)
+- [ ] Vérifier le CSR avec `certutil -dump WKS-01-Bootstrap.req`
+- [ ] Transférer le CSR vers une machine avec accès à la CA
+- [ ] Soumettre le CSR à la CA (Web Enrollment ou certreq -submit)
+- [ ] Télécharger le certificat signé (.cer)
+- [ ] Transférer le certificat vers la machine offline
+- [ ] Installer avec `Install-BootstrapCertificate`
+- [ ] Vérifier l'EKU "Client Authentication" (1.3.6.1.5.5.7.3.2)
+- [ ] Vérifier la chaîne de certification (Root + Intermediate CA installées)
+- [ ] Configurer le client VPN pour utiliser le certificat machine
+- [ ] Se connecter au VPN
+- [ ] Rejoindre le domaine Active Directory
+- [ ] Activer l'auto-enrollment via GPO pour les renouvellements futurs
+
+!!! success "Production Ready"
+    Avec ce workflow, vous pouvez provisionner des machines Windows dans des environnements Zero Trust sans aucun accès réseau initial. Le certificat bootstrap permet l'amorçage du cycle de confiance.
+
+---
+
 ## Event Viewer & Audit
 
 ### Get-WinEvent (Moderne et Rapide)
@@ -1548,4 +2149,11 @@ Get-WinEvent -LogName Security -MaxEvents 100
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625}  # Failed logons
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624}  # Success logons
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720}  # User created
+
+# === CERTIFICATS ===
+certreq -new request.inf request.req     # Générer CSR
+certreq -accept certificate.crt          # Installer Certificat
+Get-ChildItem Cert:\LocalMachine\My      # Lister Certs Machine
+certutil -dump certificate.cer           # Vérifier Certificat
+certutil -store request                  # Lister Requests Pending
 ```
