@@ -139,23 +139,22 @@ nav:
       - devops/git-sysops.md
       - devops/docs-as-code.md
       - devops/productivity-it-tools.md
-    - Conteneurs & Orchestration:
+    - Docker:
       - devops/docker-advanced.md
-      - Kubernetes:
-        - devops/kubernetes-survival.md
-        - devops/kubernetes-networking.md
-        - devops/kubernetes-cka.md
-        - devops/gitops-argocd.md
-    - Infrastructure as Code:
-      - Ansible:
-        - devops/ansible/fundamentals.md
-        - devops/ansible/playbooks.md
-        - devops/ansible/industrialization.md
-        - devops/ansible/advanced-patterns.md
-        - devops/ansible/cloud-integrations.md
-        - devops/ansible/testing-molecule.md
-      - Terraform:
-        - devops/terraform/fundamentals.md
+    - Kubernetes:
+      - devops/kubernetes-survival.md
+      - devops/kubernetes-networking.md
+      - devops/kubernetes-cka.md
+      - devops/gitops-argocd.md
+    - Ansible:
+      - devops/ansible/fundamentals.md
+      - devops/ansible/playbooks.md
+      - devops/ansible/industrialization.md
+      - devops/ansible/advanced-patterns.md
+      - devops/ansible/cloud-integrations.md
+      - devops/ansible/testing-molecule.md
+    - Terraform:
+      - devops/terraform/fundamentals.md
     - Architecture & Services:
       - devops/modern-networking.md
       - devops/database-ha.md
