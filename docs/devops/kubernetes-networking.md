@@ -47,7 +47,7 @@ flowchart TB
 
 ### Comparatif
 
-| Type | Accessibilité | Port | Use Case |
+| Type | Accessibilité | Port | Cas d'Usage |
 |------|---------------|------|----------|
 | **ClusterIP** | Interne uniquement | Service port | Communication inter-pods |
 | **NodePort** | Node IP + Port fixe | 30000-32767 | Dev, on-prem sans LB |

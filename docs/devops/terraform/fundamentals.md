@@ -79,7 +79,7 @@ flowchart LR
 provider "aws" {
   region = "eu-west-1"
 
-  # Best Practice : Ne jamais mettre les credentials en dur !
+  # Bonne Pratique : Ne jamais mettre les credentials en dur !
   # Utiliser AWS_ACCESS_KEY_ID et AWS_SECRET_ACCESS_KEY
 }
 

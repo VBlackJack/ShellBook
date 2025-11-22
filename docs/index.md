@@ -30,7 +30,7 @@
 
 | Action | Documentation |
 |--------|---------------|
-| **SSH Hardening** | [SSH Security Best Practices](linux/ssh-hardening.md) |
+| **SSH Hardening** | [Bonnes Pratiques de Sécurité SSH](linux/ssh-hardening.md) |
 | **Firewall Linux** | [UFW Configuration](linux/firewall-ufw.md) |
 | **Windows Security** | [Defender, BitLocker & Events](windows/windows-security.md) |
 | **Certificats TLS** | [Certificate Management](security/certificates.md) • [OpenSSL CLI](security/openssl-cli.md) |

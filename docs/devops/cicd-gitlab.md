@@ -160,7 +160,7 @@ build:
 
 **Stratégies de tagging :**
 
-| Tag | Usage |
+| Tag | Utilisation |
 |-----|-------|
 | `docker` / `kubernetes` | Type d'executor |
 | `linux` / `windows` | OS |
@@ -169,7 +169,7 @@ build:
 | `gpu` | Runner avec GPU (ML) |
 | `privileged` | Runner Docker avec privilèges (DinD) |
 
-!!! tip "Best Practice : Tags explicites"
+!!! tip "Bonne Pratique : Tags explicites"
     Toujours spécifier des tags pour éviter qu'un job parte sur n'importe quel runner :
 
     ```yaml

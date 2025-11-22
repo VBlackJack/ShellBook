@@ -213,7 +213,7 @@ jobs:
 
 ### Actions Standards Utilisées
 
-| Action | Usage |
+| Action | Utilisation |
 |--------|-------|
 | `actions/checkout@v4` | Clone le dépôt |
 | `actions/setup-node@v4` | Installer Node.js |

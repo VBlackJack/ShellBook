@@ -83,7 +83,7 @@ Passer de l'exécution de tâches simples à l'orchestration intelligente et opt
       register: metrics_check
 ```
 
-**Use Cases :**
+**Cas d'Usage :**
 - Calculer des valeurs basées sur l'inventory ou les facts
 - Construire des chaînes complexes (URLs, chemins)
 - Simplifier les templates Jinja2 lourds
@@ -181,7 +181,7 @@ Passer de l'exécution de tâches simples à l'orchestration intelligente et opt
 
 **Pourquoi `synchronize` > `copy` ?**
 
-| Module | Méthode | Performance | Use Case |
+| Module | Méthode | Performance | Cas d'Usage |
 |--------|---------|-------------|----------|
 | `copy` | Transfère tout via SSH | ❌ Lent pour gros fichiers | Fichiers uniques |
 | `synchronize` | Utilise rsync (delta) | ✅ Rapide (delta uniquement) | Dossiers, gros volumes |
@@ -694,7 +694,7 @@ time ansible-playbook benchmark.yml
 
 ### Modules Avancés
 
-| Module | Usage | Exemple |
+| Module | Utilisation | Exemple |
 |--------|-------|---------|
 | `register` | Capturer sortie | `register: result` |
 | `set_fact` | Créer variable | `set_fact: db_host="..."` |

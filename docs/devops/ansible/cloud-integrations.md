@@ -521,7 +521,7 @@ flowchart TB
 | **Initiation** | Contrôleur pousse | Serveur tire |
 | **Scaling** | Limité par le contrôleur | Linéaire (chaque serveur se gère) |
 | **Sécurité** | SSH sortant | Git pull (HTTPS/SSH) |
-| **Use Case** | Infra stable, orchestration | Auto-scaling, postes de travail |
+| **Cas d'Usage** | Infra stable, orchestration | Auto-scaling, postes de travail |
 
 ### Cas d'Usage : Ansible Pull
 
@@ -734,7 +734,7 @@ docker-compose up -d
 
 ### Alternatives Légères
 
-| Outil | Description | Use Case |
+| Outil | Description | Cas d'Usage |
 |-------|-------------|----------|
 | **Semaphore UI** | Interface Web open-source pour Ansible | Alternative légère à AWX |
 | **ARA** (Ansible Run Analysis) | Enregistre et visualise les exécutions | Logs et debugging |
