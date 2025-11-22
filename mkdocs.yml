@@ -95,6 +95,11 @@ nav:
         - linux/automation-cron.md
         - linux/data-processing-advanced.md
         - linux/scripting-standards.md
+      - RHEL & Securité:
+        - linux/rhel-security-selinux.md
+        - linux/rhel-networking.md
+        - linux/rhel-package-management.md
+        - devops/podman-containers.md
     - Infrastructure & Réseau:
       - Réseau & Sécurité:
         - linux/network-management.md
