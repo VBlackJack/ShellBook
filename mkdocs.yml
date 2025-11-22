@@ -74,6 +74,8 @@ nav:
       - linux/secure-file-exchange.md
   - Windows:
     - windows/index.md
+    - Cartes Mentales & Révision:
+      - windows/windows-mindmaps.md
     - windows/productivity.md
     - windows/powershell-foundations.md
     - windows/server-administration.md
