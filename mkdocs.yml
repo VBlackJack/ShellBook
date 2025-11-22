@@ -100,6 +100,7 @@ nav:
         - linux/rhel-networking.md
         - linux/rhel-package-management.md
         - linux/rhel-openscap-compliance.md
+        - linux/rhel-ops-audit.md
         - devops/podman-containers.md
     - Infrastructure & Réseau:
       - Réseau & Sécurité:
