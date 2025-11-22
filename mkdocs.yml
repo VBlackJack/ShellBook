@@ -41,6 +41,8 @@ nav:
     - linux/debugging.md
     - linux/bash-wizardry.md
     - linux/hardware.md
+    - Certification & Révision:
+      - linux/lpi-certification.md
     - Système & Démarrage:
       - linux/boot-and-services.md
       - linux/filesystem-and-storage.md
