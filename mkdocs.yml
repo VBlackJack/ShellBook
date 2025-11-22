@@ -93,18 +93,21 @@ nav:
     - Certification:
       - linux/lpi-certification.md
   - Windows:
-    - windows/index.md
+    - Accueil: windows/index.md
     - Cartes Mentales & Révision:
       - windows/windows-mindmaps.md
-    - Fondamentaux:
+    - Fondamentaux PowerShell & Outils:
       - windows/productivity.md
       - windows/powershell-foundations.md
       - windows/netsh-troubleshooting.md
-    - Administration:
+    - Active Directory & Identité:
+      - windows/active-directory.md
+    - Infrastructure & Maintenance:
       - windows/server-administration.md
       - windows/update-management.md
-      - windows/active-directory.md
+    - Sécurité & Hardening:
       - windows/windows-security.md
+    - Automatisation Hybride:
       - windows/ansible-windows.md
   - Fondamentaux & Architecture:
     - Architecture & Concepts:
