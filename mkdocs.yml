@@ -183,13 +183,17 @@ nav:
       - devops/observability-stack.md
       - devops/observability-advanced.md
   - 🎓 Formations:
-    - 🚀 Le Socle DevOps:
-      - Introduction: formations/devops-foundation/index.md
-      - Module 1 - Git: formations/devops-foundation/01-module.md
-    - 🛡️ Hardening Linux:
-      - Introduction: formations/linux-hardening/index.md
-    - 💠 Ansible Mastery:
-      - Introduction: formations/ansible-mastery/index.md
+    - ♾️ Pratiques DevOps:
+      - 🚀 Le Socle DevOps:
+        - Introduction: formations/devops-foundation/index.md
+        - Module 1 - Git: formations/devops-foundation/01-module.md
+        - Module 2 - Branches: formations/devops-foundation/02-module.md
+    - 🛡️ Sécurité & Conformité:
+      - 🔐 Hardening Linux:
+        - Introduction: formations/linux-hardening/index.md
+    - ⚙️ Automatisation:
+      - 💠 Ansible Mastery:
+        - Introduction: formations/ansible-mastery/index.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
