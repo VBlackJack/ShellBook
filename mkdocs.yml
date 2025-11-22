@@ -99,6 +99,7 @@ nav:
         - linux/rhel-security-selinux.md
         - linux/rhel-networking.md
         - linux/rhel-package-management.md
+        - linux/rhel-openscap-compliance.md
         - devops/podman-containers.md
     - Infrastructure & Réseau:
       - Réseau & Sécurité:
