@@ -16,24 +16,40 @@ Transition Bash → PowerShell : penser en objets, pas en texte.
 
 ### La Différence Fondamentale
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         BASH                                │
-│  Commande → Stream de TEXTE → Commande → Stream de TEXTE    │
-│                                                             │
-│  ls -l | grep "Dec" | awk '{print $9}'                      │
-│         ↓           ↓                                       │
-│      Texte       Parse du texte                             │
-└─────────────────────────────────────────────────────────────┘
+**BASH : Le flux de texte**
 
-┌────────────────────────────────────────────────────────────────┐
-│                      POWERSHELL                                │
-│  Cmdlet → Stream d'OBJETS → Cmdlet → Stream d'OBJETS           │
-│                                                                │
-│  Get-ChildItem | Where-Object { $_.LastWriteTime.Month -eq 12 }│
-│                ↓                    ↓                          │
-│            Objets .NET        Propriétés typées                │
-└────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    A[Commande] -->|Stream de<br/>TEXTE| B[Commande] -->|Stream de<br/>TEXTE| C[Commande]
+
+    subgraph Exemple
+        D["ls -l"] -->|Texte brut| E["grep 'Dec'"] -->|Parse texte| F["awk '{print $9}'"]
+    end
+
+    style A fill:#555,stroke:#333,color:#fff
+    style B fill:#555,stroke:#333,color:#fff
+    style C fill:#555,stroke:#333,color:#fff
+    style D fill:#6c757d,stroke:#495057,color:#fff
+    style E fill:#6c757d,stroke:#495057,color:#fff
+    style F fill:#6c757d,stroke:#495057,color:#fff
+```
+
+**POWERSHELL : Le flux d'objets**
+
+```mermaid
+flowchart LR
+    A[Cmdlet] -->|Stream<br/>d'OBJETS .NET| B[Cmdlet] -->|Stream<br/>d'OBJETS .NET| C[Cmdlet]
+
+    subgraph Exemple
+        D[Get-ChildItem] -->|Objets FileInfo| E[Where-Object] -->|Propriétés typées| F[Select-Object]
+    end
+
+    style A fill:#0078d4,stroke:#005a9e,color:#fff
+    style B fill:#0078d4,stroke:#005a9e,color:#fff
+    style C fill:#0078d4,stroke:#005a9e,color:#fff
+    style D fill:#2b88d8,stroke:#1a5f9e,color:#fff
+    style E fill:#2b88d8,stroke:#1a5f9e,color:#fff
+    style F fill:#2b88d8,stroke:#1a5f9e,color:#fff
 ```
 
 ### Exemple Frappant
