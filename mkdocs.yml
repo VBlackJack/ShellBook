@@ -103,6 +103,8 @@ nav:
       - devops/ansible/testing-molecule.md
     - Terraform:
       - devops/terraform/fundamentals.md
+    - Infrastructure & Network:
+      - devops/modern-networking.md
   - Security:
     - security/certificates.md
     - security/crypto-concepts.md
