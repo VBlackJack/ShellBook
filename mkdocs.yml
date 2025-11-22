@@ -205,6 +205,8 @@ nav:
         - Module 1 - Architecture: formations/katello/01-module.md
         - Module 2 - Gestion du Contenu: formations/katello/02-module.md
         - Module 3 - Gestion des Hôtes: formations/katello/03-module.md
+        - Module 4 - Patch Management: formations/katello/04-module.md
+        - Module 5 - TP Final: formations/katello/05-tp-final.md
     - ⚙️ Automatisation:
       - 💠 Ansible Mastery:
         - Introduction: formations/ansible-mastery/index.md
@@ -230,6 +232,9 @@ nav:
         - Introduction: formations/chocolatey/index.md
         - Module 1 - Client & CLI: formations/chocolatey/01-module.md
         - Module 2 - Packaging: formations/chocolatey/02-module.md
+        - Module 3 - Serveur Privé: formations/chocolatey/03-module.md
+        - Module 4 - Déploiement: formations/chocolatey/04-module.md
+        - Module 5 - TP Final: formations/chocolatey/05-tp-final.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
