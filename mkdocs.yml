@@ -8,9 +8,25 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   palette:
-    scheme: slate
-    primary: deep purple
-    accent: cyan
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Passer en mode sombre
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Passer en mode clair
+  font:
+    text: Roboto
+    code: JetBrains Mono
   features:
     - content.code.copy
     - content.action.edit
@@ -23,6 +39,8 @@ theme:
     - toc.follow
     - search.suggest
     - search.highlight
+  announcement:
+    content: 'Nouveau : Apprenez à contribuer avec le guide <a href="/ShellBook/devops/docs-as-code/">Docs-as-Code</a> ! 🚀'
 
 plugins:
   - search:
@@ -55,8 +73,8 @@ markdown_extensions:
       alternate_style: true
 
 nav:
-  - Accueil: index.md
-  - Linux:
+  - 🏠 Accueil: index.md
+  - 🐧 Linux:
     - Débuter & Productivité:
       - linux/demo.md
       - linux/productivity.md
@@ -92,7 +110,7 @@ nav:
       - linux/archives-compression.md
     - Certification:
       - linux/lpi-certification.md
-  - Windows:
+  - 🪟 Windows:
     - Accueil: windows/index.md
     - Cartes Mentales & Révision:
       - windows/windows-mindmaps.md
@@ -109,14 +127,14 @@ nav:
       - windows/windows-security.md
     - Automatisation Hybride:
       - windows/ansible-windows.md
-  - Fondamentaux & Architecture:
+  - 🏗️ Fondamentaux & Architecture:
     - Architecture & Concepts:
       - concepts/devops-pillars.md
       - concepts/web-flow.md
       - concepts/databases.md
     - Réseau:
       - network/fundamentals.md
-  - DevOps:
+  - ♾️ DevOps:
     - Méthodologie & Outils:
       - devops/git-sysops.md
       - devops/docs-as-code.md
@@ -146,7 +164,7 @@ nav:
       - devops/cicd-github-actions.md
       - devops/observability-stack.md
       - devops/observability-advanced.md
-  - Sécurité:
+  - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
       - security/certificates.md
@@ -156,3 +174,9 @@ nav:
       - security/ctf-guide.md
       - security/exegol.md
       - security/essential-tools.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/VBlackJack/ShellBook
+      name: ShellBook sur GitHub
