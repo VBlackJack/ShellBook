@@ -235,6 +235,9 @@ nav:
         - Module 3 - Serveur Privé: formations/chocolatey/03-module.md
         - Module 4 - Déploiement: formations/chocolatey/04-module.md
         - Module 5 - TP Final: formations/chocolatey/05-tp-final.md
+      - 💿 NTLite Mastery:
+        - Introduction: formations/ntlite/index.md
+        - Module 1 - Bases: formations/ntlite/01-module.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
