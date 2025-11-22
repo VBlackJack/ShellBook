@@ -111,6 +111,8 @@ nav:
     - network/fundamentals.md
   - DevOps:
     - devops/git-sysops.md
+    - Guide de Contribution (Docs-as-Code):
+      - devops/docs-as-code.md
     - devops/docker-advanced.md
     - devops/productivity-it-tools.md
     - CI/CD & Observabilité:
