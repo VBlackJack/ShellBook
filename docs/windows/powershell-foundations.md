@@ -18,22 +18,22 @@ Transition Bash → PowerShell : penser en objets, pas en texte.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                         BASH                                 │
+│                         BASH                                │
 │  Commande → Stream de TEXTE → Commande → Stream de TEXTE    │
-│                                                              │
+│                                                             │
 │  ls -l | grep "Dec" | awk '{print $9}'                      │
 │         ↓           ↓                                       │
 │      Texte       Parse du texte                             │
 └─────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────┐
-│                      POWERSHELL                              │
-│  Cmdlet → Stream d'OBJETS → Cmdlet → Stream d'OBJETS        │
-│                                                              │
-│  Get-ChildItem | Where-Object { $_.LastWriteTime.Month -eq 12 }
-│                ↓                    ↓                       │
-│            Objets .NET        Propriétés typées             │
-└─────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                      POWERSHELL                                │
+│  Cmdlet → Stream d'OBJETS → Cmdlet → Stream d'OBJETS           │
+│                                                                │
+│  Get-ChildItem | Where-Object { $_.LastWriteTime.Month -eq 12 }│
+│                ↓                    ↓                          │
+│            Objets .NET        Propriétés typées                │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ### Exemple Frappant
