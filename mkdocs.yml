@@ -75,58 +75,64 @@ markdown_extensions:
 nav:
   - 🏠 Accueil: index.md
   - 🐧 Linux:
-    - Débuter & Productivité:
-      - linux/demo.md
-      - linux/productivity.md
-      - linux/modern-tools.md
-      - linux/bash-wizardry.md
-      - linux/text-processing.md
-    - Système & Boot:
-      - linux/boot-and-services.md
-      - linux/filesystem-and-storage.md
-      - linux/hardware.md
-    - Administration:
-      - linux/users-and-permissions.md
-      - linux/package-management.md
-      - linux/automation-cron.md
-      - linux/data-processing-advanced.md
-      - linux/scripting-standards.md
-    - Réseau & Sécurité:
-      - linux/network-management.md
-      - linux/ssh-hardening.md
-      - linux/firewall-ufw.md
-      - linux/vpn-wireguard.md
-    - Services & Bases de Données:
-      - linux/web-servers.md
-      - linux/database-admin.md
-      - linux/ldap-389ds.md
-      - linux/secure-file-exchange.md
-      - linux/virtualization-kvm.md
-    - Dépannage:
-      - linux/debugging.md
-      - linux/performance-analysis.md
-      - linux/logs-management.md
-      - linux/backup-transfer.md
-      - linux/archives-compression.md
-    - Certification:
-      - linux/lpi-certification.md
+    - Bases & Certification:
+      - Débuter & Productivité:
+        - linux/demo.md
+        - linux/productivity.md
+        - linux/modern-tools.md
+        - linux/bash-wizardry.md
+        - linux/text-processing.md
+      - Certification:
+        - linux/lpi-certification.md
+    - Système & Administration:
+      - Système & Boot:
+        - linux/boot-and-services.md
+        - linux/filesystem-and-storage.md
+        - linux/hardware.md
+      - Administration:
+        - linux/users-and-permissions.md
+        - linux/package-management.md
+        - linux/automation-cron.md
+        - linux/data-processing-advanced.md
+        - linux/scripting-standards.md
+    - Infrastructure & Réseau:
+      - Réseau & Sécurité:
+        - linux/network-management.md
+        - linux/ssh-hardening.md
+        - linux/firewall-ufw.md
+        - linux/vpn-wireguard.md
+      - Services & Bases de Données:
+        - linux/web-servers.md
+        - linux/database-admin.md
+        - linux/ldap-389ds.md
+        - linux/secure-file-exchange.md
+        - linux/virtualization-kvm.md
+    - Opérations & Dépannage:
+      - Dépannage:
+        - linux/debugging.md
+        - linux/performance-analysis.md
+        - linux/logs-management.md
+        - linux/backup-transfer.md
+        - linux/archives-compression.md
   - 🪟 Windows:
-    - Accueil: windows/index.md
-    - Cartes Mentales & Révision:
-      - windows/windows-mindmaps.md
-    - Fondamentaux PowerShell & Outils:
-      - windows/productivity.md
-      - windows/powershell-foundations.md
-      - windows/netsh-troubleshooting.md
-    - Active Directory & Identité:
-      - windows/active-directory.md
-    - Infrastructure & Maintenance:
-      - windows/server-administration.md
-      - windows/update-management.md
-    - Sécurité & Hardening:
-      - windows/windows-security.md
-    - Automatisation Hybride:
-      - windows/ansible-windows.md
+    - Essentiels & Outils:
+      - Accueil: windows/index.md
+      - Cartes Mentales: windows/windows-mindmaps.md
+      - Fondamentaux PowerShell & Outils:
+        - windows/productivity.md
+        - windows/powershell-foundations.md
+        - windows/netsh-troubleshooting.md
+    - Administration Serveur:
+      - Active Directory & Identité:
+        - windows/active-directory.md
+      - Infrastructure & Maintenance:
+        - windows/server-administration.md
+        - windows/update-management.md
+      - Automatisation Hybride:
+        - windows/ansible-windows.md
+    - Sécurité:
+      - Sécurité & Hardening:
+        - windows/windows-security.md
   - 🏗️ Fondamentaux & Architecture:
     - Architecture & Concepts:
       - concepts/devops-pillars.md
@@ -139,22 +145,24 @@ nav:
       - devops/git-sysops.md
       - devops/docs-as-code.md
       - devops/productivity-it-tools.md
-    - Docker:
-      - devops/docker-advanced.md
-    - Kubernetes:
-      - devops/kubernetes-survival.md
-      - devops/kubernetes-networking.md
-      - devops/kubernetes-cka.md
-      - devops/gitops-argocd.md
-    - Ansible:
-      - devops/ansible/fundamentals.md
-      - devops/ansible/playbooks.md
-      - devops/ansible/industrialization.md
-      - devops/ansible/advanced-patterns.md
-      - devops/ansible/cloud-integrations.md
-      - devops/ansible/testing-molecule.md
-    - Terraform:
-      - devops/terraform/fundamentals.md
+    - Conteneurs & Orchestration:
+      - Docker:
+        - devops/docker-advanced.md
+      - Kubernetes:
+        - devops/kubernetes-survival.md
+        - devops/kubernetes-networking.md
+        - devops/kubernetes-cka.md
+        - devops/gitops-argocd.md
+    - Infrastructure as Code:
+      - Ansible:
+        - devops/ansible/fundamentals.md
+        - devops/ansible/playbooks.md
+        - devops/ansible/industrialization.md
+        - devops/ansible/advanced-patterns.md
+        - devops/ansible/cloud-integrations.md
+        - devops/ansible/testing-molecule.md
+      - Terraform:
+        - devops/terraform/fundamentals.md
     - Architecture & Services:
       - devops/modern-networking.md
       - devops/database-ha.md
