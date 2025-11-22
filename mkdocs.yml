@@ -194,9 +194,28 @@ nav:
     - 🛡️ Sécurité & Conformité:
       - 🔐 Hardening Linux:
         - Introduction: formations/linux-hardening/index.md
+        - Module 1 - SSH: formations/linux-hardening/01-module.md
+        - Module 2 - Users: formations/linux-hardening/02-module.md
+        - Module 3 - Firewall: formations/linux-hardening/03-module.md
+        - Module 4 - Audit: formations/linux-hardening/04-module.md
+        - Module 5 - TP Final: formations/linux-hardening/05-tp-final.md
     - ⚙️ Automatisation:
       - 💠 Ansible Mastery:
         - Introduction: formations/ansible-mastery/index.md
+        - Module 1 - Architecture: formations/ansible-mastery/01-module.md
+        - Module 2 - Playbooks: formations/ansible-mastery/02-module.md
+        - Module 3 - Roles: formations/ansible-mastery/03-module.md
+        - Module 4 - Vault: formations/ansible-mastery/04-module.md
+    - 🪟 Écosystème Microsoft:
+      - 🏰 Windows Server Mastery:
+        - Introduction: formations/windows-server/index.md
+        - Module 1 - Modern Admin: formations/windows-server/01-module.md
+        - Module 2 - Active Directory: formations/windows-server/02-module.md
+        - Module 3 - Sécurité: formations/windows-server/03-module.md
+        - Module 4 - TP Final: formations/windows-server/04-tp-final.md
+      - ♻️ Windows Patch Management:
+        - Introduction: formations/windows-patching/index.md
+        - Module 1 - Architecture: formations/windows-patching/01-module.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
