@@ -159,6 +159,10 @@ nav:
         - devops/kubernetes-survival.md
         - devops/kubernetes-networking.md
         - devops/kubernetes-cka.md
+        - Advanced:
+          - devops/kubernetes-helm.md
+          - devops/kubernetes-kustomize.md
+          - devops/kubernetes-operators.md
         - devops/gitops-argocd.md
     - Infrastructure as Code:
       - Ansible:
