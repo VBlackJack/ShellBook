@@ -439,7 +439,7 @@ curl -I https://google.com
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # Debian

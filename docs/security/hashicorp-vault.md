@@ -1008,7 +1008,7 @@ deploy_production:
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Commandes Essentielles
 
@@ -1082,7 +1082,7 @@ vault operator step-down              # Forcer l'élection d'un nouveau leader
 | **Cloud** | AWS IAM, Azure MSI | `vault auth enable aws` |
 | **Terraform** | Token, AppRole | `vault token create` |
 
-### Troubleshooting
+### Dépannage
 
 | Problème | Diagnostic | Solution |
 |----------|------------|----------|

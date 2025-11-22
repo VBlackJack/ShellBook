@@ -921,7 +921,7 @@ Throughput agrégé  : 12GB/s → 16GB/s (+33%)
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```powershell
 # === SERVER CORE ===

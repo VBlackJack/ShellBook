@@ -257,7 +257,7 @@ DPT=22 WINDOW=1024 RES=0x00 SYN URGP=0
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # Installation

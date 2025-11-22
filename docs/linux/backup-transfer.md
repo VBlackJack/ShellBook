@@ -293,7 +293,7 @@ log "Backup completed successfully"
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === RSYNC ===

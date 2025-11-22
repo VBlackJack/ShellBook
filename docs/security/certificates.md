@@ -493,7 +493,7 @@ Register-ScheduledTask -TaskName "CRL-Monitoring" `
 
 ---
 
-### Troubleshooting
+### Dépannage
 
 **Problème 1 : Clients n'utilisent pas le miroir CRL**
 

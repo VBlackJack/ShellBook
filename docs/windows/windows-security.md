@@ -1437,7 +1437,7 @@ Install-BootstrapCertificate -CertificatePath "C:\Temp\WKS-LAPTOP-01-Bootstrap.c
 
 ---
 
-### Troubleshooting
+### Dépannage
 
 **Erreur : "Keyset does not exist" lors de certreq -accept**
 
@@ -2124,7 +2124,7 @@ Write-Host "[!] REDÉMARRAGE REQUIS pour appliquer tous les changements" -Foregr
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```powershell
 # === FIREWALL ===

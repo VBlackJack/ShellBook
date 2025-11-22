@@ -487,7 +487,7 @@ sudo visudo -f /etc/sudoers.d/deploy
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # Utilisateurs

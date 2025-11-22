@@ -746,7 +746,7 @@ ansible windows -i inventory/windows_hosts.yml \
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Comparaison Linux vs Windows
 

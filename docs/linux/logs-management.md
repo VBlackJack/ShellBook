@@ -308,7 +308,7 @@ sudo journalctl --vacuum-size=500M
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === FICHIERS CLÉS ===

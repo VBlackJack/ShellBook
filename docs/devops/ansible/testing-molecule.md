@@ -822,7 +822,7 @@ root@instance:/# curl http://localhost
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Cycle de Vie Molecule
 

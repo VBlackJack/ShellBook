@@ -598,7 +598,7 @@ Channel                : 36
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Commandes Essentielles
 

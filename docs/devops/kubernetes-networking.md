@@ -402,7 +402,7 @@ kubectl get svc -n kube-system kube-dns
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === SERVICES ===

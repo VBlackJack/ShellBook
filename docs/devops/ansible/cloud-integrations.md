@@ -769,7 +769,7 @@ ara-manage runserver
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Commandes Inventaires Dynamiques
 

@@ -1009,7 +1009,7 @@ test:
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Variables Prédéfinies Utiles
 

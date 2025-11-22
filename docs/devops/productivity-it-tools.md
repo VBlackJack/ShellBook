@@ -749,7 +749,7 @@ Set-Alias tools ~\Documents\PowerShell\Scripts\tools.ps1
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Installation Rapide
 
@@ -817,7 +817,7 @@ docker stats it-tools
 | **Encodage** | Base64 Encoder | `base64` |
 | **Encodage** | URL Encoder | `url` |
 
-### Troubleshooting
+### Dépannage
 
 | Problème | Solution |
 |----------|----------|

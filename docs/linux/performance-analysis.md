@@ -283,7 +283,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === LOAD ===

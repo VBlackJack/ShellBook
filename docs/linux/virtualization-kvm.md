@@ -379,7 +379,7 @@ virsh vol-create-as default newdisk.qcow2 20G --format qcow2
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === INSTALLATION ===

@@ -645,7 +645,7 @@ journalctl -u detect-file -f
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === SERVICES ===

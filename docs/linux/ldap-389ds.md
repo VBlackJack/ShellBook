@@ -634,7 +634,7 @@ sudo dsconf mycorp repl-agmt status --suffix "dc=mycorp,dc=internal" to-ldap02
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === INSTALLATION ===
@@ -740,7 +740,7 @@ ssh jdupont@localhost
 
 ---
 
-## Troubleshooting
+## Dépannage
 
 ### Problème : "Can't contact LDAP server (-1)"
 

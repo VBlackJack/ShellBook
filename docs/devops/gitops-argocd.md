@@ -1063,7 +1063,7 @@ kubectl get deployment nginx-custom
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### CLI ArgoCD
 

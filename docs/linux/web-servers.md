@@ -307,7 +307,7 @@ sudo certbot certificates
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === NGINX ===

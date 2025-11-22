@@ -1135,7 +1135,7 @@ pgbackrest --stanza=prod-db --delta restore
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Comparaison PostgreSQL vs MariaDB HA
 

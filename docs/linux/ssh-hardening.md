@@ -235,7 +235,7 @@ sudo systemctl restart sshd
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # SSH Hardening

@@ -290,7 +290,7 @@ ls -la /etc/cron.{hourly,daily,weekly,monthly}/
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === CRON ===

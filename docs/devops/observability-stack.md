@@ -570,7 +570,7 @@ docker-compose up -d
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === PROMETHEUS ===
@@ -618,7 +618,7 @@ curl http://localhost:8080/metrics | grep container_cpu
 
 ---
 
-## Troubleshooting
+## Dépannage
 
 ### Prometheus : Targets Down
 

@@ -345,7 +345,7 @@ Invoke-Command -ComputerName Server01 -ScriptBlock { Get-Process }
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```powershell
 # === DÉCOUVERTE ===
@@ -746,7 +746,7 @@ _continue_ = "ipaddress=10.0.1.101&"
 
 ---
 
-### Troubleshooting
+### Dépannage
 
 **Erreur : "The request contains no certificate template information"**
 

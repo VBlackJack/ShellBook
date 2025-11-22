@@ -1034,7 +1034,7 @@ consul intention list
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Traefik
 

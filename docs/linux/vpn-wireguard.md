@@ -300,7 +300,7 @@ qrencode -t ansiutf8 < /etc/wireguard/clients/client1.conf
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === INSTALLATION ===

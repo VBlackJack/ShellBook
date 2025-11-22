@@ -281,7 +281,7 @@ du -sh */ 2>/dev/null | sort -rh | head -10
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === SED ===

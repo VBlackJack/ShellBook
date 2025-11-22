@@ -991,7 +991,7 @@ resource "aws_security_group" "web" {
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Commandes Essentielles
 

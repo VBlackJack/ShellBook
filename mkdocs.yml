@@ -33,7 +33,7 @@ markdown_extensions:
       alternate_style: true
 
 nav:
-  - Home: index.md
+  - Accueil: index.md
   - Linux:
     - linux/demo.md
     - linux/productivity.md
@@ -41,7 +41,7 @@ nav:
     - linux/debugging.md
     - linux/bash-wizardry.md
     - linux/hardware.md
-    - Système & Boot:
+    - Système & Démarrage:
       - linux/boot-and-services.md
       - linux/filesystem-and-storage.md
     - Administration Système:
@@ -56,7 +56,7 @@ nav:
       - linux/text-processing.md
       - linux/data-processing-advanced.md
       - linux/scripting-standards.md
-    - Monitoring & Performance:
+    - Supervision & Performance:
       - linux/logs-management.md
       - linux/performance-analysis.md
     - Sauvegarde & Transfert:
@@ -80,13 +80,13 @@ nav:
     - windows/windows-security.md
     - windows/ansible-windows.md
     - windows/netsh-troubleshooting.md
-  - Network:
+  - Réseau:
     - network/fundamentals.md
   - DevOps:
     - devops/git-sysops.md
     - devops/docker-advanced.md
     - devops/productivity-it-tools.md
-    - CI/CD & Obs:
+    - CI/CD & Observabilité:
       - devops/cicd-github-actions.md
       - devops/cicd-gitlab.md
       - devops/observability-stack.md
@@ -105,10 +105,10 @@ nav:
       - devops/ansible/testing-molecule.md
     - Terraform:
       - devops/terraform/fundamentals.md
-    - Infrastructure & Network:
+    - Infrastructure & Réseau:
       - devops/modern-networking.md
       - devops/database-ha.md
-  - Security:
+  - Sécurité:
     - security/certificates.md
     - security/crypto-concepts.md
     - security/openssl-cli.md
@@ -116,7 +116,7 @@ nav:
     - security/ctf-guide.md
     - security/essential-tools.md
     - security/hashicorp-vault.md
-  - Concepts:
+  - Concepts Clés:
     - concepts/web-flow.md
     - concepts/databases.md
     - concepts/devops-pillars.md

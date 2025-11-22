@@ -961,7 +961,7 @@ Get-PatchingStatus -Servers $AllServers | Format-Table -AutoSize
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```powershell
 # === PSWINDOWSUPDATE ===

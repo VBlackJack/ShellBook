@@ -763,7 +763,7 @@ Get-GPInheritance -Target "OU=Workstations,DC=users,DC=corp,DC=internal" |
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```powershell
 # === MODULE ===

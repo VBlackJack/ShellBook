@@ -386,7 +386,7 @@ echo "Backup completed: $DATE"
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === MYSQL/MARIADB ===

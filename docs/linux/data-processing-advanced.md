@@ -817,7 +817,7 @@ END {
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Awk : Opérateurs Essentiels
 

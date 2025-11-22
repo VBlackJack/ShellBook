@@ -368,7 +368,7 @@ kubectl get pod mypod -o yaml | grep -A20 "status:"
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === CONTEXTE ===

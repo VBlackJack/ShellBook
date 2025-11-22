@@ -403,7 +403,7 @@ sudo apt install -t bookworm-backports nginx
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # Mise à jour

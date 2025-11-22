@@ -233,7 +233,7 @@ unzip -t data.zip
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 # === TAR ===

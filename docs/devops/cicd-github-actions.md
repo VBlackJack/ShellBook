@@ -385,7 +385,7 @@ jobs:
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```yaml
 # === WORKFLOW DE BASE ===

@@ -318,7 +318,7 @@ trap 'rm -f "$temp_file"' EXIT
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ```bash
 #!/usr/bin/env bash

@@ -690,7 +690,7 @@ time ansible-playbook benchmark.yml
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Modules Avancés
 

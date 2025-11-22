@@ -1093,7 +1093,7 @@ avg_over_time(probe_success{job="blackbox-http"}[5m]) * 100
 
 ---
 
-## Quick Reference
+## Référence Rapide
 
 ### Ports par Défaut
 
