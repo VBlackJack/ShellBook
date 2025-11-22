@@ -106,8 +106,13 @@ nav:
       - windows/active-directory.md
       - windows/windows-security.md
       - windows/ansible-windows.md
-  - Réseau:
-    - network/fundamentals.md
+  - Fondamentaux & Architecture:
+    - Architecture & Concepts:
+      - concepts/devops-pillars.md
+      - concepts/web-flow.md
+      - concepts/databases.md
+    - Réseau:
+      - network/fundamentals.md
   - DevOps:
     - Méthodologie & Outils:
       - devops/git-sysops.md
@@ -130,24 +135,21 @@ nav:
         - devops/ansible/testing-molecule.md
       - Terraform:
         - devops/terraform/fundamentals.md
-      - Base de Données HA:
-        - devops/database-ha.md
+    - Architecture & Services:
+      - devops/modern-networking.md
+      - devops/database-ha.md
     - CI/CD & Observabilité:
       - devops/cicd-gitlab.md
       - devops/cicd-github-actions.md
       - devops/observability-stack.md
       - devops/observability-advanced.md
-    - Réseau Moderne:
-      - devops/modern-networking.md
   - Sécurité:
-    - security/certificates.md
-    - security/crypto-concepts.md
-    - security/openssl-cli.md
-    - security/exegol.md
-    - security/ctf-guide.md
-    - security/essential-tools.md
-    - security/hashicorp-vault.md
-  - Concepts Clés:
-    - concepts/web-flow.md
-    - concepts/databases.md
-    - concepts/devops-pillars.md
+    - Cryptographie & PKI:
+      - security/crypto-concepts.md
+      - security/certificates.md
+      - security/openssl-cli.md
+      - security/hashicorp-vault.md
+    - Red Team & Audit:
+      - security/ctf-guide.md
+      - security/exegol.md
+      - security/essential-tools.md
