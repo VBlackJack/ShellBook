@@ -1,6 +1,11 @@
-# Git pour SysAdmins
+---
+tags:
+  - git
+  - ops
+  - versioning
+---
 
-`#git` `#ops` `#versioning`
+# Git pour SysAdmins
 
 Pourquoi chaque SysAdmin a besoin de Git, même si vous n'écrivez jamais de "vrai" code.
 

@@ -1,6 +1,12 @@
-# Parcours Certification LPI (Cartes Mentales)
+---
+tags:
+  - lpi
+  - certification
+  - linux-foundation
+  - sysadmin
+---
 
-`#lpi` `#certification` `#linux-foundation` `#sysadmin`
+# Parcours Certification LPI (Cartes Mentales)
 
 Cartes mentales visuelles pour réviser les concepts clés des examens LPIC-1 et LPIC-2.
 

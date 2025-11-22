@@ -1,6 +1,12 @@
-# Nginx & Web Hosting
+---
+tags:
+  - nginx
+  - reverse-proxy
+  - https
+  - certbot
+---
 
-`#nginx` `#reverse-proxy` `#https` `#certbot`
+# Nginx & Web Hosting
 
 Configuration de serveurs web et reverse proxy sous Linux.
 

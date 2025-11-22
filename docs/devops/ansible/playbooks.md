@@ -1,6 +1,11 @@
-# Maîtriser les Playbooks
+---
+tags:
+  - yaml
+  - automation
+  - modules
+---
 
-`#yaml` `#automation` `#modules`
+# Maîtriser les Playbooks
 
 Des commandes ad-hoc à l'automatisation répétable.
 

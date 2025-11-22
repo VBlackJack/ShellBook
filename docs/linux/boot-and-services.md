@@ -1,6 +1,13 @@
-# Processus de Boot & Systemd
+---
+tags:
+  - boot
+  - systemd
+  - grub
+  - troubleshooting
+  - systemd-analyze
+---
 
-`#boot` `#systemd` `#grub` `#troubleshooting` `#systemd-analyze`
+# Processus de Boot & Systemd
 
 Référence complète pour la séquence de boot Linux et la gestion des services.
 

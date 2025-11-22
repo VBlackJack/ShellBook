@@ -1,6 +1,13 @@
-# IT-Tools : Le Couteau Suisse DevOps
+---
+tags:
+  - productivity
+  - docker
+  - tools
+  - self-hosted
+  - security
+---
 
-`#productivity` `#docker` `#tools` `#self-hosted` `#security`
+# IT-Tools : Le Couteau Suisse DevOps
 
 Une suite d'outils web complète, auto-hébergée pour ne plus jamais coller de données sensibles sur des sites publics.
 

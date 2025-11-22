@@ -1,6 +1,12 @@
-# Fondamentaux d'Ansible
+---
+tags:
+  - ansible
+  - iac
+  - python
+  - ssh
+---
 
-`#ansible` `#iac` `#python` `#ssh`
+# Fondamentaux d'Ansible
 
 Infrastructure as Code sans agents.
 

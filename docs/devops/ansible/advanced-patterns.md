@@ -1,6 +1,13 @@
-# Ansible Advanced Patterns & Optimization
+---
+tags:
+  - ansible
+  - performance
+  - logic
+  - strategies
+  - jinja2
+---
 
-`#ansible` `#performance` `#logic` `#strategies` `#jinja2`
+# Ansible Advanced Patterns & Optimization
 
 Passer de l'exécution de tâches simples à l'orchestration intelligente et optimisée.
 

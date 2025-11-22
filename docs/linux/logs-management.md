@@ -1,6 +1,12 @@
-# Logs Rotation & Management
+---
+tags:
+  - logrotate
+  - rsyslog
+  - var-log
+  - troubleshooting
+---
 
-`#logrotate` `#rsyslog` `#var-log` `#troubleshooting`
+# Logs Rotation & Management
 
 Gestion et rotation des logs système sous Linux.
 

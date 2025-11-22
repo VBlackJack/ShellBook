@@ -1,6 +1,12 @@
-# Exegol : Environnement de Hacking basé sur Docker
+---
+tags:
+  - pentest
+  - docker
+  - redteam
+  - kali-killer
+---
 
-`#pentest` `#docker` `#redteam` `#kali-killer`
+# Exegol : Environnement de Hacking basé sur Docker
 
 Une alternative moderne basée sur Docker à Kali Linux pour la sécurité offensive.
 

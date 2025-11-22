@@ -1,6 +1,12 @@
-# Les 7 Types de Bases de Données
+---
+tags:
+  - sql
+  - nosql
+  - architecture
+  - redis
+---
 
-`#sql` `#nosql` `#architecture` `#redis`
+# Les 7 Types de Bases de Données
 
 Un guide pratique pour choisir la bonne base de données selon votre cas d'usage.
 

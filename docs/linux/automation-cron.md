@@ -1,6 +1,12 @@
-# Cron & Systemd Timers
+---
+tags:
+  - cron
+  - systemd
+  - automation
+  - scheduling
+---
 
-`#cron` `#systemd` `#automation` `#scheduling`
+# Cron & Systemd Timers
 
 Planification de tâches sous Linux : méthode classique et moderne.
 

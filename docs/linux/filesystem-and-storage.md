@@ -1,6 +1,13 @@
-# Storage & Filesystem Hierarchy
+---
+tags:
+  - fhs
+  - lvm
+  - disk
+  - partitioning
+  - inodes
+---
 
-`#fhs` `#lvm` `#disk` `#partitioning` `#inodes`
+# Storage & Filesystem Hierarchy
 
 Organisation des fichiers et gestion avancée du stockage.
 

@@ -1,6 +1,12 @@
-# Productivité Windows & PowerToys
+---
+tags:
+  - windows
+  - wsl
+  - powertoys
+  - workflow
+---
 
-`#windows` `#wsl` `#powertoys` `#workflow`
+# Productivité Windows & PowerToys
 
 Transformez Windows en poste de travail pour utilisateurs avancés.
 

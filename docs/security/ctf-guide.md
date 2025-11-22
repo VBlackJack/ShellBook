@@ -1,6 +1,12 @@
-# Introduction aux CTF (Capture The Flag)
+---
+tags:
+  - ctf
+  - pwn
+  - osint
+  - hardware
+---
 
-`#ctf` `#pwn` `#osint` `#hardware`
+# Introduction aux CTF (Capture The Flag)
 
 Votre guide de survie pour les compétitions de hacking légal.
 

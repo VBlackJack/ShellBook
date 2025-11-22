@@ -1,6 +1,12 @@
-# Cartes Mentales Windows Server
+---
+tags:
+  - windows-server
+  - active-directory
+  - powershell
+  - gpo
+---
 
-`#windows-server` `#active-directory` `#powershell` `#gpo`
+# Cartes Mentales Windows Server
 
 Cartes mentales visuelles pour maîtriser les concepts clés de l'administration Windows Server.
 

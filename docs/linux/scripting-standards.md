@@ -1,6 +1,12 @@
-# Robust Bash Scripting
+---
+tags:
+  - bash
+  - best-practices
+  - error-handling
+  - boilerplate
+---
 
-`#bash` `#best-practices` `#error-handling` `#boilerplate`
+# Robust Bash Scripting
 
 Écrire des scripts Bash robustes et maintenables.
 

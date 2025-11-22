@@ -1,6 +1,13 @@
-# Load Average & Performance Analysis
+---
+tags:
+  - load-average
+  - ram
+  - iostat
+  - vmstat
+  - sysstat
+---
 
-`#load-average` `#ram` `#iostat` `#vmstat` `#sysstat`
+# Load Average & Performance Analysis
 
 Diagnostic et analyse des performances système Linux.
 

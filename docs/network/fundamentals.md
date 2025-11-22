@@ -1,6 +1,11 @@
-# Kit de Survie Réseau
+---
+tags:
+  - cidr
+  - tcp-ip
+  - load-balancing
+---
 
-`#cidr` `#tcp-ip` `#load-balancing`
+# Kit de Survie Réseau
 
 Concepts réseau essentiels que tout DevOps et SysAdmin doit connaître.
 

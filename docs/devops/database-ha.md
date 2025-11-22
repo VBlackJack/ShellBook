@@ -1,6 +1,14 @@
-# Database High Availability: Patroni & Galera
+---
+tags:
+  - postgresql
+  - mariadb
+  - patroni
+  - galera
+  - ha
+  - pitr
+---
 
-`#postgresql` `#mariadb` `#patroni` `#galera` `#ha` `#pitr`
+# Database High Availability: Patroni & Galera
 
 Transformer la couche de données en service résilient. Failover automatique et zéro perte de données.
 

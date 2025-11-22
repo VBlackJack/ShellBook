@@ -1,6 +1,12 @@
-# WireGuard VPN
+---
+tags:
+  - vpn
+  - wireguard
+  - security
+  - network
+---
 
-`#vpn` `#wireguard` `#security` `#network`
+# WireGuard VPN
 
 VPN moderne, rapide et sécurisé sous Linux.
 

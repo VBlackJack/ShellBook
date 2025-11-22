@@ -1,6 +1,9 @@
 site_name: ShellBook
 site_description: SysOps Knowledge Base - Linux, Windows, K8s & Security
 site_author: SysOps Admin
+repo_url: https://github.com/VBlackJack/ShellBook
+repo_name: VBlackJack/ShellBook
+edit_uri: edit/main/docs/
 
 theme:
   name: material
@@ -10,15 +13,33 @@ theme:
     accent: cyan
   features:
     - content.code.copy
+    - content.action.edit
+    - content.action.view
     - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
     - navigation.expand
     - navigation.top
     - search.suggest
     - search.highlight
 
+plugins:
+  - search:
+      lang: fr
+  - tags
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+      locale: fr
+
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -36,13 +57,18 @@ nav:
   - Accueil: index.md
   - Linux:
     - linux/demo.md
-    - linux/productivity.md
-    - linux/modern-tools.md
-    - linux/debugging.md
-    - linux/bash-wizardry.md
     - linux/hardware.md
     - Certification & Révision:
       - linux/lpi-certification.md
+    - Productivité & Outillage:
+      - linux/productivity.md
+      - linux/modern-tools.md
+      - linux/bash-wizardry.md
+      - linux/text-processing.md
+    - Diagnostic & Dépannage:
+      - linux/debugging.md
+      - linux/performance-analysis.md
+      - linux/logs-management.md
     - Système & Démarrage:
       - linux/boot-and-services.md
       - linux/filesystem-and-storage.md
@@ -55,12 +81,8 @@ nav:
       - linux/firewall-ufw.md
     - Automatisation & Scripting:
       - linux/automation-cron.md
-      - linux/text-processing.md
       - linux/data-processing-advanced.md
       - linux/scripting-standards.md
-    - Supervision & Performance:
-      - linux/logs-management.md
-      - linux/performance-analysis.md
     - Sauvegarde & Transfert:
       - linux/archives-compression.md
       - linux/backup-transfer.md
@@ -76,14 +98,15 @@ nav:
     - windows/index.md
     - Cartes Mentales & Révision:
       - windows/windows-mindmaps.md
-    - windows/productivity.md
-    - windows/powershell-foundations.md
+    - Fondamentaux:
+      - windows/productivity.md
+      - windows/powershell-foundations.md
+      - windows/netsh-troubleshooting.md
     - windows/server-administration.md
     - windows/update-management.md
     - windows/active-directory.md
     - windows/windows-security.md
     - windows/ansible-windows.md
-    - windows/netsh-troubleshooting.md
   - Réseau:
     - network/fundamentals.md
   - DevOps:

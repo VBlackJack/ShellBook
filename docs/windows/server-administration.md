@@ -1,6 +1,15 @@
-# Windows Server: Build & Modern Admin
+---
+tags:
+  - windows-server
+  - core
+  - wac
+  - openssh
+  - "2025"
+  - winget
+  - chocolatey
+---
 
-`#windows-server` `#core` `#wac` `#openssh` `#2025` `#winget` `#chocolatey`
+# Windows Server: Build & Modern Admin
 
 Administration Windows Server moderne : Build, WAC, PowerShell et gestion des versions 2019/2022/2025.
 

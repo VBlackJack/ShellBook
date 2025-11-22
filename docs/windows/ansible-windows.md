@@ -1,6 +1,13 @@
-# Ansible for Windows: WinRM & Automation
+---
+tags:
+  - ansible
+  - windows
+  - winrm
+  - powershell
+  - active-directory
+---
 
-`#ansible` `#windows` `#winrm` `#powershell` `#active-directory`
+# Ansible for Windows: WinRM & Automation
 
 Piloter Windows sans agent SSH : Configuration WinRM et modules natifs.
 

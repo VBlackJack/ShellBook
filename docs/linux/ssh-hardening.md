@@ -1,6 +1,12 @@
-# SSH Hardening & Fail2Ban
+---
+tags:
+  - ssh
+  - security
+  - fail2ban
+  - hardening
+---
 
-`#ssh` `#security` `#fail2ban` `#hardening`
+# SSH Hardening & Fail2Ban
 
 Sécurisation du service SSH et protection contre les attaques par bruteforce.
 

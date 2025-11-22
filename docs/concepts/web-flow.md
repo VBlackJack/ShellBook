@@ -1,6 +1,12 @@
-# Architecture Web : De l'URL à la Page
+---
+tags:
+  - network
+  - dns
+  - http3
+  - quic
+---
 
-`#network` `#dns` `#http3` `#quic`
+# Architecture Web : De l'URL à la Page
 
 Comprendre le parcours complet d'une requête web, de la saisie d'une URL au rendu d'une page.
 

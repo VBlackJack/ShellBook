@@ -1,6 +1,13 @@
-# Ansible Testing with Molecule
+---
+tags:
+  - ansible
+  - testing
+  - molecule
+  - quality
+  - ci
+---
 
-`#ansible` `#testing` `#molecule` `#quality` `#ci`
+# Ansible Testing with Molecule
 
 Ne testez plus en production. Validez vos rôles dans des environnements isolés.
 

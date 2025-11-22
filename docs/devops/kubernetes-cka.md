@@ -1,6 +1,11 @@
-# Kubernetes CKA: Stratégie & Leçons
+---
+tags:
+  - k8s
+  - certification
+  - cka
+---
 
-`#k8s` `#certification` `#cka`
+# Kubernetes CKA: Stratégie & Leçons
 
 Retours d'expérience concrets sur la réussite de l'examen Certified Kubernetes Administrator.
 

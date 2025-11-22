@@ -1,6 +1,13 @@
-# Active Directory PowerShell
+---
+tags:
+  - active-directory
+  - powershell
+  - users
+  - groups
+  - audit
+---
 
-`#active-directory` `#powershell` `#users` `#groups` `#audit`
+# Active Directory PowerShell
 
 Administration Active Directory via PowerShell.
 

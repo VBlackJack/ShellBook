@@ -1,6 +1,11 @@
-# Fondamentaux de la Cryptographie & Vocabulaire
+---
+tags:
+  - crypto
+  - security
+  - theory
+---
 
-`#crypto` `#security` `#theory`
+# Fondamentaux de la Cryptographie & Vocabulaire
 
 Maîtriser les concepts avant les commandes.
 

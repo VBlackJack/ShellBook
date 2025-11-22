@@ -1,6 +1,13 @@
-# Netsh: Network Troubleshooting & Legacy Config
+---
+tags:
+  - windows
+  - netsh
+  - network
+  - debug
+  - firewall
+---
 
-`#windows` `#netsh` `#network` `#debug` `#firewall`
+# Netsh: Network Troubleshooting & Legacy Config
 
 L'outil réseau en ligne de commande ultime de Windows. Indispensable pour le troubleshooting et Server Core.
 

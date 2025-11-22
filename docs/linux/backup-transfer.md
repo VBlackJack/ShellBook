@@ -1,6 +1,12 @@
-# Rsync & Secure Transfer
+---
+tags:
+  - rsync
+  - scp
+  - sftp
+  - backup
+---
 
-`#rsync` `#scp` `#sftp` `#backup`
+# Rsync & Secure Transfer
 
 Synchronisation et transfert sécurisé de fichiers.
 

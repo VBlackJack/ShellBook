@@ -1,6 +1,12 @@
-# Secure File Exchange Gateway
+---
+tags:
+  - security
+  - clamav
+  - audit
+  - scripting
+---
 
-`#security` `#clamav` `#audit` `#scripting`
+# Secure File Exchange Gateway
 
 Zone tampon sécurisée ("Sas") pour l'échange de fichiers avec scan antivirus automatique et audit complet.
 

@@ -1,6 +1,13 @@
-# Database Administration (MariaDB/PostgreSQL)
+---
+tags:
+  - sql
+  - mariadb
+  - postgresql
+  - backup
+  - security
+---
 
-`#sql` `#mariadb` `#postgresql` `#backup` `#security`
+# Database Administration (MariaDB/PostgreSQL)
 
 Administration des bases de données relationnelles sous Linux.
 

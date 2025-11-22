@@ -1,6 +1,13 @@
-# Ansible: Cloud, Docker & Dynamic Inventories
+---
+tags:
+  - ansible
+  - cloud
+  - docker
+  - dynamic-inventory
+  - awx
+---
 
-`#ansible` `#cloud` `#docker` `#dynamic-inventory` `#awx`
+# Ansible: Cloud, Docker & Dynamic Inventories
 
 Connecter Ansible aux infrastructures dynamiques et piloter les conteneurs.
 

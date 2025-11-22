@@ -1,6 +1,12 @@
-# APT & Package Management
+---
+tags:
+  - apt
+  - dpkg
+  - repository
+  - updates
+---
 
-`#apt` `#dpkg` `#repository` `#updates`
+# APT & Package Management
 
 Gestion des paquets sur Debian, Ubuntu et dérivés.
 

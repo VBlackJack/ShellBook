@@ -1,6 +1,13 @@
-# K8s Services & Ingress
+---
+tags:
+  - service
+  - ingress
+  - dns
+  - coredns
+  - networking
+---
 
-`#service` `#ingress` `#dns` `#coredns` `#networking`
+# K8s Services & Ingress
 
 Exposition des applications et réseau interne Kubernetes.
 

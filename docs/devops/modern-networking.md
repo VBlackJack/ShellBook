@@ -1,6 +1,13 @@
-# Modern Networking: Traefik & Consul
+---
+tags:
+  - traefik
+  - consul
+  - service-mesh
+  - proxy
+  - discovery
+---
 
-`#traefik` `#consul` `#service-mesh` `#proxy` `#discovery`
+# Modern Networking: Traefik & Consul
 
 Gérer le trafic quand les IPs changent chaque minute. Routing dynamique et Service Discovery pour environnements Docker/Kubernetes.
 

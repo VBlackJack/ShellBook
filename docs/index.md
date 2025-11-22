@@ -51,46 +51,69 @@
 
 ## 📚 Architecture du Savoir
 
-### 🐧 Linux (30+ Guides)
+<div class="grid cards" markdown>
 
-Le cœur de l'infrastructure moderne.
+-   :fontawesome-brands-linux:{ .lg .middle } **Linux (30+ Guides)**
 
-- **Système** : Boot & Services, Filesystem, LVM, Package Management
-- **Réseau** : Network Management, SSH Hardening, Firewall UFW
-- **Services** : Nginx/Apache, MariaDB/PostgreSQL, WireGuard VPN
-- **Automatisation** : Cron/Systemd Timers, Bash Scripting Standards
+    ---
 
-[Explorer Linux →](linux/demo.md){ .md-button .md-button--primary }
+    Le cœur de l'infrastructure moderne : système, réseau, services et automatisation.
 
-### 🪟 Windows (6 Guides)
+    **Couvre :** Boot & Services • Filesystem & LVM • SSH Hardening • Nginx/Apache • Bash Scripting
 
-Administration Windows Server et Desktop.
+    [:octicons-arrow-right-24: Explorer Linux](linux/demo.md)
 
-- **PowerShell** : Foundations (Objects vs Text), Remote Management
-- **Active Directory** : CRUD Operations, Group Management
-- **Sécurité** : Windows Defender, BitLocker, Event Viewer Audit
+-   :fontawesome-brands-windows:{ .lg .middle } **Windows (9 Guides)**
 
-[Explorer Windows →](windows/index.md){ .md-button }
+    ---
 
-### ☸️ Kubernetes (3 Guides)
+    Administration Windows Server et Desktop : PowerShell, AD et sécurité.
 
-Orchestration de conteneurs en production.
+    **Couvre :** PowerShell Foundations • Active Directory • GPO • BitLocker • Defender
 
-- **CKA Prep** : Certification Kubernetes Administrator
-- **Survival Kit** : kubectl Debug, Logs, Port-Forward
-- **Networking** : Services (ClusterIP/NodePort/LB), Ingress, CoreDNS
+    [:octicons-arrow-right-24: Explorer Windows](windows/index.md)
 
-[Explorer Kubernetes →](devops/kubernetes-survival.md){ .md-button }
+-   :material-kubernetes:{ .lg .middle } **Kubernetes (4 Guides)**
 
-### 🛡️ Security (6 Guides)
+    ---
 
-Sécurité offensive et défensive.
+    Orchestration de conteneurs en production : CKA, debugging et networking.
 
-- **Cryptographie** : Certificates, OpenSSL, Crypto Concepts
-- **Red Team** : Exegol, CTF Methodology, Essential Tools
-- **Blue Team** : Hardening, Logging, Compliance
+    **Couvre :** CKA Prep • kubectl Survival • Services & Ingress • GitOps ArgoCD
 
-[Explorer Security →](security/certificates.md){ .md-button }
+    [:octicons-arrow-right-24: Explorer Kubernetes](devops/kubernetes-survival.md)
+
+-   :material-shield-lock:{ .lg .middle } **Security (7 Guides)**
+
+    ---
+
+    Sécurité offensive et défensive : cryptographie, red team et hardening.
+
+    **Couvre :** Certificates & OpenSSL • Exegol • CTF Methodology • HashiCorp Vault
+
+    [:octicons-arrow-right-24: Explorer Security](security/certificates.md)
+
+-   :material-layers-triple:{ .lg .middle } **DevOps (15+ Guides)**
+
+    ---
+
+    CI/CD, conteneurs et automatisation : Docker, Ansible, Terraform et GitOps.
+
+    **Couvre :** GitHub Actions • GitLab CI • Docker Advanced • Ansible • Observability
+
+    [:octicons-arrow-right-24: Explorer DevOps](devops/git-sysops.md)
+
+-   :material-network:{ .lg .middle } **Réseau & Infrastructure**
+
+    ---
+
+    Fondamentaux réseau et haute disponibilité : CIDR, load balancing et database HA.
+
+    **Couvre :** CIDR • TCP/IP • Load Balancing L4/L7 • Database Clustering
+
+    [:octicons-arrow-right-24: Explorer Réseau](network/fundamentals.md)
+
+</div>
 
 ---
 

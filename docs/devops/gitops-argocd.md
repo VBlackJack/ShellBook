@@ -1,6 +1,13 @@
-# GitOps: ArgoCD & Helm
+---
+tags:
+  - gitops
+  - argocd
+  - helm
+  - kubernetes
+  - cd
+---
 
-`#gitops` `#argocd` `#helm` `#kubernetes` `#cd`
+# GitOps: ArgoCD & Helm
 
 La source de vérité est Git. Le cluster se synchronise tout seul. Fini les `kubectl apply` manuels.
 

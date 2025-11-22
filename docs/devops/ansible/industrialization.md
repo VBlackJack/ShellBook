@@ -1,6 +1,12 @@
-# Industrialiser Ansible : Roles & Vault
+---
+tags:
+  - ansible
+  - security
+  - jinja2
+  - roles
+---
 
-`#ansible` `#security` `#jinja2` `#roles`
+# Industrialiser Ansible : Roles & Vault
 
 Faire passer votre automatisation à l'échelle avec une structure et une sécurité appropriées.
 

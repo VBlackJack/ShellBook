@@ -1,6 +1,13 @@
-# GitLab CI : Le Standard On-Premise
+---
+tags:
+  - gitlab-ci
+  - pipeline
+  - docker
+  - runner
+  - yaml
+---
 
-`#gitlab-ci` `#pipeline` `#docker` `#runner` `#yaml`
+# GitLab CI : Le Standard On-Premise
 
 L'usine logicielle souveraine. Du code au déploiement sans sortir du réseau.
 

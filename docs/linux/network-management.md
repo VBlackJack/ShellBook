@@ -1,6 +1,12 @@
-# Network Configuration & DNS
+---
+tags:
+  - netplan
+  - interfaces
+  - dns
+  - systemd-resolved
+---
 
-`#netplan` `#interfaces` `#dns` `#systemd-resolved`
+# Network Configuration & DNS
 
 Configuration réseau persistante sur Debian et Ubuntu.
 

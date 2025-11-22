@@ -1,6 +1,12 @@
-# OpenSSL & Gestion du Cycle de Vie des Certificats
+---
+tags:
+  - openssl
+  - pki
+  - anssi
+  - secnumcloud
+---
 
-`#openssl` `#pki` `#anssi` `#secnumcloud`
+# OpenSSL & Gestion du Cycle de Vie des Certificats
 
 Une référence complète pour gérer les certificats X.509 dans les environnements SecNumCloud.
 

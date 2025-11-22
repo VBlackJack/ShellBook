@@ -1,6 +1,12 @@
-# GitHub Actions for Ops
+---
+tags:
+  - cicd
+  - github-actions
+  - pipeline
+  - automation
+---
 
-`#cicd` `#github-actions` `#pipeline` `#automation`
+# GitHub Actions for Ops
 
 CI/CD avec GitHub Actions pour l'automatisation Ops.
 

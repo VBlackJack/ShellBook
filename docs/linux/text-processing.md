@@ -1,6 +1,12 @@
-# Sed, Awk & Text Processing
+---
+tags:
+  - sed
+  - awk
+  - regex
+  - logs
+---
 
-`#sed` `#awk` `#regex` `#logs`
+# Sed, Awk & Text Processing
 
 Manipulation de texte en ligne de commande : les outils indispensables du SysOps.
 

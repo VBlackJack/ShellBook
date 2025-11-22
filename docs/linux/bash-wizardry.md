@@ -1,6 +1,11 @@
-# Caractères Spéciaux Bash & Redirections
+---
+tags:
+  - bash
+  - shell
+  - scripting
+---
 
-`#bash` `#shell` `#scripting`
+# Caractères Spéciaux Bash & Redirections
 
 Maîtriser les symboles magiques qui rendent Bash puissant.
 

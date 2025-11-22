@@ -1,6 +1,12 @@
-# Users, Groups & Permissions
+---
+tags:
+  - permissions
+  - sudo
+  - acl
+  - security
+---
 
-`#permissions` `#sudo` `#acl` `#security`
+# Users, Groups & Permissions
 
 Gestion des accès et principe du moindre privilège.
 

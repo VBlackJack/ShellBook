@@ -1,6 +1,15 @@
-# Windows Hardening & Security
+---
+tags:
+  - defender
+  - firewall
+  - bitlocker
+  - laps
+  - gpo
+  - secnumcloud
+  - logging
+---
 
-`#defender` `#firewall` `#bitlocker` `#laps` `#gpo` `#secnumcloud` `#logging`
+# Windows Hardening & Security
 
 Sécurisation et audit des systèmes Windows (Blue Team) : LAPS, GPO Hardening, BitLocker avancé.
 

@@ -1,6 +1,12 @@
-# Principes Fondamentaux du Matériel Serveur
+---
+tags:
+  - hardware
+  - bare-metal
+  - power
+  - acpi
+---
 
-`#hardware` `#bare-metal` `#power` `#acpi`
+# Principes Fondamentaux du Matériel Serveur
 
 Comprendre le métal sous la virtualisation.
 

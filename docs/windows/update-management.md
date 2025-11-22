@@ -1,6 +1,13 @@
-# Update Management: WSUS & Modern Patching
+---
+tags:
+  - wsus
+  - updates
+  - hotpatching
+  - pswindowsupdate
+  - azure-arc
+---
 
-`#wsus` `#updates` `#hotpatching` `#pswindowsupdate` `#azure-arc`
+# Update Management: WSUS & Modern Patching
 
 Gestion moderne des mises à jour Windows Server : PSWindowsUpdate, WSUS Legacy, et Hotpatching (2025).
 

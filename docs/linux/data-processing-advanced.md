@@ -1,6 +1,13 @@
-# Advanced Data Processing: Awk, Sed & JQ
+---
+tags:
+  - awk
+  - jq
+  - json
+  - logs
+  - parsing
+---
 
-`#awk` `#jq` `#json` `#logs` `#parsing`
+# Advanced Data Processing: Awk, Sed & JQ
 
 Transformer le terminal en moteur ETL. Traiter des logs, du JSON et des données structurées sans Python.
 

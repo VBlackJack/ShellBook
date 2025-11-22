@@ -1,6 +1,12 @@
-# Firewalling with UFW
+---
+tags:
+  - ufw
+  - firewall
+  - security
+  - iptables
+---
 
-`#ufw` `#firewall` `#security` `#iptables`
+# Firewalling with UFW
 
 Gestion simplifiée du pare-feu Linux avec UFW (Uncomplicated Firewall).
 

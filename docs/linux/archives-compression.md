@@ -1,6 +1,12 @@
-# Archives (Tar) & Compression
+---
+tags:
+  - tar
+  - gzip
+  - zip
+  - backup
+---
 
-`#tar` `#gzip` `#zip` `#backup`
+# Archives (Tar) & Compression
 
 Archivage et compression de fichiers sous Linux.
 

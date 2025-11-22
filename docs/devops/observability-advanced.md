@@ -1,6 +1,13 @@
-# Advanced Observability: Alerting & ELK
+---
+tags:
+  - alertmanager
+  - blackbox
+  - elk
+  - sre
+  - monitoring
+---
 
-`#alertmanager` `#blackbox` `#elk` `#sre` `#monitoring`
+# Advanced Observability: Alerting & ELK
 
 Passer de la visualisation passive à l'action proactive. Gestion des astreintes et logs à grande échelle.
 

@@ -1,6 +1,11 @@
-# Aide-Mémoire OpenSSL CLI
+---
+tags:
+  - openssl
+  - cli
+  - commands
+---
 
-`#openssl` `#cli` `#commands`
+# Aide-Mémoire OpenSSL CLI
 
 Commandes OpenSSL essentielles pour les opérations de sécurité quotidiennes.
 

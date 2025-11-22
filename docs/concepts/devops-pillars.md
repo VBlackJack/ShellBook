@@ -1,6 +1,11 @@
-# Les 6 Piliers du DevOps
+---
+tags:
+  - devops
+  - architecture
+  - culture
+---
 
-`#devops` `#architecture` `#culture`
+# Les 6 Piliers du DevOps
 
 Ne vous perdez pas dans les outils. Il n'y a que **6 problèmes à résoudre**.
 

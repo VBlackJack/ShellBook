@@ -1,6 +1,13 @@
-# Terraform: Infrastructure as Code
+---
+tags:
+  - terraform
+  - iac
+  - hcl
+  - aws
+  - state
+---
 
-`#terraform` `#iac` `#hcl` `#aws` `#state`
+# Terraform: Infrastructure as Code
 
 Définir, provisionner et gérer l'infrastructure cloud de manière déclarative.
 

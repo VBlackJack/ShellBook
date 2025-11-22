@@ -1,6 +1,12 @@
-# Kubectl Survival Kit
+---
+tags:
+  - kubectl
+  - debug
+  - pods
+  - cheatsheet
+---
 
-`#kubectl` `#debug` `#pods` `#cheatsheet`
+# Kubectl Survival Kit
 
 Commandes essentielles pour le troubleshooting Kubernetes au quotidien.
 

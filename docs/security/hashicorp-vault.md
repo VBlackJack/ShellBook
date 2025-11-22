@@ -1,6 +1,13 @@
-# HashiCorp Vault: Secrets Management
+---
+tags:
+  - vault
+  - security
+  - pki
+  - kubernetes
+  - secrets
+---
 
-`#vault` `#security` `#pki` `#kubernetes` `#secrets`
+# HashiCorp Vault: Secrets Management
 
 Centraliser, sécuriser et contrôler l'accès aux secrets. Fini les mots de passe statiques.
 

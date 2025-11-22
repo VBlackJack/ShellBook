@@ -1,6 +1,13 @@
-# Prometheus, Loki & Grafana
+---
+tags:
+  - monitoring
+  - prometheus
+  - loki
+  - grafana
+  - metrics
+---
 
-`#monitoring` `#prometheus` `#loki` `#grafana` `#metrics`
+# Prometheus, Loki & Grafana
 
 Stack d'observabilité moderne pour le monitoring d'infrastructure et d'applications.
 

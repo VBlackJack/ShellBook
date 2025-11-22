@@ -1,6 +1,12 @@
-# Outils de Sécurité Essentiels
+---
+tags:
+  - redteam
+  - nmap
+  - wifi
+  - cracking
+---
 
-`#redteam` `#nmap` `#wifi` `#cracking`
+# Outils de Sécurité Essentiels
 
 La boîte à outils du hacker—outils essentiels pour les tests de pénétration et l'audit de sécurité.
 

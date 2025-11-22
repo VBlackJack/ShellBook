@@ -1,6 +1,12 @@
-# PowerShell for Linux Admins
+---
+tags:
+  - powershell
+  - scripting
+  - objects
+  - pipeline
+---
 
-`#powershell` `#scripting` `#objects` `#pipeline`
+# PowerShell for Linux Admins
 
 Transition Bash → PowerShell : penser en objets, pas en texte.
 

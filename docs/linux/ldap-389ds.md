@@ -1,6 +1,12 @@
-# LDAP: 389 Directory Server (Red Hat DS)
+---
+tags:
+  - ldap
+  - 389ds
+  - security
+  - rhel
+---
 
-`#ldap` `#389ds` `#security` `#rhel`
+# LDAP: 389 Directory Server (Red Hat DS)
 
 Alternative Open Source robuste à Active Directory sur Linux. Annuaire LDAP haute performance pour l'authentification centralisée.
 
