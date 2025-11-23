@@ -242,6 +242,12 @@ nav:
         - Module 3 - Intégration: formations/ntlite/03-module.md
         - Module 4 - Automatisation: formations/ntlite/04-module.md
         - Module 5 - TP Final: formations/ntlite/05-tp-final.md
+      - 🛢️ SQL Server DBA:
+        - Introduction: formations/sql-server/index.md
+        - Module 1 - Architecture: formations/sql-server/01-module.md
+        - Module 2 - Sécurité: formations/sql-server/02-module.md
+        - Module 3 - Maintenance: formations/sql-server/03-module.md
+        - Module 4 - Automatisation: formations/sql-server/04-module.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
