@@ -1,6 +1,6 @@
 # ShellBook
 
-**La Base de Connaissance Opérationnelle pour l'Ingénieur SysOps & DevOps**
+**La Base de Connaissance & Plateforme de Formation pour l'Ingénieur SysOps & DevOps**
 
 <div style="text-align: center; margin: 2em 0;">
   <span style="background: #1e3a8a; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🛡️ SecNumCloud Friendly</span>
@@ -8,6 +8,13 @@
   <span style="background: #0369a1; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🪟 Windows</span>
   <span style="background: #326ce5; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">☸️ K8s Ready</span>
 </div>
+
+!!! success "🎓 Nouveau : Découvrez ShellBook Academy"
+    **9 parcours de formation professionnels** pour monter en compétence, du niveau débutant à expert.
+
+    120 heures de contenu pédagogique : DevOps, Linux, Windows, Sécurité, Automatisation, Bases de Données.
+
+    [:octicons-arrow-right-24: Accéder aux Formations](formations/index.md){ .md-button .md-button--primary }
 
 ---
 
@@ -52,6 +59,16 @@
 ## 📚 Architecture du Savoir
 
 <div class="grid cards" markdown>
+
+-   :material-school:{ .lg .middle } **🎓 Formations (9 Parcours)**
+
+    ---
+
+    Des cursus complets pour monter en compétence : Linux, Windows, Ansible, SQL Server, Sécurité...
+
+    **Couvre :** DevOps Foundation • Hardening Linux • Katello • Ansible Mastery • Windows Server • WSUS • Chocolatey • NTLite • SQL Server DBA
+
+    [:octicons-arrow-right-24: Accéder aux Formations](formations/index.md)
 
 -   :fontawesome-brands-linux:{ .lg .middle } **Linux (30+ Guides)**
 
@@ -142,14 +159,17 @@
     - Les sections **Quick Reference** en fin de page regroupent les commandes essentielles
 
 !!! example "Parcours Recommandés"
+    **Apprendre les fondamentaux DevOps ?**
+    → [🚀 Le Socle DevOps](formations/devops-foundation/index.md) (Formation complète en 5 modules - 12h)
+
     **Nouveau sur Linux ?**
     → [Linux Productivity](linux/productivity.md) → [Modern Tools](linux/modern-tools.md) → [Bash Wizardry](linux/bash-wizardry.md)
 
     **Préparer la CKA ?**
     → [Kubernetes CKA](devops/kubernetes-cka.md) → [Kubectl Survival](devops/kubernetes-survival.md) → [K8s Networking](devops/kubernetes-networking.md)
 
-    **Sécuriser un serveur ?**
-    → [SSH Hardening](linux/ssh-hardening.md) → [Firewall UFW](linux/firewall-ufw.md) → [Logs Management](linux/logs-management.md)
+    **Sécuriser un serveur Linux ?**
+    → [🔐 Hardening Linux](formations/linux-hardening/index.md) (Formation complète en 5 modules - 10h)
 
 ---
 
@@ -164,6 +184,7 @@ Ce projet suit les standards **SecNumCloud** pour la sécurité et la conformit�
 ---
 
 <div style="text-align: center; color: #64748b; margin-top: 3em;">
-  <p><strong>ShellBook</strong> - Votre cerveau opérationnel externalisé</p>
+  <p><strong>ShellBook Academy</strong> - Votre plateforme d'apprentissage SysOps & DevOps</p>
+  <p>📚 100+ Guides • 🎓 9 Formations • 120h de Contenu</p>
   <p>Linux • Windows • Kubernetes • DevOps • Security</p>
 </div>

@@ -4,9 +4,9 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![MkDocs](https://img.shields.io/badge/mkdocs-material-526CFE.svg)
 
-**La Base de Connaissance Opérationnelle pour l'Ingénieur SysOps & DevOps**
+**La Base de Connaissance & Plateforme de Formation pour SysOps & DevOps**
 
-Documentation-as-Code couvrant Linux, Windows, Kubernetes, DevOps et Sécurité.
+Documentation-as-Code et parcours de formation complets couvrant Linux, Windows, Kubernetes, DevOps et Sécurité.
 
 🌐 **Site en ligne** : [https://vblackjack.github.io/ShellBook/](https://vblackjack.github.io/ShellBook/)
 
@@ -14,16 +14,35 @@ Documentation-as-Code couvrant Linux, Windows, Kubernetes, DevOps et Sécurité.
 
 ## 📋 Présentation
 
-ShellBook est une base de connaissance structurée pour les ingénieurs systèmes et DevOps. Elle regroupe :
+ShellBook est une base de connaissance structurée ET une plateforme de formation pour les ingénieurs systèmes et DevOps. Elle regroupe :
 
+### 📚 Base de Connaissance
 - **30+ guides Linux** : Administration système, réseau, sécurité, automatisation
-- **6 guides Windows** : PowerShell, Active Directory, sécurité Windows
-- **6 guides DevOps** : Docker, Kubernetes, CI/CD, Ansible, Observabilité
+- **10+ guides Windows** : PowerShell, Active Directory, sécurité Windows, patch management
+- **8+ guides DevOps** : Docker, Kubernetes, CI/CD, Ansible, Observabilité
 - **6 guides Security** : Certificats, pentest, hardening, conformité SecNumCloud
+
+### 🎓 ShellBook Academy - 9 Parcours de Formation Complets
+Des formations progressives de **niveau Zero to Hero** avec travaux pratiques :
+
+| Formation | Modules | Durée | Niveau |
+|-----------|---------|-------|--------|
+| **🚀 Le Socle DevOps** | 5 modules | 12h | Débutant |
+| **🔐 Hardening Linux** | 5 modules | 10h | Intermédiaire |
+| **🦁 Katello Lifecycle** | 5 modules | 15h | Avancé |
+| **💠 Ansible Mastery** | 4 modules | 14h | Intermédiaire |
+| **🏰 Windows Server Mastery** | 4 modules | 12h | Intermédiaire |
+| **♻️ Windows Patch Management** | 5 modules | 14h | Avancé |
+| **🍫 Chocolatey Factory** | 5 modules | 12h | Intermédiaire |
+| **💿 NTLite Mastery** | 5 modules | 10h | Avancé |
+| **🛢️ SQL Server DBA** | 5 modules | 22h | Avancé |
+
+**Total** : ~120 heures de formation professionnelle
 
 ### Caractéristiques clés
 
 ✅ **Recherche Instantanée** : Ctrl+K pour trouver n'importe quelle commande
+✅ **9 Parcours de Formation** : Du niveau débutant à avancé avec TP
 ✅ **Tags Filtrables** : Chaque page est taguée par technologie
 ✅ **Quick Reference** : Résumé des commandes en fin de chaque guide
 ✅ **Exemples Pratiques** : Code blocks, YAML, configurations réelles
@@ -37,6 +56,34 @@ ShellBook est une base de connaissance structurée pour les ingénieurs système
 ShellBook/
 ├── docs/                           # Contenu documentation
 │   ├── index.md                    # Landing page
+│   │
+│   ├── formations/                 # 🎓 9 PARCOURS DE FORMATION
+│   │   ├── index.md                # Catalogue formations
+│   │   │
+│   │   ├── devops-foundation/      # Le Socle DevOps (5 modules)
+│   │   │   ├── index.md
+│   │   │   ├── 01-module.md        # Git & Versionning
+│   │   │   ├── 02-module.md        # Branches & Collaboration
+│   │   │   ├── 03-module.md        # CI/CD avec GitHub Actions
+│   │   │   ├── 04-module.md        # Qualité & Tests
+│   │   │   └── 05-tp-final.md      # TP Final
+│   │   │
+│   │   ├── linux-hardening/        # Hardening Linux (5 modules)
+│   │   ├── katello/                # Katello Lifecycle (5 modules)
+│   │   ├── ansible-mastery/        # Ansible Mastery (4 modules)
+│   │   │
+│   │   ├── windows-server/         # Windows Server Mastery (4 modules)
+│   │   ├── windows-patching/       # Patch Management (5 modules)
+│   │   ├── chocolatey/             # Chocolatey Factory (5 modules)
+│   │   ├── ntlite/                 # NTLite Mastery (5 modules)
+│   │   └── sql-server/             # SQL Server DBA (5 modules)
+│   │       ├── index.md
+│   │       ├── 01-module.md        # Architecture & Installation
+│   │       ├── 02-module.md        # Sécurité & Configuration
+│   │       ├── 03-module.md        # Maintenance (Ola Hallengren)
+│   │       ├── 04-module.md        # Automatisation (dbatools)
+│   │       └── 05-tp-final.md      # Projet Phoenix
+│   │
 │   ├── linux/                      # 30+ guides Linux
 │   │   ├── productivity.md
 │   │   ├── modern-tools.md
@@ -44,12 +91,14 @@ ShellBook/
 │   │   ├── ssh-hardening.md
 │   │   ├── firewall-ufw.md
 │   │   └── ...
-│   ├── windows/                    # 6 guides Windows
+│   │
+│   ├── windows/                    # 10+ guides Windows
 │   │   ├── index.md
 │   │   ├── powershell-foundations.md
 │   │   ├── active-directory.md
 │   │   └── windows-security.md
-│   ├── devops/                     # 6 guides DevOps
+│   │
+│   ├── devops/                     # 8+ guides DevOps
 │   │   ├── docker-advanced.md
 │   │   ├── cicd-github-actions.md
 │   │   ├── observability-stack.md
@@ -59,17 +108,21 @@ ShellBook/
 │   │       ├── fundamentals.md
 │   │       ├── playbooks.md
 │   │       └── industrialization.md
+│   │
 │   ├── security/                   # 6 guides Security
 │   │   ├── certificates.md
 │   │   ├── openssl-cli.md
 │   │   ├── exegol.md
 │   │   └── ctf-guide.md
+│   │
 │   ├── network/
 │   │   └── fundamentals.md
+│   │
 │   └── concepts/
 │       ├── web-flow.md
 │       ├── databases.md
 │       └── devops-pillars.md
+│
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                  # Pipeline GitHub Actions
@@ -105,6 +158,9 @@ Créer un nouveau guide dans le dossier approprié :
 ```bash
 # Exemple : nouveau guide Linux
 touch docs/linux/new-feature.md
+
+# Exemple : nouveau module de formation
+touch docs/formations/ma-formation/03-module.md
 ```
 
 **Structure type d'un guide :**
@@ -159,14 +215,15 @@ nav:
     - linux/new-feature.md    # ← Ajouter ici
 ```
 
-**Exemple avec sous-menu :**
+**Exemple avec sous-menu (formation) :**
 
 ```yaml
 nav:
-  - DevOps:
-    - CI/CD & Obs:
-      - devops/cicd-github-actions.md
-      - devops/observability-stack.md
+  - 🎓 Formations:
+    - 🛢️ SQL Server DBA:
+      - Introduction: formations/sql-server/index.md
+      - Module 1 - Architecture: formations/sql-server/01-module.md
+      - Module 2 - Sécurité: formations/sql-server/02-module.md
 ```
 
 ### 4️⃣ Tester en local
@@ -294,14 +351,70 @@ git branch -a
 
 ## 📊 Statistiques du Projet
 
-- **Guides** : 50+ fichiers Markdown
-- **Lignes de code** : ~15,000 lignes
-- **Taille** : ~500 KB de contenu
+- **Guides & Modules** : 100+ fichiers Markdown
+- **Formations** : 9 parcours complets (~120h de contenu)
+- **Lignes de code** : ~30,000+ lignes
+- **Taille** : ~2 MB de contenu
 - **Couverture** :
-  - 30+ guides Linux
-  - 6 guides Windows
-  - 6 guides DevOps
-  - 6 guides Security
+  - 🎓 9 formations professionnelles (43 modules)
+  - 📚 30+ guides Linux
+  - 📚 10+ guides Windows
+  - 📚 8+ guides DevOps
+  - 📚 6 guides Security
+
+---
+
+## 🎓 Catalogue des Formations
+
+### ♾️ Pratiques DevOps
+
+#### 🚀 Le Socle DevOps (5 modules - 12h)
+Formation pour acquérir les fondamentaux DevOps : Git, CI/CD, qualité de code.
+- Module 1 : Git & Versionning
+- Module 2 : Branches & Collaboration
+- Module 3 : CI/CD avec GitHub Actions
+- Module 4 : Qualité & Tests
+- Module 5 : TP Final
+
+### 🛡️ Sécurité & Conformité
+
+#### 🔐 Hardening Linux (5 modules - 10h)
+Sécurisation approfondie de serveurs Linux en production.
+- SSH, Users, Firewall, Audit, TP Final
+
+### 🐧 Écosystème Linux
+
+#### 🦁 Katello Lifecycle (5 modules - 15h)
+Gestion centralisée de patchs et contenus pour flottes RHEL.
+- Architecture, Contenu, Hôtes, Patch Management, TP Final
+
+### ⚙️ Automatisation
+
+#### 💠 Ansible Mastery (4 modules - 14h)
+Maîtrise de l'automatisation avec Ansible.
+- Architecture, Playbooks, Roles, Vault
+
+### 🪟 Écosystème Microsoft
+
+#### 🏰 Windows Server Mastery (4 modules - 12h)
+Administration moderne de Windows Server.
+- Modern Admin, Active Directory, Sécurité, TP Final
+
+#### ♻️ Windows Patch Management (5 modules - 14h)
+Gestion professionnelle des mises à jour Windows avec WSUS.
+- Architecture, Gestion, Clients, Maintenance, TP Final
+
+#### 🍫 Chocolatey Factory (5 modules - 12h)
+Gestion de paquets Windows avec Chocolatey.
+- Client & CLI, Packaging, Serveur Privé, Déploiement, TP Final
+
+#### 💿 NTLite Mastery (5 modules - 10h)
+Personnalisation avancée d'images Windows.
+- Bases, Debloating, Intégration, Automatisation, TP Final
+
+#### 🛢️ SQL Server DBA (5 modules - 22h)
+Administration professionnelle de SQL Server.
+- Architecture, Sécurité, Maintenance (Ola Hallengren), Automatisation (dbatools), TP Final
 
 ---
 
@@ -311,6 +424,7 @@ Les contributions sont les bienvenues ! Suivez le workflow ci-dessus.
 
 **Types de contributions :**
 - ✅ Nouveaux guides
+- ✅ Nouveaux modules de formation
 - ✅ Corrections de typos
 - ✅ Ajout d'exemples
 - ✅ Amélioration de la navigation
@@ -319,7 +433,8 @@ Les contributions sont les bienvenues ! Suivez le workflow ci-dessus.
 **Standards :**
 - Respecter le format Markdown
 - Ajouter des tags en haut de chaque guide
-- Inclure une section "Quick Reference"
+- Inclure une section "Quick Reference" pour les guides
+- Pour les formations : suivre la structure index.md + XX-module.md + TP final
 - Tester en local avant de commit
 - Suivre les conventions SecNumCloud pour la sécurité
 
@@ -333,6 +448,7 @@ Suivre [Conventional Commits](https://www.conventionalcommits.org/) :
 feat(linux): Add SSH hardening guide
 fix(windows): Correct PowerShell syntax
 docs(readme): Update contribution workflow
+docs(formations): Add SQL Server DBA Module 3
 refactor(nav): Reorganize DevOps section
 ```
 
@@ -377,7 +493,8 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 ---
 
 <div align="center">
-  <p><strong>ShellBook</strong> - Votre cerveau opérationnel externalisé</p>
+  <p><strong>ShellBook Academy</strong> - Votre plateforme d'apprentissage SysOps & DevOps</p>
+  <p>📚 100+ Guides • 🎓 9 Formations • 120h de Contenu</p>
   <p>Linux • Windows • Kubernetes • DevOps • Security</p>
   <p>Made with ❤️ and <a href="https://www.mkdocs.org/">MkDocs</a></p>
 </div>

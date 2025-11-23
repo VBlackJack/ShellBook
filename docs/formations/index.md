@@ -53,6 +53,50 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](ansible-mastery/)
 
+-   :material-ubuntu:{ .lg .middle } **Katello : Maîtriser le Cycle de Vie Linux**
+
+    ---
+
+    Gérez centralement les mises à jour Linux (RHEL/Rocky/CentOS). Synchronisation repos, Content Views, Lifecycle Environments, Patch Management.
+
+    **Compétences :** Foreman, Pulp, Content Views, Errata Management
+    **Durée :** 3 jours (24h)
+
+    [:octicons-arrow-right-24: Accéder à la Formation](katello/)
+
+-   :material-package-variant:{ .lg .middle } **Chocolatey Factory : Packaging Windows**
+
+    ---
+
+    Maîtrisez Chocolatey pour gérer les packages Windows. Création de packages, repository privé, déploiement automatisé via Ansible/GPO.
+
+    **Compétences :** Packaging, Chocolatey Server, Automatisation
+    **Durée :** 2 jours (16h)
+
+    [:octicons-arrow-right-24: Accéder à la Formation](chocolatey/)
+
+-   :material-microsoft-windows:{ .lg .middle } **Windows Server Mastery**
+
+    ---
+
+    Administration moderne Windows Server : PowerShell, Active Directory, GPO, sécurité et hardening selon les best practices Microsoft.
+
+    **Compétences :** PowerShell, AD, GPO, Tiering Model, LAPS
+    **Durée :** 3 jours (24h)
+
+    [:octicons-arrow-right-24: Accéder à la Formation](windows-server/)
+
+-   :material-update:{ .lg .middle } **Windows Patch Management (WSUS)**
+
+    ---
+
+    Déployez une infrastructure WSUS complète. Architecture, Deployment Rings, GPO, maintenance automatisée et troubleshooting avancé.
+
+    **Compétences :** WSUS, Deployment Rings, GPO PowerShell, Maintenance
+    **Durée :** 3 jours (24h)
+
+    [:octicons-arrow-right-24: Accéder à la Formation](windows-patching/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
