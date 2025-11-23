@@ -258,16 +258,18 @@ certutil.exe -addstore -f "CA" "C:\Windows\Setup\Files\Certificates\SubCA-Users.
 
 ### 3.3 Installation Silencieuse de GlobalProtect
 
+#### A. Installation Minimale (Recommandée)
+
 **Post-Setup Command :**
 
 ```batch
 REM Type: Command (Synchrone)
-REM Description: Install GlobalProtect VPN Client
+REM Description: Install GlobalProtect VPN Client - Configuration minimale
 
 msiexec.exe /i "C:\Windows\Setup\Files\GlobalProtect64-6.2.msi" /qn /norestart PORTAL=vpn.entreprise.com HIDETRAY=NO
 ```
 
-**Paramètres MSI :**
+**Paramètres MSI de base :**
 
 | Paramètre | Valeur | Description |
 |-----------|--------|-------------|
@@ -277,12 +279,43 @@ msiexec.exe /i "C:\Windows\Setup\Files\GlobalProtect64-6.2.msi" /qn /norestart P
 | `PORTAL` | `vpn.entreprise.com` | Adresse du portail GlobalProtect |
 | `HIDETRAY` | `NO` | Afficher l'icône dans la barre système |
 
-!!! tip "Paramètres Additionnels GlobalProtect"
-    Consulter la documentation Palo Alto pour :
+!!! success "Recommandation"
+    Pour une configuration de base, cette commande suffit. Les paramètres avancés (Pre-Logon, authentification) seront configurés via **Registry** (section 3.4).
 
-    - `PRELOGON=YES` : Activer le VPN pré-logon
-    - `USERAUTHENTICATION=SAML` : Méthode d'authentification
-    - `CONNECTMETHOD=pre-logon` : Connexion automatique avant logon
+#### B. Installation Avancée (Paramètres MSI)
+
+Si vous préférez configurer via MSI plutôt que Registry :
+
+```batch
+REM Type: Command (Synchrone)
+REM Description: Install GlobalProtect VPN Client - Configuration avancée
+
+msiexec.exe /i "C:\Windows\Setup\Files\GlobalProtect64-6.2.msi" /qn /norestart ^
+    PORTAL=vpn.entreprise.com ^
+    HIDETRAY=NO ^
+    PRELOGON=YES ^
+    USERAUTHENTICATION=SAML ^
+    CONNECTMETHOD=pre-logon
+```
+
+**Paramètres MSI avancés :**
+
+| Paramètre | Valeur Exemple | Description |
+|-----------|----------------|-------------|
+| `PORTAL` | `vpn.entreprise.com` | Adresse du portail GlobalProtect |
+| `HIDETRAY` | `NO` | Afficher l'icône (`YES`=masquer, `NO`=afficher) |
+| `PRELOGON` | `YES` | Activer le VPN pré-logon |
+| `USERAUTHENTICATION` | `SAML` | Méthode d'authentification (`SAML`, `Kerberos`, `Certificate`) |
+| `CONNECTMETHOD` | `pre-logon` | Mode de connexion (`pre-logon`, `on-demand`, `user-logon`) |
+
+!!! warning "Compatibilité Version GlobalProtect"
+    **Ces paramètres MSI varient selon la version de GlobalProtect.**
+
+    - **GlobalProtect 5.x** : Certains paramètres peuvent ne pas être disponibles
+    - **GlobalProtect 6.x+** : Support complet des paramètres avancés
+    - **Vérification** : Exécuter `msiexec.exe /i GlobalProtect64.msi /?` pour lister les paramètres supportés
+
+    **Recommandation :** Privilégier la **configuration Registry** (section 3.4) qui est plus flexible et compatible toutes versions.
 
 ### 3.4 Configuration Registry Avancée pour Pre-Logon VPN
 
