@@ -374,6 +374,12 @@ reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup" /v "Prelog
 
     Les deux clés activent la même fonctionnalité : **connexion VPN avant l'authentification Windows**.
 
+!!! info "Comprendre la stratégie 'Pre-Logon' (Important)"
+    Il existe souvent une confusion sur le terme "Pre-Logon". Nous configurons ici une **approche hybride** qui combine deux mécanismes distincts :
+
+    1.  **Le Tunnel Machine (Transparent)** : Grâce à `connect-before-logon = 1`, le VPN se connecte automatiquement dès le démarrage de Windows en utilisant le certificat machine. L'utilisateur ne voit rien, mais le PC est déjà connecté au domaine (permettant les scripts de login et GPO).
+    2.  **Le PLAP (Bouton Interactif)** : Grâce à `registerplap` et `ShowPrelogonButton`, un bouton apparaît sur l'écran de connexion. Il sert de **roue de secours** : si le tunnel machine échoue (ex: portail captif Wi-Fi), l'utilisateur peut cliquer pour forcer la connexion manuellement.
+
 ```batch
 REM Type: Command (Synchrone)
 REM Description: Enable Pre-Logon & Certificate-Based Auth
@@ -422,7 +428,7 @@ reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "retain
 
 #### D. Enregistrement PLAP (Credential Provider)
 
-**CRUCIAL** : Cette commande enregistre le Credential Provider pour afficher le bouton VPN sur l'écran de login.
+**CRUCIAL** : Cette commande inscrit la DLL de GlobalProtect dans les fournisseurs d'authentification de Windows (Credential Provider). C'est ce qui permet d'afficher le bouton "Réseau" sur l'écran de login pour une connexion manuelle d'urgence (PLAP), distincte du tunnel machine automatique.
 
 ```batch
 REM Type: Command (Synchrone)
@@ -720,6 +726,11 @@ Le fichier généré par NTLite contiendra :
     Running  CSFalconService    CrowdStrike Falcon Sensor
     Running  MonitoringAgent    Enterprise Monitoring Agent
     ```
+
+    **Étape 6 : Test Pre-Logon**
+
+    1.  [ ] **Pre-Logon (PLAP)** : Le bouton de connexion apparaît-il sur l'écran de login ?
+    2.  [ ] **Pre-Logon (Tunnel)** : (Test avancé) Sans toucher au bouton, le PC est-il pingable dès l'écran de login ? (Preuve que le tunnel machine est monté en arrière-plan).
 
 ### 6.3 Test Pre-Logon VPN (Avancé)
 
