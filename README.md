@@ -34,10 +34,10 @@ Des formations progressives de **niveau Zero to Hero** avec travaux pratiques :
 | **🏰 Windows Server Mastery** | 4 modules | 12h | Intermédiaire |
 | **♻️ Windows Patch Management** | 5 modules | 14h | Avancé |
 | **🍫 Chocolatey Factory** | 5 modules | 12h | Intermédiaire |
-| **💿 NTLite Mastery** | 5 modules | 10h | Avancé |
+| **💿 NTLite Mastery** | 6 modules | 14h | Avancé |
 | **🛢️ SQL Server DBA** | 5 modules | 22h | Avancé |
 
-**Total** : ~120 heures de formation professionnelle
+**Total** : ~125 heures de formation professionnelle
 
 ### Caractéristiques clés
 
@@ -408,9 +408,9 @@ Gestion professionnelle des mises à jour Windows avec WSUS.
 Gestion de paquets Windows avec Chocolatey.
 - Client & CLI, Packaging, Serveur Privé, Déploiement, TP Final
 
-#### 💿 NTLite Mastery (5 modules - 10h)
+#### 💿 NTLite Mastery (6 modules - 14h)
 Personnalisation avancée d'images Windows.
-- Bases, Debloating, Intégration, Automatisation, TP Final
+- Bases, Debloating, Intégration, Automatisation, TP Final, Cas Réel VPN
 
 #### 🛢️ SQL Server DBA (5 modules - 22h)
 Administration professionnelle de SQL Server.

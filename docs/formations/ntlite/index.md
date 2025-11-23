@@ -169,6 +169,35 @@ Vous êtes IT Manager dans **TechCorp** (250 employés). Votre mission : créer 
 
 ---
 
+### 📘 Module 6 : Cas d'Usage Avancé - ISO Sécurisé (VPN & Certificats)
+
+**Durée :** 4 heures
+
+**Scénario :**
+
+Dans un environnement **Zero Trust**, créer une ISO Windows sécurisée intégrant un client VPN GlobalProtect, des certificats Root CA d'entreprise et des agents de sécurité (EDR), le tout configuré automatiquement via Post-Setup.
+
+**Contraintes :**
+
+- ✅ Client VPN GlobalProtect intégré et pré-configuré
+- ✅ Certificats Root CA installés automatiquement
+- ✅ Pre-Logon VPN activé (connexion avant authentification)
+- ✅ Agents de sécurité déployés (CrowdStrike, monitoring)
+- ✅ Configuration Registry automatisée
+- ✅ OOBE complètement automatisée
+
+**Livrable :** ISO bootable `Windows11_Enterprise_VPN.iso`
+
+**Compétences :**
+
+- Post-Setup Commands (Run vs Command)
+- Installation MSI silencieuse (GlobalProtect)
+- Gestion certificats PKI (certutil)
+- Configuration Registry avancée
+- Déploiement massif en entreprise
+
+---
+
 ## Prérequis
 
 ### Connaissances
@@ -285,14 +314,17 @@ Chaque module suit la structure **CoPrEx** :
 
 ## Roadmap de la Formation
 
-| Module | Statut | Date |
-|--------|--------|------|
-| Introduction & Programme | ✅ Disponible | 2025-01-22 |
-| Module 1 - Bases | 🔄 En cours | 2025-01-22 |
-| Module 2 - Debloating | 📝 Planifié | 2025-01-23 |
-| Module 3 - Intégration | 📝 Planifié | 2025-01-24 |
-| Module 4 - Automatisation | 📝 Planifié | 2025-01-25 |
-| Module 5 - TP Final | 📝 Planifié | 2025-01-26 |
+| Module | Statut | Durée |
+|--------|--------|-------|
+| Introduction & Programme | ✅ Disponible | - |
+| Module 1 - Bases | ✅ Disponible | 2h |
+| Module 2 - Debloating | ✅ Disponible | 3h |
+| Module 3 - Intégration | ✅ Disponible | 2h |
+| Module 4 - Automatisation | ✅ Disponible | 3h |
+| Module 5 - TP Final | ✅ Disponible | 4h |
+| Module 6 - Cas Réel VPN | ✅ Disponible | 4h |
+
+**Durée totale :** 18 heures (base) ou **14 heures** (modules essentiels 1-5)
 
 ---
 

@@ -12,7 +12,7 @@
 !!! success "🎓 Nouveau : Découvrez ShellBook Academy"
     **9 parcours de formation professionnels** pour monter en compétence, du niveau débutant à expert.
 
-    120 heures de contenu pédagogique : DevOps, Linux, Windows, Sécurité, Automatisation, Bases de Données.
+    125 heures de contenu pédagogique : DevOps, Linux, Windows, Sécurité, Automatisation, Bases de Données.
 
     [:octicons-arrow-right-24: Accéder aux Formations](formations/index.md){ .md-button .md-button--primary }
 
@@ -185,6 +185,6 @@ Ce projet suit les standards **SecNumCloud** pour la sécurité et la conformit�
 
 <div style="text-align: center; color: #64748b; margin-top: 3em;">
   <p><strong>ShellBook Academy</strong> - Votre plateforme d'apprentissage SysOps & DevOps</p>
-  <p>📚 100+ Guides • 🎓 9 Formations • 120h de Contenu</p>
+  <p>📚 100+ Guides • 🎓 9 Formations • 125h de Contenu</p>
   <p>Linux • Windows • Kubernetes • DevOps • Security</p>
 </div>

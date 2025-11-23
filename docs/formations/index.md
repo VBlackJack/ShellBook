@@ -97,6 +97,28 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](windows-patching/)
 
+-   :material-disc:{ .lg .middle } **NTLite Mastery : Personnalisation d'Images Windows**
+
+    ---
+
+    Créez des images Windows sur mesure : debloating, intégration drivers/updates, automatisation OOBE, et déploiement VPN/certificats entreprise.
+
+    **Compétences :** Debloating, Post-Setup, Unattended XML, VPN/PKI Integration
+    **Durée :** 2 jours (14h) - 6 modules
+
+    [:octicons-arrow-right-24: Accéder à la Formation](ntlite/)
+
+-   :material-database:{ .lg .middle } **SQL Server DBA : Administration Professionnelle**
+
+    ---
+
+    Administrez SQL Server en production : architecture, sécurité, maintenance (Ola Hallengren), automatisation (dbatools), et projet Phoenix complet.
+
+    **Compétences :** Installation, Sécurité, Backups, Automatisation PowerShell
+    **Durée :** 4 jours (22h) - 5 modules
+
+    [:octicons-arrow-right-24: Accéder à la Formation](sql-server/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
