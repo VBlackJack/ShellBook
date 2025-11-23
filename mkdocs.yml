@@ -255,6 +255,8 @@ nav:
       - security/crypto-concepts.md
       - security/certificates.md
       - security/openssl-cli.md
+    - Défense & EDR:
+      - security/crowdstrike-edr.md
       - security/hashicorp-vault.md
     - Red Team & Audit:
       - security/ctf-guide.md
