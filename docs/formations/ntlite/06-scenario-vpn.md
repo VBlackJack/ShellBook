@@ -34,6 +34,16 @@ graph TD
     style F fill:#3498db
 ```
 
+!!! info "Terminologie : Pre-Logon"
+    Dans ce diagramme et la documentation, **"Pre-Logon"** désigne le mode VPN activé **avant la connexion utilisateur Windows**.
+
+    **Techniquement, cette fonctionnalité est configurée par :**
+    - Clé Registry **`PreLogon=1`** (legacy, versions 4.x/5.x)
+    - Clé Registry **`connect-before-logon=1`** (modern, version 6.x+)
+    - Paramètre MSI **`CONNECTMETHOD=pre-logon`**
+
+    **Palo Alto Networks utilise ces trois termes de manière interchangeable** pour désigner la même fonctionnalité. Voir section 3.4 pour la configuration complète.
+
 **Étapes clés :**
 
 1. **Pre-Logon** : VPN connecté avec **certificat machine uniquement** (aucun certificat utilisateur disponible avant logon)
@@ -308,6 +318,18 @@ msiexec.exe /i "C:\Windows\Setup\Files\GlobalProtect64-6.2.msi" /qn /norestart ^
 | `USERAUTHENTICATION` | `SAML` | Méthode d'authentification (`SAML`, `Kerberos`, `Certificate`) |
 | `CONNECTMETHOD` | `pre-logon` | Mode de connexion (`pre-logon`, `on-demand`, `user-logon`) |
 
+!!! info "Correspondance MSI ↔ Registry"
+    Le paramètre MSI **`CONNECTMETHOD=pre-logon`** correspond à la clé Registry **`connect-before-logon=1`**.
+
+    - **MSI (Installation)** : `CONNECTMETHOD=pre-logon` → Configure automatiquement la Registry
+    - **Registry (Post-Setup)** : `reg.exe add ... /v "connect-before-logon" /t REG_DWORD /d 1 /f`
+
+    **Pourquoi deux noms différents ?**
+    - MSI utilise une nomenclature simplifiée pour les installateurs
+    - Registry conserve les noms techniques historiques de Palo Alto Networks
+
+    **Best Practice :** Utiliser **MSI pour l'installation initiale**, puis **Registry pour les ajustements** (section 3.4).
+
 !!! warning "Compatibilité Version GlobalProtect"
     **Ces paramètres MSI varient selon la version de GlobalProtect.**
 
@@ -337,6 +359,20 @@ reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup" /v "Prelog
 ```
 
 #### B. Paramètres de Connexion (Settings)
+
+!!! info "Terminologie Palo Alto : PreLogon vs connect-before-logon"
+    **Pourquoi deux clés Registry différentes ?**
+
+    GlobalProtect utilise **deux noms différents** pour la même fonctionnalité :
+
+    - **`PreLogon`** (REG_DWORD) : Clé historique (GlobalProtect 4.x et 5.x legacy)
+    - **`connect-before-logon`** (REG_DWORD) : Clé moderne (GlobalProtect 5.0+, 6.x)
+
+    **Best Practice :** Configurer **LES DEUX** clés pour garantir la compatibilité :
+    - Clients anciens (4.x, early 5.x) → Lisent uniquement `PreLogon`
+    - Clients récents (6.x+) → Préfèrent `connect-before-logon`
+
+    Les deux clés activent la même fonctionnalité : **connexion VPN avant l'authentification Windows**.
 
 ```batch
 REM Type: Command (Synchrone)
@@ -413,6 +449,14 @@ REM Description: Register Pre-Logon Access Provider (PLAP)
 
 **CrowdStrike Falcon :**
 
+!!! danger "Security - Customer ID Protection"
+    **IMPORTANT :** Remplacez `VOTRE-CUSTOMER-ID` par votre CID CrowdStrike réel.
+
+    - ❌ **Ne JAMAIS commiter** ce CID dans Git, SVN, ou tout dépôt partagé
+    - ✅ **Stocker** dans un vault sécurisé (Azure Key Vault, HashiCorp Vault, AWS Secrets Manager)
+    - ✅ **Utiliser** des variables d'environnement ou secrets CI/CD pour automatisation
+    - 📚 **Formation** : Utilisez `CID=DEMO-1234-5678-ABCD-TRAINING` comme exemple fake
+
 ```batch
 REM Type: Run (Asynchrone)
 REM Description: Install CrowdStrike Falcon Agent
@@ -480,10 +524,19 @@ Configuration de l'expérience utilisateur au premier démarrage.
     | **Username** | `Administrator` | Compte admin local |
     | **Enabled** | `true` | Activer autologon |
     | **Logon Count** | `1` | Juste pour le premier boot |
-    | **Password** | `VotreMotDePasse` | MDP admin sécurisé |
+    | **Password** | `Train1ng-D3m0-N3v3rUs3!` | MDP admin sécurisé |
+
+    !!! warning "Mot de Passe de Formation"
+        **Le mot de passe `Train1ng-D3m0-N3v3rUs3!` est un exemple FICTIF pour cette formation.**
+
+        **En production, VOUS DEVEZ :**
+        - Générer un mot de passe unique et complexe (20+ caractères aléatoires)
+        - Utiliser **LAPS** (Local Administrator Password Solution) pour rotation automatique
+        - Stocker le mot de passe dans un coffre-fort (HashiCorp Vault, Azure Key Vault)
+        - **JAMAIS** committer le mot de passe dans Git ou le laisser en clair dans l'Unattended.xml après déploiement
 
     !!! danger "Sécurité Critique"
-        - Mot de passe **complexe** (12+ caractères)
+        - Mot de passe **complexe** (20+ caractères)
         - Désactiver le compte Admin après déploiement
         - Utiliser **LAPS** en production
 
@@ -509,7 +562,7 @@ Configuration de l'expérience utilisateur au premier démarrage.
     | Paramètre | Valeur | Description |
     |-----------|--------|-------------|
     | **Computer Name** | `SEC-%SERIAL%` ou `PC-%RAND:6%` | Nom unique |
-    | **Administrator Password** | `P@ssw0rd!` (exemple) | MDP admin |
+    | **Administrator Password** | `Train1ng-D3m0-N3v3rUs3!` | MDP admin (FICTIF) |
     | **Active** | `Yes` | Compte activé |
 
     !!! warning "Recommandations Post-Déploiement"
@@ -532,7 +585,8 @@ Le fichier généré par NTLite contiendra :
     </OOBE>
     <UserAccounts>
         <AdministratorPassword>
-            <Value>UABAAHMAcwB3ADAAcgBkACEA</Value> <!-- Base64: P@ssw0rd! -->
+            <!-- Base64 UTF-16LE: Train1ng-D3m0-N3v3rUs3! (EXEMPLE FICTIF FORMATION) -->
+            <Value>VAByAGEAaQBuADEAbgBnAC0ARAAzAG0AMAAtAE4AMwB2ADMAcgBVAHMAMwAhAA==</Value>
             <PlainText>false</PlainText>
         </AdministratorPassword>
     </UserAccounts>
@@ -540,7 +594,8 @@ Le fichier généré par NTLite contiendra :
         <Enabled>true</Enabled>
         <Username>Administrator</Username>
         <Password>
-            <Value>UABAAHMAcwB3ADAAcgBkACEA</Value>
+            <!-- Base64 UTF-16LE: Train1ng-D3m0-N3v3rUs3! (EXEMPLE FICTIF FORMATION) -->
+            <Value>VAByAGEAaQBuADEAbgBnAC0ARAAzAG0AMAAtAE4AMwB2ADMAcgBVAHMAMwAhAA==</Value>
             <PlainText>false</PlainText>
         </Password>
         <LogonCount>1</LogonCount>
@@ -971,7 +1026,7 @@ Vous devez créer une ISO Windows 11 Entreprise pour un client avec les spécifi
    - Portal : `vpn-client.example.com`
    - Pre-Logon activé
 5. **OOBE :** Complètement automatisée
-6. **Compte admin :** `LocalAdmin` / `C0mpl3xP@ss!`
+6. **Compte admin :** `LocalAdmin` / `Tr@in1ng-Fake-P@ss-2024!` (FICTIF)
 
 **Tâches :**
 
@@ -1016,10 +1071,18 @@ REM 4. Installation SentinelOne (Run - Asynchrone)
 "C:\Windows\Setup\Files\Security\SentinelInstaller.exe" /quiet /site-token=VOTRE_TOKEN
 ```
 
+!!! danger "Security - Site Token Protection"
+    **CRITIQUE :** Le `site-token` est un secret d'authentification sensible.
+
+    - ❌ **Ne JAMAIS exposer** les tokens dans documentation, screenshots, ou logs
+    - ✅ **Utiliser** des variables d'environnement sécurisées ou configuration management
+    - ✅ **Rotation** : Régénérer les tokens tous les 90 jours minimum
+    - 📚 **Formation** : Utilisez `site-token=DEMO_TOKEN_TRAINING_ONLY` comme placeholder
+
 **Unattended Settings :**
 
 - Skip User OOBE : ✅
-- Administrator : `LocalAdmin` / `C0mpl3xP@ss!`
+- Administrator : `LocalAdmin` / `Tr@in1ng-Fake-P@ss-2024!` (FICTIF)
 - Autologon : 1 time
 
 **Checklist Validation :**
