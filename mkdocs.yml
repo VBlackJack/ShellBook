@@ -242,6 +242,7 @@ nav:
         - Module 3 - Intégration: formations/ntlite/03-module.md
         - Module 4 - Automatisation: formations/ntlite/04-module.md
         - Module 5 - TP Final: formations/ntlite/05-tp-final.md
+        - Module 6 - Cas Réel VPN: formations/ntlite/06-scenario-vpn.md
       - 🛢️ SQL Server DBA:
         - Introduction: formations/sql-server/index.md
         - Module 1 - Architecture: formations/sql-server/01-module.md
