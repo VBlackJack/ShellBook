@@ -13,9 +13,31 @@ Ce module présente un **scénario entreprise réel** : la création d'une ISO W
 - 🔐 **Client VPN GlobalProtect** (Palo Alto Networks)
 - 📜 **Certificats Root CA** de l'entreprise
 - 🛡️ **Outils de sécurité** (CrowdStrike, agents de monitoring)
+- 🔑 **Authentification forte** (YubiKey/SmartCard)
 - ⚙️ **Configuration pré-déployée** via Registry et Post-Setup
 
-**Cas d'usage :** Déploiement massif de postes sécurisés nécessitant une connexion VPN dès le premier démarrage, avant même l'authentification utilisateur.
+**Cas d'usage :** Déploiement massif de postes nomades sécurisés nécessitant une connexion VPN dès le premier démarrage, avant même l'authentification utilisateur, avec bascule vers une authentification utilisateur forte (certificat SmartCard).
+
+### Flux de Connexion Sécurisée
+
+```mermaid
+graph TD
+    A[Boot Windows] -->|Certificat Machine| B[Tunnel VPN Pre-Logon]
+    B -->|Connexion au DC via VPN| C[Écran de Login Windows]
+    C -->|User + YubiKey/SmartCard| D[Ouverture de Session]
+    D -->|Switch Context VPN| E[Tunnel VPN User Auth]
+    E -->|Accès Ressources Entreprise| F[Bureau Windows]
+
+    style B fill:#2ecc71
+    style E fill:#3498db
+    style D fill:#f39c12
+```
+
+**Étapes clés :**
+
+1. **Pre-Logon** : VPN connecté avec certificat machine (authentification transparente)
+2. **Logon** : Utilisateur s'authentifie avec SmartCard/YubiKey
+3. **Post-Logon** : VPN rebascule sur authentification utilisateur (contexte sécurisé)
 
 ---
 
@@ -68,7 +90,7 @@ L'ISO intègre tous les composants nécessaires et les configure automatiquement
 Organisation du dossier de travail pour ce scénario :
 
 ```
-D:\NTLite\PROJET_ISO\
+G:\NTLite\Projet_VPN\
 │
 ├── ISO_SOURCE\                      # ISO Windows montée/extraite
 │   ├── sources\
@@ -76,28 +98,45 @@ D:\NTLite\PROJET_ISO\
 │   │   └── install.wim
 │   └── ...
 │
-├── INTEGRATION\                     # Fichiers à intégrer
-│   ├── VPN\
-│   │   └── GlobalProtect64-6.2.msi
+├── Applications\                    # Applications à intégrer
+│   ├── DellCommandUpdate\
+│   │   └── Dell-Command-Update_Setup.exe
 │   │
-│   ├── Certificates\
-│   │   ├── RootCA-Entreprise.cer
-│   │   ├── SubCA-Infra.cer
-│   │   └── SubCA-Users.cer
+│   ├── GlobalProtect\
+│   │   └── globalprotect.msi        # Client VPN (v6.x)
 │   │
-│   ├── Security\
-│   │   ├── CrowdStrike-Installer.exe
-│   │   └── monitoring-agent.msi
+│   ├── KeePass\
+│   │   └── KeePass-Setup.exe        # Gestionnaire mots de passe
 │   │
-│   └── Scripts\
-│       └── configure-vpn.ps1
+│   ├── PuttyCAC\
+│   │   └── puttycac-x64.msi         # Putty compatible SmartCard
+│   │
+│   └── YubiKey\
+│       └── yubikey-manager-qt-win64.exe  # Gestionnaire YubiKey
 │
-├── POST_SETUP\                      # Commandes Post-Setup NTLite
-│   └── (défini dans l'interface NTLite)
+├── Folders\                         # Dossiers à copier
+│   ├── Certificates\                # Certificats PKI
+│   │   ├── Enterprise-RootCA.crt    # CA Racine entreprise
+│   │   ├── Enterprise-SubCA.crt     # CA Intermédiaire
+│   │   └── External-RootCA.cer      # CA Externe (si nécessaire)
+│   │
+│   ├── Scripts\
+│   │   └── Register-VPN.ps1         # Script post-install
+│   │
+│   └── PSWindowsUpdate\             # Module PowerShell (optionnel)
+│
+├── Security\                        # Agents de sécurité
+│   ├── CrowdStrike-Installer.exe
+│   └── monitoring-agent.msi
 │
 └── ISO_FINALE\                      # ISO générée
-    └── Windows11_Enterprise_VPN.iso
+    └── Windows11_Enterprise_VPN_Secure.iso
 ```
+
+!!! tip "Organisation Recommandée"
+    - **Applications/** : Tout ce qui s'installe via MSI/EXE
+    - **Folders/** : Fichiers statiques (certificats, scripts, modules)
+    - **Security/** : Agents EDR et outils de sécurité
 
 ---
 
@@ -238,41 +277,88 @@ msiexec.exe /i "C:\Windows\Setup\Files\GlobalProtect64-6.2.msi" /qn /norestart P
     - `USERAUTHENTICATION=SAML` : Méthode d'authentification
     - `CONNECTMETHOD=pre-logon` : Connexion automatique avant logon
 
-### 3.4 Configuration Registry pour Pre-Logon VPN
+### 3.4 Configuration Registry Avancée pour Pre-Logon VPN
 
-**Objectif :** Activer la fonctionnalité Pre-Logon de GlobalProtect via le Registre.
+**Objectif :** Configurer GlobalProtect pour le Pre-Logon avec support SmartCard/YubiKey.
 
-**Post-Setup Command :**
+!!! warning "Configuration Critique"
+    Les clés Registry suivantes contrôlent le comportement du VPN. Une erreur peut empêcher la connexion Pre-Logon.
+
+#### A. Configuration du Portail (PanSetup)
+
+Définit le portail par défaut.
 
 ```batch
 REM Type: Command (Synchrone)
-REM Description: Enable GlobalProtect Pre-Logon
+REM Description: Configure Portal Address
 
-reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "PortalAddress" /t REG_SZ /d "vpn.entreprise.com" /f
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup" /v "Portal" /t REG_SZ /d "vpn.entreprise.com" /f
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup" /v "Prelogon" /t REG_DWORD /d 1 /f
 ```
 
+#### B. Paramètres de Connexion (Settings)
+
 ```batch
 REM Type: Command (Synchrone)
-REM Description: Enable Pre-Logon Mode
+REM Description: Enable Pre-Logon & Certificate-Based Auth
 
+REM Activer le Pre-Logon (connexion avant authentification)
 reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "PreLogon" /t REG_DWORD /d 1 /f
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "connect-before-logon" /t REG_DWORD /d 1 /f
+
+REM Recherche de certificats dans Machine ET Utilisateur
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "certificate-store-lookup" /t REG_SZ /d "user-and-machine" /f
+
+REM Magasin personnel (My) pour les certificats
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "certificate-store" /t REG_SZ /d "My" /f
+
+REM Délai de connexion (laisser le temps au réseau de monter)
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "prelogon-connect-delay" /t REG_DWORD /d 15 /f
+
+REM Adresse du portail
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "PortalAddress" /t REG_SZ /d "vpn.entreprise.com" /f
+
+REM Afficher l'icône système
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "HideTrayIcon" /t REG_DWORD /d 0 /f
 ```
+
+#### C. Intégration SmartCard / YubiKey (CBL)
 
 ```batch
 REM Type: Command (Synchrone)
-REM Description: Hide Tray Icon for Standard Users
+REM Description: Enable SmartCard Support
 
-reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "HideTrayIcon" /t REG_DWORD /d 0 /f
+REM Utiliser la SmartCard pour l'authentification
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\CBL" /v "UseSmartCard" /t REG_SZ /d "yes" /f
+
+REM Maintenir la connexion si la carte est retirée (optionnel)
+reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "retain-connection-smartcard-removal" /t REG_SZ /d "yes" /f
+```
+
+#### D. Enregistrement PLAP (Credential Provider)
+
+**CRUCIAL** : Cette commande enregistre le Credential Provider pour afficher le bouton VPN sur l'écran de login.
+
+```batch
+REM Type: Command (Synchrone)
+REM Description: Register Pre-Logon Access Provider (PLAP)
+
+"C:\Program Files\Palo Alto Networks\GlobalProtect\PanGPS.exe" -registerplap
 ```
 
 **Clés Registry Importantes :**
 
 | Clé | Type | Valeur | Description |
 |-----|------|--------|-------------|
-| `PortalAddress` | REG_SZ | `vpn.entreprise.com` | URL du portail GP |
-| `PreLogon` | REG_DWORD | `1` | Activer VPN pré-logon |
-| `HideTrayIcon` | REG_DWORD | `0` | Afficher icône (0=visible) |
-| `ConnectMethod` | REG_SZ | `on-demand` | Mode de connexion |
+| `Portal` (PanSetup) | REG_SZ | `vpn.entreprise.com` | URL du portail GP |
+| `Prelogon` (PanSetup) | REG_DWORD | `1` | Activer Pre-Logon |
+| `PreLogon` (Settings) | REG_DWORD | `1` | Mode Pre-Logon |
+| `connect-before-logon` | REG_DWORD | `1` | Connexion avant login |
+| `certificate-store-lookup` | REG_SZ | `user-and-machine` | Recherche certif machine+user |
+| `certificate-store` | REG_SZ | `My` | Magasin personnel |
+| `prelogon-connect-delay` | REG_DWORD | `15` | Délai connexion (secondes) |
+| `UseSmartCard` (CBL) | REG_SZ | `yes` | Support SmartCard/YubiKey |
+| `retain-connection-smartcard-removal` | REG_SZ | `yes` | Maintenir VPN sans carte |
 
 ### 3.5 Installation des Agents de Sécurité
 
@@ -298,25 +384,89 @@ msiexec.exe /i "C:\Windows\Setup\Files\Security\monitoring-agent.msi" /qn SERVER
 
 ## 🎨 Phase 4 : Configuration Unattended (OOBE)
 
-### 4.1 Paramètres Unattended Recommandés
+### 4.1 Passes d'Installation Windows
 
-**Onglet NTLite : Unattended**
+NTLite configure l'installation via différentes "passes" (Configuration Passes) :
 
-| Section | Paramètre | Valeur | Objectif |
-|---------|-----------|--------|----------|
-| **Settings → Display** | Skip User OOBE | ✅ Enabled | Passer les questions utilisateur |
-| **Settings → Privacy** | Disable Telemetry | ✅ Enabled | Conformité RGPD |
-| **Settings → Privacy** | Disable Advertising ID | ✅ Enabled | Désactiver tracking |
-| **User Accounts** | Administrator | `Admin` / `P@ssw0rd!` | Compte admin temporaire |
-| **Autologon** | Enable Autologon | ✅ 1 time | Premier boot automatique |
-| **Computer Name** | Pattern | `PC-%RAND:6%` | Nom unique généré |
+- **Pass 4 (specialize)** : Configuration machine (nom, copie de profil)
+- **Pass 7 (oobeSystem)** : Configuration première exécution (OOBE, autologon)
 
-!!! danger "Sécurité du Compte Administrateur"
-    Le compte admin temporaire doit être :
+### 4.2 Pass 4 : Specialize (Configuration Machine)
 
-    - **Désactivé** après le déploiement (via GPO ou script)
-    - **Mot de passe complexe** conforme à la politique entreprise
-    - **Remplacé** par un compte admin local LAPS (Local Admin Password Solution)
+**Onglet NTLite : Unattended → Pass 4**
+
+| Composant | Paramètre | Valeur | Description |
+|-----------|-----------|--------|-------------|
+| `Microsoft-Windows-Shell-Setup` | `ComputerName` | `SEC-%SERIAL%` | Nommage basé sur N° série |
+| `Microsoft-Windows-Shell-Setup` | `CopyProfile` | `true` | Copier profil Admin vers Default User |
+| `Microsoft-Windows-Deployment` | `RunSynchronous` | `net user Administrator /active:Yes` | Activer compte Admin local |
+
+### 4.3 Pass 7 : oobeSystem (Première Expérience)
+
+Configuration de l'expérience utilisateur au premier démarrage.
+
+=== "Localisation"
+
+    **Paramètres régionaux et langue :**
+
+    | Paramètre | Valeur | Description |
+    |-----------|--------|-------------|
+    | **Input Locale** | `040c:0000040c` | Clavier Français AZERTY |
+    | **System Locale** | `fr-FR` | Paramètres régionaux système |
+    | **User Locale** | `fr-FR` | Paramètres utilisateur |
+    | **UI Language** | `fr-FR` ou `en-US` | Langue de l'interface |
+    | **Time Zone** | `Romance Standard Time` | Fuseau Paris (GMT+1) |
+
+    !!! tip "Environnement International"
+        Pour un environnement multilingue, choisir `en-US` comme UI Language (standard technique).
+
+=== "Auto-Logon"
+
+    **Ouverture automatique de session (1 fois) :**
+
+    Permet d'exécuter les scripts de post-installation dans une session ouverte.
+
+    | Paramètre | Valeur | Description |
+    |-----------|--------|-------------|
+    | **Username** | `Administrator` | Compte admin local |
+    | **Enabled** | `true` | Activer autologon |
+    | **Logon Count** | `1` | Juste pour le premier boot |
+    | **Password** | `VotreMotDePasse` | MDP admin sécurisé |
+
+    !!! danger "Sécurité Critique"
+        - Mot de passe **complexe** (12+ caractères)
+        - Désactiver le compte Admin après déploiement
+        - Utiliser **LAPS** en production
+
+=== "Masquer OOBE"
+
+    **Désactiver les questions de configuration :**
+
+    | Paramètre | Valeur | Description |
+    |-----------|--------|-------------|
+    | **Hide EULA** | `true` | Pas d'accord de licence |
+    | **Hide Local Account Screen** | `true` | Pas de création compte local |
+    | **Hide Online Account Screens** | `true` | Pas de compte Microsoft |
+    | **Hide Wireless Setup** | `true` | Pas de config WiFi |
+    | **Network Location** | `Work` | Réseau entreprise |
+    | **SkipMachineOOBE** | `true` | Skip toutes questions machine |
+    | **SkipUserOOBE** | `true` | Skip toutes questions utilisateur |
+    | **ProtectYourPC** | `3` | Désactiver questions confidentialité |
+
+=== "Compte Admin"
+
+    **Configuration du compte administrateur local :**
+
+    | Paramètre | Valeur | Description |
+    |-----------|--------|-------------|
+    | **Computer Name** | `SEC-%SERIAL%` ou `PC-%RAND:6%` | Nom unique |
+    | **Administrator Password** | `P@ssw0rd!` (exemple) | MDP admin |
+    | **Active** | `Yes` | Compte activé |
+
+    !!! warning "Recommandations Post-Déploiement"
+        1. **Désactiver** le compte Admin local : `net user Administrator /active:No`
+        2. **Activer LAPS** pour rotation automatique des mots de passe
+        3. **Auditer** l'utilisation du compte admin (Event 4624, 4634)
 
 ### 4.2 Exemple Autounattend.xml (Extrait)
 
@@ -659,6 +809,70 @@ net stop PanGPS && net start PanGPS
 
 - Vérifier dans NTLite : `Unattended → Settings → Skip User OOBE` = **Enabled**
 - Ré-appliquer l'image et recréer l'ISO
+
+### Problème 5 : Erreur "File not found" lors de la création ISO
+
+**Symptômes :**
+
+- NTLite échoue avec `File not found` pendant **Create ISO**
+- L'image semble correcte mais l'export plante
+
+**Causes possibles :**
+
+1. **Mises à jour intégrées** dont le fichier source a été déplacé/supprimé du cache NTLite
+2. **Chemin de fichier trop long** (limite Windows 260 caractères)
+
+**Solution :**
+
+```
+1. Ouvrir l'onglet **Updates** dans NTLite
+2. Supprimer les mises à jour dont le fichier source est manquant
+3. Réintégrer les updates depuis un cache valide
+4. Ré-appliquer et recréer l'ISO
+```
+
+**Alternative :**
+
+- Déplacer le projet NTLite vers un chemin court (ex: `C:\NTL\`)
+- Vider le cache : `C:\Users\[User]\AppData\Local\NTLite\Cache\`
+
+### Problème 6 : VPN ne monte pas en Pre-Logon
+
+**Symptômes :**
+
+- Le bouton VPN apparaît sur l'écran de login, mais la connexion échoue
+- Erreur certificat ou timeout
+
+**Causes possibles :**
+
+1. **Certificat machine manquant** ou non approuvé par le portail
+2. **Réseau non disponible** (Ethernet/WiFi non configuré au boot)
+3. **PLAP non enregistré** correctement
+
+**Solution :**
+
+```powershell
+# 1. Vérifier que le certificat machine est présent
+Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object { $_.Subject -like "*VPN*" }
+
+# 2. Vérifier les logs GlobalProtect
+Get-Content "C:\Program Files\Palo Alto Networks\GlobalProtect\PanGPS.log" | Select-String -Pattern "error"
+
+# 3. Ré-enregistrer le PLAP
+& "C:\Program Files\Palo Alto Networks\GlobalProtect\PanGPS.exe" -registerplap
+
+# 4. Redémarrer le service
+Restart-Service PanGPS
+```
+
+**Vérification PLAP :**
+
+```batch
+REM Vérifier que le Credential Provider est enregistré
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\Credential Providers\{7AD9B4F0-82F0-4ABD-AA51-94A1F96F6B2E}"
+```
+
+Si la clé n'existe pas, le PLAP n'est pas enregistré correctement.
 
 ---
 
