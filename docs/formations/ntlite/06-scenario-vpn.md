@@ -16,28 +16,35 @@ Ce module présente un **scénario entreprise réel** : la création d'une ISO W
 - 🔑 **Authentification forte** (YubiKey/SmartCard)
 - ⚙️ **Configuration pré-déployée** via Registry et Post-Setup
 
-**Cas d'usage :** Déploiement massif de postes nomades sécurisés nécessitant une connexion VPN dès le premier démarrage, avant même l'authentification utilisateur, avec bascule vers une authentification utilisateur forte (certificat SmartCard).
+**Cas d'usage :** Déploiement massif de postes nomades sécurisés nécessitant une connexion VPN dès le premier démarrage, avant même l'authentification utilisateur, avec maintien de session via YubiKey/SmartCard.
 
 ### Flux de Connexion Sécurisée
 
 ```mermaid
 graph TD
-    A[Boot Windows] -->|Certificat Machine| B[Tunnel VPN Pre-Logon]
+    A[Boot Windows] -->|Certificat Machine uniquement| B[Tunnel VPN Pre-Logon]
     B -->|Connexion au DC via VPN| C[Écran de Login Windows]
-    C -->|User + YubiKey/SmartCard| D[Ouverture de Session]
-    D -->|Switch Context VPN| E[Tunnel VPN User Auth]
-    E -->|Accès Ressources Entreprise| F[Bureau Windows]
+    C -->|Credentials AD| D[Ouverture de Session Windows]
+    D -->|GlobalProtect demande PIN| E[Code PIN YubiKey/SmartCard]
+    E -->|Authentification réussie| F[Session VPN maintenue]
+    F -->|Accès Ressources Entreprise| G[Bureau Windows]
 
     style B fill:#2ecc71
-    style E fill:#3498db
-    style D fill:#f39c12
+    style E fill:#f39c12
+    style F fill:#3498db
 ```
 
 **Étapes clés :**
 
-1. **Pre-Logon** : VPN connecté avec certificat machine (authentification transparente)
-2. **Logon** : Utilisateur s'authentifie avec SmartCard/YubiKey
-3. **Post-Logon** : VPN rebascule sur authentification utilisateur (contexte sécurisé)
+1. **Pre-Logon** : VPN connecté avec **certificat machine uniquement** (aucun certificat utilisateur disponible avant logon)
+2. **Logon Windows** : Utilisateur s'authentifie avec ses credentials AD (le VPN machine est déjà actif)
+3. **Post-Logon** : GlobalProtect **demande le code PIN de la YubiKey/SmartCard** pour maintenir la session VPN sous le contexte utilisateur
+
+!!! warning "Limitation Technique Importante"
+    GlobalProtect **ne peut pas** lire un certificat utilisateur avant l'ouverture de session Windows.
+
+    - **Pre-Logon** : Utilise uniquement le certificat **machine** (stocké dans `Cert:\LocalMachine\My`)
+    - **Post-Logon** : Demande le **PIN SmartCard** pour authentification forte utilisateur
 
 ---
 
@@ -322,18 +329,27 @@ REM Afficher l'icône système
 reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "HideTrayIcon" /t REG_DWORD /d 0 /f
 ```
 
-#### C. Intégration SmartCard / YubiKey (CBL)
+#### C. Intégration SmartCard / YubiKey (CBL) - Post-Logon
+
+!!! info "SmartCard = Authentification Post-Logon"
+    La SmartCard/YubiKey intervient **après** l'ouverture de session Windows, pour maintenir le tunnel VPN avec authentification forte utilisateur.
 
 ```batch
 REM Type: Command (Synchrone)
-REM Description: Enable SmartCard Support
+REM Description: Enable SmartCard Support (Post-Logon)
 
-REM Utiliser la SmartCard pour l'authentification
+REM Utiliser la SmartCard pour l'authentification utilisateur POST-logon
 reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\CBL" /v "UseSmartCard" /t REG_SZ /d "yes" /f
 
-REM Maintenir la connexion si la carte est retirée (optionnel)
+REM Maintenir la connexion si la carte est retirée (optionnel - sécurité vs confort)
 reg.exe add "HKLM\SOFTWARE\Palo Alto Networks\GlobalProtect\Settings" /v "retain-connection-smartcard-removal" /t REG_SZ /d "yes" /f
 ```
+
+**Comportement :**
+
+1. **Pre-Logon** : VPN monte avec certificat machine (aucune SmartCard requise)
+2. **Logon** : Utilisateur entre login/password AD
+3. **Post-Logon** : GlobalProtect popup demande **code PIN de la YubiKey** → authentification forte pour maintenir le tunnel
 
 #### D. Enregistrement PLAP (Credential Provider)
 
@@ -619,22 +635,25 @@ Le fichier généré par NTLite contiendra :
 
 ### 6.3 Test Pre-Logon VPN (Avancé)
 
-**Objectif :** Vérifier que le VPN se connecte **avant** le logon utilisateur.
+**Objectif :** Vérifier que le VPN se connecte **avant** le logon utilisateur avec le certificat machine.
 
 **Procédure :**
 
-1. **Fermer la session** Windows
+1. **Fermer la session** Windows (ou redémarrer la VM)
 2. Sur l'écran de **connexion** (Ctrl+Alt+Del), observer la barre système
 3. **Vérifier** que l'icône GlobalProtect est présente
-4. **Cliquer** sur l'icône → Connexion VPN disponible avant authentification
-5. **Se connecter au VPN**, puis se loguer avec un compte utilisateur
+4. **Cliquer** sur l'icône → Le VPN se connecte automatiquement avec le **certificat machine**
+5. **Attendre** que le tunnel soit établi (icône verte)
+6. **Se loguer** avec un compte AD → La connexion au DC fonctionne grâce au VPN déjà actif
+7. **Après le logon** : GlobalProtect demande le **code PIN de la YubiKey** pour maintenir la session
 
 !!! warning "Prérequis Pre-Logon"
     Le Pre-Logon VPN nécessite :
 
-    - **Credential Provider** GlobalProtect installé
-    - **Configuration GPO** pour activer le Credential Provider
+    - **Certificat machine** valide dans `Cert:\LocalMachine\My` (approuvé par le portail GP)
+    - **Credential Provider** GlobalProtect installé (PLAP)
     - **Réseau accessible** (Ethernet ou Wi-Fi pré-configuré)
+    - **Pas de certificat utilisateur requis** pour le Pre-Logon
 
 ---
 
@@ -842,18 +861,20 @@ net stop PanGPS && net start PanGPS
 
 - Le bouton VPN apparaît sur l'écran de login, mais la connexion échoue
 - Erreur certificat ou timeout
+- Message "Unable to authenticate"
 
 **Causes possibles :**
 
-1. **Certificat machine manquant** ou non approuvé par le portail
-2. **Réseau non disponible** (Ethernet/WiFi non configuré au boot)
-3. **PLAP non enregistré** correctement
+1. **Certificat machine manquant** ou non approuvé par le portail GlobalProtect
+2. **Certificat machine sans clé privée** (certificat importé mais pas la clé)
+3. **Réseau non disponible** (Ethernet/WiFi non configuré au boot)
+4. **PLAP non enregistré** correctement
 
 **Solution :**
 
 ```powershell
-# 1. Vérifier que le certificat machine est présent
-Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object { $_.Subject -like "*VPN*" }
+# 1. Vérifier que le certificat MACHINE est présent (LocalMachine\My, PAS CurrentUser)
+Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object { $_.HasPrivateKey -eq $true }
 
 # 2. Vérifier les logs GlobalProtect
 Get-Content "C:\Program Files\Palo Alto Networks\GlobalProtect\PanGPS.log" | Select-String -Pattern "error"
