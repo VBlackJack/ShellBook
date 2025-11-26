@@ -1,6 +1,6 @@
 site_name: ShellBook
 site_description: SysOps Knowledge Base - Linux, Windows, K8s & Security
-site_author: SysOps Admin
+site_author: Julien Bombled
 repo_url: https://github.com/VBlackJack/ShellBook
 repo_name: VBlackJack/ShellBook
 edit_uri: edit/main/docs/
