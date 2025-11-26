@@ -185,15 +185,19 @@ Les formations sont ouvertes aux contributions ! Pour proposer un nouveau parcou
 
 Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails.
 
-## Roadmap
+## Formations Disponibles
 
-| Formation | Statut | Date Prévisionnelle |
-|-----------|--------|---------------------|
-| Le Socle DevOps | ✅ Disponible | 2025-01-15 |
-| Hardening Linux | 🔄 En cours | 2025-02-01 |
-| Ansible Mastery | 🔄 En cours | 2025-02-15 |
-| Kubernetes Fundamentals | 📝 Planifié | 2025-03-01 |
-| Terraform : Infrastructure as Code | 💡 Idée | 2025-Q2 |
+| Formation | Modules | Statut |
+|-----------|---------|--------|
+| 🚀 Le Socle DevOps | 5 modules | ✅ Disponible |
+| 🔐 Hardening Linux | 5 modules | ✅ Disponible |
+| 💠 Ansible Mastery | 4 modules | ✅ Disponible |
+| 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |
+| 🏰 Windows Server Mastery | 4 modules | ✅ Disponible |
+| ♻️ Windows Patch Management | 5 modules | ✅ Disponible |
+| 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
+| 💿 NTLite Mastery | 6 modules | ✅ Disponible |
+| 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
 
 ---
 
