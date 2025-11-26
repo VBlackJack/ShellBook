@@ -71,7 +71,7 @@ Cette formation s'adresse aux **professionnels IT** souhaitant adopter les prati
 - Résolution de conflits (merge conflicts)
 - Diagramme : Git Flow vs GitHub Flow
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 2](02-module.md)
 
 ### Module 3 : Pipeline CI/CD avec GitLab (1h30)
 
@@ -85,7 +85,7 @@ Cette formation s'adresse aux **professionnels IT** souhaitant adopter les prati
 - Variables et secrets (`CI_COMMIT_SHA`, `CI_REGISTRY_IMAGE`)
 - Exemple : Pipeline pour une app Python (lint → test → build → deploy)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 3](03-module.md)
 
 ### Module 4 : Linting & Quality Gates (1h)
 
@@ -99,7 +99,7 @@ Cette formation s'adresse aux **professionnels IT** souhaitant adopter les prati
 - Quality Gates : Fail le build si le linting échoue
 - Exemple : `.gitlab-ci.yml` avec stage `lint`
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 4](04-module.md)
 
 ### Module 5 : TP Final - Projet Complet (2h)
 
@@ -116,7 +116,7 @@ Vous êtes SysOps dans une équipe qui gère une documentation technique (ShellB
 5. Créer une Pull Request
 6. Merger après validation du pipeline
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au TP Final](05-tp-final.md)
 
 ## Durée Estimée
 

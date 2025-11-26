@@ -70,7 +70,7 @@ Cette formation s'adresse aux **professionnels de l'automatisation IT** :
   - Managed Nodes : Aucune installation requise (SSH + Python)
 - **Diagramme Mermaid :** Architecture Control Node → Managed Nodes
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Commencer le Module 1](01-module.md){ .md-button .md-button--primary }
 
 ### Module 2 : Playbooks - De la Task au Rôle (2h)
 
@@ -108,7 +108,7 @@ Cette formation s'adresse aux **professionnels de l'automatisation IT** :
 
 **Exemple complet :** Déployer une stack LAMP (Linux, Apache, MySQL, PHP)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Commencer le Module 2](02-module.md){ .md-button .md-button--primary }
 
 ### Module 3 : Roles - Structurer et Réutiliser (2h)
 
@@ -158,7 +158,7 @@ roles/nginx/
 - Versionner les roles dans Git
 - Tester avec Molecule avant production
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Commencer le Module 3](03-module.md){ .md-button .md-button--primary }
 
 ### Module 4 : Sécurité avec Ansible Vault (1h30)
 
@@ -220,7 +220,7 @@ ansible-playbook site.yml --vault-password-file ~/.vault_pass
 - Utiliser des vaults distincts par environnement (dev, staging, prod)
 - Rotation régulière des secrets (`ansible-vault rekey`)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Commencer le Module 4](04-module.md){ .md-button .md-button--primary }
 
 ### Module 5 : TP Final - Industrialisation Complète (3h)
 
@@ -262,7 +262,8 @@ Vous êtes DevOps Engineer dans une startup. Votre mission : automatiser le dép
 - Pipeline `.gitlab-ci.yml` opérationnel
 - Documentation (README.md avec diagramme d'architecture)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+!!! warning "Module en cours de rédaction"
+    Le TP Final sera bientôt disponible. En attendant, consolidez vos acquis avec les modules 1 à 4.
 
 ## Durée Estimée
 
@@ -323,4 +324,4 @@ Une fois la formation complétée, vous pouvez valider vos compétences avec le 
 
 ---
 
-**Prêt ?** Module 1 en cours de rédaction 🚀
+**Prêt ?** [:octicons-arrow-right-24: Commencer le Module 1](01-module.md){ .md-button .md-button--primary }

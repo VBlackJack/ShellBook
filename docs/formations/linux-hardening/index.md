@@ -75,7 +75,7 @@ Le référentiel **SecNumCloud** de l'ANSSI définit les exigences de sécurité
 - Port knocking avancé
 - Diagramme : Flux d'authentification SSH avec clés
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 1](01-module.md)
 
 ### Module 2 : Gestion des Utilisateurs & Sudo (1h)
 
@@ -92,7 +92,7 @@ Le référentiel **SecNumCloud** de l'ANSSI définit les exigences de sécurité
   - Restreindre un utilisateur à `systemctl restart postgresql`
 - Diagramme : Matrice de permissions (User → Role → Commands)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 2](02-module.md)
 
 ### Module 3 : Firewall - Firewalld & UFW (2h)
 
@@ -118,7 +118,7 @@ Le référentiel **SecNumCloud** de l'ANSSI définit les exigences de sécurité
 - Serveur web : Autoriser 80/443, bloquer le reste
 - Serveur DB : Autoriser PostgreSQL uniquement depuis l'app server
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 3](03-module.md)
 
 ### Module 4 : Audit & Conformité (2h)
 
@@ -146,7 +146,7 @@ Le référentiel **SecNumCloud** de l'ANSSI définit les exigences de sécurité
 - Rechercher dans les logs : `ausearch`, `aureport`
 - Centraliser les logs avec rsyslog vers un SIEM
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au Module 4](04-module.md)
 
 ### Module 5 : TP Final - Hardening Complet (3h)
 
@@ -173,7 +173,7 @@ Vous êtes Security Engineer dans une entreprise soumise à SecNumCloud. Votre m
 - Rapport OpenSCAP HTML
 - Rapport de conformité (Markdown)
 
-[:octicons-arrow-right-24: Module en cours de rédaction](#)
+[:octicons-arrow-right-24: Accéder au TP Final](05-tp-final.md)
 
 ## Durée Estimée
 
@@ -232,4 +232,4 @@ Une fois la formation complétée, vous pouvez valider vos compétences avec le 
 
 ---
 
-**Prêt ?** Module 1 en cours de rédaction 🚀
+**Prêt ?** [:octicons-arrow-right-24: Commencer le Module 1](01-module.md){ .md-button .md-button--primary }
