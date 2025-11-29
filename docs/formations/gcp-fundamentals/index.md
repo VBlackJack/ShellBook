@@ -21,6 +21,10 @@ tags:
 - :fontawesome-solid-database: **Gérer** le stockage (Cloud Storage, Persistent Disks, Cloud SQL)
 - :material-kubernetes: **Orchestrer** des containers avec GKE (Google Kubernetes Engine)
 - :fontawesome-solid-terminal: **Automatiser** avec `gcloud` CLI et Infrastructure as Code
+- :material-pipe: **Construire** des pipelines CI/CD avec Cloud Build et Artifact Registry
+- :material-lambda: **Déployer** des applications serverless (Cloud Functions, Cloud Run)
+- :fontawesome-solid-shield-halved: **Sécuriser** avec Cloud Armor, Secret Manager et Binary Authorization
+- :material-chart-line: **Superviser** avec Cloud Monitoring, Logging et Trace
 
 ## Public Cible
 
@@ -258,6 +262,117 @@ Vous êtes Cloud Engineer dans une entreprise migrant une application 3-tier ver
 
 [:octicons-arrow-right-24: Commencer le TP Final](06-tp-final.md){ .md-button .md-button--primary }
 
+### Module 7 : CI/CD avec Cloud Build & Artifact Registry (3h)
+
+**Objectif :** Automatiser les déploiements avec les outils DevOps natifs GCP.
+
+**Contenu :**
+
+- **Artifact Registry** :
+    - Remplaçant de Container Registry
+    - Repositories Docker, Maven, npm, Python
+    - IAM et scanning de vulnérabilités
+- **Cloud Build** :
+    - Configuration `cloudbuild.yaml`
+    - Steps, substitutions, secrets
+    - Triggers (GitHub, Cloud Source Repos, Pub/Sub)
+- **Pipelines CI/CD** :
+    - Build → Test → Push → Deploy
+    - Déploiement vers GKE et Cloud Run
+    - Canary deployments et rollback
+- **Best Practices** :
+    - Multi-environnements (dev/staging/prod)
+    - Build cache et optimisation
+    - Intégration avec Secret Manager
+
+[:octicons-arrow-right-24: Commencer le Module 7](07-module.md){ .md-button .md-button--primary }
+
+### Module 8 : Serverless - Cloud Functions & Cloud Run (3h)
+
+**Objectif :** Déployer des applications sans gérer d'infrastructure.
+
+**Contenu :**
+
+- **Cloud Functions** :
+    - 1ère génération vs 2ème génération
+    - Triggers : HTTP, Pub/Sub, Cloud Storage, Firestore
+    - Runtimes : Node.js, Python, Go, Java
+    - Variables d'environnement et secrets
+- **Cloud Run** :
+    - Containers stateless managés
+    - Scale to zero, concurrence, cold starts
+    - Révisions et traffic splitting
+    - Services vs Jobs
+- **Eventarc** :
+    - Event-driven architecture
+    - Sources : Audit Logs, Pub/Sub, direct
+    - Routing vers Cloud Run/Functions
+- **Patterns Serverless** :
+    - API Gateway avec Cloud Endpoints
+    - Workflows pour orchestration
+    - Scheduler pour tâches planifiées
+
+[:octicons-arrow-right-24: Commencer le Module 8](08-module.md){ .md-button .md-button--primary }
+
+### Module 9 : Security - Cloud Armor, Secret Manager & Binary Authorization (3h)
+
+**Objectif :** Sécuriser les applications et les données sur GCP.
+
+**Contenu :**
+
+- **Cloud Armor** :
+    - WAF (Web Application Firewall)
+    - Protection DDoS L3/L4/L7
+    - Règles : IP allowlist/denylist, geo-blocking
+    - OWASP Top 10 rules preconfigured
+- **Secret Manager** :
+    - Stockage sécurisé des secrets
+    - Versioning et rotation
+    - Accès depuis VMs, GKE, Cloud Run
+    - IAM granulaire par secret
+- **Binary Authorization** :
+    - Container image signing
+    - Attestations et attestors
+    - Policies d'enforcement
+    - Intégration CI/CD
+- **VPC Service Controls** :
+    - Périmètres de sécurité
+    - Protection contre l'exfiltration de données
+    - Access Context Manager
+
+[:octicons-arrow-right-24: Commencer le Module 9](09-module.md){ .md-button .md-button--primary }
+
+### Module 10 : Observability - Monitoring, Logging & Tracing (3h)
+
+**Objectif :** Superviser et debugger les applications en production.
+
+**Contenu :**
+
+- **Cloud Monitoring** :
+    - Métriques : CPU, mémoire, réseau, custom metrics
+    - Dashboards et visualisation
+    - Uptime checks et synthetic monitoring
+    - Alerting policies et notification channels
+- **Cloud Logging** :
+    - Logs Explorer et requêtes
+    - Log-based metrics
+    - Log Router : sinks vers BigQuery, Pub/Sub, GCS
+    - Log Analytics avec SQL
+- **Cloud Trace** :
+    - Distributed tracing
+    - Latency analysis
+    - Intégration OpenTelemetry
+- **Error Reporting** :
+    - Agrégation d'erreurs
+    - Stack traces et contexte
+    - Notifications et workflow
+- **SLOs et Alerting** :
+    - Définition de SLIs/SLOs
+    - Error budgets
+    - Alerting policies basées sur SLOs
+
+[:octicons-arrow-right-24: Commencer le Module 10](10-module.md){ .md-button .md-button--primary }
+
 ## Durée Estimée
 
 | Module | Durée | Type |
@@ -268,7 +383,11 @@ Vous êtes Cloud Engineer dans une entreprise migrant une application 3-tier ver
 | Module 4 : Storage & Databases | 4h | Pratique + Design |
 | Module 5 : GKE & Containers | 4h | Orchestration |
 | Module 6 : TP Final | 4h | Projet autonome |
-| **Total** | **23h** | **Formation complète** |
+| Module 7 : CI/CD (Cloud Build) | 3h | DevOps |
+| Module 8 : Serverless | 3h | Architecture moderne |
+| Module 9 : Security | 3h | Sécurité avancée |
+| Module 10 : Observability | 3h | Opérations |
+| **Total** | **35h** | **Formation complète** |
 
 !!! tip "Organisation Recommandée"
     **Format présentiel :** 3 jours intensifs (8h/jour)
@@ -287,6 +406,10 @@ Vous êtes Cloud Engineer dans une entreprise migrant une application 3-tier ver
 - ✅ Concevoir des architectures VPC sécurisées
 - ✅ Choisir et configurer les solutions de stockage adaptées
 - ✅ Déployer des applications sur GKE
+- ✅ Automatiser les déploiements avec Cloud Build (CI/CD)
+- ✅ Créer des applications serverless (Cloud Functions, Cloud Run)
+- ✅ Sécuriser les workloads (Cloud Armor, Secret Manager, Binary Auth)
+- ✅ Implémenter l'observabilité (Monitoring, Logging, Trace, SLOs)
 - ✅ Estimer et optimiser les coûts cloud
 
 ## Certification

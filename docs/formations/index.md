@@ -134,10 +134,10 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     ---
 
-    Migrez vers Google Cloud Platform : Console, IAM, Compute Engine, VPC, Storage, Cloud SQL et GKE. Préparation certification Associate Cloud Engineer.
+    Formation complète GCP : Console, IAM, Compute Engine, VPC, Storage, GKE, CI/CD, Serverless, Security et Observability. Préparation certification Associate Cloud Engineer.
 
-    **Compétences :** gcloud CLI, IAM, Compute Engine, VPC, Cloud SQL, GKE
-    **Durée :** 3 jours (23h) - 6 modules
+    **Compétences :** gcloud CLI, IAM, Compute, VPC, GKE, Cloud Build, Cloud Run, Cloud Armor, Monitoring
+    **Durée :** 5 jours (35h) - 10 modules
 
     [:octicons-arrow-right-24: Accéder à la Formation](gcp-fundamentals/)
 
@@ -221,7 +221,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
 | 💿 NTLite Mastery | 6 modules | ✅ Disponible |
 | 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
-| ☁️ GCP Fundamentals | 6 modules | ✅ Disponible |
+| ☁️ GCP Fundamentals | 10 modules | ✅ Disponible |
 
 ---
 

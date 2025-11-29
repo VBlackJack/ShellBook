@@ -267,6 +267,10 @@ nav:
         - Module 4 - Storage: formations/gcp-fundamentals/04-module.md
         - Module 5 - GKE: formations/gcp-fundamentals/05-module.md
         - Module 6 - TP Final: formations/gcp-fundamentals/06-tp-final.md
+        - Module 7 - CI/CD: formations/gcp-fundamentals/07-module.md
+        - Module 8 - Serverless: formations/gcp-fundamentals/08-module.md
+        - Module 9 - Security: formations/gcp-fundamentals/09-module.md
+        - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md

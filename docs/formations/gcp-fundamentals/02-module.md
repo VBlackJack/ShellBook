@@ -553,6 +553,80 @@ gcloud compute instances create spot-worker \
 
 **Cas d'usage** : Batch processing, CI/CD runners, rendering, ML training
 
+### Arbre de décision : Choisir le bon type de VM
+
+```mermaid
+flowchart TD
+    A[Nouvelle VM] --> B{Workload type?}
+    B -->|General purpose| C{Budget?}
+    C -->|Économique| D[E2]
+    C -->|Performance| E[N2/N2D]
+    B -->|Compute intensive| F[C2/C2D]
+    B -->|Memory intensive| G{Size?}
+    G -->|< 1TB RAM| H[N2-highmem]
+    G -->|> 1TB RAM| I[M2/M3]
+    B -->|ML/AI| J[A2 + GPU]
+    B -->|Batch/Interruptible| K{Duration?}
+    K -->|< 24h| L[Spot VM<br/>-60-91%]
+    K -->|Long running| M[Standard VM]
+
+    style D fill:#34A853,color:#fff
+    style L fill:#FBBC04,color:#000
+    style J fill:#4285F4,color:#fff
+```
+
+### Architecture MIG avec Load Balancer
+
+```mermaid
+graph TB
+    subgraph "Internet"
+        Users((Users))
+    end
+
+    subgraph "Global"
+        GLB[Global HTTP(S)<br/>Load Balancer]
+    end
+
+    subgraph "europe-west1"
+        subgraph "MIG EU"
+            EU1[VM eu-1]
+            EU2[VM eu-2]
+            EU3[VM eu-3]
+        end
+        HC_EU[Health Check]
+        AS_EU[Autoscaler<br/>CPU: 60%]
+    end
+
+    subgraph "us-central1"
+        subgraph "MIG US"
+            US1[VM us-1]
+            US2[VM us-2]
+        end
+        HC_US[Health Check]
+        AS_US[Autoscaler<br/>CPU: 60%]
+    end
+
+    Users --> GLB
+    GLB -->|EU users| EU1
+    GLB -->|EU users| EU2
+    GLB -->|EU users| EU3
+    GLB -->|US users| US1
+    GLB -->|US users| US2
+
+    HC_EU --> EU1
+    HC_EU --> EU2
+    HC_EU --> EU3
+    HC_US --> US1
+    HC_US --> US2
+
+    AS_EU -.-> EU1
+    AS_US -.-> US1
+
+    style GLB fill:#4285F4,color:#fff
+    style AS_EU fill:#FBBC04,color:#000
+    style AS_US fill:#FBBC04,color:#000
+```
+
 ---
 
 ## 10. Exercices Pratiques
@@ -676,6 +750,118 @@ gcloud compute instances create spot-worker \
     # Vérifier
     gcloud compute ssh web-server-clone --zone=europe-west1-b \
         --command="cat /var/www/html/index.html"
+    ```
+
+### Exercice 4 : Blue-Green Deployment avec MIG
+
+!!! example "Exercice"
+    Simulez un déploiement Blue-Green :
+
+    1. Créez deux templates : `blue-template` (v1) et `green-template` (v2)
+    2. Créez un MIG avec `blue-template`
+    3. Effectuez un rolling update vers `green-template`
+    4. Vérifiez que le rollback fonctionne
+
+??? quote "Solution"
+    ```bash
+    # Template Blue (v1)
+    gcloud compute instance-templates create blue-template \
+        --machine-type=e2-micro \
+        --image-family=debian-12 \
+        --image-project=debian-cloud \
+        --metadata=startup-script='#!/bin/bash
+    apt-get update && apt-get install -y nginx
+    echo "<h1>Version BLUE (v1)</h1>" > /var/www/html/index.html
+    systemctl start nginx'
+
+    # Template Green (v2)
+    gcloud compute instance-templates create green-template \
+        --machine-type=e2-micro \
+        --image-family=debian-12 \
+        --image-project=debian-cloud \
+        --metadata=startup-script='#!/bin/bash
+    apt-get update && apt-get install -y nginx
+    echo "<h1>Version GREEN (v2)</h1>" > /var/www/html/index.html
+    systemctl start nginx'
+
+    # MIG avec Blue
+    gcloud compute instance-groups managed create deploy-mig \
+        --template=blue-template \
+        --size=3 \
+        --zone=europe-west1-b
+
+    # Attendre que les instances soient prêtes
+    gcloud compute instance-groups managed wait-until --stable deploy-mig \
+        --zone=europe-west1-b
+
+    # Rolling update vers Green (canary: 1 instance d'abord)
+    gcloud compute instance-groups managed rolling-action start-update deploy-mig \
+        --version=template=green-template \
+        --zone=europe-west1-b \
+        --max-surge=1 \
+        --max-unavailable=0
+
+    # Observer le déploiement
+    watch -n2 "gcloud compute instance-groups managed list-instances deploy-mig --zone=europe-west1-b"
+
+    # Rollback si problème
+    gcloud compute instance-groups managed rolling-action start-update deploy-mig \
+        --version=template=blue-template \
+        --zone=europe-west1-b
+    ```
+
+### Exercice 5 : Optimisation des coûts
+
+!!! example "Exercice"
+    Analysez et optimisez les coûts d'un environnement :
+
+    1. Listez toutes les VMs avec leur type et leur statut
+    2. Identifiez les VMs qui pourraient être des Spot VMs
+    3. Calculez les économies potentielles
+    4. Créez un script de rightsizing
+
+??? quote "Solution"
+    ```bash
+    # Lister toutes les VMs avec détails
+    gcloud compute instances list \
+        --format="table(name,zone,machineType.basename(),status,scheduling.preemptible)"
+
+    # Identifier les VMs sous-utilisées (nécessite monitoring)
+    # Via Console : Monitoring > Dashboards > VM Instances
+    # Chercher CPU < 10% sur 7 jours
+
+    # Script de rightsizing
+    cat > rightsizing.sh << 'EOF'
+    #!/bin/bash
+    # Analyse des recommendations de rightsizing
+
+    PROJECT_ID=$(gcloud config get-value project)
+
+    echo "=== VMs actuelles ==="
+    gcloud compute instances list --format="table(name,machineType.basename(),zone)"
+
+    echo ""
+    echo "=== Recommendations ==="
+    # Via Recommender API
+    gcloud recommender recommendations list \
+        --project=$PROJECT_ID \
+        --location=europe-west1-b \
+        --recommender=google.compute.instance.MachineTypeRecommender \
+        --format="table(content.overview.resourceName,content.overview.recommendedMachineType.name)"
+
+    echo ""
+    echo "=== Économies Spot potentielles ==="
+    echo "VMs batch/dev qui pourraient être Spot :"
+    gcloud compute instances list \
+        --filter="name~batch OR name~dev OR name~test" \
+        --format="table(name,machineType.basename())"
+
+    echo ""
+    echo "Économie estimée avec Spot : 60-91% sur ces VMs"
+    EOF
+
+    chmod +x rightsizing.sh
+    ./rightsizing.sh
     ```
 
 ---

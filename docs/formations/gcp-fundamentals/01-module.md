@@ -310,6 +310,47 @@ graph TD
 !!! info "Héritage additif"
     L'héritage est **additif** : on ne peut pas retirer une permission héritée au niveau inférieur, seulement en ajouter.
 
+### Flux de décision IAM
+
+```mermaid
+flowchart TD
+    A[Requête API] --> B{Authentifié ?}
+    B -->|Non| C[❌ 401 Unauthorized]
+    B -->|Oui| D{Permission<br/>sur ressource ?}
+    D -->|Non| E{Permission<br/>héritée ?}
+    E -->|Non| F[❌ 403 Forbidden]
+    E -->|Oui| G[✅ Autorisé]
+    D -->|Oui| G
+
+    style C fill:#EA4335,color:#fff
+    style F fill:#EA4335,color:#fff
+    style G fill:#34A853,color:#fff
+```
+
+### Comparaison des stratégies IAM
+
+```mermaid
+graph TB
+    subgraph "❌ Anti-pattern : Permissions individuelles"
+        A1[Alice] -->|Editor| P1[Project]
+        A2[Bob] -->|Editor| P1
+        A3[Charlie] -->|Editor| P1
+    end
+
+    subgraph "✅ Best Practice : Groupes + Roles granulaires"
+        G1[Group: Developers] -->|compute.instanceAdmin| P2[Project]
+        G1 -->|storage.objectViewer| P2
+        B1[Alice] --> G1
+        B2[Bob] --> G1
+        B3[Charlie] --> G1
+    end
+
+    style A1 fill:#EA4335,color:#fff
+    style A2 fill:#EA4335,color:#fff
+    style A3 fill:#EA4335,color:#fff
+    style G1 fill:#34A853,color:#fff
+```
+
 ---
 
 ## 5. Commandes IAM avec gcloud
@@ -495,6 +536,51 @@ gcloud projects get-iam-policy PROJECT_ID \
 # Console > IAM & Admin > Audit Logs > Enable Data Access logs
 ```
 
+### Architecture Service Account pour une application
+
+```mermaid
+graph TB
+    subgraph "Application 3-Tier"
+        subgraph "Frontend (GKE)"
+            FE[Pod Frontend]
+            FE_KSA[K8s SA: frontend-ksa]
+        end
+        subgraph "Backend (GKE)"
+            BE[Pod Backend]
+            BE_KSA[K8s SA: backend-ksa]
+        end
+        subgraph "Jobs (Compute)"
+            JOB[VM Batch Job]
+        end
+    end
+
+    subgraph "GCP Service Accounts"
+        SA_FE[frontend-sa<br/>roles/logging.logWriter]
+        SA_BE[backend-sa<br/>roles/cloudsql.client<br/>roles/storage.objectViewer]
+        SA_JOB[batch-sa<br/>roles/bigquery.dataEditor]
+    end
+
+    subgraph "GCP Resources"
+        SQL[(Cloud SQL)]
+        GCS[Cloud Storage]
+        BQ[BigQuery]
+        LOG[Cloud Logging]
+    end
+
+    FE_KSA -->|Workload Identity| SA_FE
+    BE_KSA -->|Workload Identity| SA_BE
+    JOB -->|Attached SA| SA_JOB
+
+    SA_FE --> LOG
+    SA_BE --> SQL
+    SA_BE --> GCS
+    SA_JOB --> BQ
+
+    style SA_FE fill:#4285F4,color:#fff
+    style SA_BE fill:#34A853,color:#fff
+    style SA_JOB fill:#FBBC04,color:#000
+```
+
 ---
 
 ## 8. Exercices Pratiques
@@ -582,6 +668,90 @@ gcloud projects get-iam-policy PROJECT_ID \
     # Export JSON
     gcloud projects get-iam-policy $PROJECT_ID --format=json > iam-audit.json
     cat iam-audit.json
+    ```
+
+### Exercice 4 : Custom Role (avancé)
+
+!!! example "Exercice"
+    Créez un Custom Role `customStorageReader` qui permet uniquement de :
+
+    - Lister les buckets
+    - Lister les objets dans un bucket
+    - Télécharger des objets
+
+    Mais PAS de supprimer ou modifier.
+
+??? quote "Solution"
+    ```bash
+    PROJECT_ID=$(gcloud config get-value project)
+
+    # Créer le custom role
+    gcloud iam roles create customStorageReader \
+        --project=$PROJECT_ID \
+        --title="Custom Storage Reader" \
+        --description="Read-only access to Cloud Storage without delete" \
+        --permissions=storage.buckets.list,storage.buckets.get,storage.objects.list,storage.objects.get \
+        --stage=GA
+
+    # Vérifier
+    gcloud iam roles describe customStorageReader --project=$PROJECT_ID
+
+    # Utiliser le custom role
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="user:reader@example.com" \
+        --role="projects/${PROJECT_ID}/roles/customStorageReader"
+    ```
+
+### Exercice 5 : Simulation de scénario entreprise
+
+!!! example "Exercice"
+    Vous êtes Cloud Admin. Configurez les accès pour :
+
+    1. **Équipe Dev** (groupe `devs@company.com`) :
+        - Créer/gérer des VMs dans le projet `dev-sandbox`
+        - Accès lecture aux logs
+
+    2. **Équipe Ops** (groupe `ops@company.com`) :
+        - Accès complet au monitoring
+        - Peut redémarrer les VMs (mais pas les supprimer)
+
+    3. **Service Account CI/CD** (`cicd-sa`) :
+        - Peut déployer sur GKE
+        - Peut push des images vers Artifact Registry
+
+??? quote "Solution"
+    ```bash
+    PROJECT_ID="dev-sandbox"
+
+    # Équipe Dev
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="group:devs@company.com" \
+        --role="roles/compute.instanceAdmin.v1"
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="group:devs@company.com" \
+        --role="roles/logging.viewer"
+
+    # Équipe Ops
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="group:ops@company.com" \
+        --role="roles/monitoring.admin"
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="group:ops@company.com" \
+        --role="roles/compute.instanceAdmin.v1"  # Inclut restart
+
+    # CI/CD Service Account
+    gcloud iam service-accounts create cicd-sa \
+        --display-name="CI/CD Pipeline SA"
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:cicd-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
+        --role="roles/container.developer"
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member="serviceAccount:cicd-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
+        --role="roles/artifactregistry.writer"
     ```
 
 ---
