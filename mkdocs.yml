@@ -132,6 +132,7 @@ nav:
     - Administration Serveur:
       - Active Directory & Identité:
         - windows/active-directory.md
+        - windows/ad-trusts.md
       - Infrastructure & Maintenance:
         - windows/server-administration.md
         - windows/update-management.md

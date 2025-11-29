@@ -361,6 +361,60 @@ foreach ($user in $users) {
 
 ---
 
+## 7. Relations d'Approbation (Trusts)
+
+Les trusts permettent l'authentification entre domaines et forêts.
+
+### 7.1 Types de Trusts
+
+```
+TYPES DE TRUSTS
+───────────────────────────────────────────────────
+
+Parent-Child    Automatique, bidirectionnel, transitif
+                (entre domaine parent et enfant)
+
+Forest          Entre deux forêts distinctes
+                Bidirectionnel ou unidirectionnel
+
+External        Vers un domaine spécifique hors forêt
+                Non-transitif
+
+Shortcut        Optimisation entre domaines distants
+                Dans la même forêt
+```
+
+### 7.2 Commandes de Base
+
+```powershell
+# Lister les trusts
+Get-ADTrust -Filter *
+
+# Créer un Forest Trust
+New-ADTrust -Name "partner.com" `
+    -Type Forest `
+    -Direction Bidirectional `
+    -RemoteDomainName "partner.com"
+
+# Vérifier un trust
+Test-ADTrust -Identity "partner.com"
+
+# Valider via netdom
+netdom trust corp.local /domain:partner.com /verify
+```
+
+### 7.3 Sécurité des Trusts
+
+- **SID Filtering** : Filtre les SIDs étrangers (activé par défaut)
+- **Selective Authentication** : Contrôle granulaire des accès
+
+!!! tip "Documentation Complète"
+    Pour une documentation approfondie sur les trusts (types, création, sécurité, troubleshooting, architectures multi-forêts), consultez le guide de référence :
+
+    **[Active Directory : Relations d'Approbation (Trusts)](../../windows/ad-trusts.md)**
+
+---
+
 ## Quiz
 
 1. **Combien de Schema Masters par forêt ?**
