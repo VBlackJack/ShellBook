@@ -305,32 +305,87 @@ nav:
       - Module 09 - Security: formations/azure-fundamentals/09-module.md
       - Module 10 - Observability: formations/azure-fundamentals/10-module.md
     # ══════════════════════════════════════════════════════════════
-    # FORMATIONS COURTES (<20h) - Liens directs vers index
+    # FORMATIONS COURTES - Avec modules repliables
     # ══════════════════════════════════════════════════════════════
-    - 🛡️ Sécurité:
-      - PKI & Certificats (16h): formations/pki-certificates/index.md
-      - Hardening Linux (10h): formations/linux-hardening/index.md
-    - ♾️ DevOps & Automatisation:
-      - Le Socle DevOps (6h): formations/devops-foundation/index.md
-      - Ansible Mastery (10h): formations/ansible-mastery/index.md
-      - Katello Lifecycle (15h): formations/katello/index.md
+    - 🔒 PKI & Certificats (16h):
+      - Programme: formations/pki-certificates/index.md
+      - Module 01 - Crypto: formations/pki-certificates/01-module.md
+      - Module 02 - X.509: formations/pki-certificates/02-module.md
+      - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
+      - Module 04 - Automatisation: formations/pki-certificates/04-module.md
+      - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
+    - 🔐 Hardening Linux (10h):
+      - Programme: formations/linux-hardening/index.md
+      - Module 01 - SSH: formations/linux-hardening/01-module.md
+      - Module 02 - Users: formations/linux-hardening/02-module.md
+      - Module 03 - Firewall: formations/linux-hardening/03-module.md
+      - Module 04 - Audit: formations/linux-hardening/04-module.md
+      - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
+    - 🚀 Le Socle DevOps (6h):
+      - Programme: formations/devops-foundation/index.md
+      - Module 01 - Git: formations/devops-foundation/01-module.md
+      - Module 02 - Branches: formations/devops-foundation/02-module.md
+      - Module 03 - CI/CD: formations/devops-foundation/03-module.md
+      - Module 04 - Qualité: formations/devops-foundation/04-module.md
+      - Module 05 - TP Final: formations/devops-foundation/05-tp-final.md
+      - Ressources:
+        - Glossaire: formations/devops-foundation/glossaire.md
+        - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
+        - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
+    - 💠 Ansible Mastery (10h):
+      - Programme: formations/ansible-mastery/index.md
+      - Module 01 - Architecture: formations/ansible-mastery/01-module.md
+      - Module 02 - Playbooks: formations/ansible-mastery/02-module.md
+      - Module 03 - Roles: formations/ansible-mastery/03-module.md
+      - Module 04 - Vault: formations/ansible-mastery/04-module.md
+    - 🦁 Katello Lifecycle (15h):
+      - Programme: formations/katello/index.md
+      - Module 01 - Architecture: formations/katello/01-module.md
+      - Module 02 - Contenu: formations/katello/02-module.md
+      - Module 03 - Hôtes: formations/katello/03-module.md
+      - Module 04 - Patch Mgmt: formations/katello/04-module.md
+      - Module 05 - TP Final: formations/katello/05-tp-final.md
     - 🔧 Terraform ACI (35h):
       - Programme: formations/terraform-aci/index.md
-      - Module 01 - Terraform Basics: formations/terraform-aci/01-module.md
-      - Module 02 - Architecture ACI: formations/terraform-aci/02-module.md
+      - Module 01 - Terraform: formations/terraform-aci/01-module.md
+      - Module 02 - Architecture: formations/terraform-aci/02-module.md
       - Module 03 - Modèle Objet: formations/terraform-aci/03-module.md
       - Module 04 - Contracts: formations/terraform-aci/04-module.md
-      - Module 05 - Provider ACI: formations/terraform-aci/05-module.md
+      - Module 05 - Provider: formations/terraform-aci/05-module.md
       - Module 06 - Patterns: formations/terraform-aci/06-module.md
-      - Module 07 - Flux Nord-Sud: formations/terraform-aci/07-module.md
-      - Module 08 - Flux Est-Ouest: formations/terraform-aci/08-module.md
+      - Module 07 - Nord-Sud: formations/terraform-aci/07-module.md
+      - Module 08 - Est-Ouest: formations/terraform-aci/08-module.md
       - Module 09 - Multi-Site: formations/terraform-aci/09-module.md
       - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
-    - 🪟 Écosystème Microsoft:
-      - Windows Patching (12h): formations/windows-patching/index.md
-      - Chocolatey Factory (12h): formations/chocolatey/index.md
-      - NTLite Mastery (18h): formations/ntlite/index.md
-      - SQL Server DBA (22h): formations/sql-server/index.md
+    - ♻️ Windows Patching (12h):
+      - Programme: formations/windows-patching/index.md
+      - Module 01 - Architecture: formations/windows-patching/01-module.md
+      - Module 02 - Gestion: formations/windows-patching/02-module.md
+      - Module 03 - Clients: formations/windows-patching/03-module.md
+      - Module 04 - Maintenance: formations/windows-patching/04-module.md
+      - Module 05 - TP Final: formations/windows-patching/05-tp-final.md
+    - 🍫 Chocolatey Factory (12h):
+      - Programme: formations/chocolatey/index.md
+      - Module 01 - Client CLI: formations/chocolatey/01-module.md
+      - Module 02 - Packaging: formations/chocolatey/02-module.md
+      - Module 03 - Serveur: formations/chocolatey/03-module.md
+      - Module 04 - Déploiement: formations/chocolatey/04-module.md
+      - Module 05 - TP Final: formations/chocolatey/05-tp-final.md
+    - 💿 NTLite Mastery (18h):
+      - Programme: formations/ntlite/index.md
+      - Module 01 - Bases: formations/ntlite/01-module.md
+      - Module 02 - Debloating: formations/ntlite/02-module.md
+      - Module 03 - Intégration: formations/ntlite/03-module.md
+      - Module 04 - Automatisation: formations/ntlite/04-module.md
+      - Module 05 - TP Final: formations/ntlite/05-tp-final.md
+      - Module 06 - Cas VPN: formations/ntlite/06-scenario-vpn.md
+    - 🛢️ SQL Server DBA (22h):
+      - Programme: formations/sql-server/index.md
+      - Module 01 - Architecture: formations/sql-server/01-module.md
+      - Module 02 - Sécurité: formations/sql-server/02-module.md
+      - Module 03 - Maintenance: formations/sql-server/03-module.md
+      - Module 04 - Automatisation: formations/sql-server/04-module.md
+      - Module 05 - TP Final: formations/sql-server/05-tp-final.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
