@@ -129,6 +129,7 @@ nav:
         - windows/productivity.md
         - windows/powershell-foundations.md
         - windows/netsh-troubleshooting.md
+        - windows/wsl2.md
     - Administration Serveur:
       - Active Directory & Identité:
         - windows/active-directory.md
