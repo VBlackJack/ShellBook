@@ -130,6 +130,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](sql-server/)
 
+-   :material-google-cloud:{ .lg .middle } **GCP Fundamentals : De l'On-Premise au Cloud**
+
+    ---
+
+    Migrez vers Google Cloud Platform : Console, IAM, Compute Engine, VPC, Storage, Cloud SQL et GKE. Préparation certification Associate Cloud Engineer.
+
+    **Compétences :** gcloud CLI, IAM, Compute Engine, VPC, Cloud SQL, GKE
+    **Durée :** 3 jours (23h) - 6 modules
+
+    [:octicons-arrow-right-24: Accéder à la Formation](gcp-fundamentals/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -210,6 +221,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
 | 💿 NTLite Mastery | 6 modules | ✅ Disponible |
 | 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
+| ☁️ GCP Fundamentals | 6 modules | ✅ Disponible |
 
 ---
 
