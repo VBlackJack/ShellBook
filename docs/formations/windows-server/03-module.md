@@ -1130,4 +1130,4 @@ Vous êtes maintenant prêt à passer au **Module 4 : Automatisation** où vous 
 
 ---
 
-**[← Retour au Module 2](02-module.md)** | **[Continuer vers Module 4 : Automatisation →](04-module.md)**
+**[← Retour au Module 2](02-module.md)** | **[Continuer vers le TP Final →](04-tp-final.md)**

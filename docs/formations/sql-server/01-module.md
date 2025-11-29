@@ -1,3 +1,12 @@
+---
+tags:
+  - formation
+  - sql-server
+  - dba
+  - database
+  - installation
+---
+
 # Module 1 : Architecture & Installation
 
 ## Introduction

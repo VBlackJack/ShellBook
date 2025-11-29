@@ -910,3 +910,7 @@ Rendez-vous au **Module 2 : Création de Paquets (Packaging)** pour apprendre à
 
 !!! quote "Citation du formateur"
     *"Chocolatey transforme 2 heures de clics en 5 minutes de script. Et ce script, vous pouvez le rejouer 1000 fois sans erreur."* — ShellBook Training
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

@@ -1260,3 +1260,7 @@ Dans le **Module 3 : Repository Interne**, vous allez apprendre à :
 - [Chocolatey Package Creation](https://docs.chocolatey.org/en-us/create/create-packages)
 - [PowerShell Helpers Reference](https://docs.chocolatey.org/en-us/create/functions)
 - [Community Repository](https://community.chocolatey.org/packages)
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

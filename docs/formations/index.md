@@ -60,7 +60,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Automatisez votre infrastructure avec Ansible. Architecture, playbooks, roles, Vault, et patterns d'industrialisation.
 
     **Compétences :** Playbooks, Roles, Vault, Galaxy, Testing
-    **Durée :** 2 jours (14h)
+    **Durée :** 1.5 jours (10h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](ansible-mastery/)
 
@@ -104,7 +104,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Déployez une infrastructure WSUS complète. Architecture, Deployment Rings, GPO, maintenance automatisée et troubleshooting avancé.
 
     **Compétences :** WSUS, Deployment Rings, GPO PowerShell, Maintenance
-    **Durée :** 2 jours (14h)
+    **Durée :** 1.5 jours (12h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](windows-patching/)
 

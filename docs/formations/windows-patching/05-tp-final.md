@@ -1280,3 +1280,7 @@ Invoke-WsusServerCleanup -CleanupUnneededContentFiles
 
 !!! quote "Citation du formateur"
     *"Déployer WSUS, c'est comme construire une usine : l'installation prend 1 jour, l'optimisation prend 1 mois, mais les bénéfices durent 10 ans."* — ShellBook Training
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

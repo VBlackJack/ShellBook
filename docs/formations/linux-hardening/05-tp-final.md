@@ -1539,3 +1539,7 @@ Au terme de ce TP Final, vous êtes capable de :
 ---
 
 **Félicitations ! Vous avez complété la formation "Hardening Linux" et transformé une passoire en forteresse SecNumCloud-ready ! 🎉🔒**
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

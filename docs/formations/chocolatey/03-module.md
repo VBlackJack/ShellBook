@@ -1385,3 +1385,7 @@ Dans le **Module 4 : Déploiement Automatisé**, vous allez apprendre à :
 - [Chocolatey Server Setup](https://docs.chocolatey.org/en-us/guides/organizations/set-up-chocolatey-server)
 - [NuGet v2 API](https://docs.microsoft.com/en-us/nuget/api/nuget-api-v2)
 - [Nexus Repository Manager](https://help.sonatype.com/repomanager3/nexus-repository-administration/formats/nuget-repositories)
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

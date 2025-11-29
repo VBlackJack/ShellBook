@@ -853,3 +853,7 @@ Rendez-vous au **[Module 2 : Gestion des Mises à Jour](#)** pour apprendre à :
 
 !!! quote "Citation du formateur"
     *"La première synchronisation WSUS est comme un inventaire : elle ne télécharge que le catalogue (metadata). Les produits (binaires) ne quittent l'entrepôt qu'après validation du bon de commande (approbation)."* — ShellBook Training
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

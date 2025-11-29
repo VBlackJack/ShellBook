@@ -1196,3 +1196,7 @@ Vous maîtrisez maintenant :
 **Vous êtes officiellement un Image Master.** 🎓
 
 N'hésitez pas à partager vos créations et à contribuer à la communauté !
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
