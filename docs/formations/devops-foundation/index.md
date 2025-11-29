@@ -157,7 +157,53 @@ Cette formation ne délivre pas de certification officielle, mais prépare aux c
 
 Une fois la formation complétée, vous pouvez valider vos compétences avec le **TP Final** comme portfolio.
 
-## Ressources Complémentaires
+## Ressources de la Formation
+
+<div class="grid cards" markdown>
+
+-   :material-book-alphabet:{ .lg .middle } **Glossaire DevOps**
+
+    ---
+
+    Définitions des termes essentiels : CI, CD, IaC, GitOps, Pipeline, etc.
+
+    [:octicons-arrow-right-24: Consulter le Glossaire](glossaire.md)
+
+-   :material-file-document:{ .lg .middle } **Cheat Sheet Git**
+
+    ---
+
+    Référence rapide de toutes les commandes Git essentielles. Format imprimable.
+
+    [:octicons-arrow-right-24: Voir le Cheat Sheet](cheatsheet-git.md)
+
+-   :octicons-workflow-16:{ .lg .middle } **Cheat Sheet GitHub Actions**
+
+    ---
+
+    Syntaxe YAML, triggers, jobs, steps, secrets, et patterns courants.
+
+    [:octicons-arrow-right-24: Voir le Cheat Sheet](cheatsheet-github-actions.md)
+
+-   :material-tag-text:{ .lg .middle } **Memo Conventional Commits**
+
+    ---
+
+    Convention de nommage des commits pour un historique propre et automatisable.
+
+    [:octicons-arrow-right-24: Voir la Fiche Memo](memo-conventional-commits.md)
+
+-   :material-shield-check:{ .lg .middle } **Memo ShellCheck**
+
+    ---
+
+    Règles ShellCheck critiques, bonnes pratiques Bash, et template sécurisé.
+
+    [:octicons-arrow-right-24: Voir la Fiche Memo](memo-shellcheck.md)
+
+</div>
+
+## Ressources Externes
 
 - [Documentation Git Officielle](https://git-scm.com/doc)
 - [GitLab CI/CD Documentation](https://docs.gitlab.com/ee/ci/)

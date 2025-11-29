@@ -192,6 +192,12 @@ nav:
         - Module 3 - CI/CD: formations/devops-foundation/03-module.md
         - Module 4 - Qualité: formations/devops-foundation/04-module.md
         - Module 5 - TP Final: formations/devops-foundation/05-tp-final.md
+        - Ressources:
+          - Glossaire DevOps: formations/devops-foundation/glossaire.md
+          - Cheat Sheet Git: formations/devops-foundation/cheatsheet-git.md
+          - Cheat Sheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
+          - Memo Conventional Commits: formations/devops-foundation/memo-conventional-commits.md
+          - Memo ShellCheck: formations/devops-foundation/memo-shellcheck.md
     - 🛡️ Sécurité & Conformité:
       - 🔒 PKI & Certificats:
         - Introduction: formations/pki-certificates/index.md
