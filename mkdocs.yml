@@ -193,6 +193,13 @@ nav:
         - Module 4 - Qualité: formations/devops-foundation/04-module.md
         - Module 5 - TP Final: formations/devops-foundation/05-tp-final.md
     - 🛡️ Sécurité & Conformité:
+      - 🔒 PKI & Certificats:
+        - Introduction: formations/pki-certificates/index.md
+        - Module 1 - Fondamentaux Crypto: formations/pki-certificates/01-module.md
+        - Module 2 - Certificats X.509: formations/pki-certificates/02-module.md
+        - Module 3 - PKI Entreprise: formations/pki-certificates/03-module.md
+        - Module 4 - Automatisation: formations/pki-certificates/04-module.md
+        - Module 5 - TP Final: formations/pki-certificates/05-tp-final.md
       - 🔐 Hardening Linux:
         - Introduction: formations/linux-hardening/index.md
         - Module 1 - SSH: formations/linux-hardening/01-module.md

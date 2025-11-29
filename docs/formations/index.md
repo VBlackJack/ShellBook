@@ -31,6 +31,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](devops-foundation/)
 
+-   :fontawesome-solid-lock:{ .lg .middle } **PKI & Certificats**
+
+    ---
+
+    Maîtrisez l'infrastructure de confiance : cryptographie, certificats X.509, déploiement PKI, automatisation et conformité SecNumCloud.
+
+    **Compétences :** OpenSSL, X.509, CA Root/Sub-CA, CRL/OCSP, mTLS, Vault PKI
+    **Durée :** 2 jours (16h)
+
+    [:octicons-arrow-right-24: Accéder à la Formation](pki-certificates/)
+
 -   :fontawesome-solid-shield-halved:{ .lg .middle } **Hardening Linux & Sécurité**
 
     ---
@@ -190,6 +201,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | Formation | Modules | Statut |
 |-----------|---------|--------|
 | 🚀 Le Socle DevOps | 5 modules | ✅ Disponible |
+| 🔒 PKI & Certificats | 5 modules | ✅ Disponible |
 | 🔐 Hardening Linux | 5 modules | ✅ Disponible |
 | 💠 Ansible Mastery | 4 modules | ✅ Disponible |
 | 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |

@@ -1,0 +1,410 @@
+---
+tags:
+  - formation
+  - crypto
+  - security
+  - theory
+---
+
+# Module 1 : Fondamentaux Cryptographiques
+
+## Objectifs du Module
+
+À la fin de ce module, vous serez capable de :
+
+- Distinguer chiffrement, hashing et encodage
+- Expliquer la différence entre cryptographie symétrique et asymétrique
+- Choisir l'algorithme approprié selon le cas d'usage
+- Appliquer les recommandations ANSSI pour les tailles de clés
+
+---
+
+## 1. Les 3 Piliers de la Cryptographie
+
+Avant de manipuler des certificats, il faut comprendre les concepts fondamentaux.
+
+### Vue d'ensemble
+
+```mermaid
+graph TD
+    A[Données] --> B{Objectif ?}
+    B -->|Confidentialité| C[Chiffrement]
+    B -->|Intégrité| D[Hashing]
+    B -->|Transport| E[Encodage]
+
+    C --> F[Réversible avec clé]
+    D --> G[Irréversible]
+    E --> H[Réversible sans clé]
+```
+
+| Concept | Réversible | Utilise des clés | Objectif | Exemples |
+|---------|------------|------------------|----------|----------|
+| **Chiffrement** | Oui | Oui | Confidentialité | AES, RSA, ChaCha20 |
+| **Hashing** | Non | Non | Intégrité | SHA256, bcrypt |
+| **Encodage** | Oui | Non | Transport/Format | Base64, Hex |
+
+---
+
+### 1.1 Chiffrement (Encryption)
+
+Le chiffrement transforme des données lisibles en données illisibles, réversible uniquement avec la bonne clé.
+
+```
+Texte clair + Clé → [Chiffrement] → Texte chiffré
+Texte chiffré + Clé → [Déchiffrement] → Texte clair
+```
+
+**Cas d'usage :**
+
+- Protection de fichiers sensibles
+- Communications sécurisées (HTTPS, SSH)
+- Chiffrement de disque (BitLocker, LUKS)
+- Messagerie chiffrée (Signal, WhatsApp)
+
+!!! info "Vocabulaire Français Correct"
+    | Terme | Définition | Usage |
+    |-------|------------|-------|
+    | **Chiffrer** | Transformer avec une clé | Correct |
+    | **Déchiffrer** | Inverser avec la clé | Correct |
+    | **Décrypter** | Inverser sans la clé (attaque) | Contexte sécurité |
+    | **Crypter** | N'existe pas en français | À éviter |
+
+---
+
+### 1.2 Hashing (Hachage)
+
+Le hashing produit une empreinte de taille fixe, impossible à inverser.
+
+```
+Données → [Fonction Hash] → Empreinte (digest)
+
+"Hello" → SHA256 → 2cf24dba5fb0a30e26e83b2ac5b9e29e...
+"Hello!" → SHA256 → 33d7c290db4c... (complètement différent)
+```
+
+**Propriétés essentielles :**
+
+- **Déterministe** : Même entrée = même sortie
+- **Sens unique** : Impossible de retrouver l'original
+- **Effet avalanche** : 1 bit modifié = hash totalement différent
+- **Résistance aux collisions** : Difficile de trouver deux entrées avec le même hash
+
+**Cas d'usage :**
+
+- Stockage de mots de passe (avec salt !)
+- Vérification d'intégrité de fichiers
+- Signatures numériques
+- Blockchain
+
+=== "Linux"
+
+    ```bash
+    # Calculer le hash SHA256 d'un fichier
+    sha256sum fichier.txt
+
+    # Avec OpenSSL
+    openssl dgst -sha256 fichier.txt
+    ```
+
+=== "PowerShell"
+
+    ```powershell
+    # Calculer le hash SHA256 d'un fichier
+    Get-FileHash -Algorithm SHA256 fichier.txt
+    ```
+
+---
+
+### 1.3 Encodage (Encoding)
+
+L'encodage change le format des données pour le transport. **Ce n'est PAS de la sécurité !**
+
+```
+Binaire → [Base64] → Texte ASCII
+Texte → [URL Encoding] → Texte compatible URL
+```
+
+!!! danger "Encodage ≠ Sécurité"
+    Base64 n'est **pas du chiffrement**. N'importe qui peut le décoder instantanément.
+
+    ```bash
+    # "Secret" encodé en Base64
+    echo "U2VjcmV0" | base64 -d
+    # Résultat : Secret
+    ```
+
+**Cas d'usage :**
+
+- Pièces jointes email (MIME)
+- URLs (URL encoding)
+- Certificats (format PEM = Base64)
+- JSON avec données binaires
+
+---
+
+## 2. Symétrique vs Asymétrique
+
+### 2.1 Chiffrement Symétrique
+
+**Une seule clé secrète** pour chiffrer ET déchiffrer.
+
+```
+┌─────────────────────────────────────┐
+│           Clé Secrète               │
+│      (partagée entre les deux)      │
+└──────────────┬──────────────────────┘
+               │
+    ┌──────────┴──────────┐
+    ▼                     ▼
+[Chiffrer]            [Déchiffrer]
+    │                     │
+Clair → Chiffré      Chiffré → Clair
+```
+
+| Avantages | Inconvénients |
+|-----------|---------------|
+| Très rapide | Distribution de la clé complexe |
+| Efficace pour gros volumes | Si la clé fuite, tout est compromis |
+| Simple à implémenter | Besoin d'un canal sécurisé pour l'échange |
+
+**Algorithmes recommandés :**
+
+| Algorithme | Taille de clé | Usage |
+|------------|---------------|-------|
+| **AES-256** | 256 bits | Standard, très répandu |
+| **ChaCha20** | 256 bits | Mobile, performance |
+| 3DES | 168 bits | Déprécié, à éviter |
+
+**Exemple pratique :**
+
+=== "Linux"
+
+    ```bash
+    # Chiffrer un fichier avec AES-256
+    openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc
+
+    # Déchiffrer
+    openssl enc -d -aes-256-cbc -pbkdf2 -in secret.enc -out secret.txt
+    ```
+
+=== "PowerShell"
+
+    ```powershell
+    # Utiliser OpenSSL sur Windows
+    openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc
+    ```
+
+---
+
+### 2.2 Chiffrement Asymétrique
+
+**Deux clés liées mathématiquement** : une publique, une privée.
+
+```
+┌─────────────────────────────────────────────────┐
+│                 PAIRE DE CLÉS                    │
+├─────────────────────┬───────────────────────────┤
+│    Clé Publique     │     Clé Privée            │
+│   (distribuable)    │    (SECRÈTE !)            │
+└─────────────────────┴───────────────────────────┘
+```
+
+#### Pour le Chiffrement (Confidentialité)
+
+**Clé publique chiffre → Clé privée déchiffre**
+
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+
+    Bob->>Alice: Envoie sa clé PUBLIQUE
+    Alice->>Alice: Chiffre le message avec clé publique de Bob
+    Alice->>Bob: Envoie le message chiffré
+    Bob->>Bob: Déchiffre avec sa clé PRIVÉE
+```
+
+#### Pour la Signature (Authentification)
+
+**Clé privée signe → Clé publique vérifie**
+
+```mermaid
+sequenceDiagram
+    participant Bob
+    participant Alice
+
+    Bob->>Bob: Signe le document avec sa clé PRIVÉE
+    Bob->>Alice: Envoie document + signature
+    Alice->>Alice: Vérifie avec la clé PUBLIQUE de Bob
+    Alice->>Alice: "Oui, c'est bien Bob qui a signé"
+```
+
+| Avantages | Inconvénients |
+|-----------|---------------|
+| Pas de problème de distribution | Beaucoup plus lent |
+| Signatures numériques | Taille de données limitée |
+| Non-répudiation | Calculs complexes |
+
+**Algorithmes recommandés (ANSSI) :**
+
+| Algorithme | Taille de clé minimale | Recommandation |
+|------------|------------------------|----------------|
+| **RSA** | 3072 bits | 4096 bits pour long terme |
+| **ECDSA** | P-256 (256 bits) | P-384 recommandé |
+| **Ed25519** | 256 bits | Moderne, performant |
+
+---
+
+### 2.3 Chiffrement Hybride (Le Monde Réel)
+
+Les systèmes modernes combinent les deux approches :
+
+1. **Asymétrique** pour échanger une clé de session
+2. **Symétrique** pour chiffrer les données (rapide)
+
+```mermaid
+flowchart LR
+    A[Handshake TLS] --> B[Échange clé RSA/ECDH]
+    B --> C[Clé de session AES]
+    C --> D[Chiffrement rapide des données]
+
+    style A fill:#ff9f43
+    style B fill:#ff6b6b
+    style C fill:#54a0ff
+    style D fill:#5f27cd
+```
+
+**Exemple : HTTPS (TLS)**
+
+1. Le client et le serveur négocient avec RSA/ECDH
+2. Ils génèrent une clé AES-256 partagée
+3. Tout le trafic est chiffré en AES (rapide)
+
+---
+
+## 3. Recommandations ANSSI
+
+L'ANSSI (Agence Nationale de la Sécurité des Systèmes d'Information) publie des recommandations pour les environnements sensibles (SecNumCloud, etc.).
+
+### Algorithmes et Tailles de Clés
+
+| Type | Algorithme | Minimum | Recommandé |
+|------|------------|---------|------------|
+| **Symétrique** | AES | 128 bits | 256 bits |
+| **Asymétrique RSA** | RSA | 3072 bits | 4096 bits |
+| **Asymétrique EC** | ECDSA | P-256 | P-384 |
+| **Hash** | SHA | SHA-256 | SHA-384/512 |
+
+### Durée de Validité des Certificats
+
+| Type de certificat | Durée maximale |
+|--------------------|----------------|
+| Certificat public (web) | 1 an (398 jours) |
+| Certificat interne | 2-3 ans |
+| Certificat CA intermédiaire | 5-10 ans |
+| Certificat CA Root | 20-30 ans |
+
+!!! warning "Certificats Expirés"
+    Un certificat expiré = service indisponible.
+
+    La gestion du cycle de vie est **critique** en production.
+
+---
+
+## 4. Exercice Pratique
+
+### Objectif
+
+Manipuler les différents concepts avec OpenSSL.
+
+### Tâches
+
+??? example "Exercice 1 : Hashing"
+    Créez un fichier texte et calculez son hash SHA256.
+    Modifiez un seul caractère et recalculez. Que constatez-vous ?
+
+    ```bash
+    echo "Hello World" > test.txt
+    sha256sum test.txt
+
+    echo "Hello World!" > test.txt
+    sha256sum test.txt
+    ```
+
+??? example "Exercice 2 : Chiffrement Symétrique"
+    Chiffrez un fichier avec AES-256, puis déchiffrez-le.
+
+    ```bash
+    # Créer un fichier secret
+    echo "Mon secret" > secret.txt
+
+    # Chiffrer
+    openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc
+
+    # Vérifier que le fichier est illisible
+    cat secret.enc
+
+    # Déchiffrer
+    openssl enc -d -aes-256-cbc -pbkdf2 -in secret.enc -out decrypted.txt
+    cat decrypted.txt
+    ```
+
+??? example "Exercice 3 : Clés Asymétriques"
+    Générez une paire de clés RSA 4096 bits.
+
+    ```bash
+    # Générer la clé privée
+    openssl genrsa -out private.pem 4096
+
+    # Extraire la clé publique
+    openssl rsa -in private.pem -pubout -out public.pem
+
+    # Voir les détails
+    openssl rsa -in private.pem -text -noout | head -20
+    ```
+
+??? quote "Solutions"
+    **Exercice 1 :** L'effet avalanche fait que le hash change complètement, même pour une modification minime.
+
+    **Exercice 2 :** Le fichier `.enc` contient des données binaires illisibles. Seul le bon mot de passe permet de récupérer le contenu.
+
+    **Exercice 3 :** La clé privée contient tous les paramètres (p, q, d, e, n), tandis que la clé publique ne contient que (e, n).
+
+---
+
+## 5. Quiz de Validation
+
+??? question "Question 1 : Quelle est la différence entre chiffrement et hashing ?"
+    **Réponse :** Le chiffrement est réversible avec la bonne clé, le hashing est irréversible (sens unique).
+
+??? question "Question 2 : Base64 est-il sécurisé pour protéger des données ?"
+    **Réponse :** Non ! Base64 est un encodage, pas du chiffrement. N'importe qui peut le décoder.
+
+??? question "Question 3 : Quelle taille de clé RSA recommande l'ANSSI ?"
+    **Réponse :** Minimum 3072 bits, recommandé 4096 bits pour le long terme.
+
+??? question "Question 4 : Dans TLS/HTTPS, quel type de chiffrement est utilisé pour les données ?"
+    **Réponse :** Chiffrement symétrique (AES), après échange de clé en asymétrique.
+
+??? question "Question 5 : Pourquoi utilise-t-on l'asymétrique pour les signatures ?"
+    **Réponse :** Car seul le détenteur de la clé privée peut signer, mais tout le monde peut vérifier avec la clé publique. Cela garantit l'authenticité et la non-répudiation.
+
+---
+
+## Résumé
+
+| Concept | À retenir |
+|---------|-----------|
+| **Chiffrement symétrique** | 1 clé, rapide, pour les données |
+| **Chiffrement asymétrique** | 2 clés, lent, pour l'échange et les signatures |
+| **Hashing** | Irréversible, pour l'intégrité et les mots de passe |
+| **Encodage** | Changement de format, pas de sécurité |
+| **ANSSI** | RSA 4096, AES-256, SHA-256 minimum |
+
+---
+
+**Prêt pour la suite ?** [:octicons-arrow-right-24: Module 2 : Certificats X.509](02-module.md){ .md-button .md-button--primary }
+
+---
+
+**Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)

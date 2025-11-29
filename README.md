@@ -22,12 +22,13 @@ ShellBook est une base de connaissance structurée ET une plateforme de formatio
 - **8+ guides DevOps** : Docker, Kubernetes, CI/CD, Ansible, Observabilité
 - **6 guides Security** : Certificats, pentest, hardening, conformité SecNumCloud
 
-### 🎓 ShellBook Academy - 9 Parcours de Formation Complets
+### 🎓 ShellBook Academy - 10 Parcours de Formation Complets
 Des formations progressives de **niveau Zero to Hero** avec travaux pratiques :
 
 | Formation | Modules | Durée | Niveau |
 |-----------|---------|-------|--------|
 | **🚀 Le Socle DevOps** | 5 modules | 6h | Débutant |
+| **🔒 PKI & Certificats** | 5 modules | 16h | Intermédiaire |
 | **🔐 Hardening Linux** | 5 modules | 10h | Intermédiaire |
 | **🦁 Katello Lifecycle** | 5 modules | 15h | Avancé |
 | **💠 Ansible Mastery** | 4 modules | 14h | Intermédiaire |
@@ -37,12 +38,12 @@ Des formations progressives de **niveau Zero to Hero** avec travaux pratiques :
 | **💿 NTLite Mastery** | 6 modules | 18h | Avancé |
 | **🛢️ SQL Server DBA** | 5 modules | 22h | Avancé |
 
-**Total** : ~125 heures de formation professionnelle
+**Total** : ~140 heures de formation professionnelle
 
 ### Caractéristiques clés
 
 ✅ **Recherche Instantanée** : Ctrl+K pour trouver n'importe quelle commande
-✅ **9 Parcours de Formation** : Du niveau débutant à avancé avec TP
+✅ **10 Parcours de Formation** : Du niveau débutant à avancé avec TP
 ✅ **Tags Filtrables** : Chaque page est taguée par technologie
 ✅ **Quick Reference** : Résumé des commandes en fin de chaque guide
 ✅ **Exemples Pratiques** : Code blocks, YAML, configurations réelles
