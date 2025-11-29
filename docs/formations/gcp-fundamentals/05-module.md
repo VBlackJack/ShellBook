@@ -662,7 +662,7 @@ kubectl describe configmap cluster-autoscaler-status -n kube-system
         <head><title>GKE Training</title></head>
         <body>
         <h1>Hello from GKE!</h1>
-        <p>Server: HOSTNAME_PLACEHOLDER</p>
+        <p>Server: ${HOSTNAME}</p>
         </body>
         </html>
     ---
