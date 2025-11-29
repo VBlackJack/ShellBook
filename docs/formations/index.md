@@ -98,16 +98,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](chocolatey/)
 
--   :material-microsoft-windows:{ .lg .middle } **Windows Server Mastery**
+-   :material-microsoft-windows:{ .lg .middle } **Windows Server Mastery : Du Débutant à l'Expert**
 
     ---
 
-    Administration moderne Windows Server : PowerShell, Active Directory, GPO, sécurité et hardening selon les best practices Microsoft.
+    Parcours complet Windows Server en 4 niveaux : Fondations, Administration, Ingénierie et Expert. 20 modules couvrant de PowerShell basique à l'Infrastructure as Code et Hybrid Cloud. Prépare aux certifications AZ-800, AZ-801, SC-300.
 
-    **Compétences :** PowerShell, AD, GPO, Tiering Model, LAPS
-    **Durée :** 1.5 jours (12h)
+    **Compétences :** PowerShell, AD, GPO, Tiering Model, LAPS, Clustering, Conteneurs, DSC, Azure Hybrid
+    **Durée :** 20 jours (150h) - 20 modules + ressources
+    **Profils :** Débutants → Architectes Windows
 
-    [:octicons-arrow-right-24: Accéder à la Formation](windows-server/)
+    [:octicons-arrow-right-24: Accéder à la Formation](windows-mastery/)
 
 -   :material-update:{ .lg .middle } **Windows Patch Management (WSUS)**
 
@@ -274,7 +275,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🔐 Hardening Linux | 5 modules | ✅ Disponible |
 | 💠 Ansible Mastery | 4 modules | ✅ Disponible |
 | 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |
-| 🏰 Windows Server Mastery | 4 modules | ✅ Disponible |
+| 🏰 Windows Server Mastery | 20 modules | ✅ Disponible |
 | ♻️ Windows Patch Management | 5 modules | ✅ Disponible |
 | 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
 | 💿 NTLite Mastery | 6 modules | ✅ Disponible |

@@ -230,11 +230,36 @@ nav:
         - Module 4 - Vault: formations/ansible-mastery/04-module.md
     - 🪟 Écosystème Microsoft:
       - 🏰 Windows Server Mastery:
-        - Introduction: formations/windows-server/index.md
-        - Module 1 - Modern Admin: formations/windows-server/01-module.md
-        - Module 2 - Active Directory: formations/windows-server/02-module.md
-        - Module 3 - Sécurité: formations/windows-server/03-module.md
-        - Module 4 - TP Final: formations/windows-server/04-tp-final.md
+        - Introduction: formations/windows-mastery/index.md
+        - Niveau 1 - Fondations:
+          - Module 1 - Découverte: formations/windows-mastery/01-decouverte.md
+          - Module 2 - PowerShell Basics: formations/windows-mastery/02-powershell-basics.md
+          - Module 3 - Utilisateurs & NTFS: formations/windows-mastery/03-utilisateurs-ntfs.md
+          - Module 4 - Outils Admin: formations/windows-mastery/04-outils-administration.md
+          - Module 5 - Scripting Intro: formations/windows-mastery/05-scripting-intro.md
+        - Niveau 2 - Administration:
+          - Module 6 - Rôles & Features: formations/windows-mastery/06-roles-features.md
+          - Module 7 - Services & Processus: formations/windows-mastery/07-services-processus.md
+          - Module 8 - Stockage & Disques: formations/windows-mastery/08-stockage-disques.md
+          - Module 9 - Réseau DNS DHCP: formations/windows-mastery/09-reseau-dns-dhcp.md
+          - Module 10 - Automatisation Basique: formations/windows-mastery/10-automatisation-basique.md
+        - Niveau 3 - Ingénierie:
+          - Module 11 - Active Directory Core: formations/windows-mastery/11-active-directory-core.md
+          - Module 12 - GPO Configuration: formations/windows-mastery/12-gpo-configuration.md
+          - Module 13 - Sécurité & Hardening: formations/windows-mastery/13-securite-hardening.md
+          - Module 14 - Services Réseau Avancés: formations/windows-mastery/14-services-reseau-avances.md
+          - Module 15 - Backup & DR: formations/windows-mastery/15-backup-disaster-recovery.md
+        - Niveau 4 - Expert:
+          - Module 16 - Haute Disponibilité: formations/windows-mastery/16-haute-disponibilite.md
+          - Module 17 - Conteneurs Windows: formations/windows-mastery/17-conteneurs-windows.md
+          - Module 18 - Hybrid Cloud: formations/windows-mastery/18-hybrid-cloud.md
+          - Module 19 - Infrastructure as Code: formations/windows-mastery/19-infrastructure-as-code.md
+          - Module 20 - Projet Final: formations/windows-mastery/20-projet-final.md
+        - Ressources:
+          - Glossaire Windows: formations/windows-mastery/glossaire.md
+          - Cheatsheet PowerShell: formations/windows-mastery/cheatsheet-powershell.md
+          - Cheatsheet Active Directory: formations/windows-mastery/cheatsheet-active-directory.md
+          - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
       - ♻️ Windows Patch Management:
         - Introduction: formations/windows-patching/index.md
         - Module 1 - Architecture: formations/windows-patching/01-module.md
