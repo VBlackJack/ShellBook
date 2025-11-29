@@ -159,6 +159,8 @@ nav:
       - Updates & WSUS: windows/update-management.md
       - Task Scheduler: windows/scheduled-tasks.md
       - Ansible Windows: windows/ansible-windows.md
+    - 📊 Monitoring:
+      - Windows Exporter: windows/windows-exporter.md
     - 🔍 Troubleshooting:
       - Event Logs: windows/event-logs.md
       - Performance Monitor: windows/performance-monitoring.md
