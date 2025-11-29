@@ -133,14 +133,38 @@ nav:
       - Active Directory & Identité:
         - windows/active-directory.md
         - windows/ad-trusts.md
-      - Infrastructure & Maintenance:
+        - windows/ad-gpo.md
+        - windows/ad-delegation.md
+        - windows/ad-sites-replication.md
+      - Infrastructure & Services:
         - windows/server-administration.md
+        - windows/dns-server.md
+        - windows/dhcp-server.md
+        - windows/file-server.md
+        - windows/certificate-services.md
+        - windows/hyper-v.md
+      - Maintenance & Updates:
         - windows/update-management.md
       - Automatisation Hybride:
         - windows/ansible-windows.md
     - Sécurité:
       - Sécurité & Hardening:
         - windows/windows-security.md
+        - windows/credential-guard.md
+        - windows/windows-firewall.md
+        - windows/bitlocker.md
+        - windows/applocker.md
+    - Troubleshooting:
+      - Diagnostic & Dépannage:
+        - windows/event-logs.md
+        - windows/performance-monitoring.md
+        - windows/disk-management.md
+        - windows/network-troubleshooting.md
+    - PowerShell Avancé:
+      - Administration & Développement:
+        - windows/powershell-remoting.md
+        - windows/powershell-dsc.md
+        - windows/powershell-modules.md
   - 🏗️ Fondamentaux & Architecture:
     - Architecture & Concepts:
       - concepts/devops-pillars.md
