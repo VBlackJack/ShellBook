@@ -141,6 +141,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](gcp-fundamentals/)
 
+-   :material-aws:{ .lg .middle } **AWS Fundamentals : De l'On-Premise au Cloud Amazon**
+
+    ---
+
+    Formation complète AWS : Console, IAM, EC2, VPC, S3, RDS, EKS, CodePipeline, Lambda, Fargate, WAF, CloudWatch. Préparation certifications Solutions Architect, SysOps, Cloud Practitioner.
+
+    **Compétences :** AWS CLI, IAM, EC2, VPC, EKS, CodePipeline, Lambda, WAF, CloudWatch, X-Ray
+    **Durée :** 5 jours (35h) - 10 modules
+
+    [:octicons-arrow-right-24: Accéder à la Formation](aws-fundamentals/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -222,6 +233,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 💿 NTLite Mastery | 6 modules | ✅ Disponible |
 | 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
 | ☁️ GCP Fundamentals | 10 modules | ✅ Disponible |
+| 🔶 AWS Fundamentals | 10 modules | ✅ Disponible |
 
 ---
 
