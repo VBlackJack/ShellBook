@@ -51,18 +51,18 @@ sequenceDiagram
 
 ### Installation Certbot
 
-=== "Debian/Ubuntu"
-
-    ```bash
-    sudo apt update
-    sudo apt install certbot python3-certbot-nginx
-    ```
-
 === "RHEL/Rocky"
 
     ```bash
     sudo dnf install epel-release
     sudo dnf install certbot python3-certbot-nginx
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt update
+    sudo apt install certbot python3-certbot-nginx
     ```
 
 ### Obtenir un Certificat
