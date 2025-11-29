@@ -283,6 +283,18 @@ nav:
         - Module 8 - Serverless: formations/aws-fundamentals/08-module.md
         - Module 9 - Security: formations/aws-fundamentals/09-module.md
         - Module 10 - Observability: formations/aws-fundamentals/10-module.md
+      - 🔷 Azure Fundamentals:
+        - Introduction: formations/azure-fundamentals/index.md
+        - Module 1 - Portal & IAM: formations/azure-fundamentals/01-module.md
+        - Module 2 - VMs: formations/azure-fundamentals/02-module.md
+        - Module 3 - Networking: formations/azure-fundamentals/03-module.md
+        - Module 4 - Storage: formations/azure-fundamentals/04-module.md
+        - Module 5 - AKS: formations/azure-fundamentals/05-module.md
+        - Module 6 - TP Final: formations/azure-fundamentals/06-tp-final.md
+        - Module 7 - CI/CD: formations/azure-fundamentals/07-module.md
+        - Module 8 - Serverless: formations/azure-fundamentals/08-module.md
+        - Module 9 - Security: formations/azure-fundamentals/09-module.md
+        - Module 10 - Observability: formations/azure-fundamentals/10-module.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md

@@ -152,6 +152,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](aws-fundamentals/)
 
+-   :material-microsoft-azure:{ .lg .middle } **Azure Fundamentals : De l'On-Premise au Cloud Microsoft**
+
+    ---
+
+    Formation complète Azure : Portal, Entra ID, VMs, VNet, Storage, SQL Database, AKS, Azure DevOps, Functions, Container Apps, Key Vault, Monitor. Préparation certifications AZ-900, AZ-104, AZ-204.
+
+    **Compétences :** Azure CLI, Entra ID, VMs, VNet, AKS, Azure DevOps, Functions, Key Vault, Monitor, KQL
+    **Durée :** 5 jours (35h) - 10 modules
+
+    [:octicons-arrow-right-24: Accéder à la Formation](azure-fundamentals/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -234,6 +245,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
 | ☁️ GCP Fundamentals | 10 modules | ✅ Disponible |
 | 🔶 AWS Fundamentals | 10 modules | ✅ Disponible |
+| 🔷 Azure Fundamentals | 10 modules | ✅ Disponible |
 
 ---
 
