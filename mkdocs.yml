@@ -122,59 +122,53 @@ nav:
         - linux/backup-transfer.md
         - linux/archives-compression.md
   - 🪟 Windows:
-    - Essentiels & Outils:
-      - Accueil: windows/index.md
-      - Cartes Mentales: windows/windows-mindmaps.md
-      - Fondamentaux PowerShell & Outils:
-        - windows/productivity.md
-        - windows/powershell-foundations.md
-        - windows/netsh-troubleshooting.md
-        - windows/wsl2.md
-    - Administration Serveur:
-      - Active Directory & Identité:
-        - windows/active-directory.md
-        - windows/ad-trusts.md
-        - windows/ad-gpo.md
-        - windows/ad-delegation.md
-        - windows/ad-sites-replication.md
-        - windows/ad-recovery.md
-      - Infrastructure & Services:
-        - windows/server-administration.md
-        - windows/dns-server.md
-        - windows/dhcp-server.md
-        - windows/file-server.md
-        - windows/certificate-services.md
-        - windows/hyper-v.md
-        - windows/iis.md
-        - windows/rds-remote-desktop.md
-        - windows/failover-cluster.md
-        - windows/nps-radius.md
-      - Maintenance & Updates:
-        - windows/update-management.md
-        - windows/scheduled-tasks.md
-      - Automatisation Hybride:
-        - windows/ansible-windows.md
-    - Sécurité:
-      - Sécurité & Hardening:
-        - windows/windows-security.md
-        - windows/credential-guard.md
-        - windows/windows-firewall.md
-        - windows/bitlocker.md
-        - windows/applocker.md
-        - windows/laps.md
-        - windows/windows-defender.md
-    - Troubleshooting:
-      - Diagnostic & Dépannage:
-        - windows/event-logs.md
-        - windows/performance-monitoring.md
-        - windows/disk-management.md
-        - windows/network-troubleshooting.md
-    - PowerShell Avancé:
-      - Administration & Développement:
-        - windows/powershell-remoting.md
-        - windows/powershell-dsc.md
-        - windows/powershell-modules.md
-        - windows/wmi-cim.md
+    - Accueil: windows/index.md
+    - Cartes Mentales: windows/windows-mindmaps.md
+    - 🚀 Démarrage:
+      - Productivité: windows/productivity.md
+      - PowerShell Bases: windows/powershell-foundations.md
+      - WSL2: windows/wsl2.md
+    - 🔷 Active Directory:
+      - Fondamentaux AD: windows/active-directory.md
+      - Trusts Inter-Domaines: windows/ad-trusts.md
+      - GPO: windows/ad-gpo.md
+      - Délégation: windows/ad-delegation.md
+      - Sites & Réplication: windows/ad-sites-replication.md
+      - Recovery AD: windows/ad-recovery.md
+    - 🖥️ Infrastructure:
+      - Administration Serveur: windows/server-administration.md
+      - DNS: windows/dns-server.md
+      - DHCP: windows/dhcp-server.md
+      - File Server & DFS: windows/file-server.md
+      - IIS Web Server: windows/iis.md
+      - Hyper-V: windows/hyper-v.md
+      - RDS Remote Desktop: windows/rds-remote-desktop.md
+      - Failover Cluster: windows/failover-cluster.md
+      - PKI & Certificats: windows/certificate-services.md
+      - NPS RADIUS 802.1X: windows/nps-radius.md
+    - 🛡️ Sécurité:
+      - Vue d'ensemble: windows/windows-security.md
+      - Credential Guard: windows/credential-guard.md
+      - Windows Firewall: windows/windows-firewall.md
+      - BitLocker: windows/bitlocker.md
+      - AppLocker & WDAC: windows/applocker.md
+      - LAPS: windows/laps.md
+      - Windows Defender: windows/windows-defender.md
+    - 🔧 Opérations:
+      - Updates & WSUS: windows/update-management.md
+      - Task Scheduler: windows/scheduled-tasks.md
+      - Ansible Windows: windows/ansible-windows.md
+    - 🔍 Troubleshooting:
+      - Event Logs: windows/event-logs.md
+      - Performance Monitor: windows/performance-monitoring.md
+      - Gestion Disques: windows/disk-management.md
+      - Diagnostic Réseau: windows/network-troubleshooting.md
+      - Netsh: windows/netsh-troubleshooting.md
+    - 💻 PowerShell Avancé:
+      - Remoting & WinRM: windows/powershell-remoting.md
+      - DSC: windows/powershell-dsc.md
+      - Modules: windows/powershell-modules.md
+      - WMI & CIM: windows/wmi-cim.md
   - 🏗️ Fondamentaux & Architecture:
     - Architecture & Concepts:
       - concepts/devops-pillars.md
