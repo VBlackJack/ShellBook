@@ -259,6 +259,15 @@ nav:
         - Module 4 - Automatisation: formations/sql-server/04-module.md
         - Module 5 - TP Final: formations/sql-server/05-tp-final.md
     - ☁️ Cloud:
+      - ☁️ Cloud Fundamentals:
+        - Introduction: formations/cloud-fundamentals/index.md
+        - Module 1 - Concepts: formations/cloud-fundamentals/01-module.md
+        - Module 2 - Modèles de Service: formations/cloud-fundamentals/02-module.md
+        - Module 3 - Infrastructure: formations/cloud-fundamentals/03-module.md
+        - Module 4 - Sécurité: formations/cloud-fundamentals/04-module.md
+        - Module 5 - Architecture: formations/cloud-fundamentals/05-module.md
+        - Module 6 - FinOps: formations/cloud-fundamentals/06-module.md
+        - Module 7 - Cas Worldline: formations/cloud-fundamentals/07-module.md
       - 🌐 GCP Fundamentals:
         - Introduction: formations/gcp-fundamentals/index.md
         - Module 1 - Console & IAM: formations/gcp-fundamentals/01-module.md
