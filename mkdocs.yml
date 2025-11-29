@@ -311,6 +311,19 @@ nav:
         - Module 8 - Serverless: formations/azure-fundamentals/08-module.md
         - Module 9 - Security: formations/azure-fundamentals/09-module.md
         - Module 10 - Observability: formations/azure-fundamentals/10-module.md
+    - 🌐 Infrastructure Datacenter:
+      - 🔧 Terraform ACI:
+        - Introduction: formations/terraform-aci/index.md
+        - Module 1 - Terraform Basics: formations/terraform-aci/01-module.md
+        - Module 2 - Architecture ACI: formations/terraform-aci/02-module.md
+        - Module 3 - Modèle Objet: formations/terraform-aci/03-module.md
+        - Module 4 - Contracts & Filters: formations/terraform-aci/04-module.md
+        - Module 5 - Provider ACI: formations/terraform-aci/05-module.md
+        - Module 6 - Patterns & Modules: formations/terraform-aci/06-module.md
+        - Module 7 - Flux Nord-Sud: formations/terraform-aci/07-module.md
+        - Module 8 - Flux Est-Ouest: formations/terraform-aci/08-module.md
+        - Module 9 - Multi-Site: formations/terraform-aci/09-module.md
+        - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md

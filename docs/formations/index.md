@@ -175,6 +175,18 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](azure-fundamentals/)
 
+-   :fontawesome-solid-network-wired:{ .lg .middle } **Terraform ACI : Automatiser votre Fabric Cisco**
+
+    ---
+
+    Formation complète Terraform + Cisco ACI : architecture fabric, modèle objet, Contracts, flux Nord-Sud/Est-Ouest, Multi-Site (MSO/NDO), et projet PCI-DSS. Prépare aux certifications Terraform Associate et DevNet.
+
+    **Compétences :** Terraform, ACI, Tenants, EPGs, Contracts, L3Out, Microsegmentation, Multi-Site
+    **Durée :** 5 jours (35h) - 10 modules
+    **Profils :** Network Engineers, DevOps, Architectes DC
+
+    [:octicons-arrow-right-24: Accéder à la Formation](terraform-aci/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -259,6 +271,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🌐 GCP Fundamentals | 10 modules | ✅ Disponible |
 | 🔶 AWS Fundamentals | 10 modules | ✅ Disponible |
 | 🔷 Azure Fundamentals | 10 modules | ✅ Disponible |
+| 🔧 Terraform ACI | 10 modules | ✅ Disponible |
 
 ---
 
