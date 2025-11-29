@@ -308,7 +308,7 @@ nav:
     # ══════════════════════════════════════════════════════════════
     # FORMATIONS THEMATIQUES - Groupées et repliables
     # ══════════════════════════════════════════════════════════════
-    - 🛡️ Sécurité & Conformité (26h):
+    - 🛡️ Sécurité & Conformité (36h):
       - 🔒 PKI & Certificats (16h):
         - Programme: formations/pki-certificates/index.md
         - Module 01 - Crypto: formations/pki-certificates/01-module.md
@@ -323,7 +323,45 @@ nav:
         - Module 03 - Firewall: formations/linux-hardening/03-module.md
         - Module 04 - Audit: formations/linux-hardening/04-module.md
         - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
-    - ♾️ DevOps & Automatisation (66h):
+      - 🛡️ Hardening Windows (10h):
+        - Programme: formations/windows-hardening/index.md
+        - Module 01 - Baselines: formations/windows-hardening/01-module.md
+        - Module 02 - Services: formations/windows-hardening/02-module.md
+        - Module 03 - Firewall: formations/windows-hardening/03-module.md
+        - Module 04 - AD: formations/windows-hardening/04-module.md
+        - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
+    - ♾️ DevOps & Automatisation (131h):
+      - 🐳 Docker Mastery (15h):
+        - Programme: formations/docker-mastery/index.md
+        - Module 01 - Fondamentaux: formations/docker-mastery/01-module.md
+        - Module 02 - Images: formations/docker-mastery/02-module.md
+        - Module 03 - Compose: formations/docker-mastery/03-module.md
+        - Module 04 - Networking: formations/docker-mastery/04-module.md
+        - Module 05 - Volumes: formations/docker-mastery/05-module.md
+        - Module 06 - Sécurité: formations/docker-mastery/06-module.md
+        - Module 07 - TP Final: formations/docker-mastery/07-tp-final.md
+      - ☸️ Kubernetes Mastery (35h):
+        - Programme: formations/kubernetes-mastery/index.md
+        - Module 01 - Architecture: formations/kubernetes-mastery/01-module.md
+        - Module 02 - Workloads: formations/kubernetes-mastery/02-module.md
+        - Module 03 - Configuration: formations/kubernetes-mastery/03-module.md
+        - Module 04 - Networking: formations/kubernetes-mastery/04-module.md
+        - Module 05 - Storage: formations/kubernetes-mastery/05-module.md
+        - Module 06 - Security: formations/kubernetes-mastery/06-module.md
+        - Module 07 - Scheduling: formations/kubernetes-mastery/07-module.md
+        - Module 08 - Observability: formations/kubernetes-mastery/08-module.md
+        - Module 09 - Helm: formations/kubernetes-mastery/09-module.md
+        - Module 10 - GitOps: formations/kubernetes-mastery/10-module.md
+        - Module 11 - Troubleshooting: formations/kubernetes-mastery/11-module.md
+        - Module 12 - TP Final: formations/kubernetes-mastery/12-tp-final.md
+      - 📊 Observabilité (15h):
+        - Programme: formations/observability/index.md
+        - Module 01 - Fondamentaux: formations/observability/01-module.md
+        - Module 02 - Prometheus: formations/observability/02-module.md
+        - Module 03 - Exporters: formations/observability/03-module.md
+        - Module 04 - Grafana: formations/observability/04-module.md
+        - Module 05 - Alerting: formations/observability/05-module.md
+        - Module 06 - TP Final: formations/observability/06-tp-final.md
       - 🚀 Le Socle DevOps (6h):
         - Programme: formations/devops-foundation/index.md
         - Module 01 - Git: formations/devops-foundation/01-module.md

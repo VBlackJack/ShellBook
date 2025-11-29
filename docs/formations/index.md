@@ -200,6 +200,54 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](linux-mastery/)
 
+-   :material-shield-lock:{ .lg .middle } **Hardening Windows : Sécurité Entreprise**
+
+    ---
+
+    Sécurisez vos environnements Windows selon les standards CIS/ANSSI. Security Baselines, LGPO, durcissement services, Tiering Model Active Directory, LAPS et comptes de service gérés.
+
+    **Compétences :** CIS Benchmarks, LGPO, Firewall avancé, Tiering Model, LAPS, gMSA
+    **Durée :** 1.5 jours (10h) - 5 modules
+    **Profils :** Admins Windows, Ingénieurs Sécurité
+
+    [:octicons-arrow-right-24: Accéder à la Formation](windows-hardening/)
+
+-   :material-docker:{ .lg .middle } **Docker Mastery : Conteneurisation de A à Z**
+
+    ---
+
+    Maîtrisez Docker de l'installation à la production : images, Dockerfile multi-stage, Compose, networking, volumes et sécurité. Formation pratique avec TP final Production-Ready.
+
+    **Compétences :** Dockerfile, Multi-stage builds, Compose, Networking, Volumes, Security
+    **Durée :** 2 jours (15h) - 7 modules
+    **Profils :** DevOps, Développeurs, SysAdmins
+
+    [:octicons-arrow-right-24: Accéder à la Formation](docker-mastery/)
+
+-   :material-kubernetes:{ .lg .middle } **Kubernetes Mastery : De l'Administration à la Production**
+
+    ---
+
+    Formation complète Kubernetes : architecture, workloads, networking, storage, RBAC, Helm, GitOps (ArgoCD/Flux) et troubleshooting. Préparation certification CKA avec TP plateforme production.
+
+    **Compétences :** Pods, Deployments, Services, Ingress, RBAC, Helm, ArgoCD, Velero
+    **Durée :** 5 jours (35h) - 12 modules
+    **Profils :** DevOps, SRE, Architectes Cloud
+
+    [:octicons-arrow-right-24: Accéder à la Formation](kubernetes-mastery/)
+
+-   :material-chart-line:{ .lg .middle } **Observabilité : Prometheus, Grafana & Alerting**
+
+    ---
+
+    Déployez une stack d'observabilité complète : Prometheus, Grafana, Alertmanager, exporters et instrumentation. Les 3 piliers (métriques, logs, traces) et alerting production.
+
+    **Compétences :** PromQL, Exporters, Grafana Dashboards, Alertmanager, SLOs/SLIs
+    **Durée :** 2 jours (15h) - 6 modules
+    **Profils :** DevOps, SRE, Ops
+
+    [:octicons-arrow-right-24: Accéder à la Formation](observability/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -273,8 +321,12 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🚀 Le Socle DevOps | 5 modules | ✅ Disponible |
 | 🔒 PKI & Certificats | 5 modules | ✅ Disponible |
 | 🔐 Hardening Linux | 5 modules | ✅ Disponible |
+| 🛡️ Hardening Windows | 5 modules | ✅ Disponible |
 | 💠 Ansible Mastery | 4 modules | ✅ Disponible |
 | 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |
+| 🐳 Docker Mastery | 7 modules | ✅ Disponible |
+| ☸️ Kubernetes Mastery | 12 modules | ✅ Disponible |
+| 📊 Observabilité | 6 modules | ✅ Disponible |
 | 🏰 Windows Server Mastery | 20 modules | ✅ Disponible |
 | ♻️ Windows Patch Management | 5 modules | ✅ Disponible |
 | 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
