@@ -93,6 +93,7 @@ nav:
         - linux/users-and-permissions.md
         - linux/package-management.md
         - linux/automation-cron.md
+        - linux/systemd-advanced.md
         - linux/data-processing-advanced.md
         - linux/scripting-standards.md
       - RHEL & Securité:
@@ -211,6 +212,9 @@ nav:
       - devops/cicd-github-actions.md
       - devops/observability-stack.md
       - devops/observability-advanced.md
+      - devops/loki-logging.md
+    - Infrastructure & HA:
+      - devops/load-balancing.md
   - 🎓 Formations:
     - Catalogue: formations/index.md
     # ══════════════════════════════════════════════════════════════
