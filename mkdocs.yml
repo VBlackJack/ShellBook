@@ -250,13 +250,60 @@ nav:
         - Cheatsheet AD: formations/windows-mastery/cheatsheet-active-directory.md
         - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
     # ══════════════════════════════════════════════════════════════
-    # FORMATIONS CLOUD (35h) - Navigation compacte
+    # FORMATIONS CLOUD (35h) - Navigation avec modules
     # ══════════════════════════════════════════════════════════════
-    - ☁️ Cloud:
-      - Cloud Fundamentals (35h): formations/cloud-fundamentals/index.md
-      - GCP Fundamentals (35h): formations/gcp-fundamentals/index.md
-      - AWS Fundamentals (35h): formations/aws-fundamentals/index.md
-      - Azure Fundamentals (35h): formations/azure-fundamentals/index.md
+    - ☁️ Cloud Fundamentals (35h):
+      - Programme: formations/cloud-fundamentals/index.md
+      - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
+      - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
+      - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
+      - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
+      - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
+      - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
+      - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
+      - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
+      - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
+      - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
+      - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+      - Ressources:
+        - Glossaire: formations/cloud-fundamentals/glossaire.md
+        - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
+    - 🌐 GCP Fundamentals (35h):
+      - Programme: formations/gcp-fundamentals/index.md
+      - Module 01 - Console & IAM: formations/gcp-fundamentals/01-module.md
+      - Module 02 - Compute Engine: formations/gcp-fundamentals/02-module.md
+      - Module 03 - Networking: formations/gcp-fundamentals/03-module.md
+      - Module 04 - Storage: formations/gcp-fundamentals/04-module.md
+      - Module 05 - GKE: formations/gcp-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/gcp-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/gcp-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
+      - Module 09 - Security: formations/gcp-fundamentals/09-module.md
+      - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
+    - 🔶 AWS Fundamentals (35h):
+      - Programme: formations/aws-fundamentals/index.md
+      - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
+      - Module 02 - EC2: formations/aws-fundamentals/02-module.md
+      - Module 03 - VPC: formations/aws-fundamentals/03-module.md
+      - Module 04 - Storage: formations/aws-fundamentals/04-module.md
+      - Module 05 - EKS: formations/aws-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/aws-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/aws-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/aws-fundamentals/08-module.md
+      - Module 09 - Security: formations/aws-fundamentals/09-module.md
+      - Module 10 - Observability: formations/aws-fundamentals/10-module.md
+    - 🔷 Azure Fundamentals (35h):
+      - Programme: formations/azure-fundamentals/index.md
+      - Module 01 - Portal & IAM: formations/azure-fundamentals/01-module.md
+      - Module 02 - VMs: formations/azure-fundamentals/02-module.md
+      - Module 03 - Networking: formations/azure-fundamentals/03-module.md
+      - Module 04 - Storage: formations/azure-fundamentals/04-module.md
+      - Module 05 - AKS: formations/azure-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/azure-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/azure-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/azure-fundamentals/08-module.md
+      - Module 09 - Security: formations/azure-fundamentals/09-module.md
+      - Module 10 - Observability: formations/azure-fundamentals/10-module.md
     # ══════════════════════════════════════════════════════════════
     # FORMATIONS COURTES (<20h) - Liens directs vers index
     # ══════════════════════════════════════════════════════════════
@@ -266,7 +313,18 @@ nav:
     - ♾️ DevOps & Automatisation:
       - Le Socle DevOps (6h): formations/devops-foundation/index.md
       - Ansible Mastery (10h): formations/ansible-mastery/index.md
-      - Terraform ACI (35h): formations/terraform-aci/index.md
+    - 🔧 Terraform ACI (35h):
+      - Programme: formations/terraform-aci/index.md
+      - Module 01 - Terraform Basics: formations/terraform-aci/01-module.md
+      - Module 02 - Architecture ACI: formations/terraform-aci/02-module.md
+      - Module 03 - Modèle Objet: formations/terraform-aci/03-module.md
+      - Module 04 - Contracts: formations/terraform-aci/04-module.md
+      - Module 05 - Provider ACI: formations/terraform-aci/05-module.md
+      - Module 06 - Patterns: formations/terraform-aci/06-module.md
+      - Module 07 - Flux Nord-Sud: formations/terraform-aci/07-module.md
+      - Module 08 - Flux Est-Ouest: formations/terraform-aci/08-module.md
+      - Module 09 - Multi-Site: formations/terraform-aci/09-module.md
+      - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
     - 🪟 Écosystème Microsoft:
       - Windows Patching (12h): formations/windows-patching/index.md
       - Chocolatey Factory (12h): formations/chocolatey/index.md
