@@ -330,6 +330,38 @@ nav:
         - Module 8 - Flux Est-Ouest: formations/terraform-aci/08-module.md
         - Module 9 - Multi-Site: formations/terraform-aci/09-module.md
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
+    - 🐧 Linux Mastery:
+      - 🎯 Linux Mastery:
+        - Introduction: formations/linux-mastery/index.md
+        - Niveau 1 - Fondations:
+          - Module 1 - Découverte: formations/linux-mastery/01-decouverte.md
+          - Module 2 - Navigation: formations/linux-mastery/02-navigation.md
+          - Module 3 - Permissions: formations/linux-mastery/03-permissions.md
+          - Module 4 - Éditeurs & Texte: formations/linux-mastery/04-editeurs.md
+          - Module 5 - Shell Intro: formations/linux-mastery/05-shell-intro.md
+        - Niveau 2 - Administration:
+          - Module 6 - Paquets: formations/linux-mastery/06-paquets.md
+          - Module 7 - Services: formations/linux-mastery/07-services.md
+          - Module 8 - Stockage: formations/linux-mastery/08-stockage.md
+          - Module 9 - Réseau: formations/linux-mastery/09-reseau.md
+          - Module 10 - Automatisation: formations/linux-mastery/10-automatisation.md
+        - Niveau 3 - Ingénierie:
+          - Module 11 - Sécurité: formations/linux-mastery/11-securite.md
+          - Module 12 - Services Réseau: formations/linux-mastery/12-services-reseau.md
+          - Module 13 - Performance: formations/linux-mastery/13-performance.md
+          - Module 14 - Scripting Avancé: formations/linux-mastery/14-scripting-avance.md
+          - Module 15 - Backup: formations/linux-mastery/15-backup.md
+        - Niveau 4 - Expert:
+          - Module 16 - Haute Disponibilité: formations/linux-mastery/16-haute-disponibilite.md
+          - Module 17 - Conteneurs: formations/linux-mastery/17-conteneurs.md
+          - Module 18 - Kubernetes: formations/linux-mastery/18-kubernetes.md
+          - Module 19 - Infrastructure as Code: formations/linux-mastery/19-iac.md
+          - Module 20 - Projet Final: formations/linux-mastery/20-projet-final.md
+        - Ressources:
+          - Glossaire Linux: formations/linux-mastery/glossaire.md
+          - Cheatsheet Commandes: formations/linux-mastery/cheatsheet-commandes.md
+          - Cheatsheet Vim: formations/linux-mastery/cheatsheet-vim.md
+          - Checklist Hardening: formations/linux-mastery/checklist-hardening.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md

@@ -187,6 +187,18 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](terraform-aci/)
 
+-   :material-linux:{ .lg .middle } **Linux Mastery : Du Débutant à l'Expert**
+
+    ---
+
+    Parcours complet Linux en 4 niveaux : Fondations, Administration, Ingénierie et Expert. 20 modules couvrant du shell basique à Kubernetes et l'Infrastructure as Code. Prépare aux certifications LPIC, RHCSA, RHCE et CKA.
+
+    **Compétences :** Shell, Administration système, Sécurité, Docker, Kubernetes, Ansible, Terraform
+    **Durée :** 20 jours (150h) - 20 modules + ressources
+    **Profils :** Débutants → Architectes Linux
+
+    [:octicons-arrow-right-24: Accéder à la Formation](linux-mastery/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -272,6 +284,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🔶 AWS Fundamentals | 10 modules | ✅ Disponible |
 | 🔷 Azure Fundamentals | 10 modules | ✅ Disponible |
 | 🔧 Terraform ACI | 10 modules | ✅ Disponible |
+| 🐧 Linux Mastery | 20 modules | ✅ Disponible |
 
 ---
 
