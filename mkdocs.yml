@@ -137,6 +137,7 @@ nav:
         - windows/ad-gpo.md
         - windows/ad-delegation.md
         - windows/ad-sites-replication.md
+        - windows/ad-recovery.md
       - Infrastructure & Services:
         - windows/server-administration.md
         - windows/dns-server.md
@@ -144,8 +145,13 @@ nav:
         - windows/file-server.md
         - windows/certificate-services.md
         - windows/hyper-v.md
+        - windows/iis.md
+        - windows/rds-remote-desktop.md
+        - windows/failover-cluster.md
+        - windows/nps-radius.md
       - Maintenance & Updates:
         - windows/update-management.md
+        - windows/scheduled-tasks.md
       - Automatisation Hybride:
         - windows/ansible-windows.md
     - Sécurité:
@@ -155,6 +161,8 @@ nav:
         - windows/windows-firewall.md
         - windows/bitlocker.md
         - windows/applocker.md
+        - windows/laps.md
+        - windows/windows-defender.md
     - Troubleshooting:
       - Diagnostic & Dépannage:
         - windows/event-logs.md
@@ -166,6 +174,7 @@ nav:
         - windows/powershell-remoting.md
         - windows/powershell-dsc.md
         - windows/powershell-modules.md
+        - windows/wmi-cim.md
   - 🏗️ Fondamentaux & Architecture:
     - Architecture & Concepts:
       - concepts/devops-pillars.md
