@@ -313,6 +313,7 @@ nav:
     - ♾️ DevOps & Automatisation:
       - Le Socle DevOps (6h): formations/devops-foundation/index.md
       - Ansible Mastery (10h): formations/ansible-mastery/index.md
+      - Katello Lifecycle (15h): formations/katello/index.md
     - 🔧 Terraform ACI (35h):
       - Programme: formations/terraform-aci/index.md
       - Module 01 - Terraform Basics: formations/terraform-aci/01-module.md
@@ -330,8 +331,6 @@ nav:
       - Chocolatey Factory (12h): formations/chocolatey/index.md
       - NTLite Mastery (18h): formations/ntlite/index.md
       - SQL Server DBA (22h): formations/sql-server/index.md
-    - 🐧 Écosystème Linux:
-      - Katello Lifecycle (15h): formations/katello/index.md
   - 🛡️ Sécurité:
     - Cryptographie & PKI:
       - security/crypto-concepts.md
