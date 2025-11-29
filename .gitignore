@@ -42,3 +42,5 @@ Thumbs.db
 
 # Claude Code
 .claude/
+audit_formations.txt
+audit_links.py
