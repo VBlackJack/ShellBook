@@ -48,16 +48,23 @@ VPN moderne, rapide et sécurisé sous Linux.
 
 ### Installation
 
-```bash
-# Debian/Ubuntu
-sudo apt install wireguard wireguard-tools
+=== "RHEL/Rocky"
 
-# RHEL/CentOS 8+
-sudo dnf install wireguard-tools
+    ```bash
+    sudo dnf install wireguard-tools
 
-# Vérifier le module kernel
-lsmod | grep wireguard
-```
+    # Vérifier le module kernel
+    lsmod | grep wireguard
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install wireguard wireguard-tools
+
+    # Vérifier le module kernel
+    lsmod | grep wireguard
+    ```
 
 ### Génération des Clés
 

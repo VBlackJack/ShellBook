@@ -53,13 +53,13 @@ ss -t state established
 | Outil | Installation | Fonctionnalités |
 |------|---------|----------|
 | `top` | Intégré | Basique, pas de souris |
-| `htop` | `apt install htop` | Couleurs, souris, vue arbre, kill processus |
-| `btop` | `apt install btop` | UI moderne, graphiques, thèmes |
+| `htop` | `dnf install htop` | Couleurs, souris, vue arbre, kill processus |
+| `btop` | `dnf install btop` | UI moderne, graphiques, thèmes |
 
 ```bash
 # Installer les alternatives modernes
+sudo dnf install htop btop    # RHEL/Rocky/Fedora
 sudo apt install htop btop    # Debian/Ubuntu
-sudo dnf install htop btop    # RHEL/Fedora
 ```
 
 !!! tip "Raccourcis htop"
@@ -84,10 +84,10 @@ sudo dnf install htop btop    # RHEL/Fedora
 
 ```bash
 # Installer fd
+sudo dnf install fd-find      # RHEL/Rocky/Fedora
 sudo apt install fd-find      # Debian/Ubuntu (binaire: fdfind)
-sudo dnf install fd-find      # RHEL/Fedora
 
-# Créer un alias si nécessaire
+# Créer un alias si nécessaire (Debian/Ubuntu)
 alias fd='fdfind'
 ```
 
@@ -99,7 +99,8 @@ alias fd='fdfind'
 
 ```bash
 # Installer
-sudo apt install ripgrep
+sudo dnf install ripgrep      # RHEL/Rocky/Fedora
+sudo apt install ripgrep      # Debian/Ubuntu
 
 # Utilisation
 rg "pattern"                  # Récursif par défaut

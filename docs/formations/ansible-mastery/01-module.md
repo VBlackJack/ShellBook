@@ -318,17 +318,17 @@ ansible --version
 
 **OU via package manager :**
 
-=== "Ubuntu/Debian"
+=== "RHEL/Rocky"
+
+    ```bash
+    sudo dnf install ansible -y
+    ```
+
+=== "Debian/Ubuntu"
 
     ```bash
     sudo apt update
     sudo apt install ansible -y
-    ```
-
-=== "RHEL/CentOS"
-
-    ```bash
-    sudo dnf install ansible -y
     ```
 
 === "macOS"

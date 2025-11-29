@@ -267,7 +267,7 @@ Le côté physique du hacking, souvent présent dans les CTF sur site et les con
 ## Résumé de la Boîte à Outils CTF
 
 ```bash
-# Outils indispensables
+# Outils indispensables (Kali/Debian/Ubuntu - les outils CTF sont souvent sur Debian-based)
 sudo apt install -y \
     gdb \
     ghidra \
@@ -278,6 +278,10 @@ sudo apt install -y \
     hashcat \          # Cassage GPU
     wireshark \        # Analyse de paquets
     burpsuite          # Test web
+
+# Sur RHEL/Rocky (via EPEL pour certains outils)
+# sudo dnf install epel-release -y
+# sudo dnf install gdb wireshark binwalk ...
 
 # Bibliothèques Python
 pip install pwntools pycryptodome requests

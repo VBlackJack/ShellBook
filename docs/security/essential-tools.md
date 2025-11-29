@@ -380,10 +380,11 @@ Outil gratuit et open-source de rétro-ingénierie. Transforme les binaires comp
 **Installation :**
 
 ```bash
-# Télécharger depuis https://ghidra-sre.org/
+# Télécharger depuis https://ghidra-sre.org/ (recommandé)
 
 # Ou via gestionnaire de paquets
-sudo apt install ghidra  # Kali/Debian
+sudo apt install ghidra  # Kali/Debian/Ubuntu
+# Sur RHEL/Rocky : télécharger manuellement depuis le site officiel
 
 # Exécuter
 ghidraRun

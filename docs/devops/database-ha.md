@@ -261,7 +261,8 @@ etcdctl endpoint health
 
 ```bash
 # Installer Patroni (Python)
-sudo apt install -y python3-pip python3-psycopg2
+sudo dnf install -y python3-pip python3-psycopg2  # RHEL/Rocky
+# sudo apt install -y python3-pip python3-psycopg2  # Debian/Ubuntu
 sudo pip3 install patroni[etcd]
 
 # Créer le fichier de configuration

@@ -181,17 +181,33 @@ choco install corpapp -y
 
 **Installer Ansible :**
 
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install -y ansible
+=== "RHEL/Rocky"
 
-# macOS
-brew install ansible
+    ```bash
+    sudo dnf install ansible -y
 
-# Vérifier
-ansible --version
-```
+    # Vérifier
+    ansible --version
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt update
+    sudo apt install -y ansible
+
+    # Vérifier
+    ansible --version
+    ```
+
+=== "macOS"
+
+    ```bash
+    brew install ansible
+
+    # Vérifier
+    ansible --version
+    ```
 
 #### 2. Windows Hosts (Machines cibles)
 

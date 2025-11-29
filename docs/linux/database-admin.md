@@ -17,17 +17,32 @@ Administration des bases de données relationnelles sous Linux.
 
 ### Installation et Sécurisation
 
-```bash
-# Installation
-sudo apt install mariadb-server    # Debian/Ubuntu
-sudo apt install mysql-server      # MySQL (Ubuntu)
+=== "RHEL/Rocky"
 
-# Démarrer et activer
-sudo systemctl enable --now mariadb
+    ```bash
+    # Installation
+    sudo dnf install mariadb-server
 
-# IMPÉRATIF : Sécurisation initiale
-sudo mysql_secure_installation
-```
+    # Démarrer et activer
+    sudo systemctl enable --now mariadb
+
+    # IMPÉRATIF : Sécurisation initiale
+    sudo mysql_secure_installation
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    # Installation
+    sudo apt install mariadb-server    # MariaDB
+    sudo apt install mysql-server      # MySQL
+
+    # Démarrer et activer
+    sudo systemctl enable --now mariadb
+
+    # IMPÉRATIF : Sécurisation initiale
+    sudo mysql_secure_installation
+    ```
 
 !!! danger "mysql_secure_installation est OBLIGATOIRE"
     Ce script interactif :

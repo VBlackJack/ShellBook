@@ -40,10 +40,11 @@ kubectl config set-context --current --namespace=myapp
 # macOS
 brew install kubectx
 
-# Linux
-sudo apt install kubectx
+# Linux (RHEL/Rocky via EPEL ou téléchargement direct)
+sudo dnf install kubectx      # si disponible dans EPEL
+# sudo apt install kubectx    # Debian/Ubuntu
 
-# Ou via krew (plugin manager)
+# Ou via krew (plugin manager - recommandé)
 kubectl krew install ctx ns
 ```
 

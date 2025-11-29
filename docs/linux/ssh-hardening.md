@@ -98,16 +98,24 @@ sudo systemctl status sshd
 
 ### Installation
 
-```bash
-# Debian/Ubuntu
-sudo apt install fail2ban
+=== "RHEL/Rocky"
 
-# RHEL/CentOS
-sudo dnf install fail2ban
+    ```bash
+    sudo dnf install epel-release -y
+    sudo dnf install fail2ban
 
-# Démarrer et activer
-sudo systemctl enable --now fail2ban
-```
+    # Démarrer et activer
+    sudo systemctl enable --now fail2ban
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install fail2ban
+
+    # Démarrer et activer
+    sudo systemctl enable --now fail2ban
+    ```
 
 ### Configuration jail.local
 

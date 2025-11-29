@@ -139,21 +139,33 @@ flowchart LR
 
 **Installation :**
 
-```bash
-# Ubuntu/Debian
-sudo apt install shellcheck
+=== "RHEL/Rocky"
 
-# RHEL/CentOS
-sudo dnf install ShellCheck
+    ```bash
+    sudo dnf install epel-release -y
+    sudo dnf install ShellCheck -y
 
-# macOS
-brew install shellcheck
+    # Vérifier l'installation
+    shellcheck --version
+    ```
 
-# Vérifier l'installation
-shellcheck --version
-# ShellCheck - shell script analysis tool
-# version: 0.9.0
-```
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install shellcheck -y
+
+    # Vérifier l'installation
+    shellcheck --version
+    ```
+
+=== "macOS"
+
+    ```bash
+    brew install shellcheck
+
+    # Vérifier l'installation
+    shellcheck --version
+    ```
 
 #### Exemple : Script Avec Erreurs (❌)
 

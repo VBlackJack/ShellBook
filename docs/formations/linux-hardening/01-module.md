@@ -527,9 +527,12 @@ ssh -i ~/.ssh/id_ed25519 user@192.168.1.10
     ### Bonus : Fail2ban
 
     ```bash
-    # Installer fail2ban
-    sudo apt update
-    sudo apt install fail2ban -y
+    # Installer fail2ban (RHEL/Rocky)
+    sudo dnf install epel-release -y
+    sudo dnf install fail2ban -y
+
+    # OU sur Debian/Ubuntu :
+    # sudo apt update && sudo apt install fail2ban -y
 
     # Créer une configuration locale
     sudo vim /etc/fail2ban/jail.local

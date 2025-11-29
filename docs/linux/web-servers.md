@@ -241,13 +241,24 @@ sudo systemctl reload apache2
 
 ### Installation
 
-```bash
-# Debian/Ubuntu
-sudo apt install certbot python3-certbot-nginx
+=== "RHEL/Rocky"
 
-# Pour Apache
-sudo apt install certbot python3-certbot-apache
-```
+    ```bash
+    sudo dnf install epel-release -y
+    sudo dnf install certbot python3-certbot-nginx
+
+    # Pour Apache
+    sudo dnf install certbot python3-certbot-apache
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install certbot python3-certbot-nginx
+
+    # Pour Apache
+    sudo apt install certbot python3-certbot-apache
+    ```
 
 ### Obtenir un Certificat
 

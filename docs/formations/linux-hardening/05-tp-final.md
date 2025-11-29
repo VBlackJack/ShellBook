@@ -453,7 +453,24 @@ sudo whoami
 
 ### Actions à Réaliser
 
-#### Option A : Ubuntu/Debian avec UFW
+!!! info "Choix du Firewall"
+    - **RHEL/Rocky/CentOS** : Utilisez **firewalld** (installé par défaut)
+    - **Debian/Ubuntu** : Utilisez **UFW** (interface simplifiée pour iptables)
+
+#### Option A : RHEL/Rocky avec firewalld (Recommandé en entreprise)
+
+##### 1. Activation firewalld
+
+```bash
+# firewalld est préinstallé sur RHEL/Rocky
+sudo systemctl enable --now firewalld
+
+# Vérifier le statut
+sudo firewall-cmd --state
+# running
+```
+
+#### Option B : Debian/Ubuntu avec UFW
 
 ##### 1. Installation UFW
 
@@ -564,14 +581,18 @@ sudo firewall-cmd --zone=public --list-all
 
 ##### 1. Installation
 
-```bash
-# Ubuntu/Debian
-sudo apt install fail2ban -y
+=== "RHEL/Rocky"
 
-# RHEL/CentOS
-sudo dnf install epel-release -y
-sudo dnf install fail2ban -y
-```
+    ```bash
+    sudo dnf install epel-release -y
+    sudo dnf install fail2ban -y
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install fail2ban -y
+    ```
 
 ##### 2. Configuration
 
@@ -685,16 +706,24 @@ sudo fail2ban-client unban 192.168.1.50
 
 #### 1. Installation Auditd
 
-```bash
-# Ubuntu/Debian
-sudo apt install auditd audispd-plugins -y
+=== "RHEL/Rocky"
 
-# RHEL/CentOS
-sudo dnf install audit -y
+    ```bash
+    sudo dnf install audit -y
 
-# Vérifier l'installation
-sudo systemctl status auditd
-```
+    # Vérifier l'installation
+    sudo systemctl enable --now auditd
+    sudo systemctl status auditd
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt install auditd audispd-plugins -y
+
+    # Vérifier l'installation
+    sudo systemctl status auditd
+    ```
 
 #### 2. Configuration des Règles d'Audit
 
@@ -1368,64 +1397,121 @@ Au terme de ce TP Final, vous êtes capable de :
 
     ### Script de Hardening Automatisé (Bonus)
 
-    **Fichier : `hardening.sh`**
+    === "RHEL/Rocky - `hardening-rhel.sh`"
 
-    ```bash
-    #!/bin/bash
-    # Script de hardening automatisé
-    # À utiliser avec précaution et validation manuelle
+        ```bash
+        #!/bin/bash
+        # Script de hardening automatisé pour RHEL/Rocky Linux
+        # À utiliser avec précaution et validation manuelle
 
-    set -e  # Arrêt en cas d'erreur
+        set -e  # Arrêt en cas d'erreur
 
-    echo "=== Début du Hardening ==="
+        echo "=== Début du Hardening (RHEL/Rocky) ==="
 
-    # Backup
-    echo "[1/6] Création des backups..."
-    sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%F)
-    sudo cp /etc/sudoers /etc/sudoers.backup.$(date +%F)
+        # Backup
+        echo "[1/6] Création des backups..."
+        sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%F)
+        sudo cp /etc/sudoers /etc/sudoers.backup.$(date +%F)
 
-    # SSH Hardening
-    echo "[2/6] Hardening SSH..."
-    sudo sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
-    sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
-    sudo systemctl restart ssh
+        # SSH Hardening
+        echo "[2/6] Hardening SSH..."
+        sudo sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+        sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+        sudo systemctl restart sshd
 
-    # Utilisateurs
-    echo "[3/6] Verrouillage utilisateurs obsolètes..."
-    for user in bob charlie testuser; do
-        sudo usermod -L $user 2>/dev/null || true
-        sudo usermod -s /sbin/nologin $user 2>/dev/null || true
-    done
+        # Utilisateurs
+        echo "[3/6] Verrouillage utilisateurs obsolètes..."
+        for user in bob charlie testuser; do
+            sudo usermod -L $user 2>/dev/null || true
+            sudo usermod -s /sbin/nologin $user 2>/dev/null || true
+        done
 
-    # Firewall
-    echo "[4/6] Configuration firewall..."
-    sudo apt install ufw fail2ban -y
-    sudo ufw --force enable
-    sudo ufw default deny incoming
-    sudo ufw default allow outgoing
-    sudo ufw allow 22/tcp
-    sudo ufw allow 80/tcp
-    sudo ufw allow 443/tcp
+        # Firewall (firewalld)
+        echo "[4/6] Configuration firewall..."
+        sudo systemctl enable --now firewalld
+        sudo firewall-cmd --set-default-zone=drop
+        sudo firewall-cmd --permanent --add-service=ssh
+        sudo firewall-cmd --permanent --add-service=http
+        sudo firewall-cmd --permanent --add-service=https
+        sudo firewall-cmd --reload
 
-    # Fail2Ban
-    echo "[5/6] Configuration Fail2Ban..."
-    sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-    sudo systemctl enable --now fail2ban
+        # Fail2Ban
+        echo "[5/6] Configuration Fail2Ban..."
+        sudo dnf install epel-release -y
+        sudo dnf install fail2ban -y
+        sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+        sudo systemctl enable --now fail2ban
 
-    # Audit
-    echo "[6/6] Configuration Audit..."
-    sudo apt install auditd -y
-    sudo systemctl enable --now auditd
+        # Audit
+        echo "[6/6] Configuration Audit..."
+        sudo dnf install audit -y
+        sudo systemctl enable --now auditd
 
-    echo "=== Hardening Terminé ==="
-    echo "⚠️  IMPORTANT : Tester SSH avant de fermer cette session!"
-    ```
+        echo "=== Hardening Terminé ==="
+        echo "⚠️  IMPORTANT : Tester SSH avant de fermer cette session!"
+        ```
+
+    === "Debian/Ubuntu - `hardening-debian.sh`"
+
+        ```bash
+        #!/bin/bash
+        # Script de hardening automatisé pour Debian/Ubuntu
+        # À utiliser avec précaution et validation manuelle
+
+        set -e  # Arrêt en cas d'erreur
+
+        echo "=== Début du Hardening (Debian/Ubuntu) ==="
+
+        # Backup
+        echo "[1/6] Création des backups..."
+        sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%F)
+        sudo cp /etc/sudoers /etc/sudoers.backup.$(date +%F)
+
+        # SSH Hardening
+        echo "[2/6] Hardening SSH..."
+        sudo sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+        sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+        sudo systemctl restart ssh
+
+        # Utilisateurs
+        echo "[3/6] Verrouillage utilisateurs obsolètes..."
+        for user in bob charlie testuser; do
+            sudo usermod -L $user 2>/dev/null || true
+            sudo usermod -s /sbin/nologin $user 2>/dev/null || true
+        done
+
+        # Firewall (UFW)
+        echo "[4/6] Configuration firewall..."
+        sudo apt install ufw fail2ban -y
+        sudo ufw --force enable
+        sudo ufw default deny incoming
+        sudo ufw default allow outgoing
+        sudo ufw allow 22/tcp
+        sudo ufw allow 80/tcp
+        sudo ufw allow 443/tcp
+
+        # Fail2Ban
+        echo "[5/6] Configuration Fail2Ban..."
+        sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+        sudo systemctl enable --now fail2ban
+
+        # Audit
+        echo "[6/6] Configuration Audit..."
+        sudo apt install auditd -y
+        sudo systemctl enable --now auditd
+
+        echo "=== Hardening Terminé ==="
+        echo "⚠️  IMPORTANT : Tester SSH avant de fermer cette session!"
+        ```
 
     **Utilisation :**
 
     ```bash
-    chmod +x hardening.sh
-    sudo ./hardening.sh
+    chmod +x hardening-*.sh
+    # Sur RHEL/Rocky :
+    sudo ./hardening-rhel.sh
+    # Sur Debian/Ubuntu :
+    sudo ./hardening-debian.sh
     ```
 
 ## Prochaines Étapes

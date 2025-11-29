@@ -201,15 +201,28 @@ iptables -A INPUT -j DROP
 
 **Installation :**
 
-```bash
-# Installer UFW (généralement préinstallé sur Ubuntu)
-sudo apt update
-sudo apt install ufw -y
+=== "RHEL/Rocky (firewalld)"
 
-# Vérifier la version
-sudo ufw version
-# ufw 0.36.1
-```
+    ```bash
+    # firewalld est préinstallé sur RHEL/Rocky - préféré en entreprise
+    sudo systemctl enable --now firewalld
+
+    # Vérifier le statut
+    sudo firewall-cmd --state
+    # running
+    ```
+
+=== "Debian/Ubuntu (ufw)"
+
+    ```bash
+    # Installer UFW (généralement préinstallé sur Ubuntu)
+    sudo apt update
+    sudo apt install ufw -y
+
+    # Vérifier la version
+    sudo ufw version
+    # ufw 0.36.1
+    ```
 
 ### Configuration de Base
 
@@ -515,19 +528,25 @@ flowchart LR
 
 **Installation :**
 
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install fail2ban -y
+=== "RHEL/Rocky"
 
-# RHEL/CentOS
-sudo dnf install epel-release -y
-sudo dnf install fail2ban -y
+    ```bash
+    sudo dnf install epel-release -y
+    sudo dnf install fail2ban -y
 
-# Démarrer et activer
-sudo systemctl start fail2ban
-sudo systemctl enable fail2ban
-```
+    # Démarrer et activer
+    sudo systemctl enable --now fail2ban
+    ```
+
+=== "Debian/Ubuntu"
+
+    ```bash
+    sudo apt update
+    sudo apt install fail2ban -y
+
+    # Démarrer et activer
+    sudo systemctl enable --now fail2ban
+    ```
 
 **Configuration :**
 
@@ -682,20 +701,33 @@ sudo tail -f /var/log/fail2ban.log
 ## Solution : Configuration Complète
 
 ??? quote "Solution Détaillée"
-    ### Étape 1 : Installer UFW
+    ### Étape 1 : Installer le Firewall
 
-    ```bash
-    # Vérifier si UFW est installé
-    dpkg -l | grep ufw
+    === "RHEL/Rocky (firewalld)"
 
-    # Si non installé
-    sudo apt update
-    sudo apt install ufw -y
+        ```bash
+        # firewalld est préinstallé - juste l'activer
+        sudo systemctl enable --now firewalld
 
-    # Vérifier la version
-    sudo ufw version
-    # ufw 0.36.1
-    ```
+        # Vérifier le statut
+        sudo firewall-cmd --state
+        # running
+        ```
+
+    === "Debian/Ubuntu (ufw)"
+
+        ```bash
+        # Vérifier si UFW est installé
+        dpkg -l | grep ufw
+
+        # Si non installé
+        sudo apt update
+        sudo apt install ufw -y
+
+        # Vérifier la version
+        sudo ufw version
+        # ufw 0.36.1
+        ```
 
     ### Étape 2 : Politiques par Défaut
 
@@ -758,10 +790,21 @@ sudo tail -f /var/log/fail2ban.log
 
     ### Étape 5 : Installer Fail2Ban
 
+    === "RHEL/Rocky"
+
+        ```bash
+        sudo dnf install epel-release -y
+        sudo dnf install fail2ban -y
+        ```
+
+    === "Debian/Ubuntu"
+
+        ```bash
+        sudo apt update
+        sudo apt install fail2ban -y
+        ```
+
     ```bash
-    # Installer Fail2Ban
-    sudo apt update
-    sudo apt install fail2ban -y
 
     # Copier la configuration par défaut
     sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local

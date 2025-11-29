@@ -333,7 +333,9 @@ jobs:
 
           # Étape 2 : Installer shellcheck
           - name: Install shellcheck
-            run: sudo apt-get update && sudo apt-get install -y shellcheck
+            run: |
+              # Sur les runners GitHub (Ubuntu), on utilise apt
+              sudo apt-get update && sudo apt-get install -y shellcheck
 
           # Étape 3 : Trouver et vérifier tous les scripts .sh
           - name: Run shellcheck

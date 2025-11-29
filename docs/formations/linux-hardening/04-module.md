@@ -166,7 +166,26 @@ flowchart LR
 
 ### Installation
 
-=== "Ubuntu/Debian"
+=== "RHEL/Rocky"
+
+    ```bash
+    # Installation
+    sudo dnf install audit -y
+
+    # Activation
+    sudo systemctl enable --now auditd
+
+    # Vérification
+    sudo systemctl status auditd
+    # ● auditd.service - Security Auditing Service
+    #    Active: active (running)
+
+    # Version
+    auditctl -v
+    # auditctl version 3.0.9
+    ```
+
+=== "Debian/Ubuntu"
 
     ```bash
     # Installation
@@ -182,16 +201,6 @@ flowchart LR
     # Version
     auditctl -v
     # auditctl version 3.0.7
-    ```
-
-=== "RHEL/CentOS"
-
-    ```bash
-    # Installation
-    sudo dnf install audit -y
-
-    # Activation
-    sudo systemctl enable --now auditd
 
     # Vérification
     sudo auditctl -l
