@@ -77,7 +77,7 @@ nav:
   - 🐧 Linux:
     - Bases & Certification:
       - Débuter & Productivité:
-        - linux/demo.md
+        - linux/ssh-keys.md
         - linux/productivity.md
         - linux/modern-tools.md
         - linux/bash-wizardry.md
@@ -183,6 +183,7 @@ nav:
       - devops/observability-stack.md
       - devops/observability-advanced.md
   - 🎓 Formations:
+    - Catalogue: formations/index.md
     - ♾️ Pratiques DevOps:
       - 🚀 Le Socle DevOps:
         - Introduction: formations/devops-foundation/index.md

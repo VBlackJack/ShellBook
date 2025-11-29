@@ -78,7 +78,7 @@
 
     **Couvre :** Boot & Services • Filesystem & LVM • SSH Hardening • Nginx/Apache • Bash Scripting
 
-    [:octicons-arrow-right-24: Explorer Linux](linux/demo.md)
+    [:octicons-arrow-right-24: Explorer Linux](linux/ssh-keys.md)
 
 -   :fontawesome-brands-windows:{ .lg .middle } **Windows (9 Guides)**
 

@@ -27,14 +27,14 @@ Des formations progressives de **niveau Zero to Hero** avec travaux pratiques :
 
 | Formation | Modules | Durée | Niveau |
 |-----------|---------|-------|--------|
-| **🚀 Le Socle DevOps** | 5 modules | 12h | Débutant |
+| **🚀 Le Socle DevOps** | 5 modules | 6h | Débutant |
 | **🔐 Hardening Linux** | 5 modules | 10h | Intermédiaire |
 | **🦁 Katello Lifecycle** | 5 modules | 15h | Avancé |
 | **💠 Ansible Mastery** | 4 modules | 14h | Intermédiaire |
 | **🏰 Windows Server Mastery** | 4 modules | 12h | Intermédiaire |
 | **♻️ Windows Patch Management** | 5 modules | 14h | Avancé |
 | **🍫 Chocolatey Factory** | 5 modules | 12h | Intermédiaire |
-| **💿 NTLite Mastery** | 6 modules | 14h | Avancé |
+| **💿 NTLite Mastery** | 6 modules | 18h | Avancé |
 | **🛢️ SQL Server DBA** | 5 modules | 22h | Avancé |
 
 **Total** : ~125 heures de formation professionnelle
@@ -75,7 +75,7 @@ ShellBook/
 │   │   ├── windows-server/         # Windows Server Mastery (4 modules)
 │   │   ├── windows-patching/       # Patch Management (5 modules)
 │   │   ├── chocolatey/             # Chocolatey Factory (5 modules)
-│   │   ├── ntlite/                 # NTLite Mastery (5 modules)
+│   │   ├── ntlite/                 # NTLite Mastery (6 modules)
 │   │   └── sql-server/             # SQL Server DBA (5 modules)
 │   │       ├── index.md
 │   │       ├── 01-module.md        # Architecture & Installation

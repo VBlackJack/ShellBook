@@ -27,7 +27,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Maîtrisez les fondamentaux DevOps : Git, branches, pull requests, CI/CD, et pipelines automatisés. De zéro à la production.
 
     **Compétences :** Git workflows, GitLab CI/CD, Tests automatisés
-    **Durée :** 2 jours (16h)
+    **Durée :** 1 jour (6h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](devops-foundation/)
 
@@ -38,7 +38,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Sécurisez vos serveurs Linux selon les standards SecNumCloud. SSH, sudo, firewall, audit et conformité ANSSI.
 
     **Compétences :** SSH Hardening, Firewalld, OpenSCAP, Audit
-    **Durée :** 3 jours (24h)
+    **Durée :** 1.5 jours (10h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](linux-hardening/)
 
@@ -49,7 +49,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Automatisez votre infrastructure avec Ansible. Architecture, playbooks, roles, Vault, et patterns d'industrialisation.
 
     **Compétences :** Playbooks, Roles, Vault, Galaxy, Testing
-    **Durée :** 4 jours (32h)
+    **Durée :** 2 jours (14h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](ansible-mastery/)
 
@@ -60,7 +60,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Gérez centralement les mises à jour Linux (RHEL/Rocky/CentOS). Synchronisation repos, Content Views, Lifecycle Environments, Patch Management.
 
     **Compétences :** Foreman, Pulp, Content Views, Errata Management
-    **Durée :** 3 jours (24h)
+    **Durée :** 2 jours (15h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](katello/)
 
@@ -71,7 +71,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Maîtrisez Chocolatey pour gérer les packages Windows. Création de packages, repository privé, déploiement automatisé via Ansible/GPO.
 
     **Compétences :** Packaging, Chocolatey Server, Automatisation
-    **Durée :** 2 jours (16h)
+    **Durée :** 1.5 jours (12h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](chocolatey/)
 
@@ -82,7 +82,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Administration moderne Windows Server : PowerShell, Active Directory, GPO, sécurité et hardening selon les best practices Microsoft.
 
     **Compétences :** PowerShell, AD, GPO, Tiering Model, LAPS
-    **Durée :** 3 jours (24h)
+    **Durée :** 1.5 jours (12h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](windows-server/)
 
@@ -93,7 +93,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Déployez une infrastructure WSUS complète. Architecture, Deployment Rings, GPO, maintenance automatisée et troubleshooting avancé.
 
     **Compétences :** WSUS, Deployment Rings, GPO PowerShell, Maintenance
-    **Durée :** 3 jours (24h)
+    **Durée :** 2 jours (14h)
 
     [:octicons-arrow-right-24: Accéder à la Formation](windows-patching/)
 
@@ -104,7 +104,7 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
     Créez des images Windows sur mesure : debloating, intégration drivers/updates, automatisation OOBE, et déploiement VPN/certificats entreprise.
 
     **Compétences :** Debloating, Post-Setup, Unattended XML, VPN/PKI Integration
-    **Durée :** 2 jours (14h) - 6 modules
+    **Durée :** 2.5 jours (18h) - 6 modules
 
     [:octicons-arrow-right-24: Accéder à la Formation](ntlite/)
 
