@@ -330,7 +330,7 @@ nav:
         - Module 03 - Firewall: formations/windows-hardening/03-module.md
         - Module 04 - AD: formations/windows-hardening/04-module.md
         - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
-    - ♾️ DevOps & Automatisation (131h):
+    - ♾️ DevOps & Automatisation (146h):
       - 🐳 Docker Mastery (15h):
         - Programme: formations/docker-mastery/index.md
         - Module 01 - Fondamentaux: formations/docker-mastery/01-module.md
@@ -340,6 +340,15 @@ nav:
         - Module 05 - Volumes: formations/docker-mastery/05-module.md
         - Module 06 - Sécurité: formations/docker-mastery/06-module.md
         - Module 07 - TP Final: formations/docker-mastery/07-tp-final.md
+      - 🦭 Podman Mastery (15h):
+        - Programme: formations/podman-mastery/index.md
+        - Module 01 - Fondamentaux: formations/podman-mastery/01-module.md
+        - Module 02 - Rootless: formations/podman-mastery/02-module.md
+        - Module 03 - Buildah: formations/podman-mastery/03-module.md
+        - Module 04 - Skopeo: formations/podman-mastery/04-module.md
+        - Module 05 - Pods: formations/podman-mastery/05-module.md
+        - Module 06 - Systemd: formations/podman-mastery/06-module.md
+        - Module 07 - TP Final: formations/podman-mastery/07-tp-final.md
       - ☸️ Kubernetes Mastery (35h):
         - Programme: formations/kubernetes-mastery/index.md
         - Module 01 - Architecture: formations/kubernetes-mastery/01-module.md

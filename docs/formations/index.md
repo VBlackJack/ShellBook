@@ -224,6 +224,18 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](docker-mastery/)
 
+-   :fontawesome-solid-seal:{ .lg .middle } **Podman Mastery : Conteneurs pour l'Entreprise**
+
+    ---
+
+    Maîtrisez l'écosystème Podman (Red Hat) : conteneurs rootless, Buildah, Skopeo, pods multi-conteneurs et intégration systemd avec Quadlet. Focus RHEL/Rocky Linux.
+
+    **Compétences :** Podman rootless, Buildah, Skopeo, Pods, Quadlet, Systemd
+    **Durée :** 2 jours (15h) - 7 modules
+    **Profils :** Admins RHEL/Rocky, DevOps Red Hat, SRE
+
+    [:octicons-arrow-right-24: Accéder à la Formation](podman-mastery/)
+
 -   :material-kubernetes:{ .lg .middle } **Kubernetes Mastery : De l'Administration à la Production**
 
     ---
@@ -325,6 +337,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 💠 Ansible Mastery | 4 modules | ✅ Disponible |
 | 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |
 | 🐳 Docker Mastery | 7 modules | ✅ Disponible |
+| 🦭 Podman Mastery | 7 modules | ✅ Disponible |
 | ☸️ Kubernetes Mastery | 12 modules | ✅ Disponible |
 | 📊 Observabilité | 6 modules | ✅ Disponible |
 | 🏰 Windows Server Mastery | 20 modules | ✅ Disponible |
