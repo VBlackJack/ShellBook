@@ -113,6 +113,7 @@ nav:
         - linux/web-servers.md
         - linux/database-admin.md
         - linux/ldap-389ds.md
+        - linux/postfix-relay.md
         - linux/secure-file-exchange.md
         - linux/virtualization-kvm.md
     - Opérations & Dépannage:
