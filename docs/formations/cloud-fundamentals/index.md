@@ -13,6 +13,8 @@ tags:
 
 Cette formation constitue le **socle commun** avant toute spécialisation sur un provider cloud (AWS, Azure, GCP). Conçue pour tous les profils Worldline, elle démystifie le cloud computing avec une approche progressive et contextualisée au métier du paiement.
 
+**Durée : 5 jours (35h) - 11 modules**
+
 ```mermaid
 graph LR
     subgraph "Votre Parcours Cloud"
@@ -83,10 +85,11 @@ graph TB
 
 | Profil | Modules recommandés | Durée | Focus |
 |--------|---------------------|-------|-------|
-| **Managers / Chefs de projet** | 1, 2, 5, 6, 7 | 1.5 jours | Vision stratégique, coûts, décisions |
-| **Stagiaires / Alternants** | Tous (1-7) | 3 jours | Formation complète |
-| **Ingénieurs / DevOps** | 1, 3, 4, 5, 7 | 2 jours | Technique + contexte métier |
-| **Commerciaux / Avant-vente** | 1, 2, 6, 7 | 1 jour | Discours client, pricing |
+| **Managers / Chefs de projet** | 1, 2, 5, 6, 7, 11 | 2 jours | Vision stratégique, coûts, migration |
+| **Stagiaires / Alternants** | Tous (1-11) | 5 jours | Formation complète |
+| **Ingénieurs / DevOps** | 1, 3, 4, 5, 7, 8, 9, 10 | 3.5 jours | Technique + contexte métier |
+| **Commerciaux / Avant-vente** | 1, 2, 6, 7, 11 | 1.5 jours | Discours client, pricing, migration |
+| **Data Engineers** | 1, 3, 5, 10 | 2 jours | Infrastructure + Data/IA |
 
 ---
 
@@ -113,7 +116,10 @@ graph TB
 
 ---
 
-## Programme Détaillé (3 jours - 21h)
+## Programme Détaillé (5 jours - 35h)
+
+!!! info "Formation Enrichie"
+    Cette formation a été enrichie avec 4 modules supplémentaires couvrant les conteneurs, DevOps, Data/IA et la migration cloud.
 
 ### Jour 1 : Fondamentaux (7h)
 
@@ -136,6 +142,27 @@ graph TB
 | **5** | [Architecture Cloud](05-module.md) | 3h | Haute disponibilité, disaster recovery, scalabilité, patterns |
 | **6** | [FinOps & Coûts](06-module.md) | 2h | Modèles de pricing, optimisation, budgets, TCO |
 | **7** | [Cas d'Usage Worldline](07-module.md) | 2h | Paiement, fintech, contraintes métier, exemples concrets |
+
+### Jour 4 : Technologies Modernes (7h)
+
+| Module | Titre | Durée | Contenu |
+|--------|-------|-------|---------|
+| **8** | [Conteneurs & Kubernetes](08-module.md) | 4h | Docker, conteneurs vs VMs, Kubernetes, services cloud (EKS/AKS/GKE) |
+| **9** | [DevOps & CI/CD](09-module.md) | 3h | Culture DevOps, Git, pipelines CI/CD, Infrastructure as Code, DevSecOps |
+
+### Jour 5 : Data, IA & Migration (7h)
+
+| Module | Titre | Durée | Contenu |
+|--------|-------|-------|---------|
+| **10** | [Data & IA/ML Cloud](10-module.md) | 4h | Data Lake, Data Warehouse, services ML, Generative AI, cas d'usage |
+| **11** | [Migration Cloud](11-module.md) | 3h | Stratégies 6R, TCO, phases de migration, risques et bonnes pratiques |
+
+### Ressources Complémentaires
+
+| Ressource | Description |
+|-----------|-------------|
+| [Glossaire](glossaire.md) | Tous les termes cloud essentiels |
+| [Fiches Mémo](fiches-memo.md) | Fiches de révision rapide |
 
 ---
 

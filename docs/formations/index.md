@@ -24,10 +24,10 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     ---
 
-    Formation socle pour tous les profils : concepts cloud, IaaS/PaaS/SaaS, infrastructure, sécurité, architecture, FinOps et cas d'usage Worldline. Prépare aux spécialisations AWS/Azure/GCP.
+    Formation socle pour tous les profils : concepts cloud, IaaS/PaaS/SaaS, infrastructure, sécurité, architecture, FinOps, conteneurs, DevOps, Data/IA et migration. Prépare aux spécialisations AWS/Azure/GCP.
 
-    **Compétences :** Concepts cloud, modèles de service, sécurité, PCI-DSS, architecture HA/DR, FinOps
-    **Durée :** 3 jours (21h) - 7 modules
+    **Compétences :** Concepts cloud, modèles de service, sécurité, PCI-DSS, architecture HA/DR, FinOps, Docker/K8s, CI/CD, Data/ML
+    **Durée :** 5 jours (35h) - 11 modules + ressources
     **Profils :** Tous (parcours différenciés)
 
     [:octicons-arrow-right-24: Accéder à la Formation](cloud-fundamentals/)
@@ -255,7 +255,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🍫 Chocolatey Factory | 5 modules | ✅ Disponible |
 | 💿 NTLite Mastery | 6 modules | ✅ Disponible |
 | 🛢️ SQL Server DBA | 5 modules | ✅ Disponible |
-| ☁️ Cloud Fundamentals | 7 modules | ✅ Disponible |
+| ☁️ Cloud Fundamentals | 11 modules | ✅ Disponible |
 | 🌐 GCP Fundamentals | 10 modules | ✅ Disponible |
 | 🔶 AWS Fundamentals | 10 modules | ✅ Disponible |
 | 🔷 Azure Fundamentals | 10 modules | ✅ Disponible |

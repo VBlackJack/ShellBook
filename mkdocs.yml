@@ -268,6 +268,13 @@ nav:
         - Module 5 - Architecture: formations/cloud-fundamentals/05-module.md
         - Module 6 - FinOps: formations/cloud-fundamentals/06-module.md
         - Module 7 - Cas Worldline: formations/cloud-fundamentals/07-module.md
+        - Module 8 - Conteneurs & K8s: formations/cloud-fundamentals/08-module.md
+        - Module 9 - DevOps & CI/CD: formations/cloud-fundamentals/09-module.md
+        - Module 10 - Data & IA/ML: formations/cloud-fundamentals/10-module.md
+        - Module 11 - Migration Cloud: formations/cloud-fundamentals/11-module.md
+        - Ressources:
+          - Glossaire: formations/cloud-fundamentals/glossaire.md
+          - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
       - 🌐 GCP Fundamentals:
         - Introduction: formations/gcp-fundamentals/index.md
         - Module 1 - Console & IAM: formations/gcp-fundamentals/01-module.md
