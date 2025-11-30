@@ -11,6 +11,12 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 
 ---
 
+## Audit & Découverte
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [server-discovery.sh](server-discovery-audit.md) | **God Script** - Audit complet serveur (Markdown) | :material-star::material-star::material-star: |
+
 ## Système
 
 | Script | Description | Niveau |
