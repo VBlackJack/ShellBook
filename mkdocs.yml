@@ -75,54 +75,51 @@ markdown_extensions:
 nav:
   - 🏠 Accueil: index.md
   - 🐧 Linux:
-    - Bases & Certification:
-      - Débuter & Productivité:
-        - linux/ssh-keys.md
-        - linux/productivity.md
-        - linux/modern-tools.md
-        - linux/bash-wizardry.md
-        - linux/text-processing.md
-      - Certification:
-        - linux/lpi-certification.md
-    - Système & Administration:
-      - Système & Boot:
-        - linux/boot-and-services.md
-        - linux/filesystem-and-storage.md
-        - linux/hardware.md
-      - Administration:
-        - linux/users-and-permissions.md
-        - linux/package-management.md
-        - linux/automation-cron.md
-        - linux/systemd-advanced.md
-        - linux/data-processing-advanced.md
-        - linux/scripting-standards.md
-      - RHEL & Securité:
-        - linux/rhel-security-selinux.md
-        - linux/rhel-networking.md
-        - linux/rhel-package-management.md
-        - linux/rhel-openscap-compliance.md
-        - linux/rhel-ops-audit.md
-        - devops/podman-containers.md
-    - Infrastructure & Réseau:
-      - Réseau & Sécurité:
-        - linux/network-management.md
-        - linux/ssh-hardening.md
-        - linux/firewall-ufw.md
-        - linux/vpn-wireguard.md
-      - Services & Bases de Données:
-        - linux/web-servers.md
-        - linux/database-admin.md
-        - linux/ldap-389ds.md
-        - linux/postfix-relay.md
-        - linux/secure-file-exchange.md
-        - linux/virtualization-kvm.md
-    - Opérations & Dépannage:
-      - Dépannage:
-        - linux/debugging.md
-        - linux/performance-analysis.md
-        - linux/logs-management.md
-        - linux/backup-transfer.md
-        - linux/archives-compression.md
+    - Accueil: linux/index.md
+    - 🚀 Démarrage:
+      - Clés SSH: linux/ssh-keys.md
+      - Productivité: linux/productivity.md
+      - Outils Modernes: linux/modern-tools.md
+      - Bash Wizardry: linux/bash-wizardry.md
+      - Traitement Texte: linux/text-processing.md
+    - 🎓 Certification:
+      - LPI Certification: linux/lpi-certification.md
+    - 🖥️ Système:
+      - Boot & Services: linux/boot-and-services.md
+      - Filesystem & Stockage: linux/filesystem-and-storage.md
+      - Hardware: linux/hardware.md
+    - 👥 Administration:
+      - Users & Permissions: linux/users-and-permissions.md
+      - Gestion Paquets: linux/package-management.md
+      - Automatisation Cron: linux/automation-cron.md
+      - Systemd Avancé: linux/systemd-advanced.md
+      - Data Processing: linux/data-processing-advanced.md
+      - Standards Scripting: linux/scripting-standards.md
+    - 🔴 RHEL & Sécurité:
+      - SELinux: linux/rhel-security-selinux.md
+      - Networking RHEL: linux/rhel-networking.md
+      - Packages RHEL: linux/rhel-package-management.md
+      - OpenSCAP: linux/rhel-openscap-compliance.md
+      - Audit Ops: linux/rhel-ops-audit.md
+      - Podman: devops/podman-containers.md
+    - 🌐 Réseau & Services:
+      - Network Management: linux/network-management.md
+      - SSH Hardening: linux/ssh-hardening.md
+      - Firewall UFW: linux/firewall-ufw.md
+      - VPN WireGuard: linux/vpn-wireguard.md
+    - 🗄️ Services & Données:
+      - Web Servers: linux/web-servers.md
+      - Database Admin: linux/database-admin.md
+      - LDAP 389DS: linux/ldap-389ds.md
+      - Postfix Relay: linux/postfix-relay.md
+      - Échange Fichiers: linux/secure-file-exchange.md
+      - KVM: linux/virtualization-kvm.md
+    - 🔧 Dépannage:
+      - Debugging: linux/debugging.md
+      - Performance: linux/performance-analysis.md
+      - Logs: linux/logs-management.md
+      - Backup & Transfert: linux/backup-transfer.md
+      - Archives: linux/archives-compression.md
   - 🪟 Windows:
     - Accueil: windows/index.md
     - Cartes Mentales: windows/windows-mindmaps.md
@@ -175,50 +172,49 @@ nav:
       - Modules: windows/powershell-modules.md
       - WMI & CIM: windows/wmi-cim.md
   - 🏗️ Fondamentaux & Architecture:
-    - Architecture & Concepts:
-      - concepts/devops-pillars.md
-      - concepts/web-flow.md
-      - concepts/databases.md
-    - Réseau:
-      - network/fundamentals.md
+    - Accueil: concepts/index.md
+    - 🏛️ Architecture & Concepts:
+      - Piliers DevOps: concepts/devops-pillars.md
+      - Flux Web: concepts/web-flow.md
+      - Bases de Données: concepts/databases.md
+    - 🌐 Réseau:
+      - Fondamentaux Réseau: network/fundamentals.md
   - ♾️ DevOps:
-    - Méthodologie & Outils:
-      - devops/git-sysops.md
-      - devops/docs-as-code.md
-      - devops/productivity-it-tools.md
-    - Conteneurs & Orchestration:
-      - Docker:
-        - devops/docker-advanced.md
-      - Kubernetes:
-        - devops/kubernetes-survival.md
-        - devops/kubernetes-networking.md
-        - devops/kubernetes-cka.md
-        - Advanced:
-          - devops/kubernetes-helm.md
-          - devops/kubernetes-kustomize.md
-          - devops/kubernetes-operators.md
-        - devops/gitops-argocd.md
-    - Infrastructure as Code:
-      - Ansible:
-        - devops/ansible/fundamentals.md
-        - devops/ansible/playbooks.md
-        - devops/ansible/industrialization.md
-        - devops/ansible/advanced-patterns.md
-        - devops/ansible/cloud-integrations.md
-        - devops/ansible/testing-molecule.md
-      - Terraform:
-        - devops/terraform/fundamentals.md
-    - Architecture & Services:
-      - devops/modern-networking.md
-      - devops/database-ha.md
-    - CI/CD & Observabilité:
-      - devops/cicd-gitlab.md
-      - devops/cicd-github-actions.md
-      - devops/observability-stack.md
-      - devops/observability-advanced.md
-      - devops/loki-logging.md
-    - Infrastructure & HA:
-      - devops/load-balancing.md
+    - Accueil: devops/index.md
+    - 🛠️ Méthodologie:
+      - Git SysOps: devops/git-sysops.md
+      - Docs-as-Code: devops/docs-as-code.md
+      - Outils IT: devops/productivity-it-tools.md
+    - 🐳 Conteneurs:
+      - Docker Avancé: devops/docker-advanced.md
+      - Podman: devops/podman-containers.md
+    - ☸️ Kubernetes:
+      - Survival Guide: devops/kubernetes-survival.md
+      - Networking: devops/kubernetes-networking.md
+      - CKA Prep: devops/kubernetes-cka.md
+      - Helm: devops/kubernetes-helm.md
+      - Kustomize: devops/kubernetes-kustomize.md
+      - Operators: devops/kubernetes-operators.md
+      - GitOps ArgoCD: devops/gitops-argocd.md
+    - 📦 Infrastructure as Code:
+      - Ansible Fundamentals: devops/ansible/fundamentals.md
+      - Ansible Playbooks: devops/ansible/playbooks.md
+      - Ansible Industrialization: devops/ansible/industrialization.md
+      - Ansible Advanced: devops/ansible/advanced-patterns.md
+      - Ansible Cloud: devops/ansible/cloud-integrations.md
+      - Ansible Testing: devops/ansible/testing-molecule.md
+      - Terraform Fundamentals: devops/terraform/fundamentals.md
+    - 🔄 CI/CD:
+      - GitLab CI: devops/cicd-gitlab.md
+      - GitHub Actions: devops/cicd-github-actions.md
+    - 📊 Observabilité:
+      - Stack Observabilité: devops/observability-stack.md
+      - Observabilité Avancée: devops/observability-advanced.md
+      - Loki Logging: devops/loki-logging.md
+    - 🏗️ Architecture & HA:
+      - Networking Moderne: devops/modern-networking.md
+      - Database HA: devops/database-ha.md
+      - Load Balancing: devops/load-balancing.md
   - 🎓 Formations:
     - Catalogue: formations/index.md
     # ══════════════════════════════════════════════════════════════
@@ -475,20 +471,21 @@ nav:
         - Module 04 - Automatisation: formations/sql-server/04-module.md
         - Module 05 - TP Final: formations/sql-server/05-tp-final.md
   - 🛡️ Sécurité:
-    - Conformité & Référentiels:
-      - security/secnumcloud.md
-      - security/anssi-guides.md
-    - Cryptographie & PKI:
-      - security/crypto-concepts.md
-      - security/certificates.md
-      - security/openssl-cli.md
-    - Défense & EDR:
-      - security/crowdstrike-edr.md
-      - security/hashicorp-vault.md
-    - Red Team & Audit:
-      - security/ctf-guide.md
-      - security/exegol.md
-      - security/essential-tools.md
+    - Accueil: security/index.md
+    - 📋 Conformité:
+      - SecNumCloud: security/secnumcloud.md
+      - Guides ANSSI: security/anssi-guides.md
+    - 🔐 Cryptographie & PKI:
+      - Concepts Crypto: security/crypto-concepts.md
+      - Certificats: security/certificates.md
+      - OpenSSL CLI: security/openssl-cli.md
+    - 🛡️ Défense & EDR:
+      - CrowdStrike EDR: security/crowdstrike-edr.md
+      - HashiCorp Vault: security/hashicorp-vault.md
+    - 🔴 Red Team & Audit:
+      - Guide CTF: security/ctf-guide.md
+      - Exegol: security/exegol.md
+      - Outils Essentiels: security/essential-tools.md
 
 extra:
   social:
