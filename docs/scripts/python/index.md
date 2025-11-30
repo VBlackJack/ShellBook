@@ -59,6 +59,12 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 |--------|-------------|--------|
 | [redis_key_auditor.py](redis_key_auditor.md) | Audit clés Redis (SCAN non-bloquant) | :material-star::material-star: |
 
+## Générateurs de Configuration
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [systemd_generator.py](systemd_generator.md) | Générateur service Systemd avec hardening | :material-star::material-star: |
+
 ---
 
 ## Template de Script

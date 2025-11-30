@@ -66,6 +66,13 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [pg-bloat-check.sh](pg-bloat-check.md) | Estimation bloat PostgreSQL (MVCC) | :material-star::material-star::material-star: |
 | [mysql-security-audit.sh](mysql-security-audit.md) | Audit sécurité MySQL/MariaDB | :material-star::material-star: |
 
+## Générateurs de Configuration
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [ssl-csr-wizard.sh](ssl-csr-wizard.md) | Générateur CSR SSL avec support SANs | :material-star::material-star: |
+| [logrotate-builder.sh](logrotate-builder.md) | Générateur config logrotate | :material-star: |
+
 ## Infrastructure Linux
 
 | Script | Description | Niveau |
