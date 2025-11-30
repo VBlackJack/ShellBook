@@ -11,59 +11,82 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 
 ---
 
-## Système
+!!! tip "Installation des dépendances"
+    Pour utiliser ces scripts, installez les librairies requises :
+
+    ```bash
+    # Depuis la racine du projet
+    pip install -r docs/scripts/python/requirements.txt
+
+    # Ou avec un environnement virtuel (recommandé)
+    python -m venv .venv
+    source .venv/bin/activate  # Linux/macOS
+    # .venv\Scripts\activate   # Windows
+    pip install -r docs/scripts/python/requirements.txt
+    ```
+
+    **Dépendances installées :**
+
+    | Package | Version | Utilisé par |
+    |---------|---------|-------------|
+    | `rich` | >=13.0.0 | backup_manager.py, systemd_generator.py |
+    | `pyyaml` | >=6.0 | kubernetes_health.py |
+    | `psutil` | >=5.9.0 | system_info.py, health_checker.py |
+    | `docker` | >=7.0.0 | docker_cleaner_pro.py, docker_health.py |
+    | `kubernetes` | >=29.0.0 | kubernetes_health.py |
+    | `redis` | >=5.0.0 | redis_key_auditor.py |
+    | `cryptography` | >=42.0.0 | cert_checker.py |
+    | `gitpython` | >=3.1.0 | git_repo_cleaner.py |
+    | `requests` | >=2.31.0 | Dépendance commune |
+
+---
+
+## Scripts Disponibles
+
+### Système
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [system_info.py](system_info.md) | Informations système complètes | :material-star: |
-| [disk_monitor.py](disk_monitor.md) | Monitoring espace disque | :material-star: |
-| [process_manager.py](process_manager.md) | Gestion des processus | :material-star::material-star: |
 
-## Réseau
-
-| Script | Description | Niveau |
-|--------|-------------|--------|
-| [network_scanner.py](network_scanner.md) | Scanner réseau | :material-star::material-star: |
-| [port_checker.py](port_checker.md) | Vérification de ports | :material-star: |
-| [dns_resolver.py](dns_resolver.md) | Résolution DNS avancée | :material-star: |
-
-## Fichiers & Backup
-
-| Script | Description | Niveau |
-|--------|-------------|--------|
-| [backup_manager.py](backup_manager.md) | Gestion des sauvegardes | :material-star::material-star: |
-| [file_organizer.py](file_organizer.md) | Organisation automatique | :material-star: |
-| [duplicate_finder.py](duplicate_finder.md) | Recherche de doublons | :material-star::material-star: |
-
-## Monitoring & Alertes
+### Monitoring & Alertes
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [health_checker.py](health_checker.md) | Vérification santé services | :material-star::material-star: |
-| [log_analyzer.py](log_analyzer.md) | Analyse de logs | :material-star::material-star: |
-| [alert_sender.py](alert_sender.md) | Envoi d'alertes (email/Slack) | :material-star::material-star: |
 
-## DevOps & Cloud
+### Fichiers & Backup
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
-| [cert_checker.py](cert_checker.md) | Vérification certificats SSL/TLS | :material-star::material-star: |
-| [kubernetes_health.py](kubernetes_health.md) | Vérification santé cluster Kubernetes | :material-star::material-star::material-star: |
-| [docker_health.py](docker_health.md) | Vérification santé Docker | :material-star::material-star: |
-| [docker_cleaner_pro.py](docker_cleaner_pro.md) | Nettoyage Docker avancé avec dry-run | :material-star::material-star: |
-| [git_repo_cleaner.py](git_repo_cleaner.md) | Nettoyage branches Git obsolètes | :material-star::material-star: |
+| [backup_manager.py](backup_manager.md) | Gestion des sauvegardes avec Rich | :material-star::material-star: |
 
-## Base de Données
+### Conteneurs
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [docker_cleaner_pro.py](docker_cleaner_pro.md) | Nettoyage Docker avancé avec dry-run | :material-star::material-star: |
+| [docker_health.py](docker_health.md) | Vérification santé Docker | :material-star::material-star: |
+| [kubernetes_health.py](kubernetes_health.md) | Vérification santé cluster Kubernetes | :material-star::material-star::material-star: |
+
+### Bases de Données
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [redis_key_auditor.py](redis_key_auditor.md) | Audit clés Redis (SCAN non-bloquant) | :material-star::material-star: |
 
-## Générateurs de Configuration
+### Générateurs de Configuration
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [systemd_generator.py](systemd_generator.md) | Générateur service Systemd avec hardening | :material-star::material-star: |
+
+### DevOps & Cloud
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [cert_checker.py](cert_checker.md) | Vérification certificats SSL/TLS | :material-star::material-star: |
+| [git_repo_cleaner.py](git_repo_cleaner.md) | Nettoyage branches Git obsolètes | :material-star::material-star: |
 
 ---
 
@@ -93,12 +116,12 @@ logger = logging.getLogger(__name__)
 
 
 def setup_args() -> argparse.Namespace:
-    """Configure les arguments CLI."""
+    """Configure CLI arguments."""
     parser = argparse.ArgumentParser(
         description="Description du script",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Exemples:
+Examples:
     %(prog)s --option value
     %(prog)s -v --config config.yaml
         """
@@ -107,46 +130,46 @@ Exemples:
     parser.add_argument(
         '-v', '--verbose',
         action='store_true',
-        help='Mode verbeux'
+        help='Verbose mode'
     )
 
     parser.add_argument(
         '-c', '--config',
         type=Path,
-        help='Fichier de configuration'
+        help='Configuration file'
     )
 
     parser.add_argument(
         'target',
         nargs='?',
         default='.',
-        help='Cible (défaut: répertoire courant)'
+        help='Target (default: current directory)'
     )
 
     return parser.parse_args()
 
 
 def main() -> int:
-    """Point d'entrée principal."""
+    """Main entry point."""
     args = setup_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
     try:
-        logger.info("Script démarré")
+        logger.info("Script started")
 
-        # Code principal ici
+        # Main logic here
 
-        logger.info("Script terminé avec succès")
+        logger.info("Script completed successfully")
         return 0
 
     except KeyboardInterrupt:
-        logger.warning("Interruption utilisateur")
+        logger.warning("User interrupt")
         return 130
 
     except Exception as e:
-        logger.error(f"Erreur: {e}")
+        logger.error(f"Error: {e}")
         return 1
 
 
@@ -163,26 +186,13 @@ if __name__ == '__main__':
 ```
 mon_script/
 ├── __init__.py
-├── __main__.py      # Point d'entrée
-├── cli.py           # Interface CLI
-├── core.py          # Logique métier
-├── utils.py         # Utilitaires
+├── __main__.py      # Entry point
+├── cli.py           # CLI interface
+├── core.py          # Business logic
+├── utils.py         # Utilities
 ├── config.py        # Configuration
 └── tests/
     └── test_core.py
-```
-
-### Gestion des Dépendances
-
-```python
-# requirements.txt
-psutil>=5.9.0
-requests>=2.28.0
-python-dotenv>=1.0.0
-rich>=13.0.0
-
-# Installation
-# pip install -r requirements.txt
 ```
 
 ### Configuration avec dotenv
@@ -192,10 +202,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-# Charger .env
+# Load .env file
 load_dotenv()
 
-# Accéder aux variables
+# Access variables
 API_KEY = os.getenv('API_KEY')
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 ```
@@ -209,48 +219,20 @@ from rich.progress import track
 
 console = Console()
 
-# Texte coloré
-console.print("[green]Succès![/green]")
-console.print("[red]Erreur![/red]")
+# Colored text
+console.print("[green]Success![/green]")
+console.print("[red]Error![/red]")
 
-# Tableaux
-table = Table(title="Résultats")
-table.add_column("Nom", style="cyan")
-table.add_column("Statut", style="green")
+# Tables
+table = Table(title="Results")
+table.add_column("Name", style="cyan")
+table.add_column("Status", style="green")
 table.add_row("Service A", "OK")
 console.print(table)
 
-# Barre de progression
+# Progress bar
 for item in track(items, description="Processing..."):
     process(item)
-```
-
----
-
-## Dépendances Communes
-
-```bash
-# Système
-pip install psutil         # Informations système
-pip install watchdog       # Surveillance fichiers
-
-# Réseau
-pip install requests       # HTTP
-pip install paramiko       # SSH
-pip install dnspython      # DNS
-
-# CLI
-pip install click          # CLI moderne
-pip install rich           # Sortie formatée
-pip install typer          # CLI avec types
-
-# Configuration
-pip install python-dotenv  # Variables d'environnement
-pip install pyyaml         # Fichiers YAML
-
-# Tests
-pip install pytest         # Tests
-pip install pytest-cov     # Couverture
 ```
 
 ---
