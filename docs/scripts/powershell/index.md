@@ -11,6 +11,12 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 
 ---
 
+## Audit & Découverte
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [Invoke-ServerAudit.ps1](Invoke-ServerAudit.md) | **God Script** - Audit complet serveur (Markdown) | :material-star::material-star::material-star: |
+
 ## Système
 
 | Script | Description | Niveau |
