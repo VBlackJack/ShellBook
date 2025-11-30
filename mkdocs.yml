@@ -175,6 +175,7 @@ nav:
       - Diagnostic Réseau: windows/network-troubleshooting.md
       - Netsh: windows/netsh-troubleshooting.md
     - 💻 PowerShell Avancé:
+      - Survival Guide: windows/powershell-cheatsheet.md
       - Execution Policy & Launcher: windows/powershell-execution.md
       - Remoting & WinRM: windows/powershell-remoting.md
       - DSC: windows/powershell-dsc.md
