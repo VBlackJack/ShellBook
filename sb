@@ -1,0 +1,450 @@
+#!/usr/bin/env bash
+# =============================================================================
+# ShellBook CLI (sb) - Unified wrapper for ShellBook scripts
+# =============================================================================
+# Usage: ./sb <command> [options]
+# Run ./sb help for available commands
+# =============================================================================
+
+set -euo pipefail
+
+# -----------------------------------------------------------------------------
+# Configuration
+# -----------------------------------------------------------------------------
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOCS_SCRIPTS="$SCRIPT_DIR/docs/scripts"
+BIN_DIR="$SCRIPT_DIR/bin"
+PYTHON_REQ="$DOCS_SCRIPTS/python/requirements.txt"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# -----------------------------------------------------------------------------
+# Helper Functions
+# -----------------------------------------------------------------------------
+
+print_banner() {
+    echo -e "${CYAN}"
+    cat << 'EOF'
+   _____ __         ____  ____              __
+  / ___// /_  ___  / / / / __ )____  ____  / /__
+  \__ \/ __ \/ _ \/ / / / __  / __ \/ __ \/ //_/
+ ___/ / / / /  __/ / / / /_/ / /_/ / /_/ / ,<
+/____/_/ /_/\___/_/_/ /_____/\____/\____/_/|_|
+
+EOF
+    echo -e "${NC}"
+    echo -e "${BOLD}ShellBook CLI${NC} - SysOps Knowledge Base Toolkit"
+    echo -e "Version 1.0.0 | https://github.com/VBlackJack/ShellBook"
+    echo ""
+}
+
+print_help() {
+    print_banner
+    echo -e "${BOLD}USAGE:${NC}"
+    echo "    ./sb <command> [subcommand] [options]"
+    echo ""
+    echo -e "${BOLD}COMMANDS:${NC}"
+    echo ""
+    echo -e "  ${GREEN}hydrate${NC}              Extract scripts from Markdown docs to bin/"
+    echo -e "  ${GREEN}install${NC}              Install Python dependencies"
+    echo -e "  ${GREEN}list${NC}                 List available scripts in bin/"
+    echo ""
+    echo -e "  ${YELLOW}clean docker${NC}         Run Docker cleanup (dry-run by default)"
+    echo -e "  ${YELLOW}clean git${NC}            Clean obsolete Git branches"
+    echo ""
+    echo -e "  ${BLUE}audit redis${NC}          Audit Redis keys"
+    echo -e "  ${BLUE}audit server${NC}         Run server discovery audit"
+    echo ""
+    echo -e "  ${CYAN}generate systemd${NC}     Generate systemd unit file"
+    echo -e "  ${CYAN}generate ssl${NC}         Generate SSL CSR"
+    echo -e "  ${CYAN}generate logrotate${NC}   Generate logrotate config"
+    echo ""
+    echo -e "  ${BOLD}help${NC}                 Show this help message"
+    echo ""
+    echo -e "${BOLD}EXAMPLES:${NC}"
+    echo "    ./sb hydrate                    # Extract all scripts to bin/"
+    echo "    ./sb install                    # Install Python dependencies"
+    echo "    ./sb clean docker --dry-run     # Preview Docker cleanup"
+    echo "    ./sb audit server -o report.md  # Run server audit"
+    echo ""
+    echo -e "${BOLD}FIRST TIME SETUP:${NC}"
+    echo "    ./sb hydrate && ./sb install"
+    echo ""
+}
+
+log_info() {
+    echo -e "${GREEN}[INFO]${NC} $1"
+}
+
+log_warn() {
+    echo -e "${YELLOW}[WARN]${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+check_bin_exists() {
+    local script_name="$1"
+    local script_path="$BIN_DIR/$script_name"
+
+    if [[ ! -f "$script_path" ]]; then
+        log_error "Script not found: $script_path"
+        log_warn "Run './sb hydrate' first to extract scripts from documentation."
+        exit 1
+    fi
+}
+
+# -----------------------------------------------------------------------------
+# Hydrate: Extract scripts from Markdown to bin/
+# -----------------------------------------------------------------------------
+
+hydrate() {
+    print_banner
+    log_info "Hydrating scripts from Markdown documentation..."
+
+    # Create bin directory
+    mkdir -p "$BIN_DIR"
+
+    local count=0
+
+    # Process Bash scripts
+    log_info "Extracting Bash scripts..."
+    for md_file in "$DOCS_SCRIPTS"/bash/*.md; do
+        [[ -f "$md_file" ]] || continue
+        [[ "$(basename "$md_file")" == "index.md" ]] && continue
+
+        local basename_md=$(basename "$md_file" .md)
+        local output_file="$BIN_DIR/${basename_md}.sh"
+
+        # Extract first bash/shell code block
+        if awk '/^```(bash|shell|sh)$/,/^```$/' "$md_file" | \
+           sed '1d;$d' | \
+           grep -v '^$' > "$output_file.tmp" 2>/dev/null; then
+
+            # Check if we got actual content (more than just comments)
+            if [[ -s "$output_file.tmp" ]] && grep -q '[^#]' "$output_file.tmp"; then
+                mv "$output_file.tmp" "$output_file"
+                chmod +x "$output_file"
+                ((count++))
+                echo -e "  ${GREEN}✓${NC} $basename_md.sh"
+            else
+                rm -f "$output_file.tmp"
+            fi
+        else
+            rm -f "$output_file.tmp"
+        fi
+    done
+
+    # Process Python scripts
+    log_info "Extracting Python scripts..."
+    for md_file in "$DOCS_SCRIPTS"/python/*.md; do
+        [[ -f "$md_file" ]] || continue
+        [[ "$(basename "$md_file")" == "index.md" ]] && continue
+
+        local basename_md=$(basename "$md_file" .md)
+        local output_file="$BIN_DIR/${basename_md}.py"
+
+        # Extract first python code block
+        if awk '/^```python$/,/^```$/' "$md_file" | \
+           sed '1d;$d' > "$output_file.tmp" 2>/dev/null; then
+
+            if [[ -s "$output_file.tmp" ]]; then
+                # Add shebang if missing
+                if ! head -1 "$output_file.tmp" | grep -q '^#!'; then
+                    echo '#!/usr/bin/env python3' | cat - "$output_file.tmp" > "$output_file"
+                else
+                    mv "$output_file.tmp" "$output_file"
+                fi
+                rm -f "$output_file.tmp"
+                chmod +x "$output_file"
+                ((count++))
+                echo -e "  ${GREEN}✓${NC} $basename_md.py"
+            else
+                rm -f "$output_file.tmp"
+            fi
+        else
+            rm -f "$output_file.tmp"
+        fi
+    done
+
+    # Process PowerShell scripts
+    log_info "Extracting PowerShell scripts..."
+    for md_file in "$DOCS_SCRIPTS"/powershell/*.md; do
+        [[ -f "$md_file" ]] || continue
+        [[ "$(basename "$md_file")" == "index.md" ]] && continue
+
+        local basename_md=$(basename "$md_file" .md)
+        local output_file="$BIN_DIR/${basename_md}.ps1"
+
+        # Extract first powershell code block
+        if awk '/^```powershell$/,/^```$/' "$md_file" | \
+           sed '1d;$d' > "$output_file.tmp" 2>/dev/null; then
+
+            if [[ -s "$output_file.tmp" ]]; then
+                mv "$output_file.tmp" "$output_file"
+                ((count++))
+                echo -e "  ${GREEN}✓${NC} $basename_md.ps1"
+            else
+                rm -f "$output_file.tmp"
+            fi
+        else
+            rm -f "$output_file.tmp"
+        fi
+    done
+
+    echo ""
+    log_info "Hydration complete! Extracted ${count} scripts to bin/"
+    log_info "Run './sb list' to see available scripts."
+}
+
+# -----------------------------------------------------------------------------
+# Install: Set up Python dependencies
+# -----------------------------------------------------------------------------
+
+install_deps() {
+    print_banner
+    log_info "Installing Python dependencies..."
+
+    if [[ ! -f "$PYTHON_REQ" ]]; then
+        log_error "requirements.txt not found at $PYTHON_REQ"
+        exit 1
+    fi
+
+    # Check for pip
+    if ! command -v pip3 &> /dev/null && ! command -v pip &> /dev/null; then
+        log_error "pip not found. Please install Python and pip first."
+        exit 1
+    fi
+
+    local pip_cmd="pip3"
+    command -v pip3 &> /dev/null || pip_cmd="pip"
+
+    log_info "Using $pip_cmd..."
+    $pip_cmd install -r "$PYTHON_REQ"
+
+    echo ""
+    log_info "Dependencies installed successfully!"
+}
+
+# -----------------------------------------------------------------------------
+# List: Show available scripts
+# -----------------------------------------------------------------------------
+
+list_scripts() {
+    print_banner
+
+    if [[ ! -d "$BIN_DIR" ]]; then
+        log_warn "bin/ directory not found. Run './sb hydrate' first."
+        exit 1
+    fi
+
+    echo -e "${BOLD}Available Scripts in bin/:${NC}"
+    echo ""
+
+    # Bash
+    local bash_count=$(find "$BIN_DIR" -name "*.sh" 2>/dev/null | wc -l)
+    if [[ $bash_count -gt 0 ]]; then
+        echo -e "${GREEN}Bash Scripts:${NC}"
+        for f in "$BIN_DIR"/*.sh; do
+            [[ -f "$f" ]] && echo "  - $(basename "$f")"
+        done
+        echo ""
+    fi
+
+    # Python
+    local py_count=$(find "$BIN_DIR" -name "*.py" 2>/dev/null | wc -l)
+    if [[ $py_count -gt 0 ]]; then
+        echo -e "${BLUE}Python Scripts:${NC}"
+        for f in "$BIN_DIR"/*.py; do
+            [[ -f "$f" ]] && echo "  - $(basename "$f")"
+        done
+        echo ""
+    fi
+
+    # PowerShell
+    local ps_count=$(find "$BIN_DIR" -name "*.ps1" 2>/dev/null | wc -l)
+    if [[ $ps_count -gt 0 ]]; then
+        echo -e "${CYAN}PowerShell Scripts:${NC}"
+        for f in "$BIN_DIR"/*.ps1; do
+            [[ -f "$f" ]] && echo "  - $(basename "$f")"
+        done
+        echo ""
+    fi
+
+    local total=$((bash_count + py_count + ps_count))
+    log_info "Total: $total scripts available"
+}
+
+# -----------------------------------------------------------------------------
+# Command Wrappers
+# -----------------------------------------------------------------------------
+
+cmd_clean_docker() {
+    check_bin_exists "docker_cleaner_pro.py"
+    log_info "Running Docker cleanup..."
+    python3 "$BIN_DIR/docker_cleaner_pro.py" "$@"
+}
+
+cmd_clean_git() {
+    check_bin_exists "git_repo_cleaner.py"
+    log_info "Running Git branch cleanup..."
+    python3 "$BIN_DIR/git_repo_cleaner.py" "$@"
+}
+
+cmd_audit_redis() {
+    check_bin_exists "redis_key_auditor.py"
+    log_info "Running Redis key audit..."
+    python3 "$BIN_DIR/redis_key_auditor.py" "$@"
+}
+
+cmd_audit_server() {
+    check_bin_exists "server-discovery-audit.sh"
+    log_info "Running server discovery audit..."
+    bash "$BIN_DIR/server-discovery-audit.sh" "$@"
+}
+
+cmd_generate_systemd() {
+    check_bin_exists "systemd_generator.py"
+    log_info "Running systemd unit generator..."
+    python3 "$BIN_DIR/systemd_generator.py" "$@"
+}
+
+cmd_generate_ssl() {
+    check_bin_exists "ssl-csr-wizard.sh"
+    log_info "Running SSL CSR wizard..."
+    bash "$BIN_DIR/ssl-csr-wizard.sh" "$@"
+}
+
+cmd_generate_logrotate() {
+    check_bin_exists "logrotate-builder.sh"
+    log_info "Running logrotate config builder..."
+    bash "$BIN_DIR/logrotate-builder.sh" "$@"
+}
+
+# -----------------------------------------------------------------------------
+# Main: Command Router
+# -----------------------------------------------------------------------------
+
+main() {
+    # No arguments - show help
+    if [[ $# -eq 0 ]]; then
+        print_help
+        exit 0
+    fi
+
+    local command="$1"
+    shift
+
+    case "$command" in
+        # Setup commands
+        hydrate)
+            hydrate
+            ;;
+        install)
+            install_deps
+            ;;
+        list|ls)
+            list_scripts
+            ;;
+
+        # Clean commands
+        clean)
+            if [[ $# -eq 0 ]]; then
+                log_error "Missing subcommand. Use: clean docker | clean git"
+                exit 1
+            fi
+            local subcommand="$1"
+            shift
+            case "$subcommand" in
+                docker)
+                    cmd_clean_docker "$@"
+                    ;;
+                git)
+                    cmd_clean_git "$@"
+                    ;;
+                *)
+                    log_error "Unknown clean subcommand: $subcommand"
+                    log_warn "Available: docker, git"
+                    exit 1
+                    ;;
+            esac
+            ;;
+
+        # Audit commands
+        audit)
+            if [[ $# -eq 0 ]]; then
+                log_error "Missing subcommand. Use: audit redis | audit server"
+                exit 1
+            fi
+            local subcommand="$1"
+            shift
+            case "$subcommand" in
+                redis|keys)
+                    cmd_audit_redis "$@"
+                    ;;
+                server|full)
+                    cmd_audit_server "$@"
+                    ;;
+                *)
+                    log_error "Unknown audit subcommand: $subcommand"
+                    log_warn "Available: redis, server"
+                    exit 1
+                    ;;
+            esac
+            ;;
+
+        # Generate commands
+        generate|gen)
+            if [[ $# -eq 0 ]]; then
+                log_error "Missing subcommand. Use: generate systemd | ssl | logrotate"
+                exit 1
+            fi
+            local subcommand="$1"
+            shift
+            case "$subcommand" in
+                systemd|service)
+                    cmd_generate_systemd "$@"
+                    ;;
+                ssl|csr)
+                    cmd_generate_ssl "$@"
+                    ;;
+                logrotate|logs)
+                    cmd_generate_logrotate "$@"
+                    ;;
+                *)
+                    log_error "Unknown generate subcommand: $subcommand"
+                    log_warn "Available: systemd, ssl, logrotate"
+                    exit 1
+                    ;;
+            esac
+            ;;
+
+        # Help
+        help|--help|-h)
+            print_help
+            ;;
+
+        # Version
+        version|--version|-v)
+            echo "ShellBook CLI v1.0.0"
+            ;;
+
+        # Unknown command
+        *)
+            log_error "Unknown command: $command"
+            echo "Run './sb help' for usage information."
+            exit 1
+            ;;
+    esac
+}
+
+# Run main
+main "$@"
