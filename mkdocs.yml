@@ -140,6 +140,8 @@ nav:
       - Système:
         - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
         - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
+        - Get-PendingReboot.ps1: scripts/powershell/Get-PendingReboot.md
+        - Export-EventLogs.ps1: scripts/powershell/Export-EventLogs.md
       - Réseau:
         - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
       - Fichiers:
@@ -147,9 +149,16 @@ nav:
         - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
       - Services:
         - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
-      - Sécurité & Audit:
+      - Sécurité & Certificats:
         - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
+        - Test-SSLCertificates.ps1: scripts/powershell/Test-SSLCertificates.md
+      - Active Directory:
         - New-BulkUsers.ps1: scripts/powershell/New-BulkUsers.md
+      - Patch Management:
+        - Get-WindowsUpdateStatus.ps1: scripts/powershell/Get-WindowsUpdateStatus.md
+        - Invoke-PrePatchPreparation.ps1: scripts/powershell/Invoke-PrePatchPreparation.md
+        - Repair-WindowsUpdate.ps1: scripts/powershell/Repair-WindowsUpdate.md
+        - Get-PatchCompliance.ps1: scripts/powershell/Get-PatchCompliance.md
       - Infrastructure Windows:
         - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
         - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
