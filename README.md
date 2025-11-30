@@ -17,9 +17,10 @@
 **ShellBook** n'est pas juste un wiki statique. C'est une **Plateforme d'Opérations (Ops Platform)** hybride.
 Elle fusionne la théorie (Documentation) et la pratique (Scripts) grâce à un moteur d'extraction intelligent.
 
-* 📚 **Knowledge Base :** +100 modules (Linux, Windows, K8s, Sécurité).
+* 📚 **Knowledge Base :** +350 modules (Linux, Windows, K8s, Sécurité, Databases).
 * 🛠️ **Ops Framework :** Une CLI unifiée (`sb`) pour piloter l'infrastructure.
 * 🔄 **Self-Hydrating :** Les scripts sont stockés dans la documentation et extraits à la volée.
+* 🎓 **Academy :** 23 parcours de formation structurés.
 
 ---
 
@@ -90,32 +91,44 @@ La documentation est organisée par piliers technologiques :
 ├── 📂 devops/        # Docker, K8s, Terraform, Ansible
 │   └── 📂 pipelines/ # Templates CI/CD (GitLab/GitHub) prêts à l'emploi
 ├── 📂 scripts/       # Le code source des outils (Bash, Python, PS1)
-│   ├── 📂 bash/
-│   ├── 📂 python/
+│   ├── 📂 bash/        # 29 scripts
+│   ├── 📂 python/      # 10 scripts
 │   │   └── requirements.txt
-│   └── 📂 powershell/
-└── 📂 formations/    # 15+ parcours de formation (150h+)
+│   └── 📂 powershell/  # 15 scripts
+└── 📂 formations/    # 23 parcours de formation (500h+)
 ```
 
 ---
 
-## 🎓 Formations Disponibles
+## 🎓 Formations Disponibles (23 parcours)
 
 | Formation | Durée | Niveau |
 |-----------|-------|--------|
-| 🚀 Le Socle DevOps | 6h | Débutant |
+| 🚀 DevOps Foundation | 6h | Débutant |
 | 🐧 Linux Mastery | 150h | Zero to Hero |
 | 🪟 Windows Mastery | 150h | Zero to Hero |
+| 🪟 Windows Server | 20h | Intermédiaire |
 | ☸️ Kubernetes Mastery | 35h | Intermédiaire |
+| 🐳 Docker Mastery | 15h | Intermédiaire |
+| 🦭 Podman Mastery | 10h | Intermédiaire |
 | 💠 Ansible Mastery | 10h | Intermédiaire |
 | 🔐 Hardening Linux | 10h | Intermédiaire |
 | 🔐 Hardening Windows | 10h | Intermédiaire |
 | 🐍 Python SysOps | 35h | Intermédiaire |
 | ☁️ Cloud Fundamentals | 35h | Intermédiaire |
+| ☁️ AWS Fundamentals | 15h | Intermédiaire |
+| ☁️ Azure Fundamentals | 15h | Intermédiaire |
+| ☁️ GCP Fundamentals | 15h | Intermédiaire |
+| 🌍 Terraform ACI | 10h | Intermédiaire |
+| 📊 Observability | 15h | Intermédiaire |
+| 🔑 PKI & Certificates | 8h | Intermédiaire |
 | 🦁 Katello Lifecycle | 15h | Avancé |
 | 🛢️ SQL Server DBA | 22h | Avancé |
+| 🍫 Chocolatey | 4h | Débutant |
+| 🔧 NTLite | 4h | Débutant |
+| 🔄 Windows Patching | 6h | Intermédiaire |
 
-**Total** : 150+ heures de formation professionnelle
+**Total** : 500+ heures de formation professionnelle
 
 ---
 
@@ -144,9 +157,9 @@ Le déploiement sur GitHub Pages est automatique via GitHub Actions.
 
 ## 📊 Statistiques
 
-- **Guides & Modules** : 100+ fichiers Markdown
-- **Scripts** : 50+ (Bash, Python, PowerShell)
-- **Formations** : 15 parcours complets (~150h)
+- **Guides & Modules** : 350+ fichiers Markdown
+- **Scripts** : 54 (29 Bash, 10 Python, 15 PowerShell)
+- **Formations** : 23 parcours complets (500h+)
 - **Templates CI/CD** : GitLab CI, GitHub Actions, Dockerfile
 
 ---
@@ -159,5 +172,5 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 <div align="center">
   <p><strong>Built with ❤️ for SysAdmin & DevOps Engineers.</strong></p>
-  <p>📚 100+ Guides • 🛠️ 50+ Scripts • 🎓 15 Formations • ⚡ CLI Unifié</p>
+  <p>📚 350+ Guides • 🛠️ 54 Scripts • 🎓 23 Formations • ⚡ CLI Unifié</p>
 </div>
