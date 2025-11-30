@@ -74,6 +74,13 @@ markdown_extensions:
 
 nav:
   - 🏠 Accueil: index.md
+  - 🐍 Python:
+    - Accueil: python/index.md
+    - Fondamentaux: python/fundamentals.md
+    - Fichiers & Données: python/files-data.md
+    - API & Réseau: python/api-network.md
+    - Cloud & AWS: python/cloud-aws.md
+    - Tests & Qualité: python/testing.md
   - 🐧 Linux:
     - Accueil: linux/index.md
     - 🚀 Démarrage:
