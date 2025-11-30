@@ -32,7 +32,7 @@ Ce script vérifie l'état d'un serveur DNS Windows :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Vérification santé d'un serveur DNS Windows.
+    Health check d'un serveur DNS Windows.
 
 .DESCRIPTION
     Vérifie l'état complet d'un serveur DNS incluant

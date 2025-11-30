@@ -27,7 +27,7 @@ Outil d'audit de sécurité rapide pour MySQL/MariaDB avec rapport colorisé PAS
 
 ## Description
 
-Ce script effectue un audit de sécurité rapide d'une instance MySQL ou MariaDB en vérifiant les failles de configuration les plus courantes. Il produit un rapport colorisé indiquant clairement les tests réussis (PASS) et échoués (FAIL).
+Ce script effectue un audit de sécurité rapide d'une instance MySQL ou MariaDB en vérifiant les failles de configuration les plus courantes. Il produit un rapport colorisé indiquant clairement les tests succeededs (PASS) et faileds (FAIL).
 
 **Vérifications effectuées :**
 
@@ -117,17 +117,17 @@ ${CYAN}Usage:${NC} $SCRIPT_NAME [OPTIONS]
 Perform a rapid security audit of a MySQL/MariaDB instance.
 
 ${CYAN}Options:${NC}
-    -h, --help          Affiche cette aide
-    -H, --host HOST     Hôte MySQL (défaut: localhost)
-    -P, --port PORT     Port MySQL (défaut: 3306)
-    -u, --user USER     Utilisateur MySQL (défaut: root)
+    -h, --help          Show this help
+    -H, --host HOST     Hôte MySQL (default: localhost)
+    -P, --port PORT     Port MySQL (default: 3306)
+    -u, --user USER     Utilisateur MySQL (default: root)
     -p, --password      Demander le mot de passe
     -S, --socket PATH   Chemin du socket Unix
 
 ${CYAN}Variables d'environnement:${NC}
     MYSQL_HOST, MYSQL_TCP_PORT, MYSQL_USER, MYSQL_PWD
 
-${CYAN}Exemples:${NC}
+${CYAN}Examples:${NC}
     $SCRIPT_NAME
     $SCRIPT_NAME -H db.example.com -u admin -p
     $SCRIPT_NAME -S /var/run/mysqld/mysqld.sock
@@ -336,7 +336,7 @@ check_test_database() {
     result=$($cmd -e "$query" 2>/dev/null)
 
     if [[ -z "$result" ]]; then
-        log_pass "La base de données 'test' n'existe pas"
+        log_pass "La base de données 'test' does not exist"
     else
         log_warn "La base de données 'test' existe"
         echo -e "       ${YELLOW}Cette base est accessible par défaut à tous les utilisateurs${NC}"
@@ -519,7 +519,7 @@ main() {
                 shift 2
                 ;;
             *)
-                echo -e "${RED}Option inconnue: $1${NC}"
+                echo -e "${RED}Unknown option: $1${NC}"
                 usage
                 exit 1
                 ;;
@@ -568,7 +568,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Audit Basique
 
@@ -696,9 +696,9 @@ Score de sécurité:
 | Option | Description |
 |--------|-------------|
 | `-h`, `--help` | Affiche l'aide |
-| `-H`, `--host HOST` | Hôte MySQL (défaut: localhost) |
-| `-P`, `--port PORT` | Port MySQL (défaut: 3306) |
-| `-u`, `--user USER` | Utilisateur MySQL (défaut: root) |
+| `-H`, `--host HOST` | Hôte MySQL (default: localhost) |
+| `-P`, `--port PORT` | Port MySQL (default: 3306) |
+| `-u`, `--user USER` | Utilisateur MySQL (default: root) |
 | `-p`, `--password` | Demander le mot de passe interactivement |
 | `-S`, `--socket PATH` | Chemin du socket Unix |
 

@@ -34,7 +34,7 @@ Ce script vérifie l'état d'une PKI Windows :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Vérification santé d'une PKI Windows (AD CS).
+    Health check d'une PKI Windows (AD CS).
 
 .DESCRIPTION
     Vérifie l'état complet d'une autorité de certification

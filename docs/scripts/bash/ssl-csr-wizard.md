@@ -33,7 +33,7 @@ Ce script simplifie la génération de clés privées RSA/ECDSA et de CSR (Certi
 
 - **Support des SANs** : Ajoute plusieurs domaines/sous-domaines au certificat
 - **Choix de l'algorithme** : RSA (2048/4096) ou ECDSA (prime256v1)
-- **Configuration automatique** : Génère le fichier OpenSSL temporaire
+- **Configuration automatique** : Génère le ficyesterday OpenSSL temporaire
 - **Vérification** : Affiche le contenu du CSR pour validation
 - **Mode interactif** : Assistant pas-à-pas
 
@@ -45,7 +45,7 @@ Ce script simplifie la génération de clés privées RSA/ECDSA et de CSR (Certi
 # OpenSSL doit être installé
 openssl version
 
-# Vérifier que openssl peut générer des clés
+# Check que openssl peut générer des clés
 openssl genrsa -out /dev/null 2048 2>/dev/null && echo "OK"
 ```
 
@@ -133,21 +133,21 @@ ${CYAN}Usage:${NC} $SCRIPT_NAME [OPTIONS] -d <domain>
 Generate a private key and CSR (Certificate Signing Request) with SANs support.
 
 ${CYAN}Options:${NC}
-    -h, --help              Affiche cette aide
+    -h, --help              Show this help
     -d, --domain DOMAIN     Domaine principal (Common Name)
-    -o, --output DIR        Répertoire de sortie (défaut: .)
+    -o, --output DIR        Répertoire de sortie (default: .)
     -s, --san DOMAIN        Subject Alternative Name (répétable)
-    -k, --key-type TYPE     Type de clé: rsa, ecdsa (défaut: rsa)
-    -b, --bits SIZE         Taille de clé RSA: 2048, 4096 (défaut: 2048)
+    -k, --key-type TYPE     Type de clé: rsa, ecdsa (default: rsa)
+    -b, --bits SIZE         Taille de clé RSA: 2048, 4096 (default: 2048)
     -i, --interactive       Mode interactif
-    -c, --country CODE      Code pays (défaut: FR)
+    -c, --country CODE      Code pays (default: FR)
     --state STATE           État/Région
     --city CITY             Ville
     --org ORG               Organisation
     --ou OU                 Unité organisationnelle
     --email EMAIL           Email de contact
 
-${CYAN}Exemples:${NC}
+${CYAN}Examples:${NC}
     # CSR simple
     $SCRIPT_NAME -d example.com
 
@@ -163,7 +163,7 @@ ${CYAN}Exemples:${NC}
     # RSA 4096 bits
     $SCRIPT_NAME -d example.com -b 4096 -o /etc/ssl/private
 
-${CYAN}Fichiers générés:${NC}
+${CYAN}Ficyesterdays générés:${NC}
     <domain>.key    Clé privée (GARDER SECRÈTE!)
     <domain>.csr    Certificate Signing Request
 
@@ -370,7 +370,7 @@ display_summary() {
 
     echo -e "\n${BOLD}${GREEN}=== GÉNÉRATION TERMINÉE ===${NC}\n"
 
-    echo -e "${CYAN}Fichiers créés:${NC}"
+    echo -e "${CYAN}Ficyesterdays créés:${NC}"
     echo -e "  ${GREEN}✓${NC} Clé privée: $key_file"
     echo -e "  ${GREEN}✓${NC} CSR:        $csr_file"
 
@@ -451,7 +451,7 @@ main() {
                 shift 2
                 ;;
             *)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -488,7 +488,7 @@ main() {
 
     # Check if files exist
     if [[ -f "$key_file" ]] || [[ -f "$csr_file" ]]; then
-        log_warn "Des fichiers existent déjà:"
+        log_warn "Des ficyesterdays existent déjà:"
         [[ -f "$key_file" ]] && echo "  - $key_file"
         [[ -f "$csr_file" ]] && echo "  - $csr_file"
         read -rp "Écraser? [o/N]: " overwrite
@@ -521,7 +521,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Mode Simple
 
@@ -624,7 +624,7 @@ Subject Alternative Names:
 
 === GÉNÉRATION TERMINÉE ===
 
-Fichiers créés:
+Ficyesterdays créés:
   ✓ Clé privée: ./example.com.key
   ✓ CSR:        ./example.com.csr
 ```
@@ -636,12 +636,12 @@ Fichiers créés:
 | Option | Description |
 |--------|-------------|
 | `-d`, `--domain DOMAIN` | Domaine principal (Common Name) |
-| `-o`, `--output DIR` | Répertoire de sortie (défaut: .) |
+| `-o`, `--output DIR` | Répertoire de sortie (default: .) |
 | `-s`, `--san DOMAIN` | SAN additionnel (répétable) |
 | `-k`, `--key-type TYPE` | Type de clé: rsa, ecdsa |
 | `-b`, `--bits SIZE` | Taille clé RSA: 2048, 4096 |
 | `-i`, `--interactive` | Mode interactif |
-| `-c`, `--country CODE` | Code pays (défaut: FR) |
+| `-c`, `--country CODE` | Code pays (default: FR) |
 | `--state STATE` | État/Région |
 | `--city CITY` | Ville |
 | `--org ORG` | Organisation |
@@ -667,10 +667,10 @@ Fichiers créés:
     Avant de soumettre le CSR à votre CA, vérifiez son contenu :
 
     ```bash
-    # Afficher les détails
+    # Display les détails
     openssl req -in example.com.csr -noout -text
 
-    # Vérifier les SANs
+    # Check les SANs
     openssl req -in example.com.csr -noout -text | grep -A1 "Subject Alternative Name"
     ```
 

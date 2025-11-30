@@ -30,7 +30,7 @@ Ce script facilite la gestion des services Windows :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Gestion des services Windows.
+    Windows service management.
 
 .DESCRIPTION
     Liste, filtre et gère les services Windows avec
@@ -400,7 +400,7 @@ switch ($Action) {
 .\Get-ServiceStatus.ps1 -Action Start -ServiceName Spooler
 .\Get-ServiceStatus.ps1 -Action Restart -ServiceName wuauserv
 
-# Vérification santé
+# Health check
 .\Get-ServiceStatus.ps1 -Action Health
 
 # Export

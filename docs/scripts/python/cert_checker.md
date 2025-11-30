@@ -93,7 +93,7 @@ class CertificateChecker:
         self.warning_days = warning_days
 
     def check_certificate(self, domain: str, port: int = 443) -> CertificateInfo:
-        """Vérifie le certificat d'un domaine"""
+        """Check le certificat d'un domaine"""
         try:
             # Connexion SSL
             context = ssl.create_default_context()
@@ -246,8 +246,8 @@ class OutputFormatter:
 
     @staticmethod
     def print_console(results: List[CertificateInfo], verbose: bool = False):
-        """Affiche les résultats en console"""
-        # Couleurs ANSI
+        """Display les résultats en console"""
+        # Colors ANSI
         RED = '\033[91m'
         GREEN = '\033[92m'
         YELLOW = '\033[93m'

@@ -20,7 +20,7 @@ Vérification complète d'un serveur DNS BIND.
 Ce script vérifie l'état d'un serveur BIND :
 - Service named et processus
 - Configuration syntaxique
-- Zones et fichiers de zone
+- Zones et ficyesterdays de zone
 - Résolution (forward et reverse)
 - DNSSEC
 - Statistiques et logs
@@ -39,7 +39,7 @@ Ce script vérifie l'état d'un serveur BIND :
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -47,20 +47,20 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 NAMED_CONF="/etc/bind/named.conf"
 [[ ! -f "$NAMED_CONF" ]] && NAMED_CONF="/etc/named.conf"
 TEST_DOMAINS=("google.com" "cloudflare.com")
 DNS_SERVER="127.0.0.1"
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
@@ -68,7 +68,7 @@ Usage: $0 [options]
 
 Options:
     -c CONFIG    Chemin named.conf
-    -s SERVER    Serveur DNS à tester (défaut: 127.0.0.1)
+    -s SERVER    Server DNS à tester (default: 127.0.0.1)
     -d DOMAIN    Domaine de test (peut être répété)
     --help       Afficher cette aide
 EOF
@@ -110,7 +110,7 @@ while [[ $# -gt 0 ]]; do
         -s) DNS_SERVER="$2"; shift 2 ;;
         -d) TEST_DOMAINS+=("$2"); shift 2 ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -178,7 +178,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════
 echo -e "\n${CYAN}[Configuration]${NC}"
 
-# Fichier de config
+# Ficyesterday de config
 if [[ -f "$NAMED_CONF" ]]; then
     check_result "Config file" "pass" "$NAMED_CONF"
 else
@@ -198,7 +198,7 @@ fi
 if grep -q "recursion yes" "$NAMED_CONF" 2>/dev/null; then
     check_result "Recursion" "info" "Enabled"
 
-    # Vérifier ACL
+    # Check ACL
     if grep -qE "allow-recursion|allow-query" "$NAMED_CONF" 2>/dev/null; then
         check_result "Recursion ACL" "pass" "Configured"
     else
@@ -221,12 +221,12 @@ zones=$(grep -E "^\s*zone\s+" "$NAMED_CONF" /etc/bind/named.conf.local /etc/name
 zone_count=$(echo "$zones" | grep -c . || echo 0)
 check_result "Configured zones" "info" "$zone_count zone(s)"
 
-# Vérifier chaque zone
+# Check chaque zone
 if [[ -n "$zones" ]]; then
     while read -r zone; do
         [[ -z "$zone" ]] && continue
 
-        # Trouver le fichier de zone
+        # Trouver le ficyesterday de zone
         zone_file=$(grep -A5 "zone \"$zone\"" "$NAMED_CONF" /etc/bind/named.conf.local 2>/dev/null | \
             grep -oP 'file\s+"\K[^"]+' | head -1)
 
@@ -236,7 +236,7 @@ if [[ -n "$zones" ]]; then
             [[ ! -f "$zone_file" ]] && zone_file="/var/named/$zone_file"
 
             if [[ -f "$zone_file" ]]; then
-                # Vérifier la syntaxe de la zone
+                # Check la syntaxe de la zone
                 zone_check=$(named-checkzone "$zone" "$zone_file" 2>&1)
                 if echo "$zone_check" | grep -q "OK"; then
                     serial=$(echo "$zone_check" | grep -oP 'serial \K\d+')
@@ -365,7 +365,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════
 echo -e "\n${CYAN}[Logs]${NC}"
 
-# Trouver le fichier de log
+# Trouver le ficyesterday de log
 log_files=("/var/log/named/named.log" "/var/log/named.log" "/var/log/bind.log" "/var/log/messages")
 
 for log_file in "${log_files[@]}"; do
@@ -420,7 +420,7 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Vérification basique
@@ -429,7 +429,7 @@ fi
 # Config personnalisée
 ./check-bind.sh -c /etc/named.conf
 
-# Serveur distant
+# Server distant
 ./check-bind.sh -s 192.168.1.1
 
 # Domaines de test supplémentaires

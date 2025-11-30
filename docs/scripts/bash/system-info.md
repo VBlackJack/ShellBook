@@ -19,8 +19,8 @@ Affiche les informations système complètes.
 Ce script collecte et affiche les informations essentielles du système :
 - Hostname et OS
 - CPU et mémoire
-- Espace disque
-- Réseau
+- Disk space
+- Network
 - Uptime et charge
 
 ---
@@ -38,7 +38,7 @@ Ce script collecte et affiche les informations essentielles du système :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly GREEN='\033[0;32m'
 readonly CYAN='\033[0;36m'
 readonly YELLOW='\033[1;33m'
@@ -94,7 +94,7 @@ if command -v free &>/dev/null; then
 
     print_info "Total" "$mem_total"
     print_info "Utilisée" "$mem_used ($mem_percent)"
-    print_info "Disponible" "$mem_free"
+    print_info "Available" "$mem_free"
 
     # Swap
     swap_total=$(free -h | awk '/^Swap:/ {print $2}')
@@ -153,8 +153,8 @@ print_info "Running" "$running_procs"
 echo -e "\n${YELLOW}Top 5 CPU :${NC}"
 ps aux --sort=-%cpu | head -6 | tail -5 | awk '{printf "  %-10s %5s%% %s\n", $1, $3, $11}'
 
-# Top 5 Mémoire
-echo -e "\n${YELLOW}Top 5 Mémoire :${NC}"
+# Top 5 Memory
+echo -e "\n${YELLOW}Top 5 Memory :${NC}"
 ps aux --sort=-%mem | head -6 | tail -5 | awk '{printf "  %-10s %5s%% %s\n", $1, $4, $11}'
 
 echo ""
@@ -162,7 +162,7 @@ echo ""
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -171,7 +171,7 @@ chmod +x system-info.sh
 # Exécuter
 ./system-info.sh
 
-# Sauvegarder dans un fichier
+# Sauvegarder dans un ficyesterday
 ./system-info.sh > system-report.txt
 ```
 
@@ -202,7 +202,7 @@ Load Average         : 0.52 0.48 0.45
 ═══════════════════════════════════════════════════════════
 Total                : 16Gi
 Utilisée             : 8.2Gi (51.3%)
-Disponible           : 7.3Gi
+Available           : 7.3Gi
 ```
 
 ---

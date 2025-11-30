@@ -32,7 +32,7 @@ Ce script vérifie l'état d'un serveur DHCP Windows :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Vérification santé d'un serveur DHCP Windows.
+    Health check d'un serveur DHCP Windows.
 
 .DESCRIPTION
     Vérifie l'état complet d'un serveur DHCP incluant

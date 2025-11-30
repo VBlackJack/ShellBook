@@ -31,21 +31,21 @@ Ce script vérifie la connectivité réseau :
 #!/bin/bash
 #===============================================================================
 # Script Name: check-connectivity.sh
-# Description: Test de connectivité réseau
+# Description: Network connectivity test
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
 readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
-# Configuration par défaut
+# Default configuration
 PING_COUNT=4
 TIMEOUT=5
 DNS_SERVERS=("8.8.8.8" "1.1.1.1")
@@ -58,11 +58,11 @@ Usage: $(basename "$0") [OPTIONS]
 Test de connectivité réseau avec diagnostic.
 
 Options:
-    -c, --count NUM      Nombre de pings (défaut: 4)
-    -t, --timeout SEC    Timeout en secondes (défaut: 5)
-    -h, --help           Affiche cette aide
+    -c, --count NUM      Nombre de pings (default: 4)
+    -t, --timeout SEC    Timeout en seconds (default: 5)
+    -h, --help           Show this help
 
-Exemples:
+Examples:
     $(basename "$0")              # Test standard
     $(basename "$0") -c 10        # 10 pings par test
 EOF
@@ -280,7 +280,7 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -317,7 +317,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable

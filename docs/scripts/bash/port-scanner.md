@@ -37,7 +37,7 @@ Ce script scanne les ports ouverts sur une cible :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -81,16 +81,16 @@ Scanner de ports simple.
 
 Arguments:
     HOST            Adresse IP ou hostname à scanner
-    PORTS           Ports à scanner (défaut: ports courants)
+    PORTS           Ports à scanner (default: ports courants)
                     Formats: 80 | 80,443,8080 | 1-1024 | common
 
 Options:
-    -t, --timeout SEC   Timeout par port (défaut: 1s)
-    -o, --output FILE   Sauvegarder résultats dans un fichier
-    -v, --verbose       Mode verbeux
-    -h, --help          Affiche cette aide
+    -t, --timeout SEC   Timeout par port (default: 1s)
+    -o, --output FILE   Sauvegarder résultats dans un ficyesterday
+    -v, --verbose       Verbose mode
+    -h, --help          Show this help
 
-Exemples:
+Examples:
     $(basename "$0") 192.168.1.1                  # Ports courants
     $(basename "$0") example.com 80,443,8080      # Ports spécifiques
     $(basename "$0") 10.0.0.1 1-1024              # Plage de ports
@@ -182,7 +182,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -199,7 +199,7 @@ main() {
 
     # Validation
     if [[ -z "$host" ]]; then
-        echo "Erreur: Host requis"
+        echo "Error: Host requis"
         usage
         exit 1
     fi
@@ -219,12 +219,12 @@ main() {
     echo -e "  Date: $(date '+%Y-%m-%d %H:%M:%S')"
     echo -e "${CYAN}───────────────────────────────────────────────────────────${NC}"
 
-    # Vérifier que l'host est joignable
+    # Check que l'host est joignable
     if ! ping -c 1 -W 2 "$host" &>/dev/null; then
         echo -e "${YELLOW}[WARN]${NC} Host peut ne pas répondre au ping (scan continue)"
     fi
 
-    # Initialiser fichier output
+    # Initialiser ficyesterday output
     if [[ -n "$OUTPUT_FILE" ]]; then
         echo "# Port Scan Results" > "$OUTPUT_FILE"
         echo "# Target: $host" >> "$OUTPUT_FILE"
@@ -301,7 +301,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable

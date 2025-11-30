@@ -52,7 +52,7 @@ kubectl auth can-i get pods -n <namespace>
     # Changer de contexte
     kubectl config use-context <context-name>
 
-    # Vérifier le contexte actuel
+    # Check le contexte actuel
     kubectl config current-context
     ```
 
@@ -445,7 +445,7 @@ log_info "Diagnostic complete."
 
 ---
 
-## Utilisation
+## Usage
 
 ### Diagnostic basique
 
@@ -458,7 +458,7 @@ log_info "Diagnostic complete."
 # Trouvera automatiquement "worker-deployment-7d8f9-abc12"
 ```
 
-### Export vers fichier
+### Export vers ficyesterday
 
 ```bash
 # Sauvegarder le rapport
@@ -477,7 +477,7 @@ log_info "Diagnostic complete."
 # Sans les logs des containers précédents
 ./k8s-pod-inspector.sh -n default -p myapp --no-previous
 
-# Mode verbeux (inclut le YAML complet et les ReplicaSets)
+# Verbose mode (inclut le YAML complet et les ReplicaSets)
 ./k8s-pod-inspector.sh -n production -p api -v --output full-report.txt
 ```
 
@@ -582,7 +582,7 @@ fi
     # Dans ~/.bashrc ou ~/.zshrc
     alias kdiag='/path/to/k8s-pod-inspector.sh'
 
-    # Utilisation
+    # Usage
     kdiag -n prod -p api-server
     ```
 

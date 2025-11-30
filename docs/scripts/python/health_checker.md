@@ -97,7 +97,7 @@ class HealthChecker:
     def check_http(self, name: str, url: str,
                    expected_status: int = 200,
                    method: str = "GET") -> CheckResult:
-        """Vérifie un endpoint HTTP."""
+        """Check un endpoint HTTP."""
         start = datetime.now()
 
         try:
@@ -149,7 +149,7 @@ class HealthChecker:
         return result
 
     def check_port(self, name: str, host: str, port: int) -> CheckResult:
-        """Vérifie si un port est ouvert."""
+        """Check si un port est ouvert."""
         start = datetime.now()
 
         try:
@@ -191,7 +191,7 @@ class HealthChecker:
         return result
 
     def check_dns(self, name: str, domain: str) -> CheckResult:
-        """Vérifie la résolution DNS."""
+        """Check la résolution DNS."""
         start = datetime.now()
 
         try:
@@ -325,7 +325,7 @@ def run_checks_from_config(checker: HealthChecker, config: Dict[str, Any]) -> No
 
 
 def display_results_rich(checker: HealthChecker) -> None:
-    """Affiche les résultats avec Rich."""
+    """Display les résultats avec Rich."""
     console = Console()
     summary = checker.get_summary()
 
@@ -368,7 +368,7 @@ def display_results_rich(checker: HealthChecker) -> None:
 
 
 def display_results_simple(checker: HealthChecker) -> None:
-    """Affiche les résultats en mode simple."""
+    """Display les résultats en mode simple."""
     print("\n" + "=" * 60)
     print("  HEALTH CHECK RESULTS")
     print("=" * 60 + "\n")
@@ -439,7 +439,7 @@ Configuration file format (YAML):
             except ValueError:
                 print(f"Invalid port format: {port_spec} (expected host:port)")
 
-    # Vérifications par défaut si rien n'est spécifié
+    # Checks par défaut si rien n'est spécifié
     if not checker.results:
         checker.check_http("Google", "https://www.google.com")
         checker.check_dns("DNS", "www.google.com")
@@ -531,7 +531,7 @@ checks:
 ## Utilisation
 
 ```bash
-# Vérifications par défaut
+# Checks par défaut
 python health_checker.py
 
 # Avec fichier de configuration
@@ -577,7 +577,7 @@ Summary:
 ## Intégration Cron
 
 ```bash
-# Vérification toutes les 5 minutes avec alerte
+# Check toutes les 5 minutes avec alerte
 */5 * * * * /usr/bin/python3 /opt/scripts/health_checker.py -c /etc/health_checks.yaml -j >> /var/log/health_checks.log 2>&1
 
 # Avec envoi d'email en cas d'échec

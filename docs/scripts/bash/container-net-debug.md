@@ -18,7 +18,7 @@ Outil de debug réseau pour conteneurs Docker utilisant le pattern sidecar avec 
 | Propriété | Valeur |
 |-----------|--------|
 | **Langage** | Bash |
-| **Catégorie** | DevOps / Conteneurs / Réseau |
+| **Catégorie** | DevOps / Conteneurs / Network |
 | **Niveau** | :material-star::material-star: Intermédiaire |
 | **Dépendances** | Docker, nicolaka/netshoot |
 
@@ -90,20 +90,20 @@ ${CYAN}Usage:${NC} $SCRIPT_NAME [OPTIONS] <container_name_or_id>
 Attach a network debugging container to the target container's network namespace.
 
 ${CYAN}Options:${NC}
-    -h, --help          Affiche cette aide
+    -h, --help          Show this help
     -c, --command CMD   Exécute une commande et quitte (mode non-interactif)
     -l, --list-tools    Liste les outils disponibles dans netshoot
     -p, --podman        Utilise Podman au lieu de Docker
-    -v, --verbose       Mode verbeux
+    -v, --verbose       Verbose mode
 
-${CYAN}Exemples:${NC}
+${CYAN}Examples:${NC}
     # Shell interactif dans le namespace réseau du conteneur
     $SCRIPT_NAME my_container
 
     # Exécuter tcpdump sur le conteneur cible
     $SCRIPT_NAME -c "tcpdump -i any -n port 80" my_container
 
-    # Vérifier la connectivité DNS
+    # Check la connectivité DNS
     $SCRIPT_NAME -c "dig google.com" my_container
 
     # Lister les connexions actives
@@ -120,7 +120,7 @@ ${CYAN}Outils disponibles dans netshoot:${NC}
 
 ${CYAN}Note:${NC}
     Ce script utilise l'image nicolaka/netshoot qui sera téléchargée
-    automatiquement si elle n'existe pas localement.
+    automatiquement si elle does not exist localement.
 
 EOF
 }
@@ -130,7 +130,7 @@ list_tools() {
     echo -e "${CYAN}=== Outils disponibles dans nicolaka/netshoot ===${NC}\n"
 
     cat << EOF
-${GREEN}Analyse Réseau:${NC}
+${GREEN}Analyse Network:${NC}
   tcpdump       - Capture de paquets
   wireshark     - Analyse de protocoles (CLI: tshark)
   nmap          - Scanner de ports
@@ -163,8 +163,8 @@ ${GREEN}Certificats SSL:${NC}
   openssl       - Toolkit SSL/TLS
 
 ${GREEN}Utilitaires:${NC}
-  jq            - Processeur JSON
-  yq            - Processeur YAML
+  jq            - CPU JSON
+  yq            - CPU YAML
   vim/nano      - Éditeurs
   bash/zsh      - Shells
 
@@ -195,7 +195,7 @@ check_container() {
 
     # Check if container exists
     if ! $runtime inspect "$container" &> /dev/null; then
-        log_error "Le conteneur '$container' n'existe pas"
+        log_error "Le conteneur '$container' does not exist"
         return 1
     fi
 
@@ -301,7 +301,7 @@ main() {
                 shift
                 ;;
             -*)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -359,7 +359,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Mode Interactif
 
@@ -377,7 +377,7 @@ main "$@"
 # Capturer le trafic HTTP
 ./container-net-debug.sh -c "tcpdump -i any -n port 80 -c 10" my_webapp
 
-# Vérifier la résolution DNS
+# Check la résolution DNS
 ./container-net-debug.sh -c "dig api.example.com" my_webapp
 
 # Lister les connexions établies
@@ -394,7 +394,7 @@ main "$@"
 ### Debug Problème de Connectivité
 
 ```bash
-# Vérifier si le conteneur peut résoudre le DNS
+# Check si le conteneur peut résoudre le DNS
 ./container-net-debug.sh -c "dig backend-service" my_app
 
 # Tester la connectivité TCP
@@ -404,7 +404,7 @@ main "$@"
 ./container-net-debug.sh -c "mtr --report google.com" my_app
 ```
 
-### Analyse du Trafic Réseau
+### Analyse du Trafic Network
 
 ```bash
 # Capturer tout le trafic
@@ -426,11 +426,11 @@ main "$@"
 # Scanner les ports ouverts localement
 ./container-net-debug.sh -c "nmap -sT localhost" my_app
 
-# Vérifier les règles iptables
+# Check les règles iptables
 ./container-net-debug.sh -c "iptables -L -n" my_app
 ```
 
-### Test de Performance Réseau
+### Test de Performance Network
 
 ```bash
 # Test de bande passante (nécessite iperf3 server)
@@ -483,7 +483,7 @@ tcp    ESTAB   0       0       172.17.0.5:80       172.17.0.1:45678
 | `-c CMD`, `--command CMD` | Exécute une commande et quitte |
 | `-l`, `--list-tools` | Liste tous les outils disponibles |
 | `-p`, `--podman` | Utilise Podman au lieu de Docker |
-| `-v`, `--verbose` | Mode verbeux |
+| `-v`, `--verbose` | Verbose mode |
 
 ---
 
@@ -496,7 +496,7 @@ tcp    ESTAB   0       0       172.17.0.5:80       172.17.0.1:45678
     ```bash
     alias netdebug='container-net-debug.sh'
 
-    # Utilisation : netdebug my_container
+    # Usage : netdebug my_container
     ```
 
 !!! info "Image nicolaka/netshoot"

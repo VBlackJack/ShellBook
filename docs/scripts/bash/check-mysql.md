@@ -22,8 +22,8 @@ Ce script vérifie l'état d'un serveur MySQL/MariaDB :
 - Service et connectivité
 - État des bases de données
 - Réplication master/slave
-- Connexions actives et threads
-- Espace disque et taille des tables
+- Connections actives et threads
+- Disk space et taille des tables
 - Variables critiques
 - Slow queries
 
@@ -41,7 +41,7 @@ Ce script vérifie l'état d'un serveur MySQL/MariaDB :
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -49,7 +49,7 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 MYSQL_HOST="localhost"
 MYSQL_PORT="3306"
 MYSQL_USER="root"
@@ -61,23 +61,23 @@ CONN_WARNING_PCT=70
 CONN_CRITICAL_PCT=90
 SLOW_QUERY_THRESHOLD=100
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
 Usage: $0 [options]
 
 Options:
-    -h HOST      Serveur MySQL (défaut: localhost)
-    -P PORT      Port MySQL (défaut: 3306)
-    -u USER      Utilisateur (défaut: root)
+    -h HOST      Server MySQL (default: localhost)
+    -P PORT      Port MySQL (default: 3306)
+    -u USER      Utilisateur (default: root)
     -p PASSWORD  Mot de passe
     -S SOCKET    Socket Unix
     --help       Afficher cette aide
@@ -136,7 +136,7 @@ while [[ $# -gt 0 ]]; do
         -p) MYSQL_PASS="$2"; shift 2 ;;
         -S) MYSQL_SOCKET="$2"; shift 2 ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -217,9 +217,9 @@ qps=$((questions / uptime_seconds))
 echo -e "       ${GRAY}Total queries: $questions (${qps}/sec avg)${NC}"
 
 # ═══════════════════════════════════════════════════════════════════
-# CHECK 4: Connexions
+# CHECK 4: Connections
 # ═══════════════════════════════════════════════════════════════════
-echo -e "\n${CYAN}[Connexions]${NC}"
+echo -e "\n${CYAN}[Connections]${NC}"
 
 max_connections=$(mysql_value "SHOW VARIABLES LIKE 'max_connections'" | awk '{print $2}')
 current_connections=$(mysql_value "SHOW GLOBAL STATUS LIKE 'Threads_connected'" | awk '{print $2}')
@@ -238,7 +238,7 @@ else
     check_result "Connection Usage" "pass" "${conn_pct}%"
 fi
 
-# Connexions refusées
+# Connections refusées
 aborted_connects=$(mysql_value "SHOW GLOBAL STATUS LIKE 'Aborted_connects'" | awk '{print $2}')
 if [[ $aborted_connects -gt 100 ]]; then
     check_result "Aborted Connections" "warn" "$aborted_connects"
@@ -425,13 +425,13 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
-# Serveur local (root sans mot de passe)
+# Server local (root sans mot de passe)
 ./check-mysql.sh
 
-# Serveur distant avec authentification
+# Server distant avec authentification
 ./check-mysql.sh -h mysql.domain.local -u admin -p 'password'
 
 # Via socket Unix

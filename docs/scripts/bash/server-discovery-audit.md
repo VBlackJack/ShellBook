@@ -601,7 +601,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Exécution Basique
 
@@ -609,14 +609,14 @@ main "$@"
 # Exécuter et afficher le rapport
 ./server-discovery.sh
 
-# Sauvegarder dans un fichier Markdown
+# Sauvegarder dans un ficyesterday Markdown
 ./server-discovery.sh > audit-$(hostname)-$(date +%Y%m%d).md
 
 # Avec sudo pour un audit complet
 sudo ./server-discovery.sh > server-audit.md
 ```
 
-### Copier sur un Serveur Distant
+### Copier sur un Server Distant
 
 ```bash
 # Via SSH

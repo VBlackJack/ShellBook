@@ -16,10 +16,10 @@ Vérification des permissions sensibles.
 
 ## Description
 
-Ce script vérifie les permissions de fichiers sensibles :
-- Fichiers système critiques
+Ce script vérifie les permissions de ficyesterdays sensibles :
+- Ficyesterdays système critiques
 - Clés SSH et certificats
-- Fichiers de configuration
+- Ficyesterdays de configuration
 - Détection d'anomalies
 
 ---
@@ -37,14 +37,14 @@ Ce script vérifie les permissions de fichiers sensibles :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
 readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
-# Compteurs
+# Counters
 ERRORS=0
 WARNINGS=0
 OK=0
@@ -56,16 +56,16 @@ Usage: $(basename "$0") [OPTIONS] [PATH]
 Vérification des permissions sensibles.
 
 Arguments:
-    PATH            Chemin à vérifier (défaut: système)
+    PATH            Chemin à vérifier (default: système)
 
 Options:
     -f, --fix       Proposer les corrections
-    -v, --verbose   Mode verbeux
-    -h, --help      Affiche cette aide
+    -v, --verbose   Verbose mode
+    -h, --help      Show this help
 
-Exemples:
+Examples:
     $(basename "$0")              # Vérification système
-    $(basename "$0") /home/user   # Vérifier un répertoire
+    $(basename "$0") /home/user   # Check un répertoire
     $(basename "$0") -f           # Avec suggestions de fix
 EOF
 }
@@ -98,7 +98,7 @@ check_file_perms() {
     local fix_suggest=${4:-}
 
     if [[ ! -e "$file" ]]; then
-        [[ "$VERBOSE" == "true" ]] && echo -e "${CYAN}[SKIP]${NC} $file (n'existe pas)"
+        [[ "$VERBOSE" == "true" ]] && echo -e "${CYAN}[SKIP]${NC} $file (does not exist)"
         return
     fi
 
@@ -212,7 +212,7 @@ check_user_ssh() {
 check_config_files() {
     print_header "FICHIERS DE CONFIGURATION"
 
-    # Fichiers sensibles dans /etc
+    # Ficyesterdays sensibles dans /etc
     local sensitive_files=(
         "/etc/mysql/my.cnf:640"
         "/etc/postgresql/*/main/pg_hba.conf:640"
@@ -250,12 +250,12 @@ check_world_writable() {
     local ww_files=$(find /etc /var /usr -type f -perm -0002 2>/dev/null | head -20)
 
     if [[ -n "$ww_files" ]]; then
-        log_error "Fichiers world-writable trouvés:"
+        log_error "Ficyesterdays world-writable found:"
         echo "$ww_files" | while read -r f; do
             echo "    $f"
         done
     else
-        log_ok "Aucun fichier world-writable dans /etc, /var, /usr"
+        log_ok "Aucun ficyesterday world-writable dans /etc, /var, /usr"
     fi
 }
 
@@ -264,11 +264,11 @@ check_suid_sgid() {
 
     # SUID
     local suid_count=$(find / -perm -4000 -type f 2>/dev/null | wc -l)
-    echo "Fichiers SUID trouvés: $suid_count"
+    echo "Ficyesterdays SUID found: $suid_count"
 
     # SGID
     local sgid_count=$(find / -perm -2000 -type f 2>/dev/null | wc -l)
-    echo "Fichiers SGID trouvés: $sgid_count"
+    echo "Ficyesterdays SGID found: $sgid_count"
 
     # SUID suspects (hors chemins standard)
     local suspect_suid=$(find / -perm -4000 -type f \
@@ -276,7 +276,7 @@ check_suid_sgid() {
         2>/dev/null | head -10)
 
     if [[ -n "$suspect_suid" ]]; then
-        log_warn "Fichiers SUID hors chemins standard:"
+        log_warn "Ficyesterdays SUID hors chemins standard:"
         echo "$suspect_suid" | while read -r f; do
             echo "    $f"
         done
@@ -294,21 +294,21 @@ check_directory() {
     local dir_owner=$(stat -c %U:%G "$dir")
     echo "Répertoire: $dir ($dir_perms, $dir_owner)"
 
-    # Fichiers sensibles
+    # Ficyesterdays sensibles
     find "$dir" -type f \( -name "*.key" -o -name "*.pem" -o -name "*password*" -o -name "*secret*" -o -name "*.env" \) 2>/dev/null | \
     while read -r f; do
         local perms=$(stat -c %a "$f")
         if [[ "$perms" != "600" ]] && [[ "$perms" != "400" ]]; then
-            log_warn "Fichier sensible: $f ($perms)"
+            log_warn "Ficyesterday sensible: $f ($perms)"
         else
-            log_ok "Fichier sensible: $f ($perms)"
+            log_ok "Ficyesterday sensible: $f ($perms)"
         fi
     done
 
     # World readable
     local readable=$(find "$dir" -type f -perm -004 -name "*.key" -o -name "*secret*" 2>/dev/null | head -5)
     if [[ -n "$readable" ]]; then
-        log_error "Fichiers sensibles lisibles par tous:"
+        log_error "Ficyesterdays sensibles lisibles par tous:"
         echo "$readable"
     fi
 }
@@ -351,7 +351,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -392,7 +392,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -401,13 +401,13 @@ chmod +x check-permissions.sh
 # Vérification système complète
 sudo ./check-permissions.sh
 
-# Vérifier un répertoire spécifique
+# Check un répertoire spécifique
 ./check-permissions.sh /home/user/app
 
 # Avec suggestions de fix
 sudo ./check-permissions.sh -f
 
-# Mode verbeux
+# Verbose mode
 sudo ./check-permissions.sh -v
 ```
 

@@ -39,7 +39,7 @@ pip install psutil rich
 #!/usr/bin/env python3
 """
 Script Name: system_info.py
-Description: Affiche les informations système complètes
+Description: Display comprehensive system information
 Author: ShellBook
 Version: 1.0
 
@@ -79,7 +79,7 @@ def get_size(bytes_value: int, suffix: str = "B") -> str:
 
 
 def get_os_info() -> Dict[str, Any]:
-    """Récupère les informations OS."""
+    """Retrieve les informations OS."""
     uname = platform.uname()
     boot_time = datetime.fromtimestamp(psutil.boot_time())
     uptime = datetime.now() - boot_time
@@ -97,7 +97,7 @@ def get_os_info() -> Dict[str, Any]:
 
 
 def get_cpu_info() -> Dict[str, Any]:
-    """Récupère les informations CPU."""
+    """Retrieve les informations CPU."""
     cpu_freq = psutil.cpu_freq()
 
     return {
@@ -111,7 +111,7 @@ def get_cpu_info() -> Dict[str, Any]:
 
 
 def get_memory_info() -> Dict[str, Any]:
-    """Récupère les informations mémoire."""
+    """Retrieve les informations mémoire."""
     mem = psutil.virtual_memory()
     swap = psutil.swap_memory()
 
@@ -127,7 +127,7 @@ def get_memory_info() -> Dict[str, Any]:
 
 
 def get_disk_info() -> list:
-    """Récupère les informations disques."""
+    """Retrieve les informations disques."""
     disks = []
     for partition in psutil.disk_partitions():
         try:
@@ -147,7 +147,7 @@ def get_disk_info() -> list:
 
 
 def get_network_info() -> Dict[str, Any]:
-    """Récupère les informations réseau."""
+    """Retrieve les informations réseau."""
     hostname = socket.gethostname()
 
     try:
@@ -176,7 +176,7 @@ def get_network_info() -> Dict[str, Any]:
 
 
 def get_top_processes(n: int = 5) -> list:
-    """Récupère les processus les plus gourmands."""
+    """Retrieve les processus les plus gourmands."""
     processes = []
     for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
         try:

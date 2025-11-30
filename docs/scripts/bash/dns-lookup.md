@@ -30,14 +30,14 @@ Ce script effectue des requêtes DNS détaillées :
 #!/bin/bash
 #===============================================================================
 # Script Name: dns-lookup.sh
-# Description: Résolution DNS avancée
+# Description: Advanced DNS lookup
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly GREEN='\033[0;32m'
 readonly CYAN='\033[0;36m'
 readonly YELLOW='\033[1;33m'
@@ -59,15 +59,15 @@ Arguments:
 
 Options:
     -t, --type TYPE     Type d'enregistrement (A, AAAA, MX, NS, TXT, CNAME, SOA, PTR, all)
-    -s, --server DNS    Serveur DNS à utiliser
+    -s, --server DNS    Server DNS à utiliser
     -r, --reverse IP    Reverse DNS lookup
     -p, --propagation   Vérifier la propagation DNS
-    -h, --help          Affiche cette aide
+    -h, --help          Show this help
 
-Exemples:
+Examples:
     $(basename "$0") google.com                    # Tous les enregistrements
     $(basename "$0") -t MX gmail.com               # Enregistrements MX
-    $(basename "$0") -s 8.8.8.8 example.com        # Serveur DNS spécifique
+    $(basename "$0") -s 8.8.8.8 example.com        # Server DNS spécifique
     $(basename "$0") -r 8.8.8.8                    # Reverse lookup
     $(basename "$0") -p example.com                # Propagation
 EOF
@@ -288,7 +288,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -308,7 +308,7 @@ main() {
     # Propagation check
     if [[ "$propagation" == "true" ]]; then
         if [[ -z "$domain" ]]; then
-            echo "Erreur: Domaine requis pour vérification propagation"
+            echo "Error: Domaine requis pour vérification propagation"
             exit 1
         fi
         check_propagation "$domain"
@@ -317,7 +317,7 @@ main() {
 
     # Validation
     if [[ -z "$domain" ]]; then
-        echo "Erreur: Domaine requis"
+        echo "Error: Domaine requis"
         usage
         exit 1
     fi
@@ -354,7 +354,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -367,13 +367,13 @@ chmod +x dns-lookup.sh
 ./dns-lookup.sh -t MX gmail.com
 ./dns-lookup.sh -t A example.com
 
-# Serveur DNS spécifique
+# Server DNS spécifique
 ./dns-lookup.sh -s 8.8.8.8 example.com
 
 # Reverse lookup
 ./dns-lookup.sh -r 8.8.8.8
 
-# Vérifier la propagation
+# Check la propagation
 ./dns-lookup.sh -p example.com
 ```
 

@@ -2,7 +2,7 @@
 tags:
   - scripts
   - bash
-  - fichiers
+  - ficyesterdays
   - synchronisation
 ---
 
@@ -37,7 +37,7 @@ Ce script synchronise des dossiers :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -64,14 +64,14 @@ Arguments:
 
 Options:
     -d, --dry-run       Simulation sans modification
-    --delete            Supprimer les fichiers absents de la source
-    -v, --verbose       Mode verbeux
+    --delete            Supprimer les ficyesterdays absents de la source
+    -v, --verbose       Verbose mode
     -z, --compress      Compresser pendant le transfert
-    -e, --exclude FILE  Fichier d'exclusions
-    -p, --port NUM      Port SSH (défaut: 22)
-    -h, --help          Affiche cette aide
+    -e, --exclude FILE  Ficyesterday d'exclusions
+    -p, --port NUM      Port SSH (default: 22)
+    -h, --help          Show this help
 
-Exemples:
+Examples:
     $(basename "$0") /home/user/docs /backup/docs
     $(basename "$0") -v --delete /var/www /backup/www
     $(basename "$0") /data user@server:/backup
@@ -181,7 +181,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -205,7 +205,7 @@ main() {
 
     # Vérification source
     if ! is_remote "$SOURCE" && [[ ! -d "$SOURCE" ]]; then
-        log_error "Source n'existe pas: $SOURCE"
+        log_error "Source does not exist: $SOURCE"
         exit 1
     fi
 
@@ -251,9 +251,9 @@ main() {
     echo ""
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
     if [[ "$DRY_RUN" == "true" ]]; then
-        log_info "Simulation terminée (aucune modification)"
+        log_info "Simulation completede (aucune modification)"
     else
-        log_info "Synchronisation terminée!"
+        log_info "Synchronizing completede!"
     fi
     log_info "Durée: ${duration}s"
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
@@ -264,7 +264,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -273,7 +273,7 @@ chmod +x sync-folders.sh
 # Synchronisation locale
 ./sync-folders.sh /home/user/documents /backup/documents
 
-# Avec suppression des fichiers absents
+# Avec suppression des ficyesterdays absents
 ./sync-folders.sh --delete /var/www /backup/www
 
 # Simulation d'abord
@@ -324,19 +324,19 @@ Total bytes sent: 45,789,012
 Total bytes received: 1,234
 
 ═══════════════════════════════════════════════════════════
-[INFO] Synchronisation terminée!
+[INFO] Synchronisation completede!
 [INFO] Durée: 23s
 ═══════════════════════════════════════════════════════════
 ```
 
 ---
 
-## Fichier d'Exclusion
+## Ficyesterday d'Exclusion
 
-Exemple de fichier `exclude.txt`:
+Exemple de ficyesterday `exclude.txt`:
 
 ```
-# Fichiers temporaires
+# Ficyesterdays temporaires
 *.tmp
 *.temp
 *~
@@ -347,7 +347,7 @@ Exemple de fichier `exclude.txt`:
 __pycache__/
 node_modules/
 
-# Fichiers système
+# Ficyesterdays système
 .DS_Store
 Thumbs.db
 

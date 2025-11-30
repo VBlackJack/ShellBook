@@ -3,7 +3,7 @@ tags:
   - scripts
   - bash
   - backup
-  - fichiers
+  - ficyesterdays
 ---
 
 # backup-directory.sh
@@ -19,7 +19,7 @@ Backup de répertoires avec rotation et compression.
 Ce script effectue des sauvegardes de répertoires :
 - Compression tar.gz ou zip
 - Rotation automatique des anciennes sauvegardes
-- Exclusion de fichiers/dossiers
+- Exclusion de ficyesterdays/dossiers
 - Vérification d'intégrité
 - Notification par email (optionnel)
 
@@ -31,20 +31,20 @@ Ce script effectue des sauvegardes de répertoires :
 #!/bin/bash
 #===============================================================================
 # Script Name: backup-directory.sh
-# Description: Backup de répertoires avec rotation
+# Description: Directory backup with rotation
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
 readonly NC='\033[0m'
 
-# Configuration par défaut
+# Default configuration
 COMPRESS_FORMAT="tar.gz"
 KEEP_BACKUPS=7
 DATE_FORMAT="%Y%m%d_%H%M%S"
@@ -59,18 +59,18 @@ Usage: $(basename "$0") [OPTIONS] SOURCE DESTINATION
 Backup de répertoires avec rotation.
 
 Arguments:
-    SOURCE          Répertoire source à sauvegarder
+    SOURCE          Source directory à sauvegarder
     DESTINATION     Répertoire de destination des backups
 
 Options:
-    -f, --format FORMAT  Format de compression (tar.gz, zip) (défaut: tar.gz)
-    -k, --keep NUM       Nombre de backups à conserver (défaut: 7)
-    -e, --exclude FILE   Fichier contenant les exclusions
+    -f, --format FORMAT  Format de compression (tar.gz, zip) (default: tar.gz)
+    -k, --keep NUM       Nombre de backups à conserver (default: 7)
+    -e, --exclude FILE   Ficyesterday contenant les exclusions
     -v, --verify         Vérifier l'intégrité après création
-    --verbose            Mode verbeux
-    -h, --help           Affiche cette aide
+    --verbose            Verbose mode
+    -h, --help           Show this help
 
-Exemples:
+Examples:
     $(basename "$0") /home/user/data /backup/user
     $(basename "$0") -k 14 -v /var/www /backup/www
     $(basename "$0") -f zip -e exclude.txt /data /backup
@@ -135,7 +135,7 @@ create_backup_zip() {
 verify_backup() {
     local backup_file=$1
 
-    log_info "Vérification de l'intégrité..."
+    log_info "Checking de l'intégrité..."
 
     case "$COMPRESS_FORMAT" in
         tar.gz)
@@ -173,7 +173,7 @@ rotate_backups() {
     for backup in $backups; do
         count=$((count + 1))
         if (( count > KEEP_BACKUPS )); then
-            log_info "Suppression: $(basename "$backup")"
+            log_info "Deleting: $(basename "$backup")"
             rm -f "$backup"
         fi
     done
@@ -211,7 +211,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -234,12 +234,12 @@ main() {
     fi
 
     if [[ ! -d "$source" ]]; then
-        log_error "Source n'existe pas: $source"
+        log_error "Source does not exist: $source"
         exit 1
     fi
 
     if [[ ! -d "$destination" ]]; then
-        log_info "Création du répertoire destination: $destination"
+        log_info "Creating du répertoire destination: $destination"
         mkdir -p "$destination"
     fi
 
@@ -266,7 +266,7 @@ main() {
     log_info "Taille source: $(format_size $source_size)"
 
     # Création du backup
-    log_info "Création du backup en cours..."
+    log_info "Creating du backup en cours..."
     local start_time=$(date +%s)
 
     case "$COMPRESS_FORMAT" in
@@ -299,7 +299,7 @@ main() {
 
     # Résumé
     echo -e "${GREEN}═══════════════════════════════════════════════════════════${NC}"
-    log_info "Backup terminé avec succès!"
+    log_info "Backup completed avec succès!"
 
     # Liste des backups existants
     echo ""
@@ -313,7 +313,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -354,7 +354,7 @@ echo "cache/" >> exclude.txt
 [INFO] Intégrité OK: /backup/documents_20240115_143022.tar.gz
 [INFO] Rotation des backups (conservation: 7)...
 ═══════════════════════════════════════════════════════════
-[INFO] Backup terminé avec succès!
+[INFO] Backup completed avec succès!
 
 [INFO] Backups disponibles:
     /backup/documents_20240115_143022.tar.gz (485M)
@@ -364,12 +364,12 @@ echo "cache/" >> exclude.txt
 
 ---
 
-## Fichier d'Exclusion
+## Ficyesterday d'Exclusion
 
-Exemple de fichier `exclude.txt`:
+Exemple de ficyesterday `exclude.txt`:
 
 ```
-# Fichiers temporaires
+# Ficyesterdays temporaires
 *.tmp
 *.temp
 *.swp
@@ -385,7 +385,7 @@ cache/
 __pycache__/
 node_modules/
 
-# Fichiers système
+# Ficyesterdays système
 .DS_Store
 Thumbs.db
 ```

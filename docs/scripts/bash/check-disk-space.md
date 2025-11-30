@@ -38,7 +38,7 @@ Ce script surveille l'utilisation des disques et génère des alertes :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -60,13 +60,13 @@ Usage: $(basename "$0") [OPTIONS]
 Vérifie l'espace disque et génère des alertes.
 
 Options:
-    -w, --warning NUM    Seuil d'avertissement (défaut: 80%)
-    -c, --critical NUM   Seuil critique (défaut: 90%)
+    -w, --warning NUM    Seuil d'avertissement (default: 80%)
+    -c, --critical NUM   Seuil critique (default: 90%)
     -p, --partition PATH Vérifier une partition spécifique
     -m, --machine        Sortie format machine (CSV)
-    -h, --help           Affiche cette aide
+    -h, --help           Show this help
 
-Exemples:
+Examples:
     $(basename "$0")                    # Vérifie tous les disques
     $(basename "$0") -w 70 -c 85        # Seuils personnalisés
     $(basename "$0") -p /home           # Vérifie /home uniquement
@@ -150,7 +150,7 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -159,12 +159,12 @@ main() {
 
     # Validation des seuils
     if ! [[ "$WARNING_THRESHOLD" =~ ^[0-9]+$ ]] || ! [[ "$CRITICAL_THRESHOLD" =~ ^[0-9]+$ ]]; then
-        echo "Erreur: Les seuils doivent être des nombres entiers"
+        echo "Error: Les seuils doivent être des nombres entiers"
         exit 1
     fi
 
     if (( WARNING_THRESHOLD >= CRITICAL_THRESHOLD )); then
-        echo "Erreur: Le seuil warning doit être inférieur au seuil critical"
+        echo "Error: Le seuil warning doit être inférieur au seuil critical"
         exit 1
     fi
 
@@ -180,7 +180,7 @@ main() {
     if [[ -n "$PARTITION" ]]; then
         # Partition spécifique
         if [[ ! -d "$PARTITION" ]] && [[ ! -b "$PARTITION" ]]; then
-            echo "Erreur: $PARTITION n'existe pas"
+            echo "Error: $PARTITION does not exist"
             exit 1
         fi
         check_partition "$PARTITION"
@@ -209,19 +209,19 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
 chmod +x check-disk-space.sh
 
-# Vérifier tous les disques
+# Check tous les disques
 ./check-disk-space.sh
 
 # Seuils personnalisés
 ./check-disk-space.sh -w 70 -c 85
 
-# Vérifier une partition spécifique
+# Check une partition spécifique
 ./check-disk-space.sh -p /home
 
 # Sortie CSV pour parsing
@@ -282,7 +282,7 @@ exit $EXIT
 ### Crontab
 
 ```bash
-# Vérification toutes les heures
+# Vérification toutes les hours
 0 * * * * /opt/scripts/check-disk-space.sh -w 75 -c 90 >> /var/log/disk-check.log 2>&1
 ```
 

@@ -40,7 +40,7 @@ Ce script vérifie l'état d'un serveur Postfix :
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -48,27 +48,27 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 QUEUE_WARNING=100
 QUEUE_CRITICAL=500
 CERT_WARNING_DAYS=30
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
 Usage: $0 [options]
 
 Options:
-    -q NUMBER    Seuil d'alerte queue (défaut: 100)
-    -c DAYS      Jours avant alerte expiration cert (défaut: 30)
+    -q NUMBER    Seuil d'alerte queue (default: 100)
+    -c DAYS      Jours avant alerte expiration cert (default: 30)
     --help       Afficher cette aide
 EOF
     exit 0
@@ -112,7 +112,7 @@ while [[ $# -gt 0 ]]; do
         -q) QUEUE_WARNING="$2"; shift 2 ;;
         -c) CERT_WARNING_DAYS="$2"; shift 2 ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -150,7 +150,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════
 echo -e "\n${CYAN}[Processus]${NC}"
 
-# Vérifier les daemons essentiels
+# Check les daemons essentiels
 daemons=("master" "pickup" "qmgr")
 for daemon in "${daemons[@]}"; do
     if pgrep -f "postfix.*$daemon" > /dev/null 2>&1 || pgrep -x "$daemon" > /dev/null 2>&1; then
@@ -189,7 +189,7 @@ else
     check_result "Relay host" "info" "Direct delivery"
 fi
 
-# Vérifier la config
+# Check la config
 config_check=$(postfix check 2>&1)
 if [[ -z "$config_check" ]]; then
     check_result "Configuration check" "pass" "Valid"
@@ -349,7 +349,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════
 echo -e "\n${CYAN}[Logs]${NC}"
 
-# Trouver le fichier de log
+# Trouver le ficyesterday de log
 log_file="/var/log/mail.log"
 [[ ! -f "$log_file" ]] && log_file="/var/log/maillog"
 
@@ -357,7 +357,7 @@ if [[ -f "$log_file" ]]; then
     log_size=$(du -h "$log_file" 2>/dev/null | awk '{print $1}')
     check_result "Mail log" "info" "$log_file ($log_size)"
 
-    # Statistiques dernière heure
+    # Statistiques last heure
     hour_ago=$(date -d '1 hour ago' '+%b %e %H')
 
     sent=$(grep -c "status=sent" "$log_file" 2>/dev/null || echo 0)
@@ -436,7 +436,7 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Vérification basique

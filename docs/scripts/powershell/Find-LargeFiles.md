@@ -30,7 +30,7 @@ Ce script identifie les fichiers volumineux :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Recherche fichiers volumineux.
+    Find large files.
 
 .DESCRIPTION
     Identifie les fichiers volumineux avec options de filtrage

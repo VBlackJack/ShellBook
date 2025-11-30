@@ -57,7 +57,7 @@ psql --version
 
     Ces dead tuples s'accumulent et créent du **bloat** :
 
-    - **Espace disque gaspillé** : Les fichiers de données grossissent inutilement
+    - **Disk space gaspillé** : Les ficyesterdays de données grossissent inutilement
     - **Performances dégradées** : Les scans doivent parcourir plus de pages
     - **Index inefficaces** : Les index pointent vers des tuples morts
 
@@ -66,7 +66,7 @@ psql --version
 
     - `VACUUM FULL` prend un **verrou exclusif** sur la table (ACCESS EXCLUSIVE LOCK)
     - La table est **complètement inaccessible** pendant l'opération
-    - Sur une grosse table, cela peut prendre **plusieurs heures**
+    - Sur une grosse table, cela peut prendre **plusieurs hours**
 
     **Alternatives recommandées :**
 
@@ -125,20 +125,20 @@ ${CYAN}Usage:${NC} $SCRIPT_NAME [OPTIONS]
 Estimate table and index bloat in PostgreSQL to determine VACUUM needs.
 
 ${CYAN}Options:${NC}
-    -h, --help              Affiche cette aide
-    -H, --host HOST         Hôte PostgreSQL (défaut: localhost)
-    -p, --port PORT         Port PostgreSQL (défaut: 5432)
-    -d, --database DB       Base de données (défaut: postgres)
-    -U, --user USER         Utilisateur PostgreSQL (défaut: postgres)
-    -s, --schema SCHEMA     Schéma à analyser (défaut: public)
-    -t, --threshold PCT     Seuil de bloat minimum à afficher (défaut: 10%)
+    -h, --help              Show this help
+    -H, --host HOST         Hôte PostgreSQL (default: localhost)
+    -p, --port PORT         Port PostgreSQL (default: 5432)
+    -d, --database DB       Base de données (default: postgres)
+    -U, --user USER         Utilisateur PostgreSQL (default: postgres)
+    -s, --schema SCHEMA     Schéma à analyser (default: public)
+    -t, --threshold PCT     Seuil de bloat minimum à afficher (default: 10%)
     --tables-only           Analyser uniquement les tables
     --indexes-only          Analyser uniquement les index
 
 ${CYAN}Variables d'environnement:${NC}
     PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD
 
-${CYAN}Exemples:${NC}
+${CYAN}Examples:${NC}
     $SCRIPT_NAME -d myapp -U admin
     $SCRIPT_NAME -H db.example.com -d production -t 20
     $SCRIPT_NAME --tables-only -s myschema
@@ -168,7 +168,7 @@ test_connection() {
         exit 1
     fi
 
-    log_info "Connexion établie"
+    log_info "Connection établie"
 }
 
 # Query for table bloat estimation
@@ -520,7 +520,7 @@ main() {
                 shift
                 ;;
             *)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -555,7 +555,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Analyse Basique
 
@@ -573,7 +573,7 @@ PGPASSWORD=secret ./pg-bloat-check.sh -H db.example.com -d production -U admin
 ### Filtrage et Options
 
 ```bash
-# Afficher uniquement les tables avec >20% de bloat
+# Display uniquement les tables avec >20% de bloat
 ./pg-bloat-check.sh -d myapp -t 20
 
 # Analyser un schéma spécifique
@@ -628,12 +628,12 @@ Tables avec bloat élevé (>30%) :
 | Option | Description |
 |--------|-------------|
 | `-h`, `--help` | Affiche l'aide |
-| `-H`, `--host HOST` | Hôte PostgreSQL (défaut: localhost) |
-| `-p`, `--port PORT` | Port PostgreSQL (défaut: 5432) |
+| `-H`, `--host HOST` | Hôte PostgreSQL (default: localhost) |
+| `-p`, `--port PORT` | Port PostgreSQL (default: 5432) |
 | `-d`, `--database DB` | Base de données à analyser |
 | `-U`, `--user USER` | Utilisateur PostgreSQL |
-| `-s`, `--schema SCHEMA` | Schéma à analyser (défaut: public) |
-| `-t`, `--threshold PCT` | Seuil minimum de bloat à afficher (défaut: 10%) |
+| `-s`, `--schema SCHEMA` | Schéma à analyser (default: public) |
+| `-t`, `--threshold PCT` | Seuil minimum de bloat à afficher (default: 10%) |
 | `--tables-only` | Analyser uniquement les tables |
 | `--indexes-only` | Analyser uniquement les index |
 

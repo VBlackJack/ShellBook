@@ -44,7 +44,7 @@ Install-WindowsFeature -Name UpdateServices-RSAT
 #Requires -Modules UpdateServices
 <#
 .SYNOPSIS
-    Vérification santé d'un serveur WSUS.
+    Health check d'un serveur WSUS.
 
 .DESCRIPTION
     Vérifie l'état complet d'un serveur WSUS incluant

@@ -18,7 +18,7 @@ Nettoyage système automatisé avec gestion des logs et caches.
 ## Description
 
 Ce script effectue un nettoyage complet du système :
-- Suppression des fichiers temporaires
+- Suppression des ficyesterdays temporaires
 - Nettoyage des anciens logs
 - Purge des caches package manager
 - Nettoyage des kernels obsolètes (optionnel)
@@ -32,14 +32,14 @@ Ce script effectue un nettoyage complet du système :
 #!/bin/bash
 #===============================================================================
 # Script Name: cleanup-system.sh
-# Description: Nettoyage système automatisé
+# Description: Automated system cleanup
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -56,31 +56,31 @@ CLEAN_KERNELS=false
 LOG_DAYS=30
 TEMP_DAYS=7
 
-# Compteurs
+# Counters
 SPACE_FREED=0
 
 usage() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Nettoyage système automatisé.
+Automated system cleanup.
 
 Options:
-    -d, --dry-run        Simulation sans suppression
-    -v, --verbose        Mode verbeux
-    --no-logs            Ne pas nettoyer les logs
-    --no-temp            Ne pas nettoyer les fichiers temporaires
-    --no-cache           Ne pas nettoyer les caches
-    -k, --kernels        Nettoyer les anciens kernels
-    --log-days NUM       Âge des logs à supprimer (défaut: 30)
-    --temp-days NUM      Âge des fichiers temp (défaut: 7)
-    -h, --help           Affiche cette aide
+    -d, --dry-run        Dry-run mode (no deletion)
+    -v, --verbose        Verbose mode
+    --no-logs            Skip log cleanup
+    --no-temp            Skip temp files cleanup
+    --no-cache           Skip cache cleanup
+    -k, --kernels        Clean old kernels
+    --log-days NUM       Max age for logs (default: 30)
+    --temp-days NUM      Max age for temp files (default: 7)
+    -h, --help           Show this help
 
-Exemples:
-    $(basename "$0")              # Nettoyage standard
-    $(basename "$0") -d           # Simulation
-    $(basename "$0") -v -k        # Verbeux + kernels
-    $(basename "$0") --log-days 7 # Logs > 7 jours
+Examples:
+    $(basename "$0")              # Standard cleanup
+    $(basename "$0") -d           # Dry-run simulation
+    $(basename "$0") -v -k        # Verbose + kernels
+    $(basename "$0") --log-days 7 # Logs > 7 days
 EOF
 }
 
@@ -127,7 +127,7 @@ get_dir_size() {
 }
 
 clean_temp_files() {
-    log_info "Nettoyage des fichiers temporaires (> ${TEMP_DAYS} jours)..."
+    log_info "Cleaning temporary files (> ${TEMP_DAYS} days)..."
 
     local dirs=("/tmp" "/var/tmp")
 
@@ -137,7 +137,7 @@ clean_temp_files() {
 
             if [[ "$DRY_RUN" == "true" ]]; then
                 local count=$(find "$dir" -type f -atime +${TEMP_DAYS} 2>/dev/null | wc -l)
-                log_action "Supprimerait $count fichiers dans $dir"
+                log_action "Would delete $count files in $dir"
             else
                 find "$dir" -type f -atime +${TEMP_DAYS} -delete 2>/dev/null || true
                 find "$dir" -type d -empty -delete 2>/dev/null || true
@@ -147,37 +147,37 @@ clean_temp_files() {
             local freed=$((size_before - size_after))
             SPACE_FREED=$((SPACE_FREED + freed))
 
-            [[ "$VERBOSE" == "true" ]] && log_info "  $dir: $(format_size $freed) libérés"
+            [[ "$VERBOSE" == "true" ]] && log_info "  $dir: $(format_size $freed) freed"
         fi
     done
 }
 
 clean_log_files() {
-    log_info "Nettoyage des anciens logs (> ${LOG_DAYS} jours)..."
+    log_info "Cleaning old logs (> ${LOG_DAYS} days)..."
 
     local log_dir="/var/log"
     local size_before=$(get_dir_size "$log_dir")
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        # Fichiers .log anciens
+        # Old .log files
         local count=$(find "$log_dir" -name "*.log" -type f -mtime +${LOG_DAYS} 2>/dev/null | wc -l)
-        log_action "Supprimerait $count fichiers .log anciens"
+        log_action "Would delete $count old .log files"
 
-        # Fichiers .gz
+        # .gz files
         count=$(find "$log_dir" -name "*.gz" -type f -mtime +${LOG_DAYS} 2>/dev/null | wc -l)
-        log_action "Supprimerait $count fichiers .gz anciens"
+        log_action "Would delete $count old .gz files"
 
-        # Journaux systemd
+        # Systemd journals
         if command -v journalctl &>/dev/null; then
-            log_action "Nettoierait les journaux systemd > ${LOG_DAYS} jours"
+            log_action "Would clean systemd journals > ${LOG_DAYS} days"
         fi
     else
-        # Supprimer les vieux logs
+        # Delete old logs
         find "$log_dir" -name "*.log" -type f -mtime +${LOG_DAYS} -delete 2>/dev/null || true
         find "$log_dir" -name "*.log.[0-9]*" -type f -mtime +${LOG_DAYS} -delete 2>/dev/null || true
         find "$log_dir" -name "*.gz" -type f -mtime +${LOG_DAYS} -delete 2>/dev/null || true
 
-        # Nettoyer journald
+        # Clean journald
         if command -v journalctl &>/dev/null; then
             journalctl --vacuum-time=${LOG_DAYS}d 2>/dev/null || true
         fi
@@ -187,11 +187,11 @@ clean_log_files() {
     local freed=$((size_before - size_after))
     SPACE_FREED=$((SPACE_FREED + freed))
 
-    [[ "$VERBOSE" == "true" ]] && log_info "  Logs: $(format_size $freed) libérés"
+    [[ "$VERBOSE" == "true" ]] && log_info "  Logs: $(format_size $freed) freed"
 }
 
 clean_package_cache() {
-    log_info "Nettoyage des caches package manager..."
+    log_info "Cleaning package manager caches..."
 
     # APT (Debian/Ubuntu)
     if command -v apt-get &>/dev/null; then
@@ -202,7 +202,7 @@ clean_package_cache() {
             apt-get clean 2>/dev/null || true
             apt-get autoremove -y 2>/dev/null || true
         fi
-        [[ "$VERBOSE" == "true" ]] && log_info "  APT cache nettoyé"
+        [[ "$VERBOSE" == "true" ]] && log_info "  APT cache cleaned"
     fi
 
     # YUM/DNF (RHEL/CentOS/Fedora)
@@ -212,14 +212,14 @@ clean_package_cache() {
         else
             dnf clean all 2>/dev/null || true
         fi
-        [[ "$VERBOSE" == "true" ]] && log_info "  DNF cache nettoyé"
+        [[ "$VERBOSE" == "true" ]] && log_info "  DNF cache cleaned"
     elif command -v yum &>/dev/null; then
         if [[ "$DRY_RUN" == "true" ]]; then
             log_action "yum clean all"
         else
             yum clean all 2>/dev/null || true
         fi
-        [[ "$VERBOSE" == "true" ]] && log_info "  YUM cache nettoyé"
+        [[ "$VERBOSE" == "true" ]] && log_info "  YUM cache cleaned"
     fi
 
     # Pacman (Arch)
@@ -229,12 +229,12 @@ clean_package_cache() {
         else
             pacman -Sc --noconfirm 2>/dev/null || true
         fi
-        [[ "$VERBOSE" == "true" ]] && log_info "  Pacman cache nettoyé"
+        [[ "$VERBOSE" == "true" ]] && log_info "  Pacman cache cleaned"
     fi
 }
 
 clean_user_caches() {
-    log_info "Nettoyage des caches utilisateur..."
+    log_info "Cleaning user caches..."
 
     local cache_dirs=(
         "/root/.cache"
@@ -249,7 +249,7 @@ clean_user_caches() {
                 local size_before=$(get_dir_size "$dir")
 
                 if [[ "$DRY_RUN" == "true" ]]; then
-                    log_action "Nettoierait $dir ($(format_size $size_before))"
+                    log_action "Would clean $dir ($(format_size $size_before))"
                 else
                     rm -rf "$dir"/* 2>/dev/null || true
                 fi
@@ -261,7 +261,7 @@ clean_user_caches() {
 }
 
 clean_old_kernels() {
-    log_info "Nettoyage des anciens kernels..."
+    log_info "Cleaning old kernels..."
 
     if command -v apt-get &>/dev/null; then
         local current_kernel=$(uname -r)
@@ -269,12 +269,12 @@ clean_old_kernels() {
 
         if [[ -n "$old_kernels" ]]; then
             if [[ "$DRY_RUN" == "true" ]]; then
-                log_action "Supprimerait les kernels: $old_kernels"
+                log_action "Would remove kernels: $old_kernels"
             else
                 echo "$old_kernels" | xargs apt-get remove -y 2>/dev/null || true
             fi
         else
-            log_info "  Aucun ancien kernel à supprimer"
+            log_info "  No old kernels to remove"
         fi
     fi
 }
@@ -282,28 +282,28 @@ clean_old_kernels() {
 show_summary() {
     echo ""
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}  RÉSUMÉ DU NETTOYAGE${NC}"
+    echo -e "${GREEN}  CLEANUP SUMMARY${NC}"
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
 
     if [[ "$DRY_RUN" == "true" ]]; then
-        echo -e "  Mode: ${YELLOW}SIMULATION${NC}"
-        echo -e "  Espace potentiellement libéré: ${GREEN}$(format_size $SPACE_FREED)${NC}"
+        echo -e "  Mode: ${YELLOW}DRY-RUN${NC}"
+        echo -e "  Potential space freed: ${GREEN}$(format_size $SPACE_FREED)${NC}"
     else
-        echo -e "  Mode: ${GREEN}EXÉCUTION${NC}"
-        echo -e "  Espace libéré: ${GREEN}$(format_size $SPACE_FREED)${NC}"
+        echo -e "  Mode: ${GREEN}EXECUTED${NC}"
+        echo -e "  Space freed: ${GREEN}$(format_size $SPACE_FREED)${NC}"
     fi
 
     echo ""
-    echo -e "  Espace disque actuel:"
-    df -h / | tail -1 | awk '{printf "    Utilisé: %s / %s (%s)\n", $3, $2, $5}'
+    echo -e "  Current disk space:"
+    df -h / | tail -1 | awk '{printf "    Used: %s / %s (%s)\n", $3, $2, $5}'
 
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
 }
 
 main() {
-    # Vérifier root
+    # Check root
     if [[ $EUID -ne 0 ]]; then
-        log_warn "Ce script devrait être exécuté en tant que root pour un nettoyage complet"
+        log_warn "This script should be run as root for complete cleanup"
     fi
 
     # Parse arguments
@@ -346,7 +346,7 @@ main() {
                 exit 0
                 ;;
             *)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -354,14 +354,14 @@ main() {
     done
 
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}  NETTOYAGE SYSTÈME${NC}"
+    echo -e "${GREEN}  SYSTEM CLEANUP${NC}"
     if [[ "$DRY_RUN" == "true" ]]; then
-        echo -e "  ${YELLOW}Mode simulation activé${NC}"
+        echo -e "  ${YELLOW}Dry-run mode enabled${NC}"
     fi
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
     echo ""
 
-    # Exécution des nettoyages
+    # Execute cleanup tasks
     [[ "$CLEAN_TEMP" == "true" ]] && clean_temp_files
     [[ "$CLEAN_LOGS" == "true" ]] && clean_log_files
     [[ "$CLEAN_CACHE" == "true" ]] && clean_package_cache
@@ -376,7 +376,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -391,7 +391,7 @@ sudo ./cleanup-system.sh -d
 # Nettoyage verbeux avec kernels
 sudo ./cleanup-system.sh -v -k
 
-# Logs de plus de 7 jours
+# Logs de plus de 7 days
 sudo ./cleanup-system.sh --log-days 7
 
 # Sans nettoyage des caches
@@ -407,11 +407,11 @@ sudo ./cleanup-system.sh --no-cache
   NETTOYAGE SYSTÈME
 ═══════════════════════════════════════════════════════════
 
-[INFO] Nettoyage des fichiers temporaires (> 7 jours)...
-[INFO]   /tmp: 234M libérés
-[INFO]   /var/tmp: 45M libérés
-[INFO] Nettoyage des anciens logs (> 30 jours)...
-[INFO]   Logs: 1.2G libérés
+[INFO] Nettoyage des ficyesterdays temporaires (> 7 days)...
+[INFO]   /tmp: 234M freed
+[INFO]   /var/tmp: 45M freed
+[INFO] Nettoyage des anciens logs (> 30 days)...
+[INFO]   Logs: 1.2G freed
 [INFO] Nettoyage des caches package manager...
 [INFO]   APT cache nettoyé
 [INFO] Nettoyage des caches utilisateur...
@@ -422,7 +422,7 @@ sudo ./cleanup-system.sh --no-cache
   Mode: EXÉCUTION
   Espace libéré: 1.5G
 
-  Espace disque actuel:
+  Disk space actuel:
     Utilisé: 22G / 50G (44%)
 ═══════════════════════════════════════════════════════════
 ```

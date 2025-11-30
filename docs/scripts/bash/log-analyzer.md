@@ -17,7 +17,7 @@ Analyse des logs système pour détecter les anomalies.
 ## Description
 
 Ce script analyse les logs système :
-- Détection des tentatives de connexion échouées
+- Détection des tentatives de connexion failedes
 - Analyse des erreurs critiques
 - Statistiques d'accès
 - Rapport d'anomalies
@@ -37,7 +37,7 @@ Ce script analyse les logs système :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -58,13 +58,13 @@ Usage: $(basename "$0") [OPTIONS]
 Analyse des logs système.
 
 Options:
-    -d, --dir PATH      Répertoire des logs (défaut: /var/log)
-    -t, --time HOURS    Analyser les N dernières heures (défaut: 24)
-    -n, --top NUM       Nombre de résultats top (défaut: 10)
+    -d, --dir PATH      Répertoire des logs (default: /var/log)
+    -t, --time HOURS    Analyser les N lasts hours (default: 24)
+    -n, --top NUM       Nombre de résultats top (default: 10)
     -o, --output FILE   Sauvegarder le rapport
-    -h, --help          Affiche cette aide
+    -h, --help          Show this help
 
-Exemples:
+Examples:
     $(basename "$0")                    # Analyse 24h
     $(basename "$0") -t 1               # Dernière heure
     $(basename "$0") -n 20 -o report.txt
@@ -93,11 +93,11 @@ analyze_auth_logs() {
     done
 
     if [[ -z "$auth_log" ]]; then
-        echo "Aucun fichier de log d'authentification trouvé"
+        echo "Aucun ficyesterday de log d'authentification trouvé"
         return
     fi
 
-    # Tentatives échouées SSH
+    # Tentatives failedes SSH
     print_section "Tentatives SSH Échouées (Top $TOP_N IPs)"
     grep -h "Failed password" "$auth_log" "$LOG_DIR/auth.log.1" 2>/dev/null | \
         grep -oE "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" | \
@@ -115,8 +115,8 @@ analyze_auth_logs() {
             printf "  ${YELLOW}%-6s${NC} %s\n" "$count" "$user"
         done
 
-    # Connexions réussies
-    print_section "Connexions SSH Réussies"
+    # Connections succeededes
+    print_section "Connections SSH Réussies"
     local success_count=$(grep -c "Accepted" "$auth_log" 2>/dev/null || echo "0")
     echo "  Total: $success_count"
 
@@ -150,7 +150,7 @@ analyze_syslog() {
     done
 
     if [[ -z "$syslog" ]]; then
-        echo "Aucun fichier syslog trouvé"
+        echo "Aucun ficyesterday syslog trouvé"
         return
     fi
 
@@ -265,14 +265,14 @@ analyze_journald() {
     local since="$HOURS hours ago"
 
     # Erreurs système
-    print_section "Erreurs Système (dernières ${HOURS}h)"
+    print_section "Erreurs Système (lasts ${HOURS}h)"
     journalctl --since "$since" -p err --no-pager 2>/dev/null | \
         tail -n 20 | \
         while read -r line; do
             echo "  ${line:0:80}"
         done
 
-    # Services échoués
+    # Services faileds
     print_section "Services Échoués"
     journalctl --since "$since" | \
         grep -i "failed" | \
@@ -303,7 +303,7 @@ show_statistics() {
         done
 
     # Logs modifiés récemment
-    print_section "Logs Modifiés (dernière heure)"
+    print_section "Logs Modifiés (last heure)"
     find "$LOG_DIR" -type f -mmin -60 2>/dev/null | head -n 10 | \
         while read -r log; do
             echo "  $(basename "$log")"
@@ -313,7 +313,7 @@ show_statistics() {
 show_summary() {
     print_header "RÉSUMÉ"
 
-    echo "  Période analysée: dernières ${HOURS}h"
+    echo "  Période analysée: lasts ${HOURS}h"
     echo "  Répertoire logs: $LOG_DIR"
     echo "  Date rapport: $(date '+%Y-%m-%d %H:%M:%S')"
 
@@ -347,14 +347,14 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
         esac
     done
 
-    # Redirection vers fichier si demandé
+    # Redirection vers ficyesterday si demandé
     if [[ -n "$OUTPUT_FILE" ]]; then
         exec > >(tee "$OUTPUT_FILE")
     fi
@@ -364,7 +364,7 @@ main() {
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
     echo -e "  Date: $(date '+%Y-%m-%d %H:%M:%S')"
     echo -e "  Host: $(hostname)"
-    echo -e "  Période: dernières ${HOURS}h"
+    echo -e "  Période: lasts ${HOURS}h"
 
     analyze_auth_logs
     analyze_syslog
@@ -379,7 +379,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -408,7 +408,7 @@ sudo ./log-analyzer.sh -d /var/log/myapp
 ═══════════════════════════════════════════════════════════
   Date: 2024-01-15 14:30:22
   Host: webserver01
-  Période: dernières 24h
+  Période: lasts 24h
 
 ═══════════════════════════════════════════════════════════
   ANALYSE AUTHENTIFICATION
@@ -425,7 +425,7 @@ sudo ./log-analyzer.sh -d /var/log/myapp
   145    test
   98     user
 
-▶ Connexions SSH Réussies
+▶ Connections SSH Réussies
   Total: 45
   23     192.168.1.10
   15     10.0.0.5

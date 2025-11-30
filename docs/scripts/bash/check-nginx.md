@@ -39,7 +39,7 @@ Ce script vérifie l'état d'un serveur Nginx :
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -47,29 +47,29 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 NGINX_CONF="/etc/nginx/nginx.conf"
 SITES_DIR="/etc/nginx/sites-enabled"
 STATUS_URL=""
 CERT_WARNING_DAYS=30
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
 Usage: $0 [options]
 
 Options:
-    -c CONFIG    Chemin nginx.conf (défaut: /etc/nginx/nginx.conf)
+    -c CONFIG    Chemin nginx.conf (default: /etc/nginx/nginx.conf)
     -s URL       URL stub_status pour statistiques
-    -d DAYS      Jours avant alerte expiration SSL (défaut: 30)
+    -d DAYS      Jours avant alerte expiration SSL (default: 30)
     --help       Afficher cette aide
 EOF
     exit 0
@@ -132,7 +132,7 @@ while [[ $# -gt 0 ]]; do
         -s) STATUS_URL="$2"; shift 2 ;;
         -d) CERT_WARNING_DAYS="$2"; shift 2 ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -204,7 +204,7 @@ else
     echo -e "       ${RED}$config_test${NC}"
 fi
 
-# Fichier de config principal
+# Ficyesterday de config principal
 if [[ -f "$NGINX_CONF" ]]; then
     check_result "Main config" "pass" "$NGINX_CONF"
 else
@@ -214,7 +214,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════
 # CHECK 4: Sites actifs
 # ═══════════════════════════════════════════════════════════════════
-echo -e "\n${CYAN}[Sites Actifs]${NC}"
+echo -e "\n${CYAN}[Sites Actives]${NC}"
 
 if [[ -d "$SITES_DIR" ]]; then
     site_count=$(ls -1 "$SITES_DIR" 2>/dev/null | wc -l)
@@ -312,7 +312,7 @@ if [[ -f "$error_log" ]]; then
     log_size=$(du -h "$error_log" 2>/dev/null | awk '{print $1}')
     check_result "Error log" "info" "$error_log ($log_size)"
 
-    # Erreurs récentes (dernière heure)
+    # Erreurs récentes (last heure)
     recent_errors=$(awk -v date="$(date -d '1 hour ago' '+%Y/%m/%d %H')" \
         '$0 ~ date {count++} END {print count+0}' "$error_log" 2>/dev/null)
 
@@ -341,7 +341,7 @@ if [[ -f "$access_log" ]]; then
     log_size=$(du -h "$access_log" 2>/dev/null | awk '{print $1}')
     check_result "Access log" "info" "$access_log ($log_size)"
 
-    # Requêtes par minute (dernière minute)
+    # Requêtes par minute (last minute)
     rpm=$(tail -1000 "$access_log" 2>/dev/null | \
         awk -v min="$(date -d '1 minute ago' '+%d/%b/%Y:%H:%M')" \
         '$0 ~ min {count++} END {print count+0}')
@@ -369,7 +369,7 @@ if [[ -n "$STATUS_URL" ]]; then
         echo -e "       ${GRAY}Accepts: $accepts | Handled: $handled | Requests: $requests${NC}"
         echo -e "       ${GRAY}Reading: $reading | Writing: $writing | Waiting: $waiting${NC}"
 
-        # Vérifier les connexions dropping
+        # Check les connexions dropping
         dropped=$((accepts - handled))
         if [[ $dropped -gt 0 ]]; then
             check_result "Dropped connections" "warn" "$dropped"
@@ -427,7 +427,7 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Vérification basique

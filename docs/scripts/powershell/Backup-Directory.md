@@ -267,7 +267,7 @@ if ($PSCmdlet.ShouldProcess($backupPath, "Create backup")) {
         }
     }
 
-    # Vérification d'intégrité
+    # Check d'intégrité
     if ($Verify) {
         Write-Log "Verifying backup integrity..." -Level Info
         $integrityResult = Test-ZipIntegrity -ZipPath $backupPath

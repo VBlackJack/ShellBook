@@ -19,7 +19,7 @@ Vérification complète d'un serveur LDAP/OpenLDAP.
 
 Ce script vérifie l'état d'un serveur LDAP :
 - Service slapd et connectivité
-- Connexion anonyme et authentifiée
+- Connection anonyme et authentifiée
 - Réplication (syncrepl)
 - Recherches de base
 - Certificats TLS
@@ -51,7 +51,7 @@ sudo dnf install openldap-clients openssl
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -59,7 +59,7 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 LDAP_HOST="localhost"
 LDAP_PORT="389"
 LDAP_BIND_DN=""
@@ -68,22 +68,22 @@ LDAP_BASE_DN=""
 USE_TLS=false
 LDAPS_PORT="636"
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
 Usage: $0 [options]
 
 Options:
-    -h HOST      Serveur LDAP (défaut: localhost)
-    -p PORT      Port LDAP (défaut: 389)
+    -h HOST      Server LDAP (default: localhost)
+    -p PORT      Port LDAP (default: 389)
     -D BINDDN    DN pour bind authentifié
     -w PASSWORD  Mot de passe bind
     -b BASEDN    Base DN pour recherches
@@ -140,7 +140,7 @@ while [[ $# -gt 0 ]]; do
         -b) LDAP_BASE_DN="$2"; shift 2 ;;
         -s) USE_TLS=true; LDAP_PORT="$LDAPS_PORT"; shift ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -220,9 +220,9 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════════
-# CHECK 4: Connexion anonyme
+# CHECK 4: Connection anonyme
 # ═══════════════════════════════════════════════════════════════════
-echo -e "\n${CYAN}[Connexion Anonyme]${NC}"
+echo -e "\n${CYAN}[Connection Anonyme]${NC}"
 
 anon_result=$(ldapsearch -x -H "$LDAP_URI" -b "$LDAP_BASE_DN" -s base "(objectclass=*)" 2>&1)
 if [[ $? -eq 0 ]]; then
@@ -236,10 +236,10 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════════
-# CHECK 5: Connexion authentifiée
+# CHECK 5: Connection authentifiée
 # ═══════════════════════════════════════════════════════════════════
 if [[ -n "$LDAP_BIND_DN" ]] && [[ -n "$LDAP_BIND_PW" ]]; then
-    echo -e "\n${CYAN}[Connexion Authentifiée]${NC}"
+    echo -e "\n${CYAN}[Connection Authentifiée]${NC}"
 
     auth_result=$(ldapsearch -x -H "$LDAP_URI" -D "$LDAP_BIND_DN" -w "$LDAP_BIND_PW" \
         -b "$LDAP_BASE_DN" -s base "(objectclass=*)" 2>&1)
@@ -264,7 +264,7 @@ else
     check_result "StartTLS" "info" "Not available"
 fi
 
-# Vérifier certificat LDAPS
+# Check certificat LDAPS
 if nc -z -w 3 "$LDAP_HOST" 636 2>/dev/null; then
     cert_info=$(echo | openssl s_client -connect "$LDAP_HOST:636" 2>/dev/null | \
         openssl x509 -noout -dates -subject 2>/dev/null)
@@ -340,7 +340,7 @@ fi
 if [[ "$LDAP_HOST" == "localhost" ]] || [[ "$LDAP_HOST" == "127.0.0.1" ]]; then
     echo -e "\n${CYAN}[Réplication]${NC}"
 
-    # Vérifier syncrepl (OpenLDAP)
+    # Check syncrepl (OpenLDAP)
     if [[ -d /etc/ldap/slapd.d ]] || [[ -f /etc/openldap/slapd.conf ]]; then
         syncrepl_config=$(ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=config" \
             "(olcSyncrepl=*)" olcSyncrepl 2>/dev/null | grep -c "olcSyncrepl")
@@ -348,7 +348,7 @@ if [[ "$LDAP_HOST" == "localhost" ]] || [[ "$LDAP_HOST" == "127.0.0.1" ]]; then
         if [[ $syncrepl_config -gt 0 ]]; then
             check_result "Syncrepl Config" "info" "$syncrepl_config provider(s)"
 
-            # Vérifier contextCSN
+            # Check contextCSN
             csn=$(ldapsearch -x -H "$LDAP_URI" -b "$LDAP_BASE_DN" -s base \
                 "(objectclass=*)" contextCSN 2>/dev/null | grep "contextCSN:")
 
@@ -414,13 +414,13 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
-# Serveur local
+# Server local
 ./check-ldap.sh
 
-# Serveur distant
+# Server distant
 ./check-ldap.sh -h ldap.domain.local -p 389
 
 # Avec authentification

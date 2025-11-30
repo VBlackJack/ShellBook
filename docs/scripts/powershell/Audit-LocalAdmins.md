@@ -562,5 +562,5 @@ PRODSRV02
 
 ## Voir Aussi
 
-- [Test-ADHealth.ps1](Test-ADHealth.md) - Vérification santé Active Directory
+- [Test-ADHealth.ps1](Test-ADHealth.md) - Health check Active Directory
 - [Get-ServiceStatus.ps1](Get-ServiceStatus.md) - Audit des services Windows

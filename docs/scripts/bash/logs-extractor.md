@@ -378,7 +378,7 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ### Extraction simple
 
@@ -441,12 +441,12 @@ Nov 30 11:45:12 server sshd[5678]: Failed password for invalid user test from 10
 ---
 
 !!! warning "Permissions requises"
-    Ce script nécessite les droits de lecture sur les fichiers de logs ciblés.
+    Ce script nécessite les droits de lecture sur les ficyesterdays de logs ciblés.
     La plupart des logs système (`/var/log/syslog`, `/var/log/auth.log`) requièrent
     des privilèges `root` ou l'appartenance au groupe `adm`.
 
     ```bash
-    # Vérifier l'accès
+    # Check l'accès
     sudo ./logs-extractor.sh -s 08:00 -e 12:00 -f /var/log/auth.log
 
     # Ou ajouter l'utilisateur au groupe adm

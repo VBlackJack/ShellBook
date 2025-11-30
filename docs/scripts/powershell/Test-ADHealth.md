@@ -44,7 +44,7 @@ Install-WindowsFeature -Name RSAT-AD-PowerShell
 #Requires -Modules ActiveDirectory
 <#
 .SYNOPSIS
-    Vérification santé Active Directory.
+    Health check Active Directory.
 
 .DESCRIPTION
     Vérifie l'état complet d'Active Directory incluant

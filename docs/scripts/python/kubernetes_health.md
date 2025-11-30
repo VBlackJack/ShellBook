@@ -61,7 +61,7 @@ except ImportError:
     print("Warning: kubernetes module not installed. Run: pip install kubernetes")
 
 
-# Couleurs ANSI
+# Colors ANSI
 class Colors:
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -114,7 +114,7 @@ class KubernetesHealthChecker:
         ))
 
     def check_api_server(self) -> bool:
-        """Vérifie la connectivité à l'API server"""
+        """Check la connectivité à l'API server"""
         if not self.connected:
             self.add_result(
                 "API Server",
@@ -132,7 +132,7 @@ class KubernetesHealthChecker:
             return False
 
     def check_nodes(self):
-        """Vérifie l'état des nodes"""
+        """Check l'état des nodes"""
         try:
             nodes = self.v1.list_node()
 
@@ -188,7 +188,7 @@ class KubernetesHealthChecker:
             self.add_result("Nodes", "fail", f"Cannot list nodes: {e.reason}")
 
     def _check_node_resources(self, nodes):
-        """Vérifie les ressources des nodes"""
+        """Check les ressources des nodes"""
         try:
             # Obtenir les metrics si disponibles
             custom_api = client.CustomObjectsApi()
@@ -221,7 +221,7 @@ class KubernetesHealthChecker:
             self.add_result("Node Resources", "info", "Metrics server not available")
 
     def check_pods(self, namespace: str = None):
-        """Vérifie l'état des pods"""
+        """Check l'état des pods"""
         try:
             if namespace:
                 pods = self.v1.list_namespaced_pod(namespace)
@@ -290,7 +290,7 @@ class KubernetesHealthChecker:
             self.add_result("Pods", "fail", f"Cannot list pods: {e.reason}")
 
     def check_deployments(self, namespace: str = None):
-        """Vérifie l'état des deployments"""
+        """Check l'état des deployments"""
         try:
             if namespace:
                 deployments = self.apps_v1.list_namespaced_deployment(namespace)
@@ -327,7 +327,7 @@ class KubernetesHealthChecker:
             self.add_result("Deployments", "fail", f"Cannot list deployments: {e.reason}")
 
     def check_daemonsets(self, namespace: str = None):
-        """Vérifie l'état des daemonsets"""
+        """Check l'état des daemonsets"""
         try:
             if namespace:
                 daemonsets = self.apps_v1.list_namespaced_daemon_set(namespace)
@@ -363,7 +363,7 @@ class KubernetesHealthChecker:
             self.add_result("DaemonSets", "fail", f"Cannot list daemonsets: {e.reason}")
 
     def check_persistent_volumes(self):
-        """Vérifie l'état des PersistentVolumes"""
+        """Check l'état des PersistentVolumes"""
         try:
             pvs = self.v1.list_persistent_volume()
 
@@ -396,7 +396,7 @@ class KubernetesHealthChecker:
             self.add_result("PersistentVolumes", "fail", f"Cannot list PVs: {e.reason}")
 
     def check_services(self, namespace: str = None):
-        """Vérifie les services sans endpoints"""
+        """Check les services sans endpoints"""
         try:
             if namespace:
                 services = self.v1.list_namespaced_service(namespace)
@@ -443,7 +443,7 @@ class KubernetesHealthChecker:
             self.add_result("Services", "fail", f"Cannot check services: {e.reason}")
 
     def check_events(self, namespace: str = None, minutes: int = 60):
-        """Vérifie les events récents problématiques"""
+        """Check les events récents problématiques"""
         try:
             if namespace:
                 events = self.v1.list_namespaced_event(namespace)
@@ -504,7 +504,7 @@ class KubernetesHealthChecker:
         self.check_events(namespace)
 
     def print_results(self):
-        """Affiche les résultats"""
+        """Display les résultats"""
         print(f"\n{Colors.CYAN}{'='*70}{Colors.RESET}")
         print(f"{Colors.GREEN}  KUBERNETES CLUSTER HEALTH CHECK{Colors.RESET}")
         print(f"{Colors.CYAN}{'='*70}{Colors.RESET}")

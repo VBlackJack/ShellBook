@@ -26,7 +26,7 @@ Générateur de configuration logrotate pour applications personnalisées avec b
 
 ## Description
 
-Ce script génère des configurations logrotate valides et optimisées pour vos applications. Il intègre automatiquement les bonnes pratiques : compression différée, gestion des fichiers manquants, conservation des permissions.
+Ce script génère des configurations logrotate valides et optimisées pour vos applications. Il intègre automatiquement les bonnes pratiques : compression différée, gestion des ficyesterdays manquants, conservation des permissions.
 
 **Fonctionnalités :**
 
@@ -56,8 +56,8 @@ sudo -v
 |--------|-------------|----------------|
 | `compress` | Compresse les anciens logs | **Oui** - économise l'espace |
 | `delaycompress` | Compresse au cycle suivant | **Oui** - évite les conflits |
-| `missingok` | Ignore si fichier absent | **Oui** - évite les erreurs |
-| `notifempty` | Ne rotate pas si vide | **Oui** - évite les fichiers vides |
+| `missingok` | Ignore si ficyesterday absent | **Oui** - évite les erreurs |
+| `notifempty` | Ne rotate pas si vide | **Oui** - évite les ficyesterdays vides |
 | `copytruncate` | Copie puis tronque | Pour apps sans reopen |
 | `create` | Recrée avec permissions | Standard pour syslog |
 | `sharedscripts` | Un seul postrotate | Pour patterns multiples |
@@ -122,21 +122,21 @@ ${CYAN}Usage:${NC} $SCRIPT_NAME [OPTIONS] -p <log_path>
 Generate a logrotate configuration file for custom applications.
 
 ${CYAN}Options:${NC}
-    -h, --help              Affiche cette aide
-    -p, --path PATH         Chemin du fichier log (avec wildcard si besoin)
-    -n, --name NAME         Nom de l'application (pour le fichier de config)
-    -r, --retention DAYS    Nombre de jours de rétention (défaut: 7)
-    -f, --frequency FREQ    Fréquence: daily, weekly, monthly (défaut: daily)
-    -u, --user USER         Propriétaire des logs (défaut: root)
-    -g, --group GROUP       Groupe des logs (défaut: root)
-    -m, --mode MODE         Permissions (défaut: 640)
+    -h, --help              Show this help
+    -p, --path PATH         Chemin du ficyesterday log (avec wildcard si besoin)
+    -n, --name NAME         Nom de l'application (pour le ficyesterday de config)
+    -r, --retention DAYS    Number of days de rétention (default: 7)
+    -f, --frequency FREQ    Fréquence: daily, weekly, monthly (default: daily)
+    -u, --user USER         Propriétaire des logs (default: root)
+    -g, --group GROUP       Groupe des logs (default: root)
+    -m, --mode MODE         Permissions (default: 640)
     --copytruncate          Utilise copytruncate au lieu de create
     --postrotate CMD        Commande à exécuter après rotation
-    -o, --output FILE       Fichier de sortie
+    -o, --output FILE       Output file
     --install               Installe directement dans /etc/logrotate.d/
     -i, --interactive       Mode interactif
 
-${CYAN}Exemples:${NC}
+${CYAN}Examples:${NC}
     # Configuration basique
     $SCRIPT_NAME -p /var/log/myapp/*.log -n myapp
 
@@ -152,8 +152,8 @@ ${CYAN}Exemples:${NC}
     # Installation directe
     $SCRIPT_NAME -p /var/log/myapp/*.log -n myapp --install
 
-${CYAN}Fichier généré:${NC}
-    Le fichier sera créé dans /etc/logrotate.d/<name> ou stdout
+${CYAN}Ficyesterday généré:${NC}
+    Le ficyesterday sera créé dans /etc/logrotate.d/<name> ou stdout
 
 EOF
 }
@@ -193,7 +193,7 @@ interactive_mode() {
     esac
 
     # Retention
-    read -rp "Rétention (nombre de fichiers à garder) [7]: " input
+    read -rp "Rétention (nombre de ficyesterdays à garder) [7]: " input
     RETENTION="${input:-7}"
 
     # User/Group
@@ -207,7 +207,7 @@ interactive_mode() {
 
     # Rotation method
     echo -e "\n${CYAN}Méthode de rotation:${NC}"
-    echo "  1. create (recrée le fichier après rotation)"
+    echo "  1. create (recrée le ficyesterday après rotation)"
     echo "  2. copytruncate (copie puis tronque - pour apps sans reopen)"
     read -rp "Choix [1]: " method_choice
     if [[ "$method_choice" == "2" ]]; then
@@ -306,7 +306,7 @@ validate_config() {
         rm -f "$temp_file"
         return 0
     else
-        log_warn "La validation a échoué (peut nécessiter des droits root)"
+        log_warn "La validation a failed (peut nécessiter des droits root)"
         rm -f "$temp_file"
         return 0  # Don't fail, just warn
     fi
@@ -341,7 +341,7 @@ install_config() {
     # Test the configuration
     log_info "Test de la configuration..."
     if logrotate -d "$dest_file" 2>/dev/null; then
-        log_info "Test réussi"
+        log_info "Test succeeded"
     else
         log_warn "Le test a généré des avertissements (vérifiez les permissions)"
     fi
@@ -433,7 +433,7 @@ main() {
                 shift
                 ;;
             *)
-                log_error "Option inconnue: $1"
+                log_error "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -477,13 +477,13 @@ main() {
         # Ask to save
         echo -e "${CYAN}Options:${NC}"
         echo "  1. Afficher seulement (déjà fait)"
-        echo "  2. Sauvegarder dans un fichier"
+        echo "  2. Sauvegarder dans un ficyesterday"
         echo "  3. Installer dans /etc/logrotate.d/"
         read -rp "Choix [1]: " save_choice
 
         case "$save_choice" in
             2)
-                read -rp "Nom du fichier [${APP_NAME}.logrotate]: " filename
+                read -rp "Nom du ficyesterday [${APP_NAME}.logrotate]: " filename
                 filename="${filename:-${APP_NAME}.logrotate}"
                 echo -e "$config" > "$filename"
                 log_info "Configuration sauvegardée: $filename"
@@ -504,7 +504,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ### Mode Simple
 
@@ -512,7 +512,7 @@ main "$@"
 # Configuration basique
 ./logrotate-builder.sh -p /var/log/myapp/*.log -n myapp
 
-# Avec rétention de 30 jours
+# Avec rétention de 30 days
 ./logrotate-builder.sh -p /var/log/myapp/app.log -n myapp -r 30
 
 # Rotation hebdomadaire
@@ -540,7 +540,7 @@ main "$@"
 # Installation directe (nécessite sudo)
 sudo ./logrotate-builder.sh -p /var/log/myapp/*.log -n myapp --install
 
-# Ou sauvegarde dans un fichier
+# Ou sauvegarde dans un ficyesterday
 ./logrotate-builder.sh -p /var/log/myapp/*.log -n myapp -o myapp.logrotate
 sudo cp myapp.logrotate /etc/logrotate.d/myapp
 ```
@@ -589,14 +589,14 @@ sudo cp myapp.logrotate /etc/logrotate.d/myapp
 |--------|-------------|
 | `-p`, `--path PATH` | Chemin des logs (avec wildcards) |
 | `-n`, `--name NAME` | Nom de l'application |
-| `-r`, `--retention DAYS` | Nombre de fichiers à conserver (défaut: 7) |
-| `-f`, `--frequency FREQ` | daily, weekly, monthly (défaut: daily) |
-| `-u`, `--user USER` | Propriétaire des logs (défaut: root) |
-| `-g`, `--group GROUP` | Groupe des logs (défaut: root) |
-| `-m`, `--mode MODE` | Permissions (défaut: 640) |
+| `-r`, `--retention DAYS` | Nombre de ficyesterdays à conserver (default: 7) |
+| `-f`, `--frequency FREQ` | daily, weekly, monthly (default: daily) |
+| `-u`, `--user USER` | Propriétaire des logs (default: root) |
+| `-g`, `--group GROUP` | Groupe des logs (default: root) |
+| `-m`, `--mode MODE` | Permissions (default: 640) |
 | `--copytruncate` | Copie puis tronque (pour apps sans reopen) |
 | `--postrotate CMD` | Commande après rotation |
-| `-o`, `--output FILE` | Fichier de sortie |
+| `-o`, `--output FILE` | Output file |
 | `--install` | Installe dans /etc/logrotate.d/ |
 | `-i`, `--interactive` | Mode interactif |
 
@@ -614,7 +614,7 @@ sudo logrotate -f /etc/logrotate.d/myapp
 # Voir le statut des rotations
 cat /var/lib/logrotate/status
 
-# Vérifier la configuration globale
+# Check la configuration globale
 sudo logrotate -d /etc/logrotate.conf
 ```
 
@@ -623,13 +623,13 @@ sudo logrotate -d /etc/logrotate.conf
 !!! tip "copytruncate vs create"
     **Utilisez `copytruncate`** quand :
 
-    - L'application ne gère pas la réouverture des fichiers (SIGHUP)
+    - L'application ne gère pas la réouverture des ficyesterdays (SIGHUP)
     - Vous ne pouvez pas redémarrer le service
-    - L'application garde le fichier ouvert en permanence
+    - L'application garde le ficyesterday ouvert en permanence
 
     **Utilisez `create` (défaut)** quand :
 
-    - L'application peut rouvrir ses fichiers (postrotate avec reload)
+    - L'application peut rouvrir ses ficyesterdays (postrotate avec reload)
     - Vous avez un script postrotate pour notifier l'application
 
 !!! warning "Wildcards et sharedscripts"

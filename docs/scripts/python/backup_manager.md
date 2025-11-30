@@ -113,7 +113,7 @@ class BackupManager:
         self.destination.mkdir(parents=True, exist_ok=True)
 
     def _should_exclude(self, path: Path) -> bool:
-        """Vérifie si un chemin doit être exclu."""
+        """Check si un chemin doit être exclu."""
         path_str = str(path)
         for pattern in self.exclude:
             if pattern in path_str:
@@ -162,7 +162,7 @@ class BackupManager:
                     tar.add(file_path, arcname)
 
     def _verify_archive(self, backup_path: Path) -> bool:
-        """Vérifie l'intégrité de l'archive."""
+        """Check l'intégrité de l'archive."""
         try:
             if self.format == "zip":
                 with zipfile.ZipFile(backup_path, 'r') as zipf:
@@ -211,7 +211,7 @@ class BackupManager:
             duration = (datetime.now() - start_time).total_seconds()
             size_compressed = backup_path.stat().st_size
 
-            # Vérification optionnelle
+            # Check optionnelle
             checksum = None
             if verify:
                 logger.info("Verifying archive integrity...")
@@ -298,7 +298,7 @@ class BackupManager:
 
 
 def display_results(result: BackupResult, backups: List[dict]) -> None:
-    """Affiche les résultats."""
+    """Display les résultats."""
     if RICH_AVAILABLE:
         console = Console()
 

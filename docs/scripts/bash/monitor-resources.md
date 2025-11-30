@@ -38,7 +38,7 @@ Ce script surveille les ressources système en continu :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -46,7 +46,7 @@ readonly CYAN='\033[0;36m'
 readonly BOLD='\033[1m'
 readonly NC='\033[0m'
 
-# Configuration par défaut
+# Default configuration
 INTERVAL=2
 COUNT=0  # 0 = infini
 LOG_FILE=""
@@ -61,15 +61,15 @@ Usage: $(basename "$0") [OPTIONS]
 Monitoring CPU/RAM en temps réel.
 
 Options:
-    -i, --interval SEC   Intervalle de rafraîchissement (défaut: 2s)
-    -n, --count NUM      Nombre d'itérations (défaut: infini)
-    -l, --log FILE       Enregistrer dans un fichier
-    -cw, --cpu-warn NUM  Seuil CPU warning (défaut: 80%)
-    -mw, --mem-warn NUM  Seuil mémoire warning (défaut: 85%)
+    -i, --interval SEC   Intervalle de rafraîchissement (default: 2s)
+    -n, --count NUM      Nombre d'itérations (default: infini)
+    -l, --log FILE       Enregistrer dans un ficyesterday
+    -cw, --cpu-warn NUM  Seuil CPU warning (default: 80%)
+    -mw, --mem-warn NUM  Seuil mémoire warning (default: 85%)
     -q, --quiet          Mode silencieux (log uniquement)
-    -h, --help           Affiche cette aide
+    -h, --help           Show this help
 
-Exemples:
+Examples:
     $(basename "$0")                     # Monitoring continu
     $(basename "$0") -i 5 -n 100         # 100 mesures, 5s d'intervalle
     $(basename "$0") -l monitor.csv      # Avec logging
@@ -170,7 +170,7 @@ monitor_once() {
         cpu_percent=$((cpu_delta_used * 100 / cpu_delta_total))
     fi
 
-    # Mémoire
+    # Memory
     read mem_used mem_total mem_percent swap_used swap_total swap_percent <<< $(get_memory_info)
 
     # Load average
@@ -263,14 +263,14 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
         esac
     done
 
-    # Créer le fichier de log avec header
+    # Create le ficyesterday de log avec header
     if [[ -n "$LOG_FILE" ]]; then
         echo "timestamp,cpu_percent,mem_percent,swap_percent,load_avg" > "$LOG_FILE"
     fi
@@ -286,7 +286,7 @@ main() {
         iteration=$((iteration + 1))
 
         if (( COUNT > 0 && iteration >= COUNT )); then
-            echo -e "\n${GREEN}Monitoring terminé après $COUNT itérations.${NC}"
+            echo -e "\n${GREEN}Monitoring completed après $COUNT itérations.${NC}"
             break
         fi
 
@@ -299,7 +299,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -308,7 +308,7 @@ chmod +x monitor-resources.sh
 # Monitoring continu (Ctrl+C pour arrêter)
 ./monitor-resources.sh
 
-# Rafraîchissement toutes les 5 secondes
+# Rafraîchissement toutes les 5 seconds
 ./monitor-resources.sh -i 5
 
 # 100 mesures puis arrêt

@@ -20,7 +20,7 @@ Vérification complète d'un serveur PostgreSQL.
 Ce script vérifie l'état d'un serveur PostgreSQL :
 - Service et connectivité
 - Bases de données et taille
-- Connexions actives
+- Connections actives
 - Réplication streaming
 - Vacuum et bloat
 - Statistiques I/O
@@ -40,7 +40,7 @@ Ce script vérifie l'état d'un serveur PostgreSQL :
 
 set -o pipefail
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -48,7 +48,7 @@ CYAN='\033[0;36m'
 GRAY='\033[0;90m'
 NC='\033[0m'
 
-# Paramètres par défaut
+# Parameters par défaut
 PG_HOST="localhost"
 PG_PORT="5432"
 PG_USER="postgres"
@@ -59,24 +59,24 @@ CONN_WARNING_PCT=70
 CONN_CRITICAL_PCT=90
 LONG_QUERY_SECONDS=300
 
-# Compteurs
+# Counters
 TOTAL=0
 PASSED=0
 WARNINGS=0
 FAILED=0
 
 #===============================================================================
-# Fonctions
+# Functions
 #===============================================================================
 usage() {
     cat << EOF
 Usage: $0 [options]
 
 Options:
-    -h HOST      Serveur PostgreSQL (défaut: localhost)
-    -p PORT      Port PostgreSQL (défaut: 5432)
-    -U USER      Utilisateur (défaut: postgres)
-    -d DATABASE  Base de données (défaut: postgres)
+    -h HOST      Server PostgreSQL (default: localhost)
+    -p PORT      Port PostgreSQL (default: 5432)
+    -U USER      Utilisateur (default: postgres)
+    -d DATABASE  Base de données (default: postgres)
     --help       Afficher cette aide
 EOF
     exit 0
@@ -130,7 +130,7 @@ while [[ $# -gt 0 ]]; do
         -U) PG_USER="$2"; shift 2 ;;
         -d) PG_DB="$2"; shift 2 ;;
         --help) usage ;;
-        *) echo "Option inconnue: $1"; usage ;;
+        *) echo "Unknown option: $1"; usage ;;
     esac
 done
 
@@ -208,9 +208,9 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════════
-# CHECK 4: Connexions
+# CHECK 4: Connections
 # ═══════════════════════════════════════════════════════════════════
-echo -e "\n${CYAN}[Connexions]${NC}"
+echo -e "\n${CYAN}[Connections]${NC}"
 
 max_connections=$(pg_query "SHOW max_connections")
 current_connections=$(pg_query "SELECT count(*) FROM pg_stat_activity")
@@ -229,7 +229,7 @@ else
     check_result "Connection Usage" "pass" "${conn_pct}%"
 fi
 
-# Connexions par état
+# Connections par état
 echo -e "       ${GRAY}By state:${NC}"
 pg_query_csv "SELECT state, count(*) FROM pg_stat_activity GROUP BY state ORDER BY count DESC" | while IFS='|' read state count; do
     echo -e "       ${GRAY}  - ${state:-idle}: $count${NC}"
@@ -386,7 +386,7 @@ wal_size=$(pg_query "SELECT pg_size_pretty(sum(size)) FROM pg_ls_waldir()" 2>/de
 # Archivage
 archive_mode=$(pg_query "SHOW archive_mode")
 if [[ "$archive_mode" == "on" ]]; then
-    # Vérifier les WAL en attente
+    # Check les WAL en attente
     pending_wal=$(pg_query "SELECT count(*) FROM pg_stat_archiver WHERE last_failed_time > last_archived_time" 2>/dev/null)
     if [[ "$pending_wal" == "1" ]]; then
         check_result "WAL Archiving" "warn" "Archive errors detected"
@@ -425,13 +425,13 @@ fi
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
-# Serveur local
+# Server local
 ./check-postgresql.sh
 
-# Serveur distant
+# Server distant
 ./check-postgresql.sh -h pg.domain.local -U admin -d mydb
 
 # Port personnalisé

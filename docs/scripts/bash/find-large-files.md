@@ -2,7 +2,7 @@
 tags:
   - scripts
   - bash
-  - fichiers
+  - ficyesterdays
   - système
 ---
 
@@ -10,15 +10,15 @@ tags:
 
 :material-star: **Niveau : Débutant**
 
-Recherche des fichiers volumineux sur le système.
+Recherche des ficyesterdays volumineux sur le système.
 
 ---
 
 ## Description
 
-Ce script identifie les fichiers volumineux :
+Ce script identifie les ficyesterdays volumineux :
 - Recherche par taille minimum
-- Filtrage par type de fichier
+- Filtrage par type de ficyesterday
 - Exclusion de répertoires
 - Affichage formaté avec taille lisible
 
@@ -30,14 +30,14 @@ Ce script identifie les fichiers volumineux :
 #!/bin/bash
 #===============================================================================
 # Script Name: find-large-files.sh
-# Description: Recherche fichiers volumineux
+# Description: Recherche ficyesterdays volumineux
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -56,25 +56,25 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS] [PATH]
 
-Recherche fichiers volumineux.
+Recherche ficyesterdays volumineux.
 
 Arguments:
-    PATH            Chemin de recherche (défaut: /)
+    PATH            Chemin de recherche (default: /)
 
 Options:
-    -s, --size SIZE     Taille minimum (défaut: 100M)
+    -s, --size SIZE     Minimum size (default: 100M)
                         Formats: 10M, 1G, 500K
-    -n, --number NUM    Nombre de résultats (défaut: 20)
+    -n, --number NUM    Nombre de résultats (default: 20)
     -t, --type EXT      Filtrer par extension (ex: log, tar.gz)
     -e, --exclude PATH  Exclure un chemin (peut être répété)
     --sort-time         Trier par date de modification
-    -h, --help          Affiche cette aide
+    -h, --help          Show this help
 
-Exemples:
-    $(basename "$0")                        # Fichiers > 100M depuis /
-    $(basename "$0") -s 1G /home            # Fichiers > 1G dans /home
+Examples:
+    $(basename "$0")                        # Ficyesterdays > 100M depuis /
+    $(basename "$0") -s 1G /home            # Ficyesterdays > 1G dans /home
     $(basename "$0") -t log -s 50M /var     # Logs > 50M dans /var
-    $(basename "$0") -n 50 -s 500M          # Top 50 fichiers > 500M
+    $(basename "$0") -n 50 -s 500M          # Top 50 ficyesterdays > 500M
 EOF
 }
 
@@ -146,7 +146,7 @@ main() {
                 exit 0
                 ;;
             -*)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -159,7 +159,7 @@ main() {
 
     # Validation
     if [[ ! -d "$SEARCH_PATH" ]]; then
-        echo -e "${RED}Erreur:${NC} $SEARCH_PATH n'existe pas"
+        echo -e "${RED}Error:${NC} $SEARCH_PATH does not exist"
         exit 1
     fi
 
@@ -195,7 +195,7 @@ main() {
               head -n "$MAX_RESULTS")
 
     if [[ -z "$results" ]]; then
-        echo -e "${YELLOW}Aucun fichier trouvé avec les critères spécifiés.${NC}"
+        echo -e "${YELLOW}Aucun ficyesterday trouvé avec les critères spécifiés.${NC}"
         exit 0
     fi
 
@@ -230,7 +230,7 @@ main() {
 
     # Calculer le total
     local total=$(echo "$results" | awk '{sum+=$1} END {print sum}')
-    echo -e "  Total: ${GREEN}$(format_size $total)${NC} dans $(echo "$results" | wc -l) fichiers"
+    echo -e "  Total: ${GREEN}$(format_size $total)${NC} dans $(echo "$results" | wc -l) ficyesterdays"
 
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
 }
@@ -240,19 +240,19 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
 chmod +x find-large-files.sh
 
-# Recherche par défaut (fichiers > 100M depuis /)
+# Recherche par défaut (ficyesterdays > 100M depuis /)
 sudo ./find-large-files.sh
 
-# Fichiers > 1G dans /home
+# Ficyesterdays > 1G dans /home
 ./find-large-files.sh -s 1G /home
 
-# Top 50 fichiers log > 50M dans /var
+# Top 50 ficyesterdays log > 50M dans /var
 ./find-large-files.sh -t log -s 50M -n 50 /var
 
 # Exclure des chemins
@@ -284,7 +284,7 @@ Recherche en cours...
   189M       2024-01-10 09:30:00  /var/backups/dpkg.status.0
 
 ───────────────────────────────────────────────────────────
-  Total: 5.9G dans 6 fichiers
+  Total: 5.9G dans 6 ficyesterdays
 ═══════════════════════════════════════════════════════════
 ```
 
@@ -295,20 +295,20 @@ Recherche en cours...
 ### Nettoyage Disque
 
 ```bash
-# Trouver les gros fichiers de log
+# Trouver les gros ficyesterdays de log
 ./find-large-files.sh -t log -s 50M /var/log
 
-# Trouver les gros fichiers temporaires
+# Trouver les gros ficyesterdays temporaires
 ./find-large-files.sh -s 100M /tmp /var/tmp
 ```
 
 ### Audit Stockage
 
 ```bash
-# Top 100 fichiers du système
+# Top 100 ficyesterdays du système
 sudo ./find-large-files.sh -n 100 -s 500M /
 
-# Gros fichiers utilisateur
+# Gros ficyesterdays utilisateur
 ./find-large-files.sh -s 1G /home/user
 ```
 

@@ -10,7 +10,7 @@ tags:
 
 :material-star: **Niveau : Débutant**
 
-Test de connectivité réseau avec diagnostic complet.
+Network connectivity test avec diagnostic complet.
 
 ---
 
@@ -31,7 +31,7 @@ Ce script vérifie la connectivité réseau :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Test de connectivité réseau avec diagnostic.
+    Network connectivity test avec diagnostic.
 
 .DESCRIPTION
     Vérifie la connectivité réseau locale et Internet,

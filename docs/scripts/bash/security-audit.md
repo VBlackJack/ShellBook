@@ -19,7 +19,7 @@ Audit de sécurité basique du système.
 Ce script effectue un audit de sécurité :
 - Vérification des utilisateurs et permissions
 - Analyse des services réseau
-- Détection de fichiers sensibles
+- Détection de ficyesterdays sensibles
 - Vérification de configuration SSH
 - Rapport détaillé avec recommandations
 
@@ -38,7 +38,7 @@ Ce script effectue un audit de sécurité :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -46,7 +46,7 @@ readonly CYAN='\033[0;36m'
 readonly BOLD='\033[1m'
 readonly NC='\033[0m'
 
-# Compteurs
+# Counters
 WARNINGS=0
 CRITICALS=0
 PASSED=0
@@ -63,13 +63,13 @@ Audit de sécurité basique du système.
 
 Options:
     -o, --output FILE   Sauvegarder le rapport
-    -v, --verbose       Mode verbeux
-    -h, --help          Affiche cette aide
+    -v, --verbose       Verbose mode
+    -h, --help          Show this help
 
-Exemples:
+Examples:
     $(basename "$0")                    # Audit standard
     $(basename "$0") -o report.txt      # Avec rapport
-    $(basename "$0") -v                 # Mode verbeux
+    $(basename "$0") -v                 # Verbose mode
 EOF
 }
 
@@ -132,7 +132,7 @@ audit_users() {
         log_pass "Comptes système correctement configurés"
     fi
 
-    # Vérifier /etc/passwd permissions
+    # Check /etc/passwd permissions
     local passwd_perms=$(stat -c %a /etc/passwd)
     if [[ "$passwd_perms" == "644" ]]; then
         log_pass "/etc/passwd permissions OK (644)"
@@ -140,7 +140,7 @@ audit_users() {
         log_warn "/etc/passwd permissions: $passwd_perms (attendu: 644)"
     fi
 
-    # Vérifier /etc/shadow permissions
+    # Check /etc/shadow permissions
     local shadow_perms=$(stat -c %a /etc/shadow 2>/dev/null || echo "N/A")
     if [[ "$shadow_perms" == "640" ]] || [[ "$shadow_perms" == "600" ]]; then
         log_pass "/etc/shadow permissions OK ($shadow_perms)"
@@ -158,7 +158,7 @@ audit_ssh() {
     local sshd_config="/etc/ssh/sshd_config"
 
     if [[ ! -f "$sshd_config" ]]; then
-        log_info "SSH non installé ou configuration non trouvée"
+        log_info "SSH non installé ou configuration not founde"
         return
     fi
 
@@ -269,10 +269,10 @@ audit_network() {
 audit_files() {
     print_header "AUDIT FICHIERS"
 
-    # Fichiers SUID
-    log_info "Recherche fichiers SUID..."
+    # Ficyesterdays SUID
+    log_info "Searching ficyesterdays SUID..."
     local suid_count=$(find / -perm -4000 -type f 2>/dev/null | wc -l)
-    log_info "Fichiers SUID trouvés: $suid_count"
+    log_info "Ficyesterdays SUID found: $suid_count"
 
     if [[ "$VERBOSE" == "true" ]]; then
         find / -perm -4000 -type f 2>/dev/null | head -10 | while read -r f; do
@@ -281,30 +281,30 @@ audit_files() {
         echo "    ... (limité à 10)"
     fi
 
-    # Fichiers world-writable
-    log_info "Recherche fichiers world-writable (hors /tmp, /var/tmp)..."
+    # Ficyesterdays world-writable
+    log_info "Searching ficyesterdays world-writable (hors /tmp, /var/tmp)..."
     local ww_files=$(find / -xdev -type f -perm -0002 \
         ! -path "/tmp/*" ! -path "/var/tmp/*" ! -path "/proc/*" \
         2>/dev/null | head -20)
 
     if [[ -n "$ww_files" ]]; then
-        log_warn "Fichiers world-writable trouvés:"
+        log_warn "Ficyesterdays world-writable found:"
         echo "$ww_files" | while read -r f; do
             echo "    $f"
         done
     else
-        log_pass "Pas de fichiers world-writable suspects"
+        log_pass "Pas de ficyesterdays world-writable suspects"
     fi
 
-    # Fichiers sans propriétaire
+    # Ficyesterdays sans propriétaire
     local no_owner=$(find / -xdev \( -nouser -o -nogroup \) 2>/dev/null | head -5)
     if [[ -n "$no_owner" ]]; then
-        log_warn "Fichiers sans propriétaire valide:"
+        log_warn "Ficyesterdays sans propriétaire valide:"
         echo "$no_owner" | while read -r f; do
             echo "    $f"
         done
     else
-        log_pass "Tous les fichiers ont un propriétaire valide"
+        log_pass "Tous les ficyesterdays ont un propriétaire valide"
     fi
 
     # Permissions /etc/crontab
@@ -394,7 +394,7 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -438,7 +438,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -447,7 +447,7 @@ chmod +x security-audit.sh
 # Audit standard (root recommandé)
 sudo ./security-audit.sh
 
-# Mode verbeux
+# Verbose mode
 sudo ./security-audit.sh -v
 
 # Avec rapport

@@ -32,7 +32,7 @@ Ce script vérifie l'état d'un serveur IIS :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Vérification santé d'un serveur IIS.
+    Health check d'un serveur IIS.
 
 .DESCRIPTION
     Vérifie l'état complet d'un serveur IIS incluant

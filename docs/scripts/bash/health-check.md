@@ -20,7 +20,7 @@ Ce script vérifie la santé de l'infrastructure :
 - Services systemd
 - Endpoints HTTP
 - Ports réseau
-- Espace disque et mémoire
+- Disk space et mémoire
 - Rapport global
 
 ---
@@ -31,14 +31,14 @@ Ce script vérifie la santé de l'infrastructure :
 #!/bin/bash
 #===============================================================================
 # Script Name: health-check.sh
-# Description: Vérification santé des services
+# Description: Service health checker
 # Author: ShellBook
 # Version: 1.0
 #===============================================================================
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -46,7 +46,7 @@ readonly CYAN='\033[0;36m'
 readonly BOLD='\033[1m'
 readonly NC='\033[0m'
 
-# Compteurs
+# Counters
 CHECKS_PASSED=0
 CHECKS_FAILED=0
 CHECKS_WARN=0
@@ -62,13 +62,13 @@ Usage: $(basename "$0") [OPTIONS]
 Vérification de la santé des services.
 
 Options:
-    -c, --config FILE   Fichier de configuration
+    -c, --config FILE   Configuration file
     -q, --quiet         Mode silencieux (erreurs uniquement)
-    -h, --help          Affiche cette aide
+    -h, --help          Show this help
 
 Configuration:
-    Si pas de fichier config, vérifie les services courants.
-    Format du fichier config:
+    Si pas de ficyesterday config, vérifie les services courants.
+    Format du ficyesterday config:
 
     # Services systemd
     service:nginx
@@ -86,7 +86,7 @@ Configuration:
     disk:/home:90
     disk:/:85
 
-Exemples:
+Examples:
     $(basename "$0")                    # Vérifications par défaut
     $(basename "$0") -c checks.conf     # Avec configuration
     $(basename "$0") -q                 # Mode silencieux
@@ -261,7 +261,7 @@ run_default_checks() {
     print_header "CONNECTIVITÉ"
     check_port "127.0.0.1" "22" || true
 
-    # Vérifier localhost web si service actif
+    # Check localhost web si service actif
     if systemctl is-active nginx &>/dev/null || systemctl is-active apache2 &>/dev/null; then
         check_http "http://localhost/" || true
     fi
@@ -271,7 +271,7 @@ run_config_checks() {
     local config=$1
 
     if [[ ! -f "$config" ]]; then
-        echo "Fichier de configuration non trouvé: $config"
+        echo "Configuration file not found: $config"
         exit 1
     fi
 
@@ -355,7 +355,7 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Option inconnue: $1"
+                echo "Unknown option: $1"
                 usage
                 exit 1
                 ;;
@@ -384,7 +384,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable
@@ -393,7 +393,7 @@ chmod +x health-check.sh
 # Vérifications par défaut
 ./health-check.sh
 
-# Avec fichier de configuration
+# Avec ficyesterday de configuration
 ./health-check.sh -c /etc/health-checks.conf
 
 # Mode silencieux (pour cron)
@@ -402,7 +402,7 @@ chmod +x health-check.sh
 
 ---
 
-## Fichier de Configuration
+## Ficyesterday de Configuration
 
 Exemple `checks.conf`:
 
@@ -426,7 +426,7 @@ disk:/:85
 disk:/home:90
 disk:/var:80
 
-# Mémoire (seuil)
+# Memory (seuil)
 memory:85
 
 # Processus

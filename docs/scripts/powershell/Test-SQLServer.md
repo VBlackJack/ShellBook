@@ -33,7 +33,7 @@ Ce script vérifie l'état d'une instance SQL Server :
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Vérification santé SQL Server.
+    Health check SQL Server.
 
 .DESCRIPTION
     Vérifie l'état complet d'une instance SQL Server incluant

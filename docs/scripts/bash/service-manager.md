@@ -37,7 +37,7 @@ Ce script facilite la gestion des services :
 
 set -euo pipefail
 
-# Couleurs
+# Colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly YELLOW='\033[1;33m'
@@ -63,9 +63,9 @@ Commands:
     health                  Vérifie la santé des services
 
 Options:
-    -h, --help              Affiche cette aide
+    -h, --help              Show this help
 
-Exemples:
+Examples:
     $(basename "$0") list
     $(basename "$0") status nginx
     $(basename "$0") restart apache2
@@ -158,7 +158,7 @@ service_action() {
     if systemctl "$action" "$service"; then
         echo -e "${GREEN}[OK]${NC} $service $action"
 
-        # Afficher le nouveau statut
+        # Display le nouveau statut
         sleep 1
         local status=$(systemctl is-active "$service" 2>/dev/null || echo "unknown")
         echo -e "  Nouveau statut: $status"
@@ -195,7 +195,7 @@ health_check() {
         fi
     done
 
-    # Services échoués
+    # Services faileds
     echo ""
     echo -e "  ${BOLD}Services Échoués:${NC}"
 
@@ -207,12 +207,12 @@ health_check() {
             echo -e "    ${RED}✗${NC} $unit"
         done
     else
-        echo -e "    ${GREEN}Aucun service échoué${NC}"
+        echo -e "    ${GREEN}Aucun service failed${NC}"
     fi
 
     # Services avec beaucoup de mémoire
     echo ""
-    echo -e "  ${BOLD}Top 5 Services (Mémoire):${NC}"
+    echo -e "  ${BOLD}Top 5 Services (Memory):${NC}"
 
     systemctl list-units --type=service --state=running --no-pager 2>/dev/null | \
         grep "\.service" | \
@@ -261,14 +261,14 @@ main() {
             ;;
         start|stop|restart|enable|disable|reload)
             if [[ $# -eq 0 ]]; then
-                echo "Erreur: Service requis"
+                echo "Error: Service requis"
                 exit 1
             fi
             service_action "$command" "$1"
             ;;
         logs)
             if [[ $# -eq 0 ]]; then
-                echo "Erreur: Service requis"
+                echo "Error: Service requis"
                 exit 1
             fi
             show_logs "$@"
@@ -292,7 +292,7 @@ main "$@"
 
 ---
 
-## Utilisation
+## Usage
 
 ```bash
 # Rendre exécutable

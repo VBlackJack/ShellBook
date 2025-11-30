@@ -60,7 +60,7 @@ except ImportError:
     print("Warning: docker module not installed. Run: pip install docker")
 
 
-# Couleurs ANSI
+# Colors ANSI
 class Colors:
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -116,7 +116,7 @@ class DockerHealthChecker:
         ))
 
     def check_daemon(self) -> bool:
-        """Vérifie la connectivité au daemon Docker"""
+        """Check la connectivité au daemon Docker"""
         if not self.connected:
             self.add_result(
                 "Docker Daemon",
@@ -144,7 +144,7 @@ class DockerHealthChecker:
             return False
 
     def check_containers(self):
-        """Vérifie l'état des containers"""
+        """Check l'état des containers"""
         try:
             containers = self.client.containers.list(all=True)
 
@@ -174,7 +174,7 @@ class DockerHealthChecker:
                 else:
                     stopped += 1
 
-            # Résultat
+            # Result
             details = []
             if unhealthy:
                 details.append(f"Unhealthy: {', '.join(unhealthy)}")
@@ -208,7 +208,7 @@ class DockerHealthChecker:
             self.add_result("Containers", "fail", f"Cannot list containers: {e}")
 
     def check_container_resources(self):
-        """Vérifie les ressources des containers"""
+        """Check les ressources des containers"""
         try:
             containers = self.client.containers.list()
 
@@ -269,7 +269,7 @@ class DockerHealthChecker:
             self.add_result("Container Resources", "fail", f"Cannot get stats: {e}")
 
     def check_images(self):
-        """Vérifie les images Docker"""
+        """Check les images Docker"""
         try:
             images = self.client.images.list()
 
@@ -304,7 +304,7 @@ class DockerHealthChecker:
             self.add_result("Images", "fail", f"Cannot list images: {e}")
 
     def check_volumes(self):
-        """Vérifie les volumes Docker"""
+        """Check les volumes Docker"""
         try:
             volumes = self.client.volumes.list()
 
@@ -342,7 +342,7 @@ class DockerHealthChecker:
             self.add_result("Volumes", "fail", f"Cannot list volumes: {e}")
 
     def check_networks(self):
-        """Vérifie les réseaux Docker"""
+        """Check les réseaux Docker"""
         try:
             networks = self.client.networks.list()
 
@@ -359,7 +359,7 @@ class DockerHealthChecker:
             self.add_result("Networks", "fail", f"Cannot list networks: {e}")
 
     def check_disk_usage(self):
-        """Vérifie l'utilisation disque Docker"""
+        """Check l'utilisation disque Docker"""
         try:
             df = self.client.df()
 
@@ -398,7 +398,7 @@ class DockerHealthChecker:
             self.add_result("Disk Usage", "fail", f"Cannot get disk usage: {e}")
 
     def check_container_logs(self, tail: int = 50):
-        """Vérifie les logs des containers en erreur"""
+        """Check les logs des containers en erreur"""
         try:
             containers = self.client.containers.list(all=True)
 
@@ -444,7 +444,7 @@ class DockerHealthChecker:
             self.add_result("Container Logs", "fail", f"Cannot get logs: {e}")
 
     def check_swarm(self):
-        """Vérifie le mode Swarm si actif"""
+        """Check le mode Swarm si actif"""
         try:
             info = self.client.info()
             swarm_info = info.get('Swarm', {})
@@ -483,7 +483,7 @@ class DockerHealthChecker:
         self.check_swarm()
 
     def print_results(self):
-        """Affiche les résultats"""
+        """Display les résultats"""
         print(f"\n{Colors.CYAN}{'='*70}{Colors.RESET}")
         print(f"{Colors.GREEN}  DOCKER HEALTH CHECK{Colors.RESET}")
         print(f"{Colors.CYAN}{'='*70}{Colors.RESET}")
