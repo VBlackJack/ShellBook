@@ -79,6 +79,7 @@ nav:
     - 🚀 Démarrage:
       - Clés SSH: linux/ssh-keys.md
       - Productivité: linux/productivity.md
+      - Bashrc Optimisé: linux/bashrc-config.md
       - Outils Modernes: linux/modern-tools.md
       - Bash Wizardry: linux/bash-wizardry.md
       - Traitement Texte: linux/text-processing.md
@@ -475,6 +476,7 @@ nav:
     - 📋 Conformité:
       - SecNumCloud: security/secnumcloud.md
       - Guides ANSSI: security/anssi-guides.md
+      - Checklist Audit: security/audit-checklist.md
     - 🔐 Cryptographie & PKI:
       - Concepts Crypto: security/crypto-concepts.md
       - Certificats: security/certificates.md
