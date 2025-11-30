@@ -158,7 +158,7 @@ Le déploiement sur GitHub Pages est automatique via GitHub Actions.
 ## 📊 Statistiques
 
 - **Guides & Modules** : 350+ fichiers Markdown
-- **Scripts** : 54 (29 Bash, 10 Python, 15 PowerShell)
+- **Scripts** : 59 (31 Bash, 12 Python, 16 PowerShell)
 - **Formations** : 23 parcours complets (500h+)
 - **Templates CI/CD** : GitLab CI, GitHub Actions, Dockerfile
 
@@ -172,5 +172,5 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 <div align="center">
   <p><strong>Built with ❤️ for SysAdmin & DevOps Engineers.</strong></p>
-  <p>📚 350+ Guides • 🛠️ 54 Scripts • 🎓 23 Formations • ⚡ CLI Unifié</p>
+  <p>📚 350+ Guides • 🛠️ 59 Scripts • 🎓 23 Formations • ⚡ CLI Unifié</p>
 </div>

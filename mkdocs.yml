@@ -116,6 +116,8 @@ nav:
         - service-manager.sh: scripts/bash/service-manager.md
         - health-check.sh: scripts/bash/health-check.md
         - logrotate-builder.sh: scripts/bash/logrotate-builder.md
+        - cron-watchdog.sh: scripts/bash/cron-watchdog.md
+        - log-rotation-manager.sh: scripts/bash/log-rotation-manager.md
       - Conteneurs:
         - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
         - container-net-debug.sh: scripts/bash/container-net-debug.md
@@ -144,6 +146,7 @@ nav:
         - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
       - Sécurité & Audit:
         - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
+        - New-BulkUsers.ps1: scripts/powershell/New-BulkUsers.md
       - Infrastructure Windows:
         - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
         - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
@@ -158,8 +161,10 @@ nav:
         - system_info.py: scripts/python/system_info.md
       - Monitoring:
         - health_checker.py: scripts/python/health_checker.md
+        - api_health_monitor.py: scripts/python/api_health_monitor.md
       - Fichiers:
         - backup_manager.py: scripts/python/backup_manager.md
+        - backup_validator.py: scripts/python/backup_validator.md
       - Conteneurs:
         - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
         - docker_health.py: scripts/python/docker_health.md
