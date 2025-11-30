@@ -51,6 +51,18 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 | [Get-ServiceStatus.ps1](Get-ServiceStatus.md) | Gestion des services Windows | :material-star: |
 | [Test-ServiceHealth.ps1](Test-ServiceHealth.md) | Vérification santé des services | :material-star::material-star: |
 
+## Infrastructure Windows
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [Test-WSUSHealth.ps1](Test-WSUSHealth.md) | Vérification santé serveur WSUS | :material-star::material-star: |
+| [Test-ADHealth.ps1](Test-ADHealth.md) | Vérification complète Active Directory | :material-star::material-star::material-star: |
+| [Test-DNSServer.ps1](Test-DNSServer.md) | Vérification serveur DNS Windows | :material-star::material-star: |
+| [Test-DHCPServer.ps1](Test-DHCPServer.md) | Vérification serveur DHCP Windows | :material-star::material-star: |
+| [Test-SQLServer.ps1](Test-SQLServer.md) | Vérification instance SQL Server | :material-star::material-star: |
+| [Test-IISHealth.ps1](Test-IISHealth.md) | Vérification serveur IIS | :material-star::material-star: |
+| [Test-PKIHealth.ps1](Test-PKIHealth.md) | Vérification PKI / AD CS | :material-star::material-star::material-star: |
+
 ---
 
 ## Template de Script

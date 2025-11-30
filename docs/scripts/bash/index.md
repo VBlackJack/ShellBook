@@ -51,6 +51,17 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [service-manager.sh](service-manager.md) | Gestion des services systemd | :material-star: |
 | [health-check.sh](health-check.md) | Vérification santé des services | :material-star::material-star: |
 
+## Infrastructure Linux
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [check-ldap.sh](check-ldap.md) | Vérification serveur LDAP/OpenLDAP | :material-star::material-star: |
+| [check-bind.sh](check-bind.md) | Vérification serveur DNS BIND | :material-star::material-star: |
+| [check-mysql.sh](check-mysql.md) | Vérification serveur MySQL/MariaDB | :material-star::material-star: |
+| [check-postgresql.sh](check-postgresql.md) | Vérification serveur PostgreSQL | :material-star::material-star: |
+| [check-nginx.sh](check-nginx.md) | Vérification serveur Nginx | :material-star::material-star: |
+| [check-postfix.sh](check-postfix.md) | Vérification serveur mail Postfix | :material-star::material-star: |
+
 ---
 
 ## Template de Script

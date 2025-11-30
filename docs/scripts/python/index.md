@@ -43,6 +43,14 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 | [log_analyzer.py](log_analyzer.md) | Analyse de logs | :material-star::material-star: |
 | [alert_sender.py](alert_sender.md) | Envoi d'alertes (email/Slack) | :material-star::material-star: |
 
+## DevOps & Cloud
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [cert_checker.py](cert_checker.md) | Vérification certificats SSL/TLS | :material-star::material-star: |
+| [kubernetes_health.py](kubernetes_health.md) | Vérification santé cluster Kubernetes | :material-star::material-star::material-star: |
+| [docker_health.py](docker_health.md) | Vérification santé Docker | :material-star::material-star: |
+
 ---
 
 ## Template de Script

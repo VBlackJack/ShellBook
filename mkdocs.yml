@@ -585,6 +585,13 @@ nav:
       - Services:
         - service-manager.sh: scripts/bash/service-manager.md
         - health-check.sh: scripts/bash/health-check.md
+      - Infrastructure Linux:
+        - check-ldap.sh: scripts/bash/check-ldap.md
+        - check-bind.sh: scripts/bash/check-bind.md
+        - check-mysql.sh: scripts/bash/check-mysql.md
+        - check-postgresql.sh: scripts/bash/check-postgresql.md
+        - check-nginx.sh: scripts/bash/check-nginx.md
+        - check-postfix.sh: scripts/bash/check-postfix.md
     - 🔷 PowerShell:
       - Index: scripts/powershell/index.md
       - Système:
@@ -597,6 +604,14 @@ nav:
         - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
       - Services:
         - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
+      - Infrastructure Windows:
+        - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
+        - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
+        - Test-DNSServer.ps1: scripts/powershell/Test-DNSServer.md
+        - Test-DHCPServer.ps1: scripts/powershell/Test-DHCPServer.md
+        - Test-SQLServer.ps1: scripts/powershell/Test-SQLServer.md
+        - Test-IISHealth.ps1: scripts/powershell/Test-IISHealth.md
+        - Test-PKIHealth.ps1: scripts/powershell/Test-PKIHealth.md
     - 🐍 Python:
       - Index: scripts/python/index.md
       - Système:
@@ -605,6 +620,10 @@ nav:
         - health_checker.py: scripts/python/health_checker.md
       - Fichiers:
         - backup_manager.py: scripts/python/backup_manager.md
+      - DevOps & Cloud:
+        - cert_checker.py: scripts/python/cert_checker.md
+        - kubernetes_health.py: scripts/python/kubernetes_health.md
+        - docker_health.py: scripts/python/docker_health.md
 
   # ══════════════════════════════════════════════════════════════
   # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
