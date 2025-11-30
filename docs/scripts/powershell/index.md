@@ -7,7 +7,7 @@ tags:
 
 # Scripts PowerShell
 
-Collection de scripts PowerShell pour l'administration Windows et cross-platform. **16 scripts disponibles.**
+Collection de scripts PowerShell pour l'administration Windows et cross-platform. **23 scripts disponibles.**
 
 ---
 
@@ -23,12 +23,21 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 |--------|-------------|--------|
 | [Get-SystemInfo.ps1](Get-SystemInfo.md) | Informations système complètes | :material-star: |
 | [Test-DiskSpace.ps1](Test-DiskSpace.md) | Vérification espace disque avec alertes | :material-star: |
+| [Get-PendingReboot.ps1](Get-PendingReboot.md) | Détection redémarrages en attente | :material-star: |
+| [Export-EventLogs.ps1](Export-EventLogs.md) | Export journaux Windows (CSV/JSON/EVTX) | :material-star::material-star: |
 
 ## Réseau
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [Test-NetworkConnectivity.ps1](Test-NetworkConnectivity.md) | Test de connectivité réseau | :material-star: |
+
+## Sécurité & Certificats
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [Test-SSLCertificates.ps1](Test-SSLCertificates.md) | Vérification certificats SSL/TLS multi-endpoints | :material-star::material-star: |
+| [Audit-LocalAdmins.ps1](Audit-LocalAdmins.md) | Audit des administrateurs locaux | :material-star::material-star: |
 
 ## Fichiers & Backup
 
@@ -43,17 +52,20 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 |--------|-------------|--------|
 | [New-BulkUsers.ps1](New-BulkUsers.md) | Création utilisateurs en masse (AD + Local) | :material-star::material-star: |
 
-## Sécurité & Audit
-
-| Script | Description | Niveau |
-|--------|-------------|--------|
-| [Audit-LocalAdmins.ps1](Audit-LocalAdmins.md) | Audit des administrateurs locaux | :material-star::material-star: |
-
 ## Services
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [Get-ServiceStatus.ps1](Get-ServiceStatus.md) | Gestion des services Windows | :material-star: |
+
+## Patch Management
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [Get-WindowsUpdateStatus.ps1](Get-WindowsUpdateStatus.md) | Diagnostic complet WU/WSUS/SCCM | :material-star::material-star: |
+| [Invoke-PrePatchPreparation.ps1](Invoke-PrePatchPreparation.md) | Préparation pré-patching (nettoyage, vérifications) | :material-star::material-star::material-star: |
+| [Repair-WindowsUpdate.ps1](Repair-WindowsUpdate.md) | Réparation automatique Windows Update | :material-star::material-star::material-star: |
+| [Get-PatchCompliance.ps1](Get-PatchCompliance.md) | Rapport conformité patchs avec scoring | :material-star::material-star::material-star: |
 
 ## Infrastructure Windows
 
