@@ -10,6 +10,10 @@ tags:
 
 Un guide pratique pour choisir la bonne base de données selon votre cas d'usage.
 
+!!! info "Guides Pratiques"
+    Pour l'administration opérationnelle, voir la **[Section Bases de Données](../databases/index.md)** :
+    [PostgreSQL](../databases/postgresql.md) | [MariaDB](../databases/mariadb.md) | [Redis](../databases/redis.md) | [Haute Dispo](../databases/high-availability.md)
+
 ---
 
 !!! tip "Guide de Décision Rapide"

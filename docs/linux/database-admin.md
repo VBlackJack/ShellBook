@@ -11,6 +11,14 @@ tags:
 
 Administration des bases de données relationnelles sous Linux.
 
+!!! tip "Section Dédiée"
+    Pour des guides complets, consultez la **[Section Bases de Données](../databases/index.md)** :
+
+    - [PostgreSQL](../databases/postgresql.md) - Installation, tuning, backup, monitoring
+    - [MariaDB/MySQL](../databases/mariadb.md) - Configuration, réplication, maintenance
+    - [Redis](../databases/redis.md) - Cache, sessions, pub/sub
+    - [Haute Disponibilité](../databases/high-availability.md) - Patroni, Galera
+
 ---
 
 ## MariaDB/MySQL : Les Bases Ops
