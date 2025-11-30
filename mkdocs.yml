@@ -74,6 +74,10 @@ markdown_extensions:
 
 nav:
   - 🏠 Accueil: index.md
+
+  # ══════════════════════════════════════════════════════════════
+  # PYTHON
+  # ══════════════════════════════════════════════════════════════
   - 🐍 Python:
     - Accueil: python/index.md
     - Fondamentaux: python/fundamentals.md
@@ -81,8 +85,50 @@ nav:
     - API & Réseau: python/api-network.md
     - Cloud & AWS: python/cloud-aws.md
     - Tests & Qualité: python/testing.md
+
+  # ══════════════════════════════════════════════════════════════
+  # LINUX + FORMATION LINUX MASTERY
+  # ══════════════════════════════════════════════════════════════
   - 🐧 Linux:
     - Accueil: linux/index.md
+    - 🎓 Formation Linux Mastery (150h):
+      - Programme: formations/linux-mastery/index.md
+      - Niveau 1 - Fondations (30h):
+        - Module 01 - Découverte: formations/linux-mastery/01-decouverte.md
+        - Module 02 - Navigation: formations/linux-mastery/02-navigation.md
+        - Module 03 - Permissions: formations/linux-mastery/03-permissions.md
+        - Module 04 - Éditeurs: formations/linux-mastery/04-editeurs.md
+        - Module 05 - Shell Intro: formations/linux-mastery/05-shell-intro.md
+      - Niveau 2 - Administration (35h):
+        - Module 06 - Paquets: formations/linux-mastery/06-paquets.md
+        - Module 07 - Services: formations/linux-mastery/07-services.md
+        - Module 08 - Stockage: formations/linux-mastery/08-stockage.md
+        - Module 09 - Réseau: formations/linux-mastery/09-reseau.md
+        - Module 10 - Automatisation: formations/linux-mastery/10-automatisation.md
+      - Niveau 3 - Ingénierie (40h):
+        - Module 11 - Sécurité: formations/linux-mastery/11-securite.md
+        - Module 12 - Services Réseau: formations/linux-mastery/12-services-reseau.md
+        - Module 13 - Performance: formations/linux-mastery/13-performance.md
+        - Module 14 - Scripting Avancé: formations/linux-mastery/14-scripting-avance.md
+        - Module 15 - Backup: formations/linux-mastery/15-backup.md
+      - Niveau 4 - Expert (45h):
+        - Module 16 - Haute Dispo: formations/linux-mastery/16-haute-disponibilite.md
+        - Module 17 - Conteneurs: formations/linux-mastery/17-conteneurs.md
+        - Module 18 - Kubernetes: formations/linux-mastery/18-kubernetes.md
+        - Module 19 - IaC: formations/linux-mastery/19-iac.md
+        - Module 20 - Projet Final: formations/linux-mastery/20-projet-final.md
+      - Ressources:
+        - Glossaire: formations/linux-mastery/glossaire.md
+        - Cheatsheet Commandes: formations/linux-mastery/cheatsheet-commandes.md
+        - Cheatsheet Vim: formations/linux-mastery/cheatsheet-vim.md
+        - Checklist Hardening: formations/linux-mastery/checklist-hardening.md
+    - 🎓 Formation Hardening Linux (10h):
+      - Programme: formations/linux-hardening/index.md
+      - Module 01 - SSH: formations/linux-hardening/01-module.md
+      - Module 02 - Users: formations/linux-hardening/02-module.md
+      - Module 03 - Firewall: formations/linux-hardening/03-module.md
+      - Module 04 - Audit: formations/linux-hardening/04-module.md
+      - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
     - 🚀 Démarrage:
       - Clés SSH: linux/ssh-keys.md
       - Productivité: linux/productivity.md
@@ -128,9 +174,81 @@ nav:
       - Logs: linux/logs-management.md
       - Backup & Transfert: linux/backup-transfer.md
       - Archives: linux/archives-compression.md
+
+  # ══════════════════════════════════════════════════════════════
+  # WINDOWS + FORMATIONS WINDOWS
+  # ══════════════════════════════════════════════════════════════
   - 🪟 Windows:
     - Accueil: windows/index.md
     - Cartes Mentales: windows/windows-mindmaps.md
+    - 🎓 Formation Windows Mastery (150h):
+      - Programme: formations/windows-mastery/index.md
+      - Niveau 1 - Fondations (30h):
+        - Module 01 - Découverte: formations/windows-mastery/01-decouverte.md
+        - Module 02 - PowerShell: formations/windows-mastery/02-powershell-basics.md
+        - Module 03 - Users & NTFS: formations/windows-mastery/03-utilisateurs-ntfs.md
+        - Module 04 - Outils Admin: formations/windows-mastery/04-outils-administration.md
+        - Module 05 - Scripting Intro: formations/windows-mastery/05-scripting-intro.md
+      - Niveau 2 - Administration (35h):
+        - Module 06 - Rôles: formations/windows-mastery/06-roles-features.md
+        - Module 07 - Services: formations/windows-mastery/07-services-processus.md
+        - Module 08 - Stockage: formations/windows-mastery/08-stockage-disques.md
+        - Module 09 - DNS & DHCP: formations/windows-mastery/09-reseau-dns-dhcp.md
+        - Module 10 - Automatisation: formations/windows-mastery/10-automatisation-basique.md
+      - Niveau 3 - Ingénierie (40h):
+        - Module 11 - Active Directory: formations/windows-mastery/11-active-directory-core.md
+        - Module 12 - GPO: formations/windows-mastery/12-gpo-configuration.md
+        - Module 13 - Sécurité: formations/windows-mastery/13-securite-hardening.md
+        - Module 14 - PKI & RADIUS: formations/windows-mastery/14-services-reseau-avances.md
+        - Module 15 - Backup & DR: formations/windows-mastery/15-backup-disaster-recovery.md
+      - Niveau 4 - Expert (45h):
+        - Module 16 - Haute Dispo: formations/windows-mastery/16-haute-disponibilite.md
+        - Module 17 - Conteneurs: formations/windows-mastery/17-conteneurs-windows.md
+        - Module 18 - Hybrid Cloud: formations/windows-mastery/18-hybrid-cloud.md
+        - Module 19 - IaC & DSC: formations/windows-mastery/19-infrastructure-as-code.md
+        - Module 20 - Projet Final: formations/windows-mastery/20-projet-final.md
+      - Ressources:
+        - Glossaire: formations/windows-mastery/glossaire.md
+        - Cheatsheet PowerShell: formations/windows-mastery/cheatsheet-powershell.md
+        - Cheatsheet AD: formations/windows-mastery/cheatsheet-active-directory.md
+        - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
+    - 🎓 Formation Hardening Windows (10h):
+      - Programme: formations/windows-hardening/index.md
+      - Module 01 - Baselines: formations/windows-hardening/01-module.md
+      - Module 02 - Services: formations/windows-hardening/02-module.md
+      - Module 03 - Firewall: formations/windows-hardening/03-module.md
+      - Module 04 - AD: formations/windows-hardening/04-module.md
+      - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
+    - 🎓 Formations Écosystème Microsoft:
+      - ♻️ Windows Patching (12h):
+        - Programme: formations/windows-patching/index.md
+        - Module 01 - Architecture: formations/windows-patching/01-module.md
+        - Module 02 - Gestion: formations/windows-patching/02-module.md
+        - Module 03 - Clients: formations/windows-patching/03-module.md
+        - Module 04 - Maintenance: formations/windows-patching/04-module.md
+        - Module 05 - TP Final: formations/windows-patching/05-tp-final.md
+      - 🍫 Chocolatey Factory (12h):
+        - Programme: formations/chocolatey/index.md
+        - Module 01 - Client CLI: formations/chocolatey/01-module.md
+        - Module 02 - Packaging: formations/chocolatey/02-module.md
+        - Module 03 - Serveur: formations/chocolatey/03-module.md
+        - Module 04 - Déploiement: formations/chocolatey/04-module.md
+        - Module 05 - TP Final: formations/chocolatey/05-tp-final.md
+      - 💿 NTLite Mastery (18h):
+        - Programme: formations/ntlite/index.md
+        - Module 01 - Bases: formations/ntlite/01-module.md
+        - Module 02 - Debloating: formations/ntlite/02-module.md
+        - Module 03 - Intégration: formations/ntlite/03-module.md
+        - Module 04 - Automatisation: formations/ntlite/04-module.md
+        - Module 05 - TP Final: formations/ntlite/05-tp-final.md
+        - Module 06 - Cas VPN: formations/ntlite/06-scenario-vpn.md
+      - 🛢️ SQL Server DBA (22h):
+        - Programme: formations/sql-server/index.md
+        - Module 01 - Architecture: formations/sql-server/01-module.md
+        - Module 02 - Sécurité: formations/sql-server/02-module.md
+        - Module 03 - Maintenance: formations/sql-server/03-module.md
+        - Module 04 - Automatisation: formations/sql-server/04-module.md
+        - Module 05 - TP Final: formations/sql-server/05-tp-final.md
     - 🚀 Démarrage:
       - Productivité: windows/productivity.md
       - PowerShell Bases: windows/powershell-foundations.md
@@ -181,6 +299,67 @@ nav:
       - DSC: windows/powershell-dsc.md
       - Modules: windows/powershell-modules.md
       - WMI & CIM: windows/wmi-cim.md
+
+  # ══════════════════════════════════════════════════════════════
+  # CLOUD + FORMATIONS CLOUD
+  # ══════════════════════════════════════════════════════════════
+  - ☁️ Cloud:
+    - 🎓 Formation Cloud Fundamentals (35h):
+      - Programme: formations/cloud-fundamentals/index.md
+      - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
+      - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
+      - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
+      - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
+      - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
+      - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
+      - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
+      - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
+      - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
+      - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
+      - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+      - Ressources:
+        - Glossaire: formations/cloud-fundamentals/glossaire.md
+        - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
+    - 🎓 Formation GCP (35h):
+      - Programme: formations/gcp-fundamentals/index.md
+      - Module 01 - Console & IAM: formations/gcp-fundamentals/01-module.md
+      - Module 02 - Compute Engine: formations/gcp-fundamentals/02-module.md
+      - Module 03 - Networking: formations/gcp-fundamentals/03-module.md
+      - Module 04 - Storage: formations/gcp-fundamentals/04-module.md
+      - Module 05 - GKE: formations/gcp-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/gcp-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/gcp-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
+      - Module 09 - Security: formations/gcp-fundamentals/09-module.md
+      - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
+    - 🎓 Formation AWS (35h):
+      - Programme: formations/aws-fundamentals/index.md
+      - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
+      - Module 02 - EC2: formations/aws-fundamentals/02-module.md
+      - Module 03 - VPC: formations/aws-fundamentals/03-module.md
+      - Module 04 - Storage: formations/aws-fundamentals/04-module.md
+      - Module 05 - EKS: formations/aws-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/aws-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/aws-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/aws-fundamentals/08-module.md
+      - Module 09 - Security: formations/aws-fundamentals/09-module.md
+      - Module 10 - Observability: formations/aws-fundamentals/10-module.md
+    - 🎓 Formation Azure (35h):
+      - Programme: formations/azure-fundamentals/index.md
+      - Module 01 - Portal & IAM: formations/azure-fundamentals/01-module.md
+      - Module 02 - VMs: formations/azure-fundamentals/02-module.md
+      - Module 03 - Networking: formations/azure-fundamentals/03-module.md
+      - Module 04 - Storage: formations/azure-fundamentals/04-module.md
+      - Module 05 - AKS: formations/azure-fundamentals/05-module.md
+      - Module 06 - TP Final: formations/azure-fundamentals/06-tp-final.md
+      - Module 07 - CI/CD: formations/azure-fundamentals/07-module.md
+      - Module 08 - Serverless: formations/azure-fundamentals/08-module.md
+      - Module 09 - Security: formations/azure-fundamentals/09-module.md
+      - Module 10 - Observability: formations/azure-fundamentals/10-module.md
+
+  # ══════════════════════════════════════════════════════════════
+  # FONDAMENTAUX & ARCHITECTURE
+  # ══════════════════════════════════════════════════════════════
   - 🏗️ Fondamentaux & Architecture:
     - Accueil: concepts/index.md
     - 🏛️ Architecture & Concepts:
@@ -189,205 +368,24 @@ nav:
       - Bases de Données: concepts/databases.md
     - 🌐 Réseau:
       - Fondamentaux Réseau: network/fundamentals.md
+
+  # ══════════════════════════════════════════════════════════════
+  # DEVOPS + FORMATIONS DEVOPS
+  # ══════════════════════════════════════════════════════════════
   - ♾️ DevOps:
     - Accueil: devops/index.md
-    - 🛠️ Méthodologie:
-      - Git SysOps: devops/git-sysops.md
-      - Docs-as-Code: devops/docs-as-code.md
-      - Outils IT: devops/productivity-it-tools.md
-    - 🐳 Conteneurs:
-      - Docker Avancé: devops/docker-advanced.md
-      - Podman: devops/podman-containers.md
-    - ☸️ Kubernetes:
-      - Survival Guide: devops/kubernetes-survival.md
-      - Networking: devops/kubernetes-networking.md
-      - CKA Prep: devops/kubernetes-cka.md
-      - Helm: devops/kubernetes-helm.md
-      - Kustomize: devops/kubernetes-kustomize.md
-      - Operators: devops/kubernetes-operators.md
-      - GitOps ArgoCD: devops/gitops-argocd.md
-    - 📦 Infrastructure as Code:
-      - Ansible Fundamentals: devops/ansible/fundamentals.md
-      - Ansible Playbooks: devops/ansible/playbooks.md
-      - Ansible Industrialization: devops/ansible/industrialization.md
-      - Ansible Advanced: devops/ansible/advanced-patterns.md
-      - Ansible Cloud: devops/ansible/cloud-integrations.md
-      - Ansible Testing: devops/ansible/testing-molecule.md
-      - Terraform Fundamentals: devops/terraform/fundamentals.md
-    - 🔄 CI/CD:
-      - GitLab CI: devops/cicd-gitlab.md
-      - GitHub Actions: devops/cicd-github-actions.md
-    - 📊 Observabilité:
-      - Stack Observabilité: devops/observability-stack.md
-      - Observabilité Avancée: devops/observability-advanced.md
-      - Loki Logging: devops/loki-logging.md
-    - 🏗️ Architecture & HA:
-      - Networking Moderne: devops/modern-networking.md
-      - Load Balancing: devops/load-balancing.md
-  - 🗄️ Bases de Données:
-    - Accueil: databases/index.md
-    - 🐘 PostgreSQL:
-      - Guide: databases/postgresql.md
-      - Cheatsheet: databases/postgresql-cheatsheet.md
-    - 🐬 MariaDB/MySQL:
-      - Guide: databases/mariadb.md
-      - Cheatsheet: databases/mariadb-cheatsheet.md
-    - 🍃 MongoDB:
-      - Guide: databases/mongodb.md
-      - Cheatsheet: databases/mongodb-cheatsheet.md
-    - 🔴 Redis:
-      - Guide: databases/redis.md
-      - Cheatsheet: databases/redis-cheatsheet.md
-    - 🔄 Haute Disponibilité: databases/high-availability.md
-  - 🎓 Formations:
-    - Catalogue: formations/index.md
-    # ══════════════════════════════════════════════════════════════
-    # PARCOURS MASTERY (150h) - Navigation détaillée par niveaux
-    # ══════════════════════════════════════════════════════════════
-    - 🐧 Linux Mastery (150h):
-      - Programme: formations/linux-mastery/index.md
-      - Niveau 1 - Fondations (30h):
-        - Module 01 - Découverte: formations/linux-mastery/01-decouverte.md
-        - Module 02 - Navigation: formations/linux-mastery/02-navigation.md
-        - Module 03 - Permissions: formations/linux-mastery/03-permissions.md
-        - Module 04 - Éditeurs: formations/linux-mastery/04-editeurs.md
-        - Module 05 - Shell Intro: formations/linux-mastery/05-shell-intro.md
-      - Niveau 2 - Administration (35h):
-        - Module 06 - Paquets: formations/linux-mastery/06-paquets.md
-        - Module 07 - Services: formations/linux-mastery/07-services.md
-        - Module 08 - Stockage: formations/linux-mastery/08-stockage.md
-        - Module 09 - Réseau: formations/linux-mastery/09-reseau.md
-        - Module 10 - Automatisation: formations/linux-mastery/10-automatisation.md
-      - Niveau 3 - Ingénierie (40h):
-        - Module 11 - Sécurité: formations/linux-mastery/11-securite.md
-        - Module 12 - Services Réseau: formations/linux-mastery/12-services-reseau.md
-        - Module 13 - Performance: formations/linux-mastery/13-performance.md
-        - Module 14 - Scripting Avancé: formations/linux-mastery/14-scripting-avance.md
-        - Module 15 - Backup: formations/linux-mastery/15-backup.md
-      - Niveau 4 - Expert (45h):
-        - Module 16 - Haute Dispo: formations/linux-mastery/16-haute-disponibilite.md
-        - Module 17 - Conteneurs: formations/linux-mastery/17-conteneurs.md
-        - Module 18 - Kubernetes: formations/linux-mastery/18-kubernetes.md
-        - Module 19 - IaC: formations/linux-mastery/19-iac.md
-        - Module 20 - Projet Final: formations/linux-mastery/20-projet-final.md
-      - Ressources:
-        - Glossaire: formations/linux-mastery/glossaire.md
-        - Cheatsheet Commandes: formations/linux-mastery/cheatsheet-commandes.md
-        - Cheatsheet Vim: formations/linux-mastery/cheatsheet-vim.md
-        - Checklist Hardening: formations/linux-mastery/checklist-hardening.md
-    - 🪟 Windows Mastery (150h):
-      - Programme: formations/windows-mastery/index.md
-      - Niveau 1 - Fondations (30h):
-        - Module 01 - Découverte: formations/windows-mastery/01-decouverte.md
-        - Module 02 - PowerShell: formations/windows-mastery/02-powershell-basics.md
-        - Module 03 - Users & NTFS: formations/windows-mastery/03-utilisateurs-ntfs.md
-        - Module 04 - Outils Admin: formations/windows-mastery/04-outils-administration.md
-        - Module 05 - Scripting Intro: formations/windows-mastery/05-scripting-intro.md
-      - Niveau 2 - Administration (35h):
-        - Module 06 - Rôles: formations/windows-mastery/06-roles-features.md
-        - Module 07 - Services: formations/windows-mastery/07-services-processus.md
-        - Module 08 - Stockage: formations/windows-mastery/08-stockage-disques.md
-        - Module 09 - DNS & DHCP: formations/windows-mastery/09-reseau-dns-dhcp.md
-        - Module 10 - Automatisation: formations/windows-mastery/10-automatisation-basique.md
-      - Niveau 3 - Ingénierie (40h):
-        - Module 11 - Active Directory: formations/windows-mastery/11-active-directory-core.md
-        - Module 12 - GPO: formations/windows-mastery/12-gpo-configuration.md
-        - Module 13 - Sécurité: formations/windows-mastery/13-securite-hardening.md
-        - Module 14 - PKI & RADIUS: formations/windows-mastery/14-services-reseau-avances.md
-        - Module 15 - Backup & DR: formations/windows-mastery/15-backup-disaster-recovery.md
-      - Niveau 4 - Expert (45h):
-        - Module 16 - Haute Dispo: formations/windows-mastery/16-haute-disponibilite.md
-        - Module 17 - Conteneurs: formations/windows-mastery/17-conteneurs-windows.md
-        - Module 18 - Hybrid Cloud: formations/windows-mastery/18-hybrid-cloud.md
-        - Module 19 - IaC & DSC: formations/windows-mastery/19-infrastructure-as-code.md
-        - Module 20 - Projet Final: formations/windows-mastery/20-projet-final.md
-      - Ressources:
-        - Glossaire: formations/windows-mastery/glossaire.md
-        - Cheatsheet PowerShell: formations/windows-mastery/cheatsheet-powershell.md
-        - Cheatsheet AD: formations/windows-mastery/cheatsheet-active-directory.md
-        - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
-    # ══════════════════════════════════════════════════════════════
-    # FORMATIONS CLOUD (35h) - Repliables par provider
-    # ══════════════════════════════════════════════════════════════
-    - ☁️ Cloud (140h):
-      - ☁️ Cloud Fundamentals (35h):
-        - Programme: formations/cloud-fundamentals/index.md
-        - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
-        - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
-        - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
-        - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
-        - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
-        - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
-        - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
-        - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
-        - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
-        - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
-        - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+    - 🎓 Formations DevOps:
+      - 🚀 Le Socle DevOps (6h):
+        - Programme: formations/devops-foundation/index.md
+        - Module 01 - Git: formations/devops-foundation/01-module.md
+        - Module 02 - Branches: formations/devops-foundation/02-module.md
+        - Module 03 - CI/CD: formations/devops-foundation/03-module.md
+        - Module 04 - Qualité: formations/devops-foundation/04-module.md
+        - Module 05 - TP Final: formations/devops-foundation/05-tp-final.md
         - Ressources:
-          - Glossaire: formations/cloud-fundamentals/glossaire.md
-          - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
-      - 🌐 GCP Fundamentals (35h):
-        - Programme: formations/gcp-fundamentals/index.md
-        - Module 01 - Console & IAM: formations/gcp-fundamentals/01-module.md
-        - Module 02 - Compute Engine: formations/gcp-fundamentals/02-module.md
-        - Module 03 - Networking: formations/gcp-fundamentals/03-module.md
-        - Module 04 - Storage: formations/gcp-fundamentals/04-module.md
-        - Module 05 - GKE: formations/gcp-fundamentals/05-module.md
-        - Module 06 - TP Final: formations/gcp-fundamentals/06-tp-final.md
-        - Module 07 - CI/CD: formations/gcp-fundamentals/07-module.md
-        - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
-        - Module 09 - Security: formations/gcp-fundamentals/09-module.md
-        - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
-      - 🔶 AWS Fundamentals (35h):
-        - Programme: formations/aws-fundamentals/index.md
-        - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
-        - Module 02 - EC2: formations/aws-fundamentals/02-module.md
-        - Module 03 - VPC: formations/aws-fundamentals/03-module.md
-        - Module 04 - Storage: formations/aws-fundamentals/04-module.md
-        - Module 05 - EKS: formations/aws-fundamentals/05-module.md
-        - Module 06 - TP Final: formations/aws-fundamentals/06-tp-final.md
-        - Module 07 - CI/CD: formations/aws-fundamentals/07-module.md
-        - Module 08 - Serverless: formations/aws-fundamentals/08-module.md
-        - Module 09 - Security: formations/aws-fundamentals/09-module.md
-        - Module 10 - Observability: formations/aws-fundamentals/10-module.md
-      - 🔷 Azure Fundamentals (35h):
-        - Programme: formations/azure-fundamentals/index.md
-        - Module 01 - Portal & IAM: formations/azure-fundamentals/01-module.md
-        - Module 02 - VMs: formations/azure-fundamentals/02-module.md
-        - Module 03 - Networking: formations/azure-fundamentals/03-module.md
-        - Module 04 - Storage: formations/azure-fundamentals/04-module.md
-        - Module 05 - AKS: formations/azure-fundamentals/05-module.md
-        - Module 06 - TP Final: formations/azure-fundamentals/06-tp-final.md
-        - Module 07 - CI/CD: formations/azure-fundamentals/07-module.md
-        - Module 08 - Serverless: formations/azure-fundamentals/08-module.md
-        - Module 09 - Security: formations/azure-fundamentals/09-module.md
-        - Module 10 - Observability: formations/azure-fundamentals/10-module.md
-    # ══════════════════════════════════════════════════════════════
-    # FORMATIONS THEMATIQUES - Groupées et repliables
-    # ══════════════════════════════════════════════════════════════
-    - 🛡️ Sécurité & Conformité (36h):
-      - 🔒 PKI & Certificats (16h):
-        - Programme: formations/pki-certificates/index.md
-        - Module 01 - Crypto: formations/pki-certificates/01-module.md
-        - Module 02 - X.509: formations/pki-certificates/02-module.md
-        - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
-        - Module 04 - Automatisation: formations/pki-certificates/04-module.md
-        - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
-      - 🔐 Hardening Linux (10h):
-        - Programme: formations/linux-hardening/index.md
-        - Module 01 - SSH: formations/linux-hardening/01-module.md
-        - Module 02 - Users: formations/linux-hardening/02-module.md
-        - Module 03 - Firewall: formations/linux-hardening/03-module.md
-        - Module 04 - Audit: formations/linux-hardening/04-module.md
-        - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
-      - 🛡️ Hardening Windows (10h):
-        - Programme: formations/windows-hardening/index.md
-        - Module 01 - Baselines: formations/windows-hardening/01-module.md
-        - Module 02 - Services: formations/windows-hardening/02-module.md
-        - Module 03 - Firewall: formations/windows-hardening/03-module.md
-        - Module 04 - AD: formations/windows-hardening/04-module.md
-        - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
-    - ♾️ DevOps & Automatisation (146h):
+          - Glossaire: formations/devops-foundation/glossaire.md
+          - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
+          - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
       - 🐳 Docker Mastery (15h):
         - Programme: formations/docker-mastery/index.md
         - Module 01 - Fondamentaux: formations/docker-mastery/01-module.md
@@ -428,17 +426,6 @@ nav:
         - Module 04 - Grafana: formations/observability/04-module.md
         - Module 05 - Alerting: formations/observability/05-module.md
         - Module 06 - TP Final: formations/observability/06-tp-final.md
-      - 🚀 Le Socle DevOps (6h):
-        - Programme: formations/devops-foundation/index.md
-        - Module 01 - Git: formations/devops-foundation/01-module.md
-        - Module 02 - Branches: formations/devops-foundation/02-module.md
-        - Module 03 - CI/CD: formations/devops-foundation/03-module.md
-        - Module 04 - Qualité: formations/devops-foundation/04-module.md
-        - Module 05 - TP Final: formations/devops-foundation/05-tp-final.md
-        - Ressources:
-          - Glossaire: formations/devops-foundation/glossaire.md
-          - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
-          - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
       - 💠 Ansible Mastery (10h):
         - Programme: formations/ansible-mastery/index.md
         - Module 01 - Architecture: formations/ansible-mastery/01-module.md
@@ -464,38 +451,71 @@ nav:
         - Module 08 - Est-Ouest: formations/terraform-aci/08-module.md
         - Module 09 - Multi-Site: formations/terraform-aci/09-module.md
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
-    - 🪟 Écosystème Microsoft (64h):
-      - ♻️ Windows Patching (12h):
-        - Programme: formations/windows-patching/index.md
-        - Module 01 - Architecture: formations/windows-patching/01-module.md
-        - Module 02 - Gestion: formations/windows-patching/02-module.md
-        - Module 03 - Clients: formations/windows-patching/03-module.md
-        - Module 04 - Maintenance: formations/windows-patching/04-module.md
-        - Module 05 - TP Final: formations/windows-patching/05-tp-final.md
-      - 🍫 Chocolatey Factory (12h):
-        - Programme: formations/chocolatey/index.md
-        - Module 01 - Client CLI: formations/chocolatey/01-module.md
-        - Module 02 - Packaging: formations/chocolatey/02-module.md
-        - Module 03 - Serveur: formations/chocolatey/03-module.md
-        - Module 04 - Déploiement: formations/chocolatey/04-module.md
-        - Module 05 - TP Final: formations/chocolatey/05-tp-final.md
-      - 💿 NTLite Mastery (18h):
-        - Programme: formations/ntlite/index.md
-        - Module 01 - Bases: formations/ntlite/01-module.md
-        - Module 02 - Debloating: formations/ntlite/02-module.md
-        - Module 03 - Intégration: formations/ntlite/03-module.md
-        - Module 04 - Automatisation: formations/ntlite/04-module.md
-        - Module 05 - TP Final: formations/ntlite/05-tp-final.md
-        - Module 06 - Cas VPN: formations/ntlite/06-scenario-vpn.md
-      - 🛢️ SQL Server DBA (22h):
-        - Programme: formations/sql-server/index.md
-        - Module 01 - Architecture: formations/sql-server/01-module.md
-        - Module 02 - Sécurité: formations/sql-server/02-module.md
-        - Module 03 - Maintenance: formations/sql-server/03-module.md
-        - Module 04 - Automatisation: formations/sql-server/04-module.md
-        - Module 05 - TP Final: formations/sql-server/05-tp-final.md
+    - 🛠️ Méthodologie:
+      - Git SysOps: devops/git-sysops.md
+      - Docs-as-Code: devops/docs-as-code.md
+      - Outils IT: devops/productivity-it-tools.md
+    - 🐳 Conteneurs:
+      - Docker Avancé: devops/docker-advanced.md
+      - Podman: devops/podman-containers.md
+    - ☸️ Kubernetes:
+      - Survival Guide: devops/kubernetes-survival.md
+      - Networking: devops/kubernetes-networking.md
+      - CKA Prep: devops/kubernetes-cka.md
+      - Helm: devops/kubernetes-helm.md
+      - Kustomize: devops/kubernetes-kustomize.md
+      - Operators: devops/kubernetes-operators.md
+      - GitOps ArgoCD: devops/gitops-argocd.md
+    - 📦 Infrastructure as Code:
+      - Ansible Fundamentals: devops/ansible/fundamentals.md
+      - Ansible Playbooks: devops/ansible/playbooks.md
+      - Ansible Industrialization: devops/ansible/industrialization.md
+      - Ansible Advanced: devops/ansible/advanced-patterns.md
+      - Ansible Cloud: devops/ansible/cloud-integrations.md
+      - Ansible Testing: devops/ansible/testing-molecule.md
+      - Terraform Fundamentals: devops/terraform/fundamentals.md
+    - 🔄 CI/CD:
+      - GitLab CI: devops/cicd-gitlab.md
+      - GitHub Actions: devops/cicd-github-actions.md
+    - 📊 Observabilité:
+      - Stack Observabilité: devops/observability-stack.md
+      - Observabilité Avancée: devops/observability-advanced.md
+      - Loki Logging: devops/loki-logging.md
+    - 🏗️ Architecture & HA:
+      - Networking Moderne: devops/modern-networking.md
+      - Load Balancing: devops/load-balancing.md
+
+  # ══════════════════════════════════════════════════════════════
+  # BASES DE DONNÉES
+  # ══════════════════════════════════════════════════════════════
+  - 🗄️ Bases de Données:
+    - Accueil: databases/index.md
+    - 🐘 PostgreSQL:
+      - Guide: databases/postgresql.md
+      - Cheatsheet: databases/postgresql-cheatsheet.md
+    - 🐬 MariaDB/MySQL:
+      - Guide: databases/mariadb.md
+      - Cheatsheet: databases/mariadb-cheatsheet.md
+    - 🍃 MongoDB:
+      - Guide: databases/mongodb.md
+      - Cheatsheet: databases/mongodb-cheatsheet.md
+    - 🔴 Redis:
+      - Guide: databases/redis.md
+      - Cheatsheet: databases/redis-cheatsheet.md
+    - 🔄 Haute Disponibilité: databases/high-availability.md
+
+  # ══════════════════════════════════════════════════════════════
+  # SÉCURITÉ + FORMATIONS SÉCURITÉ
+  # ══════════════════════════════════════════════════════════════
   - 🛡️ Sécurité:
     - Accueil: security/index.md
+    - 🎓 Formation PKI & Certificats (16h):
+      - Programme: formations/pki-certificates/index.md
+      - Module 01 - Crypto: formations/pki-certificates/01-module.md
+      - Module 02 - X.509: formations/pki-certificates/02-module.md
+      - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
+      - Module 04 - Automatisation: formations/pki-certificates/04-module.md
+      - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
     - 📋 Conformité:
       - SecNumCloud: security/secnumcloud.md
       - Guides ANSSI: security/anssi-guides.md
@@ -511,6 +531,11 @@ nav:
       - Guide CTF: security/ctf-guide.md
       - Exegol: security/exegol.md
       - Outils Essentiels: security/essential-tools.md
+
+  # ══════════════════════════════════════════════════════════════
+  # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
+  # ══════════════════════════════════════════════════════════════
+  - 🎓 Catalogue Formations: formations/index.md
 
 extra:
   social:
