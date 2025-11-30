@@ -123,6 +123,8 @@ nav:
         - container-net-debug.sh: scripts/bash/container-net-debug.md
       - Bases de Données:
         - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
+      - Conformité & Audit:
+        - config-drift-checker.sh: scripts/bash/config-drift-checker.md
       - Infrastructure Linux:
         - check-ldap.sh: scripts/bash/check-ldap.md
         - check-bind.sh: scripts/bash/check-bind.md
@@ -171,6 +173,11 @@ nav:
         - kubernetes_health.py: scripts/python/kubernetes_health.md
       - Bases de Données:
         - redis_key_auditor.py: scripts/python/redis_key_auditor.md
+        - db_replication_monitor.py: scripts/python/db_replication_monitor.md
+      - Système & Performance:
+        - patch_compliance_report.py: scripts/python/patch_compliance_report.md
+        - system_tuning_advisor.py: scripts/python/system_tuning_advisor.md
+        - disk_io_analyzer.py: scripts/python/disk_io_analyzer.md
       - Générateurs:
         - systemd_generator.py: scripts/python/systemd_generator.md
       - DevOps & Cloud:
