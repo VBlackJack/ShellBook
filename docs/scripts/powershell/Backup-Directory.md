@@ -384,5 +384,5 @@ Register-ScheduledTask -TaskName "DailyBackup" `
 
 ## Voir Aussi
 
-- [Sync-Folders.ps1](Sync-Folders.md)
+- [Test-DiskSpace.ps1](Test-DiskSpace.md)
 - [Find-LargeFiles.ps1](Find-LargeFiles.md)

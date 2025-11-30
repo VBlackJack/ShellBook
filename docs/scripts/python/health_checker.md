@@ -588,5 +588,5 @@ Summary:
 
 ## Voir Aussi
 
-- [log_analyzer.py](log_analyzer.md)
-- [alert_sender.py](alert_sender.md)
+- [log_anomaly_detector.py](log_anomaly_detector.md) - Détection anomalies logs
+- [api_health_monitor.py](api_health_monitor.md) - Monitoring API

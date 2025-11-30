@@ -348,4 +348,4 @@ powershell      8901         123.4
 ## Voir Aussi
 
 - [Test-DiskSpace.ps1](Test-DiskSpace.md)
-- [Watch-Resources.ps1](Watch-Resources.md)
+- [Get-PendingReboot.ps1](Get-PendingReboot.md)

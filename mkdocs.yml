@@ -88,6 +88,8 @@ nav:
       - GitLab CI Ultimate: devops/pipelines/gitlab-ci-ultimate.md
       - GitHub Actions: devops/pipelines/github-actions-workflow.md
       - Dockerfile Golden: devops/pipelines/dockerfile-golden.md
+    - 📜 Bibliothèque Scripts:
+      - Vue d'ensemble: scripts/index.md
     - 📜 Scripts Bash:
       - Index: scripts/bash/index.md
       - God Script:
@@ -363,6 +365,12 @@ nav:
         - Module 03 - Maintenance: formations/sql-server/03-module.md
         - Module 04 - Automatisation: formations/sql-server/04-module.md
         - Module 05 - TP Final: formations/sql-server/05-tp-final.md
+      - 🪟 Windows Server (20h):
+        - Programme: formations/windows-server/index.md
+        - Module 01 - Fondamentaux: formations/windows-server/01-module.md
+        - Module 02 - Active Directory: formations/windows-server/02-module.md
+        - Module 03 - Services Réseau: formations/windows-server/03-module.md
+        - Module 04 - TP Final: formations/windows-server/04-tp-final.md
     - 🚀 Démarrage:
       - Productivité: windows/productivity.md
       - PowerShell Bases: windows/powershell-foundations.md
@@ -464,6 +472,8 @@ nav:
           - Glossaire: formations/devops-foundation/glossaire.md
           - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
           - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
+          - Memo Conventional Commits: formations/devops-foundation/memo-conventional-commits.md
+          - Memo ShellCheck: formations/devops-foundation/memo-shellcheck.md
       - 🐳 Docker Mastery (15h):
         - Programme: formations/docker-mastery/index.md
         - Module 01 - Fondamentaux: formations/docker-mastery/01-module.md

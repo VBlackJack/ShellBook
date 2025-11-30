@@ -455,5 +455,5 @@ Available Backups:
 
 ## Voir Aussi
 
-- [file_organizer.py](file_organizer.md)
-- [duplicate_finder.py](duplicate_finder.md)
+- [backup_validator.py](backup_validator.md) - Validation intégrité backups
+- [git_repo_cleaner.py](git_repo_cleaner.md) - Nettoyage branches Git

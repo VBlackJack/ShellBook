@@ -426,5 +426,5 @@ Write-Host ("=" * 60) -ForegroundColor Cyan
 
 ## Voir Aussi
 
-- [Scan-Ports.ps1](Scan-Ports.md)
-- [Get-DNSInfo.ps1](Get-DNSInfo.md)
+- [Test-DNSServer.ps1](Test-DNSServer.md)
+- [Test-SSLCertificates.ps1](Test-SSLCertificates.md)

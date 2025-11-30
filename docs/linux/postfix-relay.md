@@ -824,7 +824,7 @@ Checklist Postfix Relay:
 
 **Voir aussi :**
 
-- [Services et Démons](services.md) - Gestion systemd
+- [Boot & Services](boot-and-services.md) - Gestion systemd
 - [SSH Hardening](ssh-hardening.md) - Sécurisation
 - [Firewall UFW](firewall-ufw.md) - Configuration firewall
 - [NXLog](../windows/nxlog.md) - Envoi de logs (alertes mail)

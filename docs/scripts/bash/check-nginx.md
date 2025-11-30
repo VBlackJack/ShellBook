@@ -461,5 +461,5 @@ server {
 
 ## Voir Aussi
 
-- [check-apache.sh](check-apache.md)
-- [check-ssl-cert.sh](../check-ssl-cert.md)
+- [ssl-csr-wizard.sh](ssl-csr-wizard.md) - Génération CSR SSL
+- [health-check.sh](health-check.md) - Vérification santé services

@@ -338,4 +338,4 @@ Register-ScheduledTask -TaskName "DiskSpaceCheck" `
 ## Voir Aussi
 
 - [Get-SystemInfo.ps1](Get-SystemInfo.md)
-- [Clear-SystemCache.ps1](Clear-SystemCache.md)
+- [Find-LargeFiles.ps1](Find-LargeFiles.md)

@@ -450,5 +450,5 @@ fi
 
 ## Voir Aussi
 
-- [check-dns.sh](check-dns.md)
-- [check-ssl-cert.sh](../check-ssl-cert.md)
+- [check-bind.sh](check-bind.md) - Vérification DNS BIND
+- [ssl-csr-wizard.sh](ssl-csr-wizard.md) - Génération CSR SSL

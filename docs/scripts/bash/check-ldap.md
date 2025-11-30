@@ -434,5 +434,5 @@ fi
 
 ## Voir Aussi
 
-- [check-dns.sh](check-dns.md)
+- [check-bind.sh](check-bind.md) - Vérification DNS BIND
 - [check-mysql.sh](check-mysql.md)

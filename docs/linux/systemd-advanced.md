@@ -1038,6 +1038,6 @@ Checklist Systemd:
 
 **Voir aussi :**
 
-- [Services et Démons](services.md) - Bases systemd
-- [Processus](processes.md) - Gestion des processus
-- [Cron Jobs](../devops/cron-automation.md) - Alternative aux timers
+- [Boot & Services](boot-and-services.md) - Bases systemd
+- [Performance Analysis](performance-analysis.md) - Gestion des processus
+- [Automation Cron](automation-cron.md) - Alternative aux timers
