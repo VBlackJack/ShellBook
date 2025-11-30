@@ -112,6 +112,7 @@ nav:
         - log-analyzer.sh: scripts/bash/log-analyzer.md
         - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
         - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
+        - secret-scanner.sh: scripts/bash/secret-scanner.md
       - Services:
         - service-manager.sh: scripts/bash/service-manager.md
         - health-check.sh: scripts/bash/health-check.md
@@ -178,6 +179,12 @@ nav:
         - patch_compliance_report.py: scripts/python/patch_compliance_report.md
         - system_tuning_advisor.py: scripts/python/system_tuning_advisor.md
         - disk_io_analyzer.py: scripts/python/disk_io_analyzer.md
+        - log_anomaly_detector.py: scripts/python/log_anomaly_detector.md
+      - Réseau & Sécurité:
+        - network_topology_mapper.py: scripts/python/network_topology_mapper.md
+        - compliance_report_generator.py: scripts/python/compliance_report_generator.md
+      - FinOps & Cloud:
+        - infrastructure_cost_analyzer.py: scripts/python/infrastructure_cost_analyzer.md
       - Générateurs:
         - systemd_generator.py: scripts/python/systemd_generator.md
       - DevOps & Cloud:
