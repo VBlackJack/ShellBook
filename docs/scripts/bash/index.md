@@ -59,6 +59,13 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [k8s-pod-inspector.sh](k8s-pod-inspector.md) | Diagnostic complet de pods Kubernetes | :material-star::material-star: |
 | [container-net-debug.sh](container-net-debug.md) | Debug réseau avec sidecar netshoot | :material-star::material-star: |
 
+## Base de Données
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [pg-bloat-check.sh](pg-bloat-check.md) | Estimation bloat PostgreSQL (MVCC) | :material-star::material-star::material-star: |
+| [mysql-security-audit.sh](mysql-security-audit.md) | Audit sécurité MySQL/MariaDB | :material-star::material-star: |
+
 ## Infrastructure Linux
 
 | Script | Description | Niveau |

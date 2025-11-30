@@ -53,6 +53,12 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 | [docker_cleaner_pro.py](docker_cleaner_pro.md) | Nettoyage Docker avancé avec dry-run | :material-star::material-star: |
 | [git_repo_cleaner.py](git_repo_cleaner.md) | Nettoyage branches Git obsolètes | :material-star::material-star: |
 
+## Base de Données
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [redis_key_auditor.py](redis_key_auditor.md) | Audit clés Redis (SCAN non-bloquant) | :material-star::material-star: |
+
 ---
 
 ## Template de Script
