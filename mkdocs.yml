@@ -559,6 +559,54 @@ nav:
       - Outils Essentiels: security/essential-tools.md
 
   # ══════════════════════════════════════════════════════════════
+  # BIBLIOTHÈQUE DE SCRIPTS
+  # ══════════════════════════════════════════════════════════════
+  - 📜 Scripts:
+    - Accueil: scripts/index.md
+    - 🐚 Bash:
+      - Index: scripts/bash/index.md
+      - Système:
+        - system-info.sh: scripts/bash/system-info.md
+        - check-disk-space.sh: scripts/bash/check-disk-space.md
+        - monitor-resources.sh: scripts/bash/monitor-resources.md
+        - cleanup-system.sh: scripts/bash/cleanup-system.md
+      - Réseau:
+        - check-connectivity.sh: scripts/bash/check-connectivity.md
+        - port-scanner.sh: scripts/bash/port-scanner.md
+        - dns-lookup.sh: scripts/bash/dns-lookup.md
+      - Fichiers:
+        - backup-directory.sh: scripts/bash/backup-directory.md
+        - sync-folders.sh: scripts/bash/sync-folders.md
+        - find-large-files.sh: scripts/bash/find-large-files.md
+      - Sécurité:
+        - security-audit.sh: scripts/bash/security-audit.md
+        - check-permissions.sh: scripts/bash/check-permissions.md
+        - log-analyzer.sh: scripts/bash/log-analyzer.md
+      - Services:
+        - service-manager.sh: scripts/bash/service-manager.md
+        - health-check.sh: scripts/bash/health-check.md
+    - 🔷 PowerShell:
+      - Index: scripts/powershell/index.md
+      - Système:
+        - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
+        - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
+      - Réseau:
+        - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
+      - Fichiers:
+        - Backup-Directory.ps1: scripts/powershell/Backup-Directory.md
+        - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
+      - Services:
+        - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
+    - 🐍 Python:
+      - Index: scripts/python/index.md
+      - Système:
+        - system_info.py: scripts/python/system_info.md
+      - Monitoring:
+        - health_checker.py: scripts/python/health_checker.md
+      - Fichiers:
+        - backup_manager.py: scripts/python/backup_manager.md
+
+  # ══════════════════════════════════════════════════════════════
   # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
   # ══════════════════════════════════════════════════════════════
   - 🎓 Catalogue Formations: formations/index.md
