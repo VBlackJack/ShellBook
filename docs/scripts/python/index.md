@@ -50,6 +50,7 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 | [cert_checker.py](cert_checker.md) | Vérification certificats SSL/TLS | :material-star::material-star: |
 | [kubernetes_health.py](kubernetes_health.md) | Vérification santé cluster Kubernetes | :material-star::material-star::material-star: |
 | [docker_health.py](docker_health.md) | Vérification santé Docker | :material-star::material-star: |
+| [docker_cleaner_pro.py](docker_cleaner_pro.md) | Nettoyage Docker avancé avec dry-run | :material-star::material-star: |
 | [git_repo_cleaner.py](git_repo_cleaner.md) | Nettoyage branches Git obsolètes | :material-star::material-star: |
 
 ---

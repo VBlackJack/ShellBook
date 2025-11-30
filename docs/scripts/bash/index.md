@@ -52,6 +52,13 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [service-manager.sh](service-manager.md) | Gestion des services systemd | :material-star: |
 | [health-check.sh](health-check.md) | Vérification santé des services | :material-star::material-star: |
 
+## Conteneurs & Kubernetes
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [k8s-pod-inspector.sh](k8s-pod-inspector.md) | Diagnostic complet de pods Kubernetes | :material-star::material-star: |
+| [container-net-debug.sh](container-net-debug.md) | Debug réseau avec sidecar netshoot | :material-star::material-star: |
+
 ## Infrastructure Linux
 
 | Script | Description | Niveau |
