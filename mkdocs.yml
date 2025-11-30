@@ -217,10 +217,18 @@ nav:
       - Load Balancing: devops/load-balancing.md
   - 🗄️ Bases de Données:
     - Accueil: databases/index.md
-    - 🐘 PostgreSQL: databases/postgresql.md
-    - 🐬 MariaDB/MySQL: databases/mariadb.md
-    - 🍃 MongoDB: databases/mongodb.md
-    - 🔴 Redis: databases/redis.md
+    - 🐘 PostgreSQL:
+      - Guide: databases/postgresql.md
+      - Cheatsheet: databases/postgresql-cheatsheet.md
+    - 🐬 MariaDB/MySQL:
+      - Guide: databases/mariadb.md
+      - Cheatsheet: databases/mariadb-cheatsheet.md
+    - 🍃 MongoDB:
+      - Guide: databases/mongodb.md
+      - Cheatsheet: databases/mongodb-cheatsheet.md
+    - 🔴 Redis:
+      - Guide: databases/redis.md
+      - Cheatsheet: databases/redis-cheatsheet.md
     - 🔄 Haute Disponibilité: databases/high-availability.md
   - 🎓 Formations:
     - Catalogue: formations/index.md
