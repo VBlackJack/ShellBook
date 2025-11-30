@@ -76,15 +76,41 @@ nav:
   - 🏠 Accueil: index.md
 
   # ══════════════════════════════════════════════════════════════
-  # PYTHON
+  # PYTHON + FORMATION PYTHON SYSOPS
   # ══════════════════════════════════════════════════════════════
   - 🐍 Python:
     - Accueil: python/index.md
-    - Fondamentaux: python/fundamentals.md
-    - Fichiers & Données: python/files-data.md
-    - API & Réseau: python/api-network.md
-    - Cloud & AWS: python/cloud-aws.md
-    - Tests & Qualité: python/testing.md
+    - 🎓 Formation Python SysOps (35h):
+      - Programme: formations/python-sysops/index.md
+      - Niveau 1 - Fondations (10h):
+        - Module 01 - Environnement: formations/python-sysops/01-environnement.md
+        - Module 02 - Syntaxe: formations/python-sysops/02-syntaxe.md
+        - Module 03 - Structures: formations/python-sysops/03-structures.md
+        - Module 04 - Fonctions: formations/python-sysops/04-fonctions.md
+      - Niveau 2 - Système (10h):
+        - Module 05 - Fichiers: formations/python-sysops/05-fichiers.md
+        - Module 06 - Formats: formations/python-sysops/06-formats.md
+        - Module 07 - Subprocess: formations/python-sysops/07-subprocess.md
+        - Module 08 - Regex: formations/python-sysops/08-regex.md
+        - Module 09 - Erreurs: formations/python-sysops/09-erreurs.md
+      - Niveau 3 - Réseau (8h):
+        - Module 10 - Réseau: formations/python-sysops/10-reseau.md
+        - Module 11 - APIs REST: formations/python-sysops/11-api-rest.md
+        - Module 12 - SSH: formations/python-sysops/12-ssh.md
+      - Niveau 4 - Production (7h):
+        - Module 13 - CLI: formations/python-sysops/13-cli.md
+        - Module 14 - Cloud: formations/python-sysops/14-cloud.md
+        - Module 15 - Tests: formations/python-sysops/15-tests.md
+      - Ressources:
+        - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
+        - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
+        - Glossaire: formations/python-sysops/glossaire.md
+    - 📚 Documentation:
+      - Fondamentaux: python/fundamentals.md
+      - Fichiers & Données: python/files-data.md
+      - API & Réseau: python/api-network.md
+      - Cloud & AWS: python/cloud-aws.md
+      - Tests & Qualité: python/testing.md
 
   # ══════════════════════════════════════════════════════════════
   # LINUX + FORMATION LINUX MASTERY
