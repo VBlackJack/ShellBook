@@ -76,64 +76,104 @@ nav:
   - 🏠 Accueil: index.md
 
   # ══════════════════════════════════════════════════════════════
-  # CLI - SHELLBOOK WRAPPER
+  # ONGLET 1 : OPS CENTER (CLI + Playbooks + Pipelines + Scripts)
   # ══════════════════════════════════════════════════════════════
-  - 🛠️ CLI (sb): cli/index.md
+  - 🚀 Ops Center:
+    - 🛠️ CLI ShellBook:
+      - Guide CLI (sb): cli/index.md
+    - 🔥 Playbooks:
+      - Réponse Incident: playbooks/incident-response.md
+    - 🚀 Pipelines CI/CD:
+      - Vue d'ensemble: devops/pipelines/index.md
+      - GitLab CI Ultimate: devops/pipelines/gitlab-ci-ultimate.md
+      - GitHub Actions: devops/pipelines/github-actions-workflow.md
+      - Dockerfile Golden: devops/pipelines/dockerfile-golden.md
+    - 📜 Scripts Bash:
+      - Index: scripts/bash/index.md
+      - God Script:
+        - server-discovery.sh: scripts/bash/server-discovery-audit.md
+      - Système:
+        - check-disk-space.sh: scripts/bash/check-disk-space.md
+        - cleanup-system.sh: scripts/bash/cleanup-system.md
+        - logs-extractor.sh: scripts/bash/logs-extractor.md
+        - monitor-resources.sh: scripts/bash/monitor-resources.md
+        - system-info.sh: scripts/bash/system-info.md
+      - Réseau:
+        - check-connectivity.sh: scripts/bash/check-connectivity.md
+        - port-scanner.sh: scripts/bash/port-scanner.md
+        - dns-lookup.sh: scripts/bash/dns-lookup.md
+      - Fichiers:
+        - backup-directory.sh: scripts/bash/backup-directory.md
+        - sync-folders.sh: scripts/bash/sync-folders.md
+        - find-large-files.sh: scripts/bash/find-large-files.md
+      - Sécurité:
+        - security-audit.sh: scripts/bash/security-audit.md
+        - check-permissions.sh: scripts/bash/check-permissions.md
+        - log-analyzer.sh: scripts/bash/log-analyzer.md
+        - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
+        - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
+      - Services:
+        - service-manager.sh: scripts/bash/service-manager.md
+        - health-check.sh: scripts/bash/health-check.md
+        - logrotate-builder.sh: scripts/bash/logrotate-builder.md
+      - Conteneurs:
+        - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
+        - container-net-debug.sh: scripts/bash/container-net-debug.md
+      - Bases de Données:
+        - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
+      - Infrastructure Linux:
+        - check-ldap.sh: scripts/bash/check-ldap.md
+        - check-bind.sh: scripts/bash/check-bind.md
+        - check-mysql.sh: scripts/bash/check-mysql.md
+        - check-postgresql.sh: scripts/bash/check-postgresql.md
+        - check-nginx.sh: scripts/bash/check-nginx.md
+        - check-postfix.sh: scripts/bash/check-postfix.md
+    - 📜 Scripts PowerShell:
+      - Index: scripts/powershell/index.md
+      - God Script:
+        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
+      - Système:
+        - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
+        - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
+      - Réseau:
+        - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
+      - Fichiers:
+        - Backup-Directory.ps1: scripts/powershell/Backup-Directory.md
+        - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
+      - Services:
+        - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
+      - Sécurité & Audit:
+        - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
+      - Infrastructure Windows:
+        - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
+        - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
+        - Test-DNSServer.ps1: scripts/powershell/Test-DNSServer.md
+        - Test-DHCPServer.ps1: scripts/powershell/Test-DHCPServer.md
+        - Test-SQLServer.ps1: scripts/powershell/Test-SQLServer.md
+        - Test-IISHealth.ps1: scripts/powershell/Test-IISHealth.md
+        - Test-PKIHealth.ps1: scripts/powershell/Test-PKIHealth.md
+    - 📜 Scripts Python:
+      - Index: scripts/python/index.md
+      - Système:
+        - system_info.py: scripts/python/system_info.md
+      - Monitoring:
+        - health_checker.py: scripts/python/health_checker.md
+      - Fichiers:
+        - backup_manager.py: scripts/python/backup_manager.md
+      - Conteneurs:
+        - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
+        - docker_health.py: scripts/python/docker_health.md
+        - kubernetes_health.py: scripts/python/kubernetes_health.md
+      - Bases de Données:
+        - redis_key_auditor.py: scripts/python/redis_key_auditor.md
+      - Générateurs:
+        - systemd_generator.py: scripts/python/systemd_generator.md
+      - DevOps & Cloud:
+        - cert_checker.py: scripts/python/cert_checker.md
+        - git_repo_cleaner.py: scripts/python/git_repo_cleaner.md
 
   # ══════════════════════════════════════════════════════════════
-  # PLAYBOOKS - RÉPONSE INCIDENT (ACCÈS PRIORITAIRE)
-  # ══════════════════════════════════════════════════════════════
-  - 🔥 Playbooks:
-    - Réponse Incident: playbooks/incident-response.md
-
-  # ══════════════════════════════════════════════════════════════
-  # PIPELINES CI/CD
-  # ══════════════════════════════════════════════════════════════
-  - 🚀 Pipelines CI/CD:
-    - Vue d'ensemble: devops/pipelines/index.md
-    - GitLab CI Ultimate: devops/pipelines/gitlab-ci-ultimate.md
-    - GitHub Actions: devops/pipelines/github-actions-workflow.md
-    - Dockerfile Golden: devops/pipelines/dockerfile-golden.md
-
-  # ══════════════════════════════════════════════════════════════
-  # PYTHON + FORMATION PYTHON SYSOPS
-  # ══════════════════════════════════════════════════════════════
-  - 🐍 Python:
-    - Accueil: python/index.md
-    - 🎓 Formation Python SysOps (35h):
-      - Programme: formations/python-sysops/index.md
-      - Niveau 1 - Fondations (10h):
-        - Module 01 - Environnement: formations/python-sysops/01-environnement.md
-        - Module 02 - Syntaxe: formations/python-sysops/02-syntaxe.md
-        - Module 03 - Structures: formations/python-sysops/03-structures.md
-        - Module 04 - Fonctions: formations/python-sysops/04-fonctions.md
-      - Niveau 2 - Système (10h):
-        - Module 05 - Fichiers: formations/python-sysops/05-fichiers.md
-        - Module 06 - Formats: formations/python-sysops/06-formats.md
-        - Module 07 - Subprocess: formations/python-sysops/07-subprocess.md
-        - Module 08 - Regex: formations/python-sysops/08-regex.md
-        - Module 09 - Erreurs: formations/python-sysops/09-erreurs.md
-      - Niveau 3 - Réseau (8h):
-        - Module 10 - Réseau: formations/python-sysops/10-reseau.md
-        - Module 11 - APIs REST: formations/python-sysops/11-api-rest.md
-        - Module 12 - SSH: formations/python-sysops/12-ssh.md
-      - Niveau 4 - Production (7h):
-        - Module 13 - CLI: formations/python-sysops/13-cli.md
-        - Module 14 - Cloud: formations/python-sysops/14-cloud.md
-        - Module 15 - Tests: formations/python-sysops/15-tests.md
-      - Ressources:
-        - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
-        - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
-        - Glossaire: formations/python-sysops/glossaire.md
-    - 📚 Documentation:
-      - Fondamentaux: python/fundamentals.md
-      - Fichiers & Données: python/files-data.md
-      - API & Réseau: python/api-network.md
-      - Cloud & AWS: python/cloud-aws.md
-      - Tests & Qualité: python/testing.md
-
-  # ══════════════════════════════════════════════════════════════
-  # LINUX + FORMATION LINUX MASTERY
+  # ONGLET 2 : LINUX
   # ══════════════════════════════════════════════════════════════
   - 🐧 Linux:
     - Accueil: linux/index.md
@@ -222,7 +262,7 @@ nav:
       - Archives: linux/archives-compression.md
 
   # ══════════════════════════════════════════════════════════════
-  # WINDOWS + FORMATIONS WINDOWS
+  # ONGLET 3 : WINDOWS
   # ══════════════════════════════════════════════════════════════
   - 🪟 Windows:
     - Accueil: windows/index.md
@@ -347,79 +387,43 @@ nav:
       - WMI & CIM: windows/wmi-cim.md
 
   # ══════════════════════════════════════════════════════════════
-  # CLOUD + FORMATIONS CLOUD
+  # ONGLET 4 : DEVOPS & CLOUD (Fusion DevOps + Cloud + Python)
   # ══════════════════════════════════════════════════════════════
-  - ☁️ Cloud:
-    - 🎓 Formation Cloud Fundamentals (35h):
-      - Programme: formations/cloud-fundamentals/index.md
-      - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
-      - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
-      - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
-      - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
-      - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
-      - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
-      - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
-      - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
-      - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
-      - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
-      - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
-      - Ressources:
-        - Glossaire: formations/cloud-fundamentals/glossaire.md
-        - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
-    - 🎓 Formation GCP (35h):
-      - Programme: formations/gcp-fundamentals/index.md
-      - Module 01 - Console & IAM: formations/gcp-fundamentals/01-module.md
-      - Module 02 - Compute Engine: formations/gcp-fundamentals/02-module.md
-      - Module 03 - Networking: formations/gcp-fundamentals/03-module.md
-      - Module 04 - Storage: formations/gcp-fundamentals/04-module.md
-      - Module 05 - GKE: formations/gcp-fundamentals/05-module.md
-      - Module 06 - TP Final: formations/gcp-fundamentals/06-tp-final.md
-      - Module 07 - CI/CD: formations/gcp-fundamentals/07-module.md
-      - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
-      - Module 09 - Security: formations/gcp-fundamentals/09-module.md
-      - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
-    - 🎓 Formation AWS (35h):
-      - Programme: formations/aws-fundamentals/index.md
-      - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
-      - Module 02 - EC2: formations/aws-fundamentals/02-module.md
-      - Module 03 - VPC: formations/aws-fundamentals/03-module.md
-      - Module 04 - Storage: formations/aws-fundamentals/04-module.md
-      - Module 05 - EKS: formations/aws-fundamentals/05-module.md
-      - Module 06 - TP Final: formations/aws-fundamentals/06-tp-final.md
-      - Module 07 - CI/CD: formations/aws-fundamentals/07-module.md
-      - Module 08 - Serverless: formations/aws-fundamentals/08-module.md
-      - Module 09 - Security: formations/aws-fundamentals/09-module.md
-      - Module 10 - Observability: formations/aws-fundamentals/10-module.md
-    - 🎓 Formation Azure (35h):
-      - Programme: formations/azure-fundamentals/index.md
-      - Module 01 - Portal & IAM: formations/azure-fundamentals/01-module.md
-      - Module 02 - VMs: formations/azure-fundamentals/02-module.md
-      - Module 03 - Networking: formations/azure-fundamentals/03-module.md
-      - Module 04 - Storage: formations/azure-fundamentals/04-module.md
-      - Module 05 - AKS: formations/azure-fundamentals/05-module.md
-      - Module 06 - TP Final: formations/azure-fundamentals/06-tp-final.md
-      - Module 07 - CI/CD: formations/azure-fundamentals/07-module.md
-      - Module 08 - Serverless: formations/azure-fundamentals/08-module.md
-      - Module 09 - Security: formations/azure-fundamentals/09-module.md
-      - Module 10 - Observability: formations/azure-fundamentals/10-module.md
-
-  # ══════════════════════════════════════════════════════════════
-  # FONDAMENTAUX & ARCHITECTURE
-  # ══════════════════════════════════════════════════════════════
-  - 🏗️ Fondamentaux & Architecture:
-    - Accueil: concepts/index.md
-    - 🏛️ Architecture & Concepts:
-      - Piliers DevOps: concepts/devops-pillars.md
-      - Flux Web: concepts/web-flow.md
-      - Bases de Données: concepts/databases.md
-    - 🌐 Réseau:
-      - Fondamentaux Réseau: network/fundamentals.md
-
-  # ══════════════════════════════════════════════════════════════
-  # DEVOPS + FORMATIONS DEVOPS
-  # ══════════════════════════════════════════════════════════════
-  - ♾️ DevOps:
+  - ☁️ DevOps & Cloud:
     - Accueil: devops/index.md
+    - 🐍 Python SysOps:
+      - Accueil: python/index.md
+      - 🎓 Formation Python SysOps (35h):
+        - Programme: formations/python-sysops/index.md
+        - Niveau 1 - Fondations (10h):
+          - Module 01 - Environnement: formations/python-sysops/01-environnement.md
+          - Module 02 - Syntaxe: formations/python-sysops/02-syntaxe.md
+          - Module 03 - Structures: formations/python-sysops/03-structures.md
+          - Module 04 - Fonctions: formations/python-sysops/04-fonctions.md
+        - Niveau 2 - Système (10h):
+          - Module 05 - Fichiers: formations/python-sysops/05-fichiers.md
+          - Module 06 - Formats: formations/python-sysops/06-formats.md
+          - Module 07 - Subprocess: formations/python-sysops/07-subprocess.md
+          - Module 08 - Regex: formations/python-sysops/08-regex.md
+          - Module 09 - Erreurs: formations/python-sysops/09-erreurs.md
+        - Niveau 3 - Réseau (8h):
+          - Module 10 - Réseau: formations/python-sysops/10-reseau.md
+          - Module 11 - APIs REST: formations/python-sysops/11-api-rest.md
+          - Module 12 - SSH: formations/python-sysops/12-ssh.md
+        - Niveau 4 - Production (7h):
+          - Module 13 - CLI: formations/python-sysops/13-cli.md
+          - Module 14 - Cloud: formations/python-sysops/14-cloud.md
+          - Module 15 - Tests: formations/python-sysops/15-tests.md
+        - Ressources:
+          - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
+          - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
+          - Glossaire: formations/python-sysops/glossaire.md
+      - 📚 Documentation:
+        - Fondamentaux: python/fundamentals.md
+        - Fichiers & Données: python/files-data.md
+        - API & Réseau: python/api-network.md
+        - Cloud & AWS: python/cloud-aws.md
+        - Tests & Qualité: python/testing.md
     - 🎓 Formations DevOps:
       - 🚀 Le Socle DevOps (6h):
         - Programme: formations/devops-foundation/index.md
@@ -497,6 +501,59 @@ nav:
         - Module 08 - Est-Ouest: formations/terraform-aci/08-module.md
         - Module 09 - Multi-Site: formations/terraform-aci/09-module.md
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
+    - 🎓 Formations Cloud:
+      - ☁️ Cloud Fundamentals (35h):
+        - Programme: formations/cloud-fundamentals/index.md
+        - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
+        - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
+        - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
+        - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
+        - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
+        - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
+        - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
+        - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
+        - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
+        - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
+        - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+        - Ressources:
+          - Glossaire: formations/cloud-fundamentals/glossaire.md
+          - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
+      - 🟠 AWS Fundamentals (35h):
+        - Programme: formations/aws-fundamentals/index.md
+        - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
+        - Module 02 - EC2: formations/aws-fundamentals/02-module.md
+        - Module 03 - VPC: formations/aws-fundamentals/03-module.md
+        - Module 04 - Storage: formations/aws-fundamentals/04-module.md
+        - Module 05 - EKS: formations/aws-fundamentals/05-module.md
+        - Module 06 - TP Final: formations/aws-fundamentals/06-tp-final.md
+        - Module 07 - CI/CD: formations/aws-fundamentals/07-module.md
+        - Module 08 - Serverless: formations/aws-fundamentals/08-module.md
+        - Module 09 - Security: formations/aws-fundamentals/09-module.md
+        - Module 10 - Observability: formations/aws-fundamentals/10-module.md
+      - 🔵 Azure Fundamentals (35h):
+        - Programme: formations/azure-fundamentals/index.md
+        - Module 01 - Portal & IAM: formations/azure-fundamentals/01-module.md
+        - Module 02 - VMs: formations/azure-fundamentals/02-module.md
+        - Module 03 - Networking: formations/azure-fundamentals/03-module.md
+        - Module 04 - Storage: formations/azure-fundamentals/04-module.md
+        - Module 05 - AKS: formations/azure-fundamentals/05-module.md
+        - Module 06 - TP Final: formations/azure-fundamentals/06-tp-final.md
+        - Module 07 - CI/CD: formations/azure-fundamentals/07-module.md
+        - Module 08 - Serverless: formations/azure-fundamentals/08-module.md
+        - Module 09 - Security: formations/azure-fundamentals/09-module.md
+        - Module 10 - Observability: formations/azure-fundamentals/10-module.md
+      - 🔴 GCP Fundamentals (35h):
+        - Programme: formations/gcp-fundamentals/index.md
+        - Module 01 - Console & IAM: formations/gcp-fundamentals/01-module.md
+        - Module 02 - Compute Engine: formations/gcp-fundamentals/02-module.md
+        - Module 03 - Networking: formations/gcp-fundamentals/03-module.md
+        - Module 04 - Storage: formations/gcp-fundamentals/04-module.md
+        - Module 05 - GKE: formations/gcp-fundamentals/05-module.md
+        - Module 06 - TP Final: formations/gcp-fundamentals/06-tp-final.md
+        - Module 07 - CI/CD: formations/gcp-fundamentals/07-module.md
+        - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
+        - Module 09 - Security: formations/gcp-fundamentals/09-module.md
+        - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
     - 🛠️ Méthodologie:
       - Git SysOps: devops/git-sysops.md
       - Docs-as-Code: devops/docs-as-code.md
@@ -532,145 +589,59 @@ nav:
       - Load Balancing: devops/load-balancing.md
 
   # ══════════════════════════════════════════════════════════════
-  # BASES DE DONNÉES
+  # ONGLET 5 : ENCYCLOPÉDIE (Fondamentaux + BDD + Sécurité)
   # ══════════════════════════════════════════════════════════════
-  - 🗄️ Bases de Données:
-    - Accueil: databases/index.md
-    - 🐘 PostgreSQL:
-      - Guide: databases/postgresql.md
-      - Cheatsheet: databases/postgresql-cheatsheet.md
-    - 🐬 MariaDB/MySQL:
-      - Guide: databases/mariadb.md
-      - Cheatsheet: databases/mariadb-cheatsheet.md
-    - 🍃 MongoDB:
-      - Guide: databases/mongodb.md
-      - Cheatsheet: databases/mongodb-cheatsheet.md
-    - 🔴 Redis:
-      - Guide: databases/redis.md
-      - Cheatsheet: databases/redis-cheatsheet.md
-    - 🔄 Haute Disponibilité: databases/high-availability.md
+  - 📚 Encyclopédie:
+    - 🏛️ Fondamentaux:
+      - Accueil: concepts/index.md
+      - Piliers DevOps: concepts/devops-pillars.md
+      - Flux Web: concepts/web-flow.md
+      - Bases de Données: concepts/databases.md
+      - Fondamentaux Réseau: network/fundamentals.md
+    - 🗄️ Bases de Données:
+      - Accueil: databases/index.md
+      - 🐘 PostgreSQL:
+        - Guide: databases/postgresql.md
+        - Cheatsheet: databases/postgresql-cheatsheet.md
+      - 🐬 MariaDB/MySQL:
+        - Guide: databases/mariadb.md
+        - Cheatsheet: databases/mariadb-cheatsheet.md
+      - 🍃 MongoDB:
+        - Guide: databases/mongodb.md
+        - Cheatsheet: databases/mongodb-cheatsheet.md
+      - 🔴 Redis:
+        - Guide: databases/redis.md
+        - Cheatsheet: databases/redis-cheatsheet.md
+      - 🔄 Haute Disponibilité: databases/high-availability.md
+    - 🛡️ Sécurité:
+      - Accueil: security/index.md
+      - 🎓 Formation PKI & Certificats (16h):
+        - Programme: formations/pki-certificates/index.md
+        - Module 01 - Crypto: formations/pki-certificates/01-module.md
+        - Module 02 - X.509: formations/pki-certificates/02-module.md
+        - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
+        - Module 04 - Automatisation: formations/pki-certificates/04-module.md
+        - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
+      - 📋 Conformité:
+        - SecNumCloud: security/secnumcloud.md
+        - Guides ANSSI: security/anssi-guides.md
+        - Checklist Audit: security/audit-checklist.md
+      - 🔐 Cryptographie & PKI:
+        - Concepts Crypto: security/crypto-concepts.md
+        - Certificats: security/certificates.md
+        - OpenSSL CLI: security/openssl-cli.md
+      - 🛡️ Défense & EDR:
+        - CrowdStrike EDR: security/crowdstrike-edr.md
+        - HashiCorp Vault: security/hashicorp-vault.md
+      - 🔴 Red Team & Audit:
+        - Guide CTF: security/ctf-guide.md
+        - Exegol: security/exegol.md
+        - Outils Essentiels: security/essential-tools.md
 
   # ══════════════════════════════════════════════════════════════
-  # SÉCURITÉ + FORMATIONS SÉCURITÉ
+  # ONGLET 6 : CATALOGUE FORMATIONS
   # ══════════════════════════════════════════════════════════════
-  - 🛡️ Sécurité:
-    - Accueil: security/index.md
-    - 🎓 Formation PKI & Certificats (16h):
-      - Programme: formations/pki-certificates/index.md
-      - Module 01 - Crypto: formations/pki-certificates/01-module.md
-      - Module 02 - X.509: formations/pki-certificates/02-module.md
-      - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
-      - Module 04 - Automatisation: formations/pki-certificates/04-module.md
-      - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
-    - 📋 Conformité:
-      - SecNumCloud: security/secnumcloud.md
-      - Guides ANSSI: security/anssi-guides.md
-      - Checklist Audit: security/audit-checklist.md
-    - 🔐 Cryptographie & PKI:
-      - Concepts Crypto: security/crypto-concepts.md
-      - Certificats: security/certificates.md
-      - OpenSSL CLI: security/openssl-cli.md
-    - 🛡️ Défense & EDR:
-      - CrowdStrike EDR: security/crowdstrike-edr.md
-      - HashiCorp Vault: security/hashicorp-vault.md
-    - 🔴 Red Team & Audit:
-      - Guide CTF: security/ctf-guide.md
-      - Exegol: security/exegol.md
-      - Outils Essentiels: security/essential-tools.md
-
-  # ══════════════════════════════════════════════════════════════
-  # BIBLIOTHÈQUE DE SCRIPTS
-  # ══════════════════════════════════════════════════════════════
-  - 📜 Scripts:
-    - Accueil: scripts/index.md
-    - 🐚 Bash:
-      - Index: scripts/bash/index.md
-      - God Script:
-        - server-discovery.sh: scripts/bash/server-discovery-audit.md
-      - Système:
-        - check-disk-space.sh: scripts/bash/check-disk-space.md
-        - cleanup-system.sh: scripts/bash/cleanup-system.md
-        - logs-extractor.sh: scripts/bash/logs-extractor.md
-        - monitor-resources.sh: scripts/bash/monitor-resources.md
-        - system-info.sh: scripts/bash/system-info.md
-      - Réseau:
-        - check-connectivity.sh: scripts/bash/check-connectivity.md
-        - port-scanner.sh: scripts/bash/port-scanner.md
-        - dns-lookup.sh: scripts/bash/dns-lookup.md
-      - Fichiers:
-        - backup-directory.sh: scripts/bash/backup-directory.md
-        - sync-folders.sh: scripts/bash/sync-folders.md
-        - find-large-files.sh: scripts/bash/find-large-files.md
-      - Sécurité:
-        - security-audit.sh: scripts/bash/security-audit.md
-        - check-permissions.sh: scripts/bash/check-permissions.md
-        - log-analyzer.sh: scripts/bash/log-analyzer.md
-        - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
-        - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
-      - Services:
-        - service-manager.sh: scripts/bash/service-manager.md
-        - health-check.sh: scripts/bash/health-check.md
-        - logrotate-builder.sh: scripts/bash/logrotate-builder.md
-      - Conteneurs:
-        - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
-        - container-net-debug.sh: scripts/bash/container-net-debug.md
-      - Bases de Données:
-        - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
-      - Infrastructure Linux:
-        - check-ldap.sh: scripts/bash/check-ldap.md
-        - check-bind.sh: scripts/bash/check-bind.md
-        - check-mysql.sh: scripts/bash/check-mysql.md
-        - check-postgresql.sh: scripts/bash/check-postgresql.md
-        - check-nginx.sh: scripts/bash/check-nginx.md
-        - check-postfix.sh: scripts/bash/check-postfix.md
-    - 🔷 PowerShell:
-      - Index: scripts/powershell/index.md
-      - God Script:
-        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
-      - Système:
-        - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
-        - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
-      - Réseau:
-        - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
-      - Fichiers:
-        - Backup-Directory.ps1: scripts/powershell/Backup-Directory.md
-        - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
-      - Services:
-        - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
-      - Sécurité & Audit:
-        - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
-      - Infrastructure Windows:
-        - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
-        - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
-        - Test-DNSServer.ps1: scripts/powershell/Test-DNSServer.md
-        - Test-DHCPServer.ps1: scripts/powershell/Test-DHCPServer.md
-        - Test-SQLServer.ps1: scripts/powershell/Test-SQLServer.md
-        - Test-IISHealth.ps1: scripts/powershell/Test-IISHealth.md
-        - Test-PKIHealth.ps1: scripts/powershell/Test-PKIHealth.md
-    - 🐍 Python:
-      - Index: scripts/python/index.md
-      - Système:
-        - system_info.py: scripts/python/system_info.md
-      - Monitoring:
-        - health_checker.py: scripts/python/health_checker.md
-      - Fichiers:
-        - backup_manager.py: scripts/python/backup_manager.md
-      - Conteneurs:
-        - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
-        - docker_health.py: scripts/python/docker_health.md
-        - kubernetes_health.py: scripts/python/kubernetes_health.md
-      - Bases de Données:
-        - redis_key_auditor.py: scripts/python/redis_key_auditor.md
-      - Générateurs:
-        - systemd_generator.py: scripts/python/systemd_generator.md
-      - DevOps & Cloud:
-        - cert_checker.py: scripts/python/cert_checker.md
-        - git_repo_cleaner.py: scripts/python/git_repo_cleaner.md
-
-  # ══════════════════════════════════════════════════════════════
-  # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
-  # ══════════════════════════════════════════════════════════════
-  - 🎓 Catalogue Formations: formations/index.md
+  - 🎓 Formations: formations/index.md
 
 extra:
   social:
