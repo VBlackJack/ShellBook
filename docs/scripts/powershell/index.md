@@ -44,6 +44,12 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 | [New-ADUserBulk.ps1](New-ADUserBulk.md) | Création utilisateurs en masse | :material-star::material-star: |
 | [Test-ADHealth.ps1](Test-ADHealth.md) | Vérification santé AD | :material-star::material-star::material-star: |
 
+## Sécurité & Audit
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [Audit-LocalAdmins.ps1](Audit-LocalAdmins.md) | Audit des administrateurs locaux | :material-star::material-star: |
+
 ## Services
 
 | Script | Description | Niveau |

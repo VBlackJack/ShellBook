@@ -19,6 +19,7 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [check-disk-space.sh](check-disk-space.md) | Vérification espace disque avec alertes | :material-star: |
 | [monitor-resources.sh](monitor-resources.md) | Monitoring CPU/RAM en temps réel | :material-star::material-star: |
 | [cleanup-system.sh](cleanup-system.md) | Nettoyage système automatisé | :material-star::material-star: |
+| [logs-extractor.sh](logs-extractor.md) | Extraction de logs par plage horaire | :material-star::material-star: |
 
 ## Réseau
 

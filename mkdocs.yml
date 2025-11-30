@@ -566,10 +566,11 @@ nav:
     - 🐚 Bash:
       - Index: scripts/bash/index.md
       - Système:
-        - system-info.sh: scripts/bash/system-info.md
         - check-disk-space.sh: scripts/bash/check-disk-space.md
-        - monitor-resources.sh: scripts/bash/monitor-resources.md
         - cleanup-system.sh: scripts/bash/cleanup-system.md
+        - logs-extractor.sh: scripts/bash/logs-extractor.md
+        - monitor-resources.sh: scripts/bash/monitor-resources.md
+        - system-info.sh: scripts/bash/system-info.md
       - Réseau:
         - check-connectivity.sh: scripts/bash/check-connectivity.md
         - port-scanner.sh: scripts/bash/port-scanner.md
@@ -604,6 +605,8 @@ nav:
         - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
       - Services:
         - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
+      - Sécurité & Audit:
+        - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
       - Infrastructure Windows:
         - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
         - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
@@ -622,8 +625,9 @@ nav:
         - backup_manager.py: scripts/python/backup_manager.md
       - DevOps & Cloud:
         - cert_checker.py: scripts/python/cert_checker.md
-        - kubernetes_health.py: scripts/python/kubernetes_health.md
         - docker_health.py: scripts/python/docker_health.md
+        - git_repo_cleaner.py: scripts/python/git_repo_cleaner.md
+        - kubernetes_health.py: scripts/python/kubernetes_health.md
 
   # ══════════════════════════════════════════════════════════════
   # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
