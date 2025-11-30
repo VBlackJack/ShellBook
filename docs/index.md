@@ -1,190 +1,205 @@
+---
+tags:
+  - accueil
+  - dashboard
+  - secnumcloud
+---
+
 # ShellBook
 
-**La Base de Connaissance & Plateforme de Formation pour l'Ingénieur SysOps & DevOps**
-
 <div style="text-align: center; margin: 2em 0;">
-  <span style="background: #1e3a8a; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🛡️ SecNumCloud Friendly</span>
+  <p style="font-size: 1.3em; color: #64748b;">Base de Connaissance Ops SecNumCloud</p>
+  <span style="background: #1e3a8a; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🛡️ SecNumCloud</span>
   <span style="background: #047857; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🐧 Linux</span>
   <span style="background: #0369a1; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">🪟 Windows</span>
-  <span style="background: #326ce5; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">☸️ K8s Ready</span>
+  <span style="background: #326ce5; color: white; padding: 0.3em 0.8em; border-radius: 4px; margin: 0.3em;">☸️ Kubernetes</span>
 </div>
 
-!!! success "🎓 Nouveau : Découvrez ShellBook Academy"
-    **9 parcours de formation professionnels** pour monter en compétence, du niveau débutant à expert.
-
-    125 heures de contenu pédagogique : DevOps, Linux, Windows, Sécurité, Automatisation, Bases de Données.
-
-    [:octicons-arrow-right-24: Accéder aux Formations](formations/index.md){ .md-button .md-button--primary }
-
 ---
 
-## 🎯 Accès Rapide par Besoin
-
-### 🔥 Urgence / Debug
-
-**Votre système est en feu ?** Accès direct aux commandes de survie.
-
-| Problème | Solution Express |
-|----------|------------------|
-| **Serveur Linux HS** | [Debugging Linux](linux/debugging.md) • [Performance Analysis](linux/performance-analysis.md) |
-| **Pod K8s Crash** | [Kubectl Survival Kit](devops/kubernetes-survival.md) • [K8s Networking](devops/kubernetes-networking.md) |
-| **Logs illisibles** | [Logs Management](linux/logs-management.md) • [Loki Stack](devops/observability-stack.md#loki-prometheus-pour-les-logs) |
-| **Disque plein** | [Filesystem & Storage](linux/filesystem-and-storage.md) • [Archives & Compression](linux/archives-compression.md) |
-
-### 🛡️ Sécurité & Hardening
-
-**Renforcer votre infrastructure** selon les standards SecNumCloud.
-
-| Action | Documentation |
-|--------|---------------|
-| **SSH Hardening** | [Bonnes Pratiques de Sécurité SSH](linux/ssh-hardening.md) |
-| **Firewall Linux** | [UFW Configuration](linux/firewall-ufw.md) |
-| **Windows Security** | [Defender, BitLocker & Events](windows/windows-security.md) |
-| **Certificats TLS** | [Certificate Management](security/certificates.md) • [OpenSSL CLI](security/openssl-cli.md) |
-| **Pentest Tools** | [Exegol Framework](security/exegol.md) • [CTF Guide](security/ctf-guide.md) |
-
-### 🚀 Déploiement & Automatisation
-
-**Déployer rapidement et de manière reproductible.**
-
-| Besoin | Stack |
-|--------|-------|
-| **CI/CD** | [GitHub Actions for Ops](devops/cicd-github-actions.md) |
-| **Orchestration** | [Ansible Playbooks](devops/ansible/playbooks.md) • [Ansible Industrialization](devops/ansible/industrialization.md) |
-| **Conteneurs** | [Docker Advanced](devops/docker-advanced.md) |
-| **Monitoring** | [Prometheus, Loki & Grafana](devops/observability-stack.md) |
-
----
-
-## 📚 Architecture du Savoir
+## Dashboard Opérationnel
 
 <div class="grid cards" markdown>
 
--   :material-school:{ .lg .middle } **🎓 Formations (9 Parcours)**
+-   :fire:{ .lg .middle } **Urgence / Troubleshooting**
 
     ---
 
-    Des cursus complets pour monter en compétence : Linux, Windows, Ansible, SQL Server, Sécurité...
+    **Le système est en feu ?** Accès direct aux scripts de survie et playbooks d'incident.
 
-    **Couvre :** DevOps Foundation • Hardening Linux • Katello • Ansible Mastery • Windows Server • WSUS • Chocolatey • NTLite • SQL Server DBA
+    - [Playbook Réponse Incident](playbooks/incident-response.md)
+    - [Scripts Bash](scripts/bash/index.md) • [Scripts PowerShell](scripts/powershell/index.md)
+    - [Scripts Python](scripts/python/index.md)
 
-    [:octicons-arrow-right-24: Accéder aux Formations](formations/index.md)
+    [:octicons-flame-24: Voir les Playbooks](playbooks/incident-response.md){ .md-button .md-button--primary }
 
--   :fontawesome-brands-linux:{ .lg .middle } **Linux (30+ Guides)**
-
-    ---
-
-    Le cœur de l'infrastructure moderne : système, réseau, services et automatisation.
-
-    **Couvre :** Boot & Services • Filesystem & LVM • SSH Hardening • Nginx/Apache • Bash Scripting
-
-    [:octicons-arrow-right-24: Explorer Linux](linux/ssh-keys.md)
-
--   :fontawesome-brands-windows:{ .lg .middle } **Windows (9 Guides)**
+-   :rocket:{ .lg .middle } **CI/CD Factory**
 
     ---
 
-    Administration Windows Server et Desktop : PowerShell, AD et sécurité.
+    **Templates de production** pour pipelines et containerisation.
 
-    **Couvre :** PowerShell Foundations • Active Directory • GPO • BitLocker • Defender
+    - [GitLab CI Ultimate](devops/pipelines/gitlab-ci-ultimate.md)
+    - [GitHub Actions Workflow](devops/pipelines/github-actions-workflow.md)
+    - [Dockerfile Golden](devops/pipelines/dockerfile-golden.md)
 
-    [:octicons-arrow-right-24: Explorer Windows](windows/index.md)
+    [:octicons-workflow-24: Voir les Pipelines](devops/pipelines/index.md){ .md-button }
 
--   :material-kubernetes:{ .lg .middle } **Kubernetes (4 Guides)**
-
-    ---
-
-    Orchestration de conteneurs en production : CKA, debugging et networking.
-
-    **Couvre :** CKA Prep • kubectl Survival • Services & Ingress • GitOps ArgoCD
-
-    [:octicons-arrow-right-24: Explorer Kubernetes](devops/kubernetes-survival.md)
-
--   :material-shield-lock:{ .lg .middle } **Security (7 Guides)**
+-   :shield:{ .lg .middle } **Sécurité & Compliance**
 
     ---
 
-    Sécurité offensive et défensive : cryptographie, red team et hardening.
+    **Hardening et conformité** selon les standards SecNumCloud et ANSSI.
 
-    **Couvre :** Certificates & OpenSSL • Exegol • CTF Methodology • HashiCorp Vault
+    - [Référentiel SecNumCloud](security/secnumcloud.md)
+    - [Guides ANSSI](security/anssi-guides.md)
+    - [Hardening Linux](formations/linux-hardening/index.md) • [Hardening Windows](formations/windows-hardening/index.md)
 
-    [:octicons-arrow-right-24: Explorer Security](security/certificates.md)
+    [:octicons-shield-check-24: Voir la Sécurité](security/index.md){ .md-button }
 
--   :material-layers-triple:{ .lg .middle } **DevOps (15+ Guides)**
-
-    ---
-
-    CI/CD, conteneurs et automatisation : Docker, Ansible, Terraform et GitOps.
-
-    **Couvre :** GitHub Actions • GitLab CI • Docker Advanced • Ansible • Observability
-
-    [:octicons-arrow-right-24: Explorer DevOps](devops/git-sysops.md)
-
--   :material-network:{ .lg .middle } **Réseau & Infrastructure**
+-   :books:{ .lg .middle } **Encyclopédie**
 
     ---
 
-    Fondamentaux réseau et haute disponibilité : CIDR, load balancing et database HA.
+    **Documentation technique** complète par domaine.
 
-    **Couvre :** CIDR • TCP/IP • Load Balancing L4/L7 • Database Clustering
+    - [Linux](linux/index.md) (30+ guides)
+    - [Windows](windows/index.md) (9 guides)
+    - [Kubernetes](devops/kubernetes-survival.md) (4 guides)
+    - [Réseau](network/fundamentals.md)
 
-    [:octicons-arrow-right-24: Explorer Réseau](network/fundamentals.md)
+    [:octicons-book-24: Explorer](linux/index.md){ .md-button }
 
 </div>
 
 ---
 
-## 🧰 Outils du Quotidien
+## Quick Actions - God Scripts
 
-### Cheatsheets Haute Densité
+!!! success "Audit Instantané"
+    Ces scripts génèrent un **rapport Markdown complet** de l'état d'un serveur en quelques secondes.
 
-**Les fiches de référence à garder ouvertes dans un onglet.**
+<div class="grid cards" markdown>
+
+-   :fontawesome-brands-linux:{ .lg .middle } **Linux Server Discovery**
+
+    ---
+
+    Audit complet : rôle, hardware, services, réseau, sécurité.
+
+    ```bash
+    # Audit complet avec rapport Markdown
+    sudo ./server-discovery.sh -o audit_$(hostname).md
+    ```
+
+    [:octicons-terminal-24: Voir le Script](scripts/bash/server-discovery-audit.md){ .md-button .md-button--primary }
+
+-   :fontawesome-brands-windows:{ .lg .middle } **Windows Server Audit**
+
+    ---
+
+    Audit complet : rôles, Defender, AD, ports, services.
+
+    ```powershell
+    # Audit complet avec rapport Markdown
+    .\Invoke-ServerAudit.ps1 -OutputPath "C:\Audit\rapport.md"
+    ```
+
+    [:octicons-terminal-24: Voir le Script](scripts/powershell/Invoke-ServerAudit.md){ .md-button .md-button--primary }
+
+</div>
+
+---
+
+## Accès Rapide par Situation
+
+### En Urgence
+
+| Symptôme | Action Immédiate | Script Recommandé |
+|----------|------------------|-------------------|
+| **Serveur ne répond plus** | Diagnostic complet | [server-discovery.sh](scripts/bash/server-discovery-audit.md) |
+| **Disque plein** | Nettoyage système | [cleanup-system.sh](scripts/bash/cleanup-system.md) |
+| **Pod K8s CrashLoop** | Inspection détaillée | [k8s-pod-inspector.sh](scripts/bash/k8s-pod-inspector.md) |
+| **Conteneurs en folie** | Nettoyage Docker | [docker_cleaner_pro.py](scripts/python/docker_cleaner_pro.md) |
+| **Base de données lente** | Analyse bloat PostgreSQL | [pg-bloat-check.sh](scripts/bash/pg-bloat-check.md) |
+| **Besoin de logs** | Extraction ciblée | [logs-extractor.sh](scripts/bash/logs-extractor.md) |
+
+### Mise en Place d'Infrastructure
+
+| Besoin | Template / Guide |
+|--------|------------------|
+| **Pipeline GitLab** | [GitLab CI Ultimate](devops/pipelines/gitlab-ci-ultimate.md) |
+| **Pipeline GitHub** | [GitHub Actions Workflow](devops/pipelines/github-actions-workflow.md) |
+| **Dockerfile optimisé** | [Dockerfile Golden](devops/pipelines/dockerfile-golden.md) |
+| **Service systemd** | [systemd_generator.py](scripts/python/systemd_generator.md) |
+| **Certificat SSL/TLS** | [ssl-csr-wizard.sh](scripts/bash/ssl-csr-wizard.md) |
+| **Rotation des logs** | [logrotate-builder.sh](scripts/bash/logrotate-builder.md) |
+
+---
+
+## Formations Recommandées
+
+<div class="grid cards" markdown>
+
+-   :material-school:{ .lg .middle } **Socle DevOps** (6h)
+
+    ---
+
+    Git, branches, CI/CD, qualité de code.
+
+    [:octicons-arrow-right-24: Commencer](formations/devops-foundation/index.md)
+
+-   :fontawesome-brands-linux:{ .lg .middle } **Linux Mastery** (150h)
+
+    ---
+
+    Du débutant à l'expert Linux.
+
+    [:octicons-arrow-right-24: Commencer](formations/linux-mastery/index.md)
+
+-   :fontawesome-brands-windows:{ .lg .middle } **Windows Mastery** (150h)
+
+    ---
+
+    Administration Windows Server.
+
+    [:octicons-arrow-right-24: Commencer](formations/windows-mastery/index.md)
+
+-   :material-kubernetes:{ .lg .middle } **Kubernetes Mastery** (35h)
+
+    ---
+
+    De l'architecture au GitOps.
+
+    [:octicons-arrow-right-24: Commencer](formations/kubernetes-mastery/index.md)
+
+</div>
+
+---
+
+## Cheatsheets Essentielles
 
 | Outil | Fiche | Cas d'Usage |
 |-------|-------|-------------|
-| **OpenSSL** | [OpenSSL CLI](security/openssl-cli.md) | Générer certificats, CSR, vérifier chaînes TLS |
+| **OpenSSL** | [OpenSSL CLI](security/openssl-cli.md) | Certificats, CSR, chaînes TLS |
 | **PowerShell** | [PowerShell Foundations](windows/powershell-foundations.md) | Objets, pipelines, remoting |
-| **Git** | [Git for SysOps](devops/git-sysops.md) | Workflows, branches, troubleshooting |
-| **Kubectl** | [Kubectl Survival](devops/kubernetes-survival.md) | Debug pods, logs, port-forward |
-| **Ansible** | [Ansible Fundamentals](devops/ansible/fundamentals.md) | Inventaires, modules, idempotence |
-| **Prometheus** | [PromQL Basics](devops/observability-stack.md#prometheus-le-collecteur-de-metriques) | Métriques, alertes, exporters |
+| **Git** | [Git for SysOps](devops/git-sysops.md) | Workflows, branches |
+| **Kubectl** | [Kubectl Survival](devops/kubernetes-survival.md) | Debug pods, logs |
+| **Ansible** | [Ansible Fundamentals](devops/ansible/fundamentals.md) | Inventaires, modules |
 
 ---
 
-## 💡 Commencer
+## Navigation
 
-!!! tip "Navigation Rapide"
-    - Utilisez **Ctrl+K** (ou **Cmd+K** sur Mac) pour rechercher n'importe quelle commande
-    - Les **tags** en haut de chaque page permettent de filtrer par technologie
-    - Les sections **Quick Reference** en fin de page regroupent les commandes essentielles
-
-!!! example "Parcours Recommandés"
-    **Apprendre les fondamentaux DevOps ?**
-    → [🚀 Le Socle DevOps](formations/devops-foundation/index.md) (Formation complète en 5 modules - 12h)
-
-    **Nouveau sur Linux ?**
-    → [Linux Productivity](linux/productivity.md) → [Modern Tools](linux/modern-tools.md) → [Bash Wizardry](linux/bash-wizardry.md)
-
-    **Préparer la CKA ?**
-    → [Kubernetes CKA](devops/kubernetes-cka.md) → [Kubectl Survival](devops/kubernetes-survival.md) → [K8s Networking](devops/kubernetes-networking.md)
-
-    **Sécuriser un serveur Linux ?**
-    → [🔐 Hardening Linux](formations/linux-hardening/index.md) (Formation complète en 5 modules - 10h)
-
----
-
-## 🤝 Contribution
-
-Ce projet suit les standards **SecNumCloud** pour la sécurité et la conformité.
-
-- 📖 Documentation : Markdown + MkDocs Material
-- 🚀 Déploiement : GitHub Actions → GitHub Pages
-- 🔒 Sécurité : Pas de secrets hardcodés, validation manuelle en production
+!!! tip "Raccourcis Clavier"
+    - **Ctrl+K** (Cmd+K sur Mac) : Recherche rapide
+    - Les **tags** filtrent par technologie
+    - Les sections **Quick Reference** regroupent les commandes essentielles
 
 ---
 
 <div style="text-align: center; color: #64748b; margin-top: 3em;">
-  <p><strong>ShellBook Academy</strong> - Votre plateforme d'apprentissage SysOps & DevOps</p>
-  <p>📚 100+ Guides • 🎓 9 Formations • 125h de Contenu</p>
+  <p><strong>ShellBook</strong> - Base de Connaissance Ops SecNumCloud</p>
+  <p>100+ Guides • 15+ Formations • 50+ Scripts</p>
   <p>Linux • Windows • Kubernetes • DevOps • Security</p>
 </div>
