@@ -29,37 +29,47 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 
     | Package | Version | Utilisé par |
     |---------|---------|-------------|
-    | `rich` | >=13.0.0 | backup_manager.py, systemd_generator.py |
-    | `pyyaml` | >=6.0 | kubernetes_health.py |
-    | `psutil` | >=5.9.0 | system_info.py, health_checker.py |
-    | `docker` | >=7.0.0 | docker_cleaner_pro.py, docker_health.py |
-    | `kubernetes` | >=29.0.0 | kubernetes_health.py |
-    | `redis` | >=5.0.0 | redis_key_auditor.py |
-    | `cryptography` | >=42.0.0 | cert_checker.py |
-    | `gitpython` | >=3.1.0 | git_repo_cleaner.py |
-    | `requests` | >=2.31.0 | Dépendance commune |
+    | `rich` | >=13.0.0 | La plupart des scripts (UI console) |
+    | `pyyaml` | >=6.0 | Configuration YAML |
+    | `psutil` | >=5.9.0 | system_info, disk_io_analyzer, cost_analyzer |
+    | `docker` | >=7.0.0 | docker_cleaner_pro, docker_health |
+    | `kubernetes` | >=29.0.0 | kubernetes_health |
+    | `redis` | >=5.0.0 | redis_key_auditor |
+    | `mysql-connector-python` | >=8.0.0 | db_replication_monitor |
+    | `psycopg2-binary` | >=2.9.0 | db_replication_monitor |
+    | `cryptography` | >=42.0.0 | cert_checker |
+    | `gitpython` | >=3.1.0 | git_repo_cleaner |
+    | `requests` | >=2.31.0 | api_health_monitor, cost_analyzer |
+    | `python-dateutil` | >=2.8.0 | log_anomaly_detector |
+    | `jinja2` | >=3.1.0 | compliance_report_generator |
 
 ---
 
-## Scripts Disponibles
+## Scripts Disponibles (20 scripts)
 
-### Système
+### Système & Performance
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [system_info.py](system_info.md) | Informations système complètes | :material-star: |
+| [system_tuning_advisor.py](system_tuning_advisor.md) | Recommandations tuning kernel/sysctl | :material-star::material-star::material-star: |
+| [disk_io_analyzer.py](disk_io_analyzer.md) | Analyse performances I/O disque | :material-star::material-star::material-star: |
+| [patch_compliance_report.py](patch_compliance_report.md) | Audit conformité patchs système | :material-star::material-star: |
 
 ### Monitoring & Alertes
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [health_checker.py](health_checker.md) | Vérification santé services | :material-star::material-star: |
+| [api_health_monitor.py](api_health_monitor.md) | Monitoring multi-endpoints API avec SSL | :material-star::material-star: |
+| [log_anomaly_detector.py](log_anomaly_detector.md) | Détection anomalies statistiques dans logs | :material-star::material-star::material-star: |
 
 ### Fichiers & Backup
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [backup_manager.py](backup_manager.md) | Gestion des sauvegardes avec Rich | :material-star::material-star: |
+| [backup_validator.py](backup_validator.md) | Validation intégrité backups (checksum) | :material-star::material-star: |
 
 ### Conteneurs
 
@@ -74,6 +84,20 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [redis_key_auditor.py](redis_key_auditor.md) | Audit clés Redis (SCAN non-bloquant) | :material-star::material-star: |
+| [db_replication_monitor.py](db_replication_monitor.md) | Monitoring lag réplication MySQL/PostgreSQL | :material-star::material-star::material-star: |
+
+### Réseau & Sécurité
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [network_topology_mapper.py](network_topology_mapper.md) | Cartographie réseau automatique (Mermaid) | :material-star::material-star::material-star: |
+| [compliance_report_generator.py](compliance_report_generator.md) | Rapports conformité CIS/ANSSI | :material-star::material-star::material-star: |
+
+### FinOps & Cloud
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [infrastructure_cost_analyzer.py](infrastructure_cost_analyzer.md) | Analyse coûts infrastructure cloud/on-prem | :material-star::material-star::material-star: |
 
 ### Générateurs de Configuration
 
@@ -81,7 +105,7 @@ Collection de scripts Python pour l'automatisation et l'administration système.
 |--------|-------------|--------|
 | [systemd_generator.py](systemd_generator.md) | Générateur service Systemd avec hardening | :material-star::material-star: |
 
-### DevOps & Cloud
+### DevOps & Git
 
 | Script | Description | Niveau |
 |--------|-------------|--------|

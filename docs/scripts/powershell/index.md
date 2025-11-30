@@ -7,7 +7,7 @@ tags:
 
 # Scripts PowerShell
 
-Collection de scripts PowerShell pour l'administration Windows et cross-platform.
+Collection de scripts PowerShell pour l'administration Windows et cross-platform. **16 scripts disponibles.**
 
 ---
 
@@ -23,32 +23,25 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 |--------|-------------|--------|
 | [Get-SystemInfo.ps1](Get-SystemInfo.md) | Informations système complètes | :material-star: |
 | [Test-DiskSpace.ps1](Test-DiskSpace.md) | Vérification espace disque avec alertes | :material-star: |
-| [Watch-Resources.ps1](Watch-Resources.md) | Monitoring CPU/RAM en temps réel | :material-star::material-star: |
-| [Clear-SystemCache.ps1](Clear-SystemCache.md) | Nettoyage système automatisé | :material-star::material-star: |
 
 ## Réseau
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [Test-NetworkConnectivity.ps1](Test-NetworkConnectivity.md) | Test de connectivité réseau | :material-star: |
-| [Scan-Ports.ps1](Scan-Ports.md) | Scanner de ports | :material-star::material-star: |
-| [Get-DNSInfo.ps1](Get-DNSInfo.md) | Résolution DNS avancée | :material-star: |
 
 ## Fichiers & Backup
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [Backup-Directory.ps1](Backup-Directory.md) | Backup avec rotation | :material-star::material-star: |
-| [Sync-Folders.ps1](Sync-Folders.md) | Synchronisation de dossiers | :material-star: |
 | [Find-LargeFiles.ps1](Find-LargeFiles.md) | Recherche fichiers volumineux | :material-star: |
 
-## Active Directory
+## Active Directory & Utilisateurs
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
-| [Get-ADUserReport.ps1](Get-ADUserReport.md) | Rapport utilisateurs AD | :material-star::material-star: |
-| [New-ADUserBulk.ps1](New-ADUserBulk.md) | Création utilisateurs en masse | :material-star::material-star: |
-| [Test-ADHealth.ps1](Test-ADHealth.md) | Vérification santé AD | :material-star::material-star::material-star: |
+| [New-BulkUsers.ps1](New-BulkUsers.md) | Création utilisateurs en masse (AD + Local) | :material-star::material-star: |
 
 ## Sécurité & Audit
 
@@ -61,7 +54,6 @@ Collection de scripts PowerShell pour l'administration Windows et cross-platform
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [Get-ServiceStatus.ps1](Get-ServiceStatus.md) | Gestion des services Windows | :material-star: |
-| [Test-ServiceHealth.ps1](Test-ServiceHealth.md) | Vérification santé des services | :material-star::material-star: |
 
 ## Infrastructure Windows
 

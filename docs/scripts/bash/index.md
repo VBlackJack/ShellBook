@@ -7,7 +7,7 @@ tags:
 
 # Scripts Bash
 
-Collection de scripts Bash pour l'administration Linux/Unix.
+Collection de scripts Bash pour l'administration Linux/Unix. **31 scripts disponibles.**
 
 ---
 
@@ -50,13 +50,22 @@ Collection de scripts Bash pour l'administration Linux/Unix.
 | [security-audit.sh](security-audit.md) | Audit de sécurité basique | :material-star::material-star::material-star: |
 | [check-permissions.sh](check-permissions.md) | Vérification permissions sensibles | :material-star::material-star: |
 | [log-analyzer.sh](log-analyzer.md) | Analyse des logs système | :material-star::material-star: |
+| [secret-scanner.sh](secret-scanner.md) | Détection secrets/credentials dans le code | :material-star::material-star::material-star: |
 
-## Services
+## Services & Monitoring
 
 | Script | Description | Niveau |
 |--------|-------------|--------|
 | [service-manager.sh](service-manager.md) | Gestion des services systemd | :material-star: |
 | [health-check.sh](health-check.md) | Vérification santé des services | :material-star::material-star: |
+| [cron-watchdog.sh](cron-watchdog.md) | Monitoring et wrapping jobs cron | :material-star::material-star: |
+| [log-rotation-manager.sh](log-rotation-manager.md) | Gestion avancée rotation logs | :material-star::material-star: |
+
+## Conformité & Audit
+
+| Script | Description | Niveau |
+|--------|-------------|--------|
+| [config-drift-checker.sh](config-drift-checker.md) | Détection dérives configuration vs baseline | :material-star::material-star::material-star: |
 
 ## Conteneurs & Kubernetes
 
