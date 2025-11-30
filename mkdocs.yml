@@ -580,6 +580,8 @@ nav:
     - Accueil: scripts/index.md
     - 🐚 Bash:
       - Index: scripts/bash/index.md
+      - God Script:
+        - server-discovery.sh: scripts/bash/server-discovery-audit.md
       - Système:
         - check-disk-space.sh: scripts/bash/check-disk-space.md
         - cleanup-system.sh: scripts/bash/cleanup-system.md
@@ -598,9 +600,17 @@ nav:
         - security-audit.sh: scripts/bash/security-audit.md
         - check-permissions.sh: scripts/bash/check-permissions.md
         - log-analyzer.sh: scripts/bash/log-analyzer.md
+        - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
+        - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
       - Services:
         - service-manager.sh: scripts/bash/service-manager.md
         - health-check.sh: scripts/bash/health-check.md
+        - logrotate-builder.sh: scripts/bash/logrotate-builder.md
+      - Conteneurs:
+        - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
+        - container-net-debug.sh: scripts/bash/container-net-debug.md
+      - Bases de Données:
+        - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
       - Infrastructure Linux:
         - check-ldap.sh: scripts/bash/check-ldap.md
         - check-bind.sh: scripts/bash/check-bind.md
@@ -610,6 +620,8 @@ nav:
         - check-postfix.sh: scripts/bash/check-postfix.md
     - 🔷 PowerShell:
       - Index: scripts/powershell/index.md
+      - God Script:
+        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
       - Système:
         - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
         - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
@@ -638,11 +650,17 @@ nav:
         - health_checker.py: scripts/python/health_checker.md
       - Fichiers:
         - backup_manager.py: scripts/python/backup_manager.md
+      - Conteneurs:
+        - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
+        - docker_health.py: scripts/python/docker_health.md
+        - kubernetes_health.py: scripts/python/kubernetes_health.md
+      - Bases de Données:
+        - redis_key_auditor.py: scripts/python/redis_key_auditor.md
+      - Générateurs:
+        - systemd_generator.py: scripts/python/systemd_generator.md
       - DevOps & Cloud:
         - cert_checker.py: scripts/python/cert_checker.md
-        - docker_health.py: scripts/python/docker_health.md
         - git_repo_cleaner.py: scripts/python/git_repo_cleaner.md
-        - kubernetes_health.py: scripts/python/kubernetes_health.md
 
   # ══════════════════════════════════════════════════════════════
   # CATALOGUE FORMATIONS (INDEX UNIQUEMENT)
