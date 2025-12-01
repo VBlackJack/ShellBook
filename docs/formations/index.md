@@ -87,6 +87,17 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](katello/)
 
+-   :fontawesome-brands-python:{ .lg .middle } **Python SysOps : Automatisation Système**
+
+    ---
+
+    Maîtrisez Python pour l'administration système. Environnement, syntaxe, fichiers, formats de données, subprocess, réseau, APIs REST, SSH et déploiement cloud.
+
+    **Compétences :** Python, JSON/YAML, APIs, Paramiko, Boto3, Tests
+    **Durée :** 5 jours (35h) - 15 modules + ressources
+
+    [:octicons-arrow-right-24: Accéder à la Formation](python-sysops/)
+
 -   :material-package-variant:{ .lg .middle } **Chocolatey Factory : Packaging Windows**
 
     ---
@@ -336,6 +347,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🛡️ Hardening Windows | 5 modules | ✅ Disponible |
 | 💠 Ansible Mastery | 4 modules | ✅ Disponible |
 | 🦁 Katello Lifecycle | 5 modules | ✅ Disponible |
+| 🐍 Python SysOps | 15 modules + ressources | ✅ Disponible |
 | 🐳 Docker Mastery | 7 modules | ✅ Disponible |
 | 🦭 Podman Mastery | 7 modules | ✅ Disponible |
 | ☸️ Kubernetes Mastery | 12 modules | ✅ Disponible |

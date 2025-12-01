@@ -82,6 +82,7 @@ nav:
     - 🛠️ CLI ShellBook:
       - Guide CLI (sb): cli/index.md
     - 🔥 Playbooks:
+      - Vue d'ensemble: playbooks/index.md
       - Réponse Incident: playbooks/incident-response.md
     - 🚀 Pipelines CI/CD:
       - Vue d'ensemble: devops/pipelines/index.md
@@ -635,7 +636,9 @@ nav:
       - Piliers DevOps: concepts/devops-pillars.md
       - Flux Web: concepts/web-flow.md
       - Bases de Données: concepts/databases.md
-      - Fondamentaux Réseau: network/fundamentals.md
+    - 🌐 Réseau:
+      - Accueil: network/index.md
+      - Fondamentaux: network/fundamentals.md
     - 🗄️ Bases de Données:
       - Accueil: databases/index.md
       - 🐘 PostgreSQL:
