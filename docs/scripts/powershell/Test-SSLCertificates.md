@@ -14,7 +14,7 @@ Vérification des certificats SSL/TLS sur endpoints multiples.
 
 ---
 
-## Fonctionnalités
+## Description
 
 - Test de certificats sur endpoints HTTPS
 - Vérification de la chaîne de confiance

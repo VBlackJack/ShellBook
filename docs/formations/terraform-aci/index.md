@@ -301,8 +301,8 @@ Cette formation aide à préparer :
 
 ### Formations Liées ShellBook
 
-- [Terraform Fundamentals](../devops/terraform/fundamentals.md) - Bases Terraform générales
-- [Ansible ACI](../devops/ansible/cloud-integrations.md) - Alternative Ansible pour ACI
+- [Terraform Fundamentals](../../devops/terraform/fundamentals.md) - Bases Terraform générales
+- [Ansible ACI](../../devops/ansible/cloud-integrations.md) - Alternative Ansible pour ACI
 
 ---
 

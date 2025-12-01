@@ -14,7 +14,7 @@ Diagnostic complet du statut Windows Update (WU, WSUS, SCCM/MECM).
 
 ---
 
-## Fonctionnalités
+## Description
 
 - Détection automatique de la source de patching (WU, WSUS, SCCM)
 - Historique des mises à jour installées

@@ -13,7 +13,7 @@ Export des journaux d'événements Windows avec filtrage avancé.
 
 ---
 
-## Fonctionnalités
+## Description
 
 - Export multi-journaux (System, Application, Security, etc.)
 - Filtrage par date, niveau, source, EventID

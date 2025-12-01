@@ -2,7 +2,7 @@
 
 Script Python d'analyse avancée des performances I/O disque.
 
-## Fonctionnalités
+## Description
 
 - **Monitoring temps réel** : IOPS, throughput, latence par disque
 - **Analyse par processus** : Identification des processus les plus I/O intensifs

@@ -16,7 +16,7 @@ Préparation complète d'un serveur avant une fenêtre de patching (WU, WSUS, SC
 
 ---
 
-## Fonctionnalités
+## Description
 
 - **Détection automatique** de la source de patching (WU, WSUS, SCCM)
 - **Nettoyage adapté** selon la source détectée :

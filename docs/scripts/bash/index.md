@@ -7,7 +7,7 @@ tags:
 
 # Scripts Bash
 
-Collection de scripts Bash pour l'administration Linux/Unix. **31 scripts disponibles.**
+Collection de scripts Bash pour l'administration Linux/Unix. **33 scripts disponibles.**
 
 ---
 
