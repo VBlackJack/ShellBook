@@ -14,7 +14,7 @@ Réparation automatique des problèmes Windows Update.
 
 ---
 
-## Fonctionnalités
+## Description
 
 - **Diagnostic automatique** : Détection des problèmes courants
 - **Réparation services** : Restart et reconfiguration WU/BITS/Crypto

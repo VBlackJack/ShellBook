@@ -2,7 +2,7 @@
 
 Script Python de génération de rapports de conformité des patchs système.
 
-## Fonctionnalités
+## Description
 
 - **Multi-OS** : Support Linux (apt, yum, dnf) et Windows (WUA)
 - **Scoring de conformité** : Calcul du score de conformité basé sur la criticité

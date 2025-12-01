@@ -91,10 +91,10 @@ La documentation est organisée par piliers technologiques :
 ├── 📂 devops/        # Docker, K8s, Terraform, Ansible
 │   └── 📂 pipelines/ # Templates CI/CD (GitLab/GitHub) prêts à l'emploi
 ├── 📂 scripts/       # Le code source des outils (Bash, Python, PS1)
-│   ├── 📂 bash/        # 31 scripts
+│   ├── 📂 bash/        # 33 scripts
 │   ├── 📂 python/      # 20 scripts
 │   │   └── requirements.txt
-│   └── 📂 powershell/  # 16 scripts
+│   └── 📂 powershell/  # 23 scripts
 └── 📂 formations/    # 23 parcours de formation (500h+)
 ```
 
@@ -158,7 +158,7 @@ Le déploiement sur GitHub Pages est automatique via GitHub Actions.
 ## 📊 Statistiques
 
 - **Guides & Modules** : 350+ fichiers Markdown
-- **Scripts** : 74 (31 Bash, 20 Python, 23 PowerShell)
+- **Scripts** : 76 (33 Bash, 20 Python, 23 PowerShell)
 - **Formations** : 23 parcours complets (500h+)
 - **Templates CI/CD** : GitLab CI, GitHub Actions, Dockerfile
 
@@ -172,5 +172,5 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 <div align="center">
   <p><strong>Built with ❤️ for SysAdmin & DevOps Engineers.</strong></p>
-  <p>📚 350+ Guides • 🛠️ 74 Scripts • 🎓 23 Formations • ⚡ CLI Unifié</p>
+  <p>📚 350+ Guides • 🛠️ 76 Scripts • 🎓 23 Formations • ⚡ CLI Unifié</p>
 </div>

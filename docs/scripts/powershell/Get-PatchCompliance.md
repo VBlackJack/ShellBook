@@ -14,7 +14,7 @@ Rapport de conformité des patchs Windows avec scoring.
 
 ---
 
-## Fonctionnalités
+## Description
 
 - **Score de conformité** : Calcul automatique du niveau de patching
 - **Analyse multi-serveurs** : Inventaire de parc complet

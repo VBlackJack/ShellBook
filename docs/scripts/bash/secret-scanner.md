@@ -2,7 +2,7 @@
 
 Script Bash de détection de secrets et credentials dans les repositories git et fichiers.
 
-## Fonctionnalités
+## Description
 
 - **Patterns étendus** : Détection de 30+ types de secrets (API keys, tokens, passwords)
 - **Git-aware** : Scan de l'historique git complet

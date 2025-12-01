@@ -2,7 +2,7 @@
 
 Script Python de découverte et cartographie automatique de topologie réseau.
 
-## Fonctionnalités
+## Description
 
 - **Découverte automatique** : Scan de réseaux et identification des hôtes
 - **Identification services** : Détection des ports ouverts et services

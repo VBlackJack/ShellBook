@@ -2,7 +2,7 @@
 
 Script Python d'analyse et recommandations de tuning système Linux.
 
-## Fonctionnalités
+## Description
 
 - **Analyse automatique** : Détection du profil d'usage (Web, DB, HPC, Container)
 - **Recommandations sysctl** : Tuning kernel paramétré selon le workload

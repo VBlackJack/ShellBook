@@ -2,7 +2,7 @@
 
 Script Python de génération automatique de rapports de conformité multi-référentiels.
 
-## Fonctionnalités
+## Description
 
 - **Multi-référentiels** : CIS Benchmarks, ANSSI, SOC2, PCI-DSS, HIPAA
 - **Audit automatisé** : Collecte des données système et configuration

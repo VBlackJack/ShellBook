@@ -2,7 +2,7 @@
 
 Script de détection des dérives de configuration par rapport à une baseline.
 
-## Fonctionnalités
+## Description
 
 - **Baseline Management** : Capture et stockage de l'état de référence
 - **Multi-fichiers** : Surveillance de plusieurs fichiers/répertoires

@@ -2,7 +2,7 @@
 
 Script Python d'analyse et optimisation des coûts d'infrastructure cloud.
 
-## Fonctionnalités
+## Description
 
 - **Multi-cloud** : Support AWS, Azure, GCP (via APIs)
 - **Analyse locale** : Estimation des coûts on-premise

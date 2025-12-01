@@ -2,7 +2,7 @@
 
 Script Python de détection d'anomalies dans les logs par analyse statistique et patterns.
 
-## Fonctionnalités
+## Description
 
 - **Détection statistique** : Identification des pics d'erreurs et variations anormales
 - **Pattern Learning** : Apprentissage des patterns normaux et détection des déviations

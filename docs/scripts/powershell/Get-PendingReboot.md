@@ -13,7 +13,7 @@ Détection des redémarrages en attente sur Windows.
 
 ---
 
-## Fonctionnalités
+## Description
 
 - Vérifie toutes les sources de reboot pending
 - Windows Update, CBS, File Rename, Configuration Manager
