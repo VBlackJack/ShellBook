@@ -650,6 +650,7 @@ nav:
       - Piliers DevOps: concepts/devops-pillars.md
       - Flux Web: concepts/web-flow.md
       - Bases de Données: concepts/databases.md
+      - IA & Prompts: concepts/ai-prompting.md
     - 🌐 Réseau:
       - Accueil: network/index.md
       - Fondamentaux: network/fundamentals.md
