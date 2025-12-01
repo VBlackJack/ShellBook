@@ -450,6 +450,7 @@ nav:
           - Module 13 - CLI: formations/python-sysops/13-cli.md
           - Module 14 - Cloud: formations/python-sysops/14-cloud.md
           - Module 15 - Tests: formations/python-sysops/15-tests.md
+          - Module 16 - TP Final: formations/python-sysops/16-tp-final.md
         - Ressources:
           - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
           - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
@@ -520,6 +521,7 @@ nav:
         - Module 02 - Playbooks: formations/ansible-mastery/02-module.md
         - Module 03 - Roles: formations/ansible-mastery/03-module.md
         - Module 04 - Vault: formations/ansible-mastery/04-module.md
+        - Module 05 - TP Final: formations/ansible-mastery/05-tp-final.md
       - 🦁 Katello Lifecycle (15h):
         - Programme: formations/katello/index.md
         - Module 01 - Architecture: formations/katello/01-module.md
@@ -553,6 +555,7 @@ nav:
         - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
         - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
         - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+        - Module 12 - TP Final: formations/cloud-fundamentals/12-tp-final.md
         - Ressources:
           - Glossaire: formations/cloud-fundamentals/glossaire.md
           - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
