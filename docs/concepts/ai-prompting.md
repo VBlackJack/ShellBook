@@ -279,6 +279,112 @@ Recommandation finale avec justification.
 
 ---
 
+## Techniques Renaud Dékode
+
+Techniques de prompting issues de la chaîne [Renaud Dékode](https://www.youtube.com/@RenaudDekode) (Renaud Varoqueaux). Approche **agentique et systémique** : construire des systèmes de prompts plutôt que des formules isolées.
+
+### Le Prompt "Système Identité"
+
+Technique fondamentale pour personnaliser l'IA. À mettre dans les **Custom Instructions** ou en début de conversation.
+
+```
+Tu es un expert en [Domaine, ex: Administration Linux / DevOps].
+Je souhaite que tu me répondes de façon respectueuse, intelligente et concise.
+Je préfère que tu m'appelles [Prénom] et que tu ne me vouvoies pas.
+Tu dois toujours répondre en français.
+Si tu ne connais pas la réponse, dis-le clairement au lieu d'inventer.
+```
+
+**Effet** : Supprime le ton robotique, instaure une relation de "collègue expert".
+
+### L'Optimiseur (Meta-Prompt)
+
+Utiliser l'IA pour améliorer ses propres prompts avant d'exécuter la tâche.
+
+```
+Agis comme un expert en Prompt Engineering.
+Voici mon prompt initial : "[Votre prompt basique]".
+Analyse-le et propose-moi une version optimisée, plus structurée
+(avec contexte, tâche, contraintes) pour maximiser la qualité du résultat.
+Ne l'exécute pas tout de suite, donne-moi juste la version améliorée.
+```
+
+**Effet** : Transforme une demande floue en prompt structuré et performant.
+
+### Le Collègue Développeur (Agentique)
+
+Traiter l'IA comme un membre de l'équipe avec responsabilité complète.
+
+```
+Tu es mon collègue développeur Senior.
+Ta mission est de travailler sur ce projet [Nom du projet].
+Avant de proposer la moindre ligne de code, analyse l'ensemble des fichiers
+du projet, la structure des dossiers et la documentation fournie.
+Fais-moi d'abord un résumé de ce que tu as compris, puis propose un plan
+d'action étape par étape pour implémenter la fonctionnalité [Nom de la feature].
+```
+
+**Effet** : Force l'analyse du contexte global avant de répondre, active le Chain of Thought.
+
+### Le Dispatcher (Triage)
+
+Créer des assistants polyvalents qui routent vers le bon "expert".
+
+```
+Tu agis comme un contrôleur de mission (Dispatcher).
+Analyse la demande de l'utilisateur.
+- Si la demande concerne l'infrastructure, active l'Agent "SysAdmin".
+- Si la demande concerne le code, active l'Agent "Développeur".
+- Si la demande concerne la sécurité, active l'Agent "SecOps".
+Ne réponds pas à la question toi-même, route la demande vers le bon profil
+et adopte sa persona pour la réponse.
+```
+
+**Effet** : Un seul fil de discussion capable de traiter des demandes variées avec expertise ciblée.
+
+### Structure "Pistolet Chargé"
+
+Les 4 éléments essentiels d'un prompt efficace :
+
+| Élément | Description | Exemple |
+|---------|-------------|---------|
+| **Rôle** | Qui tu es | "Tu es un SRE senior" |
+| **Contexte** | Où on est | "Infrastructure AWS, 50 serveurs" |
+| **Tâche** | Ce qu'il faut faire | "Audite la config Terraform" |
+| **Format** | Comment livrer | "Tableau avec criticité et remediation" |
+
+```
+[Rôle] Tu es un ingénieur SRE senior spécialisé Kubernetes.
+[Contexte] Cluster de production avec 200 pods, pic de charge à 18h.
+[Tâche] Analyse ce HPA et propose des optimisations.
+[Format] Tableau avec : Paramètre actuel | Recommandation | Justification.
+```
+
+### Analyse avec Vérification
+
+Pour l'analyse de fichiers/images, forcer la vérification avant action.
+
+```
+Regarde attentivement ce fichier/cette image.
+Décris-moi en détail ce que tu vois et comment tu interprètes les données.
+N'invente rien, base-toi uniquement sur les éléments fournis.
+Si un élément est flou, demande-moi une clarification.
+```
+
+**Effet** : Réduit les hallucinations, ancre la réponse dans la réalité du fichier.
+
+### Principes Clés Renaud Dékode
+
+| Principe | Description |
+|----------|-------------|
+| **Agentic Mindset** | L'IA est un stagiaire/collègue, pas un moteur de recherche |
+| **System Prompt** | Toujours utiliser les Custom Instructions |
+| **Itération** | Ne jamais accepter la première réponse moyenne |
+| **Auto-critique** | "Critique ta propre réponse et propose mieux" |
+| **Connexion MCP** | Connecter l'IA aux outils (fichiers, API, CRM) |
+
+---
+
 ## Anti-Patterns à Éviter
 
 | Anti-Pattern | Problème | Alternative |
