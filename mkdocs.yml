@@ -484,6 +484,8 @@ nav:
         - Module 05 - Volumes: formations/docker-mastery/05-module.md
         - Module 06 - Sécurité: formations/docker-mastery/06-module.md
         - Module 07 - TP Final: formations/docker-mastery/07-tp-final.md
+        - Ressources:
+          - Glossaire: formations/docker-mastery/glossaire.md
       - 🦭 Podman Mastery (15h):
         - Programme: formations/podman-mastery/index.md
         - Module 01 - Fondamentaux: formations/podman-mastery/01-module.md
@@ -507,6 +509,8 @@ nav:
         - Module 10 - GitOps: formations/kubernetes-mastery/10-module.md
         - Module 11 - Troubleshooting: formations/kubernetes-mastery/11-module.md
         - Module 12 - TP Final: formations/kubernetes-mastery/12-tp-final.md
+        - Ressources:
+          - Glossaire: formations/kubernetes-mastery/glossaire.md
       - 📊 Observabilité (15h):
         - Programme: formations/observability/index.md
         - Module 01 - Fondamentaux: formations/observability/01-module.md
@@ -522,6 +526,8 @@ nav:
         - Module 03 - Roles: formations/ansible-mastery/03-module.md
         - Module 04 - Vault: formations/ansible-mastery/04-module.md
         - Module 05 - TP Final: formations/ansible-mastery/05-tp-final.md
+        - Ressources:
+          - Glossaire: formations/ansible-mastery/glossaire.md
       - 🦁 Katello Lifecycle (15h):
         - Programme: formations/katello/index.md
         - Module 01 - Architecture: formations/katello/01-module.md
@@ -541,6 +547,8 @@ nav:
         - Module 08 - Est-Ouest: formations/terraform-aci/08-module.md
         - Module 09 - Multi-Site: formations/terraform-aci/09-module.md
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
+        - Ressources:
+          - Glossaire: formations/terraform-aci/glossaire.md
     - 🎓 Formations Cloud:
       - ☁️ Cloud Fundamentals (35h):
         - Programme: formations/cloud-fundamentals/index.md
