@@ -771,3 +771,9 @@ Anomalies detected: 12
 2. **Post-mortem Analysis** : Analyser les logs après un incident
 3. **Baseline Comparison** : Détecter les dérives par rapport à la normale
 4. **CI/CD Monitoring** : Surveiller les logs de déploiement
+
+## Voir Aussi
+
+- [health_checker.py](./health_checker.md) - Vérification santé services
+- [api_health_monitor.py](./api_health_monitor.md) - Monitoring multi-endpoints API
+- [compliance_report_generator.py](./compliance_report_generator.md) - Rapports conformité CIS/ANSSI

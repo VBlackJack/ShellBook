@@ -852,3 +852,9 @@ groups:
 2. **Capacity Planning** : Surveiller l'utilisation des disques
 3. **Application Profiling** : Identifier les processus I/O intensifs
 4. **SLA Monitoring** : Alerter sur les latences anormales
+
+## Voir Aussi
+
+- [system_tuning_advisor.py](./system_tuning_advisor.md) - Recommandations tuning kernel/sysctl
+- [system_info.py](./system_info.md) - Informations système complètes
+- [health_checker.py](./health_checker.md) - Vérification santé services

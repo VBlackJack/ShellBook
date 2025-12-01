@@ -908,3 +908,9 @@ Top Recommendations:
 2. **Budget Planning** : Prévision des dépenses infrastructure
 3. **Rightsizing** : Identification des ressources surdimensionnées
 4. **Chargeback** : Allocation des coûts par équipe/projet
+
+## Voir Aussi
+
+- [system_info.py](./system_info.md) - Informations système complètes
+- [docker_cleaner_pro.py](./docker_cleaner_pro.md) - Nettoyage Docker pour optimisation
+- [kubernetes_health.py](./kubernetes_health.md) - Vérification santé cluster Kubernetes

@@ -1021,3 +1021,9 @@ jobs:
 2. **Reporting Sécurité** : Rapports pour les équipes sécurité et compliance
 3. **CI/CD Gate** : Blocage des déploiements si le score est insuffisant
 4. **Monitoring Continu** : Intégration avec des outils de surveillance
+
+## Voir Aussi
+
+- [compliance_report_generator.py](./compliance_report_generator.md) - Rapports conformité CIS/ANSSI
+- [system_info.py](./system_info.md) - Informations système complètes
+- [health_checker.py](./health_checker.md) - Vérification santé services

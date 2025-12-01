@@ -685,3 +685,9 @@ secret_scan:
 2. **CI/CD Gate** : Échouer le pipeline si des secrets sont détectés
 3. **Audit Régulier** : Scanner périodiquement les repos existants
 4. **Onboarding** : Vérifier les nouveaux projets avant intégration
+
+## Voir Aussi
+
+- [security-audit.sh](./security-audit.md) - Audit de sécurité basique du système
+- [config-drift-checker.sh](./config-drift-checker.md) - Détection des dérives de configuration
+- [check-permissions.sh](./check-permissions.md) - Vérification des permissions sensibles

@@ -717,3 +717,9 @@ drift_check:
 2. **Change Management** : Détecter les modifications non autorisées
 3. **Disaster Recovery** : Valider la restauration des configurations
 4. **Security Monitoring** : Alerter sur les modifications de fichiers sensibles
+
+## Voir Aussi
+
+- [security-audit.sh](./security-audit.md) - Audit de sécurité basique du système
+- [secret-scanner.sh](./secret-scanner.md) - Détection de secrets dans le code
+- [log-analyzer.sh](./log-analyzer.md) - Analyse des logs système

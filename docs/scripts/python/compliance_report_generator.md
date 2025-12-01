@@ -905,3 +905,9 @@ Results by Category
 2. **Onboarding Serveurs** : Validation avant mise en production
 3. **Reporting Management** : Rapports pour les équipes sécurité
 4. **CI/CD Gate** : Bloquer les déploiements non conformes
+
+## Voir Aussi
+
+- [patch_compliance_report.py](./patch_compliance_report.md) - Audit conformité patchs système
+- [security_audit.py](../bash/security-audit.md) - Audit de sécurité basique
+- [log_anomaly_detector.py](./log_anomaly_detector.md) - Détection d'anomalies dans les logs
