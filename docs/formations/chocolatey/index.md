@@ -175,9 +175,19 @@ Chaque module suit la structure **CoPrEx** :
 - [Packaging Best Practices](https://docs.chocolatey.org/en-us/create/create-packages)
 - [Guide ShellBook : Windows Productivity](../../windows/productivity.md)
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Client & CLI Chocolatey | 2h |
+| [Module 2](02-module.md) | Création de Paquets (Packaging) | 3h |
+| [Module 3](03-module.md) | Serveur Privé (Internal Repository) | 2h30 |
+| [Module 4](04-module.md) | Déploiement Automatisé | 3h |
+| [TP Final](05-tp-final.md) | Chocolatey Factory Complète | 4h |
+
 ## 🚀 Prêt à commencer ?
 
-Rendez-vous au **Module 1 : Client & CLI Chocolatey** pour débuter la formation !
+Rendez-vous au **[Module 1 : Client & CLI Chocolatey](01-module.md)** pour débuter la formation !
 
 ---
 

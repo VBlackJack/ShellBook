@@ -162,6 +162,16 @@ Chaque module suit la structure **CoPrEx** :
 - [Pulp Project](https://pulpproject.org/)
 - [Guide ShellBook : Package Management Linux](../../linux/package-management.md)
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Architecture & Installation Katello | 3h |
+| [Module 2](02-module.md) | Gestion du Contenu (Content Views) | 3h |
+| [Module 3](03-module.md) | Enregistrement des Hôtes | 2h30 |
+| [Module 4](04-module.md) | Patch Management & Errata | 2h30 |
+| [TP Final](05-tp-final.md) | Infrastructure Multi-Sites | 4h |
+
 ## 🚀 Prêt à commencer ?
 
 Rendez-vous au [Module 1 : Architecture & Installation Katello](01-module.md) pour débuter la formation !

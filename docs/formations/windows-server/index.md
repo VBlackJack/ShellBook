@@ -355,6 +355,15 @@ Cette formation couvre les concepts des certifications Microsoft suivantes :
 
 ---
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Modern Admin - Le Serveur Moderne | 3-4h |
+| [Module 2](02-module.md) | Active Directory - Le Cœur de l'Entreprise | 4-5h |
+| [Module 3](03-module.md) | Sécurité & Hardening - La Forteresse AD | 4-5h |
+| [TP Final](04-tp-final.md) | Automatisation - PowerShell & IaC | 4-5h |
+
 !!! success "Prêt à Devenir un Expert Windows Server ?"
     **Lancez-vous avec le [Module 1 : Modern Admin](01-module.md) !**
 

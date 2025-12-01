@@ -328,6 +328,17 @@ Chaque module suit la structure **CoPrEx** :
 
 ---
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Prise en main & Architecture WIM | 2h |
+| [Module 2](02-module.md) | Debloating & Suppression de Composants | 3h |
+| [Module 3](03-module.md) | Intégration (Drivers & Updates) | 2h |
+| [Module 4](04-module.md) | Automatisation (Unattended XML) | 3h |
+| [TP Final](05-tp-final.md) | L'ISO Entreprise | 4h |
+| [Cas Avancé](06-scenario-vpn.md) | ISO Sécurisé (VPN & Certificats) | 4h |
+
 ## Prêt à Commencer ?
 
 **Accédez au [Module 1 : Prise en main & Architecture WIM](01-module.md)** pour démarrer votre apprentissage de NTLite !

@@ -143,6 +143,16 @@ Chaque module suit la structure **CoPrEx** :
 - [PSWindowsUpdate Module (Community)](https://www.powershellgallery.com/packages/PSWindowsUpdate)
 - [Guide de référence ShellBook : Update Management](../../windows/update-management.md)
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Architecture WSUS & Installation | 2h |
+| [Module 2](02-module.md) | Gestion des Mises à Jour | 2h30 |
+| [Module 3](03-module.md) | Configuration des Clients (GPO) | 2h |
+| [Module 4](04-module.md) | Maintenance & Dépannage | 2h |
+| [TP Final](05-tp-final.md) | Infrastructure Multi-Sites | 3h |
+
 ## 🚀 Prêt à commencer ?
 
 Rendez-vous au [Module 1 : Architecture & Installation WSUS](01-module.md) pour débuter la formation !

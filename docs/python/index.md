@@ -46,3 +46,11 @@ source venv/bin/activate  # Linux
 # Installer les outils Ops essentiels
 pip install requests boto3 paramiko pyyaml pytest
 ```
+
+## Articles
+
+- [Fondamentaux Python](fundamentals.md) - Syntaxe, types, structures de contrôle
+- [Fichiers & Données](files-data.md) - JSON, YAML, CSV, manipulation de fichiers
+- [API & Réseau](api-network.md) - Requests, APIs REST, SSH avec Paramiko
+- [Cloud & AWS](cloud-aws.md) - Boto3, automatisation AWS
+- [Tests & Qualité](testing.md) - Pytest, tests d'infrastructure

@@ -290,7 +290,7 @@ Chaque module suit cette structure :
 
 ## Créer une Nouvelle Formation
 
-Vous êtes auteur de contenu ? Utilisez le [Template de Formation](template/) comme base.
+Vous êtes auteur de contenu ? Utilisez le [Template de Formation](_template/) comme base.
 
 **Structure recommandée :**
 

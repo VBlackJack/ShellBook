@@ -226,9 +226,19 @@ Cette formation vous prépare aux certifications Microsoft :
 
 ---
 
+## 📑 Accès aux Modules
+
+| Module | Titre | Durée |
+|--------|-------|-------|
+| [Module 1](01-module.md) | Architecture & Installation | 3h |
+| [Module 2](02-module.md) | Sécurité & Configuration | 4h |
+| [Module 3](03-module.md) | Maintenance & Backups | 5h |
+| [Module 4](04-module.md) | Automatisation avec dbatools | 4h |
+| [TP Final](05-tp-final.md) | Infrastructure SQL Complète | 6h |
+
 ## Prêt à commencer ?
 
-Rendez-vous au **[Module 1 : Architecture & Installation](01-module.md)** pour démarrer votre apprentissage ! 🚀
+Rendez-vous au **[Module 1 : Architecture & Installation](01-module.md)** pour démarrer votre apprentissage !
 
 ---
 
