@@ -272,7 +272,6 @@ nav:
       - Packages RHEL: linux/rhel-package-management.md
       - OpenSCAP: linux/rhel-openscap-compliance.md
       - Audit Ops: linux/rhel-ops-audit.md
-      - Podman: devops/podman-containers.md
     - 🌐 Réseau & Services:
       - Network Management: linux/network-management.md
       - SSH Hardening: linux/ssh-hardening.md
@@ -609,13 +608,17 @@ nav:
       - Operators: devops/kubernetes-operators.md
       - GitOps ArgoCD: devops/gitops-argocd.md
     - 📦 Infrastructure as Code:
-      - Ansible Fundamentals: devops/ansible/fundamentals.md
-      - Ansible Playbooks: devops/ansible/playbooks.md
-      - Ansible Industrialization: devops/ansible/industrialization.md
-      - Ansible Advanced: devops/ansible/advanced-patterns.md
-      - Ansible Cloud: devops/ansible/cloud-integrations.md
-      - Ansible Testing: devops/ansible/testing-molecule.md
-      - Terraform Fundamentals: devops/terraform/fundamentals.md
+      - 💠 Ansible:
+        - Vue d'ensemble: devops/ansible/index.md
+        - Fundamentals: devops/ansible/fundamentals.md
+        - Playbooks: devops/ansible/playbooks.md
+        - Industrialization: devops/ansible/industrialization.md
+        - Advanced Patterns: devops/ansible/advanced-patterns.md
+        - Cloud Integrations: devops/ansible/cloud-integrations.md
+        - Testing Molecule: devops/ansible/testing-molecule.md
+      - 🔧 Terraform:
+        - Vue d'ensemble: devops/terraform/index.md
+        - Fundamentals: devops/terraform/fundamentals.md
     - 🔄 CI/CD:
       - GitLab CI: devops/cicd-gitlab.md
       - GitHub Actions: devops/cicd-github-actions.md
