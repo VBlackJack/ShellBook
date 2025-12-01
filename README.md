@@ -94,7 +94,7 @@ La documentation est organisée par piliers technologiques :
 │   ├── 📂 bash/        # 33 scripts
 │   ├── 📂 python/      # 20 scripts
 │   │   └── requirements.txt
-│   └── 📂 powershell/  # 16 scripts
+│   └── 📂 powershell/  # 23 scripts
 └── 📂 formations/    # 23 parcours de formation (500h+)
 ```
 
