@@ -367,6 +367,71 @@ if ($script:failed -gt 0) {
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  DNS SERVER HEALTH CHECK
+=================================================================
+  Server: DC01.corp.local
+  Date: 2025-12-01 18:32:15
+-----------------------------------------------------------------
+
+[Service DNS]
+[OK]   DNS Service - Running
+
+[Connectivité]
+[OK]   DNS TCP/53
+[OK]   DNS UDP/53 - Responding
+
+[Configuration]
+[INFO] Recursion - Enabled
+[INFO] Max Cache TTL - 1.00:00:00
+[OK]   Scavenging - Enabled (interval: 7.00:00:00)
+
+[Forwarders]
+[OK]   Forwarders configurés - 2 forwarder(s)
+[OK]   Forwarder 8.8.8.8 - Responding
+[OK]   Forwarder 1.1.1.1 - Responding
+
+[Zones DNS]
+[INFO] Primary zones - 4
+[INFO] Secondary zones - 1
+[INFO] AD-Integrated zones - 3
+[OK]   Zone corp.local - SOA OK
+[OK]   Zone internal.corp.local - SOA OK
+[OK]   Zone _msdcs.corp.local - SOA OK
+[OK]   Secondary partner.com - Last transfer: 2.3 h ago
+
+[Résolution externe]
+[OK]   Resolve google.com - 32ms
+[OK]   Resolve microsoft.com - 45ms
+[OK]   Resolve cloudflare.com - 28ms
+
+[Reverse Lookup Zones]
+[OK]   Reverse zones - 2 zone(s)
+
+[Statistiques]
+       Total queries: 2847563
+       Successful: 2834127
+       Recursive: 1245789
+       Cache hits: 1847234
+       Cache misses: 987593
+[OK]   Statistics - Retrieved
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 19 total
+    - Passed: 15
+    - Warnings: 0
+    - Failed: 0
+
+  DNS STATUS: HEALTHY
+```
+
+---
+
 ## Voir Aussi
 
 - [Test-ADHealth.ps1](Test-ADHealth.md)

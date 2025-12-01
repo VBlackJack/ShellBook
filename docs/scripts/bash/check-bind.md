@@ -438,6 +438,79 @@ fi
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  BIND DNS SERVER HEALTH CHECK
+=================================================================
+  Config: /etc/bind/named.conf
+  Date: 2025-12-01 14:32:18
+-----------------------------------------------------------------
+
+[Service BIND]
+[OK]   Service named - Running
+       BIND 9.18.28-1ubuntu1
+
+[Connectivité]
+[OK]   Port 53/TCP - Open
+[OK]   Port 53/UDP - Responding
+[OK]   Port 953 (rndc) - Open
+
+[Configuration]
+[OK]   Config file - /etc/bind/named.conf
+[OK]   Configuration syntax - Valid
+[INFO] Recursion - Enabled
+[OK]   Recursion ACL - Configured
+
+[Zones DNS]
+[INFO] Configured zones - 3 zone(s)
+[OK]   Zone example.com - Serial: 2025120101
+[OK]   Zone internal.local - Serial: 2025113001
+[WARN] Zone legacy.corp - Zone file not found
+
+[Résolution Forward]
+[OK]   Resolve google.com - 42ms
+       142.250.185.206
+[OK]   Resolve cloudflare.com - 38ms
+       104.16.132.229
+
+[Résolution Reverse]
+[OK]   Reverse 8.8.8.8 - dns.google.
+
+[Forwarders]
+[INFO] Forwarders configured - 2 server(s)
+[OK]   Forwarder 8.8.8.8 - Responding
+[OK]   Forwarder 1.1.1.1 - Responding
+
+[DNSSEC]
+[OK]   DNSSEC validation - Enabled
+[OK]   DNSSEC test - Working (rejects invalid)
+
+[Statistiques]
+[OK]   rndc status - Accessible
+       Recursive clients: 12
+       Zone transfers: 0
+
+[Logs]
+[INFO] Log file - /var/log/named/named.log (2.4M)
+[OK]   Recent errors - 3
+       Recent issues:
+         client @0x7f2a: query failed (REFUSED)...
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 18 total
+    - Passed: 15
+    - Warnings: 1
+    - Failed: 0
+
+  BIND STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [check-ldap.sh](check-ldap.md)

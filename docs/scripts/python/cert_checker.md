@@ -490,6 +490,43 @@ smtp.gmail.com:465
 
 ---
 
+## Exemple de Sortie
+
+```text
+======================================================================
+  SSL/TLS CERTIFICATE CHECK
+======================================================================
+  Date: 2025-12-01 16:45:23
+  Domains checked: 5
+----------------------------------------------------------------------
+
+[OK] google.com:443
+    Expires in 67 days (2026-02-06 12:00:00 UTC)
+
+[OK] github.com:443
+    Expires in 245 days (2026-08-03 23:59:59 UTC)
+
+[WARNING] api.internal.example.com:443
+    Expires in 21 days
+    Subject: *.internal.example.com
+    Issuer: Let's Encrypt
+    Serial: 04A3B2C1D4E5F6...
+    Algorithm: sha256WithRSAEncryption
+    Key: RSAPublicKey 2048 bits
+
+[EXPIRED] legacy.example.com:443
+    EXPIRED 15 days ago
+
+[FAIL] smtp.offline.local:465
+    Error: Connection timeout
+
+======================================================================
+  Valid: 2  Expiring soon: 1  Failed/Expired: 2
+======================================================================
+```
+
+---
+
 ## Voir Aussi
 
 - [kubernetes_health.py](kubernetes_health.md)

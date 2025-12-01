@@ -718,6 +718,29 @@ drift_check:
 3. **Disaster Recovery** : Valider la restauration des configurations
 4. **Security Monitoring** : Alerter sur les modifications de fichiers sensibles
 
+## Exemple de Sortie
+
+```text
+[INFO] Checking for configuration drift...
+[OK] No drift: /etc/ssh/sshd_config
+[OK] No drift: /etc/hosts
+[DRIFT] Drift detected: /etc/nginx/nginx.conf
+[DRIFT] Drift detected: /etc/nginx/sites-enabled/default
+[WARN] No baseline for: /etc/nginx/sites-enabled/api.conf (new file?)
+[OK] No drift: /etc/resolv.conf
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DRIFT CHECK SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total files checked:  6
+Files with drift:     2
+Missing files:        0
+New files (no base):  1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠ DRIFT DETECTED
+```
+
 ## Voir Aussi
 
 - [security-audit.sh](./security-audit.md) - Audit de sécurité basique du système

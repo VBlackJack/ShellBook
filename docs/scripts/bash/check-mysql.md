@@ -440,6 +440,80 @@ fi
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  MYSQL/MARIADB HEALTH CHECK
+=================================================================
+  Host: localhost:3306
+  User: root
+  Date: 2025-12-01 15:12:47
+-----------------------------------------------------------------
+
+[Service MySQL]
+[OK]   Service mariadb - Running
+
+[Connectivité]
+[OK]   Port 3306 - Open
+[OK]   MySQL Connection - Connected
+       Version: 10.11.6-MariaDB
+
+[État Général]
+[OK]   Uptime - 45d 12h
+       Total queries: 28456789 (7/sec avg)
+
+[Connections]
+       Current: 23 / 150
+       Max used: 89
+[OK]   Connection Usage - 15%
+[INFO] Aborted Connections - 12
+
+[Bases de Données]
+[INFO] User Databases - 8
+       Total size: 24.5 GB
+       Largest databases:
+         - production_db: 12480MB
+         - analytics: 8230MB
+         - staging: 2150MB
+         - logs_archive: 1024MB
+         - users_db: 512MB
+
+[Réplication]
+[OK]   Replication - 0s behind
+       IO=Yes SQL=Yes
+
+[InnoDB]
+[INFO] Buffer Pool Size - 4GB
+[OK]   Buffer Pool Hit Ratio - 99.87%
+       Pending I/O: reads=0 writes=2
+
+[Slow Queries]
+       Long query time: 10s
+[OK]   Slow Query Log - Enabled
+[INFO] Slow Queries - 47 total
+
+[Maintenance]
+[OK]   Fragmented Tables - None significant
+[WARN] Tables without PK - 3 table(s)
+
+[Sécurité]
+[OK]   Users without password - None
+[OK]   Root remote access - Restricted
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 17 total
+    - Passed: 13
+    - Warnings: 1
+    - Failed: 0
+
+  MYSQL STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [check-postgresql.sh](check-postgresql.md)

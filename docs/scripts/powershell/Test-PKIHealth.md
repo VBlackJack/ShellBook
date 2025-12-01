@@ -422,6 +422,67 @@ if ($script:failed -gt 0) {
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  PKI / AD CS HEALTH CHECK
+=================================================================
+  Date: 2025-12-01 19:05:17
+-----------------------------------------------------------------
+  CA Name: Corp-Issuing-CA
+
+[Service Autorité de Certification]
+[OK]   Certificate Services - Running
+
+[Certificat CA]
+[OK]   CA Certificate - Valid until 2029-06-15 (1657 days)
+       Subject: CN=Corp-Issuing-CA, DC=corp, DC=local
+       Thumbprint: A1B2C3D4E5F6...
+
+[CRL Status]
+[OK]   Base CRL - Valid (156.2 hours)
+[OK]   Delta CRL - Configured
+
+[Points de Distribution]
+[INFO] CDP Configured - 3 location(s)
+[INFO] AIA Configured - 2 location(s)
+
+[Templates de Certificats]
+[INFO] Certificate Templates - 12 template(s) available
+       [+] User
+       [+] Computer
+       [+] WebServer
+       [+] CodeSigning
+       [+] SmartcardLogon
+
+[Requêtes en Attente]
+[INFO] Pending Requests - 2 request(s)
+
+[Certificats Expirants]
+[WARN] Certs expiring (30d) - 8 certificate(s)
+
+[Base de Données CA]
+[INFO] Database Location - D:\CertDB
+[INFO] Database Size - 245.67 MB
+[OK]   Disk Space (D:) - 187.4 GB free
+
+[Audit & Sécurité]
+[OK]   CA Auditing - Full auditing enabled
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 14 total
+    - Passed: 8
+    - Warnings: 1
+    - Failed: 0
+
+  PKI STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [Test-ADHealth.ps1](Test-ADHealth.md)

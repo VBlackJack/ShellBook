@@ -597,6 +597,60 @@ python docker_health.py -q
 
 ---
 
+## Exemple de Sortie
+
+```text
+======================================================================
+  DOCKER HEALTH CHECK
+======================================================================
+  Date: 2025-12-01 17:15:42
+----------------------------------------------------------------------
+
+[OK]   Docker Daemon - Running
+    Version: 24.0.7
+    API: 1.43
+    OS: Ubuntu 24.04.1 LTS
+    Kernel: 6.8.0-49-generic
+
+[WARN] Containers - 12 running, 5 stopped
+    Unhealthy: api-gateway
+    Exited with error: cron-job-cleanup (exit: 1)
+    Exited with error: data-migrator (exit: 137)
+
+[WARN] Container Resources - High resource usage detected
+    High CPU: ml-processor: 87.3%
+    High Memory: elasticsearch: 82.4% (6.8 GB)
+
+[OK]   Images - 47 images
+    Total size: 18.2 GB
+    Dangling images: 3
+
+[WARN] Volumes - 23 volumes (4 unused)
+    Unused: backup_vol, temp_data, old_logs, cache_v1...
+
+[INFO] Networks - 8 networks (5 custom)
+
+[OK]   Disk Usage - Total: 24.7 GB
+    Images: 18.2 GB
+    Containers: 1.8 GB
+    Volumes: 4.2 GB
+    Build cache: 512.0 MB
+
+[WARN] Container Logs - Errors detected in logs
+    data-migrator:
+      ERROR: Connection refused to database
+      Retrying in 5 seconds...
+    api-gateway (healthcheck): curl: connection timeout
+
+[INFO] Swarm Mode - Not active
+
+======================================================================
+  Passed: 4  Warnings: 4  Failed: 0
+======================================================================
+```
+
+---
+
 ## Voir Aussi
 
 - [kubernetes_health.py](kubernetes_health.md)

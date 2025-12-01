@@ -366,6 +366,78 @@ if ($script:failed -gt 0) {
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  IIS HEALTH CHECK
+=================================================================
+  Server: WEB01
+  Date: 2025-12-01 18:48:33
+-----------------------------------------------------------------
+
+[Services IIS]
+[OK]   World Wide Web Publishing - Running
+[OK]   Windows Process Activation - Running
+[OK]   IIS Admin Service - Running
+
+[Application Pools]
+[INFO] Total App Pools - 5
+[WARN] Stopped Pools - 1 pool(s)
+       - LegacyApp_Pool
+[WARN] Pool API_Pool - No recycling configured
+       DefaultAppPool: Integrated, v4.0
+       WebApp_Pool: Integrated, v4.0
+       API_Pool: Integrated, v4.0
+
+[Sites Web]
+[INFO] Total Sites - 4
+[OK]   Site Default Web Site - Running
+       Bindings: *:80:, *:443:
+       Path: C:\inetpub\wwwroot
+[OK]   Site WebApp - Running
+       Bindings: *:443:webapp.corp.local
+       Path: D:\Apps\WebApp
+[OK]   Site API - Running
+       Bindings: *:443:api.corp.local
+       Path: D:\Apps\API
+[WARN] Site Legacy - Stopped
+       Bindings: *:8080:
+       Path: D:\Apps\Legacy
+
+[Certificats SSL]
+[OK]   Cert webapp.corp.local - Valid (187 days)
+[OK]   Cert api.corp.local - Valid (187 days)
+[WARN] Cert legacy.corp.local - Expires in 18 days
+
+[Logs IIS]
+[INFO] Log Directory - C:\inetpub\logs\LogFiles
+[OK]   Log Size - 2.45 GB
+       Recent logs (24h): 12 files
+
+[Performance]
+[INFO] Active Connections - 127
+[INFO] Requests/sec - 45.23
+[INFO] Worker Processes - 4 process(es), 892 MB
+
+[Configuration]
+       Modules loaded: 42
+[OK]   Compression - Static & Dynamic enabled
+[OK]   Request Filtering - Enabled
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 18 total
+    - Passed: 12
+    - Warnings: 4
+    - Failed: 0
+
+  IIS STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [Test-DNSServer.ps1](Test-DNSServer.md)

@@ -432,6 +432,68 @@ fi
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  LDAP SERVER HEALTH CHECK
+=================================================================
+  Host: localhost:389
+  Date: 2025-12-01 14:45:22
+-----------------------------------------------------------------
+
+[Service LDAP]
+[OK]   Service slapd - Running
+
+[Connectivité]
+[OK]   Port 389 - Open
+[OK]   Port 636 (LDAPS) - Open
+
+[RootDSE]
+[OK]   RootDSE Query - Accessible
+       Base DN: dc=example,dc=com
+       Subschema: cn=Subschema
+
+[Connection Anonyme]
+[OK]   Anonymous Bind - Disabled (secure)
+
+[Connection Authentifiée]
+[OK]   Authenticated Bind - Success
+
+[TLS/SSL]
+[OK]   StartTLS - Supported
+[OK]   LDAPS Certificate - Valid (245 days)
+       Subject: CN=ldap.example.com
+
+[Recherches]
+[INFO] Total Entries - 1847
+       Users: 423
+       Groups: 56
+[OK]   Query Performance - 127ms
+
+[Réplication]
+[INFO] Syncrepl Config - 1 provider(s)
+[OK]   ContextCSN - Present
+       contextCSN: 20251201143022.456789Z#000000#000#000000
+
+[Statistiques]
+[OK]   Monitor Backend - Accessible
+       Connections: 24
+       Operations: 185432
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 14 total
+    - Passed: 12
+    - Warnings: 0
+    - Failed: 0
+
+  LDAP STATUS: HEALTHY
+```
+
+---
+
 ## Voir Aussi
 
 - [check-bind.sh](check-bind.md) - Vérification DNS BIND

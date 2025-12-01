@@ -411,6 +411,78 @@ if ($script:failed -gt 0) {
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  DHCP SERVER HEALTH CHECK
+=================================================================
+  Server: DHCP01.corp.local
+  Date: 2025-12-01 18:15:42
+  Thresholds: Warning=80% Critical=95%
+-----------------------------------------------------------------
+
+[Service DHCP]
+[OK]   DHCP Service - Running
+
+[Autorisation Active Directory]
+[OK]   AD Authorization - Server is authorized
+
+[Configuration]
+[INFO] Conflict Detection - Attempts: 2
+[INFO] Database path - C:\Windows\System32\dhcp\dhcp.mdb
+[OK]   Audit Logging - Enabled
+
+[IPv4 Scopes]
+[INFO] IPv4 Scopes - 3 scope(s)
+[OK]   Scope Corp-Workstations - 187/254 (73.6%)
+       Range: 10.1.10.1 - 10.1.10.254
+       Free: 67 | Reserved: 12
+[WARN] Scope Corp-Servers - 45/50 (90%)
+       Range: 10.1.20.1 - 10.1.20.50
+       Free: 5 | Reserved: 8
+[OK]   Scope Guest-WiFi - 42/200 (21%)
+       Range: 10.2.0.1 - 10.2.0.200
+       Free: 158 | Reserved: 0
+
+[Failover]
+[OK]   Failover Corp-FO - Partner: DHCP02.corp.local - State: Normal
+       Mode: HotStandby | Max Client Lead: 00:01:00
+
+[Options DHCP Server]
+[OK]   Option 6 (DNS Servers) - 10.1.1.10, 10.1.1.11
+[OK]   Option 15 (DNS Domain Name) - corp.local
+[INFO] Option 3 (Router (Gateway)) - Not set at server level
+
+[Réservations]
+[INFO] Total Reservations - 28
+
+[Baux Actifs]
+       10.1.20.0: 3 leases expiring < 24h
+[INFO] Active Leases (all scopes) - 274
+
+[Statistiques]
+       Discovers: 15847
+       Offers: 15832
+       Requests: 31245
+       Acks: 31198
+       Naks: 47
+       Declines: 12
+[OK]   NAK Ratio - 0.2%
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 16 total
+    - Passed: 10
+    - Warnings: 1
+    - Failed: 0
+
+  DHCP STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [Test-DNSServer.ps1](Test-DNSServer.md)

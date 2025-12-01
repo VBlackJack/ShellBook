@@ -636,6 +636,53 @@ python kubernetes_health.py -q
 
 ---
 
+## Exemple de Sortie
+
+```text
+======================================================================
+  KUBERNETES CLUSTER HEALTH CHECK
+======================================================================
+  Date: 2025-12-01 17:32:18
+----------------------------------------------------------------------
+
+[OK]   API Server - Connected and responding
+
+[OK]   Nodes - 5/5 ready
+
+[INFO] Node Resources - Metrics server not available
+
+[WARN] Pods - 142/148 running
+    CrashLoopBackOff: 2
+      - production/payment-worker-7d4f8b5c6-x2k9p
+      - staging/data-sync-85f7c6d4b-m3n8q
+    Pending: 4
+      - production/web-frontend-5c8d7f6b-new1
+      - production/web-frontend-5c8d7f6b-new2
+
+[WARN] Deployments - 18/20 healthy
+    production/payment-service: 1/3 ready
+    staging/data-processor: 0/2 ready
+
+[OK]   DaemonSets - 6/6 healthy
+
+[OK]   PersistentVolumes - 12/12 bound
+
+[WARN] Services - 2 service(s) without endpoints
+    staging/deprecated-api
+    development/test-service
+
+[FAIL] Events (60min) - 3 critical events
+    Pod/payment-worker-7d4f8b5c6-x2k9p: Back-off restarting...
+    Pod/data-sync-85f7c6d4b-m3n8q: CrashLoopBackOff
+    PersistentVolumeClaim/data-pvc: FailedMount
+
+======================================================================
+  Passed: 4  Warnings: 3  Failed: 1
+======================================================================
+```
+
+---
+
 ## Voir Aussi
 
 - [docker_health.py](docker_health.md)

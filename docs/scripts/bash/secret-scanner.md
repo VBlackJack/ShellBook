@@ -686,6 +686,29 @@ secret_scan:
 3. **Audit Régulier** : Scanner périodiquement les repos existants
 4. **Onboarding** : Vérifier les nouveaux projets avant intégration
 
+## Exemple de Sortie
+
+```text
+[INFO] Starting secret scan...
+[INFO] Scanning directory: ./myproject
+[SECRET] ./config/database.yml:12 - PostgreSQL URL
+[SECRET] ./src/api/client.js:45 - Generic API Key
+[SECRET] ./.env.example:8 - Hardcoded Secret Env
+[SECRET] ./deploy/credentials.json:3 - Google API Key
+[INFO] Skipping: ./node_modules/package/index.js
+[INFO] Skipping: ./test/fixtures/mock_secrets.test.js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCAN SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Files scanned:      247
+Files with secrets: 4
+Total secrets:      4
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠ 4 secret(s) detected!
+```
+
 ## Voir Aussi
 
 - [security-audit.sh](./security-audit.md) - Audit de sécurité basique du système

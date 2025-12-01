@@ -459,6 +459,71 @@ server {
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  NGINX HEALTH CHECK
+=================================================================
+  Date: 2025-12-01 15:28:33
+-----------------------------------------------------------------
+
+[Service Nginx]
+[OK]   Service nginx - Running
+       Version: 1.24.0
+
+[Processus]
+[OK]   Worker processes - 4 worker(s)
+       Total memory: 128MB
+       Configured: auto worker(s)
+
+[Configuration]
+[OK]   Configuration syntax - Valid
+[OK]   Main config - /etc/nginx/nginx.conf
+
+[Sites Actives]
+[INFO] Enabled sites - 3 site(s)
+       default: _ (ports: 80 443 )
+       api.conf: api.example.com (ports: 443 )
+       web.conf: www.example.com (ports: 80 443 )
+
+[Ports d'écoute]
+[OK]   Port 80 (HTTP) - Listening
+[OK]   Port 443 (HTTPS) - Listening
+       Other ports: 8080
+
+[Certificats SSL]
+[OK]   Cert www.example.com - Valid (187 days)
+[WARN] Cert api.example.com - Expires in 21 days
+[OK]   Cert *.internal.local - Valid (320 days)
+
+[Logs]
+[INFO] Error log - /var/log/nginx/error.log (4.2M)
+[OK]   Recent errors (1h) - 12
+       Last 5 unique errors:
+         8: [error] upstream timed out (110: Connection...
+         3: [error] client intended to send too large...
+         1: [error] SSL_do_handshake() failed...
+[INFO] Access log - /var/log/nginx/access.log (128M)
+       Requests last minute: 847
+
+[Sécurité]
+[OK]   Server tokens - Hidden
+[OK]   SSL Protocols - Modern protocols only
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 15 total
+    - Passed: 12
+    - Warnings: 1
+    - Failed: 0
+
+  NGINX STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [ssl-csr-wizard.sh](ssl-csr-wizard.md) - Génération CSR SSL

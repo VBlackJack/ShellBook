@@ -448,6 +448,80 @@ fi
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  POSTFIX MAIL SERVER HEALTH CHECK
+=================================================================
+  Date: 2025-12-01 15:45:11
+-----------------------------------------------------------------
+
+[Service Postfix]
+[OK]   Service postfix - Running
+       Version: 3.8.6
+
+[Processus]
+[OK]   Daemon master - Running
+[OK]   Daemon pickup - Running
+[OK]   Daemon qmgr - Running
+       Total processes: 8
+
+[Configuration]
+[INFO] Hostname - mail.example.com
+       Domain: example.com
+       Destinations: $myhostname, localhost.$mydomain, localho...
+[INFO] Relay host - [smtp-relay.gmail.com]:587
+[OK]   Configuration check - Valid
+
+[Ports SMTP]
+[OK]   Port 25 (SMTP) - Listening
+[OK]   Port 587 (Submission) - Listening
+[INFO] Port 465 (SMTPS) - Not listening
+
+[Files d'Attente (Queues)]
+[OK]   Mail queue - 12 messages
+       Active: 2 | Deferred: 8 | Hold: 0 | Corrupt: 0
+[WARN] Deferred queue - 52 messages
+       Oldest: Dec  1 14:23:45
+
+[TLS/SSL]
+[OK]   Outbound TLS - Opportunistic (may)
+[OK]   Inbound TLS - Opportunistic (may)
+[OK]   TLS Certificate - mail.example.com (245 days)
+
+[Sécurité]
+[OK]   Recipient restrictions - Configured
+       permit_mynetworks, permit_sasl_authenticated, reject_una...
+[OK]   Relay restrictions - Open relay protected
+[OK]   SASL Authentication - Enabled
+
+[Logs]
+[INFO] Mail log - /var/log/mail.log (18M)
+       Today: sent=1247 bounced=23 deferred=89 rejected=156
+[OK]   Recent errors - 4
+       Top deferred destinations:
+         18: to=<user@legacy-server.com>
+         12: to=<bounce@external.org>
+         8: to=<admin@slow-mx.net>
+
+[Test SMTP]
+[OK]   SMTP localhost - mail.example.com ESMTP Postfix
+[OK]   STARTTLS advertised - Yes
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 19 total
+    - Passed: 15
+    - Warnings: 1
+    - Failed: 0
+
+  POSTFIX STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [check-bind.sh](check-bind.md) - Vérification DNS BIND

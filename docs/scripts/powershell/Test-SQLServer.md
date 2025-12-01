@@ -508,6 +508,77 @@ if ($script:failed -gt 0) {
 
 ---
 
+## Exemple de Sortie
+
+```text
+======================================================================
+  SQL SERVER HEALTH CHECK
+======================================================================
+  Instance: SQL01\PROD
+  Date: 2025-12-01 19:22:45
+----------------------------------------------------------------------
+
+[Connectivité]
+[OK]   TCP Port 1433 - SQL01
+[OK]   SQL Connection - Connected
+       Server: SQL01\PROD
+       Version: 16.0.4135.4
+
+[Services SQL]
+[OK]   SQL Server - Running
+[OK]   SQL Agent - Running
+[INFO] SSIS - Not installed
+[INFO] SSRS - Not installed
+
+[Bases de Données]
+[OK]   DB: AppDatabase - Online (FULL)
+[OK]   DB: ReportingDB - Online (SIMPLE)
+[OK]   DB: ArchiveDB - Online (BULK_LOGGED)
+[WARN] DB: LegacyApp - Offline
+[INFO] User Databases - 4 database(s)
+
+[Espace Fichiers]
+[OK]   Drive D - 245.7 GB free
+[OK]   Drive E - 512.3 GB free
+[WARN] Drive L - 18.2 GB free
+
+[Backups]
+[OK]   Backup: AppDatabase - Full: 2025-12-01 06:00
+[OK]   Backup: ReportingDB - Full: 2025-12-01 06:15
+[WARN] Backup: ArchiveDB - Full: 48.5 hours ago
+       WARNING: No log backup (FULL recovery mode)
+[FAIL] Backup: LegacyApp - NEVER backed up!
+
+[SQL Agent Jobs]
+[INFO] Enabled Jobs - 12
+[FAIL] Failed Jobs - 2 job(s)
+       - Maintenance_IndexRebuild
+       - ETL_NightlyLoad
+
+[Performance - Top Waits]
+       CXPACKET: 4523s
+       PAGEIOLATCH_SH: 1247s
+       LCK_M_IX: 892s
+       ASYNC_NETWORK_IO: 456s
+       WRITELOG: 234s
+[INFO] Wait Stats - Retrieved
+
+[Blocking]
+[OK]   Blocked Sessions - None
+
+======================================================================
+  RÉSUMÉ
+======================================================================
+  Checks: 20 total
+    - Passed: 11
+    - Warnings: 3
+    - Failed: 3
+
+  SQL SERVER STATUS: CRITICAL
+```
+
+---
+
 ## Voir Aussi
 
 - [Test-ADHealth.ps1](Test-ADHealth.md)

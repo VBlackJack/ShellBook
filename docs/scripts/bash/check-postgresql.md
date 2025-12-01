@@ -440,6 +440,84 @@ fi
 
 ---
 
+## Exemple de Sortie
+
+```text
+=================================================================
+  POSTGRESQL HEALTH CHECK
+=================================================================
+  Host: localhost:5432
+  User: postgres
+  Date: 2025-12-01 16:02:38
+-----------------------------------------------------------------
+
+[Service PostgreSQL]
+[OK]   Service postgresql - Running
+
+[Connectivité]
+[OK]   Port 5432 - Open
+[OK]   PostgreSQL Connection - Connected
+       Version: 16.1
+
+[État Général]
+[OK]   Uptime - 32 days 08:45:12
+[INFO] Server Role - Primary
+
+[Connections]
+       Current: 45 / 97 (max: 100)
+[OK]   Connection Usage - 46%
+       By state:
+         - active: 8
+         - idle: 35
+         - idle in transaction: 2
+
+[Bases de Données]
+[INFO] User Databases - 6
+       Total size: 156 GB
+       Largest databases:
+         - production: 98 GB
+         - analytics: 42 GB
+         - staging: 12 GB
+         - development: 3584 MB
+         - test: 512 MB
+
+[Réplication]
+[OK]   Streaming Replicas - 2 connected
+         - 192.168.1.51: streaming (lag: 0MB)
+         - 192.168.1.52: streaming (lag: 2MB)
+
+[Vacuum & Maintenance]
+[OK]   Autovacuum - Enabled
+[WARN] Tables needing vacuum - 3 table(s)
+[OK]   Transaction ID Age - 124567892
+
+[Performance I/O]
+[OK]   Cache Hit Ratio - 99.42%
+       Index hit ratio: 99.87%
+       Checkpoints: 156 1247 (req|timed)
+
+[Requêtes & Verrous]
+[OK]   Long running queries - None
+[INFO] Waiting on locks - 1 session(s)
+[OK]   Deadlocks - None
+
+[WAL & Archivage]
+[INFO] WAL Size - 2.1 GB
+[OK]   WAL Archiving - Enabled and working
+
+=================================================================
+  RÉSUMÉ
+=================================================================
+  Checks: 18 total
+    - Passed: 14
+    - Warnings: 1
+    - Failed: 0
+
+  POSTGRESQL STATUS: DEGRADED
+```
+
+---
+
 ## Voir Aussi
 
 - [check-mysql.sh](check-mysql.md)
