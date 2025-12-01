@@ -2,16 +2,43 @@
 
 Administration, optimisation et haute disponibilité des bases de données.
 
-## Sections
+---
 
-| Section | Description |
-|---------|-------------|
-| 🐘 **PostgreSQL** | Installation, configuration, tuning et backup |
-| 🐬 **MariaDB/MySQL** | Administration et réplication |
-| 🍃 **MongoDB** | Documents JSON, aggregation, replica sets |
-| 🔴 **Redis** | Cache, sessions et pub/sub |
-| 🔄 **Haute Disponibilité** | Patroni, Galera, failover automatique |
-| 📊 **Concepts** | Types de BDD, choix d'architecture |
+## PostgreSQL
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [PostgreSQL](postgresql.md) | Administration PostgreSQL complète | :material-star::material-star: |
+| [PostgreSQL Cheatsheet](postgresql-cheatsheet.md) | Aide-mémoire PostgreSQL | :material-star: |
+
+## MariaDB / MySQL
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [MariaDB](mariadb.md) | Administration MariaDB/MySQL | :material-star::material-star: |
+| [MariaDB Cheatsheet](mariadb-cheatsheet.md) | Aide-mémoire MariaDB | :material-star: |
+
+## MongoDB
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [MongoDB](mongodb.md) | Administration MongoDB | :material-star::material-star: |
+| [MongoDB Cheatsheet](mongodb-cheatsheet.md) | Aide-mémoire MongoDB | :material-star: |
+
+## Redis
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [Redis](redis.md) | Administration Redis | :material-star::material-star: |
+| [Redis Cheatsheet](redis-cheatsheet.md) | Aide-mémoire Redis | :material-star: |
+
+## Haute Disponibilité
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [High Availability](high-availability.md) | Patterns HA et failover | :material-star::material-star::material-star: |
+
+---
 
 ## Guide de Décision Rapide
 
