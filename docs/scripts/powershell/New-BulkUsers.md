@@ -28,6 +28,24 @@ Ce script automatise la gestion des utilisateurs en masse :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur (Domain Admins pour AD, Administrateur local pour utilisateurs locaux)
+- **Modules** : `ActiveDirectory` (pour mode AD uniquement, installé par défaut sur DC)
+
+---
+
+## Cas d'Usage
+
+- **Onboarding massif** : Créer des dizaines d'utilisateurs lors de l'arrivée d'une nouvelle équipe
+- **Migration Active Directory** : Recréer des comptes depuis un export CSV
+- **Environnement de test** : Générer rapidement des utilisateurs pour tests et formation
+- **Automatisation RH** : Intégrer avec un système RH pour provisioning automatique
+
+---
+
 ## Script
 
 ```powershell

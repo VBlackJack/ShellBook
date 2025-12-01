@@ -620,6 +620,167 @@ gcloud redis instances describe my-cache \
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Construire une solution de stockage multi-couches avec lifecycle management et sauvegarde automatique
+
+    **Contexte** : Vous gérez une application de partage de photos. Les photos récentes doivent être accessibles rapidement (Cloud Storage Standard), les photos de plus de 30 jours peuvent être archivées (Nearline), et celles de plus d'un an en Archive. Vous avez également besoin d'une base de données relationnelle en haute disponibilité avec des backups automatiques.
+
+    **Tâches à réaliser** :
+
+    1. Créer un bucket Cloud Storage `photos-app-VOTRENOM` avec versioning activé
+    2. Configurer une lifecycle policy avec trois règles :
+        - Après 30 jours : transition vers Nearline
+        - Après 365 jours : transition vers Archive
+        - Supprimer les versions non-courantes après 90 jours
+    3. Uploader 5 fichiers de test et vérifier la policy
+    4. Créer une instance Cloud SQL PostgreSQL 15 en haute disponibilité (Regional)
+    5. Configurer les backups automatiques (quotidiens à 3h00) et Point-in-Time Recovery
+    6. Créer une base de données `photos_db` avec une table `users`
+    7. Effectuer un backup manuel et tester une restauration
+    8. Créer un disque persistant avec snapshot schedule hebdomadaire
+
+    **Critères de validation** :
+
+    - [ ] Le bucket a le versioning et la lifecycle policy configurés correctement
+    - [ ] Les fichiers de test sont uploadés et accessibles
+    - [ ] Cloud SQL est en mode HA avec backup automatique activé
+    - [ ] La base de données et la table sont créées
+    - [ ] Un backup manuel a été créé et vérifié
+    - [ ] Le disque persistant a un snapshot schedule actif
+    - [ ] Estimation des coûts mensuelle documentée
+
+??? quote "Solution"
+    ```bash
+    # Variables
+    PROJECT_ID=$(gcloud config get-value project)
+    BUCKET_NAME="photos-app-$(whoami | tr '[:upper:]' '[:lower:]')"
+    REGION="europe-west1"
+
+    # 1. Créer le bucket avec versioning
+    gcloud storage buckets create gs://$BUCKET_NAME \
+        --location=$REGION \
+        --uniform-bucket-level-access
+
+    gcloud storage buckets update gs://$BUCKET_NAME --versioning
+
+    # 2. Lifecycle policy
+    cat > lifecycle-photos.json << 'EOF'
+    {
+      "lifecycle": {
+        "rule": [
+          {
+            "action": {"type": "SetStorageClass", "storageClass": "NEARLINE"},
+            "condition": {"age": 30}
+          },
+          {
+            "action": {"type": "SetStorageClass", "storageClass": "ARCHIVE"},
+            "condition": {"age": 365}
+          },
+          {
+            "action": {"type": "Delete"},
+            "condition": {"isLive": false, "age": 90}
+          }
+        ]
+      }
+    }
+    EOF
+
+    gsutil lifecycle set lifecycle-photos.json gs://$BUCKET_NAME
+
+    # 3. Upload fichiers de test
+    for i in {1..5}; do
+        echo "Photo $i - $(date)" > photo-$i.txt
+        gcloud storage cp photo-$i.txt gs://$BUCKET_NAME/
+    done
+
+    gcloud storage ls -L gs://$BUCKET_NAME/
+
+    # 4. Cloud SQL HA
+    gcloud sql instances create photos-db \
+        --database-version=POSTGRES_15 \
+        --tier=db-custom-2-7680 \
+        --region=$REGION \
+        --availability-type=REGIONAL \
+        --backup-start-time=03:00 \
+        --enable-point-in-time-recovery \
+        --backup-location=$REGION \
+        --retained-backups-count=7
+
+    # 5. Base de données
+    gcloud sql databases create photos_db --instance=photos-db
+
+    # Créer utilisateur
+    gcloud sql users create appuser \
+        --instance=photos-db \
+        --password=$(openssl rand -base64 16)
+
+    # Connexion et création table
+    gcloud sql connect photos-db --user=postgres << 'SQL'
+    \c photos_db
+    CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    INSERT INTO users (username, email) VALUES ('alice', 'alice@example.com');
+    INSERT INTO users (username, email) VALUES ('bob', 'bob@example.com');
+    SELECT * FROM users;
+    \q
+    SQL
+
+    # 6. Backup manuel
+    gcloud sql backups create --instance=photos-db \
+        --description="Backup manuel avant migration"
+
+    # Lister les backups
+    gcloud sql backups list --instance=photos-db
+
+    # 7. Snapshot schedule pour disque
+    gcloud compute resource-policies create snapshot-schedule weekly-snapshots \
+        --region=$REGION \
+        --weekly-schedule=SATURDAY \
+        --weekly-schedule-from-time=02:00 \
+        --max-retention-days=28 \
+        --on-source-disk-delete=keep-auto-snapshots
+
+    # Créer un disque et attacher le schedule
+    gcloud compute disks create app-data-disk \
+        --size=100GB \
+        --type=pd-ssd \
+        --zone=${REGION}-b \
+        --resource-policies=weekly-snapshots
+
+    # Vérifier
+    gcloud compute disks describe app-data-disk --zone=${REGION}-b
+
+    # Validation finale
+    echo "=== VALIDATION ==="
+    echo ""
+    echo "1. Bucket et lifecycle :"
+    gsutil lifecycle get gs://$BUCKET_NAME
+    gcloud storage ls gs://$BUCKET_NAME/ --long
+
+    echo ""
+    echo "2. Cloud SQL :"
+    gcloud sql instances describe photos-db \
+        --format="table(name,databaseVersion,state,settings.availabilityType)"
+
+    gcloud sql backups list --instance=photos-db --limit=3
+
+    echo ""
+    echo "3. Disque et snapshots :"
+    gcloud compute disks describe app-data-disk --zone=${REGION}-b \
+        --format="yaml(resourcePolicies)"
+
+    echo ""
+    echo "✅ Exercice terminé!"
+    ```
+
+---
+
 ## 6. Nettoyage
 
 ```bash

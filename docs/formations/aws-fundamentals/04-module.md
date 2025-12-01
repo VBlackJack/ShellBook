@@ -812,103 +812,327 @@ aws dynamodb delete-item \
 
 ---
 
-## 7. Exercices Pratiques
+## Exercice : À Vous de Jouer
 
-### Exercice 1 : Architecture de Stockage Multi-Tier
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une architecture de stockage complète, scalable et hautement disponible
 
-!!! example "Objectif"
-    Créer une architecture de stockage complète avec S3, EBS et EFS.
+    **Contexte** : Vous devez concevoir et déployer l'infrastructure de stockage pour une application SaaS multi-tenant. L'application nécessite du stockage objet pour les médias utilisateurs, du stockage fichier partagé pour les workers de traitement, des volumes EBS performants pour les bases de données, et une instance RDS PostgreSQL Multi-AZ pour les données transactionnelles. L'architecture doit être optimisée pour les coûts avec des policies de lifecycle appropriées et des backups automatisés.
 
-**Tâches :**
+    **Tâches à réaliser** :
 
-1. Créer un bucket S3 avec lifecycle policy (Standard → IA → Glacier)
-2. Configurer un volume EBS gp3 de 100GB avec snapshots automatiques
-3. Créer un EFS partagé entre 2 instances EC2
-4. Implémenter les politiques de sécurité (encryption, accès)
+    1. Créer un bucket S3 avec versioning, encryption, et lifecycle policy (Standard → IA après 30j → Glacier après 90j)
+    2. Configurer S3 Replication vers un bucket de backup dans une autre région
+    3. Créer 2 volumes EBS gp3 (100GB chacun) avec snapshots automatiques via DLM
+    4. Déployer un système de fichiers EFS avec lifecycle management (IA après 30 jours)
+    5. Créer une instance RDS PostgreSQL 14 Multi-AZ avec Read Replica
+    6. Configurer les automated backups RDS avec fenêtre de maintenance
+    7. Activer Performance Insights et Enhanced Monitoring sur RDS
+    8. Créer un FSx for Lustre pour workloads HPC (optionnel si budget disponible)
+
+    **Critères de validation** :
+
+    - [ ] Le bucket S3 est chiffré, versionné avec lifecycle policy active
+    - [ ] La réplication S3 fonctionne vers la région secondaire
+    - [ ] Les volumes EBS sont chiffrés avec des snapshots quotidiens automatiques (rétention 7 jours)
+    - [ ] EFS est accessible depuis plusieurs AZs avec encryption au repos et en transit
+    - [ ] RDS est Multi-AZ avec au moins un Read Replica fonctionnel
+    - [ ] Les backups RDS sont configurés avec rétention de 7 jours minimum
+    - [ ] Performance Insights montre les métriques de la base de données
+    - [ ] Tous les services de stockage utilisent le chiffrement
+    - [ ] Une estimation des coûts mensuels est documentée
 
 ??? quote "Solution"
 
+    **Étape 1 : Création du bucket S3 avec lifecycle et réplication**
+
     ```bash
     #!/bin/bash
-    # multi-tier-storage.sh
+    # Script: deploy-storage-architecture.sh
+    # Description: Déploiement complet de l'architecture de stockage
+
+    set -e
 
     # Variables
-    BUCKET_NAME="my-app-storage-$(date +%s)"
-    VPC_ID="vpc-0123456789abcdef0"
+    PRIMARY_REGION="eu-west-1"
+    BACKUP_REGION="eu-west-3"
+    BUCKET_NAME="saas-app-media-$(date +%s)"
+    BACKUP_BUCKET="saas-app-backup-$(date +%s)"
+    VPC_ID="vpc-xxx"  # À remplacer
 
-    # === S3 ===
-    # Créer le bucket
+    echo "=== Configuration S3 Primary Bucket ==="
+
+    # Créer le bucket principal
     aws s3api create-bucket \
         --bucket $BUCKET_NAME \
-        --region eu-west-1 \
-        --create-bucket-configuration LocationConstraint=eu-west-1
+        --region $PRIMARY_REGION \
+        --create-bucket-configuration LocationConstraint=$PRIMARY_REGION
 
-    # Activer versioning et encryption
+    # Activer versioning (requis pour replication)
     aws s3api put-bucket-versioning \
         --bucket $BUCKET_NAME \
         --versioning-configuration Status=Enabled
 
+    # Encryption SSE-S3
     aws s3api put-bucket-encryption \
         --bucket $BUCKET_NAME \
         --server-side-encryption-configuration '{
-            "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]
+            "Rules": [{
+                "ApplyServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                },
+                "BucketKeyEnabled": true
+            }]
         }'
 
+    # Bloquer l'accès public
+    aws s3api put-public-access-block \
+        --bucket $BUCKET_NAME \
+        --public-access-block-configuration \
+            BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+
     # Lifecycle policy
-    cat > lifecycle.json << 'EOF'
+    cat > s3-lifecycle.json << 'EOF'
     {
         "Rules": [
             {
-                "ID": "TransitionToGlacier",
+                "ID": "OptimizeStorage",
                 "Status": "Enabled",
                 "Filter": {"Prefix": ""},
                 "Transitions": [
-                    {"Days": 30, "StorageClass": "STANDARD_IA"},
-                    {"Days": 90, "StorageClass": "GLACIER"},
-                    {"Days": 365, "StorageClass": "DEEP_ARCHIVE"}
+                    {
+                        "Days": 30,
+                        "StorageClass": "STANDARD_IA"
+                    },
+                    {
+                        "Days": 90,
+                        "StorageClass": "GLACIER_IR"
+                    },
+                    {
+                        "Days": 365,
+                        "StorageClass": "DEEP_ARCHIVE"
+                    }
                 ],
-                "NoncurrentVersionExpiration": {"NoncurrentDays": 30}
+                "NoncurrentVersionTransitions": [
+                    {
+                        "NoncurrentDays": 30,
+                        "StorageClass": "GLACIER_IR"
+                    }
+                ],
+                "NoncurrentVersionExpiration": {
+                    "NoncurrentDays": 90
+                },
+                "AbortIncompleteMultipartUpload": {
+                    "DaysAfterInitiation": 7
+                }
+            },
+            {
+                "ID": "CleanupOldThumbnails",
+                "Status": "Enabled",
+                "Filter": {"Prefix": "thumbnails/"},
+                "Expiration": {"Days": 90}
             }
         ]
     }
     EOF
+
     aws s3api put-bucket-lifecycle-configuration \
         --bucket $BUCKET_NAME \
-        --lifecycle-configuration file://lifecycle.json
+        --lifecycle-configuration file://s3-lifecycle.json
 
-    # === EBS ===
-    # Créer le volume
-    VOLUME_ID=$(aws ec2 create-volume \
-        --availability-zone eu-west-1a \
-        --size 100 \
-        --volume-type gp3 \
-        --iops 3000 \
-        --throughput 125 \
-        --encrypted \
-        --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=app-data},{Key=Backup,Value=daily}]' \
-        --query 'VolumeId' --output text)
+    echo "✅ Bucket S3 principal configuré : $BUCKET_NAME"
+    ```
 
-    # DLM Policy
+    **Étape 2 : Configuration S3 Replication**
+
+    ```bash
+    echo "=== Configuration S3 Replication ==="
+
+    # Créer le bucket de backup dans la région secondaire
+    aws s3api create-bucket \
+        --bucket $BACKUP_BUCKET \
+        --region $BACKUP_REGION \
+        --create-bucket-configuration LocationConstraint=$BACKUP_REGION
+
+    aws s3api put-bucket-versioning \
+        --bucket $BACKUP_BUCKET \
+        --versioning-configuration Status=Enabled
+
+    # Créer le rôle IAM pour replication
+    cat > replication-trust-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "s3.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+        }]
+    }
+    EOF
+
+    REPLICATION_ROLE=$(aws iam create-role \
+        --role-name S3ReplicationRole \
+        --assume-role-policy-document file://replication-trust-policy.json \
+        --query 'Role.Arn' --output text)
+
+    # Policy de replication
+    ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+    cat > replication-policy.json << EOF
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetReplicationConfiguration",
+                    "s3:ListBucket"
+                ],
+                "Resource": "arn:aws:s3:::$BUCKET_NAME"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObjectVersionForReplication",
+                    "s3:GetObjectVersionAcl"
+                ],
+                "Resource": "arn:aws:s3:::$BUCKET_NAME/*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:ReplicateObject",
+                    "s3:ReplicateDelete"
+                ],
+                "Resource": "arn:aws:s3:::$BACKUP_BUCKET/*"
+            }
+        ]
+    }
+    EOF
+
+    aws iam put-role-policy \
+        --role-name S3ReplicationRole \
+        --policy-name S3ReplicationPolicy \
+        --policy-document file://replication-policy.json
+
+    # Attendre la propagation du rôle
+    sleep 10
+
+    # Configurer la replication
+    cat > replication-config.json << EOF
+    {
+        "Role": "$REPLICATION_ROLE",
+        "Rules": [{
+            "ID": "ReplicateAll",
+            "Priority": 1,
+            "Filter": {},
+            "Status": "Enabled",
+            "Destination": {
+                "Bucket": "arn:aws:s3:::$BACKUP_BUCKET",
+                "ReplicationTime": {
+                    "Status": "Enabled",
+                    "Time": {"Minutes": 15}
+                },
+                "Metrics": {
+                    "Status": "Enabled",
+                    "EventThreshold": {"Minutes": 15}
+                }
+            },
+            "DeleteMarkerReplication": {"Status": "Enabled"}
+        }]
+    }
+    EOF
+
+    aws s3api put-bucket-replication \
+        --bucket $BUCKET_NAME \
+        --replication-configuration file://replication-config.json
+
+    echo "✅ Réplication S3 configurée vers $BACKUP_REGION"
+    ```
+
+    **Étape 3 : Volumes EBS avec snapshots automatiques**
+
+    ```bash
+    echo "=== Création volumes EBS avec DLM ==="
+
+    # Créer 2 volumes EBS gp3
+    for i in 1 2; do
+        VOLUME_ID=$(aws ec2 create-volume \
+            --availability-zone ${PRIMARY_REGION}a \
+            --size 100 \
+            --volume-type gp3 \
+            --iops 3000 \
+            --throughput 125 \
+            --encrypted \
+            --tag-specifications "ResourceType=volume,Tags=[{Key=Name,Value=app-data-vol${i}},{Key=Backup,Value=daily},{Key=Environment,Value=production}]" \
+            --query 'VolumeId' --output text)
+
+        echo "✅ Volume EBS créé : $VOLUME_ID"
+    done
+
+    # Créer le rôle IAM pour DLM
+    cat > dlm-trust-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "dlm.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+        }]
+    }
+    EOF
+
+    DLM_ROLE=$(aws iam create-role \
+        --role-name AWSDataLifecycleManagerRole \
+        --assume-role-policy-document file://dlm-trust-policy.json \
+        --query 'Role.Arn' --output text)
+
+    aws iam attach-role-policy \
+        --role-name AWSDataLifecycleManagerRole \
+        --policy-arn arn:aws:iam::aws:policy/service-role/AWSDataLifecycleManagerServiceRole
+
+    # Attendre la propagation
+    sleep 10
+
+    # Créer la policy DLM
     aws dlm create-lifecycle-policy \
-        --description "Daily EBS snapshots" \
+        --description "Daily EBS snapshots - 7 days retention" \
         --state ENABLED \
-        --execution-role-arn arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):role/AWSDataLifecycleManagerDefaultRole \
+        --execution-role-arn $DLM_ROLE \
         --policy-details '{
             "PolicyType": "EBS_SNAPSHOT_MANAGEMENT",
             "ResourceTypes": ["VOLUME"],
             "TargetTags": [{"Key": "Backup", "Value": "daily"}],
             "Schedules": [{
                 "Name": "DailySnapshots",
-                "CreateRule": {"Interval": 24, "IntervalUnit": "HOURS", "Times": ["03:00"]},
-                "RetainRule": {"Count": 7}
+                "CreateRule": {
+                    "Interval": 24,
+                    "IntervalUnit": "HOURS",
+                    "Times": ["03:00"]
+                },
+                "RetainRule": {
+                    "Count": 7
+                },
+                "TagsToAdd": [
+                    {"Key": "SnapshotType", "Value": "automated"},
+                    {"Key": "CreatedBy", "Value": "DLM"}
+                ],
+                "CopyTags": true
             }]
         }'
 
-    # === EFS ===
-    # Security Group
+    echo "✅ DLM Policy créée pour snapshots quotidiens"
+    ```
+
+    **Étape 4 : Système de fichiers EFS**
+
+    ```bash
+    echo "=== Déploiement EFS ==="
+
+    # Security Group EFS
     EFS_SG=$(aws ec2 create-security-group \
-        --group-name efs-sg \
-        --description "EFS mount targets" \
+        --group-name efs-mount-targets-sg \
+        --description "Security group for EFS mount targets" \
         --vpc-id $VPC_ID \
         --query 'GroupId' --output text)
 
@@ -918,120 +1142,173 @@ aws dynamodb delete-item \
         --port 2049 \
         --cidr 10.0.0.0/16
 
-    # Créer EFS
+    # Créer le filesystem EFS
     EFS_ID=$(aws efs create-file-system \
         --performance-mode generalPurpose \
+        --throughput-mode bursting \
         --encrypted \
-        --tags Key=Name,Value=shared-storage \
+        --lifecycle-policies '[{"TransitionToIA":"AFTER_30_DAYS"},{"TransitionToPrimaryStorageClass":"AFTER_1_ACCESS"}]' \
+        --tags Key=Name,Value=shared-app-storage Key=Environment,Value=production \
         --query 'FileSystemId' --output text)
 
-    # Mount targets
-    for SUBNET in subnet-priv-a subnet-priv-b; do
+    echo "⏳ Attente de la disponibilité du filesystem EFS..."
+    aws efs describe-file-systems --file-system-id $EFS_ID --query 'FileSystems[0].LifeCycleState'
+
+    # Récupérer les subnets privés
+    SUBNETS=$(aws ec2 describe-subnets \
+        --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Tier,Values=private" \
+        --query 'Subnets[0:2].SubnetId' --output text)
+
+    # Créer les mount targets
+    for SUBNET in $SUBNETS; do
         aws efs create-mount-target \
             --file-system-id $EFS_ID \
             --subnet-id $SUBNET \
             --security-groups $EFS_SG
+        echo "✅ Mount target créé dans subnet $SUBNET"
     done
 
-    echo "=== Storage Created ==="
-    echo "S3 Bucket: $BUCKET_NAME"
-    echo "EBS Volume: $VOLUME_ID"
-    echo "EFS: $EFS_ID"
+    echo "✅ EFS créé : $EFS_ID"
+    echo "   DNS: ${EFS_ID}.efs.${PRIMARY_REGION}.amazonaws.com"
     ```
 
-### Exercice 2 : RDS Multi-AZ avec Read Replica
-
-!!! example "Objectif"
-    Déployer une architecture RDS production-ready avec haute disponibilité.
-
-**Tâches :**
-
-1. Créer une instance RDS PostgreSQL Multi-AZ
-2. Ajouter un read replica
-3. Configurer les backups et monitoring
-4. Tester le failover
-
-??? quote "Solution"
+    **Étape 5-7 : Instance RDS PostgreSQL Multi-AZ**
 
     ```bash
-    # Voir section 4 pour les commandes détaillées
-    # Points clés :
+    echo "=== Déploiement RDS PostgreSQL Multi-AZ ==="
 
-    # 1. Instance principale Multi-AZ
+    # DB Subnet Group
+    DB_SUBNETS=$(aws ec2 describe-subnets \
+        --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Tier,Values=database" \
+        --query 'Subnets[].SubnetId' --output text)
+
+    aws rds create-db-subnet-group \
+        --db-subnet-group-name saas-db-subnet-group \
+        --db-subnet-group-description "Subnet group for SaaS database" \
+        --subnet-ids $DB_SUBNETS
+
+    # Security Group RDS
+    RDS_SG=$(aws ec2 create-security-group \
+        --group-name rds-postgres-sg \
+        --description "Security group for RDS PostgreSQL" \
+        --vpc-id $VPC_ID \
+        --query 'GroupId' --output text)
+
+    aws ec2 authorize-security-group-ingress \
+        --group-id $RDS_SG \
+        --protocol tcp \
+        --port 5432 \
+        --source-group $APP_SG  # Security group des instances applicatives
+
+    # Créer l'instance RDS principale (Multi-AZ)
     aws rds create-db-instance \
-        --db-instance-identifier prod-postgres \
+        --db-instance-identifier saas-app-db \
+        --db-instance-class db.r6g.large \
+        --engine postgres \
+        --engine-version 14.9 \
+        --master-username dbadmin \
+        --master-user-password 'ChangeMeP@ssw0rd!' \
+        --allocated-storage 100 \
+        --storage-type gp3 \
+        --iops 3000 \
+        --storage-encrypted \
         --multi-az \
+        --db-subnet-group-name saas-db-subnet-group \
+        --vpc-security-group-ids $RDS_SG \
         --backup-retention-period 7 \
-        --deletion-protection \
+        --preferred-backup-window "03:00-04:00" \
+        --preferred-maintenance-window "mon:04:00-mon:05:00" \
+        --enable-cloudwatch-logs-exports '["postgresql","upgrade"]' \
         --enable-performance-insights \
-        ...
+        --performance-insights-retention-period 7 \
+        --monitoring-interval 60 \
+        --monitoring-role-arn arn:aws:iam::${ACCOUNT_ID}:role/rds-monitoring-role \
+        --deletion-protection \
+        --copy-tags-to-snapshot \
+        --tags Key=Name,Value=saas-app-db Key=Environment,Value=production
 
-    # 2. Read replica
+    echo "⏳ Attente de la disponibilité de l'instance RDS (environ 10-15 minutes)..."
+    aws rds wait db-instance-available --db-instance-identifier saas-app-db
+
+    echo "✅ Instance RDS créée : saas-app-db"
+
+    # Créer le Read Replica
     aws rds create-db-instance-read-replica \
-        --db-instance-identifier prod-postgres-replica \
-        --source-db-instance-identifier prod-postgres \
-        ...
+        --db-instance-identifier saas-app-db-replica \
+        --source-db-instance-identifier saas-app-db \
+        --db-instance-class db.r6g.large \
+        --publicly-accessible false \
+        --enable-performance-insights \
+        --performance-insights-retention-period 7 \
+        --monitoring-interval 60 \
+        --monitoring-role-arn arn:aws:iam::${ACCOUNT_ID}:role/rds-monitoring-role \
+        --tags Key=Name,Value=saas-app-db-replica Key=Role,Value=read-replica
 
-    # 3. Tester failover
-    aws rds reboot-db-instance \
-        --db-instance-identifier prod-postgres \
-        --force-failover
+    echo "⏳ Création du Read Replica en cours..."
+    aws rds wait db-instance-available --db-instance-identifier saas-app-db-replica
 
-    # 4. Vérifier les événements
-    aws rds describe-events \
-        --source-identifier prod-postgres \
-        --source-type db-instance \
-        --duration 60
+    echo "✅ Read Replica créé : saas-app-db-replica"
+
+    # Récupérer les endpoints
+    PRIMARY_ENDPOINT=$(aws rds describe-db-instances \
+        --db-instance-identifier saas-app-db \
+        --query 'DBInstances[0].Endpoint.Address' --output text)
+
+    REPLICA_ENDPOINT=$(aws rds describe-db-instances \
+        --db-instance-identifier saas-app-db-replica \
+        --query 'DBInstances[0].Endpoint.Address' --output text)
+
+    echo ""
+    echo "📊 Endpoints RDS:"
+    echo "   Primary: $PRIMARY_ENDPOINT:5432"
+    echo "   Replica: $REPLICA_ENDPOINT:5432"
     ```
 
-### Exercice 3 : Migration de Données
-
-!!! example "Objectif"
-    Migrer des données d'un système on-premise vers AWS.
-
-**Scénario :**
-- 500 GB de fichiers à migrer vers S3
-- Base PostgreSQL 50 GB à migrer vers RDS
-
-??? quote "Solution"
+    **Vérification et tests :**
 
     ```bash
-    # === Migration fichiers vers S3 ===
-
-    # Option 1: AWS CLI (pour < 1TB, bonne connexion)
-    aws s3 sync /data/files/ s3://my-bucket/migrated/ \
-        --storage-class STANDARD_IA
-
-    # Option 2: S3 Transfer Acceleration
-    aws s3api put-bucket-accelerate-configuration \
-        --bucket my-bucket \
-        --accelerate-configuration Status=Enabled
-
-    aws s3 cp /data/large-file.zip s3://my-bucket/ \
-        --endpoint-url https://my-bucket.s3-accelerate.amazonaws.com
-
-    # Option 3: AWS DataSync (pour gros volumes)
-    # Nécessite un agent on-premise
-
-    # === Migration PostgreSQL vers RDS ===
-
-    # 1. Créer l'instance RDS cible
-    # (voir exercice précédent)
-
-    # 2. Exporter depuis la source
-    pg_dump -h source-server -U admin -Fc mydb > mydb.dump
-
-    # 3. Restaurer sur RDS
-    pg_restore -h prod-postgres.xxx.eu-west-1.rds.amazonaws.com \
-        -U admin -d mydb mydb.dump
-
-    # Alternative: AWS DMS pour migration continue
-    aws dms create-replication-instance \
-        --replication-instance-identifier my-dms-instance \
-        --replication-instance-class dms.r5.large \
-        --allocated-storage 100
-
-    # Créer les endpoints source et cible, puis la tâche de migration
+    echo ""
+    echo "===========================================  ======"
+    echo "✅ Déploiement Storage Architecture Terminé"
+    echo "=================================================="
+    echo ""
+    echo "S3 Primary Bucket: $BUCKET_NAME"
+    echo "S3 Backup Bucket: $BACKUP_BUCKET (région: $BACKUP_REGION)"
+    echo "EFS FileSystem: $EFS_ID"
+    echo "RDS Primary: saas-app-db"
+    echo "RDS Replica: saas-app-db-replica"
+    echo ""
+    echo "=== Tests à effectuer ==="
+    echo ""
+    echo "1. Test S3 Replication:"
+    echo "   aws s3 cp test.txt s3://$BUCKET_NAME/"
+    echo "   aws s3 ls s3://$BACKUP_BUCKET/ --region $BACKUP_REGION"
+    echo ""
+    echo "2. Test EFS Mount (depuis une EC2):"
+    echo "   sudo mount -t nfs4 -o nfsvers=4.1 ${EFS_ID}.efs.${PRIMARY_REGION}.amazonaws.com:/ /mnt/efs"
+    echo "   df -h /mnt/efs"
+    echo ""
+    echo "3. Test connexion RDS:"
+    echo "   psql -h $PRIMARY_ENDPOINT -U dbadmin -d postgres"
+    echo ""
+    echo "4. Vérifier les métriques Performance Insights dans la console RDS"
+    echo ""
+    echo "=== Estimation des coûts mensuels (eu-west-1) ==="
+    echo "S3 Standard (100GB): ~2.30 USD"
+    echo "S3 Replication: ~2.00 USD"
+    echo "EBS gp3 (200GB total): ~16.00 USD"
+    echo "EFS (50GB utilisé): ~15.00 USD"
+    echo "RDS db.r6g.large Multi-AZ: ~420.00 USD"
+    echo "RDS Read Replica: ~210.00 USD"
+    echo "Backups & Snapshots: ~10.00 USD"
+    echo "-------------------------------------------"
+    echo "TOTAL ESTIMÉ: ~675 USD/mois"
+    echo ""
+    echo "💡 Optimisations possibles:"
+    echo "   - Utiliser Reserved Instances pour RDS (-40%)"
+    echo "   - Activer S3 Intelligent-Tiering"
+    echo "   - Réduire Performance Insights retention"
+    echo "=================================================="
     ```
 
 ---

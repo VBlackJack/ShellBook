@@ -448,28 +448,272 @@ spec:
 
 ---
 
-## 6. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place un système RBAC complet et sécuriser les pods
 
-1. Créer un utilisateur avec certificat
-2. Créer un Role avec permissions limitées
-3. Lier l'utilisateur au Role
-4. Créer un ServiceAccount avec RBAC
-5. Appliquer Pod Security Standards
+    **Contexte** : Vous devez créer un environnement sécurisé pour une équipe de développeurs. Ils doivent pouvoir déployer et gérer leurs applications dans un namespace dédié, mais sans accès aux ressources critiques du cluster.
 
-### Vérification
+    **Tâches à réaliser** :
 
-```bash
-# Tester les permissions
-kubectl auth can-i get pods --as john
-kubectl auth can-i delete pods --as john
-kubectl auth can-i get pods --as system:serviceaccount:default:app-sa
+    1. Créer un namespace "dev-team" avec Pod Security Standards en mode baseline
+    2. Créer un ServiceAccount "developer" pour l'équipe
+    3. Créer un Role limitant les permissions aux pods, deployments et services
+    4. Lier le ServiceAccount au Role avec un RoleBinding
+    5. Déployer un pod sécurisé respectant les Pod Security Standards
 
-# Lister les roles
-kubectl get roles,rolebindings -A
-kubectl get clusterroles,clusterrolebindings
-```
+    **Critères de validation** :
+
+    - [ ] Le namespace est créé avec Pod Security Standards
+    - [ ] Le ServiceAccount a des permissions limitées au namespace
+    - [ ] Les développeurs peuvent gérer pods/deployments/services
+    - [ ] Les développeurs ne peuvent PAS accéder aux secrets
+    - [ ] Le pod déployé respecte les contraintes de sécurité
+
+??? quote "Solution"
+    **Étape 1 : Créer le namespace avec Pod Security**
+
+    ```yaml
+    # namespace.yaml
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: dev-team
+      labels:
+        name: dev-team
+        pod-security.kubernetes.io/enforce: baseline
+        pod-security.kubernetes.io/audit: restricted
+        pod-security.kubernetes.io/warn: restricted
+    ```
+
+    ```bash
+    kubectl apply -f namespace.yaml
+    kubectl get namespace dev-team --show-labels
+    ```
+
+    **Étape 2 : Créer le ServiceAccount**
+
+    ```yaml
+    # serviceaccount.yaml
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: developer
+      namespace: dev-team
+    automountServiceAccountToken: true
+    ```
+
+    ```bash
+    kubectl apply -f serviceaccount.yaml
+    kubectl get sa -n dev-team
+    ```
+
+    **Étape 3 : Créer le Role**
+
+    ```yaml
+    # role.yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      name: developer-role
+      namespace: dev-team
+    rules:
+      # Permissions sur les pods
+      - apiGroups: [""]
+        resources: ["pods", "pods/log", "pods/status"]
+        verbs: ["get", "list", "watch", "create", "delete"]
+      - apiGroups: [""]
+        resources: ["pods/exec"]
+        verbs: ["create"]
+
+      # Permissions sur les deployments
+      - apiGroups: ["apps"]
+        resources: ["deployments", "replicasets"]
+        verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+      # Permissions sur les services
+      - apiGroups: [""]
+        resources: ["services"]
+        verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+      # Permissions limitées sur configmaps (lecture seule)
+      - apiGroups: [""]
+        resources: ["configmaps"]
+        verbs: ["get", "list"]
+
+      # PAS de permissions sur les secrets!
+    ```
+
+    ```bash
+    kubectl apply -f role.yaml
+    kubectl describe role developer-role -n dev-team
+    ```
+
+    **Étape 4 : Créer le RoleBinding**
+
+    ```yaml
+    # rolebinding.yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: developer-binding
+      namespace: dev-team
+    subjects:
+      - kind: ServiceAccount
+        name: developer
+        namespace: dev-team
+    roleRef:
+      kind: Role
+      name: developer-role
+      apiGroup: rbac.authorization.k8s.io
+    ```
+
+    ```bash
+    kubectl apply -f rolebinding.yaml
+    kubectl describe rolebinding developer-binding -n dev-team
+    ```
+
+    **Étape 5 : Déployer un pod sécurisé**
+
+    ```yaml
+    # secure-pod.yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: secure-app
+      namespace: dev-team
+    spec:
+      serviceAccountName: developer
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: nginx:alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /var/cache/nginx
+            - name: run
+              mountPath: /var/run
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+    ```
+
+    ```bash
+    kubectl apply -f secure-pod.yaml
+    kubectl get pods -n dev-team
+    kubectl describe pod secure-app -n dev-team
+    ```
+
+    **Étape 6 : Tester les permissions**
+
+    ```bash
+    # Créer un token pour le ServiceAccount
+    TOKEN=$(kubectl create token developer -n dev-team)
+
+    # Tester avec kubectl
+    # Devrait fonctionner : lister les pods
+    kubectl auth can-i list pods -n dev-team --as=system:serviceaccount:dev-team:developer
+    # Résultat: yes
+
+    # Devrait fonctionner : créer un deployment
+    kubectl auth can-i create deployments -n dev-team --as=system:serviceaccount:dev-team:developer
+    # Résultat: yes
+
+    # Devrait échouer : lire les secrets
+    kubectl auth can-i get secrets -n dev-team --as=system:serviceaccount:dev-team:developer
+    # Résultat: no
+
+    # Devrait échouer : accès à un autre namespace
+    kubectl auth can-i get pods -n kube-system --as=system:serviceaccount:dev-team:developer
+    # Résultat: no
+
+    # Tester toutes les permissions
+    kubectl auth can-i --list -n dev-team --as=system:serviceaccount:dev-team:developer
+    ```
+
+    **Étape 7 : Tests additionnels**
+
+    ```bash
+    # Créer un deployment avec le ServiceAccount
+    kubectl create deployment nginx --image=nginx:alpine --replicas=2 -n dev-team
+
+    # Vérifier que le pod peut lister d'autres pods (via API interne)
+    kubectl exec -it secure-app -n dev-team -- sh
+    # Dans le pod:
+    # TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    # curl -k -H "Authorization: Bearer $TOKEN" https://kubernetes.default.svc/api/v1/namespaces/dev-team/pods
+    ```
+
+    **Étape 8 : Test de violation de sécurité**
+
+    ```yaml
+    # insecure-pod.yaml (devrait être rejeté ou averti)
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: insecure-app
+      namespace: dev-team
+    spec:
+      containers:
+        - name: app
+          image: nginx
+          securityContext:
+            privileged: true  # Violation!
+    ```
+
+    ```bash
+    kubectl apply -f insecure-pod.yaml
+    # Devrait afficher un warning ou être rejeté selon le niveau de Pod Security
+    ```
+
+    **Vérifications finales** :
+
+    ```bash
+    # Lister toutes les ressources RBAC
+    kubectl get roles,rolebindings -n dev-team
+    kubectl get serviceaccounts -n dev-team
+
+    # Vérifier les Pod Security labels
+    kubectl get namespace dev-team -o yaml | grep pod-security
+
+    # Auditer les permissions
+    kubectl describe role developer-role -n dev-team
+    kubectl describe rolebinding developer-binding -n dev-team
+    ```
+
+    **Nettoyage** :
+
+    ```bash
+    kubectl delete namespace dev-team
+    ```
 
 ---
 

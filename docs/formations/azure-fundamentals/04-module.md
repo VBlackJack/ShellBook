@@ -649,7 +649,420 @@ az storage account update \
 
 ---
 
-## 7. Exercices Pratiques
+## 7. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Concevoir une solution de stockage et base de données complète pour une application e-commerce
+
+    **Contexte** : Vous êtes architecte pour une plateforme e-commerce qui doit gérer des images de produits, des fichiers de configuration, des transactions et des sessions utilisateurs. L'application doit être hautement disponible, performante et sécurisée. Vous devez mettre en place l'infrastructure de stockage et base de données appropriée.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Storage Account avec tiers Hot/Cool/Archive pour les images produits
+    2. Configurer une politique de lifecycle management (Hot→Cool après 30j, Archive après 90j)
+    3. Créer un File Share Azure pour les fichiers de configuration partagés
+    4. Implémenter une Queue Storage pour le traitement asynchrone des commandes
+    5. Créer un Azure SQL Database avec zone-redundancy
+    6. Configurer un failover group pour la haute disponibilité
+    7. Créer un Cosmos DB pour les sessions utilisateurs (API Table)
+    8. Activer les Private Endpoints pour tous les services de données
+
+    **Critères de validation** :
+
+    - [ ] Le Storage Account contient 3 containers (images-hot, images-cool, images-archive)
+    - [ ] La lifecycle policy déplace automatiquement les blobs entre tiers
+    - [ ] Le File Share est monté sur une VM de test
+    - [ ] La Queue reçoit et traite les messages correctement
+    - [ ] Le SQL Database est accessible et zone-redundant
+    - [ ] Le failover group est configuré avec replica en lecture dans une autre région
+    - [ ] Cosmos DB stocke et récupère les données de session
+    - [ ] Tous les services sont accessibles uniquement via Private Endpoints
+
+??? quote "Solution"
+
+    **Étape 1 : Créer le Storage Account avec containers**
+
+    ```bash
+    # Variables
+    LOCATION="westeurope"
+    LOCATION_SECONDARY="northeurope"
+    RG_NAME="ecommerce-storage-rg"
+    STORAGE_NAME="ecommercest$(openssl rand -hex 4)"
+
+    # Créer le resource group
+    az group create --name $RG_NAME --location $LOCATION
+
+    # Créer le Storage Account
+    az storage account create \
+        --name $STORAGE_NAME \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --sku Standard_GRS \
+        --kind StorageV2 \
+        --access-tier Hot \
+        --min-tls-version TLS1_2 \
+        --allow-blob-public-access false
+
+    # Récupérer la clé
+    STORAGE_KEY=$(az storage account keys list \
+        --account-name $STORAGE_NAME \
+        --resource-group $RG_NAME \
+        --query "[0].value" -o tsv)
+
+    # Créer les containers pour les différents tiers
+    az storage container create \
+        --name images-hot \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+
+    az storage container create \
+        --name images-cool \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+
+    az storage container create \
+        --name images-archive \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+    ```
+
+    **Étape 2 : Configurer lifecycle management**
+
+    ```bash
+    # Créer la politique de lifecycle
+    cat > lifecycle-policy.json << 'EOF'
+    {
+      "rules": [
+        {
+          "enabled": true,
+          "name": "move-old-images",
+          "type": "Lifecycle",
+          "definition": {
+            "actions": {
+              "baseBlob": {
+                "tierToCool": {
+                  "daysAfterModificationGreaterThan": 30
+                },
+                "tierToArchive": {
+                  "daysAfterModificationGreaterThan": 90
+                },
+                "delete": {
+                  "daysAfterModificationGreaterThan": 365
+                }
+              }
+            },
+            "filters": {
+              "blobTypes": ["blockBlob"],
+              "prefixMatch": ["images-hot/"]
+            }
+          }
+        }
+      ]
+    }
+    EOF
+
+    # Appliquer la politique
+    az storage account management-policy create \
+        --account-name $STORAGE_NAME \
+        --resource-group $RG_NAME \
+        --policy @lifecycle-policy.json
+    ```
+
+    **Étape 3 : Créer le File Share**
+
+    ```bash
+    # Créer le file share
+    az storage share create \
+        --name app-config \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY \
+        --quota 10
+
+    # Créer une VM de test et monter le share
+    az vm create \
+        --resource-group $RG_NAME \
+        --name config-test-vm \
+        --image Ubuntu2204 \
+        --size Standard_B2s \
+        --admin-username azureuser \
+        --generate-ssh-keys
+
+    # Script de montage (à exécuter sur la VM)
+    cat > mount-fileshare.sh << EOF
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y cifs-utils
+
+    sudo mkdir -p /mnt/appconfig
+
+    # Créer le fichier credentials
+    sudo bash -c "cat > /etc/smbcredentials/${STORAGE_NAME}.cred << CRED
+    username=${STORAGE_NAME}
+    password=${STORAGE_KEY}
+    CRED"
+    sudo chmod 600 /etc/smbcredentials/${STORAGE_NAME}.cred
+
+    # Monter le share
+    sudo mount -t cifs \
+        //${STORAGE_NAME}.file.core.windows.net/app-config \
+        /mnt/appconfig \
+        -o vers=3.0,credentials=/etc/smbcredentials/${STORAGE_NAME}.cred,dir_mode=0777,file_mode=0777
+
+    # Ajouter au fstab
+    echo "//${STORAGE_NAME}.file.core.windows.net/app-config /mnt/appconfig cifs vers=3.0,credentials=/etc/smbcredentials/${STORAGE_NAME}.cred,dir_mode=0777,file_mode=0777 0 0" | sudo tee -a /etc/fstab
+    EOF
+    ```
+
+    **Étape 4 : Configurer Queue Storage**
+
+    ```bash
+    # Créer une queue
+    az storage queue create \
+        --name orders-queue \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+
+    # Envoyer un message test
+    az storage message put \
+        --queue-name orders-queue \
+        --content "Order #12345" \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+
+    # Lire les messages
+    az storage message peek \
+        --queue-name orders-queue \
+        --account-name $STORAGE_NAME \
+        --account-key $STORAGE_KEY
+    ```
+
+    **Étape 5 : Créer Azure SQL Database**
+
+    ```bash
+    # Créer le SQL Server
+    SQL_SERVER_NAME="ecommerce-sql-$(openssl rand -hex 4)"
+    SQL_ADMIN="sqladmin"
+    SQL_PASSWORD="P@ssw0rd$(openssl rand -hex 4)!"
+
+    az sql server create \
+        --name $SQL_SERVER_NAME \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --admin-user $SQL_ADMIN \
+        --admin-password $SQL_PASSWORD
+
+    # Créer la database avec zone-redundancy
+    az sql db create \
+        --resource-group $RG_NAME \
+        --server $SQL_SERVER_NAME \
+        --name ecommerce-db \
+        --edition GeneralPurpose \
+        --family Gen5 \
+        --capacity 2 \
+        --compute-model Serverless \
+        --auto-pause-delay 60 \
+        --min-capacity 0.5 \
+        --zone-redundant true
+
+    # Configurer le firewall (pour tests)
+    az sql server firewall-rule create \
+        --resource-group $RG_NAME \
+        --server $SQL_SERVER_NAME \
+        --name AllowAzureServices \
+        --start-ip-address 0.0.0.0 \
+        --end-ip-address 0.0.0.0
+    ```
+
+    **Étape 6 : Configurer le failover group**
+
+    ```bash
+    # Créer un secondary server dans une autre région
+    SQL_SERVER_SECONDARY="${SQL_SERVER_NAME}-secondary"
+
+    az sql server create \
+        --name $SQL_SERVER_SECONDARY \
+        --resource-group $RG_NAME \
+        --location $LOCATION_SECONDARY \
+        --admin-user $SQL_ADMIN \
+        --admin-password $SQL_PASSWORD
+
+    # Créer le failover group
+    az sql failover-group create \
+        --name ecommerce-fg \
+        --resource-group $RG_NAME \
+        --server $SQL_SERVER_NAME \
+        --partner-server $SQL_SERVER_SECONDARY \
+        --partner-resource-group $RG_NAME \
+        --failover-policy Automatic \
+        --grace-period 1 \
+        --add-db ecommerce-db
+
+    # Tester le failover
+    # az sql failover-group set-primary \
+    #     --name ecommerce-fg \
+    #     --resource-group $RG_NAME \
+    #     --server $SQL_SERVER_SECONDARY
+    ```
+
+    **Étape 7 : Créer Cosmos DB**
+
+    ```bash
+    # Créer le compte Cosmos DB (Table API)
+    COSMOS_ACCOUNT="ecommerce-cosmos-$(openssl rand -hex 4)"
+
+    az cosmosdb create \
+        --name $COSMOS_ACCOUNT \
+        --resource-group $RG_NAME \
+        --locations regionName=$LOCATION failoverPriority=0 isZoneRedundant=True \
+        --locations regionName=$LOCATION_SECONDARY failoverPriority=1 isZoneRedundant=True \
+        --capabilities EnableTable \
+        --default-consistency-level Session
+
+    # Créer une table
+    az cosmosdb table create \
+        --account-name $COSMOS_ACCOUNT \
+        --resource-group $RG_NAME \
+        --name UserSessions \
+        --throughput 400
+
+    # Récupérer la connection string
+    az cosmosdb keys list \
+        --name $COSMOS_ACCOUNT \
+        --resource-group $RG_NAME \
+        --type connection-strings \
+        --query "connectionStrings[?description=='Primary Table Connection String'].connectionString" -o tsv
+    ```
+
+    **Étape 8 : Configurer les Private Endpoints**
+
+    ```bash
+    # Créer un VNet et subnet
+    az network vnet create \
+        --resource-group $RG_NAME \
+        --name ecommerce-vnet \
+        --address-prefix 10.0.0.0/16 \
+        --subnet-name app-subnet \
+        --subnet-prefix 10.0.1.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name ecommerce-vnet \
+        --name private-endpoints-subnet \
+        --address-prefix 10.0.2.0/24 \
+        --disable-private-endpoint-network-policies true
+
+    # Private Endpoint pour Storage (Blob)
+    STORAGE_ID=$(az storage account show -g $RG_NAME -n $STORAGE_NAME --query id -o tsv)
+
+    az network private-endpoint create \
+        --resource-group $RG_NAME \
+        --name storage-blob-pe \
+        --vnet-name ecommerce-vnet \
+        --subnet private-endpoints-subnet \
+        --private-connection-resource-id $STORAGE_ID \
+        --group-id blob \
+        --connection-name storage-blob-connection
+
+    # Private Endpoint pour SQL
+    SQL_ID=$(az sql server show -g $RG_NAME -n $SQL_SERVER_NAME --query id -o tsv)
+
+    az network private-endpoint create \
+        --resource-group $RG_NAME \
+        --name sql-pe \
+        --vnet-name ecommerce-vnet \
+        --subnet private-endpoints-subnet \
+        --private-connection-resource-id $SQL_ID \
+        --group-id sqlServer \
+        --connection-name sql-connection
+
+    # Private Endpoint pour Cosmos DB
+    COSMOS_ID=$(az cosmosdb show -g $RG_NAME -n $COSMOS_ACCOUNT --query id -o tsv)
+
+    az network private-endpoint create \
+        --resource-group $RG_NAME \
+        --name cosmos-pe \
+        --vnet-name ecommerce-vnet \
+        --subnet private-endpoints-subnet \
+        --private-connection-resource-id $COSMOS_ID \
+        --group-id Table \
+        --connection-name cosmos-connection
+
+    # Créer les Private DNS Zones
+    az network private-dns zone create \
+        --resource-group $RG_NAME \
+        --name privatelink.blob.core.windows.net
+
+    az network private-dns zone create \
+        --resource-group $RG_NAME \
+        --name privatelink.database.windows.net
+
+    az network private-dns zone create \
+        --resource-group $RG_NAME \
+        --name privatelink.table.cosmos.azure.com
+
+    # Lier les zones au VNet
+    for zone in privatelink.blob.core.windows.net privatelink.database.windows.net privatelink.table.cosmos.azure.com; do
+        az network private-dns link vnet create \
+            --resource-group $RG_NAME \
+            --zone-name $zone \
+            --name ${zone}-link \
+            --virtual-network ecommerce-vnet \
+            --registration-enabled false
+    done
+
+    # Associer les DNS zones aux Private Endpoints
+    az network private-endpoint dns-zone-group create \
+        --resource-group $RG_NAME \
+        --endpoint-name storage-blob-pe \
+        --name storage-dns-group \
+        --private-dns-zone privatelink.blob.core.windows.net \
+        --zone-name privatelink.blob.core.windows.net
+
+    az network private-endpoint dns-zone-group create \
+        --resource-group $RG_NAME \
+        --endpoint-name sql-pe \
+        --name sql-dns-group \
+        --private-dns-zone privatelink.database.windows.net \
+        --zone-name privatelink.database.windows.net
+
+    az network private-endpoint dns-zone-group create \
+        --resource-group $RG_NAME \
+        --endpoint-name cosmos-pe \
+        --name cosmos-dns-group \
+        --private-dns-zone privatelink.table.cosmos.azure.com \
+        --zone-name privatelink.table.cosmos.azure.com
+    ```
+
+    **Validation**
+
+    ```bash
+    # Vérifier le Storage Account
+    az storage account show -g $RG_NAME -n $STORAGE_NAME --query "[name,primaryEndpoints]"
+
+    # Vérifier la lifecycle policy
+    az storage account management-policy show \
+        --account-name $STORAGE_NAME \
+        --resource-group $RG_NAME
+
+    # Vérifier SQL Database
+    az sql db show -g $RG_NAME -s $SQL_SERVER_NAME -n ecommerce-db --query "[name,zoneRedundant,status]"
+
+    # Vérifier le failover group
+    az sql failover-group show \
+        --name ecommerce-fg \
+        --resource-group $RG_NAME \
+        --server $SQL_SERVER_NAME
+
+    # Vérifier Cosmos DB
+    az cosmosdb show -g $RG_NAME -n $COSMOS_ACCOUNT --query "[name,documentEndpoint,enableMultipleWriteLocations]"
+
+    # Vérifier les Private Endpoints
+    az network private-endpoint list -g $RG_NAME --output table
+    ```
+
+---
+
+## 8. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Storage Multi-Tier
 

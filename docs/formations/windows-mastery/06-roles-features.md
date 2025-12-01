@@ -205,6 +205,175 @@ Start-Process "http://localhost:8080"
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer un serveur multi-rôles avec IIS et File Server
+
+    **Contexte** : Vous devez configurer un serveur qui hébergera à la fois un site web interne et des partages de fichiers pour le département IT. Le site web doit être accessible sur le port 8080 et les fichiers doivent être organisés par service.
+
+    **Tâches à réaliser** :
+
+    1. Installer les rôles Web Server (IIS) et File Server avec toutes les fonctionnalités nécessaires
+    2. Créer un site web nommé "IntranetIT" sur le port 8080 avec une page d'accueil personnalisée
+    3. Créer une structure de partages réseau : "IT-Scripts", "IT-Docs" et "IT-Tools"
+    4. Configurer les permissions NTFS et de partage appropriées
+    5. Ouvrir les ports nécessaires dans le pare-feu Windows
+
+    **Critères de validation** :
+
+    - [ ] Les rôles IIS et File Server sont installés et opérationnels
+    - [ ] Le site web est accessible via http://localhost:8080
+    - [ ] Les trois partages réseau sont créés et accessibles via \\SERVEUR\IT-*
+    - [ ] Les permissions permettent aux utilisateurs du groupe "IT-Team" d'accéder aux partages
+    - [ ] Les règles de pare-feu autorisent HTTP (8080) et SMB (445)
+
+??? quote "Solution"
+    Voici la solution complète étape par étape :
+
+    ```powershell
+    # 1. Installer les rôles nécessaires
+    Install-WindowsFeature -Name Web-Server, FS-FileServer `
+        -IncludeSubFeature `
+        -IncludeManagementTools
+
+    # Vérifier l'installation
+    Get-WindowsFeature | Where-Object Installed | Where-Object Name -match "Web|File"
+
+    # 2. Créer le site web IntranetIT
+    Import-Module WebAdministration
+
+    # Créer le répertoire du site
+    New-Item -Path "C:\WebSites\IntranetIT" -ItemType Directory -Force
+
+    # Créer une page d'accueil
+    @"
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Intranet IT</title>
+        <style>
+            body { font-family: Arial; margin: 50px; background-color: #f0f0f0; }
+            h1 { color: #0066cc; }
+        </style>
+    </head>
+    <body>
+        <h1>Bienvenue sur l'Intranet IT</h1>
+        <p>Portail du département informatique</p>
+        <ul>
+            <li><a href="\\$env:COMPUTERNAME\IT-Scripts">Scripts</a></li>
+            <li><a href="\\$env:COMPUTERNAME\IT-Docs">Documentation</a></li>
+            <li><a href="\\$env:COMPUTERNAME\IT-Tools">Outils</a></li>
+        </ul>
+    </body>
+    </html>
+    "@ | Set-Content "C:\WebSites\IntranetIT\index.html"
+
+    # Créer le site IIS
+    New-IISSite -Name "IntranetIT" `
+        -PhysicalPath "C:\WebSites\IntranetIT" `
+        -BindingInformation "*:8080:"
+
+    # Démarrer le site
+    Start-IISSite -Name "IntranetIT"
+
+    # 3. Créer la structure de partages
+    $shareRoot = "C:\Shares"
+    $shares = @("IT-Scripts", "IT-Docs", "IT-Tools")
+
+    foreach ($share in $shares) {
+        # Créer le dossier
+        $path = Join-Path $shareRoot $share
+        New-Item -Path $path -ItemType Directory -Force
+
+        # Créer le partage SMB
+        New-SmbShare -Name $share `
+            -Path $path `
+            -FullAccess "Administrators" `
+            -ChangeAccess "IT-Team" `
+            -ReadAccess "Domain Users"
+    }
+
+    # 4. Configurer les permissions NTFS
+    foreach ($share in $shares) {
+        $path = Join-Path $shareRoot $share
+
+        # Supprimer l'héritage
+        $acl = Get-Acl $path
+        $acl.SetAccessRuleProtection($true, $true)
+        Set-Acl $path $acl
+
+        # Ajouter les permissions
+        $acl = Get-Acl $path
+
+        # IT-Team : Modify
+        $permission = "DOMAIN\IT-Team", "Modify", "ContainerInherit,ObjectInherit", "None", "Allow"
+        $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission
+        $acl.AddAccessRule($accessRule)
+
+        # Appliquer
+        Set-Acl $path $acl
+    }
+
+    # 5. Configurer le pare-feu
+    # Règle pour HTTP 8080
+    New-NetFirewallRule -DisplayName "Intranet IT - HTTP 8080" `
+        -Direction Inbound `
+        -Protocol TCP `
+        -LocalPort 8080 `
+        -Action Allow `
+        -Profile Domain
+
+    # Règle pour SMB (si pas déjà activée)
+    New-NetFirewallRule -DisplayName "File Sharing - SMB" `
+        -Direction Inbound `
+        -Protocol TCP `
+        -LocalPort 445 `
+        -Action Allow `
+        -Profile Domain `
+        -ErrorAction SilentlyContinue
+
+    # Vérification finale
+    Write-Host "`n=== VERIFICATION ===" -ForegroundColor Green
+
+    # Vérifier IIS
+    Write-Host "`nSite IIS:" -ForegroundColor Yellow
+    Get-IISSite | Select-Object Name, State, @{N="Bindings";E={$_.Bindings.BindingInformation}}
+
+    # Vérifier les partages
+    Write-Host "`nPartages SMB:" -ForegroundColor Yellow
+    Get-SmbShare | Where-Object Name -like "IT-*" | Format-Table Name, Path, Description
+
+    # Vérifier le pare-feu
+    Write-Host "`nRègles de pare-feu:" -ForegroundColor Yellow
+    Get-NetFirewallRule | Where-Object DisplayName -match "Intranet IT|File Sharing" |
+        Select-Object DisplayName, Enabled, Direction, Action
+
+    # Test d'accès au site
+    Write-Host "`nTest du site web:" -ForegroundColor Yellow
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:8080" -UseBasicParsing
+        Write-Host "Site accessible - Code: $($response.StatusCode)" -ForegroundColor Green
+    } catch {
+        Write-Host "Erreur d'accès au site: $_" -ForegroundColor Red
+    }
+
+    Write-Host "`n=== Configuration terminée ===" -ForegroundColor Green
+    Write-Host "Site web: http://localhost:8080"
+    Write-Host "Partages: \\$env:COMPUTERNAME\IT-Scripts, IT-Docs, IT-Tools"
+    ```
+
+    **Points clés de la solution** :
+
+    - Utilisation de `Install-WindowsFeature` avec `-IncludeManagementTools` pour installer les outils d'administration
+    - Création d'un site IIS avec `New-IISSite` sur un port personnalisé
+    - Configuration des partages SMB avec des permissions différenciées par groupe
+    - Configuration des permissions NTFS pour un contrôle d'accès granulaire
+    - Création de règles de pare-feu spécifiques pour les services déployés
+    - Script de vérification pour valider chaque composant
+
+---
+
 ## Quiz
 
 1. **Quelle cmdlet installe un rôle Windows ?**

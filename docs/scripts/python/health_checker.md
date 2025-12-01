@@ -25,6 +25,26 @@ Ce script vérifie la santé de l'infrastructure :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `requests`, `pyyaml`, `rich`
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Accès réseau pour vérifier les endpoints HTTP et ports TCP
+- **Configuration** : Fichier YAML optionnel pour définir les checks à effectuer
+
+---
+
+## Cas d'Usage
+
+- **Monitoring d'infrastructure** : Vérification automatique de la disponibilité des services critiques (web, base de données, cache)
+- **Smoke tests** : Validation rapide après déploiement que tous les services démarrent correctement
+- **Intégration CI/CD** : Tests de santé dans les pipelines pour bloquer les déploiements défectueux
+- **Surveillance périodique** : Exécution via cron pour détecter les pannes de services
+- **Diagnostic réseau** : Validation de la connectivité et résolution DNS entre environnements
+
+---
+
 ## Dépendances
 
 ```bash

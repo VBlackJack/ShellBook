@@ -367,28 +367,52 @@ Write-Host "`nScore: $Passed/$Total ($([math]::Round($Passed/$Total*100))%)" -Fo
 
 ---
 
-## 6. Exercice Pratique
+## 6. Exercice : À Vous de Jouer
 
-### Scénario
+!!! example "Mise en Pratique : Appliquer une Baseline de Sécurité"
+    **Objectif** : Appliquer et valider une baseline de sécurité CIS sur un serveur Windows Server 2022.
 
-Vous devez appliquer une baseline de sécurité sur un nouveau serveur Windows Server 2022.
+    **Contexte** : Votre entreprise doit mettre en conformité un nouveau serveur avant sa mise en production.
 
-### Tâches
+    **Tâches à réaliser** :
 
-1. Télécharger Microsoft Security Compliance Toolkit
-2. Faire un backup de la configuration actuelle
-3. Appliquer la baseline Windows Server 2022
-4. Exécuter l'audit et documenter les écarts
-5. Créer une exception justifiée
+    1. Télécharger Microsoft Security Compliance Toolkit depuis le site Microsoft
+    2. Faire un backup de la configuration actuelle avec LGPO
+    3. Appliquer la baseline Windows Server 2022 Member Server
+    4. Exécuter l'audit et documenter les écarts
+    5. Créer une exception documentée et justifiée
 
-### Validation
+    **Critères de validation** :
 
-```powershell
-# Vérifier l'application
-Test-SecurityBaseline | Where-Object Status -eq "FAIL"
+    - [ ] Backup créé avant modification
+    - [ ] Baseline appliquée sans erreur
+    - [ ] Audit exécuté avec moins de 5 FAIL
+    - [ ] Exception documentée avec justification business
 
-# Doit retourner peu ou pas de FAIL
-```
+??? quote "Solution"
+    ```powershell
+    # 1. Backup de la configuration actuelle
+    New-Item -Path "C:\SecurityBackup" -ItemType Directory -Force
+    .\LGPO.exe /b "C:\SecurityBackup"
+
+    # 2. Appliquer la baseline
+    .\Baseline-LocalInstall.ps1 -WSMember
+
+    # 3. Vérifier l'application
+    Test-SecurityBaseline | Where-Object Status -eq "FAIL"
+
+    # 4. Documenter les exceptions
+    $Exception = @{
+        Setting = "Interactive logon: Message text"
+        Reason = "Custom corporate banner required"
+        ApprovedBy = "Security Team"
+        Date = Get-Date
+    }
+    $Exception | Export-Csv "C:\SecurityBackup\Exceptions.csv" -Append
+    ```
+
+    !!! tip "Bonnes pratiques"
+        Toujours tester les baselines en environnement de test avant la production.
 
 ---
 

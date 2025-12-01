@@ -25,6 +25,24 @@ Ce script vérifie la connectivité réseau :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Aucune élévation requise (lecture réseau)
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Troubleshooting réseau** : Diagnostiquer rapidement une panne de connectivité
+- **Monitoring proactif** : Tâche planifiée pour détecter les problèmes réseau
+- **Documentation incidents** : Générer un rapport complet lors d'un ticket support
+- **Tests post-déploiement** : Valider la connectivité après un changement d'infrastructure
+
+---
+
 ## Script
 
 ```powershell

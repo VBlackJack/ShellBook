@@ -30,6 +30,24 @@ Préparation complète d'un serveur avant une fenêtre de patching (WU, WSUS, SC
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur (requis pour services et nettoyage)
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Préparation fenêtre de patching** : Exécuter 2-4h avant la maintenance programmée
+- **Résolution problèmes WU/WSUS** : Nettoyer les caches corrompus et réinitialiser
+- **Automatisation SCCM** : Intégrer dans les task sequences de déploiement
+- **Maintenance préventive** : Nettoyage mensuel pour éviter les problèmes de patching
+
+---
+
 ## Différences entre Sources
 
 | Élément | Windows Update | WSUS | SCCM/MECM |

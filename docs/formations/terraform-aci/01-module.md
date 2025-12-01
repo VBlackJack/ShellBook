@@ -689,6 +689,173 @@ projet-terraform/
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer votre premier projet Terraform avec gestion du state et variables
+
+    **Contexte** : Vous devez initialiser un projet Terraform pour préparer l'automatisation d'une infrastructure ACI. Ce projet doit suivre les bonnes pratiques : séparation des fichiers, variables typées, et configuration du backend remote.
+
+    **Tâches à réaliser** :
+
+    1. Créer la structure de fichiers recommandée (main.tf, variables.tf, outputs.tf, versions.tf)
+    2. Configurer le backend S3 ou Azure Blob pour le state remote
+    3. Déclarer des variables avec validation pour : nom du tenant, environnement (dev/staging/prod), région
+    4. Initialiser le projet et vérifier la configuration
+
+    **Critères de validation** :
+
+    - [ ] Le projet s'initialise sans erreur avec `terraform init`
+    - [ ] La validation syntaxique passe avec `terraform validate`
+    - [ ] Le formatage est correct avec `terraform fmt -check`
+    - [ ] Les variables ont des validations fonctionnelles
+    - [ ] Le backend remote est configuré (même si non accessible pour le test)
+
+??? quote "Solution"
+
+    **Structure du projet :**
+
+    ```bash
+    mkdir -p terraform-aci-project && cd terraform-aci-project
+    ```
+
+    **versions.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+    ```
+
+    **variables.tf**
+
+    ```hcl
+    variable "tenant_name" {
+      description = "Nom du tenant ACI"
+      type        = string
+
+      validation {
+        condition     = can(regex("^[a-zA-Z][a-zA-Z0-9_-]{0,63}$", var.tenant_name))
+        error_message = "Le nom du tenant doit commencer par une lettre et contenir maximum 64 caractères."
+      }
+    }
+
+    variable "environment" {
+      description = "Environnement de déploiement"
+      type        = string
+
+      validation {
+        condition     = contains(["dev", "staging", "prod"], var.environment)
+        error_message = "L'environnement doit être dev, staging ou prod."
+      }
+    }
+
+    variable "region" {
+      description = "Région du datacenter"
+      type        = string
+      default     = "eu-west"
+    }
+    ```
+
+    **backend.tf**
+
+    ```hcl
+    terraform {
+      backend "s3" {
+        bucket         = "worldline-terraform-state"
+        key            = "aci/infrastructure/terraform.tfstate"
+        region         = "eu-west-3"
+        encrypt        = true
+        dynamodb_table = "terraform-locks"
+      }
+    }
+
+    # Alternative Azure
+    # terraform {
+    #   backend "azurerm" {
+    #     resource_group_name  = "terraform-state-rg"
+    #     storage_account_name = "wltfstate"
+    #     container_name       = "tfstate"
+    #     key                  = "aci.terraform.tfstate"
+    #   }
+    # }
+    ```
+
+    **main.tf**
+
+    ```hcl
+    locals {
+      common_tags = {
+        environment  = var.environment
+        managed_by   = "terraform"
+        region       = var.region
+      }
+
+      tenant_description = "Tenant ${var.tenant_name} - Environment: ${var.environment}"
+    }
+    ```
+
+    **outputs.tf**
+
+    ```hcl
+    output "tenant_name" {
+      description = "Nom du tenant configuré"
+      value       = var.tenant_name
+    }
+
+    output "environment" {
+      description = "Environnement de déploiement"
+      value       = var.environment
+    }
+
+    output "configuration_summary" {
+      description = "Résumé de la configuration"
+      value = {
+        tenant      = var.tenant_name
+        environment = var.environment
+        region      = var.region
+        tags        = local.common_tags
+      }
+    }
+    ```
+
+    **terraform.tfvars**
+
+    ```hcl
+    tenant_name = "Demo-Tenant"
+    environment = "dev"
+    region      = "eu-west"
+    ```
+
+    **Commandes de validation :**
+
+    ```bash
+    # Initialisation
+    terraform init
+
+    # Validation
+    terraform validate
+
+    # Formatage
+    terraform fmt
+
+    # Plan (sans provider configuré, affichera les outputs)
+    terraform plan
+    ```
+
+    **Résultat attendu :**
+
+    Toutes les commandes doivent s'exécuter sans erreur. Le projet est structuré correctement et prêt à recevoir la configuration du provider ACI.
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

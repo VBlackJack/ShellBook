@@ -24,6 +24,23 @@ Ce script scanne les ports ouverts sur une cible :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis)
+- **Dépendances** : `bash` 4.0+, `ping`, `timeout`
+
+---
+
+## Cas d'Usage
+
+- **Audit de sécurité** : Vérification des ports exposés sur vos propres systèmes
+- **Validation de firewall** : Test que seuls les ports voulus sont accessibles
+- **Découverte de services** : Identification rapide des services actifs sur un serveur
+- **Troubleshooting réseau** : Diagnostic de problèmes de connectivité applicative
+
+---
+
 ## Script
 
 ```bash

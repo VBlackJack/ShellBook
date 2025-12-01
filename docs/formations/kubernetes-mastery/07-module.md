@@ -306,25 +306,333 @@ spec:
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser le scheduling avancé et la gestion des ressources
 
-1. Labelliser des nodes
-2. Créer un pod avec node affinity
-3. Configurer des taints et tolerations
-4. Mettre en place des ResourceQuotas
+    **Contexte** : Vous gérez un cluster multi-tenants où certains nodes sont équipés de GPUs coûteux. Vous devez configurer le scheduling pour que seules les applications GPU soient placées sur ces nodes, et limiter la consommation de ressources par namespace.
 
-### Validation
+    **Tâches à réaliser** :
 
-```bash
-# Vérifier le scheduling
-kubectl get pods -o wide
-kubectl describe pod <pod-name> | grep -A5 Events
+    1. Labelliser un node comme "gpu-node"
+    2. Appliquer un taint sur ce node pour repousser les pods normaux
+    3. Créer un Deployment avec toleration pour utiliser les nodes GPU
+    4. Configurer un ResourceQuota pour un namespace
+    5. Créer un LimitRange avec des limites par défaut
 
-# Vérifier les quotas
-kubectl describe resourcequota -n development
-```
+    **Critères de validation** :
+
+    - [ ] Le node GPU a les labels et taints appropriés
+    - [ ] Les pods GPU sont schedulés uniquement sur les nodes GPU
+    - [ ] Les pods normaux ne sont PAS schedulés sur les nodes GPU
+    - [ ] Le ResourceQuota limite correctement les ressources
+    - [ ] Le LimitRange applique des valeurs par défaut
+
+??? quote "Solution"
+    **Étape 1 : Labelliser et tainter le node**
+
+    ```bash
+    # Lister les nodes
+    kubectl get nodes
+
+    # Choisir un node et le labelliser (remplacer <node-name>)
+    NODE_NAME=$(kubectl get nodes -o jsonpath='{.items[0].metadata.name}')
+    kubectl label nodes $NODE_NAME gpu=true
+    kubectl label nodes $NODE_NAME node-type=gpu-enabled
+
+    # Vérifier les labels
+    kubectl get nodes --show-labels | grep gpu
+
+    # Appliquer un taint
+    kubectl taint nodes $NODE_NAME dedicated=gpu:NoSchedule
+
+    # Vérifier le taint
+    kubectl describe node $NODE_NAME | grep -A5 Taints
+    ```
+
+    **Étape 2 : Créer un namespace avec quotas**
+
+    ```yaml
+    # namespace-gpu.yaml
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: gpu-workloads
+
+    ---
+    apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: gpu-quota
+      namespace: gpu-workloads
+    spec:
+      hard:
+        requests.cpu: "4"
+        requests.memory: "8Gi"
+        limits.cpu: "8"
+        limits.memory: "16Gi"
+        pods: "10"
+        services: "5"
+
+    ---
+    apiVersion: v1
+    kind: LimitRange
+    metadata:
+      name: gpu-limits
+      namespace: gpu-workloads
+    spec:
+      limits:
+        - type: Container
+          default:
+            cpu: "500m"
+            memory: "512Mi"
+          defaultRequest:
+            cpu: "100m"
+            memory: "128Mi"
+          min:
+            cpu: "50m"
+            memory: "64Mi"
+          max:
+            cpu: "2"
+            memory: "2Gi"
+    ```
+
+    ```bash
+    kubectl apply -f namespace-gpu.yaml
+    kubectl describe resourcequota gpu-quota -n gpu-workloads
+    kubectl describe limitrange gpu-limits -n gpu-workloads
+    ```
+
+    **Étape 3 : Déployer une application GPU**
+
+    ```yaml
+    # gpu-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: gpu-app
+      namespace: gpu-workloads
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: gpu-app
+      template:
+        metadata:
+          labels:
+            app: gpu-app
+        spec:
+          # NodeSelector pour cibler les nodes GPU
+          nodeSelector:
+            gpu: "true"
+            node-type: gpu-enabled
+
+          # Toleration pour le taint
+          tolerations:
+            - key: "dedicated"
+              operator: "Equal"
+              value: "gpu"
+              effect: "NoSchedule"
+
+          # Node Affinity (alternative/complément au nodeSelector)
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: gpu
+                        operator: In
+                        values:
+                          - "true"
+
+          containers:
+            - name: app
+              image: nvidia/cuda:11.8.0-base-ubuntu22.04
+              command: ["sleep", "infinity"]
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+    ```
+
+    ```bash
+    kubectl apply -f gpu-deployment.yaml
+
+    # Vérifier que les pods sont sur le node GPU
+    kubectl get pods -n gpu-workloads -o wide
+    kubectl describe pod -n gpu-workloads -l app=gpu-app | grep Node:
+    ```
+
+    **Étape 4 : Déployer une application normale (sans GPU)**
+
+    ```yaml
+    # normal-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: normal-app
+      namespace: gpu-workloads
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: normal-app
+      template:
+        metadata:
+          labels:
+            app: normal-app
+        spec:
+          # Pas de toleration = ne peut pas aller sur node GPU
+          containers:
+            - name: app
+              image: nginx:alpine
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+    ```
+
+    ```bash
+    kubectl apply -f normal-deployment.yaml
+
+    # Vérifier que les pods NE SONT PAS sur le node GPU
+    kubectl get pods -n gpu-workloads -o wide
+    ```
+
+    **Étape 5 : Test Pod Affinity/Anti-Affinity**
+
+    ```yaml
+    # affinity-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+      namespace: gpu-workloads
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: frontend
+      template:
+        metadata:
+          labels:
+            app: frontend
+            tier: frontend
+        spec:
+          # Anti-affinity: éviter de mettre 2 pods sur le même node
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        app: frontend
+                    topologyKey: kubernetes.io/hostname
+          containers:
+            - name: frontend
+              image: nginx:alpine
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 32Mi
+    ```
+
+    ```bash
+    kubectl apply -f affinity-deployment.yaml
+    kubectl get pods -n gpu-workloads -l app=frontend -o wide
+    ```
+
+    **Étape 6 : Tester les quotas**
+
+    ```bash
+    # Vérifier l'utilisation du quota
+    kubectl describe resourcequota gpu-quota -n gpu-workloads
+
+    # Essayer de dépasser le quota
+    kubectl create deployment quota-test --image=nginx --replicas=20 -n gpu-workloads
+
+    # Observer que certains pods restent Pending
+    kubectl get pods -n gpu-workloads
+
+    # Voir pourquoi
+    kubectl describe replicaset -n gpu-workloads | grep -A5 "exceeded quota"
+    ```
+
+    **Étape 7 : Test de PriorityClass**
+
+    ```yaml
+    # priority.yaml
+    apiVersion: scheduling.k8s.io/v1
+    kind: PriorityClass
+    metadata:
+      name: high-priority
+    value: 1000000
+    globalDefault: false
+    description: "High priority for critical workloads"
+
+    ---
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: high-priority-pod
+      namespace: gpu-workloads
+    spec:
+      priorityClassName: high-priority
+      containers:
+        - name: app
+          image: nginx:alpine
+    ```
+
+    ```bash
+    kubectl apply -f priority.yaml
+    kubectl get priorityclass
+    kubectl get pod high-priority-pod -n gpu-workloads -o yaml | grep priority
+    ```
+
+    **Vérifications** :
+
+    ```bash
+    # Nodes et labels
+    kubectl get nodes --show-labels | grep gpu
+
+    # Taints
+    kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints
+
+    # Scheduling des pods
+    kubectl get pods -n gpu-workloads -o wide
+
+    # Quotas et limites
+    kubectl describe quota -n gpu-workloads
+    kubectl describe limitrange -n gpu-workloads
+
+    # Utilisation des ressources
+    kubectl top nodes
+    kubectl top pods -n gpu-workloads
+    ```
+
+    **Nettoyage** :
+
+    ```bash
+    # Supprimer le namespace
+    kubectl delete namespace gpu-workloads
+
+    # Supprimer le taint du node
+    kubectl taint nodes $NODE_NAME dedicated=gpu:NoSchedule-
+
+    # Supprimer les labels
+    kubectl label nodes $NODE_NAME gpu- node-type-
+
+    # Supprimer la PriorityClass
+    kubectl delete priorityclass high-priority
+    ```
 
 ---
 

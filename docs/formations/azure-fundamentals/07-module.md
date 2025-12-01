@@ -557,7 +557,127 @@ steps:
 
 ---
 
-## 7. Exercices Pratiques
+## 7. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un pipeline CI/CD complet pour déployer une application sur AKS
+
+    **Contexte** : Vous devez mettre en place une chaîne CI/CD complète pour une application microservices. Le pipeline doit builder l'application, créer des images Docker, les pousser dans ACR, exécuter des tests, et déployer sur AKS avec des environnements Dev et Prod séparés nécessitant des approbations.
+
+    **Tâches à réaliser** :
+
+    1. Créer un projet Azure DevOps avec repository Git
+    2. Créer des Service Connections pour Azure et Kubernetes
+    3. Créer un pipeline CI (build) en YAML qui compile, teste et crée les images Docker
+    4. Publier les artifacts et images dans ACR
+    5. Créer un pipeline CD (release) en YAML avec stages Dev et Prod
+    6. Configurer des environnements avec approbations pour Prod
+    7. Implémenter des variables groups pour les configurations
+    8. Ajouter des quality gates (tests, security scanning)
+
+    **Critères de validation** :
+
+    - [ ] Le repository Git contient le code source et les pipelines YAML
+    - [ ] Les Service Connections sont configurées avec Workload Identity Federation
+    - [ ] Le pipeline CI build et teste l'application avec succès
+    - [ ] Les images Docker sont poussées dans ACR avec tags appropriés
+    - [ ] Le pipeline CD déploie automatiquement sur Dev
+    - [ ] Le déploiement sur Prod nécessite une approbation manuelle
+    - [ ] Les variables sensibles sont stockées dans des variable groups
+    - [ ] Les quality gates bloquent le déploiement en cas d'échec
+
+??? quote "Solution"
+
+    **Pipeline CI (azure-pipelines-ci.yml)** :
+
+    ```yaml
+    trigger:
+      branches:
+        include:
+          - main
+          - develop
+
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      - group: phoenix-variables
+      - name: imageRepository
+        value: 'phoenix/backend'
+      - name: tag
+        value: '$(Build.BuildId)'
+
+    stages:
+      - stage: Build
+        jobs:
+          - job: BuildAndTest
+            steps:
+              - task: Docker@2
+                inputs:
+                  containerRegistry: 'ACR-Connection'
+                  repository: $(imageRepository)
+                  command: 'buildAndPush'
+                  Dockerfile: '**/Dockerfile'
+                  tags: |
+                    $(tag)
+                    latest
+
+              - task: PublishBuildArtifacts@1
+                inputs:
+                  PathtoPublish: 'k8s-manifests'
+                  ArtifactName: 'manifests'
+    ```
+
+    **Pipeline CD (azure-pipelines-cd.yml)** :
+
+    ```yaml
+    trigger: none
+
+    resources:
+      pipelines:
+        - pipeline: ci-pipeline
+          source: 'Phoenix-CI'
+          trigger:
+            branches:
+              include:
+                - main
+
+    stages:
+      - stage: Dev
+        jobs:
+          - deployment: DeployDev
+            environment: 'development'
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - task: KubernetesManifest@0
+                      inputs:
+                        action: 'deploy'
+                        kubernetesServiceConnection: 'AKS-Dev'
+                        namespace: 'dev'
+                        manifests: '$(Pipeline.Workspace)/manifests/*.yaml'
+
+      - stage: Prod
+        dependsOn: Dev
+        jobs:
+          - deployment: DeployProd
+            environment: 'production'
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - task: KubernetesManifest@0
+                      inputs:
+                        action: 'deploy'
+                        kubernetesServiceConnection: 'AKS-Prod'
+                        namespace: 'prod'
+                        manifests: '$(Pipeline.Workspace)/manifests/*.yaml'
+    ```
+
+---
+
+## 8. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Pipeline CI/CD Complet
 

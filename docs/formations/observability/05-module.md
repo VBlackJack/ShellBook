@@ -671,88 +671,321 @@ groups:
 
 ---
 
-## 6. Exercice Pratique
+## 6. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place un système d'alerting complet avec routage intelligent et gestion des silences
 
-1. Créer 5 règles d'alerte (CPU, RAM, Disk, HTTP errors, Uptime)
-2. Configurer Alertmanager avec Slack
-3. Créer des routes par severity
-4. Tester le silencing
+    **Contexte** : Vous gérez une plateforme e-commerce critique. Vous devez configurer des alertes pour détecter les problèmes d'infrastructure et d'application, avec une escalade appropriée selon la sévérité. Les alertes critiques doivent réveiller l'astreinte, les warnings peuvent attendre les heures de bureau.
 
-### Configuration Complète
+    **Tâches à réaliser** :
 
-```yaml
-# prometheus/rules/alerts.yml
-groups:
-  - name: infrastructure
-    rules:
-      - alert: HighCPU
-        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "CPU > 80% on {{ $labels.instance }}"
+    1. Créer 8 règles d'alerte couvrant infrastructure et application
+    2. Configurer Alertmanager avec routage par sévérité
+    3. Simuler des alertes en générant de la charge
+    4. Créer un silence pour maintenance planifiée
+    5. Tester l'inhibition (une alerte critique doit masquer les warnings)
+    6. Documenter chaque alerte avec summary et runbook_url
 
-      - alert: HighMemory
-        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 85
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "Memory > 85% on {{ $labels.instance }}"
+    **Critères de validation** :
 
-      - alert: DiskFull
-        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
-        for: 5m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Disk < 10% on {{ $labels.instance }}"
+    - [ ] Règles d'alerte valides (vérifiées avec promtool)
+    - [ ] Alertes visibles dans Prometheus (/alerts)
+    - [ ] Alertmanager reçoit et route les alertes
+    - [ ] Le groupement fonctionne (alertes similaires groupées)
+    - [ ] Les silences fonctionnent
+    - [ ] L'inhibition masque correctement les alertes
 
-  - name: application
-    rules:
-      - alert: HighErrorRate
-        expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) > 0.05
-        for: 5m
-        labels:
-          severity: warning
+??? quote "Solution"
+    **1. Règles d'alerte complètes**
 
-      - alert: ServiceDown
-        expr: up == 0
-        for: 1m
-        labels:
-          severity: critical
-```
+    ```yaml
+    # prometheus/rules/infrastructure.yml
+    groups:
+      - name: infrastructure
+        interval: 30s
+        rules:
+          # Alerte instance down
+          - alert: InstanceDown
+            expr: up == 0
+            for: 1m
+            labels:
+              severity: critical
+              team: platform
+            annotations:
+              summary: "Instance {{ $labels.instance }} est down"
+              description: "L'instance {{ $labels.instance }} (job {{ $labels.job }}) ne répond plus depuis 1 minute"
+              runbook_url: "https://wiki.example.com/runbooks/instance-down"
 
-```yaml
-# alertmanager/alertmanager.yml
-global:
-  resolve_timeout: 5m
+          # CPU élevé
+          - alert: HighCPUUsage
+            expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+            for: 5m
+            labels:
+              severity: warning
+              team: platform
+            annotations:
+              summary: "CPU élevé sur {{ $labels.instance }}"
+              description: "Utilisation CPU à {{ $value | printf \"%.1f\" }}% sur {{ $labels.instance }}"
+              runbook_url: "https://wiki.example.com/runbooks/high-cpu"
 
-route:
-  receiver: 'slack-default'
-  group_by: ['alertname']
-  group_wait: 30s
-  group_interval: 5m
-  repeat_interval: 4h
-  routes:
-    - match:
-        severity: critical
-      receiver: 'slack-critical'
+          - alert: CriticalCPUUsage
+            expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 95
+            for: 2m
+            labels:
+              severity: critical
+              team: platform
+            annotations:
+              summary: "CPU critique sur {{ $labels.instance }}"
+              description: "Utilisation CPU à {{ $value | printf \"%.1f\" }}% - intervention immédiate requise"
 
-receivers:
-  - name: 'slack-default'
-    slack_configs:
-      - channel: '#alerts'
-        send_resolved: true
+          # Mémoire élevée
+          - alert: HighMemoryUsage
+            expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100 > 85
+            for: 5m
+            labels:
+              severity: warning
+              team: platform
+            annotations:
+              summary: "Mémoire élevée sur {{ $labels.instance }}"
+              description: "Utilisation mémoire à {{ $value | printf \"%.1f\" }}%"
 
-  - name: 'slack-critical'
-    slack_configs:
-      - channel: '#alerts-critical'
-        send_resolved: true
-```
+          # Disque plein
+          - alert: DiskSpaceLow
+            expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes) * 100 < 15
+            for: 5m
+            labels:
+              severity: warning
+              team: platform
+            annotations:
+              summary: "Espace disque faible sur {{ $labels.instance }}"
+              description: "Partition {{ $labels.mountpoint }} : {{ $value | printf \"%.1f\" }}% disponible"
+
+          - alert: DiskSpaceCritical
+            expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes) * 100 < 5
+            for: 1m
+            labels:
+              severity: critical
+              team: platform
+            annotations:
+              summary: "Espace disque critique sur {{ $labels.instance }}"
+              description: "Partition {{ $labels.mountpoint }} : seulement {{ $value | printf \"%.1f\" }}% disponible"
+    ```
+
+    ```yaml
+    # prometheus/rules/application.yml
+    groups:
+      - name: application
+        interval: 30s
+        rules:
+          # Taux d'erreur élevé
+          - alert: HighErrorRate
+            expr: |
+              sum(rate(http_requests_total{status=~"5.."}[5m]))
+              /
+              sum(rate(http_requests_total[5m]))
+              * 100 > 5
+            for: 5m
+            labels:
+              severity: warning
+              team: backend
+            annotations:
+              summary: "Taux d'erreur HTTP élevé"
+              description: "Taux d'erreur à {{ $value | printf \"%.2f\" }}% (seuil: 5%)"
+              runbook_url: "https://wiki.example.com/runbooks/high-error-rate"
+
+          # Latence élevée
+          - alert: HighLatency
+            expr: |
+              histogram_quantile(0.95,
+                sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+              ) > 0.5
+            for: 5m
+            labels:
+              severity: warning
+              team: backend
+            annotations:
+              summary: "Latence P95 élevée"
+              description: "Latence P95 à {{ $value | printf \"%.2f\" }}s (seuil: 500ms)"
+    ```
+
+    **2. Configuration Alertmanager**
+
+    ```yaml
+    # alertmanager/alertmanager.yml
+    global:
+      resolve_timeout: 5m
+
+    # Configuration webhook Slack
+    # Remplacez par votre webhook URL réel
+    route:
+      receiver: 'default'
+      group_by: ['alertname', 'severity', 'instance']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+
+      routes:
+        # Alertes critiques -> escalade immédiate
+        - match:
+            severity: critical
+          receiver: 'critical-alerts'
+          group_wait: 10s
+          repeat_interval: 1h
+
+        # Alertes warning -> canal standard
+        - match:
+            severity: warning
+          receiver: 'warning-alerts'
+
+        # Par équipe
+        - match:
+            team: backend
+          receiver: 'team-backend'
+
+        - match:
+            team: platform
+          receiver: 'team-platform'
+
+    # Règles d'inhibition
+    inhibit_rules:
+      # Critical inhibe Warning pour la même alerte
+      - source_match:
+          severity: 'critical'
+        target_match:
+          severity: 'warning'
+        equal: ['alertname', 'instance']
+
+      # InstanceDown inhibe toutes les autres alertes de cette instance
+      - source_match:
+          alertname: 'InstanceDown'
+        target_match_re:
+          alertname: '.+'
+        equal: ['instance']
+
+    receivers:
+      - name: 'default'
+        webhook_configs:
+          - url: 'http://localhost:5001/webhook'
+            send_resolved: true
+
+      - name: 'critical-alerts'
+        # En production: PagerDuty, OpsGenie, etc.
+        webhook_configs:
+          - url: 'http://localhost:5001/webhook/critical'
+            send_resolved: true
+
+      - name: 'warning-alerts'
+        webhook_configs:
+          - url: 'http://localhost:5001/webhook/warning'
+
+      - name: 'team-backend'
+        webhook_configs:
+          - url: 'http://localhost:5001/webhook/backend'
+
+      - name: 'team-platform'
+        webhook_configs:
+          - url: 'http://localhost:5001/webhook/platform'
+    ```
+
+    **3. Validation des règles**
+
+    ```bash
+    # Vérifier la syntaxe des règles
+    docker run --rm -v $(pwd)/prometheus/rules:/rules \
+      prom/prometheus:latest \
+      promtool check rules /rules/*.yml
+
+    # Tester une règle spécifique
+    docker run --rm -v $(pwd)/prometheus/rules:/rules \
+      prom/prometheus:latest \
+      promtool test rules /rules/test.yml
+    ```
+
+    **4. Générer des alertes de test**
+
+    ```bash
+    # Stress CPU pour déclencher HighCPUUsage
+    docker exec -it node-exporter sh -c "yes > /dev/null &"
+
+    # Remplir le disque (ATTENTION: test uniquement)
+    # docker exec -it node-exporter dd if=/dev/zero of=/tmp/bigfile bs=1M count=1000
+
+    # Vérifier les alertes dans Prometheus
+    curl http://localhost:9090/api/v1/alerts | jq '.data.alerts[] | {name: .labels.alertname, state: .state}'
+
+    # Vérifier dans Alertmanager
+    curl http://localhost:9093/api/v2/alerts | jq '.[] | {labels: .labels.alertname, status: .status.state}'
+    ```
+
+    **5. Créer un silence**
+
+    ```bash
+    # Créer un silence pour maintenance (2 heures)
+    curl -X POST http://localhost:9093/api/v2/silences \
+      -H "Content-Type: application/json" \
+      -d '{
+        "matchers": [
+          {"name": "instance", "value": "node-exporter:9100", "isRegex": false}
+        ],
+        "startsAt": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+        "endsAt": "'$(date -u -d '+2 hours' +%Y-%m-%dT%H:%M:%SZ)'",
+        "createdBy": "admin",
+        "comment": "Maintenance planifiée - mise à jour système"
+      }'
+
+    # Lister les silences actifs
+    curl http://localhost:9093/api/v2/silences | jq '.[] | {id: .id, comment: .comment, status: .status.state}'
+
+    # Supprimer un silence (remplacer SILENCE_ID)
+    # curl -X DELETE http://localhost:9093/api/v2/silence/SILENCE_ID
+    ```
+
+    **6. Tester l'inhibition**
+
+    Créez deux alertes pour la même instance : une warning et une critical. La critical devrait masquer la warning grâce à la règle d'inhibition.
+
+    ```bash
+    # Vérifier les inhibitions actives
+    curl http://localhost:9093/api/v2/alerts | jq '.[] | select(.status.inhibitedBy | length > 0)'
+    ```
+
+    **7. Docker Compose complet**
+
+    ```yaml
+    version: '3.8'
+
+    services:
+      prometheus:
+        image: prom/prometheus:latest
+        ports:
+          - "9090:9090"
+        volumes:
+          - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+          - ./prometheus/rules:/etc/prometheus/rules
+        command:
+          - '--config.file=/etc/prometheus/prometheus.yml'
+          - '--web.enable-lifecycle'
+
+      alertmanager:
+        image: prom/alertmanager:latest
+        ports:
+          - "9093:9093"
+        volumes:
+          - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+        command:
+          - '--config.file=/etc/alertmanager/alertmanager.yml'
+    ```
+
+    **Checklist finale :**
+
+    - [ ] `promtool check rules` passe sans erreur
+    - [ ] Les alertes apparaissent dans Prometheus UI (Status > Rules)
+    - [ ] Alertmanager reçoit les alertes (visible dans l'UI :9093)
+    - [ ] Le groupement fonctionne (alertes similaires regroupées)
+    - [ ] Les silences masquent les alertes
+    - [ ] L'inhibition fonctionne (critical masque warning)
+    - [ ] Chaque alerte a un summary et un runbook_url
 
 ---
 

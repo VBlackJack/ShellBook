@@ -354,78 +354,194 @@ podman images myapp
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Construire une application Python Flask avec Buildah en utilisant un build multi-stage pour optimiser la taille de l'image
 
-Construire une application Python avec Buildah en multi-stage.
+    **Contexte** : Vous devez créer une image conteneur pour une application web Python Flask. Pour minimiser la taille de l'image finale, vous utiliserez une approche multi-stage : un conteneur pour installer les dépendances, et un conteneur minimal pour l'exécution. L'image finale utilisera Gunicorn comme serveur WSGI.
 
-### Fichiers de l'Application
+    **Tâches à réaliser** :
 
-```python
-# app.py
-from flask import Flask
-app = Flask(__name__)
+    1. Créer une application Flask simple avec ses dépendances
+    2. Écrire un script Buildah pour un build multi-stage
+    3. Stage 1 : Installer les dépendances Python dans une image complète
+    4. Stage 2 : Créer une image runtime minimale avec seulement l'application
+    5. Configurer l'image avec le bon utilisateur, port et commande
+    6. Tester l'image construite
+    7. Comparer la taille avec une approche simple (non multi-stage)
 
-@app.route('/')
-def hello():
-    return "Hello from Buildah!"
+    **Critères de validation** :
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-```
+    - [ ] L'application Flask démarre correctement
+    - [ ] Le serveur web répond sur le port 8080
+    - [ ] L'image utilise un utilisateur non-root (1001)
+    - [ ] L'image finale est basée sur ubi9/python-311-minimal
+    - [ ] L'application est accessible via curl
 
-```
-# requirements.txt
-flask==3.0.0
-gunicorn==21.2.0
-```
+??? quote "Solution"
+    Voici la solution complète avec build multi-stage :
 
-### Construction
+    **1. Créer l'application Flask**
 
-```bash
-#!/bin/bash
-# build-python-app.sh
+    ```python
+    # app.py
+    from flask import Flask
+    import os
+    import socket
 
-set -e
+    app = Flask(__name__)
 
-# Stage 1: Build avec dépendances
-echo "=== Building dependencies ==="
-builder=$(buildah from registry.access.redhat.com/ubi9/python-311)
+    @app.route('/')
+    def hello():
+        return f"""
+        <h1>Hello from Buildah!</h1>
+        <p>Hostname: {socket.gethostname()}</p>
+        <p>Python version: {os.sys.version}</p>
+        <p>Built with multi-stage Buildah</p>
+        """
 
-buildah copy $builder requirements.txt /tmp/
-buildah run $builder -- pip install --user -r /tmp/requirements.txt
+    @app.route('/health')
+    def health():
+        return {'status': 'ok'}, 200
 
-# Stage 2: Runtime minimal
-echo "=== Creating runtime image ==="
-runtime=$(buildah from registry.access.redhat.com/ubi9/python-311-minimal)
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=8080)
+    ```
 
-# Copier les packages installés
-mnt_builder=$(buildah mount $builder)
-buildah copy $runtime ${mnt_builder}/opt/app-root/src/.local /opt/app-root/src/.local
-buildah unmount $builder
+    ```txt
+    # requirements.txt
+    flask==3.0.0
+    gunicorn==21.2.0
+    ```
 
-# Copier l'application
-buildah copy $runtime app.py /opt/app-root/src/
-buildah config --workingdir /opt/app-root/src $runtime
-buildah config --port 8080 $runtime
-buildah config --user 1001 $runtime
-buildah config --cmd '["gunicorn", "-b", "0.0.0.0:8080", "app:app"]' $runtime
+    **2. Script Buildah multi-stage**
 
-# Commit
-buildah commit $runtime python-app:v1
+    ```bash
+    #!/bin/bash
+    # build-python-app.sh
 
-# Cleanup
-buildah rm $builder $runtime
+    set -e
 
-echo "=== Testing ==="
-podman run -d --name test -p 8080:8080 python-app:v1
-sleep 3
-curl http://localhost:8080
-podman stop test && podman rm test
+    echo "=== Buildah Multi-Stage Build ==="
 
-echo "Image python-app:v1 ready!"
-```
+    # Stage 1: Build - Installation des dépendances
+    echo "Stage 1: Building dependencies..."
+    builder=$(buildah from registry.access.redhat.com/ubi9/python-311)
+
+    # Copier requirements et installer
+    buildah copy $builder requirements.txt /tmp/requirements.txt
+    buildah run $builder -- pip install --user --no-cache-dir -r /tmp/requirements.txt
+
+    # Stage 2: Runtime - Image minimale
+    echo "Stage 2: Creating runtime image..."
+    runtime=$(buildah from registry.access.redhat.com/ubi9/python-311-minimal)
+
+    # Extraire les packages installés du builder
+    mnt_builder=$(buildah mount $builder)
+    buildah copy $runtime ${mnt_builder}/opt/app-root/src/.local /opt/app-root/src/.local
+    buildah unmount $builder
+
+    # Copier l'application
+    buildah copy $runtime app.py /opt/app-root/src/app.py
+    buildah config --workingdir /opt/app-root/src $runtime
+
+    # Configuration du conteneur
+    buildah config --port 8080 $runtime
+    buildah config --user 1001 $runtime
+    buildah config --env PATH=/opt/app-root/src/.local/bin:$PATH $runtime
+    buildah config --cmd '["gunicorn", "-b", "0.0.0.0:8080", "-w", "2", "app:app"]' $runtime
+
+    # Metadata
+    buildah config --label maintainer="devops@company.com" $runtime
+    buildah config --label version="1.0" $runtime
+    buildah config --label description="Flask app built with Buildah" $runtime
+
+    # Commit l'image
+    buildah commit --rm $runtime localhost/python-app:v1
+
+    # Cleanup du builder
+    buildah rm $builder
+
+    # Afficher les informations
+    echo "=== Image Info ==="
+    podman images localhost/python-app:v1
+
+    echo "=== Testing ==="
+    podman run -d --name flask-test -p 8080:8080 localhost/python-app:v1
+    echo "Waiting for app to start..."
+    sleep 4
+
+    # Tester l'application
+    echo "Testing endpoints..."
+    curl -s http://localhost:8080/ | head -5
+    curl -s http://localhost:8080/health
+
+    # Cleanup
+    podman stop flask-test
+    podman rm flask-test
+
+    echo ""
+    echo "✓ Image python-app:v1 built and tested successfully!"
+    echo "  Run with: podman run -d -p 8080:8080 localhost/python-app:v1"
+    ```
+
+    **3. Exécuter le build**
+
+    ```bash
+    # Créer le répertoire de travail
+    mkdir -p ~/podman-lab/buildah-python
+    cd ~/podman-lab/buildah-python
+
+    # Créer les fichiers (app.py et requirements.txt)
+    # ... (copier le contenu ci-dessus)
+
+    # Rendre le script exécutable et lancer
+    chmod +x build-python-app.sh
+    ./build-python-app.sh
+    ```
+
+    **4. Comparaison : Build simple vs Multi-stage**
+
+    ```bash
+    # Build simple (pour comparaison)
+    cat > Containerfile.simple << 'EOF'
+    FROM registry.access.redhat.com/ubi9/python-311
+    COPY requirements.txt /tmp/
+    RUN pip install --no-cache-dir -r /tmp/requirements.txt
+    COPY app.py /opt/app-root/src/
+    WORKDIR /opt/app-root/src
+    USER 1001
+    EXPOSE 8080
+    CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+    EOF
+
+    buildah build -t localhost/python-app:simple -f Containerfile.simple .
+
+    # Comparer les tailles
+    podman images | grep python-app
+    # python-app:v1     (minimal) ~180MB
+    # python-app:simple (full)    ~350MB
+    ```
+
+    !!! success "Avantages du Multi-Stage"
+        - **Taille réduite** : ~50% plus petite (minimal vs full)
+        - **Surface d'attaque** : Moins de packages, moins de vulnérabilités
+        - **Performance** : Image plus légère = déploiement plus rapide
+        - **Sécurité** : Pas d'outils de build dans l'image de production
+
+    !!! tip "Bonnes pratiques Buildah"
+        - Toujours utiliser `--rm` avec `buildah commit` pour nettoyer
+        - Monter/démonter proprement les filesystems avec `buildah mount/unmount`
+        - Utiliser des images de base officielles et maintenues (UBI)
+        - Définir un utilisateur non-root avec `--user`
+        - Ajouter des labels pour la traçabilité
+
+    !!! note "Alternatives"
+        Cette même application peut être construite avec :
+        - **Dockerfile** : `podman build` ou `buildah build`
+        - **Buildah script** : Plus de contrôle, intégration CI/CD
+        - **Buildah + Containerfile** : Meilleur des deux mondes
 
 ---
 

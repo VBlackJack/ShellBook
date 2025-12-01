@@ -27,6 +27,23 @@ Ce script surveille l'exécution des tâches planifiées :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur avec droits d'exécution des jobs cron à surveiller
+- **Dépendances** : `bash`, `timeout`, `mail` (optionnel pour alertes email)
+
+---
+
+## Cas d'Usage
+
+- **Surveillance cron jobs** : Monitoring automatique de toutes les tâches planifiées avec alertes
+- **Détection d'échecs** : Notification immédiate lors d'échec de jobs critiques
+- **Analyse de performance** : Mesure des durées d'exécution pour optimisation
+- **Reporting automatisé** : Génération de rapports quotidiens sur l'état des jobs cron
+
+---
+
 ## Script
 
 ```bash

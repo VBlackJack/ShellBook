@@ -1034,6 +1034,339 @@ output "epg_dns" {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer une infrastructure réseau complète avec Tenant, VRF, Bridge Domains et EPGs en Terraform
+
+    **Contexte** : Vous devez déployer un tenant ACI pour une application web 3-tiers. L'application nécessite une séparation réseau entre les couches Web, Application et Base de données, tout en restant dans le même VRF pour faciliter le routage. Chaque couche aura son propre Bridge Domain et EPG.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Tenant nommé "WebApp-Prod"
+    2. Créer un VRF "Production" avec policy enforcement activé
+    3. Créer 3 Bridge Domains : BD-Web (10.1.1.0/24), BD-App (10.1.2.0/24), BD-DB (10.1.3.0/24)
+    4. Créer un Application Profile "3Tier-App"
+    5. Créer 3 EPGs : Web-Frontend, App-Backend, Database
+    6. Associer chaque EPG à son Bridge Domain correspondant
+
+    **Critères de validation** :
+
+    - [ ] Le Tenant est créé avec une annotation "managed-by:terraform"
+    - [ ] Le VRF est en mode "enforced" (whitelist par défaut)
+    - [ ] Chaque BD a un subnet avec scope "public" pour permettre le routage
+    - [ ] Les EPGs sont dans le même Application Profile
+    - [ ] La hiérarchie Tenant → VRF → BD → EPG est correcte
+    - [ ] Le code utilise des variables pour les noms et les subnets
+
+??? quote "Solution"
+
+    **variables.tf**
+
+    ```hcl
+    variable "apic_url" {
+      description = "URL de l'APIC"
+      type        = string
+    }
+
+    variable "apic_username" {
+      description = "Username pour l'APIC"
+      type        = string
+      sensitive   = true
+    }
+
+    variable "apic_password" {
+      description = "Password pour l'APIC"
+      type        = string
+      sensitive   = true
+    }
+
+    variable "tenant_name" {
+      description = "Nom du tenant"
+      type        = string
+      default     = "WebApp-Prod"
+    }
+
+    variable "subnets" {
+      description = "Subnets pour chaque tier"
+      type = object({
+        web = string
+        app = string
+        db  = string
+      })
+      default = {
+        web = "10.1.1.1/24"
+        app = "10.1.2.1/24"
+        db  = "10.1.3.1/24"
+      }
+    }
+    ```
+
+    **main.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+
+    provider "aci" {
+      username = var.apic_username
+      password = var.apic_password
+      url      = var.apic_url
+      insecure = true
+    }
+
+    # ===================
+    # TENANT
+    # ===================
+
+    resource "aci_tenant" "webapp_prod" {
+      name        = var.tenant_name
+      description = "Tenant pour application Web 3-tiers en production"
+      annotation  = "managed-by:terraform"
+    }
+
+    # ===================
+    # VRF
+    # ===================
+
+    resource "aci_vrf" "production" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "Production"
+      description = "VRF Production avec policy enforcement"
+
+      # Policy Enforcement : enforced = whitelist (tout bloqué par défaut)
+      pc_enf_pref = "enforced"
+      pc_enf_dir  = "ingress"
+
+      annotation  = "managed-by:terraform"
+    }
+
+    # ===================
+    # BRIDGE DOMAINS
+    # ===================
+
+    # Bridge Domain - Web
+    resource "aci_bridge_domain" "web" {
+      tenant_dn                   = aci_tenant.webapp_prod.id
+      name                        = "BD-Web"
+      description                 = "Bridge Domain pour la couche Web"
+      relation_fv_rs_ctx          = aci_vrf.production.id
+
+      # Optimisations ACI
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform"
+    }
+
+    resource "aci_subnet" "web" {
+      parent_dn   = aci_bridge_domain.web.id
+      ip          = var.subnets.web
+      scope       = ["public"]
+      description = "Gateway pour couche Web"
+    }
+
+    # Bridge Domain - App
+    resource "aci_bridge_domain" "app" {
+      tenant_dn                   = aci_tenant.webapp_prod.id
+      name                        = "BD-App"
+      description                 = "Bridge Domain pour la couche Application"
+      relation_fv_rs_ctx          = aci_vrf.production.id
+
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform"
+    }
+
+    resource "aci_subnet" "app" {
+      parent_dn   = aci_bridge_domain.app.id
+      ip          = var.subnets.app
+      scope       = ["public"]
+      description = "Gateway pour couche Application"
+    }
+
+    # Bridge Domain - Database
+    resource "aci_bridge_domain" "db" {
+      tenant_dn                   = aci_tenant.webapp_prod.id
+      name                        = "BD-DB"
+      description                 = "Bridge Domain pour la couche Database"
+      relation_fv_rs_ctx          = aci_vrf.production.id
+
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform"
+    }
+
+    resource "aci_subnet" "db" {
+      parent_dn   = aci_bridge_domain.db.id
+      ip          = var.subnets.db
+      scope       = ["private"]  # BD Database en private (pas de routage externe)
+      description = "Gateway pour couche Database"
+    }
+
+    # ===================
+    # APPLICATION PROFILE
+    # ===================
+
+    resource "aci_application_profile" "three_tier" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "3Tier-App"
+      description = "Application Profile pour architecture 3-tiers"
+      annotation  = "managed-by:terraform"
+    }
+
+    # ===================
+    # EPGs
+    # ===================
+
+    # EPG - Web Frontend
+    resource "aci_application_epg" "web" {
+      application_profile_dn = aci_application_profile.three_tier.id
+      name                   = "Web-Frontend"
+      description            = "EPG pour les serveurs Web (nginx, apache)"
+      relation_fv_rs_bd      = aci_bridge_domain.web.id
+
+      # Preferred Group : désactivé pour forcer les contracts
+      pref_gr_memb           = "exclude"
+
+      annotation             = "managed-by:terraform,tier:web"
+    }
+
+    # EPG - App Backend
+    resource "aci_application_epg" "app" {
+      application_profile_dn = aci_application_profile.three_tier.id
+      name                   = "App-Backend"
+      description            = "EPG pour les serveurs applicatifs (Java, Python)"
+      relation_fv_rs_bd      = aci_bridge_domain.app.id
+
+      pref_gr_memb           = "exclude"
+
+      annotation             = "managed-by:terraform,tier:application"
+    }
+
+    # EPG - Database
+    resource "aci_application_epg" "database" {
+      application_profile_dn = aci_application_profile.three_tier.id
+      name                   = "Database"
+      description            = "EPG pour les bases de données (PostgreSQL, MySQL)"
+      relation_fv_rs_bd      = aci_bridge_domain.db.id
+
+      pref_gr_memb           = "exclude"
+
+      annotation             = "managed-by:terraform,tier:data"
+    }
+    ```
+
+    **outputs.tf**
+
+    ```hcl
+    output "tenant_dn" {
+      description = "DN du tenant créé"
+      value       = aci_tenant.webapp_prod.id
+    }
+
+    output "vrf_dn" {
+      description = "DN du VRF Production"
+      value       = aci_vrf.production.id
+    }
+
+    output "bridge_domains" {
+      description = "Liste des Bridge Domains créés"
+      value = {
+        web = {
+          dn     = aci_bridge_domain.web.id
+          name   = aci_bridge_domain.web.name
+          subnet = var.subnets.web
+        }
+        app = {
+          dn     = aci_bridge_domain.app.id
+          name   = aci_bridge_domain.app.name
+          subnet = var.subnets.app
+        }
+        db = {
+          dn     = aci_bridge_domain.db.id
+          name   = aci_bridge_domain.db.name
+          subnet = var.subnets.db
+        }
+      }
+    }
+
+    output "epgs" {
+      description = "Liste des EPGs créés"
+      value = {
+        web = {
+          dn   = aci_application_epg.web.id
+          name = aci_application_epg.web.name
+        }
+        app = {
+          dn   = aci_application_epg.app.id
+          name = aci_application_epg.app.name
+        }
+        database = {
+          dn   = aci_application_epg.database.id
+          name = aci_application_epg.database.name
+        }
+      }
+    }
+
+    output "architecture_summary" {
+      description = "Résumé de l'architecture déployée"
+      value = {
+        tenant             = var.tenant_name
+        vrf                = "Production (enforced)"
+        application        = "3Tier-App"
+        bridge_domains     = 3
+        epgs               = 3
+        policy_enforcement = "Whitelist (contracts requis pour communication)"
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    # Initialisation
+    terraform init
+
+    # Validation
+    terraform validate
+
+    # Plan
+    terraform plan
+
+    # Application
+    terraform apply
+
+    # Vérification
+    terraform output architecture_summary
+    ```
+
+    **Résultat attendu :**
+
+    Une infrastructure réseau complète pour une application 3-tiers est créée dans ACI :
+    - 1 Tenant avec 1 VRF en mode enforced
+    - 3 Bridge Domains avec leurs subnets
+    - 1 Application Profile contenant 3 EPGs
+    - Prêt pour l'ajout de Contracts au module 4
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -696,68 +696,154 @@ scrape_configs:
 
 ---
 
-## 6. Exercice Pratique
+## 6. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer Prometheus en production avec service discovery et relabeling avancé
 
-1. Déployer Prometheus avec Docker
-2. Configurer le service discovery file-based
-3. Ajouter des relabel rules
-4. Configurer la rétention à 7 jours
+    **Contexte** : Votre entreprise souhaite monitorer une flotte de serveurs web et d'applications conteneurisées. Vous devez configurer Prometheus pour découvrir automatiquement les targets et appliquer des labels personnalisés.
 
-### Configuration Complète
+    **Tâches à réaliser** :
 
-```yaml
-# prometheus.yml
-global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
-  external_labels:
-    environment: lab
-    datacenter: local
+    1. Déployer Prometheus avec Docker et configurer la rétention à 7 jours
+    2. Configurer le file-based service discovery pour gérer dynamiquement les nodes
+    3. Ajouter le Docker service discovery pour les conteneurs avec le label `prometheus.scrape=true`
+    4. Créer des relabel rules pour extraire le hostname depuis l'adresse IP:PORT
+    5. Configurer des external_labels pour identifier l'environnement
+    6. Valider la configuration avec `promtool`
 
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
+    **Critères de validation** :
 
-  - job_name: 'nodes'
-    file_sd_configs:
-      - files:
-          - '/etc/prometheus/targets/nodes.yml'
-        refresh_interval: 30s
+    - [ ] Prometheus démarre sans erreur
+    - [ ] La rétention est configurée à 7 jours
+    - [ ] Les targets du fichier JSON/YAML sont découvertes automatiquement
+    - [ ] Les conteneurs Docker avec le bon label sont scrapés
+    - [ ] Les labels sont correctement transformés
+    - [ ] L'API /targets montre toutes les targets actives
 
-    relabel_configs:
-      - source_labels: [__address__]
-        regex: '(.+):(\d+)'
-        target_label: hostname
-        replacement: '${1}'
+??? quote "Solution"
+    **1. Docker Compose avec rétention**
 
-  - job_name: 'docker'
-    docker_sd_configs:
-      - host: unix:///var/run/docker.sock
+    ```yaml
+    version: '3.8'
+    services:
+      prometheus:
+        image: prom/prometheus:latest
+        ports:
+          - "9090:9090"
+        volumes:
+          - ./prometheus.yml:/etc/prometheus/prometheus.yml
+          - ./targets:/etc/prometheus/targets
+          - prometheus_data:/prometheus
+        command:
+          - '--config.file=/etc/prometheus/prometheus.yml'
+          - '--storage.tsdb.path=/prometheus'
+          - '--storage.tsdb.retention.time=7d'
+          - '--web.enable-lifecycle'
 
-    relabel_configs:
-      - source_labels: [__meta_docker_container_label_prometheus_scrape]
-        action: keep
-        regex: 'true'
-      - source_labels: [__meta_docker_container_name]
-        regex: '/(.*)'
-        target_label: container
-```
+    volumes:
+      prometheus_data:
+    ```
 
-### Validation
+    **2. Configuration prometheus.yml**
 
-```bash
-# Vérifier la configuration
-promtool check config prometheus.yml
+    ```yaml
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        environment: production
+        datacenter: dc1
 
-# Vérifier les targets
-curl http://localhost:9090/api/v1/targets | jq .
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
 
-# Vérifier le service discovery
-curl http://localhost:9090/api/v1/targets/metadata | jq .
-```
+      # File-based service discovery
+      - job_name: 'nodes'
+        file_sd_configs:
+          - files:
+              - '/etc/prometheus/targets/*.json'
+              - '/etc/prometheus/targets/*.yml'
+            refresh_interval: 30s
+
+        relabel_configs:
+          # Extraire hostname de IP:PORT
+          - source_labels: [__address__]
+            regex: '([^:]+):.*'
+            target_label: hostname
+            replacement: '${1}'
+
+      # Docker service discovery
+      - job_name: 'docker'
+        docker_sd_configs:
+          - host: unix:///var/run/docker.sock
+            refresh_interval: 30s
+
+        relabel_configs:
+          # Garder uniquement conteneurs avec label scrape=true
+          - source_labels: [__meta_docker_container_label_prometheus_scrape]
+            action: keep
+            regex: 'true'
+
+          # Extraire le nom du conteneur
+          - source_labels: [__meta_docker_container_name]
+            regex: '/(.*)'
+            target_label: container_name
+
+          # Utiliser le label "app" comme label Prometheus
+          - source_labels: [__meta_docker_container_label_app]
+            target_label: app
+    ```
+
+    **3. Fichier de targets (targets/nodes.json)**
+
+    ```json
+    [
+      {
+        "targets": ["server1:9100", "server2:9100", "server3:9100"],
+        "labels": {
+          "env": "production",
+          "role": "webserver"
+        }
+      },
+      {
+        "targets": ["db1:9100", "db2:9100"],
+        "labels": {
+          "env": "production",
+          "role": "database"
+        }
+      }
+    ]
+    ```
+
+    **4. Validation**
+
+    ```bash
+    # Vérifier la configuration avant démarrage
+    docker run --rm -v $(pwd)/prometheus.yml:/prometheus.yml \
+      prom/prometheus:latest \
+      promtool check config /prometheus.yml
+
+    # Démarrer la stack
+    docker-compose up -d
+
+    # Vérifier les targets
+    curl http://localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job: .labels.job, instance: .labels.instance, health: .health}'
+
+    # Recharger la configuration sans redémarrage
+    curl -X POST http://localhost:9090/-/reload
+
+    # Vérifier les métriques scrapées
+    curl http://localhost:9090/api/v1/query?query=up | jq .
+    ```
+
+    **Vérifications importantes :**
+
+    - Toutes les targets doivent être `UP`
+    - Les labels `hostname`, `env`, `role` doivent apparaître
+    - La rétention est visible dans les logs : `Storage retention=7d`
 
 ---
 

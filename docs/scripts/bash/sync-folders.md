@@ -24,6 +24,23 @@ Ce script synchronise des dossiers :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits de lecture sur source et écriture sur destination
+- **Dépendances** : `rsync`, `ssh` (pour synchro distante), `bc`, `du`
+
+---
+
+## Cas d'Usage
+
+- **Synchronisation régulière** : Maintien de copies synchronisées de données critiques vers backup
+- **Migration de serveurs** : Transfert de données entre serveurs avec vérification d'intégrité
+- **Réplication de contenu** : Synchronisation de fichiers web ou applicatifs entre environnements
+- **Backup incrémental** : Sauvegarde efficace avec transfert uniquement des changements
+
+---
+
 ## Script
 
 ```bash

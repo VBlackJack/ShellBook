@@ -24,6 +24,23 @@ Ce script identifie les ficyesterdays volumineux :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (sudo pour recherche depuis `/`)
+- **Dépendances** : `find`, `du`, `bc`
+
+---
+
+## Cas d'Usage
+
+- **Nettoyage disque** : Identification rapide des fichiers volumineux à supprimer ou archiver
+- **Audit de stockage** : Analyse de l'utilisation de l'espace disque par répertoire
+- **Investigation de saturation** : Diagnostic rapide lors d'alertes d'espace disque faible
+- **Planification d'archivage** : Identification des candidats pour migration vers stockage froid
+
+---
+
 ## Script
 
 ```bash

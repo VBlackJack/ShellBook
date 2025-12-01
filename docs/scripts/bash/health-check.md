@@ -25,6 +25,23 @@ Ce script vérifie la santé de l'infrastructure :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (sudo pour certains checks système)
+- **Dépendances** : `systemctl`, `curl`, `df`, `free`
+
+---
+
+## Cas d'Usage
+
+- **Monitoring proactif** : Vérification automatisée de la santé de l'infrastructure avec alertes
+- **Intégration cron** : Exécution régulière pour surveillance continue des services critiques
+- **Validation post-déploiement** : Test automatique après mise à jour ou changement de configuration
+- **Dashboard monitoring** : Intégration avec systèmes de monitoring pour reporting centralisé
+
+---
+
 ## Script
 
 ```bash

@@ -25,6 +25,24 @@ Ce script surveille l'utilisation des disques Windows :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Lecture système (pas d'élévation requise)
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Monitoring quotidien** : Tâche planifiée pour surveillance automatique des disques
+- **Alerting** : Intégration avec système de monitoring (Nagios, PRTG, Zabbix)
+- **Rapports management** : Génération de rapports HTML pour documentation
+- **Prévention incidents** : Détecter les disques pleins avant qu'ils ne causent des problèmes
+
+---
+
 ## Script
 
 ```powershell

@@ -488,7 +488,204 @@ New-AzResourceGroup -Name "app-prod-rg" -Location "West Europe" -Tag @{Environme
 
 ---
 
-## 6. Exercices Pratiques
+## 6. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un environnement Azure complet avec gestion des identités et des accès
+
+    **Contexte** : Votre entreprise souhaite mettre en place une structure Azure pour trois équipes : Développement, Production et Sécurité. Vous devez créer l'organisation complète avec les bonnes pratiques de sécurité.
+
+    **Tâches à réaliser** :
+
+    1. Créer la hiérarchie de ressources (Resource Groups pour dev/prod/shared)
+    2. Créer 5 utilisateurs Entra ID (2 développeurs, 2 ops, 1 admin sécurité)
+    3. Créer 3 groupes (Developers, Operations, SecurityAdmins)
+    4. Créer un Service Principal pour les pipelines CI/CD
+    5. Configurer les rôles RBAC appropriés sur chaque Resource Group
+    6. Créer un rôle personnalisé "VM Operator" (start/stop uniquement)
+    7. Activer une Policy Azure pour imposer les tags obligatoires
+
+    **Critères de validation** :
+
+    - [ ] Les Resource Groups sont créés avec les tags Environment appropriés
+    - [ ] Tous les utilisateurs peuvent se connecter au portail Azure
+    - [ ] Les développeurs ont accès Contributor sur le RG dev uniquement
+    - [ ] Les ops ont accès Reader sur prod et Contributor sur dev
+    - [ ] Le Service Principal peut déployer sur dev mais pas sur prod
+    - [ ] Le rôle custom VM Operator fonctionne correctement
+    - [ ] La Policy bloque la création de ressources sans tag Environment
+
+??? quote "Solution"
+
+    **Étape 1 : Créer la structure de Resource Groups**
+
+    ```bash
+    # Variables
+    LOCATION="westeurope"
+    DOMAIN="contoso.onmicrosoft.com"
+
+    # Créer les Resource Groups
+    az group create --name app-dev-rg --location $LOCATION --tags Environment=Development CostCenter=IT001
+    az group create --name app-prod-rg --location $LOCATION --tags Environment=Production CostCenter=IT001
+    az group create --name shared-services-rg --location $LOCATION --tags Environment=Shared CostCenter=IT001
+    ```
+
+    **Étape 2 : Créer les utilisateurs Entra ID**
+
+    ```bash
+    # Créer les utilisateurs
+    for user in dev-alice dev-bob ops-charlie ops-david secadmin-eve; do
+        az ad user create \
+            --display-name "${user}" \
+            --user-principal-name "${user}@${DOMAIN}" \
+            --password "ChangeMe123!" \
+            --force-change-password-next-sign-in true
+    done
+    ```
+
+    **Étape 3 : Créer les groupes et assigner les membres**
+
+    ```bash
+    # Créer les groupes
+    az ad group create --display-name "Developers" --mail-nickname "developers"
+    az ad group create --display-name "Operations" --mail-nickname "operations"
+    az ad group create --display-name "SecurityAdmins" --mail-nickname "securityadmins"
+
+    # Récupérer les IDs des groupes
+    DEV_GROUP_ID=$(az ad group show --group "Developers" --query id -o tsv)
+    OPS_GROUP_ID=$(az ad group show --group "Operations" --query id -o tsv)
+    SEC_GROUP_ID=$(az ad group show --group "SecurityAdmins" --query id -o tsv)
+
+    # Assigner les utilisateurs aux groupes
+    az ad group member add --group "Developers" --member-id $(az ad user show --id "dev-alice@${DOMAIN}" --query id -o tsv)
+    az ad group member add --group "Developers" --member-id $(az ad user show --id "dev-bob@${DOMAIN}" --query id -o tsv)
+    az ad group member add --group "Operations" --member-id $(az ad user show --id "ops-charlie@${DOMAIN}" --query id -o tsv)
+    az ad group member add --group "Operations" --member-id $(az ad user show --id "ops-david@${DOMAIN}" --query id -o tsv)
+    az ad group member add --group "SecurityAdmins" --member-id $(az ad user show --id "secadmin-eve@${DOMAIN}" --query id -o tsv)
+    ```
+
+    **Étape 4 : Créer le Service Principal**
+
+    ```bash
+    # Créer le Service Principal pour CI/CD
+    SP_OUTPUT=$(az ad sp create-for-rbac \
+        --name "sp-cicd-pipeline" \
+        --role Contributor \
+        --scopes $(az group show --name app-dev-rg --query id -o tsv))
+
+    echo "$SP_OUTPUT"
+    # Sauvegarder ces credentials de manière sécurisée !
+    ```
+
+    **Étape 5 : Configurer les rôles RBAC**
+
+    ```bash
+    # Récupérer les IDs des Resource Groups
+    DEV_RG_ID=$(az group show --name app-dev-rg --query id -o tsv)
+    PROD_RG_ID=$(az group show --name app-prod-rg --query id -o tsv)
+    SHARED_RG_ID=$(az group show --name shared-services-rg --query id -o tsv)
+
+    # Developers : Contributor sur Dev
+    az role assignment create \
+        --assignee $DEV_GROUP_ID \
+        --role "Contributor" \
+        --scope $DEV_RG_ID
+
+    # Operations : Reader sur Prod, Contributor sur Dev
+    az role assignment create \
+        --assignee $OPS_GROUP_ID \
+        --role "Reader" \
+        --scope $PROD_RG_ID
+
+    az role assignment create \
+        --assignee $OPS_GROUP_ID \
+        --role "Contributor" \
+        --scope $DEV_RG_ID
+
+    # SecurityAdmins : User Access Administrator sur tout
+    SUB_ID=$(az account show --query id -o tsv)
+    az role assignment create \
+        --assignee $SEC_GROUP_ID \
+        --role "User Access Administrator" \
+        --scope "/subscriptions/${SUB_ID}"
+    ```
+
+    **Étape 6 : Créer le rôle custom VM Operator**
+
+    ```bash
+    # Définition du rôle
+    cat > vm-operator-role.json << EOF
+    {
+        "Name": "VM Operator",
+        "Description": "Peut démarrer, arrêter et redémarrer les VMs mais pas les créer ou supprimer",
+        "Actions": [
+            "Microsoft.Compute/virtualMachines/read",
+            "Microsoft.Compute/virtualMachines/start/action",
+            "Microsoft.Compute/virtualMachines/restart/action",
+            "Microsoft.Compute/virtualMachines/deallocate/action",
+            "Microsoft.Compute/virtualMachines/powerOff/action",
+            "Microsoft.Network/networkInterfaces/read",
+            "Microsoft.Storage/storageAccounts/read"
+        ],
+        "NotActions": [],
+        "DataActions": [],
+        "NotDataActions": [],
+        "AssignableScopes": [
+            "/subscriptions/${SUB_ID}"
+        ]
+    }
+    EOF
+
+    # Créer le rôle
+    az role definition create --role-definition vm-operator-role.json
+
+    # Assigner le rôle à un utilisateur
+    az role assignment create \
+        --assignee "ops-charlie@${DOMAIN}" \
+        --role "VM Operator" \
+        --scope $PROD_RG_ID
+    ```
+
+    **Étape 7 : Activer la Policy pour les tags obligatoires**
+
+    ```bash
+    # Assigner la policy built-in "Require tag on resource groups"
+    az policy assignment create \
+        --name "require-environment-tag" \
+        --display-name "Exiger le tag Environment sur les ressources" \
+        --policy "/providers/Microsoft.Authorization/policyDefinitions/96670d01-0a4d-4649-9c89-2d3abc0a5025" \
+        --scope "/subscriptions/${SUB_ID}" \
+        --params '{
+            "tagName": {
+                "value": "Environment"
+            }
+        }'
+
+    # Vérifier la compliance
+    az policy state list --output table
+    ```
+
+    **Validation finale**
+
+    ```bash
+    # Lister tous les role assignments
+    echo "=== Assignments sur app-dev-rg ==="
+    az role assignment list --resource-group app-dev-rg --output table
+
+    echo "=== Assignments sur app-prod-rg ==="
+    az role assignment list --resource-group app-prod-rg --output table
+
+    echo "=== Vérifier les groupes ==="
+    az ad group member list --group "Developers" --query "[].displayName"
+    az ad group member list --group "Operations" --query "[].displayName"
+
+    echo "=== Policies actives ==="
+    az policy assignment list --query "[].{Name:displayName, Scope:scope}" --output table
+    ```
+
+---
+
+## 7. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Configuration IAM de Base
 

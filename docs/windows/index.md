@@ -1,3 +1,11 @@
+---
+tags:
+  - windows
+  - windows-server
+  - active-directory
+  - administration
+---
+
 # Administration Windows
 
 Guide complet d'administration Windows Server et Active Directory : de la configuration initiale au dépannage avancé.

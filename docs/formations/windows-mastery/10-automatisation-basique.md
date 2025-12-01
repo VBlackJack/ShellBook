@@ -344,6 +344,198 @@ if ($alerts.Count -gt 0) {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un système de rapports automatisés multi-serveurs
+
+    **Contexte** : Vous devez créer un système qui génère quotidiennement un rapport HTML sur l'état de santé de 3 serveurs (CPU, mémoire, disques, services) et l'envoie par email aux administrateurs.
+
+    **Tâches à réaliser** :
+
+    1. Créer un script qui interroge plusieurs serveurs via CIM/WMI
+    2. Collecter les métriques : CPU, RAM, espace disque, services critiques
+    3. Générer un rapport HTML avec CSS intégré
+    4. Créer une tâche planifiée quotidienne à 6h00
+    5. Configurer l'envoi du rapport par email
+    6. Implémenter des alertes pour les valeurs critiques
+
+    **Critères de validation** :
+
+    - [ ] Le script interroge correctement plusieurs serveurs
+    - [ ] Toutes les métriques sont collectées
+    - [ ] Le rapport HTML est bien formaté avec code couleur
+    - [ ] La tâche planifiée s'exécute quotidiennement
+    - [ ] L'email est envoyé avec le rapport en pièce jointe
+    - [ ] Les alertes sont générées pour les seuils dépassés
+
+??? quote "Solution"
+    ```powershell
+    # Generate-ServerReport.ps1
+    # Génération de rapport multi-serveurs
+
+    param(
+        [string[]]$Servers = @("localhost"),
+        [string]$ReportPath = "C:\Reports\ServerHealth_$(Get-Date -Format 'yyyyMMdd').html",
+        [string]$SmtpServer = "smtp.corp.local",
+        [string]$EmailTo = "admin@corp.local",
+        [string]$EmailFrom = "monitoring@corp.local"
+    )
+
+    # CSS pour le rapport
+    $css = @"
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        h1 { color: #333; border-bottom: 3px solid #0066cc; padding-bottom: 10px; }
+        h2 { color: #0066cc; margin-top: 30px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; background-color: white; }
+        th { background-color: #0066cc; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; }
+        tr:hover { background-color: #f5f5f5; }
+        .ok { color: green; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        .critical { color: red; font-weight: bold; }
+        .info { background-color: #e7f3ff; padding: 10px; margin: 10px 0; border-left: 4px solid #0066cc; }
+    </style>
+"@
+
+    $alerts = @()
+    $htmlBody = ""
+
+    foreach ($server in $Servers) {
+        Write-Host "Collecte des données de $server..." -ForegroundColor Yellow
+
+        try {
+            # Informations système
+            $os = Get-CimInstance Win32_OperatingSystem -ComputerName $server
+            $cs = Get-CimInstance Win32_ComputerSystem -ComputerName $server
+
+            # CPU
+            $cpu = (Get-Counter "\\$server\Processor(_Total)\% Processor Time" -ErrorAction SilentlyContinue).CounterSamples.CookedValue
+            $cpuStatus = if ($cpu -gt 80) {
+                $alerts += "CPU élevé sur $server : $([math]::Round($cpu,2))%"
+                "critical"
+            } elseif ($cpu -gt 60) { "warning" } else { "ok" }
+
+            # Mémoire
+            $memUsed = [math]::Round(100 - ($os.FreePhysicalMemory / $os.TotalVisibleMemorySize * 100), 2)
+            $memStatus = if ($memUsed -gt 85) {
+                $alerts += "Mémoire élevée sur $server : $memUsed%"
+                "critical"
+            } elseif ($memUsed -gt 70) { "warning" } else { "ok" }
+
+            # Disques
+            $disks = Get-CimInstance Win32_LogicalDisk -ComputerName $server -Filter "DriveType=3" | ForEach-Object {
+                $usedPercent = [math]::Round(100 - ($_.FreeSpace / $_.Size * 100), 2)
+                $status = if ($usedPercent -gt 90) {
+                    $alerts += "Disque $($_.DeviceID) plein sur $server : $usedPercent%"
+                    "critical"
+                } elseif ($usedPercent -gt 80) { "warning" } else { "ok" }
+
+                [PSCustomObject]@{
+                    Disque = $_.DeviceID
+                    TailleGB = [math]::Round($_.Size/1GB, 2)
+                    LibreGB = [math]::Round($_.FreeSpace/1GB, 2)
+                    Utilise = "$usedPercent%"
+                    Statut = "<span class='$status'>$usedPercent%</span>"
+                }
+            }
+
+            # Services critiques
+            $services = @("DNS", "Netlogon", "W32Time") | ForEach-Object {
+                $svc = Get-Service -Name $_ -ComputerName $server -ErrorAction SilentlyContinue
+                if ($svc) {
+                    $status = if ($svc.Status -eq "Running") { "ok" } else {
+                        $alerts += "Service $_ arrêté sur $server"
+                        "critical"
+                    }
+                    [PSCustomObject]@{
+                        Service = $svc.Name
+                        Statut = "<span class='$status'>$($svc.Status)</span>"
+                        Demarrage = $svc.StartType
+                    }
+                }
+            }
+
+            # Générer le HTML pour ce serveur
+            $htmlBody += @"
+            <h2>$server</h2>
+            <div class="info">
+                <strong>OS:</strong> $($os.Caption) | <strong>Uptime:</strong> $([math]::Round(((Get-Date) - $os.LastBootUpTime).TotalDays, 2)) jours |
+                <strong>CPU:</strong> <span class="$cpuStatus">$([math]::Round($cpu,2))%</span> |
+                <strong>RAM:</strong> <span class="$memStatus">$memUsed%</span>
+            </div>
+
+            <h3>Disques</h3>
+            $(($disks | ConvertTo-Html -Fragment) -replace '<table>', '<table>' -replace '<td>','<td>' -replace '<th>','<th>')
+
+            <h3>Services Critiques</h3>
+            $(($services | ConvertTo-Html -Fragment) -replace '<table>', '<table>')
+"@
+
+        } catch {
+            $htmlBody += "<h2>$server</h2><p class='critical'>Erreur lors de la collecte: $($_.Exception.Message)</p>"
+            $alerts += "Erreur de collecte sur $server"
+        }
+    }
+
+    # Assembler le rapport complet
+    $htmlReport = @"
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Rapport de Santé Serveurs</title>
+        $css
+    </head>
+    <body>
+        <h1>Rapport de Santé des Serveurs</h1>
+        <p>Généré le $(Get-Date -Format "dd/MM/yyyy à HH:mm")</p>
+
+        $(if ($alerts.Count -gt 0) {
+            "<div class='info'><strong>Alertes ($($alerts.Count)):</strong><br>" + ($alerts -join "<br>") + "</div>"
+        } else {
+            "<div class='info' style='border-left-color: green;'><strong>Aucune alerte - Tous les systèmes fonctionnent normalement</strong></div>"
+        })
+
+        $htmlBody
+    </body>
+    </html>
+"@
+
+    # Sauvegarder le rapport
+    $reportDir = Split-Path $ReportPath -Parent
+    if (-not (Test-Path $reportDir)) {
+        New-Item -Path $reportDir -ItemType Directory -Force
+    }
+    $htmlReport | Out-File $ReportPath -Encoding UTF8
+
+    Write-Host "`nRapport généré: $ReportPath" -ForegroundColor Green
+    Write-Host "Alertes détectées: $($alerts.Count)" -ForegroundColor $(if ($alerts.Count -gt 0) { "Red" } else { "Green" })
+
+    # Envoi par email
+    $emailParams = @{
+        To = $EmailTo
+        From = $EmailFrom
+        Subject = "Rapport Serveurs - $(Get-Date -Format 'dd/MM/yyyy') - $($alerts.Count) alerte(s)"
+        Body = if ($alerts.Count -gt 0) { "Attention: $($alerts.Count) alerte(s) détectée(s). Voir le rapport en pièce jointe." } else { "Tous les systèmes fonctionnent normalement." }
+        Attachments = $ReportPath
+        SmtpServer = $SmtpServer
+    }
+
+    Send-MailMessage @emailParams
+    Write-Host "Email envoyé à $EmailTo" -ForegroundColor Green
+
+    # Tâche planifiée
+    $taskScript = @"
+    \$task = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\Generate-ServerReport.ps1"
+    \$trigger = New-ScheduledTaskTrigger -Daily -At "06:00"
+    \$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
+    Register-ScheduledTask -TaskName "Daily-ServerReport" -Action \$task -Trigger \$trigger -Principal \$principal
+"@
+    ```
+
+---
+
 ## Quiz
 
 1. **Quelle cmdlet interroge WMI/CIM ?**

@@ -214,6 +214,306 @@ foreach ($svc in $criticalServices) {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un système de surveillance automatique des services critiques
+
+    **Contexte** : Votre entreprise a besoin d'un système qui surveille les services Windows critiques et les redémarre automatiquement s'ils s'arrêtent. Vous devez créer une tâche planifiée qui s'exécute toutes les 5 minutes pour vérifier l'état des services et générer des logs.
+
+    **Tâches à réaliser** :
+
+    1. Créer un script PowerShell qui surveille 5 services critiques (W3SVC, Spooler, DNS, Netlogon, W32Time)
+    2. Le script doit redémarrer automatiquement tout service arrêté
+    3. Générer un fichier de log avec horodatage des actions effectuées
+    4. Créer une tâche planifiée qui exécute le script toutes les 5 minutes
+    5. Tester le système en arrêtant manuellement un service
+
+    **Critères de validation** :
+
+    - [ ] Le script surveille correctement les 5 services spécifiés
+    - [ ] Les services arrêtés sont automatiquement redémarrés
+    - [ ] Un fichier de log est créé dans C:\Logs\ServiceMonitor.log
+    - [ ] La tâche planifiée s'exécute toutes les 5 minutes
+    - [ ] Le test de redémarrage automatique fonctionne
+
+??? quote "Solution"
+    Voici la solution complète :
+
+    **Étape 1 : Créer le script de monitoring**
+
+    ```powershell
+    # Monitor-CriticalServices.ps1
+    # Script de surveillance des services critiques
+
+    param(
+        [string]$LogPath = "C:\Logs\ServiceMonitor.log"
+    )
+
+    # Fonction de logging
+    function Write-Log {
+        param([string]$Message, [string]$Level = "INFO")
+
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $logMessage = "[$timestamp] [$Level] $Message"
+
+        # Créer le répertoire si nécessaire
+        $logDir = Split-Path $LogPath -Parent
+        if (-not (Test-Path $logDir)) {
+            New-Item -Path $logDir -ItemType Directory -Force | Out-Null
+        }
+
+        # Écrire dans le fichier
+        Add-Content -Path $LogPath -Value $logMessage
+
+        # Afficher aussi à l'écran
+        $color = switch ($Level) {
+            "ERROR" { "Red" }
+            "WARNING" { "Yellow" }
+            "SUCCESS" { "Green" }
+            default { "White" }
+        }
+        Write-Host $logMessage -ForegroundColor $color
+    }
+
+    # Services critiques à surveiller
+    $criticalServices = @(
+        "W3SVC",       # IIS
+        "Spooler",     # Print Spooler
+        "DNS",         # DNS Server
+        "Netlogon",    # Netlogon
+        "W32Time"      # Windows Time
+    )
+
+    Write-Log "=== Démarrage de la surveillance des services ==="
+
+    $issuesFound = 0
+    $servicesRestarted = 0
+
+    foreach ($serviceName in $criticalServices) {
+        try {
+            $service = Get-Service -Name $serviceName -ErrorAction Stop
+
+            if ($service.Status -ne "Running") {
+                Write-Log "Service '$serviceName' est $($service.Status) - Tentative de redémarrage..." "WARNING"
+                $issuesFound++
+
+                try {
+                    # Vérifier si le service est configuré en automatique
+                    if ($service.StartType -eq "Disabled") {
+                        Write-Log "Service '$serviceName' est désactivé - Activation..." "WARNING"
+                        Set-Service -Name $serviceName -StartupType Automatic
+                    }
+
+                    # Redémarrer le service
+                    Start-Service -Name $serviceName -ErrorAction Stop
+
+                    # Vérifier que le service a bien démarré
+                    Start-Sleep -Seconds 2
+                    $service = Get-Service -Name $serviceName
+
+                    if ($service.Status -eq "Running") {
+                        Write-Log "Service '$serviceName' redémarré avec succès" "SUCCESS"
+                        $servicesRestarted++
+                    } else {
+                        Write-Log "Échec du redémarrage de '$serviceName' - Statut: $($service.Status)" "ERROR"
+                    }
+                } catch {
+                    Write-Log "Erreur lors du redémarrage de '$serviceName': $($_.Exception.Message)" "ERROR"
+                }
+            } else {
+                Write-Log "Service '$serviceName' fonctionne correctement (PID: $($service.Id))"
+            }
+
+            # Informations supplémentaires
+            $startType = (Get-CimInstance Win32_Service -Filter "Name='$serviceName'").StartMode
+            Write-Log "  → Compte: $($service.ServicesDependedOn.Count) dépendances | Type démarrage: $startType"
+
+        } catch {
+            Write-Log "Erreur lors de la vérification de '$serviceName': $($_.Exception.Message)" "ERROR"
+            $issuesFound++
+        }
+    }
+
+    # Résumé
+    Write-Log "=== Résumé de la surveillance ==="
+    Write-Log "Services vérifiés: $($criticalServices.Count)"
+    Write-Log "Problèmes détectés: $issuesFound"
+    Write-Log "Services redémarrés: $servicesRestarted"
+
+    # Si des problèmes ont été trouvés, retourner un code d'erreur
+    if ($issuesFound -gt 0) {
+        exit 1
+    } else {
+        exit 0
+    }
+    ```
+
+    **Étape 2 : Créer la tâche planifiée**
+
+    ```powershell
+    # Create-MonitoringTask.ps1
+    # Script pour créer la tâche planifiée de surveillance
+
+    $scriptPath = "C:\Scripts\Monitor-CriticalServices.ps1"
+    $taskName = "Monitor-CriticalServices"
+
+    # Créer le répertoire des scripts si nécessaire
+    $scriptDir = Split-Path $scriptPath -Parent
+    if (-not (Test-Path $scriptDir)) {
+        New-Item -Path $scriptDir -ItemType Directory -Force
+    }
+
+    # Copier le script de monitoring (supposant qu'il est dans le répertoire courant)
+    Copy-Item -Path ".\Monitor-CriticalServices.ps1" -Destination $scriptPath -Force
+
+    # Vérifier si la tâche existe déjà
+    $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    if ($existingTask) {
+        Write-Host "Suppression de la tâche existante..." -ForegroundColor Yellow
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+    }
+
+    # Créer l'action (exécution du script)
+    $action = New-ScheduledTaskAction `
+        -Execute "powershell.exe" `
+        -Argument "-ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -File `"$scriptPath`""
+
+    # Créer le trigger (toutes les 5 minutes)
+    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 5)
+
+    # Créer le principal (exécution avec compte SYSTEM)
+    $principal = New-ScheduledTaskPrincipal `
+        -UserId "NT AUTHORITY\SYSTEM" `
+        -LogonType ServiceAccount `
+        -RunLevel Highest
+
+    # Paramètres de la tâche
+    $settings = New-ScheduledTaskSettingsSet `
+        -AllowStartIfOnBatteries `
+        -DontStopIfGoingOnBatteries `
+        -StartWhenAvailable `
+        -RunOnlyIfNetworkAvailable:$false `
+        -MultipleInstances IgnoreNew
+
+    # Créer la tâche
+    Register-ScheduledTask `
+        -TaskName $taskName `
+        -Action $action `
+        -Trigger $trigger `
+        -Principal $principal `
+        -Settings $settings `
+        -Description "Surveillance automatique des services Windows critiques - Exécution toutes les 5 minutes"
+
+    Write-Host "`nTâche planifiée créée avec succès!" -ForegroundColor Green
+    Write-Host "Nom: $taskName"
+    Write-Host "Fréquence: Toutes les 5 minutes"
+    Write-Host "Script: $scriptPath"
+    Write-Host "Logs: C:\Logs\ServiceMonitor.log"
+
+    # Afficher les détails de la tâche
+    Get-ScheduledTask -TaskName $taskName | Format-List TaskName, State, LastRunTime, NextRunTime
+    ```
+
+    **Étape 3 : Script de test**
+
+    ```powershell
+    # Test-ServiceMonitoring.ps1
+    # Script pour tester le système de surveillance
+
+    Write-Host "=== Test du système de surveillance ===" -ForegroundColor Cyan
+
+    # 1. Vérifier que le script existe
+    $scriptPath = "C:\Scripts\Monitor-CriticalServices.ps1"
+    if (Test-Path $scriptPath) {
+        Write-Host "[OK] Script de monitoring présent" -ForegroundColor Green
+    } else {
+        Write-Host "[ERREUR] Script de monitoring introuvable" -ForegroundColor Red
+        exit 1
+    }
+
+    # 2. Vérifier que la tâche planifiée existe
+    $task = Get-ScheduledTask -TaskName "Monitor-CriticalServices" -ErrorAction SilentlyContinue
+    if ($task) {
+        Write-Host "[OK] Tâche planifiée configurée" -ForegroundColor Green
+        Write-Host "    État: $($task.State)"
+        Write-Host "    Dernière exécution: $($task.LastRunTime)"
+    } else {
+        Write-Host "[ERREUR] Tâche planifiée non trouvée" -ForegroundColor Red
+        exit 1
+    }
+
+    # 3. Test en arrêtant le service Spooler
+    Write-Host "`nTest de redémarrage automatique..." -ForegroundColor Yellow
+    Write-Host "Arrêt du service Spooler..."
+
+    Stop-Service -Name Spooler -Force
+    Start-Sleep -Seconds 2
+
+    $serviceBefore = Get-Service -Name Spooler
+    Write-Host "Service Spooler: $($serviceBefore.Status)"
+
+    # 4. Exécuter le script de monitoring manuellement
+    Write-Host "`nExécution du script de monitoring..."
+    & $scriptPath
+
+    # 5. Vérifier que le service a été redémarré
+    Start-Sleep -Seconds 2
+    $serviceAfter = Get-Service -Name Spooler
+
+    if ($serviceAfter.Status -eq "Running") {
+        Write-Host "`n[SUCCES] Le service Spooler a été redémarré automatiquement!" -ForegroundColor Green
+    } else {
+        Write-Host "`n[ERREUR] Le service n'a pas été redémarré" -ForegroundColor Red
+    }
+
+    # 6. Afficher les dernières lignes du log
+    $logPath = "C:\Logs\ServiceMonitor.log"
+    if (Test-Path $logPath) {
+        Write-Host "`nDernières entrées du log:" -ForegroundColor Cyan
+        Get-Content $logPath -Tail 10 | ForEach-Object {
+            Write-Host "  $_"
+        }
+    }
+
+    # 7. Démarrer la tâche planifiée pour vérifier qu'elle fonctionne
+    Write-Host "`nDémarrage manuel de la tâche planifiée..."
+    Start-ScheduledTask -TaskName "Monitor-CriticalServices"
+    Start-Sleep -Seconds 5
+
+    Write-Host "`n=== Test terminé ===" -ForegroundColor Cyan
+    ```
+
+    **Déploiement complet** :
+
+    ```powershell
+    # Déploiement en une commande
+
+    # 1. Sauvegarder le script de monitoring
+    # (Copier le contenu de Monitor-CriticalServices.ps1)
+
+    # 2. Créer la tâche planifiée
+    # (Exécuter Create-MonitoringTask.ps1)
+
+    # 3. Tester le système
+    # (Exécuter Test-ServiceMonitoring.ps1)
+
+    # 4. Surveiller les logs en temps réel
+    Get-Content "C:\Logs\ServiceMonitor.log" -Wait -Tail 20
+    ```
+
+    **Points clés de la solution** :
+
+    - Script robuste avec gestion d'erreurs complète
+    - Logging détaillé pour faciliter le débogage
+    - Redémarrage automatique avec vérification du type de démarrage
+    - Tâche planifiée configurée pour s'exécuter même sur batterie
+    - Utilisation du compte SYSTEM pour les privilèges nécessaires
+    - Script de test complet pour valider le fonctionnement
+    - Monitoring des dépendances de services
+
+---
+
 ## Quiz
 
 1. **Quelle cmdlet arrête un service ?**

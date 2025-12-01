@@ -26,6 +26,23 @@ Ce script effectue un nettoyage complet du système :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour nettoyage complet du système
+- **Dépendances** : `du`, `find`, `bc`, package manager (`apt`, `yum`, `dnf`, ou `pacman`)
+
+---
+
+## Cas d'Usage
+
+- **Maintenance hebdomadaire** : Nettoyage automatisé via cron pour libérer de l'espace disque
+- **Libération d'espace urgente** : Récupération rapide d'espace lors de saturation disque
+- **Nettoyage post-upgrade** : Suppression des anciens kernels et caches après mise à jour système
+- **Automatisation serveurs** : Intégration dans playbooks Ansible pour maintenance de parc
+
+---
+
 ## Script
 
 ```bash

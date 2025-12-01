@@ -255,40 +255,170 @@ docs/
 
 ---
 
-## 7. Exercice Pratique
+## 7. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Créer une image Docker optimisée pour une application web Python en utilisant les bonnes pratiques
 
-1. Créer un Dockerfile pour une app Python
-2. Optimiser avec multi-stage build
-3. Build et tester
-4. Comparer les tailles
+    **Contexte** : Vous développez une API Flask simple. Vous devez créer un Dockerfile optimisé qui minimise la taille de l'image finale, utilise le cache intelligemment et respecte les principes de sécurité.
 
-### Solution
+    **Tâches à réaliser** :
 
-```dockerfile
-# Dockerfile
-FROM python:3.11-slim AS builder
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+    1. Créer une application Flask minimaliste (`app.py`) et son fichier de dépendances (`requirements.txt`)
+    2. Écrire un premier Dockerfile simple (single-stage) et noter la taille de l'image résultante
+    3. Optimiser le Dockerfile avec un multi-stage build pour réduire la taille
+    4. Ajouter les bonnes pratiques : utilisateur non-root, layers optimisés, .dockerignore
+    5. Builder les deux versions et comparer les tailles d'images
+    6. Tester que l'application fonctionne correctement dans les deux cas
 
-FROM python:3.11-slim
-WORKDIR /app
-COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
-COPY app.py .
-RUN useradd -m appuser && chown -R appuser /app
-USER appuser
-EXPOSE 5000
-CMD ["python", "app.py"]
-```
+    **Critères de validation** :
 
-```bash
-# Build et compare
-docker build -t myapp:v1 .
-docker images myapp
-```
+    - [ ] L'application répond sur http://localhost:5000
+    - [ ] La version multi-stage est significativement plus petite (au moins 30% de réduction)
+    - [ ] Le container s'exécute avec un utilisateur non-root
+    - [ ] Le fichier .dockerignore exclut les fichiers inutiles
+    - [ ] Le cache Docker est correctement utilisé (rebuilds rapides quand seul le code change)
+
+??? quote "Solution"
+    **Étape 1 : Créer l'application**
+
+    ```python
+    # app.py
+    from flask import Flask, jsonify
+    import os
+
+    app = Flask(__name__)
+
+    @app.route('/')
+    def hello():
+        return jsonify({"message": "Hello from Docker!", "version": "1.0"})
+
+    @app.route('/health')
+    def health():
+        return jsonify({"status": "healthy"})
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=5000)
+    ```
+
+    ```text
+    # requirements.txt
+    flask==3.0.0
+    gunicorn==21.2.0
+    ```
+
+    **Étape 2 : Dockerfile simple (version 1)**
+
+    ```dockerfile
+    # Dockerfile.simple
+    FROM python:3.11
+    WORKDIR /app
+    COPY . .
+    RUN pip install -r requirements.txt
+    EXPOSE 5000
+    CMD ["python", "app.py"]
+    ```
+
+    ```bash
+    # Build et vérifier la taille
+    docker build -f Dockerfile.simple -t myapp:simple .
+    docker images myapp:simple
+    # Taille: ~1GB
+    ```
+
+    **Étape 3 : Dockerfile optimisé (multi-stage)**
+
+    ```dockerfile
+    # Dockerfile
+    # Stage 1: Builder
+    FROM python:3.11-slim AS builder
+    WORKDIR /app
+
+    # Copier uniquement les dépendances d'abord (cache)
+    COPY requirements.txt .
+    RUN pip install --user --no-cache-dir -r requirements.txt
+
+    # Stage 2: Production
+    FROM python:3.11-slim
+    WORKDIR /app
+
+    # Créer utilisateur non-root
+    RUN useradd -m -u 1000 appuser && \
+        chown -R appuser:appuser /app
+
+    # Copier les dépendances depuis le builder
+    COPY --from=builder /root/.local /home/appuser/.local
+
+    # Copier le code application
+    COPY --chown=appuser:appuser app.py .
+
+    # Configurer l'environnement
+    ENV PATH=/home/appuser/.local/bin:$PATH \
+        PYTHONUNBUFFERED=1 \
+        PYTHONDONTWRITEBYTECODE=1
+
+    # Utiliser l'utilisateur non-root
+    USER appuser
+
+    EXPOSE 5000
+
+    # Utiliser gunicorn en production
+    CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "app:app"]
+    ```
+
+    **Étape 4 : Créer .dockerignore**
+
+    ```
+    # .dockerignore
+    .git
+    .gitignore
+    __pycache__
+    *.pyc
+    *.pyo
+    *.pyd
+    .Python
+    *.so
+    .env
+    venv/
+    *.md
+    !README.md
+    Dockerfile*
+    .dockerignore
+    ```
+
+    **Étape 5 : Build et comparaison**
+
+    ```bash
+    # Build version optimisée
+    docker build -t myapp:optimized .
+
+    # Comparer les tailles
+    docker images | grep myapp
+    # simple: ~1GB
+    # optimized: ~150-200MB
+
+    # Tester
+    docker run -d -p 5000:5000 --name myapp myapp:optimized
+    curl http://localhost:5000
+    curl http://localhost:5000/health
+
+    # Vérifier l'utilisateur
+    docker exec myapp whoami
+    # Devrait afficher: appuser
+
+    # Cleanup
+    docker stop myapp && docker rm myapp
+    ```
+
+    **Points clés** :
+
+    - Multi-stage build réduit la taille en excluant les outils de build
+    - Image `python:3.11-slim` au lieu de `python:3.11` (900MB → 150MB)
+    - `pip install --user` installe dans le répertoire utilisateur
+    - `--no-cache-dir` évite de stocker le cache pip
+    - Ordre des COPY optimise le cache Docker
+    - Utilisateur non-root améliore la sécurité
+    - .dockerignore réduit le contexte de build
 
 ---
 

@@ -349,70 +349,223 @@ podman push --sign-by your@email.com localhost:5000/myapp:v1
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place un registry privé local et créer un workflow de mirroring d'images avec validation d'intégrité
 
-Mettre en place un workflow de mirroring avec validation.
+    **Contexte** : Vous travaillez dans un environnement d'entreprise où vous devez synchroniser des images Docker Hub vers un registry privé interne. Vous devez également préparer des images pour un déploiement air-gap (sans connexion internet). Skopeo vous permettra d'inspecter, copier et valider les images sans les télécharger localement.
 
-### Étapes
+    **Tâches à réaliser** :
 
-```bash
-# 1. Démarrer un registry local
-podman run -d \
-  --name lab-registry \
-  -p 5000:5000 \
-  -v lab-registry:/var/lib/registry \
-  docker.io/library/registry:2
+    1. Déployer un registry Docker local avec Podman
+    2. Configurer Podman pour accepter le registry insecure
+    3. Inspecter des images distantes avec Skopeo sans les télécharger
+    4. Copier plusieurs images de Docker Hub vers le registry local
+    5. Vérifier l'intégrité des images copiées en comparant les digests
+    6. Lister le catalogue du registry
+    7. Exporter des images au format OCI pour un déploiement air-gap
+    8. Nettoyer l'environnement
 
-# 2. Créer la configuration insecure
-sudo tee /etc/containers/registries.conf.d/lab.conf << 'EOF'
-[[registry]]
-location = "localhost:5000"
-insecure = true
-EOF
+    **Critères de validation** :
 
-# 3. Inspecter les images sources
-echo "=== Inspection nginx:alpine ==="
-skopeo inspect docker://docker.io/library/nginx:alpine | jq '{
-  created: .Created,
-  arch: .Architecture,
-  labels: .Labels
-}'
+    - [ ] Le registry local est accessible sur localhost:5000
+    - [ ] Les images sont copiées avec succès vers le registry local
+    - [ ] Les digests source et destination sont identiques
+    - [ ] Le catalogue du registry affiche les images copiées
+    - [ ] Les images sont exportées au format OCI
 
-# 4. Copier vers le registry local
-echo "=== Mirroring images ==="
-skopeo copy docker://nginx:alpine docker://localhost:5000/nginx:alpine
-skopeo copy docker://redis:7-alpine docker://localhost:5000/redis:7-alpine
+??? quote "Solution"
+    Voici la solution complète pour le mirroring avec Skopeo :
 
-# 5. Vérifier le catalogue
-echo "=== Registry catalog ==="
-curl -s http://localhost:5000/v2/_catalog | jq .
+    ```bash
+    # 1. Démarrer un registry Docker local
+    echo "=== Starting local registry ==="
+    podman run -d \
+      --name lab-registry \
+      -p 5000:5000 \
+      -v lab-registry:/var/lib/registry \
+      --restart=always \
+      docker.io/library/registry:2
 
-# 6. Comparer les digests (intégrité)
-echo "=== Verifying integrity ==="
-SOURCE_DIGEST=$(skopeo inspect docker://nginx:alpine --format '{{.Digest}}')
-LOCAL_DIGEST=$(skopeo inspect docker://localhost:5000/nginx:alpine --format '{{.Digest}}')
+    # Attendre que le registry démarre
+    sleep 3
+    curl -s http://localhost:5000/v2/ | jq .
 
-if [ "$SOURCE_DIGEST" == "$LOCAL_DIGEST" ]; then
-  echo "✓ Digests match: $SOURCE_DIGEST"
-else
-  echo "✗ Digest mismatch!"
-  echo "  Source: $SOURCE_DIGEST"
-  echo "  Local:  $LOCAL_DIGEST"
-fi
+    # 2. Configurer Podman pour accepter le registry insecure
+    echo "=== Configuring insecure registry ==="
+    sudo tee /etc/containers/registries.conf.d/lab.conf << 'EOF'
+    [[registry]]
+    location = "localhost:5000"
+    insecure = true
+    EOF
 
-# 7. Exporter pour air-gap
-echo "=== Export for air-gap ==="
-mkdir -p ~/air-gap-images
-skopeo copy docker://localhost:5000/nginx:alpine oci:~/air-gap-images/nginx:alpine
-ls -la ~/air-gap-images/
+    # Vérifier la configuration
+    grep -A2 "localhost:5000" /etc/containers/registries.conf.d/lab.conf
 
-# 8. Cleanup
-podman stop lab-registry && podman rm lab-registry
-podman volume rm lab-registry
-rm -rf ~/air-gap-images
-```
+    # 3. Inspecter les images sources SANS les télécharger
+    echo "=== Inspecting remote images with Skopeo ==="
+
+    # Nginx - informations complètes
+    skopeo inspect docker://docker.io/library/nginx:alpine | jq '{
+      name: .Name,
+      created: .Created,
+      architecture: .Architecture,
+      os: .Os,
+      size: .Size,
+      layers: .Layers | length,
+      digest: .Digest
+    }'
+
+    # Redis - tags disponibles
+    skopeo list-tags docker://docker.io/library/redis | jq '.Tags | .[] | select(startswith("7-alpine"))'
+
+    # PostgreSQL - manifest brut
+    skopeo inspect --raw docker://docker.io/library/postgres:15-alpine | jq '.schemaVersion'
+
+    # 4. Copier plusieurs images vers le registry local
+    echo "=== Mirroring images to local registry ==="
+
+    IMAGES=(
+      "nginx:alpine"
+      "redis:7-alpine"
+      "postgres:15-alpine"
+    )
+
+    for img in "${IMAGES[@]}"; do
+      echo "Copying $img..."
+      skopeo copy \
+        --dest-tls-verify=false \
+        docker://docker.io/library/$img \
+        docker://localhost:5000/$img
+    done
+
+    # 5. Vérifier le catalogue du registry
+    echo "=== Registry catalog ==="
+    curl -s http://localhost:5000/v2/_catalog | jq .
+
+    # Lister les tags de nginx
+    curl -s http://localhost:5000/v2/nginx/tags/list | jq .
+
+    # 6. Valider l'intégrité des images (comparer les digests)
+    echo "=== Verifying image integrity ==="
+
+    for img in "${IMAGES[@]}"; do
+      echo "Checking $img..."
+      SOURCE_DIGEST=$(skopeo inspect docker://docker.io/library/$img --format '{{.Digest}}')
+      LOCAL_DIGEST=$(skopeo inspect --tls-verify=false docker://localhost:5000/$img --format '{{.Digest}}')
+
+      if [ "$SOURCE_DIGEST" == "$LOCAL_DIGEST" ]; then
+        echo "  ✓ Digests match: $SOURCE_DIGEST"
+      else
+        echo "  ✗ Digest mismatch!"
+        echo "    Source: $SOURCE_DIGEST"
+        echo "    Local:  $LOCAL_DIGEST"
+      fi
+    done
+
+    # 7. Exporter pour déploiement air-gap
+    echo "=== Exporting images for air-gap deployment ==="
+    mkdir -p ~/podman-lab/air-gap-images
+
+    # Export au format OCI
+    skopeo copy \
+      --src-tls-verify=false \
+      docker://localhost:5000/nginx:alpine \
+      oci:~/podman-lab/air-gap-images/nginx:alpine
+
+    # Export au format docker-archive
+    skopeo copy \
+      --src-tls-verify=false \
+      docker://localhost:5000/redis:7-alpine \
+      docker-archive:~/podman-lab/air-gap-images/redis-7-alpine.tar:redis:7-alpine
+
+    # Vérifier les exports
+    ls -lh ~/podman-lab/air-gap-images/
+    du -sh ~/podman-lab/air-gap-images/*
+
+    # 8. Tester le chargement depuis l'export
+    echo "=== Testing air-gap import ==="
+
+    # Import depuis OCI
+    skopeo copy \
+      oci:~/podman-lab/air-gap-images/nginx:alpine \
+      containers-storage:localhost/nginx-airgap:latest
+
+    # Vérifier que l'image est chargée
+    podman images localhost/nginx-airgap
+
+    # 9. Synchronisation avancée (bonus)
+    echo "=== Advanced: Sync multiple images ==="
+
+    # Créer un fichier de configuration pour skopeo sync
+    cat > ~/podman-lab/sync-config.yaml << 'EOF'
+    docker.io:
+      images:
+        nginx:
+          - "alpine"
+          - "1.25-alpine"
+        redis:
+          - "7-alpine"
+    EOF
+
+    # Synchroniser vers un répertoire
+    skopeo sync \
+      --src yaml \
+      --dest dir \
+      ~/podman-lab/sync-config.yaml \
+      ~/podman-lab/synced-images/
+
+    ls -R ~/podman-lab/synced-images/
+
+    # 10. Cleanup
+    echo "=== Cleanup ==="
+    podman stop lab-registry
+    podman rm lab-registry
+    podman volume rm lab-registry
+    podman rmi localhost/nginx-airgap
+    rm -rf ~/podman-lab/air-gap-images
+    rm -rf ~/podman-lab/synced-images
+    rm ~/podman-lab/sync-config.yaml
+    sudo rm /etc/containers/registries.conf.d/lab.conf
+
+    echo "✓ Exercise completed successfully!"
+    ```
+
+    !!! success "Avantages de Skopeo"
+        - **Pas de stockage local** : Copie directe registry-à-registry
+        - **Inspection sans pull** : Économise bande passante et espace disque
+        - **Multi-format** : OCI, Docker, tar archives
+        - **Validation d'intégrité** : Vérification des digests automatique
+
+    !!! tip "Cas d'usage en production"
+        **Registry mirroring** :
+        ```bash
+        # Automatiser avec cron/systemd timer
+        */30 * * * * /usr/local/bin/mirror-critical-images.sh
+        ```
+
+        **Air-gap deployment** :
+        ```bash
+        # Sur la machine connectée
+        skopeo sync --src yaml --dest dir sync.yaml /media/usb/images/
+
+        # Sur la machine air-gap
+        skopeo sync --src dir --dest docker /media/usb/images/ registry.local:5000
+        ```
+
+        **Vérification de sécurité** :
+        ```bash
+        # Vérifier les vulnérabilités avant mirroring
+        skopeo inspect docker://image:tag | jq .Labels
+        ```
+
+    !!! note "Formats de transport"
+        - `docker://` : Registry Docker/OCI (standard)
+        - `oci:` : Répertoire au format OCI Layout
+        - `docker-archive:` : Archive tar Docker
+        - `dir:` : Répertoire simple (debug)
+        - `containers-storage:` : Storage Podman local
 
 ---
 

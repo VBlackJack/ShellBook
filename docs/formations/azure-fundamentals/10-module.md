@@ -562,7 +562,208 @@ az portal dashboard create \
 
 ---
 
-## 7. Exercices Pratiques
+## 7. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place une solution d'observabilité complète pour une application multi-tier
+
+    **Contexte** : Vous gérez une application e-commerce déployée sur Azure (AKS, Azure SQL, Storage). Vous devez implémenter une solution de monitoring et observabilité complète permettant de détecter proactivement les problèmes, analyser les performances, créer des alertes pertinentes et visualiser l'état de santé global de l'infrastructure et de l'application.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Log Analytics Workspace centralisé
+    2. Activer les Diagnostic Settings sur tous les services Azure
+    3. Déployer Application Insights pour le monitoring applicatif
+    4. Créer des requêtes KQL pour analyser les logs et métriques
+    5. Configurer des alertes (CPU, mémoire, erreurs, latence)
+    6. Créer des Action Groups (email, SMS, webhook)
+    7. Construire un dashboard Azure Monitor unifié
+    8. Implémenter des Workbooks personnalisés pour les rapports
+
+    **Critères de validation** :
+
+    - [ ] Log Analytics Workspace collecte les logs de tous les services
+    - [ ] Application Insights trace les requêtes de bout en bout
+    - [ ] Les requêtes KQL identifient les top erreurs et pages lentes
+    - [ ] Les alertes se déclenchent correctement (testé avec simulation)
+    - [ ] Les Action Groups notifient par email et webhook
+    - [ ] Le dashboard affiche les métriques clés en temps réel
+    - [ ] Les Workbooks génèrent des rapports hebdomadaires automatiques
+    - [ ] La rétention des logs est configurée (90 jours)
+
+??? quote "Solution"
+
+    **Étape 1 : Créer le Workspace et activer diagnostics** :
+
+    ```bash
+    RG_NAME="monitoring-rg"
+    LOCATION="westeurope"
+    WORKSPACE_NAME="phoenix-logs"
+
+    # Créer Log Analytics Workspace
+    az monitor log-analytics workspace create \
+        --resource-group $RG_NAME \
+        --workspace-name $WORKSPACE_NAME \
+        --location $LOCATION \
+        --retention-time 90
+
+    WORKSPACE_ID=$(az monitor log-analytics workspace show \
+        --resource-group $RG_NAME \
+        --workspace-name $WORKSPACE_NAME \
+        --query customerId -o tsv)
+
+    # Activer diagnostics sur AKS
+    az aks enable-addons \
+        --resource-group $RG_NAME \
+        --name phoenix-aks \
+        --addons monitoring \
+        --workspace-resource-id $(az monitor log-analytics workspace show -g $RG_NAME -n $WORKSPACE_NAME --query id -o tsv)
+
+    # Activer diagnostics sur Storage
+    az monitor diagnostic-settings create \
+        --name "storage-diag" \
+        --resource $(az storage account show -g $RG_NAME -n phoenixstorage --query id -o tsv) \
+        --workspace $WORKSPACE_NAME \
+        --logs '[{"category": "StorageRead", "enabled": true}]' \
+        --metrics '[{"category": "Transaction", "enabled": true}]'
+    ```
+
+    **Étape 2 : Créer Application Insights** :
+
+    ```bash
+    # Créer Application Insights
+    az monitor app-insights component create \
+        --app phoenix-appinsights \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --workspace $(az monitor log-analytics workspace show -g $RG_NAME -n $WORKSPACE_NAME --query id -o tsv)
+
+    # Récupérer la connection string
+    APPINSIGHTS_KEY=$(az monitor app-insights component show \
+        --app phoenix-appinsights \
+        --resource-group $RG_NAME \
+        --query connectionString -o tsv)
+    ```
+
+    **Étape 3 : Requêtes KQL** :
+
+    ```kql
+    // Top 10 des erreurs dans les dernières 24h
+    AppServiceHTTPLogs
+    | where TimeGenerated > ago(24h)
+    | where ScStatus >= 500
+    | summarize ErrorCount = count() by CsUriStem, ScStatus
+    | order by ErrorCount desc
+    | take 10
+
+    // Pages les plus lentes (P95)
+    AppServiceHTTPLogs
+    | where TimeGenerated > ago(1h)
+    | summarize P95Duration = percentile(TimeTaken, 95) by CsUriStem
+    | where P95Duration > 1000
+    | order by P95Duration desc
+
+    // Taux d'erreur par heure
+    AppServiceHTTPLogs
+    | where TimeGenerated > ago(7d)
+    | summarize
+        Total = count(),
+        Errors = countif(ScStatus >= 400)
+        by bin(TimeGenerated, 1h)
+    | extend ErrorRate = (Errors * 100.0) / Total
+    | render timechart
+
+    // Monitoring AKS - Pods avec erreurs
+    KubePodInventory
+    | where TimeGenerated > ago(1h)
+    | where PodStatus != "Running"
+    | summarize Count = count() by PodStatus, Namespace
+    ```
+
+    **Étape 4 : Créer des alertes** :
+
+    ```bash
+    # Action Group
+    az monitor action-group create \
+        --name "phoenix-alerts" \
+        --resource-group $RG_NAME \
+        --short-name "PhoenixOps" \
+        --email-receiver name="Admin" email="admin@contoso.com" \
+        --webhook-receiver name="Slack" uri="https://hooks.slack.com/services/..."
+
+    # Alerte sur CPU élevé (AKS)
+    az monitor metrics alert create \
+        --name "aks-high-cpu" \
+        --resource-group $RG_NAME \
+        --scopes $(az aks show -g $RG_NAME -n phoenix-aks --query id -o tsv) \
+        --condition "avg node_cpu_usage_percentage > 80" \
+        --window-size 5m \
+        --evaluation-frequency 1m \
+        --action "phoenix-alerts"
+
+    # Alerte sur taux d'erreur élevé
+    az monitor scheduled-query create \
+        --name "high-error-rate" \
+        --resource-group $RG_NAME \
+        --scopes $(az monitor log-analytics workspace show -g $RG_NAME -n $WORKSPACE_NAME --query id -o tsv) \
+        --condition "count > 100" \
+        --condition-query "AppServiceHTTPLogs | where ScStatus >= 500 | summarize count()" \
+        --window-size 5m \
+        --evaluation-frequency 1m \
+        --action "phoenix-alerts"
+    ```
+
+    **Étape 5 : Créer un dashboard** :
+
+    ```bash
+    # Dashboard JSON (à importer dans le portail)
+    cat > dashboard.json << 'EOF'
+    {
+      "properties": {
+        "lenses": {
+          "0": {
+            "parts": {
+              "0": {
+                "metadata": {
+                  "type": "Extension/Microsoft_Azure_Monitoring/PartType/MetricsChartPart",
+                  "settings": {
+                    "content": {
+                      "title": "AKS CPU Usage"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    EOF
+    ```
+
+    **Validation** :
+
+    ```bash
+    # Vérifier le workspace
+    az monitor log-analytics workspace show -g $RG_NAME -n $WORKSPACE_NAME
+
+    # Tester une requête KQL
+    az monitor log-analytics query \
+        --workspace $WORKSPACE_ID \
+        --analytics-query "AppServiceHTTPLogs | take 10"
+
+    # Lister les alertes
+    az monitor metrics alert list -g $RG_NAME --output table
+
+    # Voir l'historique des alertes
+    az monitor activity-log list \
+        --resource-group $RG_NAME \
+        --offset 1d
+    ```
+
+---
+
+## 8. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Monitoring Complet
 

@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - bash
+  - security
+  - secrets
+  - git
+---
+
 # Secret Scanner
 
 Script Bash de détection de secrets et credentials dans les repositories git et fichiers.

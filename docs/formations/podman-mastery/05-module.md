@@ -409,85 +409,269 @@ spec:
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Créer une application 3-tiers complète avec des pods Podman et générer un manifest Kubernetes pour la portabilité
 
-Créer une application 3-tiers avec pods et la convertir en manifest Kubernetes.
+    **Contexte** : Vous devez déployer une application e-commerce composée de plusieurs services : une base de données PostgreSQL, un cache Redis, une API backend, et un frontend Nginx. Tous ces services doivent communiquer via localhost dans un même pod. Vous générerez ensuite un manifest Kubernetes compatible pour faciliter la migration vers un cluster.
 
-### Étapes
+    **Tâches à réaliser** :
 
-```bash
-# 1. Créer le pod principal
-podman pod create \
-  --name ecommerce \
-  -p 80:80 \
-  -p 8080:8080
+    1. Créer un pod avec les ports exposés nécessaires
+    2. Déployer PostgreSQL avec persistance des données
+    3. Ajouter Redis comme système de cache
+    4. Déployer une API backend (simulée avec httpbin)
+    5. Configurer Nginx comme reverse proxy et serveur frontend
+    6. Vérifier la communication entre les conteneurs via localhost
+    7. Générer un manifest Kubernetes depuis le pod
+    8. Détruire le pod et le recréer depuis le manifest
+    9. Valider que tout fonctionne après recréation
 
-# 2. Ajouter la base de données
-podman run -d --pod ecommerce \
-  --name db \
-  -e POSTGRES_USER=app \
-  -e POSTGRES_PASSWORD=secret \
-  -e POSTGRES_DB=shop \
-  -v ecommerce-db:/var/lib/postgresql/data \
-  postgres:15-alpine
+    **Critères de validation** :
 
-# 3. Ajouter le cache Redis
-podman run -d --pod ecommerce \
-  --name cache \
-  redis:7-alpine
+    - [ ] Le pod contient 4 conteneurs actifs
+    - [ ] PostgreSQL stocke les données dans un volume persistant
+    - [ ] Tous les conteneurs communiquent via localhost
+    - [ ] Nginx proxy les requêtes vers l'API
+    - [ ] Le manifest Kubernetes est généré et valide
+    - [ ] Le pod peut être recréé depuis le manifest
 
-# 4. Ajouter l'API (simulée avec httpbin)
-podman run -d --pod ecommerce \
-  --name api \
-  kennethreitz/httpbin
+??? quote "Solution"
+    Voici la solution complète pour créer une application multi-conteneurs :
 
-# 5. Ajouter le frontend nginx
-cat > /tmp/nginx-ecommerce.conf << 'EOF'
-server {
-    listen 80;
-    location / {
-        root /usr/share/nginx/html;
+    ```bash
+    # 1. Créer le pod principal avec les ports exposés
+    echo "=== Creating ecommerce pod ==="
+    podman pod create \
+      --name ecommerce \
+      --publish 80:80 \
+      --publish 8080:8080 \
+      --network podman
+
+    # Vérifier le pod vide
+    podman pod ps
+    podman pod inspect ecommerce | jq '.InfraConfig.PortBindings'
+
+    # 2. Ajouter PostgreSQL avec volume persistant
+    echo "=== Adding PostgreSQL database ==="
+    podman run -d --pod ecommerce \
+      --name db \
+      -e POSTGRES_USER=ecommerce \
+      -e POSTGRES_PASSWORD=SecureP@ss123 \
+      -e POSTGRES_DB=shop \
+      -v ecommerce-db:/var/lib/postgresql/data:Z \
+      postgres:15-alpine
+
+    # Attendre que PostgreSQL démarre
+    sleep 5
+
+    # Tester la connexion PostgreSQL
+    podman exec -it db psql -U ecommerce -d shop -c "\l"
+
+    # 3. Ajouter Redis pour le cache
+    echo "=== Adding Redis cache ==="
+    podman run -d --pod ecommerce \
+      --name cache \
+      redis:7-alpine \
+      redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+    # Tester Redis
+    podman exec cache redis-cli ping
+    # Réponse: PONG
+
+    # 4. Ajouter l'API backend
+    echo "=== Adding API backend ==="
+    podman run -d --pod ecommerce \
+      --name api \
+      -e GUNICORN_CMD_ARGS="--bind=0.0.0.0:8080" \
+      kennethreitz/httpbin
+
+    # Attendre que l'API démarre
+    sleep 3
+
+    # 5. Créer la configuration Nginx
+    echo "=== Configuring Nginx frontend ==="
+    mkdir -p ~/podman-lab/ecommerce
+    cat > ~/podman-lab/ecommerce/nginx.conf << 'EOF'
+    server {
+        listen 80;
+        server_name localhost;
+
+        # Page d'accueil
+        location / {
+            root /usr/share/nginx/html;
+            index index.html;
+        }
+
+        # Proxy vers l'API (même pod = localhost!)
+        location /api/ {
+            proxy_pass http://127.0.0.1:8080/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        # Health check
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
     }
-    location /api/ {
-        proxy_pass http://127.0.0.1:8080/;
-    }
-}
-EOF
+    EOF
 
-podman run -d --pod ecommerce \
-  --name frontend \
-  -v /tmp/nginx-ecommerce.conf:/etc/nginx/conf.d/default.conf:ro,Z \
-  nginx:alpine
+    # Créer une page HTML simple
+    cat > ~/podman-lab/ecommerce/index.html << 'EOF'
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>E-Commerce Demo</title>
+        <style>
+            body { font-family: Arial; margin: 50px; background: #f0f0f0; }
+            h1 { color: #892CA0; }
+            .card { background: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        </style>
+    </head>
+    <body>
+        <h1>E-Commerce Application - Podman Pod</h1>
+        <div class="card">
+            <h2>Architecture</h2>
+            <ul>
+                <li>Frontend: Nginx</li>
+                <li>Backend API: httpbin</li>
+                <li>Cache: Redis</li>
+                <li>Database: PostgreSQL</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Test Links</h2>
+            <ul>
+                <li><a href="/api/get">API Test (GET)</a></li>
+                <li><a href="/api/headers">Show Headers</a></li>
+                <li><a href="/health">Health Check</a></li>
+            </ul>
+        </div>
+    </body>
+    </html>
+    EOF
 
-# 6. Vérifier le pod
-echo "=== Pod Status ==="
-podman pod ps
-podman ps --pod --filter pod=ecommerce
+    # 6. Ajouter Nginx au pod
+    podman run -d --pod ecommerce \
+      --name frontend \
+      -v ~/podman-lab/ecommerce/nginx.conf:/etc/nginx/conf.d/default.conf:ro,Z \
+      -v ~/podman-lab/ecommerce/index.html:/usr/share/nginx/html/index.html:ro,Z \
+      nginx:alpine
 
-# 7. Tester
-echo "=== Testing ==="
-curl -s http://localhost/api/get | jq .
+    # 7. Vérifier l'état du pod complet
+    echo "=== Pod Status ==="
+    podman pod ps
+    podman ps --pod --filter pod=ecommerce
 
-# 8. Générer le manifest Kubernetes
-echo "=== Generating Kubernetes manifest ==="
-podman generate kube --service ecommerce > ecommerce-k8s.yaml
-cat ecommerce-k8s.yaml
+    # Statistiques du pod
+    podman pod stats ecommerce --no-stream
 
-# 9. Supprimer et recréer depuis le manifest
-echo "=== Recreating from manifest ==="
-podman pod rm -f ecommerce
-podman play kube ecommerce-k8s.yaml
+    # 8. Tester l'application
+    echo "=== Testing Application ==="
 
-# 10. Vérifier
-podman pod ps
+    # Page d'accueil
+    curl -s http://localhost/ | grep "E-Commerce"
 
-# Cleanup
-podman play kube --down ecommerce-k8s.yaml
-podman volume rm ecommerce-db
-rm /tmp/nginx-ecommerce.conf ecommerce-k8s.yaml
-```
+    # API via le proxy Nginx
+    curl -s http://localhost/api/get | jq '.url'
+
+    # Health check
+    curl http://localhost/health
+
+    # Tester la communication intra-pod
+    podman exec api curl -s http://127.0.0.1:6379  # Redis (devrait échouer mais prouver la connectivité)
+    podman exec cache redis-cli set test "hello from pod"
+    podman exec cache redis-cli get test
+
+    # 9. Générer le manifest Kubernetes
+    echo "=== Generating Kubernetes manifest ==="
+    podman generate kube --service ecommerce > ~/podman-lab/ecommerce/ecommerce-k8s.yaml
+
+    # Afficher le manifest
+    cat ~/podman-lab/ecommerce/ecommerce-k8s.yaml
+
+    # Vérifier la structure
+    grep -E "(apiVersion|kind|name:)" ~/podman-lab/ecommerce/ecommerce-k8s.yaml
+
+    # 10. Test de portabilité : supprimer et recréer depuis le manifest
+    echo "=== Testing Kubernetes manifest ==="
+
+    # Sauvegarder les données actuelles
+    podman exec db pg_dump -U ecommerce shop > ~/podman-lab/ecommerce/backup.sql
+
+    # Supprimer le pod original
+    podman pod stop ecommerce
+    podman pod rm -f ecommerce
+
+    # Vérifier qu'il n'existe plus
+    podman pod ps -a
+
+    # Recréer depuis le manifest
+    podman play kube ~/podman-lab/ecommerce/ecommerce-k8s.yaml
+
+    # Vérifier que le pod est recréé
+    sleep 5
+    podman pod ps
+    podman ps --pod
+
+    # Tester à nouveau
+    curl -s http://localhost/ | grep "E-Commerce"
+    curl -s http://localhost/api/headers | jq .headers
+
+    # 11. Vérifier les logs du pod
+    echo "=== Pod Logs ==="
+    podman pod logs ecommerce --tail=20
+
+    # Logs d'un conteneur spécifique
+    podman logs ecommerce-frontend --tail=10
+
+    # 12. Cleanup final
+    echo "=== Cleanup ==="
+    podman play kube --down ~/podman-lab/ecommerce/ecommerce-k8s.yaml
+    podman volume rm ecommerce-db
+    rm -rf ~/podman-lab/ecommerce
+
+    echo "✓ Exercise completed successfully!"
+    ```
+
+    !!! success "Avantages des Pods"
+        - **Communication localhost** : Pas besoin de découverte de service
+        - **Déploiement atomique** : Tous les conteneurs démarrent/arrêtent ensemble
+        - **Partage de ressources** : Network namespace, IPC, volumes partagés
+        - **Compatible K8s** : Transition facile vers Kubernetes
+
+    !!! tip "Communication dans un Pod"
+        Dans un pod, tous les conteneurs partagent le network namespace :
+        ```bash
+        # Depuis n'importe quel conteneur du pod
+        curl http://localhost:5432  # PostgreSQL
+        curl http://localhost:6379  # Redis
+        curl http://localhost:8080  # API
+        curl http://localhost:80    # Nginx
+        ```
+
+    !!! note "Manifest Kubernetes généré"
+        Le manifest généré contient :
+        - **Service** : Expose les ports du pod
+        - **Pod** : Définit les conteneurs et leurs configurations
+        - **PersistentVolumeClaim** : Pour les volumes (si utilisés)
+
+        Utilisable directement avec :
+        ```bash
+        kubectl apply -f ecommerce-k8s.yaml  # Sur Kubernetes
+        podman play kube ecommerce-k8s.yaml  # Sur Podman
+        ```
+
+    !!! warning "Limitations"
+        - Les pods Podman ne supportent pas tous les features K8s
+        - Les init containers sont supportés mais limités
+        - Les health checks doivent être configurés manuellement
+        - Les resource limits peuvent différer
 
 ---
 

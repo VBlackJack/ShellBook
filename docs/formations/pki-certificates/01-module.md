@@ -372,6 +372,109 @@ Manipuler les différents concepts avec OpenSSL.
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser les concepts cryptographiques fondamentaux et leur mise en œuvre avec OpenSSL
+
+    **Contexte** : Vous travaillez dans l'équipe sécurité d'une entreprise qui souhaite protéger des fichiers sensibles avant leur archivage. Vous devez comprendre et appliquer les différentes techniques cryptographiques pour garantir confidentialité et intégrité.
+
+    **Tâches à réaliser** :
+
+    1. Créez un fichier texte contenant des données sensibles (ex: "Données confidentielles de l'entreprise XYZ")
+    2. Calculez l'empreinte SHA-256 de ce fichier, puis modifiez un seul caractère et recalculez pour observer l'effet avalanche
+    3. Chiffrez le fichier avec AES-256-CBC en mode symétrique, vérifiez qu'il est illisible, puis déchiffrez-le
+    4. Générez une paire de clés RSA 4096 bits conforme aux recommandations ANSSI
+    5. Extrayez la clé publique et comparez les informations avec la clé privée
+
+    **Critères de validation** :
+
+    - [ ] Le hash SHA-256 change complètement même avec une modification mineure
+    - [ ] Le fichier chiffré en AES-256 est totalement illisible sans la clé
+    - [ ] Le déchiffrement restaure exactement le contenu original
+    - [ ] La clé RSA générée fait bien 4096 bits
+    - [ ] La clé publique ne contient que les paramètres (e, n) tandis que la privée contient tous les paramètres
+
+??? quote "Solution"
+    **Étape 1 : Création du fichier et calcul de hash**
+
+    ```bash
+    # Créer le fichier
+    echo "Données confidentielles de l'entreprise XYZ" > secret.txt
+
+    # Calculer le hash SHA-256
+    sha256sum secret.txt
+    # Ou avec OpenSSL
+    openssl dgst -sha256 secret.txt
+
+    # Modifier un caractère
+    echo "Données confidentielles de l'entreprise XYz" > secret.txt
+
+    # Recalculer le hash
+    sha256sum secret.txt
+    ```
+
+    **Observation** : L'empreinte SHA-256 change complètement, démontrant l'effet avalanche. Même une modification d'un seul bit produit un hash totalement différent.
+
+    **Étape 2 : Chiffrement symétrique AES-256**
+
+    ```bash
+    # Recréer le fichier original
+    echo "Données confidentielles de l'entreprise XYZ" > secret.txt
+
+    # Chiffrer avec AES-256-CBC
+    openssl enc -aes-256-cbc -salt -pbkdf2 -in secret.txt -out secret.enc
+    # Entrez un mot de passe fort quand demandé
+
+    # Vérifier que le fichier est illisible
+    cat secret.enc
+    # Affiche des caractères binaires illisibles
+
+    # Déchiffrer
+    openssl enc -d -aes-256-cbc -pbkdf2 -in secret.enc -out decrypted.txt
+    # Entrez le même mot de passe
+
+    # Vérifier le contenu
+    cat decrypted.txt
+    # Doit afficher : Données confidentielles de l'entreprise XYZ
+    ```
+
+    **Explication** : Le chiffrement AES-256 transforme les données en contenu binaire illisible. Seul le bon mot de passe permet de récupérer le contenu original. L'option `-pbkdf2` renforce la sécurité de la dérivation de clé.
+
+    **Étape 3 : Génération de clés RSA 4096 bits**
+
+    ```bash
+    # Générer la clé privée RSA 4096 bits
+    openssl genrsa -out private_rsa.pem 4096
+
+    # Vérifier la taille de la clé
+    openssl rsa -in private_rsa.pem -text -noout | head -1
+    # Doit afficher : Private-Key: (4096 bit, 2 primes)
+
+    # Extraire la clé publique
+    openssl rsa -in private_rsa.pem -pubout -out public_rsa.pem
+
+    # Examiner la clé privée (premiers 30 lignes)
+    openssl rsa -in private_rsa.pem -text -noout | head -30
+    # Contient : modulus (n), publicExponent (e), privateExponent (d),
+    # prime1 (p), prime2 (q), etc.
+
+    # Examiner la clé publique
+    openssl rsa -pubin -in public_rsa.pem -text -noout
+    # Contient uniquement : modulus (n) et Exponent (e)
+    ```
+
+    **Explication** : La clé privée contient tous les paramètres mathématiques nécessaires au chiffrement et au déchiffrement (notamment les nombres premiers p et q), tandis que la clé publique ne contient que le modulus n et l'exposant public e. C'est pourquoi la clé privée doit rester secrète.
+
+    **Points clés à retenir** :
+
+    - Le **hashing** (SHA-256) est irréversible et détecte toute modification
+    - Le **chiffrement symétrique** (AES-256) est rapide mais nécessite un partage sécurisé de la clé
+    - Le **chiffrement asymétrique** (RSA) utilise deux clés liées mathématiquement
+    - Les recommandations ANSSI (RSA 4096, SHA-256+, AES-256) garantissent une sécurité à long terme
+
+---
+
 ## 5. Quiz de Validation
 
 ??? question "Question 1 : Quelle est la différence entre chiffrement et hashing ?"

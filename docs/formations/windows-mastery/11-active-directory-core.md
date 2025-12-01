@@ -415,6 +415,257 @@ netdom trust corp.local /domain:partner.com /verify
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure Active Directory multi-site sécurisée
+
+    **Contexte** : Vous devez mettre en place l'Active Directory pour une entreprise avec 2 sites (Paris et Lyon). L'entreprise a 3 départements (IT, RH, Finance) et nécessite une structure organisée avec réplication entre sites.
+
+    **Tâches à réaliser** :
+
+    1. Créer la structure complète d'OU pour les 3 départements avec séparation Utilisateurs/Ordinateurs/Groupes
+    2. Créer 5 utilisateurs par département avec les propriétés appropriées (département, titre, email)
+    3. Créer les groupes globaux de sécurité pour chaque département et y ajouter les membres
+    4. Configurer un second DC pour la haute disponibilité
+    5. Créer un site AD "Lyon" avec le subnet 192.168.2.0/24 et configurer la réplication
+    6. Identifier et documenter les détenteurs de rôles FSMO
+    7. Vérifier la réplication AD entre les DC
+
+    **Critères de validation** :
+
+    - [ ] Structure d'OU créée avec protection contre la suppression accidentelle
+    - [ ] 15 utilisateurs créés et répartis dans les bonnes OU
+    - [ ] 3 groupes créés avec les bons membres
+    - [ ] Second DC opérationnel avec réplication fonctionnelle
+    - [ ] Site Lyon configuré avec lien de site (coût 100, réplication 15 min)
+    - [ ] Rapport `dcdiag` et `repadmin /replsummary` sans erreurs
+    - [ ] Les 5 rôles FSMO sont identifiés et documentés
+
+??? quote "Solution"
+    **Étape 1 : Structure d'OU et protection**
+
+    ```powershell
+    $baseDN = "DC=corp,DC=local"
+
+    # Créer la structure principale
+    New-ADOrganizationalUnit -Name "Corp" -Path $baseDN -ProtectedFromAccidentalDeletion $true
+
+    # Créer les OUs pour chaque type
+    $ouTypes = @("Users", "Computers", "Groups")
+    foreach ($type in $ouTypes) {
+        New-ADOrganizationalUnit -Name $type -Path "OU=Corp,$baseDN" `
+            -ProtectedFromAccidentalDeletion $true
+    }
+
+    # Créer les OUs départementales
+    $departments = @("IT", "RH", "Finance")
+    foreach ($dept in $departments) {
+        New-ADOrganizationalUnit -Name $dept -Path "OU=Users,OU=Corp,$baseDN" `
+            -ProtectedFromAccidentalDeletion $true
+    }
+    ```
+
+    **Étape 2 : Création des utilisateurs**
+
+    ```powershell
+    # Données des utilisateurs
+    $users = @(
+        # IT
+        @{First="Jean"; Last="Dupont"; Dept="IT"; Title="Administrateur"},
+        @{First="Marie"; Last="Martin"; Dept="IT"; Title="Technicien"},
+        @{First="Pierre"; Last="Bernard"; Dept="IT"; Title="Ingénieur"},
+        @{First="Sophie"; Last="Petit"; Dept="IT"; Title="Analyste"},
+        @{First="Luc"; Last="Moreau"; Dept="IT"; Title="Chef de projet"},
+        # RH
+        @{First="Julie"; Last="Leroy"; Dept="RH"; Title="Responsable RH"},
+        @{First="Thomas"; Last="Simon"; Dept="RH"; Title="Assistant RH"},
+        @{First="Claire"; Last="Laurent"; Dept="RH"; Title="Recruteur"},
+        @{First="Nicolas"; Last="Michel"; Dept="RH"; Title="Gestionnaire paie"},
+        @{First="Emma"; Last="Garcia"; Dept="RH"; Title="Chargé formation"},
+        # Finance
+        @{First="Paul"; Last="Roux"; Dept="Finance"; Title="Contrôleur financier"},
+        @{First="Anne"; Last="Fournier"; Dept="Finance"; Title="Comptable"},
+        @{First="Marc"; Last="Girard"; Dept="Finance"; Title="Analyste financier"},
+        @{First="Laura"; Last="Bonnet"; Dept="Finance"; Title="Trésorier"},
+        @{First="David"; Last="Blanc"; Dept="Finance"; Title="Auditeur"}
+    )
+
+    foreach ($user in $users) {
+        $sam = ($user.First[0] + $user.Last).ToLower()
+        $upn = "$sam@corp.local"
+        $path = "OU=$($user.Dept),OU=Users,OU=Corp,$baseDN"
+
+        New-ADUser -Name "$($user.First) $($user.Last)" `
+                   -GivenName $user.First `
+                   -Surname $user.Last `
+                   -SamAccountName $sam `
+                   -UserPrincipalName $upn `
+                   -EmailAddress $upn `
+                   -Department $user.Dept `
+                   -Title $user.Title `
+                   -Path $path `
+                   -AccountPassword (ConvertTo-SecureString "P@ssw0rd123!" -AsPlainText -Force) `
+                   -Enabled $true `
+                   -ChangePasswordAtLogon $true
+
+        Write-Host "Utilisateur créé: $($user.First) $($user.Last) ($sam)"
+    }
+    ```
+
+    **Étape 3 : Création des groupes et ajout des membres**
+
+    ```powershell
+    $departments = @("IT", "RH", "Finance")
+
+    foreach ($dept in $departments) {
+        # Créer le groupe
+        $groupName = "GRP-$dept"
+        New-ADGroup -Name $groupName `
+                    -GroupScope Global `
+                    -GroupCategory Security `
+                    -Path "OU=Groups,OU=Corp,$baseDN" `
+                    -Description "Groupe de sécurité pour le département $dept"
+
+        # Récupérer et ajouter les utilisateurs du département
+        $deptUsers = Get-ADUser -Filter "Department -eq '$dept'" -SearchBase "OU=$dept,OU=Users,OU=Corp,$baseDN"
+        foreach ($user in $deptUsers) {
+            Add-ADGroupMember -Identity $groupName -Members $user.SamAccountName
+        }
+
+        Write-Host "Groupe $groupName créé avec $($deptUsers.Count) membres"
+    }
+    ```
+
+    **Étape 4 : Configuration du second DC**
+
+    ```powershell
+    # Sur le serveur DC02
+    Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+    # Promouvoir comme DC supplémentaire
+    $credential = Get-Credential "CORP\Administrator"
+    $securePassword = ConvertTo-SecureString "P@ssw0rd123!" -AsPlainText -Force
+
+    Install-ADDSDomainController `
+        -DomainName "corp.local" `
+        -Credential $credential `
+        -InstallDns:$true `
+        -SafeModeAdministratorPassword $securePassword `
+        -Force:$true
+
+    # Le serveur redémarrera automatiquement
+    ```
+
+    **Étape 5 : Configuration du site Lyon**
+
+    ```powershell
+    # Créer le site
+    New-ADReplicationSite -Name "Lyon"
+
+    # Créer le subnet
+    New-ADReplicationSubnet -Name "192.168.2.0/24" -Site "Lyon"
+
+    # Créer le lien de site
+    New-ADReplicationSiteLink -Name "Paris-Lyon" `
+        -SitesIncluded "Default-First-Site-Name", "Lyon" `
+        -Cost 100 `
+        -ReplicationFrequencyInMinutes 15
+
+    # Vérifier la configuration
+    Get-ADReplicationSite -Filter *
+    Get-ADReplicationSubnet -Filter *
+    Get-ADReplicationSiteLink -Filter *
+    ```
+
+    **Étape 6 : Identification des rôles FSMO**
+
+    ```powershell
+    # Afficher tous les rôles FSMO
+    Write-Host "`n=== RÔLES FSMO AU NIVEAU FORÊT ===" -ForegroundColor Cyan
+    $forest = Get-ADForest
+    Write-Host "Schema Master: $($forest.SchemaMaster)"
+    Write-Host "Domain Naming Master: $($forest.DomainNamingMaster)"
+
+    Write-Host "`n=== RÔLES FSMO AU NIVEAU DOMAINE ===" -ForegroundColor Cyan
+    $domain = Get-ADDomain
+    Write-Host "PDC Emulator: $($domain.PDCEmulator)"
+    Write-Host "RID Master: $($domain.RIDMaster)"
+    Write-Host "Infrastructure Master: $($domain.InfrastructureMaster)"
+
+    # Ou utiliser netdom
+    netdom query fsmo
+    ```
+
+    **Étape 7 : Vérification de la réplication**
+
+    ```powershell
+    # Résumé de la réplication
+    repadmin /replsummary
+
+    # État détaillé de la réplication
+    repadmin /showrepl
+
+    # Diagnostic complet
+    dcdiag /v
+
+    # Test spécifique de la réplication
+    dcdiag /test:replications
+
+    # Forcer la réplication si nécessaire
+    repadmin /syncall /APed
+
+    # Vérifier que tous les objets sont répliqués
+    $dc1Objects = (Get-ADUser -Filter * -Server "DC01").Count
+    $dc2Objects = (Get-ADUser -Filter * -Server "DC02").Count
+
+    Write-Host "`nNombre d'utilisateurs sur DC01: $dc1Objects"
+    Write-Host "Nombre d'utilisateurs sur DC02: $dc2Objects"
+
+    if ($dc1Objects -eq $dc2Objects) {
+        Write-Host "✓ Réplication validée" -ForegroundColor Green
+    } else {
+        Write-Host "✗ Problème de réplication détecté" -ForegroundColor Red
+    }
+    ```
+
+    **Rapport de validation final**
+
+    ```powershell
+    # Script de validation complète
+    Write-Host "`n=== RAPPORT DE VALIDATION ===" -ForegroundColor Yellow
+
+    # OUs
+    $ouCount = (Get-ADOrganizationalUnit -Filter * -SearchBase "OU=Corp,$baseDN").Count
+    Write-Host "OUs créées: $ouCount (attendu: 7+)"
+
+    # Utilisateurs
+    $userCount = (Get-ADUser -Filter * -SearchBase "OU=Users,OU=Corp,$baseDN").Count
+    Write-Host "Utilisateurs créés: $userCount (attendu: 15)"
+
+    # Groupes
+    $groupCount = (Get-ADGroup -Filter * -SearchBase "OU=Groups,OU=Corp,$baseDN").Count
+    Write-Host "Groupes créés: $groupCount (attendu: 3)"
+
+    # DCs
+    $dcCount = (Get-ADDomainController -Filter *).Count
+    Write-Host "Domain Controllers: $dcCount (attendu: 2+)"
+
+    # Sites
+    $siteCount = (Get-ADReplicationSite -Filter *).Count
+    Write-Host "Sites AD: $siteCount (attendu: 2)"
+
+    # Réplication
+    $replStatus = repadmin /replsummary
+    if ($replStatus -match "0 / ") {
+        Write-Host "✓ Réplication: OK" -ForegroundColor Green
+    } else {
+        Write-Host "⚠ Réplication: À vérifier" -ForegroundColor Yellow
+    }
+    ```
+
+---
+
 ## Quiz
 
 1. **Combien de Schema Masters par forêt ?**

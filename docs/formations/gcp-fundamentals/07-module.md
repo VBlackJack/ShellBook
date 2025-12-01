@@ -854,6 +854,214 @@ steps:
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place un pipeline CI/CD complet avec Cloud Build, Artifact Registry et déploiement automatique sur Cloud Run
+
+    **Contexte** : Vous devez automatiser le déploiement d'une application web conteneurisée. À chaque push sur la branche `main`, l'application doit être buildée, testée, son image stockée dans Artifact Registry, et déployée automatiquement sur Cloud Run en production.
+
+    **Tâches à réaliser** :
+
+    1. Créer un repository Artifact Registry `cicd-repo` pour Docker
+    2. Créer une application web simple (Node.js ou Python) avec un Dockerfile
+    3. Builder l'image manuellement et la pousser dans Artifact Registry
+    4. Déployer manuellement sur Cloud Run pour valider l'image
+    5. Créer un fichier `cloudbuild.yaml` avec 4 étapes :
+        - Build de l'image Docker
+        - Push vers Artifact Registry
+        - Tests (basiques)
+        - Déploiement sur Cloud Run
+    6. Créer un Build Trigger lié à un repository GitHub/Cloud Source
+    7. Effectuer un push et vérifier le déploiement automatique
+    8. Configurer une deuxième révision avec traffic splitting (50/50)
+
+    **Critères de validation** :
+
+    - [ ] Artifact Registry repository créé
+    - [ ] Image Docker buildée et poussée
+    - [ ] Application déployée sur Cloud Run
+    - [ ] Fichier `cloudbuild.yaml` fonctionnel avec toutes les étapes
+    - [ ] Build trigger configuré
+    - [ ] Pipeline déclenché automatiquement au push
+    - [ ] Traffic splitting configuré entre deux révisions
+    - [ ] Logs du build accessibles et sans erreur
+
+??? quote "Solution"
+    ```bash
+    # 1. Créer Artifact Registry
+    REGION="europe-west1"
+    PROJECT_ID=$(gcloud config get-value project)
+
+    gcloud artifacts repositories create cicd-repo \
+        --repository-format=docker \
+        --location=$REGION \
+        --description="CI/CD Pipeline Repository"
+
+    gcloud auth configure-docker ${REGION}-docker.pkg.dev
+
+    # 2. Créer l'application
+    mkdir my-cicd-app && cd my-cicd-app
+
+    cat > app.js << 'EOF'
+    const express = require('express');
+    const app = express();
+    const PORT = process.env.PORT || 8080;
+
+    app.get('/', (req, res) => {
+        res.json({
+            message: 'Hello from CI/CD Pipeline!',
+            version: process.env.VERSION || '1.0',
+            timestamp: new Date().toISOString()
+        });
+    });
+
+    app.get('/health', (req, res) => res.json({ status: 'healthy' }));
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+    EOF
+
+    cat > package.json << 'EOF'
+    {
+      "name": "cicd-app",
+      "version": "1.0.0",
+      "main": "app.js",
+      "scripts": {
+        "start": "node app.js",
+        "test": "echo 'Tests passed!'"
+      },
+      "dependencies": {
+        "express": "^4.18.0"
+      }
+    }
+    EOF
+
+    cat > Dockerfile << 'EOF'
+    FROM node:18-alpine
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm install --production
+    COPY . .
+    EXPOSE 8080
+    CMD ["npm", "start"]
+    EOF
+
+    # 3. Build et push manuel
+    IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/cicd-repo/myapp:v1"
+
+    gcloud builds submit --tag=$IMAGE
+
+    # 4. Déployer sur Cloud Run
+    gcloud run deploy myapp \
+        --image=$IMAGE \
+        --region=$REGION \
+        --platform=managed \
+        --allow-unauthenticated \
+        --port=8080
+
+    # Tester
+    URL=$(gcloud run services describe myapp --region=$REGION --format="get(status.url)")
+    curl $URL
+
+    # 5. Créer cloudbuild.yaml
+    cat > cloudbuild.yaml << 'EOF'
+    steps:
+      # Step 1: Build
+      - id: 'build'
+        name: 'gcr.io/cloud-builders/docker'
+        args: [
+          'build',
+          '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp:$SHORT_SHA',
+          '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp:latest',
+          '.'
+        ]
+
+      # Step 2: Push
+      - id: 'push'
+        name: 'gcr.io/cloud-builders/docker'
+        args: [
+          'push',
+          '--all-tags',
+          '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp'
+        ]
+
+      # Step 3: Test
+      - id: 'test'
+        name: 'node:18-alpine'
+        entrypoint: 'sh'
+        args:
+          - '-c'
+          - |
+            npm install
+            npm test
+
+      # Step 4: Deploy
+      - id: 'deploy'
+        name: 'gcr.io/cloud-builders/gcloud'
+        args: [
+          'run', 'deploy', 'myapp',
+          '--image', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp:$SHORT_SHA',
+          '--region', '${_REGION}',
+          '--platform', 'managed',
+          '--allow-unauthenticated'
+        ]
+
+    substitutions:
+      _REGION: europe-west1
+      _REPO: cicd-repo
+
+    images:
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp:$SHORT_SHA'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/myapp:latest'
+
+    options:
+      logging: CLOUD_LOGGING_ONLY
+    EOF
+
+    # 6. Créer un trigger (si repository Git disponible)
+    # gcloud builds triggers create github \
+    #     --repo-name=my-repo \
+    #     --repo-owner=my-github \
+    #     --branch-pattern="^main$" \
+    #     --build-config=cloudbuild.yaml
+
+    # Alternative: Build manuel avec cloudbuild.yaml
+    gcloud builds submit --config=cloudbuild.yaml
+
+    # 7. Traffic splitting (v1 vs v2)
+    # Modifier app.js avec version 2.0
+    sed -i "s/version: '1.0'/version: '2.0'/g" app.js
+
+    # Build v2
+    IMAGE_V2="${REGION}-docker.pkg.dev/${PROJECT_ID}/cicd-repo/myapp:v2"
+    gcloud builds submit --tag=$IMAGE_V2
+
+    # Déployer v2 sans traffic
+    gcloud run deploy myapp \
+        --image=$IMAGE_V2 \
+        --region=$REGION \
+        --no-traffic \
+        --tag=v2
+
+    # Split traffic 50/50
+    gcloud run services update-traffic myapp \
+        --region=$REGION \
+        --to-revisions=LATEST=50,v2=50
+
+    # Validation
+    echo "=== VALIDATION ==="
+    gcloud run services describe myapp --region=$REGION
+    gcloud builds list --limit=5
+
+    echo ""
+    echo "✅ Pipeline CI/CD configuré!"
+    echo "URL: $URL"
+    ```
+
+---
+
 ## 9. Nettoyage
 
 ```bash

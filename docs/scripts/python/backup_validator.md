@@ -28,6 +28,26 @@ Ce script valide la qualité des sauvegardes :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `rich`, `pyyaml`
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Droits de lecture sur les répertoires de backup
+- **Espace disque** : Espace temporaire pour les tests d'extraction (si activés)
+
+---
+
+## Cas d'Usage
+
+- **Audit de conformité** : Vérification régulière que les backups respectent les politiques de rétention et d'intégrité
+- **Monitoring production** : Validation automatique de la présence et validité des sauvegardes critiques
+- **Disaster Recovery Planning** : Tests de restauration à blanc pour garantir la récupérabilité des données
+- **Détection de corruption** : Identification précoce des archives corrompues avant qu'elles ne soient nécessaires
+- **Intégration CI/CD** : Validation post-backup dans les pipelines d'automatisation avec alertes en cas d'échec
+
+---
+
 ## Dépendances
 
 ```bash

@@ -537,6 +537,283 @@ Déployer une PKI 2-tiers complète avec OpenSSL.
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure PKI 2-tiers complète avec gestion de la révocation
+
+    **Contexte** : Votre entreprise souhaite déployer une PKI interne pour sécuriser ses serveurs web et applications. Vous devez mettre en place une architecture 2-tiers avec une Root CA offline et une Issuing CA online, puis gérer le cycle de vie complet des certificats.
+
+    **Tâches à réaliser** :
+
+    1. Créez la structure complète de la PKI (répertoires, fichiers de configuration)
+    2. Déployez une Root CA offline (validité 20 ans, RSA 4096, protégée par passphrase)
+    3. Créez une Issuing CA (Sub-CA) et faites-la signer par la Root CA (validité 10 ans)
+    4. Construisez la chaîne de certificats complète
+    5. Émettez un certificat serveur pour `web.lab.local` (avec SANs) signé par l'Issuing CA
+    6. Générez une CRL (Certificate Revocation List)
+    7. Révoquez un certificat pour cause de compromission et mettez à jour la CRL
+    8. Vérifiez la chaîne de confiance complète
+
+    **Critères de validation** :
+
+    - [ ] La Root CA est créée avec les bons paramètres (RSA 4096, SHA-384, 20 ans)
+    - [ ] L'Issuing CA est correctement signée par la Root CA
+    - [ ] La chaîne de certificats est valide et complète
+    - [ ] Le certificat serveur contient les bonnes extensions (serverAuth, SANs)
+    - [ ] La CRL est générée et contient les certificats révoqués
+    - [ ] La commande `openssl verify` valide toute la chaîne
+
+??? quote "Solution"
+    **Étape 1 : Créer la structure de la PKI**
+
+    ```bash
+    # Créer l'arborescence complète
+    sudo mkdir -p /opt/ca/{root,intermediate}
+    sudo mkdir -p /opt/ca/root/{certs,crl,newcerts,private,csr}
+    sudo mkdir -p /opt/ca/intermediate/{certs,crl,newcerts,private,csr}
+
+    # Permissions sécurisées pour les clés privées
+    sudo chmod 700 /opt/ca/root/private
+    sudo chmod 700 /opt/ca/intermediate/private
+
+    # Fichiers de suivi OpenSSL
+    sudo touch /opt/ca/root/index.txt
+    sudo touch /opt/ca/intermediate/index.txt
+    echo 1000 | sudo tee /opt/ca/root/serial
+    echo 1000 | sudo tee /opt/ca/intermediate/serial
+    echo 1000 | sudo tee /opt/ca/root/crlnumber
+    echo 1000 | sudo tee /opt/ca/intermediate/crlnumber
+    ```
+
+    **Étape 2 : Créer la Root CA**
+
+    ```bash
+    # Copier la configuration depuis le module 3, section 2.2
+    # Ou créer une configuration minimale
+    cd /opt/ca/root
+
+    # Générer la clé privée Root (TRÈS IMPORTANTE - À PROTÉGER)
+    sudo openssl genrsa -aes256 -out private/ca.key 4096
+    sudo chmod 400 private/ca.key
+
+    # Créer le certificat Root CA (validité 20 ans = 7300 jours)
+    sudo openssl req -new -x509 -days 7300 -sha384 \
+        -key private/ca.key \
+        -out certs/ca.crt \
+        -subj "/C=FR/ST=Ile-de-France/L=Paris/O=Lab Corp/OU=PKI/CN=Lab Root CA"
+
+    # Vérifier le certificat Root
+    openssl x509 -in certs/ca.crt -text -noout | grep -E "(Subject:|Issuer:|Not After)"
+    # Subject et Issuer doivent être identiques (auto-signé)
+    ```
+
+    **Étape 3 : Créer l'Issuing CA (Sub-CA)**
+
+    ```bash
+    cd /opt/ca/intermediate
+
+    # Générer la clé privée de l'Issuing CA
+    sudo openssl genrsa -aes256 -out private/intermediate.key 4096
+    sudo chmod 400 private/intermediate.key
+
+    # Créer le CSR pour l'Issuing CA
+    sudo openssl req -new -sha384 \
+        -key private/intermediate.key \
+        -out csr/intermediate.csr \
+        -subj "/C=FR/ST=Ile-de-France/L=Paris/O=Lab Corp/OU=PKI/CN=Lab Issuing CA"
+
+    # Vérifier le CSR
+    openssl req -in csr/intermediate.csr -text -noout
+    ```
+
+    **Étape 4 : Signer l'Issuing CA avec la Root CA**
+
+    ```bash
+    # Retour à la Root CA pour signer
+    cd /opt/ca/root
+
+    # Créer une extension pour Sub-CA
+    cat > v3_intermediate.ext << 'EOF'
+    subjectKeyIdentifier = hash
+    authorityKeyIdentifier = keyid:always,issuer
+    basicConstraints = critical, CA:true, pathlen:0
+    keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+    EOF
+
+    # Signer le CSR (validité 10 ans = 3650 jours)
+    sudo openssl x509 -req -days 3650 -sha384 \
+        -in ../intermediate/csr/intermediate.csr \
+        -CA certs/ca.crt \
+        -CAkey private/ca.key \
+        -CAcreateserial \
+        -out ../intermediate/certs/intermediate.crt \
+        -extfile v3_intermediate.ext
+
+    # Vérifier la signature
+    openssl verify -CAfile certs/ca.crt ../intermediate/certs/intermediate.crt
+    # Doit afficher : OK
+    ```
+
+    **Étape 5 : Créer la chaîne de certificats**
+
+    ```bash
+    # La chaîne = Intermediate + Root
+    cd /opt/ca/intermediate
+    sudo cat certs/intermediate.crt ../root/certs/ca.crt > certs/ca-chain.crt
+
+    # Vérifier la chaîne
+    openssl verify -CAfile certs/ca-chain.crt certs/intermediate.crt
+    ```
+
+    **Étape 6 : Émettre un certificat serveur**
+
+    ```bash
+    cd /opt/ca/intermediate
+
+    # Générer la clé du serveur web
+    sudo openssl genrsa -out private/web.lab.local.key 4096
+
+    # Créer la configuration CSR avec SANs
+    cat > csr/web.lab.local.cnf << 'EOF'
+    [req]
+    distinguished_name = req_distinguished_name
+    req_extensions = req_ext
+    prompt = no
+
+    [req_distinguished_name]
+    CN = web.lab.local
+
+    [req_ext]
+    subjectAltName = @alt_names
+
+    [alt_names]
+    DNS.1 = web.lab.local
+    DNS.2 = www.lab.local
+    DNS.3 = api.lab.local
+    EOF
+
+    # Créer le CSR
+    sudo openssl req -new \
+        -key private/web.lab.local.key \
+        -out csr/web.lab.local.csr \
+        -config csr/web.lab.local.cnf
+
+    # Extensions pour certificat serveur
+    cat > server_cert.ext << 'EOF'
+    basicConstraints = CA:FALSE
+    keyUsage = critical, digitalSignature, keyEncipherment
+    extendedKeyUsage = serverAuth
+    subjectAltName = DNS:web.lab.local, DNS:www.lab.local, DNS:api.lab.local
+    EOF
+
+    # Signer le certificat serveur (365 jours)
+    sudo openssl x509 -req -days 365 -sha384 \
+        -in csr/web.lab.local.csr \
+        -CA certs/intermediate.crt \
+        -CAkey private/intermediate.key \
+        -CAcreateserial \
+        -out certs/web.lab.local.crt \
+        -extfile server_cert.ext
+
+    # Vérifier le certificat avec la chaîne complète
+    openssl verify -CAfile certs/ca-chain.crt certs/web.lab.local.crt
+    # Doit afficher : web.lab.local.crt: OK
+    ```
+
+    **Étape 7 : Générer la CRL**
+
+    ```bash
+    cd /opt/ca/intermediate
+
+    # Créer la configuration CRL minimale
+    cat > crl.cnf << 'EOF'
+    [ca]
+    default_ca = CA_default
+
+    [CA_default]
+    dir = /opt/ca/intermediate
+    database = $dir/index.txt
+    certificate = $dir/certs/intermediate.crt
+    private_key = $dir/private/intermediate.key
+    crlnumber = $dir/crlnumber
+    crl = $dir/crl/intermediate.crl
+    default_crl_days = 30
+    default_md = sha384
+    EOF
+
+    # Générer la première CRL
+    sudo openssl ca -config crl.cnf -gencrl -out crl/intermediate.crl
+
+    # Vérifier la CRL
+    openssl crl -in crl/intermediate.crl -text -noout
+    ```
+
+    **Étape 8 : Révoquer un certificat**
+
+    ```bash
+    # Simuler un certificat compromis
+    # D'abord, créer un second certificat pour le test
+    sudo openssl genrsa -out private/compromised.key 4096
+    sudo openssl req -new -key private/compromised.key -out csr/compromised.csr \
+        -subj "/CN=compromised.lab.local"
+
+    cat > compromised.ext << 'EOF'
+    basicConstraints = CA:FALSE
+    keyUsage = digitalSignature, keyEncipherment
+    extendedKeyUsage = serverAuth
+    EOF
+
+    sudo openssl x509 -req -days 365 -sha384 \
+        -in csr/compromised.csr \
+        -CA certs/intermediate.crt \
+        -CAkey private/intermediate.key \
+        -CAcreateserial \
+        -out certs/compromised.crt \
+        -extfile compromised.ext
+
+    # Ajouter à la base de données OpenSSL
+    SERIAL=$(openssl x509 -in certs/compromised.crt -serial -noout | cut -d= -f2)
+    echo "V	$(date -d '+365 days' '+%y%m%d%H%M%SZ')		$SERIAL	unknown	/CN=compromised.lab.local" | sudo tee -a index.txt
+
+    # Révoquer le certificat pour cause de compromission
+    sudo openssl ca -config crl.cnf -revoke certs/compromised.crt -crl_reason keyCompromise
+
+    # Régénérer la CRL avec le certificat révoqué
+    sudo openssl ca -config crl.cnf -gencrl -out crl/intermediate.crl
+
+    # Vérifier que le certificat est dans la CRL
+    openssl crl -in crl/intermediate.crl -text -noout | grep -A2 "Serial Number"
+    ```
+
+    **Étape 9 : Vérifications finales**
+
+    ```bash
+    # Vérifier toute la chaîne de confiance
+    openssl verify -CAfile /opt/ca/intermediate/certs/ca-chain.crt \
+        /opt/ca/intermediate/certs/web.lab.local.crt
+    # Résultat attendu : OK
+
+    # Vérifier les détails du certificat serveur
+    openssl x509 -in /opt/ca/intermediate/certs/web.lab.local.crt -text -noout | \
+        grep -E "(Subject:|Issuer:|DNS:|Extended Key Usage)"
+
+    # Vérifier la CRL
+    openssl crl -in /opt/ca/intermediate/crl/intermediate.crl -text -noout | \
+        grep -E "(Issuer:|Last Update|Next Update|Serial Number)"
+    ```
+
+    **Points clés à retenir** :
+
+    - La **Root CA** reste offline après la création de la Sub-CA (air-gapped security)
+    - L'**Issuing CA** (Sub-CA) émet tous les certificats au quotidien
+    - La **chaîne de certificats** doit contenir Intermediate + Root pour validation complète
+    - La **CRL** doit être régénérée après chaque révocation et publiée
+    - Le paramètre `pathlen:0` empêche l'Issuing CA de signer d'autres CA (sécurité)
+    - En production, automatisez la génération CRL avec un cron toutes les 6-12h
+
+---
+
 ## Résumé
 
 | Composant | Outil | Validité |

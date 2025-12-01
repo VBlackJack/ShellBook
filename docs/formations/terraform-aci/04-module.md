@@ -1130,6 +1130,316 @@ Operations > Visibility and Troubleshooting > Contract Viewer
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Implémenter la sécurité réseau pour une architecture 3-tiers avec Contracts et Filters
+
+    **Contexte** : Vous avez créé l'infrastructure réseau au Module 3 (Tenant, VRF, BDs, EPGs). Maintenant, vous devez autoriser les flux applicatifs tout en respectant le principe du moindre privilège. L'application web nécessite : HTTP/HTTPS depuis Internet vers Web, API (port 8080) de Web vers App, et PostgreSQL (port 5432) d'App vers Database. Vous devez également bloquer l'accès direct de Web vers Database avec un Taboo Contract.
+
+    **Tâches à réaliser** :
+
+    1. Créer les Filters nécessaires : http (80), https (443), api (8080), postgresql (5432)
+    2. Créer 3 Contracts : web-to-app, app-to-db, internet-to-web
+    3. Associer les EPGs en tant que Consumer/Provider selon le flux
+    4. Créer un Taboo Contract pour bloquer Web → Database
+    5. Documenter la matrice de flux en outputs
+
+    **Critères de validation** :
+
+    - [ ] Tous les Filters sont stateful avec les bons ports
+    - [ ] Chaque Contract a un Subject avec les Filters appropriés
+    - [ ] Les EPGs ont les bons rôles (consumer/provider)
+    - [ ] Le Taboo Contract bloque effectivement Web → Database
+    - [ ] Les outputs affichent clairement la matrice de sécurité
+
+??? quote "Solution"
+
+    **security.tf**
+
+    ```hcl
+    # =============================
+    # FILTERS
+    # =============================
+
+    # Filter HTTP
+    resource "aci_filter" "http" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-http"
+    }
+
+    resource "aci_filter_entry" "http" {
+      filter_dn   = aci_filter.http.id
+      name        = "http"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "80"
+      d_to_port   = "80"
+      stateful    = "yes"
+    }
+
+    # Filter HTTPS
+    resource "aci_filter" "https" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-https"
+    }
+
+    resource "aci_filter_entry" "https" {
+      filter_dn   = aci_filter.https.id
+      name        = "https"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "443"
+      d_to_port   = "443"
+      stateful    = "yes"
+    }
+
+    # Filter API (8080)
+    resource "aci_filter" "api" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-api"
+    }
+
+    resource "aci_filter_entry" "api" {
+      filter_dn   = aci_filter.api.id
+      name        = "api-8080"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "8080"
+      d_to_port   = "8080"
+      stateful    = "yes"
+    }
+
+    # Filter PostgreSQL
+    resource "aci_filter" "postgresql" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-postgresql"
+    }
+
+    resource "aci_filter_entry" "postgresql" {
+      filter_dn   = aci_filter.postgresql.id
+      name        = "postgresql"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "5432"
+      d_to_port   = "5432"
+      stateful    = "yes"
+    }
+
+    # =============================
+    # CONTRACTS
+    # =============================
+
+    # Contract : Internet → Web (HTTP/HTTPS)
+    resource "aci_contract" "internet_to_web" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "internet-to-web"
+      scope     = "context"  # VRF scope
+    }
+
+    resource "aci_contract_subject" "internet_to_web" {
+      contract_dn   = aci_contract.internet_to_web.id
+      name          = "http-https"
+      rev_flt_ports = "yes"
+    }
+
+    resource "aci_contract_subject_filter" "internet_to_web_http" {
+      contract_subject_dn = aci_contract_subject.internet_to_web.id
+      filter_dn           = aci_filter.http.id
+    }
+
+    resource "aci_contract_subject_filter" "internet_to_web_https" {
+      contract_subject_dn = aci_contract_subject.internet_to_web.id
+      filter_dn           = aci_filter.https.id
+    }
+
+    # Contract : Web → App (API)
+    resource "aci_contract" "web_to_app" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "web-to-app"
+      scope     = "context"
+    }
+
+    resource "aci_contract_subject" "web_to_app" {
+      contract_dn   = aci_contract.web_to_app.id
+      name          = "api-calls"
+      rev_flt_ports = "yes"
+    }
+
+    resource "aci_contract_subject_filter" "web_to_app_api" {
+      contract_subject_dn = aci_contract_subject.web_to_app.id
+      filter_dn           = aci_filter.api.id
+    }
+
+    # Contract : App → Database (PostgreSQL)
+    resource "aci_contract" "app_to_db" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "app-to-db"
+      scope     = "context"
+    }
+
+    resource "aci_contract_subject" "app_to_db" {
+      contract_dn   = aci_contract.app_to_db.id
+      name          = "database-access"
+      rev_flt_ports = "yes"
+    }
+
+    resource "aci_contract_subject_filter" "app_to_db_postgres" {
+      contract_subject_dn = aci_contract_subject.app_to_db.id
+      filter_dn           = aci_filter.postgresql.id
+    }
+
+    # =============================
+    # CONTRACT ASSOCIATIONS
+    # =============================
+
+    # Web EPG : Provider pour Internet, Consumer pour App
+    resource "aci_epg_to_contract" "web_provider_internet" {
+      application_epg_dn = aci_application_epg.web.id
+      contract_dn        = aci_contract.internet_to_web.id
+      contract_type      = "provider"
+    }
+
+    resource "aci_epg_to_contract" "web_consumer_app" {
+      application_epg_dn = aci_application_epg.web.id
+      contract_dn        = aci_contract.web_to_app.id
+      contract_type      = "consumer"
+    }
+
+    # App EPG : Provider pour Web, Consumer pour Database
+    resource "aci_epg_to_contract" "app_provider_web" {
+      application_epg_dn = aci_application_epg.app.id
+      contract_dn        = aci_contract.web_to_app.id
+      contract_type      = "provider"
+    }
+
+    resource "aci_epg_to_contract" "app_consumer_db" {
+      application_epg_dn = aci_application_epg.app.id
+      contract_dn        = aci_contract.app_to_db.id
+      contract_type      = "consumer"
+    }
+
+    # Database EPG : Provider pour App
+    resource "aci_epg_to_contract" "db_provider_app" {
+      application_epg_dn = aci_application_epg.database.id
+      contract_dn        = aci_contract.app_to_db.id
+      contract_type      = "provider"
+    }
+
+    # =============================
+    # TABOO CONTRACT (Blocage)
+    # =============================
+
+    # Taboo : Bloquer l'accès direct Web → Database
+    resource "aci_taboo_contract" "block_web_to_db" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "taboo-block-web-to-db"
+      description = "Empêche l'accès direct de Web vers Database (defense in depth)"
+    }
+
+    resource "aci_taboo_contract_subject" "block_web_to_db" {
+      taboo_contract_dn = aci_taboo_contract.block_web_to_db.id
+      name              = "block-postgres"
+    }
+
+    resource "aci_taboo_contract_subject_filter" "block_web_to_db_postgres" {
+      taboo_contract_subject_dn = aci_taboo_contract_subject.block_web_to_db.id
+      filter_dn                 = aci_filter.postgresql.id
+    }
+
+    # Appliquer le Taboo à l'EPG Database
+    resource "aci_epg_to_contract" "db_taboo_web" {
+      application_epg_dn = aci_application_epg.database.id
+      contract_dn        = aci_taboo_contract.block_web_to_db.id
+      contract_type      = "taboo"
+    }
+    ```
+
+    **security-outputs.tf**
+
+    ```hcl
+    output "contracts" {
+      description = "Liste des contracts créés"
+      value = {
+        internet_to_web = {
+          name     = aci_contract.internet_to_web.name
+          scope    = aci_contract.internet_to_web.scope
+          filters  = ["http (80)", "https (443)"]
+        }
+        web_to_app = {
+          name     = aci_contract.web_to_app.name
+          scope    = aci_contract.web_to_app.scope
+          filters  = ["api (8080)"]
+        }
+        app_to_db = {
+          name     = aci_contract.app_to_db.name
+          scope    = aci_contract.app_to_db.scope
+          filters  = ["postgresql (5432)"]
+        }
+      }
+    }
+
+    output "flow_matrix" {
+      description = "Matrice des flux autorisés"
+      value = {
+        "Internet → Web" = {
+          contract = "internet-to-web"
+          ports    = "80, 443"
+          status   = "ALLOWED"
+        }
+        "Web → App" = {
+          contract = "web-to-app"
+          ports    = "8080"
+          status   = "ALLOWED"
+        }
+        "App → Database" = {
+          contract = "app-to-db"
+          ports    = "5432"
+          status   = "ALLOWED"
+        }
+        "Web → Database" = {
+          contract = "taboo-block-web-to-db"
+          ports    = "5432"
+          status   = "BLOCKED"
+        }
+      }
+    }
+
+    output "security_summary" {
+      description = "Résumé de la configuration de sécurité"
+      value = {
+        enforcement_mode = "Whitelist (deny all by default)"
+        total_contracts  = 3
+        total_filters    = 4
+        taboo_contracts  = 1
+        security_model   = "Least privilege with defense in depth"
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    # Plan de déploiement
+    terraform plan
+
+    # Application
+    terraform apply
+
+    # Vérification de la matrice de flux
+    terraform output flow_matrix
+    ```
+
+    **Résultat attendu :**
+
+    La sécurité réseau est configurée avec :
+    - Flux applicatifs autorisés via Contracts (Internet→Web→App→DB)
+    - Principe du moindre privilège : seuls les ports nécessaires
+    - Defense in depth : Taboo bloque Web→Database même si un Contract existait
+    - Modèle whitelist : tout est bloqué par défaut
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

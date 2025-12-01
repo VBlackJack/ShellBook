@@ -1,3 +1,11 @@
+---
+tags:
+  - devops
+  - automation
+  - containers
+  - infrastructure-as-code
+---
+
 # DevOps & Automatisation
 
 Pratiques DevOps, conteneurisation, orchestration et Infrastructure as Code.

@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - sql-server
+  - powershell
+  - dbatools
+  - automation
+  - module
+---
+
 # Module 4 : Automatisation - La Puissance de dbatools
 
 ## Introduction

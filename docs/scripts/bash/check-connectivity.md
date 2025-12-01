@@ -25,6 +25,23 @@ Ce script vérifie la connectivité réseau :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis)
+- **Dépendances** : `ping`, `ip`, `nslookup`, `curl` (optionnel)
+
+---
+
+## Cas d'Usage
+
+- **Diagnostic de connexion** : Test rapide de la connectivité lors de problèmes réseau
+- **Validation post-installation** : Vérification que la configuration réseau fonctionne correctement
+- **Monitoring automatisé** : Intégration dans des systèmes de surveillance pour alertes réseau
+- **Troubleshooting utilisateur** : Script simple pour support technique de premier niveau
+
+---
+
 ## Script
 
 ```bash

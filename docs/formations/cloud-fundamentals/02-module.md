@@ -528,6 +528,131 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Choisir le bon modèle de service cloud pour différents scénarios
+
+    **Contexte** : Vous êtes architecte cloud et devez conseiller trois équipes projet sur le choix du modèle de service approprié (IaaS, PaaS, SaaS, FaaS) selon leurs besoins spécifiques.
+
+    **Tâches à réaliser** :
+
+    1. **Projet A** : Migration d'une application legacy Java/Oracle vers le cloud sans modification du code
+    2. **Projet B** : Développement d'une nouvelle API REST pour un portail marchand
+    3. **Projet C** : Remplacement de l'outil CRM actuel vieillissant
+
+    Pour chaque projet, identifiez :
+    - Le modèle de service recommandé (IaaS/PaaS/SaaS/FaaS)
+    - Les services équivalents sur AWS, Azure et GCP
+    - Les responsabilités client vs provider selon le modèle de responsabilité partagée
+
+    **Critères de validation** :
+
+    - [ ] Le modèle de service choisi est adapté à chaque scénario
+    - [ ] Les services cloud des 3 providers sont identifiés correctement
+    - [ ] Les responsabilités sont clairement définies pour chaque cas
+
+??? quote "Solution"
+    **Projet A : Migration legacy Java/Oracle (sans modification)**
+
+    **Modèle recommandé : IaaS**
+
+    **Justification :**
+    - Approche "Lift & Shift" pour migration rapide
+    - Pas de refactoring = pas de risque sur le code existant
+    - Contrôle total sur l'OS et la configuration Oracle
+
+    **Services cloud :**
+    ```
+    | Composant | AWS | Azure | GCP |
+    |-----------|-----|-------|-----|
+    | VMs       | EC2 | Virtual Machines | Compute Engine |
+    | Oracle DB | EC2 + Oracle ou RDS Oracle | VM + Oracle | Compute Engine + Oracle |
+    | Réseau    | VPC | VNet | VPC |
+    | Stockage  | EBS | Managed Disks | Persistent Disk |
+    ```
+
+    **Responsabilités :**
+    - **Vous gérez** : Application Java, configuration Oracle, OS, patching, sécurité applicative
+    - **Provider gère** : Infrastructure physique, hyperviseur, réseau backbone, datacenter
+
+    **Projet B : Nouvelle API REST pour portail marchand**
+
+    **Modèle recommandé : PaaS (ou FaaS si charges sporadiques)**
+
+    **Option 1 - PaaS (si API tourne en continu) :**
+    ```bash
+    # AWS
+    aws elasticbeanstalk create-application --application-name merchant-api
+
+    # Azure
+    az webapp create --name merchant-api --resource-group prod-rg
+
+    # GCP
+    gcloud app deploy app.yaml
+    ```
+
+    **Services cloud :**
+    | Provider | Service PaaS | Service FaaS |
+    |----------|--------------|--------------|
+    | AWS | Elastic Beanstalk, ECS | Lambda + API Gateway |
+    | Azure | App Service | Functions + API Management |
+    | GCP | App Engine, Cloud Run | Cloud Functions |
+
+    **Responsabilités :**
+    - **Vous gérez** : Code de l'API, configuration, données
+    - **Provider gère** : Runtime, OS, scaling, load balancing, haute disponibilité
+
+    **Avantages PaaS :**
+    - Focus sur le code uniquement
+    - Scaling automatique
+    - Déploiement simplifié (git push)
+    - Monitoring intégré
+
+    **Option 2 - FaaS (si charges sporadiques) :**
+    - Coût = 0 quand pas utilisé
+    - Scaling automatique de 0 à millions
+    - Facturation à la milliseconde
+
+    **Projet C : Remplacement du CRM**
+
+    **Modèle recommandé : SaaS**
+
+    **Justification :**
+    - CRM = besoin standard, pas de développement spécifique nécessaire
+    - Pas de ressources IT pour maintenir un serveur
+    - Mises à jour automatiques
+    - Accès mobile natif
+
+    **Solutions SaaS recommandées :**
+    ```
+    Leaders du marché :
+    • Salesforce (leader, le plus complet)
+    • HubSpot (PME, marketing intégré)
+    • Microsoft Dynamics 365 (intégration Office 365)
+    • Zoho CRM (rapport qualité/prix)
+    ```
+
+    **Responsabilités :**
+    - **Vous gérez** : Configuration, utilisateurs, données métier, workflows
+    - **Provider gère** : Application complète, infrastructure, sécurité, sauvegardes, mises à jour
+
+    **Avantages :**
+    - Déploiement immédiat (quelques jours vs mois)
+    - Coût prévisible (abonnement mensuel/utilisateur)
+    - Expertise CRM incluse
+    - Intégrations pré-construites
+
+    **Tableau récapitulatif :**
+
+    | Projet | Modèle | Effort gestion | Time-to-market | Coût initial |
+    |--------|--------|----------------|----------------|--------------|
+    | A - Migration legacy | IaaS | Élevé | Moyen (semaines) | Moyen |
+    | B - Nouvelle API | PaaS/FaaS | Faible | Rapide (jours) | Faible |
+    | C - CRM | SaaS | Minimal | Immédiat | Très faible |
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -24,6 +24,23 @@ Ce script analyse les logs système :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour accéder aux logs système
+- **Dépendances** : `grep`, `awk`, `journalctl` (optionnel)
+
+---
+
+## Cas d'Usage
+
+- **Audit de sécurité quotidien** : Détection automatique de tentatives d'intrusion et activités suspectes
+- **Investigation d'incidents** : Analyse rapide des logs lors de problèmes de sécurité ou performance
+- **Reporting régulier** : Génération de rapports périodiques sur l'activité système et web
+- **Détection d'anomalies** : Identification de patterns suspects dans l'authentification et les accès
+
+---
+
 ## Script
 
 ```bash

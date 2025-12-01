@@ -25,6 +25,23 @@ Ce script effectue des sauvegardes de répertoires :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits de lecture sur le répertoire source et d'écriture sur le répertoire de destination
+- **Dépendances** : `tar`, `gzip` (ou `zip`), `bc`
+
+---
+
+## Cas d'Usage
+
+- **Sauvegarde quotidienne automatisée** : Exécution planifiée via cron pour backup régulier des données critiques
+- **Archivage de projets** : Compression et conservation de versions multiples avec rotation automatique
+- **Migration de données** : Sauvegarde complète avant migration de serveur avec vérification d'intégrité
+- **Récupération d'urgence** : Maintien de backups testés pour restauration rapide en cas de panne
+
+---
+
 ## Script
 
 ```bash

@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - bash
+  - configuration
+  - audit
+  - compliance
+---
+
 # Config Drift Checker
 
 Script de détection des dérives de configuration par rapport à une baseline.

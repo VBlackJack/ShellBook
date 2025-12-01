@@ -292,28 +292,329 @@ helm install loki grafana/loki-stack \
 
 ---
 
-## 5. Exercice Pratique
+## 5. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une application web avec observabilité complète (health probes, métriques, monitoring)
 
-1. Configurer des probes sur un deployment
-2. Installer le Metrics Server
-3. Créer un HPA
-4. Installer Prometheus avec Helm
+    **Contexte** : Vous devez déployer une API REST qui expose des métriques Prometheus et nécessite des health checks. L'application met 20 secondes à démarrer, se connecte à une base Redis, et doit pouvoir scale automatiquement selon la charge CPU.
 
-### Validation
+    **Tâches à réaliser** :
 
-```bash
-# Tester les probes
-kubectl describe pod <pod-name> | grep -A10 "Liveness\|Readiness"
+    1. Créer un Deployment avec les trois types de probes configurées
+    2. Installer le Metrics Server et vérifier son fonctionnement
+    3. Configurer un HorizontalPodAutoscaler (2-10 replicas, 70% CPU)
+    4. Installer Prometheus avec Helm et créer un ServiceMonitor
+    5. Configurer une règle d'alerte pour le taux d'erreur HTTP
 
-# Vérifier les métriques
-kubectl top pods
+    **Critères de validation** :
 
-# Vérifier le HPA
-kubectl get hpa
-kubectl describe hpa app-hpa
-```
+    - [ ] Les pods démarrent correctement avec les probes
+    - [ ] `kubectl top pods` affiche les métriques
+    - [ ] Le HPA scale automatiquement sous charge
+    - [ ] Prometheus scrape les métriques de l'application
+    - [ ] L'alerte se déclenche en cas d'erreurs
+
+??? quote "Solution"
+    **Étape 1 : Deployment avec Probes**
+
+    ```yaml
+    # api-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: api-backend
+      labels:
+        app: api-backend
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: api-backend
+      template:
+        metadata:
+          labels:
+            app: api-backend
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "8080"
+            prometheus.io/path: "/metrics"
+        spec:
+          containers:
+            - name: api
+              image: mycompany/api-backend:1.0
+              ports:
+                - name: http
+                  containerPort: 8080
+                - name: metrics
+                  containerPort: 8080
+
+              # Startup Probe - 20s pour démarrer
+              startupProbe:
+                httpGet:
+                  path: /health/startup
+                  port: 8080
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                failureThreshold: 4  # 4 * 5s = 20s max
+
+              # Liveness Probe - vérifie que l'app tourne
+              livenessProbe:
+                httpGet:
+                  path: /health/live
+                  port: 8080
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+
+              # Readiness Probe - vérifie Redis
+              readinessProbe:
+                httpGet:
+                  path: /health/ready
+                  port: 8080
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 3
+
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 256Mi
+
+              env:
+                - name: REDIS_URL
+                  value: "redis:6379"
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: api-backend
+      labels:
+        app: api-backend
+    spec:
+      selector:
+        app: api-backend
+      ports:
+        - name: http
+          port: 80
+          targetPort: 8080
+        - name: metrics
+          port: 9090
+          targetPort: 8080
+    ```
+
+    ```bash
+    kubectl apply -f api-deployment.yaml
+
+    # Vérifier les probes
+    kubectl describe pod -l app=api-backend | grep -A10 "Liveness\|Readiness\|Startup"
+
+    # Observer le démarrage
+    kubectl get pods -l app=api-backend -w
+    ```
+
+    **Étape 2 : Installer Metrics Server**
+
+    ```bash
+    # Installation
+    kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+    # Pour minikube/kind (désactiver TLS)
+    kubectl patch deployment metrics-server -n kube-system --type='json' \
+      -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+
+    # Attendre que le pod soit prêt
+    kubectl wait --for=condition=Ready pod -l k8s-app=metrics-server -n kube-system --timeout=120s
+
+    # Vérifier
+    kubectl top nodes
+    kubectl top pods -l app=api-backend
+    ```
+
+    **Étape 3 : Configurer le HPA**
+
+    ```yaml
+    # api-hpa.yaml
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: api-backend-hpa
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: api-backend
+      minReplicas: 2
+      maxReplicas: 10
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+              type: Utilization
+              averageUtilization: 70
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 60
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+            - type: Percent
+              value: 100
+              periodSeconds: 15
+    ```
+
+    ```bash
+    kubectl apply -f api-hpa.yaml
+
+    # Vérifier le HPA
+    kubectl get hpa api-backend-hpa
+    kubectl describe hpa api-backend-hpa
+
+    # Générer de la charge (optionnel)
+    kubectl run load-generator --image=busybox --restart=Never -- /bin/sh -c "while true; do wget -q -O- http://api-backend; done"
+
+    # Observer le scaling
+    kubectl get hpa api-backend-hpa -w
+    ```
+
+    **Étape 4 : Installer Prometheus**
+
+    ```bash
+    # Ajouter le repo Helm
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+
+    # Installer kube-prometheus-stack
+    helm install prometheus prometheus-community/kube-prometheus-stack \
+      --namespace monitoring \
+      --create-namespace \
+      --set grafana.adminPassword=admin123 \
+      --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+
+    # Attendre le déploiement
+    kubectl wait --for=condition=Ready pods --all -n monitoring --timeout=300s
+
+    # Accéder à Grafana
+    kubectl port-forward svc/prometheus-grafana 3000:80 -n monitoring
+    # Login: admin / admin123
+    ```
+
+    **Créer le ServiceMonitor**
+
+    ```yaml
+    # api-servicemonitor.yaml
+    apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: api-backend-monitor
+      namespace: monitoring
+      labels:
+        release: prometheus
+    spec:
+      selector:
+        matchLabels:
+          app: api-backend
+      namespaceSelector:
+        matchNames:
+          - default
+      endpoints:
+        - port: metrics
+          path: /metrics
+          interval: 30s
+    ```
+
+    ```bash
+    kubectl apply -f api-servicemonitor.yaml
+
+    # Vérifier dans Prometheus
+    kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090 -n monitoring
+    # Ouvrir http://localhost:9090 et chercher "api_backend" dans les métriques
+    ```
+
+    **Étape 5 : Règle d'Alerte**
+
+    ```yaml
+    # api-alerts.yaml
+    apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: api-backend-alerts
+      namespace: monitoring
+      labels:
+        release: prometheus
+    spec:
+      groups:
+        - name: api-backend.rules
+          interval: 30s
+          rules:
+            - alert: HighErrorRate
+              expr: |
+                sum(rate(http_requests_total{service="api-backend",status=~"5.."}[5m]))
+                / sum(rate(http_requests_total{service="api-backend"}[5m])) > 0.05
+              for: 5m
+              labels:
+                severity: warning
+                service: api-backend
+              annotations:
+                summary: "Taux d'erreur élevé sur api-backend"
+                description: "{{ $value | humanizePercentage }} des requêtes échouent (>5%)"
+
+            - alert: HighResponseTime
+              expr: |
+                histogram_quantile(0.95,
+                  rate(http_request_duration_seconds_bucket{service="api-backend"}[5m])
+                ) > 1
+              for: 5m
+              labels:
+                severity: warning
+                service: api-backend
+              annotations:
+                summary: "Temps de réponse élevé sur api-backend"
+                description: "Le p95 est à {{ $value }}s (>1s)"
+    ```
+
+    ```bash
+    kubectl apply -f api-alerts.yaml
+
+    # Vérifier les règles
+    kubectl get prometheusrule -n monitoring
+
+    # Vérifier dans Prometheus UI
+    # Alerts > Rules
+    ```
+
+    **Validation Complète**
+
+    ```bash
+    # 1. Vérifier les probes
+    kubectl get pods -l app=api-backend
+    kubectl describe pod -l app=api-backend | grep -A5 "Liveness\|Readiness"
+
+    # 2. Vérifier les métriques
+    kubectl top pods -l app=api-backend
+    kubectl top nodes
+
+    # 3. Vérifier le HPA
+    kubectl get hpa
+    kubectl describe hpa api-backend-hpa
+
+    # 4. Vérifier Prometheus
+    kubectl get servicemonitor -n monitoring
+    kubectl get prometheusrule -n monitoring
+
+    # 5. Test de bout en bout
+    kubectl run test --rm -it --image=curlimages/curl -- sh
+    # Dans le pod: curl http://api-backend/health/ready
+    ```
 
 ---
 

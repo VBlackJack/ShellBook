@@ -866,6 +866,360 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure de calcul évolutive et résiliente avec autoscaling automatique
+
+    **Contexte** : Votre équipe développe une application de traitement d'images qui doit gérer des charges variables. Pendant les heures creuses, le trafic est minimal (2-3 requêtes/minute), mais pendant les pics (campagnes marketing), le trafic peut monter à 200 requêtes/minute. Vous devez déployer une infrastructure qui s'adapte automatiquement.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Instance Template `image-processor-template` avec :
+        - Machine type : e2-standard-2
+        - Image : Debian 12
+        - Disque boot : 30 GB SSD
+        - Script de démarrage qui installe nginx et simule un service de traitement
+        - Tags réseau appropriés
+    2. Créer un Managed Instance Group régional `image-processor-mig` :
+        - Déployé dans 3 zones de europe-west1 (b, c, d)
+        - Taille initiale : 2 instances
+    3. Configurer un Health Check HTTP sur le port 80 et le path `/health`
+    4. Configurer l'autoscaling avec les paramètres :
+        - Min : 2 instances
+        - Max : 10 instances
+        - Cible CPU : 60%
+        - Cool-down : 90 secondes
+    5. Créer un snapshot schedule automatique pour les instances :
+        - Fréquence : quotidienne à 2h00
+        - Rétention : 7 jours
+    6. Tester le scale-up en générant de la charge
+    7. Effectuer un rolling update en changeant le message de la page d'accueil
+
+    **Critères de validation** :
+
+    - [ ] Le MIG démarre avec 2 instances réparties sur plusieurs zones
+    - [ ] Le health check détecte correctement les instances saines
+    - [ ] L'autoscaling scale-up quand la CPU dépasse 60%
+    - [ ] L'autoscaling scale-down après la fin de la charge
+    - [ ] Les snapshots automatiques sont configurés et fonctionnels
+    - [ ] Le rolling update se déroule sans downtime
+    - [ ] Les instances sont dans des zones différentes pour la haute disponibilité
+
+??? quote "Solution"
+    **Étape 1 : Créer le startup script**
+
+    ```bash
+    # Créer le script de démarrage
+    cat > startup-script.sh << 'EOF'
+    #!/bin/bash
+
+    # Mise à jour et installation
+    apt-get update
+    apt-get install -y nginx stress-ng
+
+    # Configuration nginx avec health check
+    cat > /etc/nginx/sites-available/default << 'NGINX_CONF'
+    server {
+        listen 80 default_server;
+        root /var/www/html;
+        index index.html;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
+
+        location /process {
+            # Simule un traitement CPU-intensive
+            return 200 "Processing...\n";
+            add_header Content-Type text/plain;
+        }
+    }
+    NGINX_CONF
+
+    # Page d'accueil v1
+    cat > /var/www/html/index.html << 'HTML'
+    <!DOCTYPE html>
+    <html><head><title>Image Processor v1</title></head>
+    <body style="font-family: Arial; margin: 40px;">
+        <h1>Image Processor Service v1.0</h1>
+        <p>Hostname: <code>HOSTNAME</code></p>
+        <p>Status: <span style="color: green;">Ready</span></p>
+        <p>Version: 1.0.0</p>
+    </body></html>
+    HTML
+
+    sed -i "s/HOSTNAME/$(hostname)/g" /var/www/html/index.html
+
+    # Démarrer nginx
+    systemctl restart nginx
+    systemctl enable nginx
+
+    echo "Startup script completed" | systemctl status nginx
+    EOF
+
+    chmod +x startup-script.sh
+    ```
+
+    **Étape 2 : Créer l'Instance Template**
+
+    ```bash
+    # Variables
+    REGION="europe-west1"
+    TEMPLATE_NAME="image-processor-template"
+
+    # Créer le template
+    gcloud compute instance-templates create $TEMPLATE_NAME \
+        --machine-type=e2-standard-2 \
+        --image-family=debian-12 \
+        --image-project=debian-cloud \
+        --boot-disk-size=30GB \
+        --boot-disk-type=pd-ssd \
+        --tags=http-server,image-processor \
+        --metadata-from-file=startup-script=startup-script.sh \
+        --scopes=cloud-platform
+
+    # Vérifier
+    gcloud compute instance-templates describe $TEMPLATE_NAME
+    ```
+
+    **Étape 3 : Créer le Health Check**
+
+    ```bash
+    # Health check HTTP
+    gcloud compute health-checks create http image-processor-hc \
+        --port=80 \
+        --request-path=/health \
+        --check-interval=10s \
+        --timeout=5s \
+        --healthy-threshold=2 \
+        --unhealthy-threshold=3
+
+    # Vérifier
+    gcloud compute health-checks describe image-processor-hc
+    ```
+
+    **Étape 4 : Créer le MIG régional**
+
+    ```bash
+    MIG_NAME="image-processor-mig"
+
+    # Créer le MIG
+    gcloud compute instance-groups managed create $MIG_NAME \
+        --template=$TEMPLATE_NAME \
+        --size=2 \
+        --region=$REGION \
+        --zones=${REGION}-b,${REGION}-c,${REGION}-d \
+        --health-check=image-processor-hc \
+        --initial-delay=120
+
+    # Vérifier les instances
+    gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION
+
+    # Attendre que les instances soient prêtes
+    echo "Attente du démarrage des instances..."
+    sleep 60
+    ```
+
+    **Étape 5 : Configurer l'autoscaling**
+
+    ```bash
+    # Autoscaling basé sur CPU
+    gcloud compute instance-groups managed set-autoscaling $MIG_NAME \
+        --region=$REGION \
+        --min-num-replicas=2 \
+        --max-num-replicas=10 \
+        --target-cpu-utilization=0.6 \
+        --cool-down-period=90
+
+    # Vérifier la configuration
+    gcloud compute instance-groups managed describe $MIG_NAME \
+        --region=$REGION \
+        --format="yaml(autoscaler)"
+    ```
+
+    **Étape 6 : Règle firewall pour HTTP**
+
+    ```bash
+    # Si pas déjà créée
+    gcloud compute firewall-rules create allow-http-image-processor \
+        --direction=INGRESS \
+        --priority=1000 \
+        --network=default \
+        --action=ALLOW \
+        --rules=tcp:80 \
+        --source-ranges=0.0.0.0/0 \
+        --target-tags=http-server \
+        2>/dev/null || echo "Règle firewall existe déjà"
+    ```
+
+    **Étape 7 : Snapshot Schedule**
+
+    ```bash
+    # Créer le snapshot schedule
+    gcloud compute resource-policies create snapshot-schedule daily-snapshots \
+        --region=$REGION \
+        --start-time=02:00 \
+        --daily-schedule \
+        --max-retention-days=7 \
+        --on-source-disk-delete=apply-retention-policy
+
+    # Appliquer aux disques (via le MIG, pas directement possible)
+    # Alternative : configurer via le template pour les futures instances
+    echo "⚠️  Note: Pour appliquer le snapshot schedule, il faut l'attacher manuellement aux disques existants"
+
+    # Lister les instances pour référence
+    gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION \
+        --format="value(instance)"
+    ```
+
+    **Étape 8 : Tester l'autoscaling**
+
+    ```bash
+    # Obtenir les IPs des instances
+    echo "=== Instances du MIG ==="
+    gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION \
+        --format="table(instance,status,currentAction)"
+
+    # Surveiller le MIG (dans un terminal)
+    watch -n 5 'gcloud compute instance-groups managed list-instances image-processor-mig --region=europe-west1'
+
+    # Dans un autre terminal, générer de la charge
+    # Se connecter à une instance et lancer stress
+    FIRST_INSTANCE=$(gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION --format="value(instance)" | head -1)
+
+    INSTANCE_ZONE=$(gcloud compute instances list --filter="name=$FIRST_INSTANCE" --format="value(zone)")
+
+    echo "Génération de charge sur $FIRST_INSTANCE..."
+    gcloud compute ssh $FIRST_INSTANCE --zone=$INSTANCE_ZONE --command="
+        sudo stress-ng --cpu 2 --timeout 300s &
+        echo 'Charge CPU générée pendant 5 minutes'
+    "
+
+    # Observer le scale-up dans les logs
+    echo ""
+    echo "📊 Observez le scale-up dans le terminal avec 'watch'"
+    echo "Les nouvelles instances devraient apparaître dans ~2-3 minutes"
+    ```
+
+    **Étape 9 : Rolling Update**
+
+    ```bash
+    # Créer une nouvelle version du template
+    cat > startup-script-v2.sh << 'EOF'
+    #!/bin/bash
+    apt-get update
+    apt-get install -y nginx stress-ng
+
+    cat > /etc/nginx/sites-available/default << 'NGINX_CONF'
+    server {
+        listen 80 default_server;
+        root /var/www/html;
+        index index.html;
+        location / { try_files $uri $uri/ =404; }
+        location /health { access_log off; return 200 "healthy\n"; }
+    }
+    NGINX_CONF
+
+    cat > /var/www/html/index.html << 'HTML'
+    <!DOCTYPE html>
+    <html><head><title>Image Processor v2</title></head>
+    <body style="font-family: Arial; margin: 40px; background: #e8f5e9;">
+        <h1>🚀 Image Processor Service v2.0</h1>
+        <p>Hostname: <code>HOSTNAME</code></p>
+        <p>Status: <span style="color: green;">✓ Ready</span></p>
+        <p>Version: <strong>2.0.0 - Enhanced</strong></p>
+    </body></html>
+    HTML
+
+    sed -i "s/HOSTNAME/$(hostname)/g" /var/www/html/index.html
+    systemctl restart nginx && systemctl enable nginx
+    EOF
+
+    chmod +x startup-script-v2.sh
+
+    # Nouveau template
+    gcloud compute instance-templates create image-processor-template-v2 \
+        --machine-type=e2-standard-2 \
+        --image-family=debian-12 \
+        --image-project=debian-cloud \
+        --boot-disk-size=30GB \
+        --boot-disk-type=pd-ssd \
+        --tags=http-server,image-processor \
+        --metadata-from-file=startup-script=startup-script-v2.sh \
+        --scopes=cloud-platform
+
+    # Rolling update
+    gcloud compute instance-groups managed rolling-action start-update $MIG_NAME \
+        --region=$REGION \
+        --version=template=image-processor-template-v2 \
+        --max-surge=1 \
+        --max-unavailable=0
+
+    # Suivre le progrès
+    echo "📦 Rolling update en cours..."
+    watch -n 10 'gcloud compute instance-groups managed list-instances image-processor-mig --region=europe-west1 --format="table(instance,status,currentAction,version.instanceTemplate.basename())"'
+    ```
+
+    **Validation finale**
+
+    ```bash
+    echo "=== VALIDATION FINALE ==="
+    echo ""
+
+    # 1. MIG status
+    echo "1. Status du MIG :"
+    gcloud compute instance-groups managed describe $MIG_NAME \
+        --region=$REGION \
+        --format="yaml(status,currentActions,targetSize)"
+
+    # 2. Distribution des instances
+    echo ""
+    echo "2. Distribution des instances par zone :"
+    gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION \
+        --format="table(instance,zone,status)"
+
+    # 3. Autoscaler status
+    echo ""
+    echo "3. Configuration autoscaler :"
+    gcloud compute instance-groups managed describe $MIG_NAME \
+        --region=$REGION \
+        --format="yaml(autoscaler.autoscalingPolicy)"
+
+    # 4. Health check
+    echo ""
+    echo "4. Status des health checks :"
+    gcloud compute instance-groups managed list-instances $MIG_NAME \
+        --region=$REGION \
+        --format="table(instance,instanceStatus,instanceHealth[0].healthState)"
+
+    # 5. Tester HTTP
+    echo ""
+    echo "5. Test HTTP des instances :"
+    for INSTANCE in $(gcloud compute instance-groups managed list-instances $MIG_NAME --region=$REGION --format="value(instance)"); do
+        ZONE=$(gcloud compute instances list --filter="name=$INSTANCE" --format="value(zone)")
+        IP=$(gcloud compute instances describe $INSTANCE --zone=$ZONE --format="get(networkInterfaces[0].accessConfigs[0].natIP)")
+        echo "  Instance $INSTANCE ($IP):"
+        curl -s http://$IP | grep -o '<h1>.*</h1>' || echo "    Erreur de connexion"
+    done
+
+    echo ""
+    echo "✅ Validation terminée!"
+    ```
+
+---
+
 ## 11. Nettoyage
 
 ```bash

@@ -23,6 +23,15 @@ Export des journaux d'événements Windows avec filtrage avancé.
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur (requis pour accès journaux Security)
+- **Modules** : Aucun module externe requis
+
+---
+
 ## Utilisation
 
 ```powershell

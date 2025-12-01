@@ -25,6 +25,26 @@ Ce script gère les sauvegardes :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `rich`, `pyyaml` (optionnels mais recommandés)
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Droits de lecture sur les répertoires source et d'écriture sur la destination
+- **Espace disque** : Suffisant pour stocker les archives compressées
+
+---
+
+## Cas d'Usage
+
+- **Backup automatisé** : Sauvegarde quotidienne ou hebdomadaire des données critiques avec rotation automatique
+- **Disaster Recovery** : Création de snapshots compressés des serveurs et applications pour restauration rapide
+- **Conformité réglementaire** : Conservation des archives avec vérification d'intégrité pour audits
+- **Migration de données** : Transfert sécurisé de fichiers entre environnements avec compression
+- **Archivage long terme** : Stockage optimisé des données avec rotation pour économiser l'espace disque
+
+---
+
 ## Dépendances
 
 ```bash

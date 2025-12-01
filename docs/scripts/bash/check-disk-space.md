@@ -25,6 +25,23 @@ Ce script surveille l'utilisation des disques et génère des alertes :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis pour lecture)
+- **Dépendances** : `df`, `awk`
+
+---
+
+## Cas d'Usage
+
+- **Monitoring proactif** : Détection précoce de saturation disque avant incidents
+- **Intégration Nagios/Icinga** : Plugin de monitoring avec codes de retour standardisés
+- **Automatisation cron** : Vérification régulière avec alertes email en cas de dépassement
+- **Audit de serveurs** : Vérification rapide de l'espace disponible sur un parc de machines
+
+---
+
 ## Script
 
 ```bash

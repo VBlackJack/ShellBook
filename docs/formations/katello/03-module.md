@@ -737,26 +737,32 @@ activation_keys:
 
 ---
 
-## Exercice : Onboarding Automatisé
+## Exercice : À Vous de Jouer
 
-### Contexte
+!!! example "Mise en Pratique : Onboarding Automatisé"
+    **Objectif** : Automatiser l'enregistrement de clients et la gestion des Host Collections.
 
-Vous êtes SysOps dans **LinuxCorp** (infrastructure 200 serveurs Rocky Linux 9).
+    **Contexte** : Vous êtes SysOps dans **LinuxCorp** (200 serveurs Rocky Linux 9). Votre équipe Dev vient de provisionner un nouveau serveur web `web-dev-05.linuxcorp.local` qu'il faut enrôler dans l'environnement **Development**, ajouter au groupe `web-servers`, et configurer avec **Nginx** depuis vos repos internes.
 
-Votre équipe Dev vient de provisionner un nouveau serveur web `web-dev-05.linuxcorp.local` qu'il faut :
+    **Environnement Katello** :
 
-1. Enrôler dans l'environnement **Development**
-2. Ajouter au groupe `web-servers`
-3. Installer **Nginx** depuis vos repos internes
+    - **Serveur :** `katello.linuxcorp.local`
+    - **Organisation :** `LinuxCorp`
+    - **Content View :** `CV-Rocky9` (déjà publiée en Development)
 
-**Informations Katello :**
+    **Tâches à réaliser** :
 
-- **Serveur Katello :** `katello.linuxcorp.local`
-- **Organisation :** `LinuxCorp`
-- **Content View :** `CV-Rocky9` (déjà publiée en Development)
-- **Lifecycle Environment :** `Development` (déjà créé)
+    1. Créer l'Activation Key `ak-rocky9-dev`
+    2. Lier à l'environnement `Development` et Content View `CV-Rocky9`
+    3. Créer la Host Collection `web-servers`
+    4. Enregistrer le client avec `subscription-manager`
+    5. Installer et démarrer Nginx
 
----
+    **Critères de validation** :
+
+    - [ ] Activation Key créée et fonctionnelle
+    - [ ] Client visible dans l'interface Katello
+    - [ ] Nginx installé et accessible sur le client
 
 ### Mission
 

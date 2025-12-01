@@ -740,35 +740,214 @@ kubectl label pods nginx-pod tier-
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser le déploiement et la gestion des workloads Kubernetes
 
-1. Créer un Deployment avec 3 replicas
-2. Effectuer un rolling update
-3. Faire un rollback
-4. Créer un CronJob de backup
-5. Déployer un DaemonSet
+    **Contexte** : Vous êtes responsable du déploiement d'une application web avec plusieurs composants : une API backend, un système de backup automatisé, et un agent de monitoring sur chaque node.
 
-### Validation
+    **Tâches à réaliser** :
 
-```bash
-# Deployment avec rolling update
-kubectl apply -f deployment.yaml
-kubectl set image deployment/nginx nginx=nginx:1.26
-kubectl rollout status deployment/nginx
-kubectl rollout undo deployment/nginx
+    1. Créer un Deployment "api-backend" avec 3 replicas utilisant l'image nginx:1.25
+    2. Effectuer un rolling update vers nginx:1.26 et observer le processus
+    3. Simuler un problème et effectuer un rollback vers la version précédente
+    4. Créer un CronJob qui s'exécute toutes les 5 minutes pour simuler un backup
+    5. Déployer un DaemonSet d'agent de monitoring sur tous les nodes
 
-# CronJob
-kubectl apply -f cronjob.yaml
-kubectl get cronjobs
-kubectl get jobs
+    **Critères de validation** :
 
-# DaemonSet
-kubectl apply -f daemonset.yaml
-kubectl get ds
-kubectl get pods -o wide  # Vérifier un pod par node
-```
+    - [ ] Le Deployment maintient 3 pods en permanence
+    - [ ] Le rolling update se fait sans downtime
+    - [ ] Le rollback restaure la version précédente correctement
+    - [ ] Le CronJob crée un nouveau Job toutes les 5 minutes
+    - [ ] Le DaemonSet déploie exactement un pod par node
+
+??? quote "Solution"
+    **Étape 1 : Créer le Deployment**
+
+    ```yaml
+    # deployment-api.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: api-backend
+      labels:
+        app: api-backend
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: api-backend
+      template:
+        metadata:
+          labels:
+            app: api-backend
+        spec:
+          containers:
+            - name: nginx
+              image: nginx:1.25
+              ports:
+                - containerPort: 80
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 200m
+                  memory: 256Mi
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 80
+                initialDelaySeconds: 5
+                periodSeconds: 5
+    ```
+
+    ```bash
+    kubectl apply -f deployment-api.yaml
+    kubectl get deployments
+    kubectl get pods -l app=api-backend
+    ```
+
+    **Étape 2 : Rolling Update**
+
+    ```bash
+    # Mettre à jour l'image
+    kubectl set image deployment/api-backend nginx=nginx:1.26 --record
+
+    # Observer le rollout en temps réel
+    kubectl rollout status deployment/api-backend
+
+    # Voir l'historique
+    kubectl rollout history deployment/api-backend
+
+    # Observer les ReplicaSets
+    kubectl get rs -l app=api-backend
+    ```
+
+    **Étape 3 : Rollback**
+
+    ```bash
+    # Voir les révisions disponibles
+    kubectl rollout history deployment/api-backend
+
+    # Rollback à la version précédente
+    kubectl rollout undo deployment/api-backend
+
+    # Vérifier que les pods utilisent nginx:1.25
+    kubectl get pods -l app=api-backend -o jsonpath='{.items[*].spec.containers[0].image}'
+
+    # Rollback vers une révision spécifique
+    kubectl rollout undo deployment/api-backend --to-revision=1
+    ```
+
+    **Étape 4 : CronJob de Backup**
+
+    ```yaml
+    # cronjob-backup.yaml
+    apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: backup-job
+    spec:
+      schedule: "*/5 * * * *"
+      successfulJobsHistoryLimit: 3
+      failedJobsHistoryLimit: 1
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              restartPolicy: OnFailure
+              containers:
+                - name: backup
+                  image: busybox
+                  command:
+                    - /bin/sh
+                    - -c
+                    - |
+                      echo "Début du backup à $(date)"
+                      echo "Sauvegarde des données..."
+                      sleep 10
+                      echo "Backup terminé avec succès"
+    ```
+
+    ```bash
+    kubectl apply -f cronjob-backup.yaml
+    kubectl get cronjobs
+
+    # Attendre quelques minutes puis vérifier
+    kubectl get jobs
+    kubectl logs -l job-name=backup-job-<timestamp>
+    ```
+
+    **Étape 5 : DaemonSet de Monitoring**
+
+    ```yaml
+    # daemonset-monitor.yaml
+    apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: monitoring-agent
+      labels:
+        app: monitoring-agent
+    spec:
+      selector:
+        matchLabels:
+          app: monitoring-agent
+      template:
+        metadata:
+          labels:
+            app: monitoring-agent
+        spec:
+          tolerations:
+            - operator: Exists
+          containers:
+            - name: agent
+              image: busybox
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Agent de monitoring démarré sur $(hostname)"
+                  while true; do
+                    echo "Collecte des métriques..."
+                    sleep 30
+                  done
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+    ```
+
+    ```bash
+    kubectl apply -f daemonset-monitor.yaml
+    kubectl get ds
+    kubectl get pods -l app=monitoring-agent -o wide
+
+    # Vérifier qu'il y a un pod par node
+    kubectl get nodes
+    kubectl get pods -l app=monitoring-agent --no-headers | wc -l
+    ```
+
+    **Vérifications finales** :
+
+    ```bash
+    # État global
+    kubectl get all
+
+    # Vérifier le Deployment
+    kubectl describe deployment api-backend
+
+    # Vérifier le CronJob
+    kubectl describe cronjob backup-job
+
+    # Vérifier le DaemonSet
+    kubectl describe daemonset monitoring-agent
+    ```
 
 ---
 

@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - ntlite
+  - windows
+  - tp-final
+  - vdi
+  - projet
+---
+
 # Module 5 : TP Final - L'Image Master "Golden ISO"
 
 ## Scenario : Project VDI-Lite

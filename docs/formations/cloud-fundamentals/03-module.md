@@ -501,6 +501,181 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Concevoir l'infrastructure cloud pour une application web
+
+    **Contexte** : Vous devez déployer une application e-commerce dans le cloud avec les exigences suivantes :
+    - 3 serveurs web (2 vCPU, 4 Go RAM chacun)
+    - 1 base de données PostgreSQL haute disponibilité
+    - Stockage pour 5 To de photos produits
+    - Haute disponibilité obligatoire (multi-AZ)
+    - Région : Europe (France ou proche)
+
+    **Tâches à réaliser** :
+
+    1. Choisissez un cloud provider (AWS, Azure ou GCP) et justifiez votre choix
+    2. Définissez l'architecture réseau (VPC, subnets publics/privés)
+    3. Sélectionnez les types d'instances et services appropriés
+    4. Calculez le coût mensuel estimé
+
+    **Critères de validation** :
+
+    - [ ] Architecture multi-AZ avec au moins 2 zones de disponibilité
+    - [ ] Segmentation réseau correcte (DMZ, application, données)
+    - [ ] Services de stockage adaptés (block vs object)
+    - [ ] Estimation de coûts réaliste
+
+??? quote "Solution"
+    **1. Choix du cloud provider : AWS**
+
+    **Justification :**
+    - Région Paris (eu-west-3) disponible pour conformité RGPD
+    - Services matures et bien documentés
+    - Bon rapport fonctionnalités/coûts pour ce cas d'usage
+    - (Note : Azure et GCP seraient aussi valides)
+
+    **2. Architecture réseau**
+
+    ```bash
+    # Création VPC
+    aws ec2 create-vpc --cidr-block 10.0.0.0/16 --region eu-west-3
+
+    # Subnets publics (pour load balancer)
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.1.0/24 --availability-zone eu-west-3a
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.2.0/24 --availability-zone eu-west-3b
+
+    # Subnets privés (pour serveurs web)
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.11.0/24 --availability-zone eu-west-3a
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.12.0/24 --availability-zone eu-west-3b
+
+    # Subnets data (pour base de données)
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.21.0/24 --availability-zone eu-west-3a
+    aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.22.0/24 --availability-zone eu-west-3b
+    ```
+
+    **Architecture complète :**
+    ```
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    VPC 10.0.0.0/16                          │
+    │                                                             │
+    │  ┌─────────────────────┬─────────────────────┐             │
+    │  │  Zone A (eu-west-3a)│  Zone B (eu-west-3b)│             │
+    │  ├─────────────────────┼─────────────────────┤             │
+    │  │ Public Subnet       │ Public Subnet       │             │
+    │  │ 10.0.1.0/24        │ 10.0.2.0/24        │             │
+    │  │     ALB ────────────┼────── ALB          │             │
+    │  ├─────────────────────┼─────────────────────┤             │
+    │  │ Private Subnet      │ Private Subnet      │             │
+    │  │ 10.0.11.0/24       │ 10.0.12.0/24       │             │
+    │  │  Web Server 1      │  Web Server 2       │             │
+    │  │  Web Server 3      │                     │             │
+    │  ├─────────────────────┼─────────────────────┤             │
+    │  │ Data Subnet         │ Data Subnet         │             │
+    │  │ 10.0.21.0/24       │ 10.0.22.0/24       │             │
+    │  │  RDS Primary ──────┼───▶ RDS Standby     │             │
+    │  └─────────────────────┴─────────────────────┘             │
+    └─────────────────────────────────────────────────────────────┘
+    ```
+
+    **3. Services sélectionnés**
+
+    **Compute :**
+    ```bash
+    # Instances EC2 pour les serveurs web
+    # Type : t3.medium (2 vCPU, 4 Go RAM)
+    aws ec2 run-instances \
+      --image-id ami-xxx \
+      --instance-type t3.medium \
+      --count 3 \
+      --subnet-id subnet-private-a
+    ```
+    - **3x EC2 t3.medium** (2 vCPU, 4 Go RAM)
+    - Placement : 2 en Zone A, 1 en Zone B
+
+    **Load Balancer :**
+    ```bash
+    # Application Load Balancer
+    aws elbv2 create-load-balancer \
+      --name ecommerce-alb \
+      --subnets subnet-public-a subnet-public-b \
+      --security-groups sg-alb
+    ```
+    - **Application Load Balancer** (ALB) multi-AZ
+
+    **Base de données :**
+    ```bash
+    # RDS PostgreSQL Multi-AZ
+    aws rds create-db-instance \
+      --db-instance-identifier ecommerce-db \
+      --db-instance-class db.t3.large \
+      --engine postgres \
+      --allocated-storage 100 \
+      --multi-az \
+      --db-subnet-group-name db-subnet-group
+    ```
+    - **RDS PostgreSQL** (db.t3.large : 2 vCPU, 8 Go RAM)
+    - Multi-AZ activé (standby automatique)
+    - 100 Go SSD
+
+    **Stockage photos :**
+    ```bash
+    # S3 bucket pour les photos
+    aws s3 mb s3://ecommerce-products-photos-eu
+
+    # Lifecycle policy pour optimiser les coûts
+    aws s3api put-bucket-lifecycle-configuration \
+      --bucket ecommerce-products-photos-eu \
+      --lifecycle-configuration file://lifecycle.json
+    ```
+    - **S3 Standard** pour 5 To d'images
+    - CloudFront (CDN) devant S3 pour la performance
+
+    **4. Estimation des coûts mensuels (région Paris)**
+
+    | Service | Détail | Coût mensuel |
+    |---------|--------|--------------|
+    | **EC2** | 3x t3.medium (24/7) | 3 × 42€ = 126€ |
+    | **ALB** | Load balancer + data | 23€ + 10€ = 33€ |
+    | **RDS PostgreSQL** | db.t3.large Multi-AZ | 156€ |
+    | **RDS Storage** | 100 Go SSD | 12€ |
+    | **S3 Standard** | 5 To stockage | 5000 Go × 0.023€ = 115€ |
+    | **CloudFront** | 2 To data transfer | 85€ |
+    | **Data Transfer** | Sortant 1 To | 90€ |
+    | **Backup** | Snapshots EBS + RDS | 20€ |
+    | **VPC** | NAT Gateway | 33€ |
+    | **Total** | | **≈ 670€/mois** |
+    | **Total annuel** | | **≈ 8 040€/an** |
+
+    **Optimisations possibles :**
+    - Reserved Instances 1 an : **-30%** sur EC2 et RDS → économie de 84€/mois
+    - S3 Intelligent-Tiering pour photos anciennes : **-20%** → économie de 23€/mois
+    - Total optimisé : **≈ 563€/mois** (**6 756€/an**)
+
+    **Comparaison vs On-Premise :**
+    ```
+    Coûts on-premise sur 3 ans :
+    • Hardware (serveurs, storage, network) : 45 000€
+    • Datacenter (espace, énergie) : 18 000€
+    • Licences (OS, DB) : 12 000€
+    • Personnel (admin) : 45 000€
+    • Total 3 ans : 120 000€ (soit 40 000€/an)
+
+    Cloud (optimisé) :
+    • Total 3 ans : 20 268€ (soit 6 756€/an)
+    • Économie : 100 000€ sur 3 ans !
+    ```
+
+    **Points clés de l'architecture :**
+    - ✅ Haute disponibilité : multi-AZ sur tous les composants critiques
+    - ✅ Scalabilité : Auto Scaling Group peut être ajouté sur les EC2
+    - ✅ Performance : CDN CloudFront pour les images
+    - ✅ Sécurité : Segmentation réseau en 3 tiers (public/app/data)
+    - ✅ Coûts : Bien inférieur à l'on-premise
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

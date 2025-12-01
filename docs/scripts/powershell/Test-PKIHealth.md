@@ -28,6 +28,24 @@ Ce script vérifie l'état d'une PKI Windows :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ avec rôle AD CS
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur sur le serveur CA (Enterprise Admins recommandé)
+- **Modules** : `ADCS-Cert-Authority`, `PKI` (installés avec le rôle AD CS)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring PKI** : Surveillance quotidienne de la santé de l'infrastructure PKI
+- **Audit sécurité** : Vérifier les CRL, OCSP et validité des certificats CA
+- **Troubleshooting enrollment** : Diagnostiquer les problèmes d'auto-enrollment
+- **Conformité** : S'assurer que les templates et GPO sont correctement configurés
+
+---
+
 ## Script
 
 ```powershell

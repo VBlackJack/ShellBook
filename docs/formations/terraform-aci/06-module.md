@@ -1112,6 +1112,376 @@ module "apps" {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un module Terraform réutilisable pour déployer une architecture EPG standard
+
+    **Contexte** : Votre équipe déploie régulièrement des applications 3-tiers dans ACI. Pour éviter de dupliquer le code, vous devez créer un module réutilisable qui déploie automatiquement : 1 Application Profile + 3 EPGs (Web, App, DB) + 3 Bridge Domains. Le module doit être paramétrable (noms, subnets, annotations) et utilisable dans différents environnements (dev, staging, prod).
+
+    **Tâches à réaliser** :
+
+    1. Créer un module `aci-3tier-app` avec : main.tf, variables.tf, outputs.tf
+    2. Le module doit créer : 1 Application Profile, 3 Bridge Domains (avec subnets), 3 EPGs
+    3. Utiliser `for_each` pour créer les BDs et EPGs de manière DRY
+    4. Appeler le module depuis l'environnement de production avec des valeurs spécifiques
+    5. Créer un second environnement (dev) réutilisant le même module avec d'autres valeurs
+
+    **Critères de validation** :
+
+    - [ ] Le module est dans un dossier séparé `modules/aci-3tier-app`
+    - [ ] Les variables sont bien typées et documentées
+    - [ ] `for_each` est utilisé pour éviter la répétition
+    - [ ] Le module est appelé depuis 2 environnements différents (dev et prod)
+    - [ ] Les outputs du module remontent les DNs des ressources créées
+    - [ ] Le code passe `terraform validate` sur les 2 environnements
+
+??? quote "Solution"
+
+    **Structure du projet :**
+
+    ```
+    terraform-aci/
+    ├── modules/
+    │   └── aci-3tier-app/
+    │       ├── main.tf
+    │       ├── variables.tf
+    │       └── outputs.tf
+    ├── environments/
+    │   ├── dev/
+    │   │   ├── main.tf
+    │   │   ├── variables.tf
+    │   │   └── terraform.tfvars
+    │   └── prod/
+    │       ├── main.tf
+    │       ├── variables.tf
+    │       └── terraform.tfvars
+    └── README.md
+    ```
+
+    **modules/aci-3tier-app/variables.tf**
+
+    ```hcl
+    variable "tenant_dn" {
+      description = "DN du tenant parent"
+      type        = string
+    }
+
+    variable "vrf_dn" {
+      description = "DN du VRF pour les Bridge Domains"
+      type        = string
+    }
+
+    variable "app_name" {
+      description = "Nom de l'application (utilisé pour l'Application Profile)"
+      type        = string
+
+      validation {
+        condition     = length(var.app_name) > 0 && length(var.app_name) <= 64
+        error_message = "Le nom de l'application doit contenir entre 1 et 64 caractères."
+      }
+    }
+
+    variable "environment" {
+      description = "Environnement de déploiement"
+      type        = string
+      default     = "production"
+    }
+
+    variable "tiers" {
+      description = "Configuration des tiers (BD + EPG)"
+      type = map(object({
+        bd_name = string
+        epg_name = string
+        subnet  = string
+        scope   = list(string)
+      }))
+
+      default = {
+        web = {
+          bd_name  = "BD-Web"
+          epg_name = "Web-Tier"
+          subnet   = "10.1.1.1/24"
+          scope    = ["public"]
+        }
+        app = {
+          bd_name  = "BD-App"
+          epg_name = "App-Tier"
+          subnet   = "10.1.2.1/24"
+          scope    = ["public"]
+        }
+        db = {
+          bd_name  = "BD-Database"
+          epg_name = "Database-Tier"
+          subnet   = "10.1.3.1/24"
+          scope    = ["private"]
+        }
+      }
+    }
+    ```
+
+    **modules/aci-3tier-app/main.tf**
+
+    ```hcl
+    # Application Profile
+    resource "aci_application_profile" "three_tier" {
+      tenant_dn   = var.tenant_dn
+      name        = var.app_name
+      description = "Application Profile 3-tier pour ${var.app_name} - ${var.environment}"
+      annotation  = "managed-by:terraform,environment:${var.environment}"
+    }
+
+    # Bridge Domains (DRY avec for_each)
+    resource "aci_bridge_domain" "tiers" {
+      for_each = var.tiers
+
+      tenant_dn                   = var.tenant_dn
+      name                        = each.value.bd_name
+      description                 = "Bridge Domain pour ${each.key} tier"
+      relation_fv_rs_ctx          = var.vrf_dn
+
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform,tier:${each.key}"
+    }
+
+    # Subnets
+    resource "aci_subnet" "tiers" {
+      for_each = var.tiers
+
+      parent_dn   = aci_bridge_domain.tiers[each.key].id
+      ip          = each.value.subnet
+      scope       = each.value.scope
+      description = "Subnet pour ${each.key} tier"
+    }
+
+    # EPGs
+    resource "aci_application_epg" "tiers" {
+      for_each = var.tiers
+
+      application_profile_dn = aci_application_profile.three_tier.id
+      name                   = each.value.epg_name
+      description            = "EPG pour ${each.key} tier"
+      relation_fv_rs_bd      = aci_bridge_domain.tiers[each.key].id
+
+      pref_gr_memb           = "exclude"
+
+      annotation             = "managed-by:terraform,tier:${each.key}"
+    }
+    ```
+
+    **modules/aci-3tier-app/outputs.tf**
+
+    ```hcl
+    output "application_profile_dn" {
+      description = "DN de l'Application Profile créé"
+      value       = aci_application_profile.three_tier.id
+    }
+
+    output "bridge_domains" {
+      description = "DNs des Bridge Domains créés"
+      value = {
+        for k, bd in aci_bridge_domain.tiers : k => {
+          dn     = bd.id
+          name   = bd.name
+          subnet = var.tiers[k].subnet
+        }
+      }
+    }
+
+    output "epgs" {
+      description = "DNs des EPGs créés"
+      value = {
+        for k, epg in aci_application_epg.tiers : k => {
+          dn   = epg.id
+          name = epg.name
+        }
+      }
+    }
+
+    output "summary" {
+      description = "Résumé du déploiement"
+      value = {
+        app_name    = var.app_name
+        environment = var.environment
+        tiers_count = length(var.tiers)
+      }
+    }
+    ```
+
+    **environments/prod/main.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+
+    provider "aci" {
+      username = var.apic_username
+      password = var.apic_password
+      url      = var.apic_url
+      insecure = true
+    }
+
+    # Tenant
+    resource "aci_tenant" "prod" {
+      name        = "Prod-Tenant"
+      description = "Tenant de production"
+    }
+
+    # VRF
+    resource "aci_vrf" "prod" {
+      tenant_dn   = aci_tenant.prod.id
+      name        = "Production-VRF"
+      pc_enf_pref = "enforced"
+    }
+
+    # Module : Application E-Commerce
+    module "ecommerce_app" {
+      source = "../../modules/aci-3tier-app"
+
+      tenant_dn   = aci_tenant.prod.id
+      vrf_dn      = aci_vrf.prod.id
+      app_name    = "ECommerce-App"
+      environment = "production"
+
+      tiers = {
+        web = {
+          bd_name  = "BD-Web-Prod"
+          epg_name = "Web-Frontend"
+          subnet   = "10.10.1.1/24"
+          scope    = ["public"]
+        }
+        app = {
+          bd_name  = "BD-App-Prod"
+          epg_name = "App-Backend"
+          subnet   = "10.10.2.1/24"
+          scope    = ["public"]
+        }
+        db = {
+          bd_name  = "BD-DB-Prod"
+          epg_name = "Database"
+          subnet   = "10.10.3.1/24"
+          scope    = ["private"]
+        }
+      }
+    }
+    ```
+
+    **environments/prod/outputs.tf**
+
+    ```hcl
+    output "ecommerce_summary" {
+      description = "Résumé de l'application E-Commerce"
+      value       = module.ecommerce_app.summary
+    }
+
+    output "ecommerce_epgs" {
+      description = "EPGs de l'application E-Commerce"
+      value       = module.ecommerce_app.epgs
+    }
+    ```
+
+    **environments/dev/main.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+
+    provider "aci" {
+      username = var.apic_username
+      password = var.apic_password
+      url      = var.apic_url
+      insecure = true
+    }
+
+    # Tenant
+    resource "aci_tenant" "dev" {
+      name        = "Dev-Tenant"
+      description = "Tenant de développement"
+    }
+
+    # VRF
+    resource "aci_vrf" "dev" {
+      tenant_dn   = aci_tenant.dev.id
+      name        = "Dev-VRF"
+      pc_enf_pref = "unenforced"  # Plus permissif en dev
+    }
+
+    # Module : Application E-Commerce (environnement dev)
+    module "ecommerce_app_dev" {
+      source = "../../modules/aci-3tier-app"
+
+      tenant_dn   = aci_tenant.dev.id
+      vrf_dn      = aci_vrf.dev.id
+      app_name    = "ECommerce-App-Dev"
+      environment = "development"
+
+      tiers = {
+        web = {
+          bd_name  = "BD-Web-Dev"
+          epg_name = "Web-Frontend-Dev"
+          subnet   = "10.20.1.1/24"
+          scope    = ["public"]
+        }
+        app = {
+          bd_name  = "BD-App-Dev"
+          epg_name = "App-Backend-Dev"
+          subnet   = "10.20.2.1/24"
+          scope    = ["public"]
+        }
+        db = {
+          bd_name  = "BD-DB-Dev"
+          epg_name = "Database-Dev"
+          subnet   = "10.20.3.1/24"
+          scope    = ["private"]
+        }
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    # Environnement Prod
+    cd environments/prod
+    terraform init
+    terraform validate
+    terraform plan
+    terraform apply
+
+    # Environnement Dev
+    cd ../dev
+    terraform init
+    terraform validate
+    terraform plan
+    terraform apply
+    ```
+
+    **Résultat attendu :**
+
+    Le module `aci-3tier-app` est réutilisé dans 2 environnements différents (dev et prod) avec des configurations spécifiques. Le code est DRY (Don't Repeat Yourself) et maintenable.
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

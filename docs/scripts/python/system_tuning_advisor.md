@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - tuning
+  - performance
+  - linux
+---
+
 # System Tuning Advisor
 
 Script Python d'analyse et recommandations de tuning système Linux.

@@ -762,50 +762,239 @@ docker run -d \
 
 ---
 
-## 7. Exercice Pratique
+## 7. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place un monitoring complet avec plusieurs exporters
 
-1. Déployer Node Exporter avec collectors personnalisés
-2. Configurer Blackbox pour monitorer 3 endpoints
-3. Instrumenter une application Python
-4. Configurer Pushgateway pour un job batch
+    **Contexte** : Vous devez monitorer une infrastructure comprenant des serveurs Linux, une API web, et des endpoints externes. Vous avez également un job batch quotidien de sauvegarde à surveiller.
 
-### Docker Compose Complet
+    **Tâches à réaliser** :
 
-```yaml
-version: '3.8'
+    1. Déployer Node Exporter avec les collectors `systemd` et `processes` activés
+    2. Configurer Blackbox Exporter pour monitorer 3 endpoints HTTP (votre site, une API externe, et Google)
+    3. Créer une application Python simple qui expose des métriques personnalisées
+    4. Configurer Pushgateway et créer un script qui y envoie des métriques de backup
+    5. Ajouter tous ces exporters à la configuration Prometheus
+    6. Créer des requêtes PromQL pour visualiser les données de chaque exporter
 
-services:
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - "9090:9090"
+    **Critères de validation** :
+
+    - [ ] Node Exporter expose des métriques système
+    - [ ] Blackbox Exporter vérifie la disponibilité des 3 sites
+    - [ ] L'application Python expose au moins 2 métriques custom
+    - [ ] Le script de backup push des métriques au Pushgateway
+    - [ ] Toutes les targets sont UP dans Prometheus
+    - [ ] Les métriques sont requêtables via PromQL
+
+??? quote "Solution"
+    **1. Docker Compose complet**
+
+    ```yaml
+    version: '3.8'
+
+    services:
+      prometheus:
+        image: prom/prometheus:latest
+        ports:
+          - "9090:9090"
+        volumes:
+          - ./prometheus.yml:/etc/prometheus/prometheus.yml
+          - prometheus_data:/prometheus
+
+      node-exporter:
+        image: prom/node-exporter:latest
+        ports:
+          - "9100:9100"
+        volumes:
+          - /proc:/host/proc:ro
+          - /sys:/host/sys:ro
+        command:
+          - '--path.procfs=/host/proc'
+          - '--path.sysfs=/host/sys'
+          - '--collector.systemd'
+          - '--collector.processes'
+
+      blackbox-exporter:
+        image: prom/blackbox-exporter:latest
+        ports:
+          - "9115:9115"
+        volumes:
+          - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+
+      pushgateway:
+        image: prom/pushgateway:latest
+        ports:
+          - "9091:9091"
+
+      python-app:
+        build: ./python-app
+        ports:
+          - "8000:8000"
+
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      prometheus_data:
+    ```
 
-  node-exporter:
-    image: prom/node-exporter:latest
-    ports:
-      - "9100:9100"
+    **2. Configuration Blackbox (blackbox.yml)**
 
-  blackbox-exporter:
-    image: prom/blackbox-exporter:latest
-    ports:
-      - "9115:9115"
-    volumes:
-      - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+    ```yaml
+    modules:
+      http_2xx:
+        prober: http
+        timeout: 5s
+        http:
+          valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+          method: GET
+          follow_redirects: true
+    ```
 
-  pushgateway:
-    image: prom/pushgateway:latest
-    ports:
-      - "9091:9091"
+    **3. Application Python avec métriques**
 
-  python-app:
-    build: ./python-app
-    ports:
-      - "8000:8000"
-```
+    ```python
+    # python-app/app.py
+    from flask import Flask
+    from prometheus_client import Counter, Gauge, Histogram, generate_latest
+    import time
+    import random
+
+    app = Flask(__name__)
+
+    # Métriques personnalisées
+    REQUEST_COUNT = Counter('app_requests_total', 'Total requests', ['endpoint'])
+    PROCESSING_TIME = Histogram('app_processing_seconds', 'Processing time')
+    ACTIVE_USERS = Gauge('app_active_users', 'Active users')
+
+    @app.route('/')
+    def index():
+        REQUEST_COUNT.labels(endpoint='home').inc()
+        time.sleep(random.uniform(0.01, 0.1))
+        ACTIVE_USERS.set(random.randint(10, 100))
+        return "Hello World!"
+
+    @app.route('/metrics')
+    def metrics():
+        return generate_latest()
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=8000)
+    ```
+
+    **4. Script de backup avec Pushgateway**
+
+    ```bash
+    #!/bin/bash
+    # backup-script.sh
+
+    PUSHGATEWAY="localhost:9091"
+    JOB="backup"
+    INSTANCE=$(hostname)
+
+    START=$(date +%s)
+
+    # Simuler un backup
+    sleep 5
+
+    END=$(date +%s)
+    DURATION=$((END - START))
+    SUCCESS=1
+
+    # Push métriques
+    cat <<EOF | curl --data-binary @- "http://${PUSHGATEWAY}/metrics/job/${JOB}/instance/${INSTANCE}"
+    # TYPE backup_duration_seconds gauge
+    backup_duration_seconds ${DURATION}
+    # TYPE backup_success gauge
+    backup_success ${SUCCESS}
+    # TYPE backup_timestamp gauge
+    backup_timestamp ${END}
+    EOF
+
+    echo "Backup metrics pushed to Pushgateway"
+    ```
+
+    **5. Configuration Prometheus (prometheus.yml)**
+
+    ```yaml
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'node'
+        static_configs:
+          - targets: ['node-exporter:9100']
+
+      - job_name: 'python-app'
+        static_configs:
+          - targets: ['python-app:8000']
+
+      - job_name: 'pushgateway'
+        honor_labels: true
+        static_configs:
+          - targets: ['pushgateway:9091']
+
+      - job_name: 'blackbox'
+        metrics_path: /probe
+        params:
+          module: [http_2xx]
+        static_configs:
+          - targets:
+              - https://www.google.com
+              - https://prometheus.io
+              - http://python-app:8000
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
+            replacement: blackbox-exporter:9115
+    ```
+
+    **6. Requêtes PromQL pour validation**
+
+    ```promql
+    # Vérifier que tous les exporters sont UP
+    up{job=~"node|python-app|blackbox|pushgateway"}
+
+    # Métriques Node Exporter
+    node_cpu_seconds_total
+    node_systemd_units{state="active"}
+
+    # Métriques Blackbox
+    probe_success
+    probe_http_duration_seconds
+
+    # Métriques application Python
+    app_requests_total
+    app_active_users
+
+    # Métriques Pushgateway (backup)
+    backup_success
+    backup_duration_seconds
+    ```
+
+    **Commandes de test :**
+
+    ```bash
+    # Démarrer la stack
+    docker-compose up -d
+
+    # Vérifier les targets
+    curl http://localhost:9090/api/v1/targets | jq '.data.activeTargets[].health'
+
+    # Générer du traffic sur l'app Python
+    for i in {1..100}; do curl http://localhost:8000/; done
+
+    # Exécuter le script de backup
+    bash backup-script.sh
+
+    # Vérifier les métriques dans Prometheus
+    curl 'http://localhost:9090/api/v1/query?query=up' | jq .
+    ```
 
 ---
 

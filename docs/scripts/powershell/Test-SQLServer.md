@@ -27,6 +27,24 @@ Ce script vérifie l'état d'une instance SQL Server :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ avec SQL Server 2016+
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits sysadmin ou db_owner sur SQL Server
+- **Modules** : Aucun module requis (utilise .NET SQL client, SQLPS optionnel)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring SQL** : Surveillance quotidienne de la santé de SQL Server
+- **Troubleshooting connexion** : Diagnostiquer les problèmes de connectivité SQL
+- **Audit backups** : Vérifier que les sauvegardes sont récentes et fonctionnelles
+- **Performance analysis** : Analyser les jobs SQL Agent et l'état des bases de données
+
+---
+
 ## Script
 
 ```powershell

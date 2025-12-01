@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - sql-server
+  - backup
+  - maintenance
+  - dba
+  - module
+---
+
 # Module 3 : Maintenance & Backups - Le Standard Ola Hallengren
 
 ## Introduction

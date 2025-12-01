@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - compliance
+  - patching
+  - security
+---
+
 # Patch Compliance Report
 
 Script Python de génération de rapports de conformité des patchs système.

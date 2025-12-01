@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - compliance
+  - audit
+  - security
+---
+
 # Compliance Report Generator
 
 Script Python de génération automatique de rapports de conformité multi-référentiels.

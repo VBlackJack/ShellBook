@@ -52,6 +52,15 @@ mysql --version
 
 ---
 
+## Cas d'Usage
+
+- **Audit de sécurité périodique** : Vérification automatisée des configurations de sécurité MySQL avec rapport détaillé
+- **Conformité réglementaire** : Documentation et validation des paramètres de sécurité pour audits
+- **Durcissement post-installation** : Identification rapide des failles de sécurité après installation MySQL
+- **Validation avant production** : Test de sécurité complet avant mise en production d'un serveur de base de données
+
+---
+
 ## Script
 
 ```bash

@@ -25,6 +25,24 @@ Vérification des certificats SSL/TLS sur endpoints multiples.
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Lecture réseau et certificats locaux (pas d'élévation requise)
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Monitoring certificats** : Surveillance automatique des dates d'expiration
+- **Audit sécurité** : Vérification de la chaîne de confiance et algorithmes
+- **CI/CD Integration** : Validation des certificats avant déploiement en production
+- **Documentation** : Inventaire des certificats SSL de l'infrastructure
+
+---
+
 ## Utilisation
 
 ```powershell

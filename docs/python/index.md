@@ -1,3 +1,11 @@
+---
+tags:
+  - python
+  - sysops
+  - automation
+  - scripting
+---
+
 # Python for SysOps
 
 Python : la "colle" du DevOps moderne. Scripting, automatisation et intégration cloud.

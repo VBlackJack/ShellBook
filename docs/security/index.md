@@ -1,3 +1,11 @@
+---
+tags:
+  - security
+  - compliance
+  - audit
+  - pki
+---
+
 # Sécurité & Conformité
 
 Sécurité offensive et défensive, cryptographie, conformité et outils d'audit.

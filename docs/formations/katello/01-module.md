@@ -377,27 +377,29 @@ cat /etc/foreman-installer/scenarios.d/katello-answers.yaml | grep initial_admin
 
 ---
 
-## 🎓 Exercice : "First Launch"
+## Exercice : À Vous de Jouer
 
-### 📋 Contexte
+!!! example "Mise en Pratique : First Launch - Installation Katello"
+    **Objectif** : Installer et configurer Katello sur un serveur Rocky Linux 9.
 
-Vous êtes administrateur système chez **LinuxCorp**, une entreprise de 200 serveurs Rocky Linux 9. Le DSI vous demande de déployer une solution de gestion centralisée des mises à jour.
+    **Contexte** : Vous êtes administrateur système chez **LinuxCorp**, une entreprise de 200 serveurs Rocky Linux 9. Le DSI vous demande de déployer une solution de gestion centralisée des mises à jour. Vous décidez de tester **Katello** sur une VM de laboratoire avant le déploiement production.
 
-Vous décidez de tester **Katello** sur une VM de laboratoire avant le déploiement production.
+    **Tâches à réaliser** :
 
----
+    1. Préparer un serveur Rocky Linux 9 avec les ressources adéquates
+    2. Vérifier les prérequis (hostname FQDN, résolution DNS, ressources)
+    3. Installer les repos Foreman et Katello
+    4. Exécuter l'installateur `foreman-installer --scenario katello`
+    5. Configurer le firewall (ports 80, 443, 5647, 8140, 9090)
+    6. Accéder à l'interface Web HTTPS
+    7. Vérifier que tous les services sont actifs
 
-### 🎯 Objectifs
+    **Critères de validation** :
 
-1. ✅ Préparer un serveur Rocky Linux 9 avec les ressources adéquates
-2. ✅ Vérifier les prérequis (hostname FQDN, résolution DNS, ressources)
-3. ✅ Installer les repos Foreman et Katello
-4. ✅ Exécuter l'installateur `foreman-installer --scenario katello`
-5. ✅ Configurer le firewall (ports 80, 443, 5647, 8140, 9090)
-6. ✅ Accéder à l'interface Web HTTPS
-7. ✅ Vérifier que tous les services sont actifs
-
----
+    - [ ] Hostname FQDN résolu en DNS
+    - [ ] Services Foreman/Katello actifs
+    - [ ] Interface Web accessible en HTTPS
+    - [ ] Firewall configuré avec les ports requis
 
 ### 📝 Travail à réaliser
 

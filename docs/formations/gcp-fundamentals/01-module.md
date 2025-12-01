@@ -756,6 +756,234 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un environnement multi-projets avec une gouvernance IAM complète
+
+    **Contexte** : Vous êtes administrateur cloud pour une entreprise qui démarre sur GCP. L'entreprise a besoin de trois environnements (dev, staging, prod) avec une séparation stricte des accès et une traçabilité complète des actions.
+
+    **Tâches à réaliser** :
+
+    1. Créer trois projets GCP : `mon-app-dev`, `mon-app-staging`, `mon-app-prod`
+    2. Configurer des configurations gcloud séparées pour chaque environnement
+    3. Créer trois Service Accounts dédiés :
+        - `dev-deployer-sa` pour les déploiements en dev
+        - `staging-deployer-sa` pour les déploiements en staging
+        - `prod-readonly-sa` pour la lecture seule en production
+    4. Configurer les rôles IAM appropriés pour chaque Service Account
+    5. Créer un groupe Google `devops-team@votredomaine.com` et lui donner accès aux trois environnements avec des permissions différenciées
+    6. Activer les audit logs sur les trois projets
+    7. Effectuer un audit de sécurité et générer un rapport listant tous les membres avec des Basic Roles
+
+    **Critères de validation** :
+
+    - [ ] Les trois projets sont créés et configurés
+    - [ ] Les Service Accounts ont uniquement les permissions nécessaires (principe du moindre privilège)
+    - [ ] Le groupe devops-team a `roles/editor` sur dev, `roles/viewer` sur staging, et `roles/viewer` sur prod
+    - [ ] Aucun utilisateur individuel n'a de permissions directes (tout passe par des groupes)
+    - [ ] Les audit logs sont activés et accessibles dans Cloud Logging
+    - [ ] Le rapport d'audit identifie tous les Basic Roles (si présents)
+
+??? quote "Solution"
+    **Étape 1 : Création des projets**
+
+    ```bash
+    # Définir les variables
+    PREFIX="mon-app"
+    ENVIRONMENTS=("dev" "staging" "prod")
+
+    # Créer les projets
+    for ENV in "${ENVIRONMENTS[@]}"; do
+        PROJECT_ID="${PREFIX}-${ENV}"
+        gcloud projects create $PROJECT_ID --name="${PREFIX^^} ${ENV^}"
+        echo "✓ Projet $PROJECT_ID créé"
+    done
+    ```
+
+    **Étape 2 : Configurations gcloud**
+
+    ```bash
+    # Créer une configuration par environnement
+    for ENV in "${ENVIRONMENTS[@]}"; do
+        PROJECT_ID="${PREFIX}-${ENV}"
+
+        gcloud config configurations create ${PREFIX}-${ENV}
+        gcloud config set project $PROJECT_ID --configuration=${PREFIX}-${ENV}
+        gcloud config set compute/region europe-west1 --configuration=${PREFIX}-${ENV}
+        gcloud config set compute/zone europe-west1-b --configuration=${PREFIX}-${ENV}
+
+        echo "✓ Configuration ${PREFIX}-${ENV} créée"
+    done
+
+    # Lister les configurations
+    gcloud config configurations list
+
+    # Basculer vers une configuration
+    gcloud config configurations activate mon-app-dev
+    ```
+
+    **Étape 3 : Service Accounts**
+
+    ```bash
+    # Dev deployer
+    gcloud iam service-accounts create dev-deployer-sa \
+        --project=mon-app-dev \
+        --display-name="Dev Deployer Service Account"
+
+    gcloud projects add-iam-policy-binding mon-app-dev \
+        --member="serviceAccount:dev-deployer-sa@mon-app-dev.iam.gserviceaccount.com" \
+        --role="roles/compute.admin"
+
+    gcloud projects add-iam-policy-binding mon-app-dev \
+        --member="serviceAccount:dev-deployer-sa@mon-app-dev.iam.gserviceaccount.com" \
+        --role="roles/container.developer"
+
+    # Staging deployer
+    gcloud iam service-accounts create staging-deployer-sa \
+        --project=mon-app-staging \
+        --display-name="Staging Deployer Service Account"
+
+    gcloud projects add-iam-policy-binding mon-app-staging \
+        --member="serviceAccount:staging-deployer-sa@mon-app-staging.iam.gserviceaccount.com" \
+        --role="roles/compute.instanceAdmin.v1"
+
+    gcloud projects add-iam-policy-binding mon-app-staging \
+        --member="serviceAccount:staging-deployer-sa@mon-app-staging.iam.gserviceaccount.com" \
+        --role="roles/container.developer"
+
+    # Prod readonly
+    gcloud iam service-accounts create prod-readonly-sa \
+        --project=mon-app-prod \
+        --display-name="Production Read-Only Service Account"
+
+    gcloud projects add-iam-policy-binding mon-app-prod \
+        --member="serviceAccount:prod-readonly-sa@mon-app-prod.iam.gserviceaccount.com" \
+        --role="roles/viewer"
+    ```
+
+    **Étape 4 : Configuration du groupe DevOps**
+
+    ```bash
+    # Permissions pour le groupe DevOps
+    GROUP_EMAIL="devops-team@votredomaine.com"
+
+    # Dev: Editor
+    gcloud projects add-iam-policy-binding mon-app-dev \
+        --member="group:${GROUP_EMAIL}" \
+        --role="roles/editor"
+
+    # Staging: Viewer + Compute Viewer
+    gcloud projects add-iam-policy-binding mon-app-staging \
+        --member="group:${GROUP_EMAIL}" \
+        --role="roles/viewer"
+
+    gcloud projects add-iam-policy-binding mon-app-staging \
+        --member="group:${GROUP_EMAIL}" \
+        --role="roles/compute.viewer"
+
+    # Prod: Viewer seulement
+    gcloud projects add-iam-policy-binding mon-app-prod \
+        --member="group:${GROUP_EMAIL}" \
+        --role="roles/viewer"
+    ```
+
+    **Étape 5 : Activer les audit logs**
+
+    ```bash
+    # Les audit logs Admin Activity sont activés par défaut
+    # Pour Data Access logs, il faut les activer via la Console ou une policy
+
+    # Vérifier les audit logs
+    for ENV in "${ENVIRONMENTS[@]}"; do
+        PROJECT_ID="${PREFIX}-${ENV}"
+        echo "=== Audit logs pour $PROJECT_ID ==="
+        gcloud logging read "logName:cloudaudit.googleapis.com" \
+            --project=$PROJECT_ID \
+            --limit=5 \
+            --format="table(timestamp,protoPayload.methodName,protoPayload.authenticationInfo.principalEmail)"
+    done
+    ```
+
+    **Étape 6 : Audit de sécurité**
+
+    ```bash
+    # Script d'audit
+    cat > audit-iam.sh << 'SCRIPT'
+    #!/bin/bash
+
+    echo "=== AUDIT IAM MULTI-PROJETS ==="
+    echo ""
+
+    for PROJECT in mon-app-dev mon-app-staging mon-app-prod; do
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Projet: $PROJECT"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        # Basic Roles (à éviter)
+        echo ""
+        echo "⚠️  BASIC ROLES (à remplacer) :"
+        gcloud projects get-iam-policy $PROJECT \
+            --flatten="bindings[]" \
+            --filter="bindings.role:(roles/owner OR roles/editor OR roles/viewer)" \
+            --format="table(bindings.role, bindings.members)" \
+            2>/dev/null || echo "Aucun Basic Role trouvé"
+
+        # Service Accounts
+        echo ""
+        echo "🤖 SERVICE ACCOUNTS :"
+        gcloud iam service-accounts list --project=$PROJECT \
+            --format="table(email,displayName)" 2>/dev/null
+
+        # Membres avec permissions
+        echo ""
+        echo "👥 TOUS LES MEMBRES :"
+        gcloud projects get-iam-policy $PROJECT \
+            --flatten="bindings[]" \
+            --format="table(bindings.members, bindings.role)" | head -20
+
+        echo ""
+    done
+    SCRIPT
+
+    chmod +x audit-iam.sh
+    ./audit-iam.sh
+    ```
+
+    **Validation finale**
+
+    ```bash
+    # Vérifier la configuration complète
+    echo "=== VALIDATION ==="
+
+    # 1. Projets créés
+    echo "Projets :"
+    gcloud projects list --filter="projectId:mon-app-*"
+
+    # 2. Configurations gcloud
+    echo ""
+    echo "Configurations gcloud :"
+    gcloud config configurations list
+
+    # 3. Service Accounts
+    echo ""
+    echo "Service Accounts par projet :"
+    for ENV in dev staging prod; do
+        echo "  - mon-app-$ENV :"
+        gcloud iam service-accounts list --project=mon-app-$ENV \
+            --format="value(email)" --filter="email~deployer OR email~readonly"
+    done
+
+    # 4. Test de basculement
+    echo ""
+    echo "Test de basculement d'environnement :"
+    gcloud config configurations activate mon-app-dev
+    echo "  Config active : $(gcloud config configurations list --filter='is_active:true' --format='value(name)')"
+    echo "  Projet actuel : $(gcloud config get-value project)"
+    ```
+
+---
+
 ## 9. Quiz de validation
 
 !!! question "Question 1"

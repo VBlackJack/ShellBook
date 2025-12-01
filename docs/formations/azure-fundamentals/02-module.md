@@ -498,7 +498,333 @@ az vm auto-shutdown \
 
 ---
 
-## 7. Exercices Pratiques
+## 7. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure web scalable avec VMs et VMSS
+
+    **Contexte** : Vous devez déployer une application web pour une startup qui anticipe une forte croissance. L'infrastructure doit être capable de gérer une charge variable et optimiser les coûts. Vous allez créer un environnement avec des VMs pour les services statiques et un VMSS pour le frontend web qui doit scale automatiquement.
+
+    **Tâches à réaliser** :
+
+    1. Créer une VM de bastion pour l'administration (B2s, pas d'IP publique)
+    2. Créer une VM de base de données (E4s_v5 avec data disk 256GB Premium)
+    3. Créer une image personnalisée avec NGINX préinstallé
+    4. Déployer un VMSS de 2-10 instances derrière un Load Balancer
+    5. Configurer l'autoscaling basé sur CPU (scale out à 75%, scale in à 25%)
+    6. Ajouter un node pool Spot pour le traitement batch nocturne
+    7. Configurer l'auto-shutdown pour toutes les VMs à 19h00
+    8. Activer boot diagnostics sur toutes les ressources
+
+    **Critères de validation** :
+
+    - [ ] La VM bastion est accessible uniquement depuis Azure Bastion
+    - [ ] La VM database a un disque data de 256GB monté sur /data
+    - [ ] L'image personnalisée contient NGINX et répond sur le port 80
+    - [ ] Le VMSS est déployé avec minimum 2 instances dans des zones différentes
+    - [ ] Le Load Balancer distribue le trafic HTTP sur le port 80
+    - [ ] L'autoscaling fonctionne (testable avec stress-ng)
+    - [ ] Les VMs s'éteignent automatiquement à 19h00
+    - [ ] Boot diagnostics est actif et les logs sont visibles
+
+??? quote "Solution"
+
+    **Étape 1 : Préparer l'environnement**
+
+    ```bash
+    # Variables
+    LOCATION="westeurope"
+    RG_NAME="vm-infrastructure-rg"
+    VNET_NAME="infra-vnet"
+
+    # Créer le resource group
+    az group create --name $RG_NAME --location $LOCATION
+
+    # Créer le VNet et subnets
+    az network vnet create \
+        --resource-group $RG_NAME \
+        --name $VNET_NAME \
+        --address-prefix 10.0.0.0/16 \
+        --subnet-name bastion-subnet \
+        --subnet-prefix 10.0.1.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name database-subnet \
+        --address-prefix 10.0.2.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name web-subnet \
+        --address-prefix 10.0.3.0/24
+    ```
+
+    **Étape 2 : Créer la VM Bastion**
+
+    ```bash
+    # VM Bastion (sans IP publique)
+    az vm create \
+        --resource-group $RG_NAME \
+        --name bastion-vm \
+        --image Ubuntu2204 \
+        --size Standard_B2s \
+        --vnet-name $VNET_NAME \
+        --subnet bastion-subnet \
+        --admin-username azureuser \
+        --generate-ssh-keys \
+        --public-ip-address "" \
+        --nsg bastion-nsg
+
+    # NSG pour bastion (SSH depuis Azure Bastion uniquement)
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name bastion-nsg \
+        --name AllowSSHFromAzureBastion \
+        --priority 100 \
+        --source-address-prefixes AzureBastionSubnet \
+        --destination-port-ranges 22 \
+        --access Allow \
+        --protocol Tcp
+    ```
+
+    **Étape 3 : Créer la VM Database avec data disk**
+
+    ```bash
+    # Créer la VM database
+    az vm create \
+        --resource-group $RG_NAME \
+        --name database-vm \
+        --image Ubuntu2204 \
+        --size Standard_E4s_v5 \
+        --vnet-name $VNET_NAME \
+        --subnet database-subnet \
+        --admin-username azureuser \
+        --generate-ssh-keys \
+        --public-ip-address "" \
+        --storage-sku Premium_LRS
+
+    # Créer et attacher le data disk
+    az vm disk attach \
+        --resource-group $RG_NAME \
+        --vm-name database-vm \
+        --name database-data-disk \
+        --new \
+        --size-gb 256 \
+        --sku Premium_LRS
+
+    # Configurer auto-shutdown
+    az vm auto-shutdown \
+        --resource-group $RG_NAME \
+        --name database-vm \
+        --time 1900 \
+        --timezone "Romance Standard Time"
+    ```
+
+    **Étape 4 : Créer une image personnalisée avec NGINX**
+
+    ```bash
+    # Créer une VM temporaire pour l'image
+    az vm create \
+        --resource-group $RG_NAME \
+        --name template-vm \
+        --image Ubuntu2204 \
+        --size Standard_B2s \
+        --admin-username azureuser \
+        --generate-ssh-keys
+
+    # Récupérer l'IP et installer NGINX
+    TEMPLATE_IP=$(az vm show -g $RG_NAME -n template-vm --show-details --query publicIps -o tsv)
+
+    # Se connecter et installer NGINX
+    ssh azureuser@$TEMPLATE_IP << 'EOF'
+    sudo apt-get update
+    sudo apt-get install -y nginx
+    sudo systemctl enable nginx
+    echo "<h1>Azure VMSS - $(hostname)</h1>" | sudo tee /var/www/html/index.html
+    exit
+    EOF
+
+    # Généraliser la VM
+    ssh azureuser@$TEMPLATE_IP "sudo waagent -deprovision+user -force"
+    az vm deallocate --resource-group $RG_NAME --name template-vm
+    az vm generalize --resource-group $RG_NAME --name template-vm
+
+    # Créer l'image
+    az image create \
+        --resource-group $RG_NAME \
+        --name nginx-web-image \
+        --source template-vm
+
+    # Supprimer la VM template
+    az vm delete --resource-group $RG_NAME --name template-vm --yes
+    ```
+
+    **Étape 5 : Créer le Load Balancer**
+
+    ```bash
+    # IP publique pour le Load Balancer
+    az network public-ip create \
+        --resource-group $RG_NAME \
+        --name web-lb-pip \
+        --sku Standard \
+        --allocation-method Static
+
+    # Load Balancer
+    az network lb create \
+        --resource-group $RG_NAME \
+        --name web-lb \
+        --sku Standard \
+        --public-ip-address web-lb-pip \
+        --frontend-ip-name web-frontend \
+        --backend-pool-name web-backend
+
+    # Health probe
+    az network lb probe create \
+        --resource-group $RG_NAME \
+        --lb-name web-lb \
+        --name http-probe \
+        --protocol Http \
+        --port 80 \
+        --path /
+
+    # Load balancing rule
+    az network lb rule create \
+        --resource-group $RG_NAME \
+        --lb-name web-lb \
+        --name http-rule \
+        --protocol Tcp \
+        --frontend-port 80 \
+        --backend-port 80 \
+        --frontend-ip-name web-frontend \
+        --backend-pool-name web-backend \
+        --probe-name http-probe
+    ```
+
+    **Étape 6 : Déployer le VMSS avec autoscaling**
+
+    ```bash
+    # Créer le VMSS
+    az vmss create \
+        --resource-group $RG_NAME \
+        --name web-vmss \
+        --image nginx-web-image \
+        --vm-sku Standard_B2s \
+        --instance-count 2 \
+        --admin-username azureuser \
+        --generate-ssh-keys \
+        --vnet-name $VNET_NAME \
+        --subnet web-subnet \
+        --lb web-lb \
+        --backend-pool-name web-backend \
+        --upgrade-policy-mode Automatic \
+        --zones 1 2 3
+
+    # Configurer l'autoscaling
+    az monitor autoscale create \
+        --resource-group $RG_NAME \
+        --resource web-vmss \
+        --resource-type Microsoft.Compute/virtualMachineScaleSets \
+        --name web-vmss-autoscale \
+        --min-count 2 \
+        --max-count 10 \
+        --count 2
+
+    # Règle scale-out (CPU > 75%)
+    az monitor autoscale rule create \
+        --resource-group $RG_NAME \
+        --autoscale-name web-vmss-autoscale \
+        --condition "Percentage CPU > 75 avg 5m" \
+        --scale out 2
+
+    # Règle scale-in (CPU < 25%)
+    az monitor autoscale rule create \
+        --resource-group $RG_NAME \
+        --autoscale-name web-vmss-autoscale \
+        --condition "Percentage CPU < 25 avg 5m" \
+        --scale in 1
+    ```
+
+    **Étape 7 : Ajouter un node pool Spot pour batch**
+
+    ```bash
+    # Créer un VMSS Spot séparé pour batch
+    az vmss create \
+        --resource-group $RG_NAME \
+        --name batch-vmss-spot \
+        --image Ubuntu2204 \
+        --vm-sku Standard_D4s_v5 \
+        --instance-count 0 \
+        --priority Spot \
+        --eviction-policy Deallocate \
+        --max-price -1 \
+        --admin-username azureuser \
+        --generate-ssh-keys \
+        --vnet-name $VNET_NAME \
+        --subnet web-subnet
+
+    # Configurer autoscale pour batch (actif la nuit)
+    az monitor autoscale create \
+        --resource-group $RG_NAME \
+        --resource batch-vmss-spot \
+        --resource-type Microsoft.Compute/virtualMachineScaleSets \
+        --name batch-autoscale \
+        --min-count 0 \
+        --max-count 10 \
+        --count 0
+    ```
+
+    **Étape 8 : Activer boot diagnostics**
+
+    ```bash
+    # Créer un storage account pour diagnostics
+    DIAG_STORAGE="diagstorage$(openssl rand -hex 4)"
+    az storage account create \
+        --resource-group $RG_NAME \
+        --name $DIAG_STORAGE \
+        --sku Standard_LRS
+
+    # Activer boot diagnostics sur la VM database
+    az vm boot-diagnostics enable \
+        --resource-group $RG_NAME \
+        --name database-vm \
+        --storage $DIAG_STORAGE
+
+    # Pour le VMSS
+    az vmss diagnostics set \
+        --resource-group $RG_NAME \
+        --vmss-name web-vmss \
+        --settings "{\"storageAccount\":\"$DIAG_STORAGE\"}"
+    ```
+
+    **Validation**
+
+    ```bash
+    # Tester le Load Balancer
+    LB_IP=$(az network public-ip show -g $RG_NAME -n web-lb-pip --query ipAddress -o tsv)
+    echo "Load Balancer IP: $LB_IP"
+    curl http://$LB_IP
+
+    # Vérifier les instances VMSS
+    az vmss list-instances \
+        --resource-group $RG_NAME \
+        --name web-vmss \
+        --output table
+
+    # Tester l'autoscaling (générer de la charge)
+    # Se connecter à une instance et lancer stress-ng
+    az vmss list-instance-connection-info \
+        --resource-group $RG_NAME \
+        --name web-vmss
+
+    # Observer le scaling
+    watch -n 10 "az vmss list-instances -g $RG_NAME -n web-vmss --output table"
+    ```
+
+---
+
+## 8. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Déployer un Web Server
 

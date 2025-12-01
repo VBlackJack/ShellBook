@@ -25,6 +25,24 @@ Ce script effectue des sauvegardes de répertoires :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Lecture sur le répertoire source, écriture sur la destination
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Sauvegardes automatisées** : Planifier des backups quotidiens avec le Planificateur de tâches
+- **Protection de données** : Créer des copies de sécurité avant des migrations ou mises à jour
+- **Archivage** : Conserver plusieurs versions de répertoires avec rotation automatique
+- **Disaster Recovery** : Maintenir des sauvegardes hors-ligne pour la reprise après incident
+
+---
+
 ## Script
 
 ```powershell

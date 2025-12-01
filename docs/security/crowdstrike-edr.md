@@ -1,6 +1,14 @@
-# CrowdStrike Falcon : Guide EDR & Troubleshooting
+---
+tags:
+  - edr
+  - crowdstrike
+  - security
+  - endpoint
+  - linux
+  - windows
+---
 
-`#edr` `#crowdstrike` `#falcon` `#security` `#blue-team` `#endpoint` `#linux` `#windows`
+# CrowdStrike Falcon : Guide EDR & Troubleshooting
 
 **Guide de déploiement et troubleshooting pour SysAdmins & Blue Teams**
 

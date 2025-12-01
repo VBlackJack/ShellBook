@@ -1,3 +1,10 @@
+---
+tags:
+  - linux
+  - sysadmin
+  - administration
+---
+
 # Administration Linux
 
 Guide complet d'administration système Linux : de la configuration initiale au dépannage avancé.

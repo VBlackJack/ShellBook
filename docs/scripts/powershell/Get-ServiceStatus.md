@@ -24,6 +24,24 @@ Ce script facilite la gestion des services Windows :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur requis pour démarrer/arrêter des services
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Monitoring quotidien** : Vérifier l'état des services critiques chaque matin
+- **Troubleshooting** : Diagnostiquer rapidement les services en échec
+- **Documentation** : Générer des rapports HTML/CSV pour audit
+- **Automation** : Redémarrer automatiquement les services défaillants
+
+---
+
 ## Script
 
 ```powershell

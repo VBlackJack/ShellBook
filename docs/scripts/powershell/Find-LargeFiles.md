@@ -24,6 +24,24 @@ Ce script identifie les fichiers volumineux :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Lecture sur les répertoires à analyser
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Gestion d'espace disque** : Identifier les fichiers qui consomment le plus d'espace
+- **Nettoyage système** : Trouver les fichiers logs, backups ou temporaires volumineux
+- **Audit de stockage** : Analyser l'utilisation du disque avant une migration
+- **Maintenance préventive** : Détecter les fichiers qui grandissent anormalement
+
+---
+
 ## Script
 
 ```powershell

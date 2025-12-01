@@ -231,53 +231,100 @@ podman info | grep rootless
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer votre premier serveur web avec Podman en mode rootless
 
-Déployer un serveur web Nginx avec du contenu personnalisé.
+    **Contexte** : Vous devez mettre en place un serveur web Nginx qui affiche une page HTML personnalisée. Ce serveur doit être accessible depuis l'hôte et utiliser un volume pour le contenu statique.
 
-### Étapes
+    **Tâches à réaliser** :
 
-```bash
-# 1. Créer un répertoire de travail
-mkdir -p ~/podman-lab/web
-cd ~/podman-lab/web
+    1. Rechercher et télécharger l'image officielle Nginx en version Alpine
+    2. Créer un répertoire de travail et une page HTML personnalisée
+    3. Lancer un conteneur Nginx en mode détaché avec mapping de port et volume
+    4. Vérifier le fonctionnement du serveur web
+    5. Consulter les logs et les informations réseau du conteneur
+    6. Nettoyer l'environnement
 
-# 2. Créer une page HTML
-cat > index.html << 'EOF'
-<!DOCTYPE html>
-<html>
-<head><title>Podman Lab</title></head>
-<body>
-<h1>Hello from Podman!</h1>
-<p>Running rootless on $(hostname)</p>
-</body>
-</html>
-EOF
+    **Critères de validation** :
 
-# 3. Lancer le conteneur avec un volume
-podman run -d \
-  --name webserver \
-  -p 8080:80 \
-  -v ./index.html:/usr/share/nginx/html/index.html:ro,Z \
-  nginx:alpine
+    - [ ] Le conteneur Nginx est en cours d'exécution
+    - [ ] La page web est accessible sur http://localhost:8080
+    - [ ] Le contenu HTML personnalisé s'affiche correctement
+    - [ ] Le label SELinux `:Z` est appliqué au volume
+    - [ ] Les logs du conteneur sont consultables
 
-# 4. Tester
-curl http://localhost:8080
+??? quote "Solution"
+    Voici la solution complète pas à pas :
 
-# 5. Inspecter
-podman inspect webserver | jq '.[0].NetworkSettings'
+    ```bash
+    # 1. Rechercher et télécharger l'image Nginx Alpine
+    podman search nginx
+    podman pull nginx:alpine
+    podman images
 
-# 6. Voir les logs
-podman logs webserver
+    # 2. Créer un répertoire de travail et une page HTML
+    mkdir -p ~/podman-lab/web
+    cd ~/podman-lab/web
 
-# 7. Cleanup
-podman stop webserver && podman rm webserver
-```
+    cat > index.html << 'EOF'
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Podman Lab - Module 1</title>
+        <style>
+            body { font-family: Arial; margin: 50px; }
+            h1 { color: #892CA0; }
+        </style>
+    </head>
+    <body>
+        <h1>Hello from Podman!</h1>
+        <p>Running rootless on $(hostname)</p>
+        <p>Podman version: Voir avec <code>podman --version</code></p>
+    </body>
+    </html>
+    EOF
 
-!!! note "Option :Z"
-    L'option `:Z` sur les volumes applique le contexte SELinux approprié. Essentiel sur RHEL/Rocky.
+    # 3. Lancer le conteneur avec volume monté
+    podman run -d \
+      --name webserver \
+      -p 8080:80 \
+      -v ./index.html:/usr/share/nginx/html/index.html:ro,Z \
+      nginx:alpine
+
+    # 4. Vérifier et tester
+    podman ps
+    curl http://localhost:8080
+
+    # 5. Inspecter le conteneur
+    podman inspect webserver | jq '.[0].NetworkSettings.IPAddress'
+    podman port webserver
+
+    # 6. Consulter les logs
+    podman logs webserver
+    podman logs -f webserver  # Suivre en temps réel (Ctrl+C pour quitter)
+
+    # 7. Informations détaillées
+    podman stats webserver --no-stream
+
+    # 8. Cleanup
+    podman stop webserver
+    podman rm webserver
+    podman rmi nginx:alpine  # Optionnel : supprimer l'image
+    ```
+
+    !!! note "Option SELinux :Z"
+        L'option `:Z` sur les volumes applique le contexte SELinux approprié pour un accès exclusif au conteneur. C'est essentiel sur RHEL/Rocky/Fedora avec SELinux en mode enforcing.
+
+        - `:Z` = label privé (un seul conteneur)
+        - `:z` = label partagé (plusieurs conteneurs)
+
+    !!! tip "Points clés"
+        - Podman fonctionne sans daemon, contrairement à Docker
+        - Le mode rootless n'utilise aucun privilège root
+        - Les ports < 1024 nécessitent une configuration système spéciale
+        - Les volumes locaux doivent avoir les labels SELinux appropriés
 
 ---
 

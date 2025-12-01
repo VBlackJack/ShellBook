@@ -26,6 +26,24 @@ Diagnostic complet du statut Windows Update (WU, WSUS, SCCM/MECM).
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur pour interroger Windows Update
+- **Modules** : Aucun module externe requis (utilise COM Windows Update)
+
+---
+
+## Cas d'Usage
+
+- **Diagnostic patching** : Identifier pourquoi les mises à jour ne s'installent pas
+- **Audit pré-patch** : Vérifier l'état avant une fenêtre de maintenance
+- **Monitoring** : Surveiller l'état de patching de l'infrastructure
+- **CMDB Integration** : Exporter les données vers un système d'inventaire
+
+---
+
 ## Utilisation
 
 ```powershell

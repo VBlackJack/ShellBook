@@ -240,36 +240,77 @@ docker rm
 
 ---
 
-## 5. Exercice Pratique
+## 5. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser le cycle de vie complet d'un container Docker
 
-1. Installer Docker
-2. Lancer un container nginx avec port mapping
-3. Vérifier les logs
-4. Accéder au container en bash
-5. Arrêter et supprimer
+    **Contexte** : Vous devez déployer un serveur web nginx, le configurer, surveiller son état et effectuer des opérations de maintenance de base.
 
-### Solution
+    **Tâches à réaliser** :
 
-```bash
-# 1. Vérifier l'installation
-docker version
+    1. Vérifier que Docker est correctement installé sur votre système
+    2. Lancer un container nginx en mode détaché avec le nom "webserver" et mapper le port 8080 de l'hôte vers le port 80 du container
+    3. Vérifier que le serveur répond et consulter les logs d'accès
+    4. Se connecter au container en mode interactif et explorer la structure des fichiers nginx
+    5. Copier le fichier de configuration nginx depuis le container vers votre machine locale
+    6. Arrêter proprement le container, le supprimer, puis nettoyer les ressources non utilisées
 
-# 2. Lancer nginx
-docker run -d --name web -p 8080:80 nginx
+    **Critères de validation** :
 
-# 3. Vérifier
-curl http://localhost:8080
-docker logs web
+    - [ ] Le container est accessible via http://localhost:8080
+    - [ ] Les logs affichent les requêtes HTTP effectuées
+    - [ ] Vous avez pu accéder au shell du container
+    - [ ] Le fichier nginx.conf a été récupéré localement
+    - [ ] Aucun container ou image orphelin ne subsiste après le nettoyage
 
-# 4. Accéder
-docker exec -it web /bin/bash
+??? quote "Solution"
+    Voici les commandes pour accomplir cet exercice :
 
-# 5. Cleanup
-docker stop web
-docker rm web
-```
+    ```bash
+    # 1. Vérifier l'installation Docker
+    docker version
+    docker info
+
+    # 2. Lancer le container nginx
+    docker run -d --name webserver -p 8080:80 nginx
+
+    # Vérifier que le container est en cours d'exécution
+    docker ps
+
+    # 3. Tester l'accès et voir les logs
+    curl http://localhost:8080
+    docker logs webserver
+    docker logs -f webserver  # Mode follow (Ctrl+C pour quitter)
+
+    # 4. Accéder au container en bash
+    docker exec -it webserver /bin/bash
+    # Une fois dans le container :
+    ls -la /etc/nginx/
+    cat /etc/nginx/nginx.conf
+    exit
+
+    # 5. Copier le fichier de configuration
+    docker cp webserver:/etc/nginx/nginx.conf ./nginx.conf
+    cat nginx.conf
+
+    # 6. Cleanup complet
+    docker stop webserver
+    docker rm webserver
+    docker container prune -f
+    docker image prune -f
+
+    # Vérifier le nettoyage
+    docker ps -a
+    ```
+
+    **Points clés** :
+
+    - `-d` : mode détaché (background)
+    - `-p 8080:80` : port host:container
+    - `docker exec -it` : mode interactif avec TTY
+    - `docker cp` : copier des fichiers entre host et container
+    - `prune` : nettoyer les ressources non utilisées
 
 ---
 

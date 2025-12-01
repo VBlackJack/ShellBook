@@ -866,6 +866,244 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un fichier Terraform pour documenter l'architecture de votre fabric ACI
+
+    **Contexte** : Vous devez cartographier une infrastructure ACI existante sous forme de code Terraform. Cette documentation servira de référence pour l'équipe et permettra de valider la topologie avant toute automatisation. Vous utiliserez des data sources et des locals pour représenter l'architecture.
+
+    **Tâches à réaliser** :
+
+    1. Créer un fichier `fabric-topology.tf` avec des locals décrivant : 2 Spines, 4 Leafs, 1 cluster APIC (3 nodes)
+    2. Définir le TEP Pool et les VLANs de l'underlay
+    3. Utiliser des data sources pour interroger l'APIC et récupérer la liste des nodes
+    4. Créer des outputs affichant un résumé de la topologie
+    5. Documenter les rôles de chaque composant en commentaires
+
+    **Critères de validation** :
+
+    - [ ] La structure de données représente clairement la topologie (Spines, Leafs, APICs)
+    - [ ] Les data sources ACI sont correctement configurés
+    - [ ] Les outputs affichent : nombre de Spines, Leafs, TEP Pool, état de santé
+    - [ ] Les commentaires expliquent le rôle de chaque élément
+    - [ ] Le code passe `terraform validate` et `terraform fmt`
+
+??? quote "Solution"
+
+    **fabric-topology.tf**
+
+    ```hcl
+    # Configuration du provider ACI
+    terraform {
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+
+    provider "aci" {
+      username = var.apic_username
+      password = var.apic_password
+      url      = var.apic_url
+      insecure = true
+    }
+
+    # Data source : Récupération des nodes de la fabric
+    data "aci_system" "apic" {
+      # Informations système de l'APIC
+    }
+
+    data "aci_fabric_node" "spines" {
+      for_each = toset(["201", "202"])
+      dn       = "topology/pod-1/node-${each.key}"
+    }
+
+    data "aci_fabric_node" "leafs" {
+      for_each = toset(["101", "102", "103", "104"])
+      dn       = "topology/pod-1/node-${each.key}"
+    }
+
+    # Définition de la topologie en locals
+    locals {
+      # Pod 1 - Datacenter Paris
+      fabric_pod = {
+        id   = "1"
+        name = "Pod-Paris"
+        site = "Paris-DC1"
+      }
+
+      # Spines : Agrégation et routage underlay
+      spines = {
+        spine-201 = {
+          id     = "201"
+          name   = "spine-201"
+          model  = "N9K-C9364C"
+          role   = "spine"
+          serial = "FDO24XXXXXX"
+        }
+        spine-202 = {
+          id     = "202"
+          name   = "spine-202"
+          model  = "N9K-C9364C"
+          role   = "spine"
+          serial = "FDO24YYYYYY"
+        }
+      }
+
+      # Leafs : Connexion des endpoints
+      leafs = {
+        leaf-101 = {
+          id     = "101"
+          name   = "leaf-101"
+          model  = "N9K-C93180YC-FX"
+          role   = "leaf"
+          serial = "FDO21AAAAAA"
+        }
+        leaf-102 = {
+          id     = "102"
+          name   = "leaf-102"
+          model  = "N9K-C93180YC-FX"
+          role   = "leaf"
+          serial = "FDO21BBBBBB"
+        }
+        leaf-103 = {
+          id     = "103"
+          name   = "leaf-103"
+          model  = "N9K-C93180YC-FX"
+          role   = "leaf"
+          serial = "FDO21CCCCCC"
+        }
+        leaf-104 = {
+          id     = "104"
+          name   = "leaf-104"
+          model  = "N9K-C93180YC-FX"
+          role   = "leaf"
+          serial = "FDO21DDDDDD"
+        }
+      }
+
+      # Cluster APIC : 3 contrôleurs pour la haute disponibilité
+      apic_cluster = {
+        apic-1 = {
+          id         = "1"
+          name       = "apic-1"
+          ip         = "10.0.0.1"
+          role       = "controller"
+          state      = "active"
+        }
+        apic-2 = {
+          id         = "2"
+          name       = "apic-2"
+          ip         = "10.0.0.2"
+          role       = "controller"
+          state      = "active"
+        }
+        apic-3 = {
+          id         = "3"
+          name       = "apic-3"
+          ip         = "10.0.0.3"
+          role       = "controller"
+          state      = "active"
+        }
+      }
+
+      # Configuration Underlay
+      underlay_config = {
+        tep_pool       = "10.0.0.0/16"     # Tunnel Endpoint Pool
+        multicast_pool = "225.0.0.0/15"    # Pour BUM traffic
+        infra_vlan     = "3967"            # VLAN infrastructure ACI
+        protocol       = "IS-IS"           # Protocole de routage underlay
+      }
+
+      # Résumé de la topologie
+      topology_summary = {
+        total_spines      = length(local.spines)
+        total_leafs       = length(local.leafs)
+        total_controllers = length(local.apic_cluster)
+        fabric_capacity = {
+          max_endpoints = "64000"          # Par leaf
+          max_tenants   = "3000"
+          max_vrfs      = "3000"
+        }
+      }
+    }
+    ```
+
+    **outputs.tf**
+
+    ```hcl
+    output "fabric_topology" {
+      description = "Topologie complète de la fabric ACI"
+      value = {
+        pod             = local.fabric_pod
+        spines          = local.spines
+        leafs           = local.leafs
+        apic_cluster    = local.apic_cluster
+        underlay_config = local.underlay_config
+      }
+    }
+
+    output "topology_summary" {
+      description = "Résumé de la topologie"
+      value = {
+        spines      = "${local.topology_summary.total_spines} Spines"
+        leafs       = "${local.topology_summary.total_leafs} Leafs"
+        controllers = "${local.topology_summary.total_controllers} APIC Controllers"
+        tep_pool    = local.underlay_config.tep_pool
+        protocol    = local.underlay_config.protocol
+      }
+    }
+
+    output "fabric_health" {
+      description = "État de santé de la fabric"
+      value = {
+        all_nodes_count    = local.topology_summary.total_spines + local.topology_summary.total_leafs
+        apic_cluster_state = "Active (${local.topology_summary.total_controllers}/3)"
+        underlay_protocol  = local.underlay_config.protocol
+      }
+    }
+    ```
+
+    **variables.tf**
+
+    ```hcl
+    variable "apic_url" {
+      description = "URL de l'APIC"
+      type        = string
+      default     = "https://sandboxapicdc.cisco.com"
+    }
+
+    variable "apic_username" {
+      description = "Username APIC"
+      type        = string
+      sensitive   = true
+    }
+
+    variable "apic_password" {
+      description = "Password APIC"
+      type        = string
+      sensitive   = true
+    }
+    ```
+
+    **Exécution :**
+
+    ```bash
+    terraform init
+    terraform validate
+    terraform fmt
+    terraform plan
+    ```
+
+    **Résultat attendu :**
+
+    Le code documente clairement la topologie de la fabric ACI avec tous les composants (Spines, Leafs, APIC), la configuration underlay (TEP Pool, IS-IS), et fournit des outputs lisibles pour l'équipe.
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

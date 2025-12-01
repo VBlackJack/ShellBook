@@ -845,30 +845,34 @@ echo ""
 
 ---
 
-## Exercice : Scénario Zero-Day
+## Exercice : À Vous de Jouer
 
-### Contexte
+!!! example "Mise en Pratique : Scénario Zero-Day"
+    **Objectif** : Gérer un patch de sécurité critique en urgence avec Incremental Updates.
 
-Vous êtes Security Engineer dans **SecureCorp** (infrastructure 150 serveurs RHEL 9).
+    **Contexte** : Vous êtes Security Engineer dans **SecureCorp** (150 serveurs RHEL 9). Une CVE **Critical** (CVE-2024-5678, CVSS 9.8) est découverte dans `openssl`. Le CISO exige le patch de **TOUS** les serveurs Production en **24h**, sans toucher aux autres packages (conformité PCI-DSS).
 
-**Alerte :** Une CVE **Critical** est découverte dans `openssl` :
+    **Environnement Katello** :
 
-- **CVE :** `CVE-2024-5678`
-- **CVSS Score :** 9.8 (Critical)
-- **Exploitation :** À distance, sans authentification
-- **Errata :** `RHSA-2024:1234`
-- **Package :** `openssl-3.0.7-25.el9`
+    - **Organisation :** `SecureCorp`
+    - **Content View :** `CV-RHEL9` (v1.0 en Production)
+    - **Lifecycle Environments :** `Library → Development → Test → Production`
+    - **Errata :** `RHSA-2024:1234` (openssl-3.0.7-25.el9)
 
-**Directive du CISO :** Patcher **TOUS** les serveurs Production en **24h**, sans toucher aux autres packages (conformité PCI-DSS).
+    **Tâches à réaliser** :
 
-**Environnement Katello :**
+    1. Synchroniser les repos pour obtenir l'erratum `RHSA-2024:1234`
+    2. Créer un Incremental Update de `CV-RHEL9 v1.0` avec uniquement cet erratum
+    3. Promouvoir la nouvelle version en Production
+    4. Appliquer l'erratum sur tous les serveurs Production
+    5. Générer un rapport de compliance
 
-- **Organisation :** `SecureCorp`
-- **Content View :** `CV-RHEL9`
-- **Version actuelle en Prod :** `v1.0` (figée depuis 2 mois)
-- **Lifecycle Environments :** `Library → Development → Test → Production`
+    **Critères de validation** :
 
----
+    - [ ] Erratum identifié dans Katello
+    - [ ] Incremental Update créé (v1.0.1)
+    - [ ] Tous les serveurs patchés (vérification avec `rpm -q openssl`)
+    - [ ] Rapport de compliance généré
 
 ### Mission
 

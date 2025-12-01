@@ -273,58 +273,133 @@ podman network inspect podman
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser les conteneurs rootless et résoudre les problèmes de permissions avec les user namespaces
 
-Configurer un environnement rootless complet et résoudre les problèmes de permissions.
+    **Contexte** : Vous devez mettre en place un conteneur rootless qui accède à des fichiers sur l'hôte. Vous allez comprendre comment les UIDs sont mappés entre l'hôte et le conteneur, et comment gérer correctement les permissions.
 
-### Étapes
+    **Tâches à réaliser** :
 
-```bash
-# 1. Vérifier votre configuration
-echo "=== User Namespaces ==="
-cat /proc/sys/user/max_user_namespaces
+    1. Vérifier la configuration des user namespaces sur votre système
+    2. Examiner les mappings subuid/subgid de votre utilisateur
+    3. Créer un répertoire de test avec des fichiers
+    4. Exécuter un conteneur et observer le mapping des UIDs par défaut
+    5. Créer des fichiers depuis le conteneur et vérifier les permissions sur l'hôte
+    6. Utiliser l'option `--userns=keep-id` pour conserver les UIDs
+    7. Comparer les différences de comportement
 
-echo "=== SubUID/SubGID ==="
-grep $USER /etc/subuid /etc/subgid
+    **Critères de validation** :
 
-echo "=== Podman Info ==="
-podman info | grep -E "(rootless|graphRoot)"
+    - [ ] Les user namespaces sont activés (max_user_namespaces > 0)
+    - [ ] Votre utilisateur a des mappings subuid/subgid configurés
+    - [ ] Les fichiers créés sans keep-id ont des UIDs mappés (100000+)
+    - [ ] Les fichiers créés avec keep-id conservent votre UID
+    - [ ] Vous comprenez la différence entre les deux modes
 
-# 2. Créer un répertoire avec des données
-mkdir -p ~/podman-lab/rootless-test
-echo "Hello Rootless" > ~/podman-lab/rootless-test/data.txt
-chmod 644 ~/podman-lab/rootless-test/data.txt
+??? quote "Solution"
+    Voici la solution complète pour maîtriser le rootless :
 
-# 3. Tester sans keep-id (problème de permissions)
-podman run --rm \
-  -v ~/podman-lab/rootless-test:/data:Z \
-  registry.access.redhat.com/ubi9/ubi-minimal \
-  cat /data/data.txt
+    ```bash
+    # 1. Vérifier la configuration des user namespaces
+    echo "=== User Namespaces Configuration ==="
+    cat /proc/sys/user/max_user_namespaces
+    # Doit être > 0 (typiquement 15000)
 
-# 4. Créer un fichier depuis le conteneur
-podman run --rm \
-  -v ~/podman-lab/rootless-test:/data:Z \
-  registry.access.redhat.com/ubi9/ubi-minimal \
-  sh -c "echo 'Created by container' > /data/container.txt"
+    # 2. Vérifier les mappings subuid/subgid
+    echo "=== SubUID/SubGID Mappings ==="
+    grep $USER /etc/subuid
+    # Format: username:100000:65536 (65536 UIDs disponibles)
+    grep $USER /etc/subgid
+    # Format: username:100000:65536 (65536 GIDs disponibles)
 
-# Vérifier l'ownership (sera mappé)
-ls -la ~/podman-lab/rootless-test/
+    # 3. Informations Podman rootless
+    echo "=== Podman Info ==="
+    podman info | grep -E "(rootless|graphRoot|runRoot)"
+    # rootless: true
+    # graphRoot: /home/user/.local/share/containers/storage
 
-# 5. Utiliser keep-id pour conserver les UIDs
-podman run --rm \
-  --userns=keep-id \
-  -v ~/podman-lab/rootless-test:/data:Z \
-  registry.access.redhat.com/ubi9/ubi-minimal \
-  sh -c "echo 'Created with keep-id' > /data/keepid.txt"
+    # 4. Créer un répertoire de test
+    mkdir -p ~/podman-lab/rootless-test
+    cd ~/podman-lab/rootless-test
+    echo "Hello Rootless World" > data.txt
+    echo "$(whoami)" > owner.txt
+    ls -ln  # Afficher les UIDs numériques
 
-# Vérifier l'ownership (sera votre user)
-ls -la ~/podman-lab/rootless-test/
+    # 5. Tester SANS keep-id (mapping par défaut)
+    echo "=== Test 1: Sans keep-id (mapping par défaut) ==="
+    podman run --rm \
+      -v ~/podman-lab/rootless-test:/data:Z \
+      registry.access.redhat.com/ubi9/ubi-minimal \
+      sh -c "cat /data/data.txt && whoami && id"
+    # whoami affiche "root" mais c'est mappé !
 
-# 6. Cleanup
-rm -rf ~/podman-lab/rootless-test
-```
+    # 6. Créer un fichier depuis le conteneur
+    podman run --rm \
+      -v ~/podman-lab/rootless-test:/data:Z \
+      registry.access.redhat.com/ubi9/ubi-minimal \
+      sh -c "echo 'Created by container' > /data/container-file.txt"
+
+    # Vérifier l'ownership sur l'hôte
+    ls -la ~/podman-lab/rootless-test/container-file.txt
+    # Owner sera 100000:100000 (UID mappé!)
+
+    # 7. Tester AVEC keep-id
+    echo "=== Test 2: Avec --userns=keep-id ==="
+    podman run --rm \
+      --userns=keep-id \
+      -v ~/podman-lab/rootless-test:/data:Z \
+      registry.access.redhat.com/ubi9/ubi-minimal \
+      sh -c "whoami && id && echo 'Created with keep-id' > /data/keepid-file.txt"
+    # whoami affiche votre nom d'utilisateur!
+
+    # Vérifier l'ownership
+    ls -la ~/podman-lab/rootless-test/keepid-file.txt
+    # Owner sera votre UID:GID!
+
+    # 8. Comparaison complète
+    echo "=== Comparaison des fichiers ==="
+    ls -lanh ~/podman-lab/rootless-test/
+    stat ~/podman-lab/rootless-test/container-file.txt
+    stat ~/podman-lab/rootless-test/keepid-file.txt
+
+    # 9. Tester les user namespaces manuellement
+    echo "=== Test des user namespaces ==="
+    podman unshare cat /proc/self/uid_map
+    podman unshare cat /proc/self/gid_map
+    # Montre le mapping des UIDs/GIDs
+
+    # 10. Cleanup
+    rm -rf ~/podman-lab/rootless-test
+    ```
+
+    !!! note "Comprendre le mapping des UIDs"
+        **Sans `--userns=keep-id`** :
+        - UID 0 dans le conteneur → UID 100000 sur l'hôte
+        - UID 1 dans le conteneur → UID 100001 sur l'hôte
+        - etc.
+
+        **Avec `--userns=keep-id`** :
+        - Votre UID sur l'hôte = votre UID dans le conteneur
+        - Utile pour les volumes partagés et les fichiers de développement
+
+    !!! tip "Cas d'usage"
+        - **Mapping par défaut** : Applications en production, isolation maximale
+        - **keep-id** : Développement local, montage de code source, build tools
+
+    !!! warning "Troubleshooting"
+        Si vous obtenez "ERRO[0000] cannot find UID/GID for user" :
+        ```bash
+        # Vérifier les mappings
+        grep $USER /etc/subuid /etc/subgid
+
+        # Si absents, les créer (nécessite sudo)
+        sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $USER
+
+        # Reset du storage
+        podman system reset
+        ```
 
 ---
 

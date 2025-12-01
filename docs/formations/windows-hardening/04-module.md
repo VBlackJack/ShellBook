@@ -410,31 +410,63 @@ $Events | ForEach-Object {
 
 ---
 
-## 6. Exercice Pratique
+## 6. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique : Implémenter le Tiering Model et LAPS"
+    **Objectif** : Déployer une architecture de sécurité AD conforme aux bonnes pratiques Microsoft.
 
-1. Créer la structure d'OU pour le Tiering Model
-2. Déployer LAPS sur une OU de test
-3. Ajouter un compte admin à Protected Users
-4. Créer une PSO pour les administrateurs
-5. Configurer l'audit des comptes privilégiés
+    **Contexte** : Suite à un audit de sécurité, vous devez implémenter le Tiering Model et sécuriser les comptes privilégiés.
 
-### Validation
+    **Tâches à réaliser** :
 
-```powershell
-# Vérifier la structure Tiering
-Get-ADOrganizationalUnit -Filter 'Name -like "Tier*"' | Select-Object Name, DistinguishedName
+    1. Créer la structure d'OU pour le Tiering Model (Tier 0, Tier 1, Tier 2)
+    2. Déployer LAPS sur une OU de test avec rotation automatique
+    3. Ajouter un compte admin critique à Protected Users
+    4. Créer une Fine-Grained Password Policy (PSO) pour les administrateurs
+    5. Configurer l'audit des modifications de comptes privilégiés
 
-# Vérifier LAPS
-Get-AdmPwdPassword -ComputerName "PC-TEST"
+    **Critères de validation** :
 
-# Vérifier Protected Users
-Get-ADGroupMember -Identity "Protected Users"
+    - [ ] OUs Tier 0/1/2 créées avec GPO liées
+    - [ ] LAPS fonctionnel (mot de passe récupérable)
+    - [ ] Compte admin dans Protected Users
+    - [ ] PSO avec complexité renforcée (20 caractères, 1 jour historique)
+    - [ ] Audit des modifications activé
 
-# Vérifier PSO
-Get-ADFineGrainedPasswordPolicy -Filter *
-```
+??? quote "Solution"
+    ```powershell
+    # 1. Créer la structure Tiering
+    $BaseDN = "DC=corp,DC=local"
+    @("Tier 0", "Tier 1", "Tier 2") | ForEach-Object {
+        New-ADOrganizationalUnit -Name $_ -Path $BaseDN
+    }
+
+    # 2. Déployer LAPS
+    Import-Module AdmPwd.PS
+    Update-AdmPwdADSchema
+    Set-AdmPwdComputerSelfPermission -OrgUnit "OU=Workstations,DC=corp,DC=local"
+
+    # 3. Protected Users
+    Add-ADGroupMember -Identity "Protected Users" -Members "Admin-T0"
+
+    # 4. PSO pour admins
+    New-ADFineGrainedPasswordPolicy -Name "PSO-Admins" `
+        -Precedence 10 -MinPasswordLength 20 -PasswordHistoryCount 24 `
+        -ComplexityEnabled $true -LockoutThreshold 3
+
+    # 5. Audit
+    $AuditPath = "AD:\DC=corp,DC=local"
+    $Acl = Get-Acl $AuditPath
+    # Configure auditing for privileged groups changes
+    ```
+
+    **Validation** :
+    ```powershell
+    Get-ADOrganizationalUnit -Filter 'Name -like "Tier*"' | Select-Object Name
+    Get-AdmPwdPassword -ComputerName "PC-TEST"
+    Get-ADGroupMember -Identity "Protected Users"
+    Get-ADFineGrainedPasswordPolicy -Filter *
+    ```
 
 ---
 

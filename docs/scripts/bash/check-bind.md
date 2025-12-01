@@ -27,6 +27,23 @@ Ce script vérifie l'état d'un serveur BIND :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour accéder aux fichiers de configuration et logs BIND
+- **Dépendances** : `bind-utils` (ou `dnsutils`), `dig`, `named-checkconf`, `named-checkzone`, `nc`
+
+---
+
+## Cas d'Usage
+
+- **Audit quotidien de DNS** : Vérification automatique de la santé du serveur DNS avec alertes
+- **Validation après modification** : Test complet après changement de configuration ou de zones
+- **Monitoring proactif** : Détection précoce de problèmes de résolution ou de réplication
+- **Diagnostic de panne** : Identification rapide de la cause d'un dysfonctionnement DNS
+
+---
+
 ## Script
 
 ```bash

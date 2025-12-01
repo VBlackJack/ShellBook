@@ -556,7 +556,133 @@ curl -X POST $TOPIC_ENDPOINT \
 
 ---
 
-## 4. Exercices Pratiques
+## 4. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer une architecture serverless event-driven pour le traitement d'images
+
+    **Contexte** : Vous devez construire un système de traitement d'images automatisé. Quand une image est uploadée dans un Storage Account, elle doit être automatiquement redimensionnée en plusieurs formats (thumbnail, medium, large), les métadonnées extraites et stockées dans Cosmos DB, et une notification envoyée par email. Le tout doit être serverless et scale automatiquement.
+
+    **Tâches à réaliser** :
+
+    1. Créer une Function App (Consumption plan) avec plusieurs fonctions
+    2. Créer une fonction Blob Trigger pour détecter les nouveaux uploads
+    3. Créer une fonction HTTP Trigger pour l'API REST de consultation
+    4. Créer une fonction Timer Trigger pour le nettoyage quotidien
+    5. Déployer une Container App pour un service de traitement d'images
+    6. Configurer Event Grid pour router les événements
+    7. Implémenter des bindings vers Cosmos DB et Service Bus
+    8. Configurer Application Insights pour le monitoring
+
+    **Critères de validation** :
+
+    - [ ] La Function App est créée en Consumption plan
+    - [ ] La fonction Blob Trigger détecte automatiquement les nouveaux fichiers
+    - [ ] L'API HTTP retourne les métadonnées des images traitées
+    - [ ] Le Timer Trigger s'exécute quotidiennement à minuit
+    - [ ] La Container App scale de 0 à N instances automatiquement
+    - [ ] Event Grid route correctement les événements
+    - [ ] Les bindings Cosmos DB et Service Bus fonctionnent
+    - [ ] Application Insights affiche les métriques et traces
+
+??? quote "Solution"
+
+    **Fonction Blob Trigger** :
+
+    ```csharp
+    [Function("ProcessImage")]
+    [BlobOutput("thumbnails/{name}")]
+    public async Task<byte[]> Run(
+        [BlobTrigger("uploads/{name}")] byte[] imageBlob,
+        [CosmosDBOutput(
+            databaseName: "images",
+            containerName: "metadata",
+            Connection = "CosmosDBConnection")] IAsyncCollector<ImageMetadata> documentsOut,
+        FunctionContext context)
+    {
+        var logger = context.GetLogger("ProcessImage");
+        logger.LogInformation($"Processing image: {name}");
+
+        // Redimensionner l'image
+        var thumbnail = ResizeImage(imageBlob, 150, 150);
+
+        // Extraire les métadonnées
+        var metadata = new ImageMetadata
+        {
+            Id = Guid.NewGuid().ToString(),
+            FileName = name,
+            UploadedAt = DateTime.UtcNow,
+            Size = imageBlob.Length
+        };
+
+        // Sauvegarder dans Cosmos DB
+        await documentsOut.AddAsync(metadata);
+
+        return thumbnail;
+    }
+    ```
+
+    **Déploiement complet** :
+
+    ```bash
+    # Créer les ressources
+    RG_NAME="serverless-rg"
+    LOCATION="westeurope"
+
+    az group create --name $RG_NAME --location $LOCATION
+
+    # Storage Account
+    STORAGE_NAME="imgprocessst$(openssl rand -hex 4)"
+    az storage account create \
+        --name $STORAGE_NAME \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --sku Standard_LRS
+
+    # Function App
+    az functionapp create \
+        --name image-processor-func \
+        --resource-group $RG_NAME \
+        --consumption-plan-location $LOCATION \
+        --storage-account $STORAGE_NAME \
+        --runtime dotnet-isolated \
+        --runtime-version 8 \
+        --functions-version 4
+
+    # Cosmos DB
+    COSMOS_ACCOUNT="imagecosmosdb$(openssl rand -hex 4)"
+    az cosmosdb create \
+        --name $COSMOS_ACCOUNT \
+        --resource-group $RG_NAME \
+        --locations regionName=$LOCATION
+
+    # Container App Environment
+    az containerapp env create \
+        --name image-processor-env \
+        --resource-group $RG_NAME \
+        --location $LOCATION
+
+    # Container App
+    az containerapp create \
+        --name image-resizer \
+        --resource-group $RG_NAME \
+        --environment image-processor-env \
+        --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest \
+        --target-port 80 \
+        --ingress external \
+        --min-replicas 0 \
+        --max-replicas 10
+
+    # Event Grid Topic
+    az eventgrid topic create \
+        --name image-events \
+        --resource-group $RG_NAME \
+        --location $LOCATION
+    ```
+
+---
+
+## 5. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Pipeline Event-Driven
 

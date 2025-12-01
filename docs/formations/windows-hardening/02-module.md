@@ -357,51 +357,67 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 ---
 
-## 7. Exercice Pratique
+## 7. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique : Sécuriser Services et Protocoles"
+    **Objectif** : Auditer et sécuriser les services et protocoles d'un serveur Windows.
 
-1. Auditer et désactiver les services inutiles
-2. Désactiver SMBv1 et activer le signing/encryption
-3. Configurer NLA et le chiffrement RDP
-4. Activer le logging PowerShell complet
+    **Contexte** : Votre serveur de fichiers expose des services obsolètes détectés lors d'un audit de sécurité.
 
-### Script de Vérification
+    **Tâches à réaliser** :
 
-```powershell
-# verify-services-protocols.ps1
-$Checks = @()
+    1. Auditer et désactiver les services inutiles (Fax, XPS, Print Spooler si non utilisé)
+    2. Désactiver SMBv1 et activer le signing/encryption SMB
+    3. Configurer NLA et le chiffrement TLS 1.2+ pour RDP
+    4. Activer le logging PowerShell complet (ScriptBlock + Module)
 
-# SMBv1
-$SMB1 = Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
-$Checks += [PSCustomObject]@{
-    Check = "SMBv1 Disabled"
-    Status = if ($SMB1.State -eq "Disabled") { "PASS" } else { "FAIL" }
-}
+    **Critères de validation** :
 
-# SMB Signing
-$SMBConfig = Get-SmbServerConfiguration
-$Checks += [PSCustomObject]@{
-    Check = "SMB Signing Required"
-    Status = if ($SMBConfig.RequireSecuritySignature) { "PASS" } else { "FAIL" }
-}
+    - [ ] SMBv1 désactivé
+    - [ ] SMB Signing activé
+    - [ ] NLA activé pour RDP
+    - [ ] PowerShell logging activé
 
-# NLA
-$NLA = (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp').UserAuthentication
-$Checks += [PSCustomObject]@{
-    Check = "RDP NLA Enabled"
-    Status = if ($NLA -eq 1) { "PASS" } else { "FAIL" }
-}
+??? quote "Solution"
+    ```powershell
+    # 1. Désactiver les services inutiles
+    $ServicesToDisable = @("Fax", "XblGameSave", "XblAuthManager")
+    foreach ($Service in $ServicesToDisable) {
+        Stop-Service -Name $Service -Force -ErrorAction SilentlyContinue
+        Set-Service -Name $Service -StartupType Disabled -ErrorAction SilentlyContinue
+    }
 
-# PowerShell Logging
-$PSLog = Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" -ErrorAction SilentlyContinue
-$Checks += [PSCustomObject]@{
-    Check = "PowerShell Logging"
-    Status = if ($PSLog.EnableScriptBlockLogging -eq 1) { "PASS" } else { "FAIL" }
-}
+    # 2. Désactiver SMBv1 et activer signing
+    Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
+    Set-SmbServerConfiguration -RequireSecuritySignature $true -EnableSecuritySignature $true -Force
 
-$Checks | Format-Table -AutoSize
-```
+    # 3. Configurer NLA pour RDP
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
+
+    # 4. Activer PowerShell logging
+    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" -Force
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" -Name "EnableScriptBlockLogging" -Value 1
+    ```
+
+    **Script de vérification** :
+
+    ```powershell
+    $Checks = @()
+
+    # SMBv1
+    $SMB1 = Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
+    $Checks += [PSCustomObject]@{ Check = "SMBv1 Disabled"; Status = if ($SMB1.State -eq "Disabled") { "PASS" } else { "FAIL" } }
+
+    # SMB Signing
+    $SMBConfig = Get-SmbServerConfiguration
+    $Checks += [PSCustomObject]@{ Check = "SMB Signing Required"; Status = if ($SMBConfig.RequireSecuritySignature) { "PASS" } else { "FAIL" } }
+
+    # NLA
+    $NLA = (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp').UserAuthentication
+    $Checks += [PSCustomObject]@{ Check = "RDP NLA Enabled"; Status = if ($NLA -eq 1) { "PASS" } else { "FAIL" } }
+
+    $Checks | Format-Table -AutoSize
+    ```
 
 ---
 

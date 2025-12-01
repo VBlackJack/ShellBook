@@ -533,6 +533,193 @@ graph LR
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Sécuriser une application de paiement selon les standards PCI-DSS
+
+    **Contexte** : Vous êtes responsable de la sécurité d'une API de paiement déployée sur AWS. Un audit PCI-DSS approche et vous devez vérifier que toutes les exigences de sécurité sont respectées.
+
+    **Tâches à réaliser** :
+
+    1. Configurez IAM avec le principe du moindre privilège pour 3 rôles : admin, développeur, auditeur
+    2. Définissez les règles de Security Groups pour isoler l'application de paiement
+    3. Activez le chiffrement pour les données au repos et en transit
+    4. Configurez le logging et les alertes de sécurité
+
+    **Critères de validation** :
+
+    - [ ] Politiques IAM respectent le moindre privilège
+    - [ ] Architecture réseau segmentée (DMZ, app, données)
+    - [ ] Chiffrement activé partout
+    - [ ] Logging centralisé avec alertes sur événements critiques
+
+??? quote "Solution"
+    **1. Configuration IAM avec moindre privilège**
+
+    ```bash
+    # Rôle Admin (accès complet, MFA obligatoire)
+    aws iam create-role --role-name PaymentAdmin \
+      --assume-role-policy-document file://trust-policy.json
+
+    # Policy Admin avec MFA forcé
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*",
+          "Condition": {
+            "Bool": {"aws:MultiFactorAuthPresent": "true"}
+          }
+        }
+      ]
+    }
+
+    # Rôle Développeur (lecture seule prod, écriture dev/test)
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["ec2:Describe*", "rds:Describe*", "s3:Get*", "s3:List*"],
+          "Resource": "*",
+          "Condition": {"StringEquals": {"aws:RequestedRegion": "eu-west-3"}}
+        },
+        {
+          "Effect": "Allow",
+          "Action": "s3:*",
+          "Resource": "arn:aws:s3:::dev-*"
+        }
+      ]
+    }
+
+    # Rôle Auditeur (lecture seule, logs uniquement)
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["cloudtrail:LookupEvents", "logs:FilterLogEvents"],
+          "Resource": "*"
+        }
+      ]
+    }
+    ```
+
+    **2. Security Groups avec isolation réseau**
+
+    ```bash
+    # SG Load Balancer (Internet → ALB)
+    aws ec2 create-security-group --group-name sg-alb-payment \
+      --description "ALB for payment API"
+
+    aws ec2 authorize-security-group-ingress \
+      --group-id sg-xxx \
+      --protocol tcp --port 443 --cidr 0.0.0.0/0  # HTTPS uniquement
+
+    # SG Application (ALB → App)
+    aws ec2 create-security-group --group-name sg-app-payment \
+      --description "Payment application tier"
+
+    aws ec2 authorize-security-group-ingress \
+      --group-id sg-yyy \
+      --protocol tcp --port 8080 \
+      --source-group sg-alb-payment  # Uniquement depuis ALB
+
+    # SG Database (App → DB)
+    aws ec2 create-security-group --group-name sg-db-payment \
+      --description "Payment database tier"
+
+    aws ec2 authorize-security-group-ingress \
+      --group-id sg-zzz \
+      --protocol tcp --port 5432 \
+      --source-group sg-app-payment  # Uniquement depuis App
+    ```
+
+    **Architecture réseau sécurisée :**
+    ```
+    Internet → [WAF] → [ALB (HTTPS)] → [App Servers] → [RDS (privé)]
+               🛡️        🔐               🔒              🔐
+    ```
+
+    **3. Activation du chiffrement**
+
+    **Chiffrement at rest :**
+    ```bash
+    # RDS avec chiffrement
+    aws rds create-db-instance \
+      --db-instance-identifier payment-db \
+      --storage-encrypted \
+      --kms-key-id arn:aws:kms:eu-west-3:xxx:key/xxx
+
+    # S3 avec chiffrement par défaut
+    aws s3api put-bucket-encryption \
+      --bucket payment-data \
+      --server-side-encryption-configuration \
+      '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "aws:kms"}}]}'
+
+    # EBS volumes chiffrés
+    aws ec2 create-volume \
+      --size 100 \
+      --encrypted \
+      --kms-key-id arn:aws:kms:eu-west-3:xxx:key/xxx
+    ```
+
+    **Chiffrement in transit :**
+    ```bash
+    # ALB avec certificat SSL/TLS
+    aws elbv2 create-listener \
+      --load-balancer-arn arn:aws:elasticloadbalancing:xxx \
+      --protocol HTTPS \
+      --port 443 \
+      --certificates CertificateArn=arn:aws:acm:xxx \
+      --ssl-policy ELBSecurityPolicy-TLS-1-2-2017-01
+
+    # RDS avec SSL obligatoire
+    aws rds modify-db-instance \
+      --db-instance-identifier payment-db \
+      --option-group-name require-ssl
+    ```
+
+    **4. Logging et alertes**
+
+    ```bash
+    # Activer CloudTrail (logs API)
+    aws cloudtrail create-trail \
+      --name payment-audit-trail \
+      --s3-bucket-name payment-logs-bucket \
+      --is-multi-region-trail
+
+    # VPC Flow Logs (trafic réseau)
+    aws ec2 create-flow-logs \
+      --resource-type VPC \
+      --resource-ids vpc-xxx \
+      --traffic-type ALL \
+      --log-destination-type cloud-watch-logs
+
+    # CloudWatch Alarm sur échecs d'authentification
+    aws cloudwatch put-metric-alarm \
+      --alarm-name auth-failures \
+      --alarm-description "Alert on failed login attempts" \
+      --metric-name UnauthorizedAPICalls \
+      --threshold 10 \
+      --comparison-operator GreaterThanThreshold \
+      --evaluation-periods 1 \
+      --alarm-actions arn:aws:sns:eu-west-3:xxx:security-alerts
+    ```
+
+    **Checklist PCI-DSS couverte :**
+    - ✅ Exigence 1 : Firewall (Security Groups, WAF)
+    - ✅ Exigence 3 : Chiffrement données (KMS)
+    - ✅ Exigence 4 : Chiffrement transit (TLS 1.2+)
+    - ✅ Exigence 7 : Moindre privilège (IAM)
+    - ✅ Exigence 8 : MFA (IAM policy)
+    - ✅ Exigence 10 : Logging (CloudTrail, VPC Flow Logs)
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -706,6 +706,429 @@ EOF
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une application microservices complète sur EKS avec haute disponibilité et sécurité IRSA
+
+    **Contexte** : Vous devez déployer une plateforme e-commerce composée de trois microservices (frontend, API, base de données) sur EKS. L'API doit pouvoir accéder à S3 pour stocker les images produits et à DynamoDB pour le catalogue, le tout avec les bonnes pratiques de sécurité.
+
+    **Tâches à réaliser** :
+
+    1. Créer un cluster EKS avec eksctl en multi-AZ (3 zones minimum)
+    2. Configurer ECR et pousser les images Docker des trois microservices
+    3. Installer et configurer AWS Load Balancer Controller
+    4. Créer les IRSA (IAM Roles for Service Accounts) pour l'accès sécurisé à S3 et DynamoDB
+    5. Déployer les trois microservices avec leurs Deployments, Services et Ingress
+    6. Configurer le stockage persistant avec EBS CSI Driver pour la base de données
+    7. Mettre en place l'autoscaling (HPA) sur l'API avec des seuils à 70% CPU
+    8. Tester l'accès externe via l'ALB et vérifier les permissions AWS depuis les pods
+
+    **Critères de validation** :
+
+    - [ ] Le cluster EKS est opérationnel avec 3 nodes minimum répartis sur 3 AZ
+    - [ ] Les 3 images sont stockées dans ECR avec scan de vulnérabilités activé
+    - [ ] L'Ingress crée automatiquement un ALB accessible depuis Internet
+    - [ ] Les pods de l'API peuvent lire/écrire dans S3 sans clés AWS en dur
+    - [ ] Le HPA scale automatiquement le nombre de pods API selon la charge CPU
+    - [ ] La base de données utilise un PVC avec EBS gp3 de 20GB chiffré
+    - [ ] Tous les services communiquent correctement entre eux
+    - [ ] Les logs des applications sont visibles via `kubectl logs`
+
+??? quote "Solution"
+
+    **Étape 1 : Créer le cluster EKS**
+
+    Nous allons utiliser eksctl pour simplifier la création du cluster avec toutes les bonnes pratiques.
+
+    ```bash
+    # Créer le cluster avec managed node group multi-AZ
+    eksctl create cluster \
+        --name ecommerce-cluster \
+        --version 1.28 \
+        --region eu-west-1 \
+        --zones eu-west-1a,eu-west-1b,eu-west-1c \
+        --nodegroup-name standard-workers \
+        --node-type t3.medium \
+        --nodes 3 \
+        --nodes-min 3 \
+        --nodes-max 9 \
+        --managed \
+        --with-oidc \
+        --full-ecr-access \
+        --alb-ingress-access
+
+    # Vérifier que le cluster est bien créé
+    kubectl get nodes -o wide
+    ```
+
+    **Étape 2 : Créer les repositories ECR et pousser les images**
+
+    ```bash
+    # Créer les 3 repositories ECR
+    for service in frontend api database; do
+        aws ecr create-repository \
+            --repository-name ecommerce-$service \
+            --image-scanning-configuration scanOnPush=true \
+            --encryption-configuration encryptionType=AES256
+    done
+
+    # Se connecter à ECR
+    aws ecr get-login-password --region eu-west-1 | \
+        docker login --username AWS --password-stdin \
+        123456789012.dkr.ecr.eu-west-1.amazonaws.com
+
+    # Build et push les images (exemple pour l'API)
+    docker build -t ecommerce-api:v1.0 ./api
+    docker tag ecommerce-api:v1.0 \
+        123456789012.dkr.ecr.eu-west-1.amazonaws.com/ecommerce-api:v1.0
+    docker push 123456789012.dkr.ecr.eu-west-1.amazonaws.com/ecommerce-api:v1.0
+
+    # Répéter pour frontend et database
+    ```
+
+    **Étape 3 : Installer AWS Load Balancer Controller**
+
+    ```bash
+    # Télécharger la policy IAM
+    curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+
+    # Créer la policy
+    aws iam create-policy \
+        --policy-name AWSLoadBalancerControllerIAMPolicy \
+        --policy-document file://iam_policy.json
+
+    # Créer le service account avec IRSA
+    eksctl create iamserviceaccount \
+        --cluster=ecommerce-cluster \
+        --namespace=kube-system \
+        --name=aws-load-balancer-controller \
+        --attach-policy-arn=arn:aws:iam::123456789012:policy/AWSLoadBalancerControllerIAMPolicy \
+        --approve
+
+    # Installer le controller via Helm
+    helm repo add eks https://aws.github.io/eks-charts
+    helm repo update
+    helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+        -n kube-system \
+        --set clusterName=ecommerce-cluster \
+        --set serviceAccount.create=false \
+        --set serviceAccount.name=aws-load-balancer-controller
+    ```
+
+    **Étape 4 : Créer les IRSA pour S3 et DynamoDB**
+
+    ```bash
+    # Créer la policy IAM pour S3 et DynamoDB
+    cat > api-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject",
+                    "s3:DeleteObject"
+                ],
+                "Resource": "arn:aws:s3:::ecommerce-product-images/*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan"
+                ],
+                "Resource": "arn:aws:dynamodb:eu-west-1:123456789012:table/ProductCatalog"
+            }
+        ]
+    }
+    EOF
+
+    aws iam create-policy \
+        --policy-name EcommerceAPIPolicy \
+        --policy-document file://api-policy.json
+
+    # Créer le service account avec IRSA
+    eksctl create iamserviceaccount \
+        --cluster=ecommerce-cluster \
+        --namespace=default \
+        --name=ecommerce-api-sa \
+        --attach-policy-arn=arn:aws:iam::123456789012:policy/EcommerceAPIPolicy \
+        --approve
+    ```
+
+    **Étape 5 : Installer EBS CSI Driver**
+
+    ```bash
+    # Créer le service account pour EBS CSI
+    eksctl create iamserviceaccount \
+        --cluster=ecommerce-cluster \
+        --namespace=kube-system \
+        --name=ebs-csi-controller-sa \
+        --attach-policy-arn=arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
+        --approve
+
+    # Installer l'addon EBS CSI
+    eksctl create addon \
+        --cluster=ecommerce-cluster \
+        --name=aws-ebs-csi-driver \
+        --service-account-role-arn=arn:aws:iam::123456789012:role/AmazonEKS_EBS_CSI_DriverRole
+
+    # Créer une StorageClass gp3
+    kubectl apply -f - << 'EOF'
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: ebs-gp3-encrypted
+    provisioner: ebs.csi.aws.com
+    volumeBindingMode: WaitForFirstConsumer
+    parameters:
+      type: gp3
+      encrypted: "true"
+      iops: "3000"
+    EOF
+    ```
+
+    **Étape 6 : Déployer les microservices**
+
+    ```bash
+    kubectl apply -f - << 'EOF'
+    ---
+    # Database avec PVC
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: database-pvc
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: ebs-gp3-encrypted
+      resources:
+        requests:
+          storage: 20Gi
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: database
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: database
+      template:
+        metadata:
+          labels:
+            app: database
+        spec:
+          containers:
+          - name: postgres
+            image: 123456789012.dkr.ecr.eu-west-1.amazonaws.com/ecommerce-database:v1.0
+            ports:
+            - containerPort: 5432
+            volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            env:
+            - name: POSTGRES_DB
+              value: ecommerce
+            resources:
+              requests:
+                cpu: 250m
+                memory: 512Mi
+              limits:
+                cpu: 500m
+                memory: 1Gi
+          volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: database-pvc
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: database-service
+    spec:
+      selector:
+        app: database
+      ports:
+      - port: 5432
+        targetPort: 5432
+    ---
+    # API avec IRSA
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: api
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: api
+      template:
+        metadata:
+          labels:
+            app: api
+        spec:
+          serviceAccountName: ecommerce-api-sa
+          containers:
+          - name: api
+            image: 123456789012.dkr.ecr.eu-west-1.amazonaws.com/ecommerce-api:v1.0
+            ports:
+            - containerPort: 8080
+            env:
+            - name: DB_HOST
+              value: database-service
+            - name: AWS_REGION
+              value: eu-west-1
+            resources:
+              requests:
+                cpu: 200m
+                memory: 256Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: api-service
+    spec:
+      selector:
+        app: api
+      ports:
+      - port: 80
+        targetPort: 8080
+    ---
+    # Frontend
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: frontend
+      template:
+        metadata:
+          labels:
+            app: frontend
+        spec:
+          containers:
+          - name: frontend
+            image: 123456789012.dkr.ecr.eu-west-1.amazonaws.com/ecommerce-frontend:v1.0
+            ports:
+            - containerPort: 80
+            env:
+            - name: API_URL
+              value: http://api-service
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: frontend-service
+    spec:
+      selector:
+        app: frontend
+      ports:
+      - port: 80
+        targetPort: 80
+    ---
+    # Ingress avec ALB
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ecommerce-ingress
+      annotations:
+        kubernetes.io/ingress.class: alb
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/healthcheck-path: /health
+    spec:
+      rules:
+      - http:
+          paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+    ---
+    # HPA pour l'API
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: api-hpa
+    spec:
+      scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: api
+      minReplicas: 3
+      maxReplicas: 10
+      metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 70
+    EOF
+    ```
+
+    **Étape 7 : Vérification et tests**
+
+    ```bash
+    # Vérifier que tous les pods sont en Running
+    kubectl get pods -o wide
+
+    # Vérifier le HPA
+    kubectl get hpa
+
+    # Récupérer l'URL de l'ALB
+    ALB_URL=$(kubectl get ingress ecommerce-ingress -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+    echo "Application accessible sur: http://$ALB_URL"
+
+    # Tester l'accès
+    curl http://$ALB_URL/health
+    curl http://$ALB_URL/api/products
+
+    # Vérifier les permissions AWS depuis un pod API
+    kubectl exec -it deployment/api -- aws s3 ls s3://ecommerce-product-images/
+
+    # Vérifier les logs
+    kubectl logs -l app=api --tail=50
+
+    # Tester l'autoscaling avec un load test
+    kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://api-service; done"
+    # Dans un autre terminal, observer le scale-up
+    kubectl get hpa api-hpa --watch
+    ```
+
+    Votre application e-commerce est maintenant déployée sur EKS avec toutes les bonnes pratiques : haute disponibilité, sécurité IRSA, autoscaling, stockage persistant chiffré et exposition via ALB !
+
+---
+
 ## 9. Résumé
 
 | Composant | Description | Commande clé |

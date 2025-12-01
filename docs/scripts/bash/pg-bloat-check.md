@@ -50,6 +50,15 @@ psql --version
 
 ---
 
+## Cas d'Usage
+
+- **Maintenance proactive** : Détection précoce du bloat pour planifier les opérations VACUUM
+- **Optimisation performance** : Identification des tables nécessitant une réorganisation urgente
+- **Monitoring automatisé** : Intégration dans système de surveillance pour alertes sur bloat critique
+- **Planification maintenance** : Priorisation des tables à traiter lors des fenêtres de maintenance
+
+---
+
 ## Comprendre le Bloat PostgreSQL
 
 !!! info "Qu'est-ce que le Bloat ?"

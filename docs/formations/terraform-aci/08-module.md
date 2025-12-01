@@ -1249,6 +1249,312 @@ resource "aci_epg_to_contract" "card_db_taboo" {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Implémenter la micro-segmentation pour isoler une zone sensible (PCI-DSS)
+
+    **Contexte** : Votre infrastructure héberge maintenant une application de traitement de paiements. Vous devez créer une zone PCI-DSS complètement isolée avec : 1 EPG Payment-Gateway (traitement), 1 EPG Card-Database (stockage). Ces EPGs doivent pouvoir communiquer entre eux, mais être totalement isolés du reste de l'infrastructure. Même l'EPG App-Backend ne doit pas accéder directement à Card-Database (utiliser un Taboo Contract).
+
+    **Tâches à réaliser** :
+
+    1. Créer un nouveau VRF "PCI-Zone" avec enforcement strict
+    2. Créer 2 EPGs dans ce VRF : Payment-Gateway et Card-Database
+    3. Créer un Contract permettant HTTPS (443) de Payment vers CardDB
+    4. Créer un Taboo Contract bloquant tous les autres EPGs (y compris App-Backend) vers CardDB
+    5. Documenter la politique de micro-segmentation dans les outputs
+
+    **Critères de validation** :
+
+    - [ ] Le VRF PCI-Zone est séparé du VRF Production (isolation totale)
+    - [ ] Payment-Gateway peut communiquer avec Card-Database via Contract
+    - [ ] App-Backend ne peut PAS accéder à Card-Database (Taboo)
+    - [ ] Le trafic intra-EPG est contrôlé (pas de communication libre)
+    - [ ] Les outputs documentent clairement la matrice de micro-segmentation
+
+??? quote "Solution"
+
+    **pci-zone.tf**
+
+    ```hcl
+    # =============================
+    # VRF PCI-DSS (ISOLÉ)
+    # =============================
+
+    resource "aci_vrf" "pci_zone" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "PCI-Zone"
+      description = "VRF isolé pour environnement PCI-DSS"
+
+      # Enforcement strict : whitelist obligatoire
+      pc_enf_pref = "enforced"
+      pc_enf_dir  = "ingress"
+
+      annotation  = "managed-by:terraform,compliance:pci-dss"
+    }
+
+    # =============================
+    # BRIDGE DOMAINS PCI
+    # =============================
+
+    # BD Payment Gateway
+    resource "aci_bridge_domain" "payment_gateway" {
+      tenant_dn                   = aci_tenant.webapp_prod.id
+      name                        = "BD-Payment-Gateway"
+      description                 = "Bridge Domain pour Payment Gateway (PCI-DSS)"
+      relation_fv_rs_ctx          = aci_vrf.pci_zone.id
+
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform,pci-dss:cde"
+    }
+
+    resource "aci_subnet" "payment_gateway" {
+      parent_dn   = aci_bridge_domain.payment_gateway.id
+      ip          = "10.99.1.1/24"
+      scope       = ["private"]  # Pas de routage externe
+      description = "Subnet Payment Gateway - PCI CDE"
+    }
+
+    # BD Card Database
+    resource "aci_bridge_domain" "card_database" {
+      tenant_dn                   = aci_tenant.webapp_prod.id
+      name                        = "BD-Card-Database"
+      description                 = "Bridge Domain pour Card Database (PCI-DSS CDE)"
+      relation_fv_rs_ctx          = aci_vrf.pci_zone.id
+
+      arp_flood                   = "no"
+      unicast_route               = "yes"
+      unk_mac_ucast_act           = "proxy"
+      limit_ip_learn_to_subnets   = "yes"
+
+      annotation                  = "managed-by:terraform,pci-dss:cde,sensitive:cardholder-data"
+    }
+
+    resource "aci_subnet" "card_database" {
+      parent_dn   = aci_bridge_domain.card_database.id
+      ip          = "10.99.2.1/24"
+      scope       = ["private"]
+      description = "Subnet Card Database - Données sensibles PCI"
+    }
+
+    # =============================
+    # APPLICATION PROFILE PCI
+    # =============================
+
+    resource "aci_application_profile" "pci_cde" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "PCI-CDE"
+      description = "Cardholder Data Environment - PCI-DSS Compliance"
+      annotation  = "managed-by:terraform,pci-dss:cde"
+    }
+
+    # =============================
+    # EPGs PCI
+    # =============================
+
+    # EPG Payment Gateway
+    resource "aci_application_epg" "payment_gateway" {
+      application_profile_dn = aci_application_profile.pci_cde.id
+      name                   = "Payment-Gateway"
+      description            = "EPG pour traitement des paiements (PCI-DSS)"
+      relation_fv_rs_bd      = aci_bridge_domain.payment_gateway.id
+
+      # Pas de Preferred Group en zone PCI
+      pref_gr_memb           = "exclude"
+
+      # Contrôle du trafic intra-EPG (isolation stricte)
+      pc_enf_pref            = "enforced"
+
+      annotation             = "managed-by:terraform,pci-dss:cde,function:payment-processing"
+    }
+
+    # EPG Card Database
+    resource "aci_application_epg" "card_database" {
+      application_profile_dn = aci_application_profile.pci_cde.id
+      name                   = "Card-Database"
+      description            = "EPG pour stockage des données cartes (PCI-DSS CDE)"
+      relation_fv_rs_bd      = aci_bridge_domain.card_database.id
+
+      pref_gr_memb           = "exclude"
+      pc_enf_pref            = "enforced"
+
+      annotation             = "managed-by:terraform,pci-dss:cde,sensitive:cardholder-data"
+    }
+
+    # =============================
+    # FILTERS PCI
+    # =============================
+
+    # Filter HTTPS sécurisé (TLS 1.2+)
+    resource "aci_filter" "https_pci" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-https-pci"
+    }
+
+    resource "aci_filter_entry" "https_pci" {
+      filter_dn   = aci_filter.https_pci.id
+      name        = "https-tls12"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "443"
+      d_to_port   = "443"
+      stateful    = "yes"
+    }
+
+    # =============================
+    # CONTRACT : Payment → CardDB
+    # =============================
+
+    resource "aci_contract" "payment_to_carddb" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "payment-to-carddb"
+      scope       = "context"
+      description = "Autoriser Payment Gateway à accéder à Card Database"
+    }
+
+    resource "aci_contract_subject" "payment_to_carddb" {
+      contract_dn   = aci_contract.payment_to_carddb.id
+      name          = "https-secure"
+      rev_flt_ports = "yes"
+    }
+
+    resource "aci_contract_subject_filter" "payment_to_carddb_https" {
+      contract_subject_dn = aci_contract_subject.payment_to_carddb.id
+      filter_dn           = aci_filter.https_pci.id
+    }
+
+    # Association : Payment = Consumer, CardDB = Provider
+    resource "aci_epg_to_contract" "payment_consumer_carddb" {
+      application_epg_dn = aci_application_epg.payment_gateway.id
+      contract_dn        = aci_contract.payment_to_carddb.id
+      contract_type      = "consumer"
+    }
+
+    resource "aci_epg_to_contract" "carddb_provider_payment" {
+      application_epg_dn = aci_application_epg.card_database.id
+      contract_dn        = aci_contract.payment_to_carddb.id
+      contract_type      = "provider"
+    }
+
+    # =============================
+    # TABOO CONTRACT : Protéger CardDB
+    # =============================
+
+    # Taboo : Bloquer TOUS les accès à CardDB sauf Payment
+    resource "aci_taboo_contract" "protect_carddb" {
+      tenant_dn   = aci_tenant.webapp_prod.id
+      name        = "taboo-protect-carddb"
+      description = "PCI-DSS : Seul Payment-Gateway peut accéder à Card-Database"
+    }
+
+    resource "aci_taboo_contract_subject" "protect_carddb" {
+      taboo_contract_dn = aci_taboo_contract.protect_carddb.id
+      name              = "block-all-to-carddb"
+    }
+
+    # Bloquer tous les protocoles
+    resource "aci_filter" "any_traffic" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-any"
+    }
+
+    resource "aci_filter_entry" "any_traffic" {
+      filter_dn   = aci_filter.any_traffic.id
+      name        = "any"
+      ether_t     = "unspecified"  # Tous les protocoles
+    }
+
+    resource "aci_taboo_contract_subject_filter" "protect_carddb_any" {
+      taboo_contract_subject_dn = aci_taboo_contract_subject.protect_carddb.id
+      filter_dn                 = aci_filter.any_traffic.id
+    }
+
+    # Appliquer le Taboo à l'EPG CardDB
+    resource "aci_epg_to_contract" "carddb_taboo" {
+      application_epg_dn = aci_application_epg.card_database.id
+      contract_dn        = aci_taboo_contract.protect_carddb.id
+      contract_type      = "taboo"
+    }
+    ```
+
+    **pci-outputs.tf**
+
+    ```hcl
+    output "pci_zone_summary" {
+      description = "Résumé de la zone PCI-DSS"
+      value = {
+        vrf           = aci_vrf.pci_zone.name
+        enforcement   = "strict (enforced)"
+        isolation     = "VRF séparé du VRF Production"
+        epgs_count    = 2
+        compliance    = "PCI-DSS v4.0"
+      }
+    }
+
+    output "microsegmentation_matrix" {
+      description = "Matrice de micro-segmentation PCI"
+      value = {
+        "Payment-Gateway → Card-Database" = {
+          contract = aci_contract.payment_to_carddb.name
+          protocol = "HTTPS (TLS 1.2+)"
+          status   = "ALLOWED"
+        }
+        "App-Backend → Card-Database" = {
+          contract = "none"
+          taboo    = aci_taboo_contract.protect_carddb.name
+          protocol = "all"
+          status   = "BLOCKED (Taboo Contract)"
+        }
+        "Web-Frontend → Card-Database" = {
+          contract = "none"
+          taboo    = aci_taboo_contract.protect_carddb.name
+          protocol = "all"
+          status   = "BLOCKED (Taboo Contract)"
+        }
+        "Internet → Card-Database" = {
+          contract = "none"
+          vrf      = "Isolated VRF"
+          status   = "BLOCKED (VRF isolation)"
+        }
+      }
+    }
+
+    output "pci_compliance_controls" {
+      description = "Contrôles PCI-DSS implémentés"
+      value = {
+        network_segmentation = "VRF séparé + Contracts"
+        access_control       = "Whitelist (deny all by default)"
+        cardholder_data_isolation = "Taboo Contract sur Card-Database"
+        encryption           = "TLS 1.2+ obligatoire (filtre HTTPS)"
+        intra_epg_isolation  = "Enforced (pas de communication libre)"
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    terraform plan
+    terraform apply
+
+    # Vérifier la matrice de micro-segmentation
+    terraform output microsegmentation_matrix
+    ```
+
+    **Résultat attendu :**
+
+    - Zone PCI-DSS complètement isolée (VRF séparé)
+    - Micro-segmentation stricte avec Contracts
+    - Card-Database accessible uniquement par Payment-Gateway
+    - Taboo Contract bloque tous les autres accès (App, Web, Internet)
+    - Conformité PCI-DSS assurée par design
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

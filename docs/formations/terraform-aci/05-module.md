@@ -966,6 +966,213 @@ curl -sk "https://apic.example.com/api/node/mo/uni/tn-Production.json" \
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer le provider Terraform ACI avec authentification et importer une ressource existante
+
+    **Contexte** : Vous devez connecter Terraform à un APIC existant. L'APIC contient déjà un tenant "common" que vous devez importer dans le state Terraform pour pouvoir le gérer. Vous utiliserez d'abord l'authentification par username/password, puis configurerez l'authentification par certificat pour automatiser les déploiements CI/CD.
+
+    **Tâches à réaliser** :
+
+    1. Configurer le provider ACI avec les credentials (utiliser variables sensibles)
+    2. Créer un data source pour interroger un tenant existant
+    3. Importer le tenant "common" dans le state Terraform
+    4. Créer une nouvelle ressource (VRF ou BD) dans ce tenant
+    5. Configurer l'authentification par certificat (générer clé + upload sur APIC)
+
+    **Critères de validation** :
+
+    - [ ] Le provider se connecte avec succès à l'APIC
+    - [ ] Les credentials sont stockés dans des variables sensibles (pas en dur)
+    - [ ] Le data source récupère les informations du tenant existant
+    - [ ] L'import du tenant réussit sans erreur
+    - [ ] Une nouvelle ressource est créée dans le tenant importé
+    - [ ] L'authentification par certificat fonctionne (optionnel mais recommandé)
+
+??? quote "Solution"
+
+    **provider.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        aci = {
+          source  = "CiscoDevNet/aci"
+          version = "~> 2.13"
+        }
+      }
+    }
+
+    # Configuration avec username/password
+    provider "aci" {
+      username = var.apic_username
+      password = var.apic_password
+      url      = var.apic_url
+      insecure = true  # Pour lab/dev uniquement
+    }
+
+    # Alternative : Authentification par certificat (CI/CD)
+    # provider "aci" {
+    #   username    = var.apic_username
+    #   private_key = file("~/.ssh/aci_cert.key")
+    #   cert_name   = "terraform-automation"
+    #   url         = var.apic_url
+    #   insecure    = true
+    # }
+    ```
+
+    **variables.tf**
+
+    ```hcl
+    variable "apic_url" {
+      description = "URL de l'APIC (ex: https://apic.example.com)"
+      type        = string
+      default     = "https://sandboxapicdc.cisco.com"
+    }
+
+    variable "apic_username" {
+      description = "Username pour l'authentification APIC"
+      type        = string
+      sensitive   = true
+    }
+
+    variable "apic_password" {
+      description = "Password pour l'authentification APIC"
+      type        = string
+      sensitive   = true
+    }
+    ```
+
+    **terraform.tfvars** (ne pas commit!)
+
+    ```hcl
+    apic_username = "admin"
+    apic_password = "your-password-here"
+    apic_url      = "https://sandboxapicdc.cisco.com"
+    ```
+
+    **data-sources.tf**
+
+    ```hcl
+    # Data source : Interroger un tenant existant
+    data "aci_tenant" "common" {
+      name = "common"
+    }
+
+    # Data source : Récupérer les informations système
+    data "aci_system" "apic_info" {}
+
+    # Outputs pour vérifier la connexion
+    output "apic_connection" {
+      description = "Informations de connexion APIC"
+      value = {
+        url         = var.apic_url
+        system_id   = data.aci_system.apic_info.id
+        common_tenant_exists = data.aci_tenant.common.id != null ? true : false
+      }
+    }
+    ```
+
+    **import.tf**
+
+    ```hcl
+    # Ressource pour importer le tenant common
+    resource "aci_tenant" "common" {
+      name        = "common"
+      description = "Tenant common - Managed by Terraform"
+      # L'import récupérera les autres attributs
+    }
+
+    # Créer un nouveau VRF dans le tenant common
+    resource "aci_vrf" "test_import" {
+      tenant_dn   = aci_tenant.common.id
+      name        = "VRF-Terraform-Test"
+      description = "VRF créé via Terraform pour valider l'import"
+      pc_enf_pref = "enforced"
+      annotation  = "managed-by:terraform"
+    }
+    ```
+
+    **Commandes d'import :**
+
+    ```bash
+    # Étape 1 : Initialiser
+    terraform init
+
+    # Étape 2 : Vérifier la connexion avec data sources
+    terraform plan
+
+    # Étape 3 : Importer le tenant common dans le state
+    # Format : terraform import <RESOURCE_TYPE>.<RESOURCE_NAME> <DN>
+    terraform import aci_tenant.common uni/tn-common
+
+    # Étape 4 : Vérifier que l'import a réussi
+    terraform state show aci_tenant.common
+
+    # Étape 5 : Créer le nouveau VRF
+    terraform plan
+    terraform apply
+
+    # Vérifier
+    terraform state list
+    ```
+
+    **Configuration authentification par certificat (pour CI/CD) :**
+
+    ```bash
+    # Générer une clé privée
+    openssl genrsa -out aci_cert.key 2048
+
+    # Générer une requête de certificat
+    openssl req -new -key aci_cert.key -out aci_cert.csr -subj "/CN=terraform-automation/O=Worldline"
+
+    # Générer un certificat auto-signé
+    openssl x509 -req -days 365 -in aci_cert.csr -signkey aci_cert.key -out aci_cert.crt
+
+    # Extraire le certificat au format requis par APIC
+    cat aci_cert.crt | grep -v CERTIFICATE | tr -d '\n'
+    ```
+
+    **Sur l'APIC (GUI) :**
+
+    1. Admin > AAA > Users > admin
+    2. Security > User Certificates
+    3. Cliquer "+" et coller le certificat
+    4. Name: `terraform-automation`
+
+    **provider.tf avec certificat :**
+
+    ```hcl
+    provider "aci" {
+      username    = "admin"
+      private_key = file("~/.ssh/aci_cert.key")
+      cert_name   = "terraform-automation"
+      url         = var.apic_url
+      insecure    = true
+    }
+    ```
+
+    **Test de connexion :**
+
+    ```bash
+    terraform plan
+
+    # Si succès : la connexion par certificat fonctionne
+    # Aucun password requis = parfait pour CI/CD
+    ```
+
+    **Résultat attendu :**
+
+    - Connexion réussie au provider ACI
+    - Tenant "common" importé dans le state Terraform
+    - Nouveau VRF créé pour valider le fonctionnement
+    - (Optionnel) Authentification par certificat configurée pour CI/CD
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

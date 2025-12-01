@@ -245,6 +245,130 @@ Get-DhcpServerv4Scope
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure réseau complète avec DNS et DHCP redondants
+
+    **Contexte** : Vous devez configurer les services réseau pour un nouveau site avec 100 postes de travail. Le réseau est 192.168.10.0/24 et nécessite DNS et DHCP redondants pour garantir la haute disponibilité.
+
+    **Tâches à réaliser** :
+
+    1. Configurer une adresse IP statique sur le serveur (192.168.10.10/24)
+    2. Installer et configurer les rôles DNS et DHCP
+    3. Créer la zone DNS "lab.local" avec 5 enregistrements A
+    4. Créer un scope DHCP 192.168.10.100-200 avec les options appropriées
+    5. Créer 3 réservations DHCP pour des équipements critiques
+    6. Tester la résolution DNS et l'attribution DHCP
+
+    **Critères de validation** :
+
+    - [ ] L'adresse IP statique est configurée correctement
+    - [ ] Les rôles DNS et DHCP sont installés et actifs
+    - [ ] La zone DNS contient au moins 5 enregistrements
+    - [ ] Le scope DHCP est actif avec les options DNS et passerelle configurées
+    - [ ] Les 3 réservations DHCP sont créées
+    - [ ] Les tests de résolution DNS fonctionnent
+
+??? quote "Solution"
+    ```powershell
+    # Deploy-NetworkServices.ps1
+    # Déploiement complet des services réseau
+
+    # 1. Configuration IP statique
+    Write-Host "Configuration de l'adresse IP statique..." -ForegroundColor Yellow
+    $adapter = Get-NetAdapter | Where-Object Status -eq "Up" | Select-Object -First 1
+    New-NetIPAddress -InterfaceAlias $adapter.Name `
+        -IPAddress "192.168.10.10" `
+        -PrefixLength 24 `
+        -DefaultGateway "192.168.10.1" `
+        -ErrorAction SilentlyContinue
+
+    Set-DnsClientServerAddress -InterfaceAlias $adapter.Name `
+        -ServerAddresses "192.168.10.10", "8.8.8.8"
+
+    # 2. Installation des rôles
+    Write-Host "Installation DNS et DHCP..." -ForegroundColor Yellow
+    Install-WindowsFeature -Name DNS, DHCP -IncludeManagementTools
+
+    # 3. Configuration DNS
+    Write-Host "Configuration du serveur DNS..." -ForegroundColor Yellow
+    Add-DnsServerPrimaryZone -Name "lab.local" -ZoneFile "lab.local.dns"
+
+    # Créer les enregistrements A
+    $dnsRecords = @{
+        "dc01" = "192.168.10.10"
+        "srv01" = "192.168.10.20"
+        "srv02" = "192.168.10.21"
+        "web01" = "192.168.10.30"
+        "db01" = "192.168.10.40"
+    }
+
+    foreach ($record in $dnsRecords.GetEnumerator()) {
+        Add-DnsServerResourceRecordA -ZoneName "lab.local" `
+            -Name $record.Key `
+            -IPv4Address $record.Value
+        Write-Host "  Enregistrement créé: $($record.Key).lab.local -> $($record.Value)" -ForegroundColor Green
+    }
+
+    # 4. Configuration DHCP
+    Write-Host "Configuration du serveur DHCP..." -ForegroundColor Yellow
+
+    # Créer le scope
+    Add-DhcpServerv4Scope -Name "Lab Network" `
+        -StartRange "192.168.10.100" `
+        -EndRange "192.168.10.200" `
+        -SubnetMask "255.255.255.0" `
+        -State Active
+
+    # Configurer les options
+    Set-DhcpServerv4OptionValue -ScopeId "192.168.10.0" `
+        -DnsServer "192.168.10.10" `
+        -DnsDomain "lab.local" `
+        -Router "192.168.10.1"
+
+    # 5. Créer les réservations
+    Write-Host "Création des réservations DHCP..." -ForegroundColor Yellow
+    $reservations = @(
+        @{IP="192.168.10.50"; MAC="00-15-5D-00-01-01"; Name="PRINTER01"}
+        @{IP="192.168.10.51"; MAC="00-15-5D-00-01-02"; Name="SCANNER01"}
+        @{IP="192.168.10.52"; MAC="00-15-5D-00-01-03"; Name="CAMERA01"}
+    )
+
+    foreach ($res in $reservations) {
+        Add-DhcpServerv4Reservation -ScopeId "192.168.10.0" `
+            -IPAddress $res.IP `
+            -ClientId $res.MAC `
+            -Name $res.Name
+        Write-Host "  Réservation: $($res.Name) -> $($res.IP)" -ForegroundColor Green
+    }
+
+    # 6. Tests de validation
+    Write-Host "`n=== TESTS DE VALIDATION ===" -ForegroundColor Cyan
+
+    # Test DNS
+    Write-Host "`nTest de résolution DNS:" -ForegroundColor Yellow
+    foreach ($record in $dnsRecords.Keys) {
+        $result = Resolve-DnsName "$record.lab.local" -Server 127.0.0.1 -ErrorAction SilentlyContinue
+        if ($result) {
+            Write-Host "  [OK] $record.lab.local -> $($result.IPAddress)" -ForegroundColor Green
+        } else {
+            Write-Host "  [ECHEC] $record.lab.local" -ForegroundColor Red
+        }
+    }
+
+    # Vérifier DHCP
+    Write-Host "`nÉtat du scope DHCP:" -ForegroundColor Yellow
+    Get-DhcpServerv4Scope | Format-Table ScopeId, Name, State, StartRange, EndRange
+
+    Write-Host "`nRéservations DHCP:" -ForegroundColor Yellow
+    Get-DhcpServerv4Reservation -ScopeId "192.168.10.0" | Format-Table IPAddress, ClientId, Name
+
+    Write-Host "`n=== Configuration terminée! ===" -ForegroundColor Green
+    ```
+
+---
+
 ## Quiz
 
 1. **Quel type d'enregistrement DNS associe un nom à une IP ?**

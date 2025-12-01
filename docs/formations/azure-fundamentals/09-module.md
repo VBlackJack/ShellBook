@@ -664,7 +664,165 @@ az policy state list \
 
 ---
 
-## 6. Exercices Pratiques
+## 6. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Sécuriser une infrastructure Azure complète avec Key Vault, Defender et WAF
+
+    **Contexte** : Vous êtes responsable de la sécurité d'une application web hébergée sur Azure. Vous devez implémenter une stratégie de sécurité en profondeur incluant la gestion des secrets, la protection des applications, le monitoring de sécurité et la conformité. L'application utilise des VMs, AKS, Azure SQL et Storage Account.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Key Vault avec RBAC et Private Endpoint
+    2. Stocker tous les secrets (SQL passwords, API keys, certificates)
+    3. Configurer Managed Identities pour les accès sans credentials
+    4. Implémenter Certificate rotation automatique
+    5. Déployer Application Gateway avec WAF (OWASP rules)
+    6. Activer Microsoft Defender for Cloud sur tous les services
+    7. Configurer Security Center recommendations
+    8. Implémenter Just-In-Time VM Access et Adaptive Network Hardening
+
+    **Critères de validation** :
+
+    - [ ] Key Vault est créé avec RBAC et purge protection
+    - [ ] Tous les secrets sont dans Key Vault (pas de hardcoded credentials)
+    - [ ] Les Managed Identities sont configurées pour VMs et AKS
+    - [ ] Les certificats SSL ont une rotation automatique de 30 jours
+    - [ ] Application Gateway WAF bloque les attaques OWASP Top 10
+    - [ ] Defender for Cloud est activé sur tous les services
+    - [ ] Le Secure Score est supérieur à 80%
+    - [ ] JIT VM Access fonctionne et requiert des approbations
+
+??? quote "Solution"
+
+    **Étape 1 : Créer Key Vault sécurisé** :
+
+    ```bash
+    RG_NAME="security-demo-rg"
+    LOCATION="westeurope"
+    KV_NAME="secure-kv-$(openssl rand -hex 4)"
+
+    # Créer Key Vault avec RBAC
+    az keyvault create \
+        --name $KV_NAME \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --enable-rbac-authorization true \
+        --enable-purge-protection true \
+        --retention-days 90 \
+        --sku premium
+
+    # Désactiver l'accès public
+    az keyvault update \
+        --name $KV_NAME \
+        --resource-group $RG_NAME \
+        --default-action Deny
+
+    # Ajouter des secrets
+    az keyvault secret set \
+        --vault-name $KV_NAME \
+        --name "sql-admin-password" \
+        --value "$(openssl rand -base64 32)"
+
+    az keyvault secret set \
+        --vault-name $KV_NAME \
+        --name "api-key" \
+        --value "$(uuidgen)" \
+        --expires "2025-12-31T23:59:59Z"
+    ```
+
+    **Étape 2 : Configurer Managed Identities** :
+
+    ```bash
+    # Créer une VM avec System-Assigned Identity
+    az vm create \
+        --resource-group $RG_NAME \
+        --name secure-vm \
+        --image Ubuntu2204 \
+        --assign-identity \
+        --role "Key Vault Secrets User" \
+        --scope $(az keyvault show -n $KV_NAME --query id -o tsv)
+
+    # Pour AKS avec Workload Identity
+    az aks create \
+        --resource-group $RG_NAME \
+        --name secure-aks \
+        --enable-managed-identity \
+        --enable-workload-identity \
+        --enable-oidc-issuer
+    ```
+
+    **Étape 3 : Déployer Application Gateway avec WAF** :
+
+    ```bash
+    # Créer WAF Policy
+    az network application-gateway waf-policy create \
+        --name phoenix-waf-policy \
+        --resource-group $RG_NAME \
+        --location $LOCATION
+
+    # Configurer OWASP rules
+    az network application-gateway waf-policy policy-setting update \
+        --policy-name phoenix-waf-policy \
+        --resource-group $RG_NAME \
+        --mode Prevention \
+        --state Enabled
+
+    # Créer Application Gateway avec WAF
+    az network application-gateway create \
+        --name secure-appgw \
+        --resource-group $RG_NAME \
+        --location $LOCATION \
+        --sku WAF_v2 \
+        --capacity 2 \
+        --waf-policy phoenix-waf-policy
+    ```
+
+    **Étape 4 : Activer Defender for Cloud** :
+
+    ```bash
+    # Activer Defender for Servers
+    az security pricing create \
+        --name VirtualMachines \
+        --tier Standard
+
+    # Activer Defender for Containers
+    az security pricing create \
+        --name Containers \
+        --tier Standard
+
+    # Activer Defender for SQL
+    az security pricing create \
+        --name SqlServers \
+        --tier Standard
+
+    # Activer JIT VM Access
+    az security jit-policy create \
+        --resource-group $RG_NAME \
+        --name "jit-policy-vm" \
+        --location $LOCATION \
+        --virtual-machines "/subscriptions/.../resourceGroups/$RG_NAME/providers/Microsoft.Compute/virtualMachines/secure-vm"
+    ```
+
+    **Validation** :
+
+    ```bash
+    # Vérifier Key Vault
+    az keyvault show -n $KV_NAME --query "[name,properties.enableRbacAuthorization,properties.enablePurgeProtection]"
+
+    # Vérifier Defender
+    az security pricing list --output table
+
+    # Vérifier le Secure Score
+    az security secure-score list --output table
+
+    # Tester WAF (devrait être bloqué)
+    curl "https://secure-appgw.example.com/?test=<script>alert('XSS')</script>"
+    ```
+
+---
+
+## 7. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Sécurisation Complète
 

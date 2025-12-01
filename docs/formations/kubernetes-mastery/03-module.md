@@ -404,69 +404,218 @@ spec:
 
 ---
 
-## 4. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Gérer la configuration et les secrets d'une application de manière sécurisée
 
-1. Créer un ConfigMap avec configuration applicative
-2. Créer un Secret pour les credentials DB
-3. Déployer une application utilisant les deux
-4. Vérifier l'injection de configuration
+    **Contexte** : Vous devez déployer une application web qui se connecte à une base de données PostgreSQL. L'application nécessite des variables de configuration (environnement, log level, URL d'API) et des credentials sensibles (utilisateur et mot de passe de la base de données).
 
-### Solution
+    **Tâches à réaliser** :
 
-```yaml
-# 1. ConfigMap
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-settings
-data:
-  APP_ENV: "production"
-  LOG_LEVEL: "info"
-  API_URL: "https://api.example.com"
+    1. Créer un ConfigMap contenant les variables de configuration de l'application
+    2. Créer un Secret contenant les credentials de la base de données
+    3. Déployer un pod qui utilise à la fois le ConfigMap et le Secret
+    4. Vérifier que les variables sont correctement injectées dans le container
+    5. Modifier le ConfigMap et observer si le pod récupère les nouveaux valeurs
 
----
-# 2. Secret
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secrets
-type: Opaque
-stringData:
-  DB_USER: "appuser"
-  DB_PASS: "s3cr3tp@ss"
+    **Critères de validation** :
 
----
-# 3. Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: myapp
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: myapp
-  template:
+    - [ ] Le ConfigMap contient au moins 3 variables de configuration
+    - [ ] Le Secret contient les credentials de manière sécurisée
+    - [ ] Le pod démarre correctement et accède aux variables
+    - [ ] Les variables d'environnement sont visibles dans le container
+    - [ ] Le Secret n'est pas visible en clair dans les manifests
+
+??? quote "Solution"
+    **Étape 1 : Créer le ConfigMap**
+
+    ```yaml
+    # configmap.yaml
+    apiVersion: v1
+    kind: ConfigMap
     metadata:
-      labels:
-        app: myapp
-    spec:
-      containers:
-        - name: app
-          image: nginx
-          envFrom:
-            - configMapRef:
-                name: app-settings
-            - secretRef:
-                name: app-secrets
-```
+      name: webapp-config
+    data:
+      APP_ENV: "production"
+      LOG_LEVEL: "info"
+      API_URL: "https://api.example.com"
+      DATABASE_HOST: "postgres-service"
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: "webapp_db"
+    ```
 
-```bash
-# Vérification
-kubectl exec -it <pod-name> -- env | grep -E "APP_|DB_|LOG_"
-```
+    ```bash
+    kubectl apply -f configmap.yaml
+    kubectl describe configmap webapp-config
+    ```
+
+    **Étape 2 : Créer le Secret**
+
+    ```yaml
+    # secret.yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: webapp-secrets
+    type: Opaque
+    stringData:
+      DB_USER: "webapp_user"
+      DB_PASSWORD: "S3cur3P@ssw0rd!"
+      API_KEY: "abc123def456"
+    ```
+
+    ```bash
+    kubectl apply -f secret.yaml
+
+    # Vérifier le secret (attention: données visibles!)
+    kubectl get secret webapp-secrets -o yaml
+
+    # Décoder une valeur
+    kubectl get secret webapp-secrets -o jsonpath='{.data.DB_PASSWORD}' | base64 -d
+    ```
+
+    **Étape 3 : Déployer l'application**
+
+    ```yaml
+    # deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: webapp
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: webapp
+      template:
+        metadata:
+          labels:
+            app: webapp
+        spec:
+          containers:
+            - name: app
+              image: nginx:alpine
+              # Injecter toutes les variables du ConfigMap
+              envFrom:
+                - configMapRef:
+                    name: webapp-config
+                # Injecter toutes les variables du Secret
+                - secretRef:
+                    name: webapp-secrets
+              # Ou injecter des variables individuelles
+              env:
+                - name: SPECIAL_VAR
+                  value: "custom-value"
+              ports:
+                - containerPort: 80
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+    ```
+
+    ```bash
+    kubectl apply -f deployment.yaml
+    kubectl get pods -l app=webapp
+    ```
+
+    **Étape 4 : Vérifier l'injection**
+
+    ```bash
+    # Récupérer le nom du pod
+    POD=$(kubectl get pod -l app=webapp -o jsonpath='{.items[0].metadata.name}')
+
+    # Afficher toutes les variables d'environnement
+    kubectl exec $POD -- env | sort
+
+    # Filtrer les variables injectées
+    kubectl exec $POD -- env | grep -E "APP_|LOG_|API_|DATABASE_|DB_"
+
+    # Vérifier qu'on voit bien les valeurs
+    kubectl exec $POD -- sh -c 'echo "Environment: $APP_ENV"'
+    kubectl exec $POD -- sh -c 'echo "DB User: $DB_USER"'
+    ```
+
+    **Étape 5 : Modifier le ConfigMap**
+
+    ```bash
+    # Modifier le ConfigMap
+    kubectl edit configmap webapp-config
+    # Changer LOG_LEVEL de "info" à "debug"
+
+    # Les pods existants ne verront PAS automatiquement les changements
+    # Il faut les redémarrer
+    kubectl rollout restart deployment webapp
+
+    # Attendre que le nouveau pod démarre
+    kubectl rollout status deployment webapp
+
+    # Vérifier la nouvelle valeur
+    POD=$(kubectl get pod -l app=webapp -o jsonpath='{.items[0].metadata.name}')
+    kubectl exec $POD -- env | grep LOG_LEVEL
+    ```
+
+    **Variante : Monter comme volumes**
+
+    ```yaml
+    # deployment-volumes.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: webapp-volumes
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: webapp-volumes
+      template:
+        metadata:
+          labels:
+            app: webapp-volumes
+        spec:
+          containers:
+            - name: app
+              image: nginx:alpine
+              volumeMounts:
+                # Monter le ConfigMap
+                - name: config-volume
+                  mountPath: /etc/config
+                  readOnly: true
+                # Monter le Secret
+                - name: secret-volume
+                  mountPath: /etc/secrets
+                  readOnly: true
+          volumes:
+            - name: config-volume
+              configMap:
+                name: webapp-config
+            - name: secret-volume
+              secret:
+                secretName: webapp-secrets
+                defaultMode: 0400
+    ```
+
+    ```bash
+    kubectl apply -f deployment-volumes.yaml
+    POD=$(kubectl get pod -l app=webapp-volumes -o jsonpath='{.items[0].metadata.name}')
+
+    # Voir les fichiers montés
+    kubectl exec $POD -- ls -la /etc/config
+    kubectl exec $POD -- cat /etc/config/APP_ENV
+    kubectl exec $POD -- ls -la /etc/secrets
+    ```
+
+    **Nettoyage** :
+
+    ```bash
+    kubectl delete deployment webapp webapp-volumes
+    kubectl delete configmap webapp-config
+    kubectl delete secret webapp-secrets
+    ```
 
 ---
 

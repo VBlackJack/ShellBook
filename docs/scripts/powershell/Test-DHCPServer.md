@@ -26,6 +26,24 @@ Ce script vérifie l'état d'un serveur DHCP Windows :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ avec rôle DHCP
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur sur le serveur DHCP
+- **Modules** : `DhcpServer` (installé automatiquement avec le rôle DHCP)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring quotidien** : Vérifier l'état des scopes et le taux d'utilisation
+- **Troubleshooting DHCP** : Diagnostiquer les problèmes d'attribution d'adresses IP
+- **Audit infrastructure** : Documentation de la configuration DHCP pour conformité
+- **Prévention saturation** : Alertes avant épuisement des plages d'adresses
+
+---
+
 ## Script
 
 ```powershell

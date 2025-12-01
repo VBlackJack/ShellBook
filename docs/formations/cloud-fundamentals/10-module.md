@@ -584,6 +584,60 @@ graph LR
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Implémenter un système de détection de fraude ML en temps réel
+
+    **Contexte** : Vous devez créer un pipeline ML pour détecter les transactions frauduleuses avec une latence < 100ms par prédiction.
+
+    **Tâches à réaliser** :
+
+    1. Concevez l'architecture data pipeline (ingestion → storage → ML → inference)
+    2. Choisissez les services cloud appropriés (streaming, data warehouse, ML platform)
+    3. Entraînez un modèle de détection de fraude (AutoML ou custom)
+    4. Déployez le modèle en production avec endpoint temps réel
+
+    **Critères de validation** :
+
+    - [ ] Pipeline streaming temps réel (Kinesis/Pub/Sub/Event Hubs)
+    - [ ] Data warehouse pour analytics (BigQuery/Redshift/Synapse)
+    - [ ] Modèle ML déployé avec latence < 100ms
+    - [ ] Monitoring des prédictions et data drift
+
+??? quote "Solution"
+    **Architecture data + ML :**
+    ```bash
+    # 1. Streaming ingestion
+    aws kinesis create-stream \
+      --stream-name transactions \
+      --shard-count 10
+
+    # 2. Feature Store
+    aws sagemaker create-feature-group \
+      --feature-group-name fraud-features
+
+    # 3. Entraînement modèle
+    aws sagemaker create-training-job \
+      --training-job-name fraud-detection \
+      --algorithm-specification TrainingImage=xgboost
+
+    # 4. Endpoint temps réel
+    aws sagemaker create-endpoint \
+      --endpoint-name fraud-api \
+      --instance-type ml.c5.xlarge
+    ```
+
+    **Features pour détection fraude :**
+    - Montant vs historique client
+    - Distance géographique depuis dernière transaction
+    - Vélocité (transactions/heure)
+    - Device fingerprint
+
+    **Latence cible : 50ms** ✅
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

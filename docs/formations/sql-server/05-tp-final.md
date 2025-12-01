@@ -1,3 +1,12 @@
+---
+tags:
+  - formation
+  - sql-server
+  - tp-final
+  - dba
+  - projet
+---
+
 # Module 5 : TP Final - Mission DBA (Projet Phoenix)
 
 ## Scenario : Projet Phoenix

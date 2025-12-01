@@ -556,6 +556,292 @@ main "$@"
 
 ---
 
+## 10. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un script de monitoring système robuste et maintenable
+
+    **Contexte** : Vous devez créer un script de surveillance qui collecte et log les métriques système (CPU, RAM, disque, processus) toutes les 5 minutes, avec gestion d'erreurs, rotation des logs et notifications en cas de dépassement de seuils.
+
+    **Tâches à réaliser** :
+
+    1. Créer un script `system-monitor.sh` avec mode strict et gestion d'erreurs complète
+    2. Implémenter un système de logging avec niveaux (DEBUG, INFO, WARN, ERROR)
+    3. Ajouter le parsing d'arguments : `-i interval`, `-t threshold`, `-o output`, `-v verbose`
+    4. Collecter les métriques : CPU, RAM, disque, top 5 processus gourmands
+    5. Envoyer une alerte (log ERROR) si CPU > seuil ou RAM > seuil
+    6. Implémenter la rotation des logs (garder 7 jours)
+    7. Ajouter un fichier de configuration optionnel
+    8. Valider le script avec `shellcheck`
+
+    **Critères de validation** :
+
+    - [ ] Le script utilise `set -euo pipefail` et gère les erreurs avec `trap`
+    - [ ] Système de logging fonctionnel avec timestamps et niveaux
+    - [ ] Arguments parsés correctement avec validation
+    - [ ] Métriques collectées et stockées dans un fichier log
+    - [ ] Alertes générées quand les seuils sont dépassés
+    - [ ] Pas d'erreurs `shellcheck`
+    - [ ] Documentation (usage, exemples) dans le header
+
+??? quote "Solution"
+    ```bash
+    #!/bin/bash
+    #
+    # system-monitor.sh - Script de monitoring système avancé
+    # Usage: system-monitor.sh [-i interval] [-t threshold] [-o output] [-v]
+    # Author: Expert Linux
+    # Date: 2024-11-29
+    #
+
+    set -euo pipefail
+    IFS=$'\n\t'
+
+    # === CONSTANTS ===
+    readonly SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
+    readonly SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    readonly VERSION="1.0.0"
+
+    # === CONFIGURATION ===
+    INTERVAL=300           # 5 minutes par défaut
+    CPU_THRESHOLD=80
+    MEM_THRESHOLD=80
+    OUTPUT_DIR="/var/log/monitoring"
+    LOG_FILE="${OUTPUT_DIR}/system-monitor.log"
+    METRICS_FILE="${OUTPUT_DIR}/metrics.log"
+    VERBOSE=false
+    LOG_LEVEL="INFO"
+    RETENTION_DAYS=7
+
+    # Fichier de configuration optionnel
+    CONFIG_FILE="${CONFIG_FILE:-/etc/monitoring/config.conf}"
+
+    # === LOGGING ===
+    declare -A LOG_LEVELS=([DEBUG]=0 [INFO]=1 [WARN]=2 [ERROR]=3 [FATAL]=4)
+
+    log() {
+        local level=$1
+        shift
+        local message="$*"
+        local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+        if [[ ${LOG_LEVELS[$level]} -ge ${LOG_LEVELS[$LOG_LEVEL]} ]]; then
+            local color=""
+            local reset="\033[0m"
+            case $level in
+                DEBUG) color="\033[36m" ;;
+                INFO)  color="\033[32m" ;;
+                WARN)  color="\033[33m" ;;
+                ERROR) color="\033[31m" ;;
+                FATAL) color="\033[35m" ;;
+            esac
+
+            echo -e "${color}[$timestamp] [$level] $message${reset}" >&2
+            echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+        fi
+    }
+
+    # === CLEANUP ===
+    cleanup() {
+        local exit_code=$?
+        log INFO "Arrêt du monitoring (exit code: $exit_code)"
+        exit $exit_code
+    }
+
+    trap cleanup EXIT INT TERM
+
+    # === FUNCTIONS ===
+    usage() {
+        cat << EOF
+    Usage: $SCRIPT_NAME [OPTIONS]
+
+    Options:
+        -i, --interval SECONDS   Intervalle entre collectes (défaut: 300)
+        -t, --threshold PERCENT  Seuil d'alerte CPU/RAM (défaut: 80)
+        -o, --output DIR         Répertoire de sortie (défaut: /var/log/monitoring)
+        -c, --config FILE        Fichier de configuration
+        -v, --verbose            Mode verbeux (DEBUG)
+        -h, --help               Afficher cette aide
+
+    Exemples:
+        $SCRIPT_NAME -i 60 -t 90 -v
+        $SCRIPT_NAME --config /etc/custom-monitor.conf
+
+    Version: $VERSION
+    EOF
+        exit 0
+    }
+
+    load_config() {
+        if [[ -f "$CONFIG_FILE" ]]; then
+            log INFO "Chargement de la configuration depuis $CONFIG_FILE"
+            # Charger les variables depuis le fichier (format KEY=VALUE)
+            while IFS='=' read -r key value; do
+                [[ $key =~ ^#.*$ ]] && continue
+                [[ -z "$key" ]] && continue
+                case $key in
+                    INTERVAL) INTERVAL="$value" ;;
+                    CPU_THRESHOLD) CPU_THRESHOLD="$value" ;;
+                    MEM_THRESHOLD) MEM_THRESHOLD="$value" ;;
+                    OUTPUT_DIR) OUTPUT_DIR="$value" ;;
+                esac
+            done < "$CONFIG_FILE"
+        fi
+    }
+
+    collect_metrics() {
+        local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+        # CPU
+        local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
+        cpu_usage=${cpu_usage%.*}  # Arrondir
+
+        # Memory
+        local mem_total=$(free -m | awk '/Mem:/ {print $2}')
+        local mem_used=$(free -m | awk '/Mem:/ {print $3}')
+        local mem_percent=$((mem_used * 100 / mem_total))
+
+        # Disk
+        local disk_usage=$(df -h / | awk 'NR==2 {print $5}' | tr -d '%')
+
+        # Top 5 processus CPU
+        local top_procs=$(ps aux --sort=-%cpu | head -6 | tail -5 | awk '{printf "%s(%s%%) ", $11, $3}')
+
+        # Logger les métriques
+        log DEBUG "CPU=${cpu_usage}% MEM=${mem_percent}% DISK=${disk_usage}%"
+        echo "$timestamp,CPU=$cpu_usage,MEM=$mem_percent,DISK=$disk_usage,TOP_PROCS=$top_procs" >> "$METRICS_FILE"
+
+        # Vérifier les seuils
+        if [[ $cpu_usage -gt $CPU_THRESHOLD ]]; then
+            log ERROR "ALERTE: CPU usage critique: ${cpu_usage}% (seuil: ${CPU_THRESHOLD}%)"
+        fi
+
+        if [[ $mem_percent -gt $MEM_THRESHOLD ]]; then
+            log ERROR "ALERTE: Mémoire critique: ${mem_percent}% (seuil: ${MEM_THRESHOLD}%)"
+        fi
+
+        log INFO "Métriques collectées: CPU=${cpu_usage}% MEM=${mem_percent}% DISK=${disk_usage}%"
+    }
+
+    rotate_logs() {
+        log INFO "Rotation des logs (rétention: $RETENTION_DAYS jours)"
+        find "$OUTPUT_DIR" -name "*.log" -type f -mtime +$RETENTION_DAYS -delete
+    }
+
+    validate_threshold() {
+        local threshold=$1
+        if [[ ! $threshold =~ ^[0-9]+$ ]] || [[ $threshold -lt 1 ]] || [[ $threshold -gt 100 ]]; then
+            log ERROR "Seuil invalide: $threshold (doit être entre 1 et 100)"
+            exit 1
+        fi
+    }
+
+    # === MAIN ===
+    main() {
+        # Charger la config si elle existe
+        load_config
+
+        # Parser les arguments
+        while [[ $# -gt 0 ]]; do
+            case $1 in
+                -i|--interval)
+                    INTERVAL="$2"
+                    shift 2
+                    ;;
+                -t|--threshold)
+                    CPU_THRESHOLD="$2"
+                    MEM_THRESHOLD="$2"
+                    validate_threshold "$2"
+                    shift 2
+                    ;;
+                -o|--output)
+                    OUTPUT_DIR="$2"
+                    LOG_FILE="${OUTPUT_DIR}/system-monitor.log"
+                    METRICS_FILE="${OUTPUT_DIR}/metrics.log"
+                    shift 2
+                    ;;
+                -c|--config)
+                    CONFIG_FILE="$2"
+                    shift 2
+                    ;;
+                -v|--verbose)
+                    VERBOSE=true
+                    LOG_LEVEL="DEBUG"
+                    shift
+                    ;;
+                -h|--help)
+                    usage
+                    ;;
+                *)
+                    log ERROR "Option inconnue: $1"
+                    usage
+                    ;;
+            esac
+        done
+
+        # Créer le répertoire de sortie si nécessaire
+        if [[ ! -d "$OUTPUT_DIR" ]]; then
+            mkdir -p "$OUTPUT_DIR" || {
+                log FATAL "Impossible de créer $OUTPUT_DIR"
+                exit 1
+            }
+        fi
+
+        log INFO "=== Démarrage du monitoring système ==="
+        log INFO "Intervalle: ${INTERVAL}s, Seuils: CPU=${CPU_THRESHOLD}% MEM=${MEM_THRESHOLD}%"
+        log INFO "Logs: $LOG_FILE, Métriques: $METRICS_FILE"
+
+        # Boucle de monitoring
+        while true; do
+            collect_metrics
+            rotate_logs
+
+            if [[ "$VERBOSE" == true ]]; then
+                log DEBUG "Prochaine collecte dans ${INTERVAL}s"
+            fi
+
+            sleep "$INTERVAL"
+        done
+    }
+
+    main "$@"
+    ```
+
+    **Test du script :**
+
+    ```bash
+    # Valider avec shellcheck
+    shellcheck system-monitor.sh
+
+    # Tester en mode verbeux avec intervalle court
+    ./system-monitor.sh -v -i 10 -t 75
+
+    # Vérifier les logs
+    tail -f /var/log/monitoring/system-monitor.log
+    tail -f /var/log/monitoring/metrics.log
+
+    # Tester avec un fichier de config
+    cat > /etc/monitoring/config.conf << 'EOF'
+    INTERVAL=60
+    CPU_THRESHOLD=85
+    MEM_THRESHOLD=90
+    OUTPUT_DIR=/var/log/custom-monitoring
+    EOF
+
+    ./system-monitor.sh -c /etc/monitoring/config.conf -v
+    ```
+
+    **Améliorations possibles :**
+
+    1. Ajouter des tests unitaires avec BATS
+    2. Implémenter l'envoi d'emails/Slack pour les alertes
+    3. Exporter les métriques vers Prometheus
+    4. Ajouter un mode daemon avec systemd
+    5. Implémenter un fichier de lock pour éviter les exécutions multiples
+    6. Ajouter le support de multiples machines (SSH)
+
+---
+
 ## Points Clés à Retenir
 
 | Concept | Implémentation |

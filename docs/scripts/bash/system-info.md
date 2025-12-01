@@ -25,6 +25,23 @@ Ce script collecte et affiche les informations essentielles du système :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis)
+- **Dépendances** : `free`, `df`, `uptime`, `ps`
+
+---
+
+## Cas d'Usage
+
+- **Prise de connaissance serveur** : Rapport rapide des caractéristiques d'un serveur lors de première connexion
+- **Documentation infrastructure** : Génération automatique de rapports d'inventaire pour documentation
+- **Diagnostic initial** : Vue d'ensemble rapide lors de troubleshooting ou investigation de problèmes
+- **Baseline système** : Capture de l'état système avant modifications ou maintenance
+
+---
+
 ## Script
 
 ```bash

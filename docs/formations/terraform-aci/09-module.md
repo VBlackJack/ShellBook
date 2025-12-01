@@ -1001,6 +1001,386 @@ resource "mso_schema_template_deploy" "common" {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un déploiement Multi-Site avec objets "stretched" entre deux datacenters
+
+    **Contexte** : Votre entreprise dispose de deux datacenters ACI (Paris et Londres) connectés via Nexus Dashboard Orchestrator (NDO). Vous devez déployer une application critique qui doit être disponible sur les deux sites simultanément. Le tenant, les VRFs et certains EPGs doivent être "stretched" (étendus) entre les sites, tandis que d'autres ressources restent site-specific (locales à chaque site).
+
+    **Tâches à réaliser** :
+
+    1. Configurer le provider MSO/NDO pour gérer les deux sites
+    2. Créer un Schema avec Template pour le tenant "Multi-Site-App"
+    3. Déployer un VRF "Global-VRF" étendu aux deux sites
+    4. Créer un EPG "Web-Shared" étendu (stretched) entre Paris et Londres
+    5. Créer un EPG "DB-Local-Paris" spécifique au site Paris uniquement
+    6. Documenter la configuration Multi-Site dans les outputs
+
+    **Critères de validation** :
+
+    - [ ] Le provider MSO/NDO se connecte aux deux sites ACI
+    - [ ] Un Schema et Template sont créés pour l'application Multi-Site
+    - [ ] Le VRF est déployé sur les deux sites
+    - [ ] L'EPG Web est "stretched" (accessible depuis les deux sites)
+    - [ ] L'EPG DB est site-specific (Paris uniquement)
+    - [ ] Les outputs documentent clairement la topologie Multi-Site
+
+??? quote "Solution"
+
+    **provider-mso.tf**
+
+    ```hcl
+    terraform {
+      required_version = ">= 1.0"
+
+      required_providers {
+        mso = {
+          source  = "CiscoDevNet/mso"
+          version = "~> 0.7"
+        }
+      }
+    }
+
+    # Provider MSO/NDO (Nexus Dashboard Orchestrator)
+    provider "mso" {
+      username = var.ndo_username
+      password = var.ndo_password
+      url      = var.ndo_url
+      insecure = true
+      platform = "nd"  # Nexus Dashboard
+    }
+    ```
+
+    **variables-mso.tf**
+
+    ```hcl
+    variable "ndo_url" {
+      description = "URL du Nexus Dashboard Orchestrator"
+      type        = string
+      default     = "https://ndo.example.com"
+    }
+
+    variable "ndo_username" {
+      description = "Username pour NDO"
+      type        = string
+      sensitive   = true
+    }
+
+    variable "ndo_password" {
+      description = "Password pour NDO"
+      type        = string
+      sensitive   = true
+    }
+    ```
+
+    **multi-site.tf**
+
+    ```hcl
+    # =============================
+    # DATA SOURCES : Sites ACI
+    # =============================
+
+    # Site Paris
+    data "mso_site" "paris" {
+      name = "ACI-Paris"
+    }
+
+    # Site Londres
+    data "mso_site" "london" {
+      name = "ACI-London"
+    }
+
+    # =============================
+    # TENANT MULTI-SITE
+    # =============================
+
+    resource "mso_tenant" "multisite_app" {
+      name         = "Multi-Site-App"
+      display_name = "Application Multi-Site"
+      description  = "Tenant pour application répartie sur Paris et Londres"
+
+      # Associer le tenant aux deux sites
+      site_associations {
+        site_id = data.mso_site.paris.id
+      }
+      site_associations {
+        site_id = data.mso_site.london.id
+      }
+    }
+
+    # =============================
+    # SCHEMA ET TEMPLATE
+    # =============================
+
+    # Schema MSO : Conteneur pour les templates
+    resource "mso_schema" "multisite_app" {
+      name = "Schema-MultiSite-App"
+
+      # Template pour la configuration multi-site
+      template_name = "Template-Global"
+      tenant_id     = mso_tenant.multisite_app.id
+    }
+
+    # Associer le template aux deux sites
+    resource "mso_schema_site" "paris" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      site_id       = data.mso_site.paris.id
+    }
+
+    resource "mso_schema_site" "london" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      site_id       = data.mso_site.london.id
+    }
+
+    # =============================
+    # VRF STRETCHED
+    # =============================
+
+    # VRF étendu aux deux sites
+    resource "mso_schema_template_vrf" "global_vrf" {
+      schema_id     = mso_schema.multisite_app.id
+      template      = "Template-Global"
+      name          = "Global-VRF"
+      display_name  = "VRF Global Multi-Site"
+
+      # Policy enforcement
+      ip_data_plane_learning = "enabled"
+      preferred_group        = false
+    }
+
+    # =============================
+    # BRIDGE DOMAINS
+    # =============================
+
+    # BD pour EPG Web (stretched)
+    resource "mso_schema_template_bd" "web_bd" {
+      schema_id              = mso_schema.multisite_app.id
+      template_name          = "Template-Global"
+      name                   = "BD-Web-Global"
+      display_name           = "Bridge Domain Web (Stretched)"
+      vrf_name               = mso_schema_template_vrf.global_vrf.name
+
+      # Subnet partagé entre les sites
+      subnet {
+        ip          = "10.100.1.1/24"
+        description = "Subnet Web partagé Paris-Londres"
+        scope       = "public"
+        shared      = true
+      }
+    }
+
+    # BD pour EPG DB (site-specific Paris)
+    resource "mso_schema_template_bd" "db_bd_paris" {
+      schema_id              = mso_schema.multisite_app.id
+      template_name          = "Template-Global"
+      name                   = "BD-DB-Paris"
+      display_name           = "Bridge Domain DB (Paris uniquement)"
+      vrf_name               = mso_schema_template_vrf.global_vrf.name
+
+      # Subnet local à Paris
+      subnet {
+        ip          = "10.100.10.1/24"
+        description = "Subnet DB local Paris"
+        scope       = "private"
+        shared      = false
+      }
+    }
+
+    # =============================
+    # APPLICATION PROFILE
+    # =============================
+
+    resource "mso_schema_template_anp" "multisite_app" {
+      schema_id    = mso_schema.multisite_app.id
+      template     = "Template-Global"
+      name         = "ANP-MultiSite"
+      display_name = "Application Multi-Site"
+    }
+
+    # =============================
+    # EPG WEB STRETCHED
+    # =============================
+
+    # EPG Web étendu aux deux sites
+    resource "mso_schema_template_anp_epg" "web_shared" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      anp_name      = mso_schema_template_anp.multisite_app.name
+      name          = "EPG-Web-Shared"
+      display_name  = "EPG Web (Stretched Paris-Londres)"
+      bd_name       = mso_schema_template_bd.web_bd.name
+      vrf_name      = mso_schema_template_vrf.global_vrf.name
+
+      # Preferred group désactivé
+      preferred_group = false
+    }
+
+    # Déployer l'EPG Web sur Paris
+    resource "mso_schema_site_anp_epg" "web_paris" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      site_id       = data.mso_site.paris.id
+      anp_name      = mso_schema_template_anp.multisite_app.name
+      epg_name      = mso_schema_template_anp_epg.web_shared.name
+    }
+
+    # Déployer l'EPG Web sur Londres
+    resource "mso_schema_site_anp_epg" "web_london" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      site_id       = data.mso_site.london.id
+      anp_name      = mso_schema_template_anp.multisite_app.name
+      epg_name      = mso_schema_template_anp_epg.web_shared.name
+    }
+
+    # =============================
+    # EPG DB SITE-SPECIFIC (Paris)
+    # =============================
+
+    # EPG Database spécifique à Paris
+    resource "mso_schema_template_anp_epg" "db_local_paris" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      anp_name      = mso_schema_template_anp.multisite_app.name
+      name          = "EPG-DB-Paris"
+      display_name  = "EPG Database (Paris uniquement)"
+      bd_name       = mso_schema_template_bd.db_bd_paris.name
+      vrf_name      = mso_schema_template_vrf.global_vrf.name
+
+      preferred_group = false
+    }
+
+    # Déployer l'EPG DB UNIQUEMENT sur Paris
+    resource "mso_schema_site_anp_epg" "db_paris" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+      site_id       = data.mso_site.paris.id
+      anp_name      = mso_schema_template_anp.multisite_app.name
+      epg_name      = mso_schema_template_anp_epg.db_local_paris.name
+    }
+
+    # =============================
+    # DEPLOY TEMPLATE
+    # =============================
+
+    # Déployer le schema/template sur les sites
+    resource "mso_schema_template_deploy" "deploy_multisite" {
+      schema_id     = mso_schema.multisite_app.id
+      template_name = "Template-Global"
+
+      # Dépend de toutes les ressources
+      depends_on = [
+        mso_schema_site.paris,
+        mso_schema_site.london,
+        mso_schema_site_anp_epg.web_paris,
+        mso_schema_site_anp_epg.web_london,
+        mso_schema_site_anp_epg.db_paris
+      ]
+    }
+    ```
+
+    **multi-site-outputs.tf**
+
+    ```hcl
+    output "multisite_topology" {
+      description = "Topologie Multi-Site déployée"
+      value = {
+        schema  = mso_schema.multisite_app.name
+        tenant  = mso_tenant.multisite_app.name
+        sites   = {
+          paris  = data.mso_site.paris.name
+          london = data.mso_site.london.name
+        }
+        template = "Template-Global"
+      }
+    }
+
+    output "stretched_objects" {
+      description = "Objets étendus entre les sites"
+      value = {
+        vrf = {
+          name   = mso_schema_template_vrf.global_vrf.name
+          sites  = ["Paris", "London"]
+          status = "STRETCHED"
+        }
+        epg_web = {
+          name   = mso_schema_template_anp_epg.web_shared.name
+          sites  = ["Paris", "London"]
+          subnet = "10.100.1.0/24"
+          status = "STRETCHED"
+        }
+      }
+    }
+
+    output "site_specific_objects" {
+      description = "Objets spécifiques à chaque site"
+      value = {
+        epg_db_paris = {
+          name   = mso_schema_template_anp_epg.db_local_paris.name
+          site   = "Paris"
+          subnet = "10.100.10.0/24"
+          status = "SITE-SPECIFIC"
+        }
+      }
+    }
+
+    output "deployment_summary" {
+      description = "Résumé du déploiement Multi-Site"
+      value = {
+        architecture    = "Active-Active Multi-Site"
+        sites_count     = 2
+        stretched_epgs  = 1
+        local_epgs      = 1
+        failover        = "Automatic (L2 Stretch)"
+        use_case        = "High Availability + Disaster Recovery"
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    # Initialisation
+    terraform init
+
+    # Validation
+    terraform validate
+
+    # Plan
+    terraform plan
+
+    # Application
+    terraform apply
+
+    # Vérifier la topologie Multi-Site
+    terraform output multisite_topology
+    terraform output stretched_objects
+    ```
+
+    **Vérification sur NDO :**
+
+    ```
+    1. Se connecter au Nexus Dashboard Orchestrator
+    2. Application Management > Schemas
+    3. Ouvrir "Schema-MultiSite-App"
+    4. Vérifier les sites associés : Paris ✓ Londres ✓
+    5. Vérifier EPG-Web-Shared : déployé sur les 2 sites
+    6. Vérifier EPG-DB-Paris : déployé sur Paris uniquement
+    ```
+
+    **Résultat attendu :**
+
+    - Configuration Multi-Site opérationnelle
+    - VRF et EPG Web "stretched" entre Paris et Londres
+    - EPG Database local à Paris uniquement
+    - Haute disponibilité assurée par la répartition géographique
+    - Failover automatique entre les sites
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

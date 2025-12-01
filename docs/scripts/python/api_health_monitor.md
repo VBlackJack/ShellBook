@@ -28,6 +28,25 @@ Ce script surveille la santé de multiples APIs et endpoints :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `requests`, `rich`, `pyyaml`
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Accès réseau pour interroger les APIs et endpoints
+
+---
+
+## Cas d'Usage
+
+- **Monitoring production** : Surveillance continue de la santé des APIs critiques avec mesure de latence et validation SSL
+- **Audit de conformité** : Vérification automatique de l'expiration des certificats SSL sur l'ensemble des endpoints
+- **Intégration CI/CD** : Validation des endpoints après déploiement avec export JSON pour intégration dans les pipelines
+- **Alertes proactives** : Détection des dégradations de performance et des anomalies de disponibilité avec seuils configurables
+- **Documentation d'infrastructure** : Génération de rapports sur l'état de santé de l'ensemble des services exposés
+
+---
+
 ## Dépendances
 
 ```bash

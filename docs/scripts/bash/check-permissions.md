@@ -24,6 +24,23 @@ Ce script vérifie les permissions de ficyesterdays sensibles :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour accéder à tous les fichiers système
+- **Dépendances** : `stat`, `find`, `grep`
+
+---
+
+## Cas d'Usage
+
+- **Audit de sécurité régulier** : Vérification automatisée des permissions critiques avec alertes
+- **Validation post-installation** : Test après déploiement pour s'assurer de la conformité de sécurité
+- **Conformité réglementaire** : Documentation et preuve des permissions correctes pour audits
+- **Détection d'anomalies** : Identification de fichiers sensibles avec permissions incorrectes
+
+---
+
 ## Script
 
 ```bash

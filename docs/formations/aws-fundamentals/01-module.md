@@ -632,52 +632,76 @@ aws accessanalyzer list-findings \
 
 ---
 
-## 7. Exercices Pratiques
+## Exercice : À Vous de Jouer
 
-### Exercice 1 : Configuration IAM de Base
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un environnement IAM sécurisé et complet pour une équipe de développement
 
-!!! example "Objectif"
-    Configurer un environnement IAM sécurisé pour une équipe de 3 personnes.
+    **Contexte** : Vous êtes administrateur AWS d'une startup qui démarre son infrastructure cloud. L'équipe se compose de 3 développeurs, 1 ops, et 1 auditeur externe. Vous devez mettre en place une structure IAM sécurisée suivant les best practices AWS.
 
-**Tâches :**
+    **Tâches à réaliser** :
 
-1. Créer 3 IAM users : `dev-alice`, `dev-bob`, `ops-charlie`
-2. Créer 2 groups : `Developers` et `Operations`
-3. Assigner les users aux groupes appropriés
-4. Créer une policy custom `DeveloperAccess` :
-    - Accès complet EC2, Lambda, S3
-    - Read-only sur RDS et CloudWatch
-    - Deny sur IAM et Organizations
-5. Activer le MFA obligatoire
+    1. Créer 5 utilisateurs IAM : `dev-alice`, `dev-bob`, `dev-charlie`, `ops-daniel`, `auditor-eve`
+    2. Créer 3 groupes avec les permissions appropriées : `Developers`, `Operations`, `Auditors`
+    3. Assigner les utilisateurs aux groupes correspondants
+    4. Créer une policy personnalisée `DeveloperAccess` donnant accès complet à EC2, Lambda, S3 mais lecture seule sur RDS
+    5. Créer un role IAM `EC2-ReadS3` permettant aux instances EC2 d'accéder en lecture à S3
+    6. Configurer une policy de mot de passe stricte (14 caractères minimum, rotation 90 jours)
+    7. Activer MFA pour tous les utilisateurs administrateurs
+    8. Créer un rapport d'audit IAM et identifier les risques potentiels
+
+    **Critères de validation** :
+
+    - [ ] Les 5 utilisateurs sont créés avec accès console
+    - [ ] Les groupes ont les bonnes policies attachées
+    - [ ] La policy `DeveloperAccess` est fonctionnelle et respecte le principe du moindre privilège
+    - [ ] Le role EC2 peut être assumé par les instances et accéder à S3
+    - [ ] La password policy est configurée selon les exigences
+    - [ ] Le rapport IAM Credential Report est généré et analysé
+    - [ ] Aucun utilisateur avec Action:* et Resource:* simultanément
+    - [ ] Toutes les access keys ont moins de 90 jours
 
 ??? quote "Solution"
 
+    **Étape 1 : Création des utilisateurs**
+
     ```bash
-    # 1. Créer les utilisateurs
-    for user in dev-alice dev-bob ops-charlie; do
+    # Créer les 5 utilisateurs
+    for user in dev-alice dev-bob dev-charlie ops-daniel auditor-eve; do
         aws iam create-user --user-name $user
         aws iam create-login-profile \
             --user-name $user \
-            --password "ChangeMe123!" \
+            --password "ChangeMe2024!" \
             --password-reset-required
+        echo "✅ Utilisateur $user créé"
     done
+    ```
 
-    # 2. Créer les groupes
+    **Étape 2 : Création des groupes et attribution**
+
+    ```bash
+    # Créer les groupes
     aws iam create-group --group-name Developers
     aws iam create-group --group-name Operations
+    aws iam create-group --group-name Auditors
 
-    # 3. Assigner aux groupes
+    # Assigner les utilisateurs
     aws iam add-user-to-group --group-name Developers --user-name dev-alice
     aws iam add-user-to-group --group-name Developers --user-name dev-bob
-    aws iam add-user-to-group --group-name Operations --user-name ops-charlie
+    aws iam add-user-to-group --group-name Developers --user-name dev-charlie
+    aws iam add-user-to-group --group-name Operations --user-name ops-daniel
+    aws iam add-user-to-group --group-name Auditors --user-name auditor-eve
+    ```
 
-    # 4. Créer la policy
+    **Étape 3 : Policy personnalisée pour les développeurs**
+
+    ```bash
     cat > developer-policy.json << 'EOF'
     {
         "Version": "2012-10-17",
         "Statement": [
             {
-                "Sid": "FullAccessServices",
+                "Sid": "FullAccessCompute",
                 "Effect": "Allow",
                 "Action": [
                     "ec2:*",
@@ -687,18 +711,16 @@ aws accessanalyzer list-findings \
                 "Resource": "*"
             },
             {
-                "Sid": "ReadOnlyServices",
+                "Sid": "ReadOnlyDatabase",
                 "Effect": "Allow",
                 "Action": [
                     "rds:Describe*",
-                    "cloudwatch:Get*",
-                    "cloudwatch:List*",
-                    "cloudwatch:Describe*"
+                    "rds:List*"
                 ],
                 "Resource": "*"
             },
             {
-                "Sid": "DenySensitiveServices",
+                "Sid": "DenyIAMChanges",
                 "Effect": "Deny",
                 "Action": [
                     "iam:*",
@@ -714,12 +736,65 @@ aws accessanalyzer list-findings \
         --policy-name DeveloperAccess \
         --policy-document file://developer-policy.json
 
-    # Attacher au groupe
+    # Attacher au groupe Developers
+    ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
     aws iam attach-group-policy \
         --group-name Developers \
-        --policy-arn arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):policy/DeveloperAccess
+        --policy-arn arn:aws:iam::${ACCOUNT_ID}:policy/DeveloperAccess
+    ```
 
-    # 5. Policy MFA obligatoire
+    **Étape 4 : Role pour EC2 avec accès S3**
+
+    ```bash
+    # Trust policy
+    cat > ec2-trust-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "ec2.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+        }]
+    }
+    EOF
+
+    # Créer le role
+    aws iam create-role \
+        --role-name EC2-ReadS3 \
+        --assume-role-policy-document file://ec2-trust-policy.json
+
+    # Attacher la policy S3 ReadOnly
+    aws iam attach-role-policy \
+        --role-name EC2-ReadS3 \
+        --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+    # Créer l'instance profile
+    aws iam create-instance-profile --instance-profile-name EC2-ReadS3-Profile
+    aws iam add-role-to-instance-profile \
+        --instance-profile-name EC2-ReadS3-Profile \
+        --role-name EC2-ReadS3
+    ```
+
+    **Étape 5 : Configuration password policy**
+
+    ```bash
+    aws iam update-account-password-policy \
+        --minimum-password-length 14 \
+        --require-symbols \
+        --require-numbers \
+        --require-uppercase-characters \
+        --require-lowercase-characters \
+        --allow-users-to-change-password \
+        --max-password-age 90 \
+        --password-reuse-prevention 12 \
+        --hard-expiry
+
+    echo "✅ Password policy configurée"
+    ```
+
+    **Étape 6 : Policy MFA obligatoire**
+
+    ```bash
     cat > mfa-required-policy.json << 'EOF'
     {
         "Version": "2012-10-17",
@@ -774,175 +849,79 @@ aws accessanalyzer list-findings \
         --policy-document file://mfa-required-policy.json
 
     # Attacher à tous les groupes
-    for group in Developers Operations; do
+    for group in Developers Operations Auditors; do
         aws iam attach-group-policy \
             --group-name $group \
-            --policy-arn arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):policy/RequireMFA
+            --policy-arn arn:aws:iam::${ACCOUNT_ID}:policy/RequireMFA
     done
     ```
 
-### Exercice 2 : Role Cross-Account
-
-!!! example "Objectif"
-    Créer un role permettant à un compte externe d'accéder en lecture seule à vos ressources.
-
-**Scénario :**
-- Compte source : `111111111111` (votre partenaire)
-- Compte cible : `222222222222` (votre compte)
-- Le partenaire doit pouvoir lire les logs CloudWatch et les objets S3
-
-??? quote "Solution"
+    **Étape 7 : Audit de sécurité IAM**
 
     ```bash
-    # Sur le compte cible (222222222222)
+    #!/bin/bash
+    # Script d'audit IAM
 
-    # 1. Trust policy
-    cat > cross-account-trust.json << 'EOF'
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Principal": {
-                    "AWS": "arn:aws:iam::111111111111:root"
-                },
-                "Action": "sts:AssumeRole",
-                "Condition": {
-                    "Bool": {
-                        "aws:MultiFactorAuthPresent": "true"
-                    }
-                }
-            }
-        ]
-    }
-    EOF
+    echo "=== 🔍 Audit IAM de Sécurité ==="
+    echo ""
 
-    # 2. Créer le role
-    aws iam create-role \
-        --role-name PartnerReadOnlyAccess \
-        --assume-role-policy-document file://cross-account-trust.json \
-        --max-session-duration 3600
-
-    # 3. Permissions policy
-    cat > partner-permissions.json << 'EOF'
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "CloudWatchLogsReadOnly",
-                "Effect": "Allow",
-                "Action": [
-                    "logs:Describe*",
-                    "logs:Get*",
-                    "logs:List*",
-                    "logs:FilterLogEvents"
-                ],
-                "Resource": "*"
-            },
-            {
-                "Sid": "S3ReadOnly",
-                "Effect": "Allow",
-                "Action": [
-                    "s3:GetObject",
-                    "s3:ListBucket"
-                ],
-                "Resource": [
-                    "arn:aws:s3:::shared-logs-bucket",
-                    "arn:aws:s3:::shared-logs-bucket/*"
-                ]
-            }
-        ]
-    }
-    EOF
-
-    aws iam create-policy \
-        --policy-name PartnerReadOnlyPolicy \
-        --policy-document file://partner-permissions.json
-
-    aws iam attach-role-policy \
-        --role-name PartnerReadOnlyAccess \
-        --policy-arn arn:aws:iam::222222222222:policy/PartnerReadOnlyPolicy
-
-    # ---
-    # Sur le compte source (111111111111)
-
-    # Policy pour permettre d'assumer le role
-    cat > assume-partner-role.json << 'EOF'
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": "sts:AssumeRole",
-                "Resource": "arn:aws:iam::222222222222:role/PartnerReadOnlyAccess"
-            }
-        ]
-    }
-    EOF
-
-    # Attacher à un user ou group
-    aws iam create-policy \
-        --policy-name AssumePartnerRole \
-        --policy-document file://assume-partner-role.json
-    ```
-
-### Exercice 3 : Audit IAM
-
-!!! example "Objectif"
-    Auditer la configuration IAM actuelle et identifier les risques de sécurité.
-
-**Checklist :**
-
-1. Lister tous les users sans MFA activé
-2. Trouver les access keys de plus de 90 jours
-3. Identifier les policies avec `*` dans Action et Resource
-4. Vérifier les users avec des inline policies
-
-??? quote "Solution"
-
-    ```bash
     # 1. Users sans MFA
-    echo "=== Users without MFA ==="
+    echo "1️⃣ Utilisateurs sans MFA :"
     for user in $(aws iam list-users --query 'Users[].UserName' --output text); do
         mfa=$(aws iam list-mfa-devices --user-name $user --query 'MFADevices' --output text)
         if [ -z "$mfa" ]; then
-            echo "❌ $user - No MFA"
+            echo "   ❌ $user - Aucun MFA configuré"
+        else
+            echo "   ✅ $user - MFA activé"
         fi
     done
 
-    # 2. Access keys > 90 jours
-    echo -e "\n=== Old Access Keys (>90 days) ==="
+    # 2. Access keys anciennes
+    echo ""
+    echo "2️⃣ Access keys > 90 jours :"
     for user in $(aws iam list-users --query 'Users[].UserName' --output text); do
         aws iam list-access-keys --user-name $user \
             --query "AccessKeyMetadata[?CreateDate<='$(date -d '90 days ago' --iso-8601)'].[UserName,AccessKeyId,CreateDate]" \
-            --output text
+            --output table 2>/dev/null | grep -v "^---" | grep -v "^|"
     done
 
-    # 3. Policies avec wildcards dangereux
-    echo -e "\n=== Policies with dangerous wildcards ==="
+    # 3. Policies dangereuses
+    echo ""
+    echo "3️⃣ Policies avec Action:* et Resource:* :"
     for policy_arn in $(aws iam list-policies --scope Local --query 'Policies[].Arn' --output text); do
         version=$(aws iam get-policy --policy-arn $policy_arn --query 'Policy.DefaultVersionId' --output text)
         doc=$(aws iam get-policy-version --policy-arn $policy_arn --version-id $version --query 'PolicyVersion.Document' --output json)
 
         if echo "$doc" | grep -q '"Action": "\*"' && echo "$doc" | grep -q '"Resource": "\*"'; then
-            echo "⚠️  $policy_arn has Action:* and Resource:*"
+            echo "   ⚠️  $(basename $policy_arn)"
         fi
     done
 
-    # 4. Users avec inline policies
-    echo -e "\n=== Users with inline policies ==="
-    for user in $(aws iam list-users --query 'Users[].UserName' --output text); do
-        policies=$(aws iam list-user-policies --user-name $user --query 'PolicyNames' --output text)
-        if [ -n "$policies" ]; then
-            echo "⚠️  $user has inline policies: $policies"
-        fi
-    done
-
-    # Script complet d'audit
-    echo -e "\n=== IAM Credential Report ==="
+    # 4. Credential Report
+    echo ""
+    echo "4️⃣ Génération du IAM Credential Report :"
     aws iam generate-credential-report
     sleep 5
-    aws iam get-credential-report --query 'Content' --output text | base64 -d
+    aws iam get-credential-report --query 'Content' --output text | base64 -d > iam-report.csv
+    echo "   ✅ Rapport sauvegardé dans iam-report.csv"
+
+    echo ""
+    echo "=== 📊 Résumé de l'audit ==="
+    echo "Total utilisateurs : $(aws iam list-users --query 'Users | length(@)')"
+    echo "Total groupes : $(aws iam list-groups --query 'Groups | length(@)')"
+    echo "Total policies : $(aws iam list-policies --scope Local --query 'Policies | length(@)')"
+    ```
+
+    **Vérification finale :**
+
+    ```bash
+    # Vérifier tous les critères
+    echo "=== ✅ Vérification des critères ==="
+    aws iam list-users --query 'Users[].UserName'
+    aws iam list-groups --query 'Groups[].GroupName'
+    aws iam get-policy --policy-arn arn:aws:iam::${ACCOUNT_ID}:policy/DeveloperAccess
+    aws iam get-role --role-name EC2-ReadS3
+    aws iam get-account-password-policy
     ```
 
 ---

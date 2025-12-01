@@ -29,6 +29,23 @@ Ce script vérifie l'état d'un serveur MySQL/MariaDB :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Accès MySQL avec privilèges SELECT sur `information_schema` et `mysql`
+- **Dépendances** : `mysql-client`, `nc`, `bc`
+
+---
+
+## Cas d'Usage
+
+- **Health check quotidien** : Vérification automatique de la santé des serveurs de base de données
+- **Monitoring de réplication** : Surveillance du lag et de l'état des slaves MySQL
+- **Audit de performance** : Détection de problèmes de connexions, slow queries et fragmentation
+- **Validation après maintenance** : Test complet après upgrade ou modification de configuration
+
+---
+
 ## Script
 
 ```bash

@@ -50,6 +50,15 @@ sudo -v
 
 ---
 
+## Cas d'Usage
+
+- **Standardisation des rotations** : Création rapide de configurations logrotate cohérentes pour nouvelles applications
+- **Déploiement automatisé** : Intégration dans scripts de déploiement pour setup automatique de rotation logs
+- **Documentation infrastructure** : Génération de configurations documentées et versionnées
+- **Migration de serveurs** : Recréation rapide des configurations logrotate sur nouveaux serveurs
+
+---
+
 ## Bonnes Pratiques Logrotate
 
 | Option | Description | Recommandation |

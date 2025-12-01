@@ -544,25 +544,338 @@ spec:
 
 ---
 
-## 6. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Mettre en place une architecture réseau complète avec Services, Ingress et Network Policies
 
-1. Créer un Deployment frontend + Service ClusterIP
-2. Créer un Deployment backend + Service ClusterIP
-3. Configurer un Ingress pour le frontend
-4. Appliquer des Network Policies
+    **Contexte** : Vous devez déployer une application microservices composée d'un frontend React et d'un backend API. L'application doit être accessible depuis l'extérieur via un nom de domaine, et le réseau doit être sécurisé avec des Network Policies.
 
-### Validation
+    **Tâches à réaliser** :
 
-```bash
-# Test de connectivité
-kubectl run test --rm -it --image=busybox -- wget -qO- http://backend-service
+    1. Déployer un backend API avec un Service ClusterIP
+    2. Déployer un frontend avec un Service ClusterIP
+    3. Configurer un Ingress pour exposer le frontend et l'API sur des chemins différents
+    4. Créer des Network Policies pour sécuriser la communication
+    5. Tester la connectivité entre les composants
 
-# Vérifier l'Ingress
-kubectl get ingress
-curl -H "Host: myapp.local" http://<INGRESS_IP>
-```
+    **Critères de validation** :
+
+    - [ ] Le backend est accessible uniquement en interne via son Service
+    - [ ] Le frontend peut communiquer avec le backend
+    - [ ] L'Ingress route correctement le trafic HTTP
+    - [ ] Les Network Policies bloquent les communications non autorisées
+    - [ ] Le DNS interne fonctionne correctement
+
+??? quote "Solution"
+    **Étape 1 : Déployer le backend API**
+
+    ```yaml
+    # backend-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: backend-api
+      labels:
+        app: backend-api
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: backend-api
+      template:
+        metadata:
+          labels:
+            app: backend-api
+            tier: backend
+        spec:
+          containers:
+            - name: api
+              image: nginxdemos/hello:plain-text
+              ports:
+                - containerPort: 8080
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: backend-service
+      labels:
+        app: backend-api
+    spec:
+      type: ClusterIP
+      selector:
+        app: backend-api
+      ports:
+        - name: http
+          port: 80
+          targetPort: 8080
+    ```
+
+    ```bash
+    kubectl apply -f backend-deployment.yaml
+    kubectl get pods -l app=backend-api
+    kubectl get svc backend-service
+    ```
+
+    **Étape 2 : Déployer le frontend**
+
+    ```yaml
+    # frontend-deployment.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+      labels:
+        app: frontend
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: frontend
+      template:
+        metadata:
+          labels:
+            app: frontend
+            tier: frontend
+        spec:
+          containers:
+            - name: nginx
+              image: nginx:alpine
+              ports:
+                - containerPort: 80
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: frontend-service
+      labels:
+        app: frontend
+    spec:
+      type: ClusterIP
+      selector:
+        app: frontend
+      ports:
+        - name: http
+          port: 80
+          targetPort: 80
+    ```
+
+    ```bash
+    kubectl apply -f frontend-deployment.yaml
+    kubectl get pods -l app=frontend
+    kubectl get svc frontend-service
+    ```
+
+    **Étape 3 : Configurer l'Ingress**
+
+    ```yaml
+    # ingress.yaml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: app-ingress
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: myapp.local
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: frontend-service
+                    port:
+                      number: 80
+              - path: /api
+                pathType: Prefix
+                backend:
+                  service:
+                    name: backend-service
+                    port:
+                      number: 80
+    ```
+
+    ```bash
+    kubectl apply -f ingress.yaml
+    kubectl get ingress
+
+    # Tester (depuis votre machine, ajouter myapp.local à /etc/hosts)
+    # Pour minikube:
+    minikube ip  # Noter l'IP
+
+    # Ajouter à /etc/hosts: <MINIKUBE_IP> myapp.local
+    curl http://myapp.local/
+    curl http://myapp.local/api
+    ```
+
+    **Étape 4 : Network Policies**
+
+    ```yaml
+    # network-policies.yaml
+    # 1. Deny all par défaut
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: default-deny-all
+    spec:
+      podSelector: {}
+      policyTypes:
+        - Ingress
+        - Egress
+
+    ---
+    # 2. Autoriser le frontend à contacter le backend
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: frontend-to-backend
+    spec:
+      podSelector:
+        matchLabels:
+          app: frontend
+      policyTypes:
+        - Egress
+      egress:
+        - to:
+            - podSelector:
+                matchLabels:
+                  app: backend-api
+          ports:
+            - protocol: TCP
+              port: 8080
+        # Autoriser DNS
+        - to:
+            - namespaceSelector: {}
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+
+    ---
+    # 3. Autoriser le backend à recevoir du frontend
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: backend-ingress
+    spec:
+      podSelector:
+        matchLabels:
+          app: backend-api
+      policyTypes:
+        - Ingress
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  app: frontend
+          ports:
+            - protocol: TCP
+              port: 8080
+        # Autoriser depuis l'ingress controller
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  name: ingress-nginx
+          ports:
+            - protocol: TCP
+              port: 8080
+
+    ---
+    # 4. Autoriser le frontend depuis l'ingress
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: frontend-ingress
+    spec:
+      podSelector:
+        matchLabels:
+          app: frontend
+      policyTypes:
+        - Ingress
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  name: ingress-nginx
+          ports:
+            - protocol: TCP
+              port: 80
+    ```
+
+    ```bash
+    kubectl apply -f network-policies.yaml
+    kubectl get networkpolicies
+    kubectl describe networkpolicy frontend-to-backend
+    ```
+
+    **Étape 5 : Tests de connectivité**
+
+    ```bash
+    # Test DNS interne
+    kubectl run test --rm -it --image=busybox -- nslookup backend-service
+    kubectl run test --rm -it --image=busybox -- nslookup frontend-service
+
+    # Test depuis un pod frontend vers backend (devrait fonctionner)
+    FRONTEND_POD=$(kubectl get pod -l app=frontend -o jsonpath='{.items[0].metadata.name}')
+    kubectl exec $FRONTEND_POD -- wget -qO- http://backend-service
+
+    # Test depuis un pod externe (devrait échouer avec Network Policy)
+    kubectl run test --rm -it --image=busybox -- wget -T 5 -qO- http://backend-service
+    # Timeout attendu car bloqué par Network Policy
+
+    # Test via Ingress (devrait fonctionner)
+    curl http://myapp.local/
+    curl http://myapp.local/api
+    ```
+
+    **Vérifications** :
+
+    ```bash
+    # Services et Endpoints
+    kubectl get svc
+    kubectl get endpoints
+
+    # Ingress
+    kubectl describe ingress app-ingress
+
+    # Network Policies
+    kubectl get networkpolicies
+    kubectl describe networkpolicy backend-ingress
+
+    # Pods et leur réseau
+    kubectl get pods -o wide
+    ```
+
+    **Nettoyage** :
+
+    ```bash
+    kubectl delete deployment backend-api frontend
+    kubectl delete service backend-service frontend-service
+    kubectl delete ingress app-ingress
+    kubectl delete networkpolicy --all
+    ```
 
 ---
 

@@ -24,6 +24,23 @@ Ce script facilite la gestion des services :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard pour consultation, sudo pour modifications
+- **Dépendances** : `systemctl`, `journalctl`
+
+---
+
+## Cas d'Usage
+
+- **Interface simplifiée systemd** : Gestion intuitive des services sans mémoriser les commandes systemctl
+- **Monitoring rapide** : Vue d'ensemble rapide de l'état des services critiques
+- **Investigation de pannes** : Consultation rapide des logs et statuts lors d'incidents
+- **Administration quotidienne** : Restart, enable/disable de services en quelques commandes
+
+---
+
 ## Script
 
 ```bash

@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - logs
+  - monitoring
+  - anomaly-detection
+---
+
 # Log Anomaly Detector
 
 Script Python de détection d'anomalies dans les logs par analyse statistique et patterns.

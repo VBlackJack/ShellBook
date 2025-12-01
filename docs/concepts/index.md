@@ -1,3 +1,10 @@
+---
+tags:
+  - architecture
+  - devops
+  - fondamentaux
+---
+
 # Fondamentaux & Architecture
 
 Concepts fondamentaux de l'IT : architecture, DevOps, web et bases de données.

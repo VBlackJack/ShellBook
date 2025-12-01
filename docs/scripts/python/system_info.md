@@ -25,6 +25,25 @@ Ce script collecte et affiche les informations système :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `psutil`, `rich` (optionnel pour l'affichage enrichi)
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Droits de lecture sur /proc (Linux) ou équivalent système pour accéder aux métriques
+
+---
+
+## Cas d'Usage
+
+- **Audit système** : Collecte rapide des informations matérielles et logicielles pour documentation d'infrastructure
+- **Monitoring de base** : Surveillance ponctuelle de l'utilisation CPU, mémoire et disques
+- **Troubleshooting** : Diagnostic initial lors de problèmes de performance pour identifier les goulots d'étranglement
+- **Inventaire IT** : Génération de rapports JSON pour centralisation dans un CMDB
+- **Scripts d'installation** : Vérification des prérequis système avant déploiement d'applications
+
+---
+
 ## Dépendances
 
 ```bash

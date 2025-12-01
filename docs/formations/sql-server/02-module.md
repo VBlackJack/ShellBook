@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - sql-server
+  - security
+  - configuration
+  - dba
+  - module
+---
+
 # Module 2 : Sécurité & Configuration - Fortifier l'Instance
 
 ## Introduction

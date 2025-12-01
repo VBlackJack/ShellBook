@@ -25,6 +25,23 @@ Ce script surveille les ressources système en continu :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis)
+- **Dépendances** : `bc`, `/proc/stat`, `/proc/meminfo`
+
+---
+
+## Cas d'Usage
+
+- **Monitoring temps réel** : Surveillance continue des ressources CPU et mémoire avec affichage visuel
+- **Diagnostic de performance** : Identification rapide des processus consommant le plus de ressources
+- **Collection de métriques** : Export CSV pour analyse historique et création de graphiques
+- **Investigation de pics** : Surveillance pendant tests de charge ou résolution d'incidents
+
+---
+
 ## Script
 
 ```bash

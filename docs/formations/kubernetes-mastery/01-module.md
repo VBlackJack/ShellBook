@@ -547,35 +547,108 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<SERVER_IP>:6443 K3S_TOKEN=<TOKEN
 
 ---
 
-## 6. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Installer et explorer votre premier cluster Kubernetes
 
-1. Installer un cluster avec minikube ou kind
-2. Explorer les composants du control plane
-3. Vérifier la communication API Server
-4. Créer un premier déploiement
+    **Contexte** : Vous devez mettre en place un environnement Kubernetes local pour comprendre son architecture et ses composants fondamentaux.
 
-### Commandes de Validation
+    **Tâches à réaliser** :
 
-```bash
-# Vérifier l'architecture
-kubectl cluster-info
-kubectl get nodes -o wide
-kubectl get componentstatuses  # deprecated mais encore utile
+    1. Installer un cluster Kubernetes avec minikube ou kind
+    2. Explorer les composants du Control Plane dans le namespace kube-system
+    3. Vérifier la communication avec l'API Server et lister les ressources disponibles
+    4. Créer votre premier déploiement nginx et examiner son cycle de vie
+    5. Identifier sur quel node le pod a été schedulé et pourquoi
 
-# Explorer les pods système
-kubectl get pods -n kube-system
+    **Critères de validation** :
 
-# Vérifier l'API
-kubectl get --raw='/healthz'
-kubectl api-resources | head -20
+    - [ ] Cluster opérationnel avec status "Ready"
+    - [ ] Tous les composants du Control Plane sont Running
+    - [ ] L'API Server répond correctement aux requêtes
+    - [ ] Le pod nginx est déployé et accessible
+    - [ ] Vous pouvez expliquer le rôle de chaque composant observé
 
-# Premier déploiement
-kubectl create deployment hello --image=nginx
-kubectl get pods
-kubectl describe pod <pod-name>
-```
+??? quote "Solution"
+    **Étape 1 : Installation du cluster**
+
+    ```bash
+    # Option 1: minikube
+    minikube start --driver=docker --cpus=2 --memory=4096
+
+    # Option 2: kind
+    kind create cluster --name demo
+    ```
+
+    **Étape 2 : Explorer les composants du Control Plane**
+
+    ```bash
+    # Lister les pods système
+    kubectl get pods -n kube-system
+
+    # Détails de l'API Server
+    kubectl describe pod -n kube-system -l component=kube-apiserver
+
+    # Détails du Scheduler
+    kubectl describe pod -n kube-system -l component=kube-scheduler
+
+    # Détails du Controller Manager
+    kubectl describe pod -n kube-system -l component=kube-controller-manager
+
+    # Détails d'etcd
+    kubectl describe pod -n kube-system -l component=etcd
+    ```
+
+    **Étape 3 : Vérifier l'API Server**
+
+    ```bash
+    # Informations du cluster
+    kubectl cluster-info
+
+    # Santé de l'API
+    kubectl get --raw='/healthz'
+    kubectl get --raw='/readyz'
+
+    # Lister toutes les ressources API disponibles
+    kubectl api-resources | head -20
+
+    # Versions des APIs
+    kubectl api-versions
+    ```
+
+    **Étape 4 : Premier déploiement**
+
+    ```bash
+    # Créer un déploiement nginx
+    kubectl create deployment nginx --image=nginx:1.25
+
+    # Vérifier le déploiement
+    kubectl get deployments
+    kubectl get replicasets
+    kubectl get pods
+
+    # Examiner en détail
+    kubectl describe pod nginx-<pod-id>
+
+    # Voir les événements
+    kubectl get events --sort-by=.metadata.creationTimestamp
+    ```
+
+    **Étape 5 : Analyse du scheduling**
+
+    ```bash
+    # Identifier le node
+    kubectl get pods -o wide
+
+    # Examiner les événements de scheduling
+    kubectl describe pod nginx-<pod-id> | grep -A5 Events
+
+    # Information sur le node
+    kubectl describe node <node-name>
+    ```
+
+    **Explication** : Le Scheduler a assigné le pod au node en fonction des ressources disponibles (CPU, mémoire) et des contraintes éventuelles (nodeSelector, affinity, taints).
 
 ---
 

@@ -24,6 +24,23 @@ Ce script effectue des requêtes DNS détaillées :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Utilisateur standard (pas de sudo requis)
+- **Dépendances** : `dig`, `nslookup`
+
+---
+
+## Cas d'Usage
+
+- **Diagnostic DNS** : Résolution rapide de problèmes de connectivité liés au DNS
+- **Validation de propagation** : Vérification de la propagation DNS après changement de zone
+- **Troubleshooting email** : Analyse des enregistrements MX pour problèmes d'envoi mail
+- **Audit de zone** : Vérification complète de la configuration DNS d'un domaine
+
+---
+
 ## Script
 
 ```bash

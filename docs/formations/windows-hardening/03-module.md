@@ -379,33 +379,51 @@ Get-NetFirewallRule -Direction Inbound |
 
 ---
 
-## 7. Exercice Pratique
+## 7. Exercice : À Vous de Jouer
 
-### Scénario
+!!! example "Mise en Pratique : Configurer le Firewall d'un Serveur Web"
+    **Objectif** : Configurer Windows Firewall pour un serveur web en production.
 
-Configurer le firewall pour un serveur web avec :
-- HTTP/HTTPS public
-- RDP restreint aux admins
-- Logging activé
-- Blocage par défaut
+    **Contexte** : Votre serveur IIS doit être accessible publiquement en HTTP/HTTPS mais l'administration doit être restreinte.
 
-### Solution
+    **Tâches à réaliser** :
 
-```powershell
-# 1. Activer le firewall
-Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True
+    1. Activer le firewall sur tous les profils
+    2. Configurer le blocage par défaut des connexions entrantes
+    3. Créer des règles pour HTTP (80) et HTTPS (443) publics
+    4. Restreindre RDP (3389) au réseau d'administration uniquement
+    5. Activer le logging des connexions bloquées
 
-# 2. Bloquer par défaut
-Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultInboundAction Block
+    **Critères de validation** :
 
-# 3. Règles spécifiques
-New-NetFirewallRule -DisplayName "Web-HTTP" -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow
-New-NetFirewallRule -DisplayName "Web-HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow
-New-NetFirewallRule -DisplayName "Admin-RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow -RemoteAddress "10.0.100.0/24"
+    - [ ] Firewall actif sur tous les profils
+    - [ ] Inbound par défaut = Block
+    - [ ] HTTP/HTTPS accessibles depuis Internet
+    - [ ] RDP accessible uniquement depuis 10.0.100.0/24
+    - [ ] Logs activés dans pfirewall.log
 
-# 4. Logging
-Set-NetFirewallProfile -Profile Domain,Private,Public -LogBlocked True -LogFileName "%systemroot%\system32\LogFiles\Firewall\pfirewall.log"
-```
+??? quote "Solution"
+    ```powershell
+    # 1. Activer le firewall
+    Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True
+
+    # 2. Bloquer par défaut
+    Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultInboundAction Block
+
+    # 3. Règles spécifiques
+    New-NetFirewallRule -DisplayName "Web-HTTP" -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow
+    New-NetFirewallRule -DisplayName "Web-HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow
+    New-NetFirewallRule -DisplayName "Admin-RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow -RemoteAddress "10.0.100.0/24"
+
+    # 4. Logging
+    Set-NetFirewallProfile -Profile Domain,Private,Public -LogBlocked True -LogFileName "%systemroot%\system32\LogFiles\Firewall\pfirewall.log"
+    ```
+
+    **Vérification** :
+    ```powershell
+    Get-NetFirewallProfile | Select-Object Name, Enabled, DefaultInboundAction
+    Get-NetFirewallRule -DisplayName "Web-*" | Select-Object DisplayName, Enabled, Action
+    ```
 
 ---
 

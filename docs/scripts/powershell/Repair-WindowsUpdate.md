@@ -26,6 +26,24 @@ Réparation automatique des problèmes Windows Update.
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur (requis pour services système et DISM)
+- **Modules** : Aucun module externe requis
+
+---
+
+## Cas d'Usage
+
+- **Windows Update bloqué** : Résoudre les erreurs 0x80070002, 0x80073712, etc.
+- **Post-incident** : Réparer WU après une panne système ou corruption
+- **Maintenance préventive** : Nettoyer régulièrement les caches WU corrompus
+- **Avant patching critique** : S'assurer que WU est fonctionnel avant une fenêtre de maintenance
+
+---
+
 ## Utilisation
 
 ```powershell

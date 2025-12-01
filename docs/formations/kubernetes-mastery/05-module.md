@@ -393,75 +393,251 @@ parameters:
 
 ---
 
-## 5. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un stockage persistant pour une base de données MySQL
 
-1. Créer une StorageClass
-2. Créer un PVC utilisant cette StorageClass
-3. Déployer un StatefulSet avec stockage persistant
-4. Vérifier la persistance des données
+    **Contexte** : Vous devez déployer une base de données MySQL dans Kubernetes avec un stockage persistant. Les données doivent survivre aux redémarrages des pods et être stockées de manière fiable.
 
-### Solution
+    **Tâches à réaliser** :
 
-```yaml
-# StorageClass + PVC + StatefulSet
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
+    1. Créer une StorageClass pour le provisionnement de volumes
+    2. Créer un PersistentVolume (PV) de 10Gi
+    3. Déployer un StatefulSet MySQL qui utilise un PVC automatique
+    4. Insérer des données dans MySQL et vérifier leur persistance
+    5. Supprimer le pod et vérifier que les données sont toujours présentes
 
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: local-pv
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: local-storage
-  hostPath:
-    path: /mnt/data
+    **Critères de validation** :
 
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mysql
-spec:
-  serviceName: mysql
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mysql
-  template:
+    - [ ] La StorageClass est créée et disponible
+    - [ ] Le PV est créé avec la capacité demandée
+    - [ ] Le StatefulSet crée automatiquement un PVC
+    - [ ] Les données survivent à la suppression du pod
+    - [ ] Le PVC reste en status "Bound"
+
+??? quote "Solution"
+    **Étape 1 : Créer la StorageClass et le PV**
+
+    ```yaml
+    # storage.yaml
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
     metadata:
+      name: local-storage
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+    reclaimPolicy: Retain
+
+    ---
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: mysql-pv
+    spec:
+      capacity:
+        storage: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      persistentVolumeReclaimPolicy: Retain
+      storageClassName: local-storage
+      hostPath:
+        path: /mnt/data/mysql
+        type: DirectoryOrCreate
+    ```
+
+    ```bash
+    kubectl apply -f storage.yaml
+    kubectl get storageclass
+    kubectl get pv
+    ```
+
+    **Étape 2 : Créer le Service Headless pour MySQL**
+
+    ```yaml
+    # mysql-service.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: mysql
       labels:
         app: mysql
     spec:
-      containers:
+      clusterIP: None
+      selector:
+        app: mysql
+      ports:
         - name: mysql
-          image: mysql:8.0
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: password
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/mysql
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: local-storage
-        resources:
-          requests:
-            storage: 5Gi
-```
+          port: 3306
+    ```
+
+    ```bash
+    kubectl apply -f mysql-service.yaml
+    ```
+
+    **Étape 3 : Déployer le StatefulSet MySQL**
+
+    ```yaml
+    # mysql-statefulset.yaml
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: mysql
+    spec:
+      serviceName: mysql
+      replicas: 1
+      selector:
+        matchLabels:
+          app: mysql
+      template:
+        metadata:
+          labels:
+            app: mysql
+        spec:
+          containers:
+            - name: mysql
+              image: mysql:8.0
+              ports:
+                - containerPort: 3306
+                  name: mysql
+              env:
+                - name: MYSQL_ROOT_PASSWORD
+                  value: "rootpassword"
+                - name: MYSQL_DATABASE
+                  value: "testdb"
+              volumeMounts:
+                - name: data
+                  mountPath: /var/lib/mysql
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 512Mi
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+              livenessProbe:
+                exec:
+                  command:
+                    - mysqladmin
+                    - ping
+                    - -h
+                    - localhost
+                initialDelaySeconds: 30
+                periodSeconds: 10
+              readinessProbe:
+                exec:
+                  command:
+                    - mysql
+                    - -h
+                    - localhost
+                    - -e
+                    - "SELECT 1"
+                initialDelaySeconds: 10
+                periodSeconds: 5
+      volumeClaimTemplates:
+        - metadata:
+            name: data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: local-storage
+            resources:
+              requests:
+                storage: 5Gi
+    ```
+
+    ```bash
+    kubectl apply -f mysql-statefulset.yaml
+
+    # Attendre que le pod soit prêt
+    kubectl wait --for=condition=Ready pod/mysql-0 --timeout=120s
+
+    # Vérifier le PVC créé automatiquement
+    kubectl get pvc
+    kubectl get pv
+    ```
+
+    **Étape 4 : Insérer des données**
+
+    ```bash
+    # Accéder au pod MySQL
+    kubectl exec -it mysql-0 -- mysql -uroot -prootpassword testdb
+
+    # Dans MySQL, exécuter :
+    # CREATE TABLE users (id INT PRIMARY KEY, name VARCHAR(50));
+    # INSERT INTO users VALUES (1, 'Alice'), (2, 'Bob');
+    # SELECT * FROM users;
+    # EXIT;
+
+    # Ou via une seule commande
+    kubectl exec -it mysql-0 -- mysql -uroot -prootpassword testdb -e "
+    CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, name VARCHAR(50));
+    INSERT INTO users VALUES (1, 'Alice'), (2, 'Bob');
+    SELECT * FROM users;
+    "
+    ```
+
+    **Étape 5 : Tester la persistance**
+
+    ```bash
+    # Supprimer le pod (pas le StatefulSet!)
+    kubectl delete pod mysql-0
+
+    # Le StatefulSet va recréer le pod automatiquement
+    kubectl wait --for=condition=Ready pod/mysql-0 --timeout=120s
+
+    # Vérifier que les données sont toujours présentes
+    kubectl exec -it mysql-0 -- mysql -uroot -prootpassword testdb -e "SELECT * FROM users;"
+
+    # Les données devraient être intactes !
+    ```
+
+    **Étape 6 : Vérifications supplémentaires**
+
+    ```bash
+    # Vérifier le StatefulSet
+    kubectl describe statefulset mysql
+
+    # Vérifier le PVC
+    kubectl get pvc data-mysql-0 -o yaml
+
+    # Vérifier le binding PV <-> PVC
+    kubectl get pv mysql-pv -o yaml | grep -A5 claimRef
+
+    # Voir les événements
+    kubectl get events --sort-by='.lastTimestamp' | grep mysql
+    ```
+
+    **Test avancé : Scaling**
+
+    ```bash
+    # Scaler à 2 replicas (chaque pod aura son propre PVC)
+    kubectl scale statefulset mysql --replicas=2
+
+    # Observer la création du deuxième PVC
+    kubectl get pvc -w
+
+    # Note: Vous auriez besoin d'un deuxième PV pour que le deuxième pod démarre
+    ```
+
+    **Nettoyage** :
+
+    ```bash
+    # Supprimer le StatefulSet
+    kubectl delete statefulset mysql
+
+    # Les PVC ne sont PAS supprimés automatiquement (protection des données)
+    kubectl get pvc
+
+    # Supprimer manuellement si nécessaire
+    kubectl delete pvc data-mysql-0
+
+    # Supprimer le PV
+    kubectl delete pv mysql-pv
+
+    # Supprimer la StorageClass
+    kubectl delete storageclass local-storage
+    ```
 
 ---
 

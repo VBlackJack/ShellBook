@@ -616,6 +616,65 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un pipeline CI/CD complet pour une application cloud
+
+    **Contexte** : Vous devez automatiser le déploiement d'une API Node.js vers AWS ECS avec tests, sécurité et déploiement progressif (canary).
+
+    **Tâches à réaliser** :
+
+    1. Définissez les étapes du pipeline CI/CD (build, test, scan, deploy)
+    2. Implémentez le scanning de sécurité (SAST, dependency scan, container scan)
+    3. Configurez le déploiement canary (10% → 50% → 100%)
+    4. Mettez en place le monitoring et rollback automatique
+
+    **Critères de validation** :
+
+    - [ ] Pipeline avec au moins 5 étapes (build, unit test, SAST, container scan, deploy)
+    - [ ] Scanning de sécurité intégré
+    - [ ] Déploiement canary progressif
+    - [ ] Rollback automatique si erreurs détectées
+
+??? quote "Solution"
+    **Pipeline CI/CD (GitHub Actions) :**
+    ```yaml
+    # .github/workflows/deploy.yml
+    name: CI/CD Pipeline
+    on: [push]
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - run: npm ci
+          - run: npm test
+          - run: npm run build
+
+      security:
+        needs: build
+        steps:
+          - name: SAST
+            run: npm audit
+          - name: Container scan
+            run: trivy image app:latest
+
+      deploy:
+        needs: security
+        steps:
+          - name: Deploy canary 10%
+            run: aws ecs update-service --desired-count 1
+          - name: Wait and check metrics
+            run: sleep 300 && check_errors.sh
+          - name: Deploy 100% if OK
+            run: aws ecs update-service --desired-count 10
+    ```
+
+    **Rollback automatique si erreur rate > 5%**
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

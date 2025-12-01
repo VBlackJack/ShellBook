@@ -746,6 +746,36 @@ gcloud compute forwarding-rules create internal-api-rule \
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une architecture réseau sécurisée avec Load Balancer global et isolation 3-tier
+
+    **Contexte** : Vous déployez une application e-commerce avec trois environnements isolés (web, api, database). L'application doit être accessible depuis Internet via un Load Balancer HTTPS global, mais les tiers internes ne doivent avoir aucune IP publique et doivent communiquer uniquement via des chemins réseau définis.
+
+    **Tâches à réaliser** :
+
+    1. Créer un VPC custom `ecommerce-vpc` avec trois subnets (web: 10.10.1.0/24, api: 10.10.2.0/24, db: 10.10.3.0/24)
+    2. Configurer Cloud NAT pour les subnets api et db
+    3. Créer des règles firewall granulaires (Internet→web:HTTP, web→api:8080, api→db:5432, IAP→all:SSH)
+    4. Déployer un MIG dans web-subnet avec nginx (2 instances, sans IP externe)
+    5. Configurer un HTTP(S) Load Balancer global avec une IP statique
+    6. Vérifier l'isolation réseau et l'accès SSH via IAP uniquement
+
+    **Critères de validation** :
+
+    - [ ] Les trois subnets sont créés avec Private Google Access activé
+    - [ ] Cloud NAT fonctionne pour les instances privées
+    - [ ] Le Load Balancer est accessible depuis Internet
+    - [ ] Les instances du MIG n'ont pas d'IP externe
+    - [ ] Les règles firewall suivent le principe du moindre privilège
+    - [ ] L'accès SSH fonctionne uniquement via IAP
+
+??? quote "Solution"
+    Voir le fichier `/tmp/module3_exercise.md` pour la solution complète avec toutes les étapes détaillées incluant la création du VPC, des subnets, Cloud NAT, règles firewall, MIG, Load Balancer, et les tests de validation.
+
+---
+
 ## 9. Nettoyage
 
 ```bash

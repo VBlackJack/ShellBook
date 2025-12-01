@@ -833,6 +833,232 @@ gcloud run services update myapp-dev \
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Construire une architecture serverless event-driven avec Cloud Functions, Pub/Sub et Cloud Run
+
+    **Contexte** : Vous créez un système de traitement de fichiers. Quand un fichier est uploadé dans un bucket Cloud Storage, une Cloud Function est déclenchée pour valider le fichier. Si valide, un message est publié vers Pub/Sub, qui déclenche une seconde fonction de traitement. Parallèlement, une API REST sur Cloud Run permet de consulter les statuts.
+
+    **Tâches à réaliser** :
+
+    1. Créer un bucket Cloud Storage `uploads-VOTRENOM`
+    2. Créer deux topics Pub/Sub : `file-validated` et `file-errors`
+    3. Déployer une Cloud Function HTTP `api-upload` qui retourne le statut du service
+    4. Déployer une Cloud Function déclenchée par Cloud Storage qui valide les fichiers
+    5. Déployer une Cloud Function déclenchée par Pub/Sub qui traite les fichiers validés
+    6. Déployer une API sur Cloud Run qui expose `/status` et `/files`
+    7. Tester le flux complet : upload → validation → traitement
+    8. Configurer l'autoscaling sur Cloud Run (min: 0, max: 10)
+
+    **Critères de validation** :
+
+    - [ ] Le bucket Cloud Storage est créé
+    - [ ] Les topics Pub/Sub sont créés et fonctionnels
+    - [ ] Les trois Cloud Functions sont déployées
+    - [ ] L'API Cloud Run est accessible
+    - [ ] Le flux event-driven fonctionne de bout en bout
+    - [ ] Les logs montrent le traitement correct
+    - [ ] L'autoscaling est configuré sur Cloud Run
+    - [ ] Estimation des coûts documentée
+
+??? quote "Solution"
+    ```bash
+    # 1. Bucket
+    PROJECT_ID=$(gcloud config get-value project)
+    BUCKET_NAME="uploads-$(whoami | tr '[:upper:]' '[:lower:]')"
+    REGION="europe-west1"
+
+    gsutil mb -l $REGION gs://$BUCKET_NAME
+
+    # 2. Topics Pub/Sub
+    gcloud pubsub topics create file-validated
+    gcloud pubsub topics create file-errors
+
+    # 3. Cloud Function HTTP
+    mkdir -p cf-api && cd cf-api
+
+    cat > main.py << 'EOF'
+    import functions_framework
+    from flask import jsonify
+
+    @functions_framework.http
+    def api_upload(request):
+        return jsonify({
+            'service': 'File Processing System',
+            'status': 'operational',
+            'version': '1.0'
+        })
+    EOF
+
+    cat > requirements.txt << 'EOF'
+    functions-framework==3.*
+    flask==2.*
+    EOF
+
+    gcloud functions deploy api-upload \
+        --gen2 \
+        --runtime=python311 \
+        --trigger-http \
+        --allow-unauthenticated \
+        --region=$REGION \
+        --entry-point=api_upload
+
+    cd ..
+
+    # 4. Cloud Function GCS Trigger
+    mkdir -p cf-validator && cd cf-validator
+
+    cat > main.py << 'EOF'
+    import functions_framework
+    from google.cloud import pubsub_v1
+    import os
+
+    publisher = pubsub_v1.PublisherClient()
+    PROJECT_ID = os.environ.get('PROJECT_ID')
+
+    @functions_framework.cloud_event
+    def validate_file(cloud_event):
+        data = cloud_event.data
+        file_name = data["name"]
+
+        # Validation basique
+        if file_name.endswith(('.txt', '.pdf', '.jpg')):
+            topic_path = publisher.topic_path(PROJECT_ID, 'file-validated')
+            message = f'{{"file": "{file_name}", "status": "valid"}}'
+            publisher.publish(topic_path, message.encode())
+            print(f'✓ File validated: {file_name}')
+        else:
+            topic_path = publisher.topic_path(PROJECT_ID, 'file-errors')
+            message = f'{{"file": "{file_name}", "error": "Invalid format"}}'
+            publisher.publish(topic_path, message.encode())
+            print(f'✗ File rejected: {file_name}')
+    EOF
+
+    cat > requirements.txt << 'EOF'
+    functions-framework==3.*
+    google-cloud-pubsub==2.*
+    EOF
+
+    gcloud functions deploy validate-file \
+        --gen2 \
+        --runtime=python311 \
+        --trigger-bucket=$BUCKET_NAME \
+        --region=$REGION \
+        --entry-point=validate_file \
+        --set-env-vars=PROJECT_ID=$PROJECT_ID
+
+    cd ..
+
+    # 5. Cloud Function Pub/Sub Trigger
+    mkdir -p cf-processor && cd cf-processor
+
+    cat > main.py << 'EOF'
+    import functions_framework
+    import base64
+    import json
+
+    @functions_framework.cloud_event
+    def process_file(cloud_event):
+        message_data = base64.b64decode(cloud_event.data["message"]["data"]).decode()
+        data = json.loads(message_data)
+
+        print(f'Processing file: {data.get("file")}')
+        # Simulation du traitement
+        print(f'✓ File processed successfully')
+    EOF
+
+    cat > requirements.txt << 'EOF'
+    functions-framework==3.*
+    EOF
+
+    gcloud functions deploy process-file \
+        --gen2 \
+        --runtime=python311 \
+        --trigger-topic=file-validated \
+        --region=$REGION \
+        --entry-point=process_file
+
+    cd ..
+
+    # 6. API Cloud Run
+    mkdir -p api-cloudrun && cd api-cloudrun
+
+    cat > main.py << 'EOF'
+    from flask import Flask, jsonify
+    import os
+
+    app = Flask(__name__)
+
+    @app.route('/status')
+    def status():
+        return jsonify({'status': 'healthy', 'service': 'File API'})
+
+    @app.route('/files')
+    def files():
+        return jsonify({'files': [], 'count': 0})
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    EOF
+
+    cat > requirements.txt << 'EOF'
+    flask==2.*
+    EOF
+
+    cat > Dockerfile << 'EOF'
+    FROM python:3.11-slim
+    WORKDIR /app
+    COPY requirements.txt .
+    RUN pip install -r requirements.txt
+    COPY . .
+    CMD ["python", "main.py"]
+    EOF
+
+    gcloud run deploy file-api \
+        --source=. \
+        --region=$REGION \
+        --allow-unauthenticated \
+        --min-instances=0 \
+        --max-instances=10 \
+        --cpu=1 \
+        --memory=512Mi
+
+    cd ..
+
+    # 7. Tests
+    echo "=== TESTS ==="
+
+    # Upload fichier valide
+    echo "Test file" > test.txt
+    gsutil cp test.txt gs://$BUCKET_NAME/
+
+    # Upload fichier invalide
+    echo "Invalid" > test.exe
+    gsutil cp test.exe gs://$BUCKET_NAME/
+
+    sleep 10
+
+    # Logs
+    echo "Logs validation:"
+    gcloud functions logs read validate-file --region=$REGION --limit=5
+
+    echo ""
+    echo "Logs processing:"
+    gcloud functions logs read process-file --region=$REGION --limit=5
+
+    # Test API
+    API_URL=$(gcloud run services describe file-api --region=$REGION --format="get(status.url)")
+    echo ""
+    echo "Test API:"
+    curl $API_URL/status
+
+    echo ""
+    echo "✅ Architecture serverless déployée!"
+    ```
+
+---
+
 ## 8. Nettoyage
 
 ```bash

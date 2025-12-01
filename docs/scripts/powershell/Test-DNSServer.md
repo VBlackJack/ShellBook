@@ -26,6 +26,24 @@ Ce script vérifie l'état d'un serveur DNS Windows :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ avec rôle DNS
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur sur le serveur DNS
+- **Modules** : `DnsServer` (installé automatiquement avec le rôle DNS)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring DNS** : Surveillance quotidienne de la santé du service DNS
+- **Troubleshooting résolution** : Diagnostiquer les problèmes de résolution de noms
+- **Audit zones AD-intégrées** : Vérifier la réplication DNS dans Active Directory
+- **Performance** : Analyser les temps de réponse et statistiques de cache
+
+---
+
 ## Script
 
 ```powershell

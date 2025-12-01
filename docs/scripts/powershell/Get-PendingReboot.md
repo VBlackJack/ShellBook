@@ -23,6 +23,24 @@ Détection des redémarrages en attente sur Windows.
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur pour lire les clés Registry
+- **Modules** : Aucun module externe requis (PSRemoting pour serveurs distants)
+
+---
+
+## Cas d'Usage
+
+- **Maintenance préventive** : Vérifier quels serveurs nécessitent un redémarrage avant patching
+- **Monitoring** : Intégration avec Nagios, Zabbix ou PRTG pour alertes automatiques
+- **Planification** : Identifier les fenêtres de maintenance nécessaires
+- **CI/CD** : Validation d'état avant déploiement en production
+
+---
+
 ## Utilisation
 
 ```powershell

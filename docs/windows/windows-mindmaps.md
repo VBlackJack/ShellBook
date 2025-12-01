@@ -508,9 +508,9 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624}  # Logons réussis
 
 | Domaine | Guides ShellBook |
 |---------|------------------|
-| **PowerShell** | [PowerShell Foundations](powershell-foundations.md) • [Remoting](powershell-foundations.md#remoting-powershell) |
+| **PowerShell** | [PowerShell Foundations](powershell-foundations.md) • [Remoting](powershell-foundations.md#remote--web) |
 | **Active Directory** | [Active Directory CRUD](active-directory.md) • [Group Management](active-directory.md#gestion-des-groupes) |
-| **Sécurité** | [Windows Security](windows-security.md) • [PKI Bootstrap](windows-security.md#certificats-pki-bootstrap-offline) |
+| **Sécurité** | [Windows Security](windows-security.md) • [PKI Bootstrap](windows-security.md#pki-bootstrap-certificat-offline) |
 | **Administration** | [Server Administration](server-administration.md) • [Update Management](update-management.md) |
 | **Automatisation** | [Ansible for Windows](ansible-windows.md) |
 

@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - ntlite
+  - windows
+  - drivers
+  - updates
+  - module
+---
+
 # Module 3 : Intégration - Drivers & Updates
 
 ## Introduction

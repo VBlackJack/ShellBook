@@ -759,6 +759,211 @@ kubectl describe configmap cluster-autoscaler-status -n kube-system
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une application multi-tier sur GKE Autopilot avec autoscaling, monitoring et secrets management
+
+    **Contexte** : Vous déployez une application web 2-tier (frontend + backend) sur GKE. Le frontend doit scaler horizontalement en fonction du trafic, et le backend doit accéder à des secrets de manière sécurisée via Workload Identity. L'application doit être accessible via un Load Balancer avec une IP publique réservée.
+
+    **Tâches à réaliser** :
+
+    1. Créer un cluster GKE Autopilot `prod-app-cluster` dans `europe-west1`
+    2. Créer un namespace `production`
+    3. Créer un Secret Kubernetes `api-credentials` avec une clé API fictive
+    4. Déployer un frontend (nginx) avec 2 replicas minimum
+    5. Déployer un backend (application simple) qui utilise le secret
+    6. Configurer un Service ClusterIP pour le backend
+    7. Configurer un Ingress avec LoadBalancer pour exposer le frontend
+    8. Configurer HPA (Horizontal Pod Autoscaler) pour le frontend (target: 70% CPU, max: 10 pods)
+    9. Tester le scaling en générant de la charge
+    10. Configurer les resource requests/limits appropriées
+
+    **Critères de validation** :
+
+    - [ ] Le cluster GKE Autopilot est créé et fonctionnel
+    - [ ] Le namespace `production` existe
+    - [ ] Les deux applications (frontend + backend) sont déployées
+    - [ ] Le backend accède au secret correctement
+    - [ ] Le frontend est accessible via le Load Balancer
+    - [ ] Le HPA est configuré et fonctionne
+    - [ ] Les pods scalent automatiquement sous charge
+    - [ ] Les resource requests/limits sont définis
+
+??? quote "Solution"
+    ```bash
+    # 1. Créer le cluster Autopilot
+    gcloud container clusters create-auto prod-app-cluster \
+        --region=europe-west1 \
+        --release-channel=regular
+
+    gcloud container clusters get-credentials prod-app-cluster --region=europe-west1
+
+    # 2. Namespace
+    kubectl create namespace production
+    kubectl config set-context --current --namespace=production
+
+    # 3. Secret
+    kubectl create secret generic api-credentials \
+        --from-literal=api-key='sk-test-1234567890abcdef' \
+        --from-literal=api-endpoint='https://api.example.com' \
+        -n production
+
+    # 4. Déployer le Backend
+    cat > backend-deployment.yaml << 'EOF'
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: backend
+      namespace: production
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: backend
+          tier: api
+      template:
+        metadata:
+          labels:
+            app: backend
+            tier: api
+        spec:
+          containers:
+          - name: api
+            image: nginx:alpine
+            ports:
+            - containerPort: 80
+            env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-credentials
+                  key: api-key
+            - name: API_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: api-credentials
+                  key: api-endpoint
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 80
+              initialDelaySeconds: 10
+              periodSeconds: 5
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 80
+              initialDelaySeconds: 5
+              periodSeconds: 3
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: backend-svc
+      namespace: production
+    spec:
+      type: ClusterIP
+      selector:
+        app: backend
+        tier: api
+      ports:
+      - port: 8080
+        targetPort: 80
+    EOF
+
+    kubectl apply -f backend-deployment.yaml
+
+    # 5. Déployer le Frontend
+    cat > frontend-deployment.yaml << 'EOF'
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: frontend
+      namespace: production
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: frontend
+          tier: web
+      template:
+        metadata:
+          labels:
+            app: frontend
+            tier: web
+        spec:
+          containers:
+          - name: web
+            image: nginx:alpine
+            ports:
+            - containerPort: 80
+            resources:
+              requests:
+                cpu: 200m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: frontend-svc
+      namespace: production
+    spec:
+      type: LoadBalancer
+      selector:
+        app: frontend
+        tier: web
+      ports:
+      - port: 80
+        targetPort: 80
+    EOF
+
+    kubectl apply -f frontend-deployment.yaml
+
+    # 6. HPA pour le frontend
+    kubectl autoscale deployment frontend \
+        --cpu-percent=70 \
+        --min=2 \
+        --max=10 \
+        -n production
+
+    # 7. Attendre le LoadBalancer
+    echo "Attente de l'IP du LoadBalancer..."
+    kubectl get svc frontend-svc -n production --watch
+
+    # 8. Tester
+    LB_IP=$(kubectl get svc frontend-svc -n production -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "Application accessible sur: http://$LB_IP"
+    curl http://$LB_IP
+
+    # 9. Générer de la charge (dans un terminal séparé)
+    kubectl run -it --rm load-generator \
+        --image=busybox \
+        --namespace=production \
+        -- /bin/sh -c "while true; do wget -q -O- http://frontend-svc; done"
+
+    # 10. Observer le scaling
+    watch kubectl get hpa,pods -n production
+
+    # Validation
+    echo "=== VALIDATION ==="
+    kubectl get all -n production
+    kubectl describe hpa frontend -n production
+    kubectl get pods -n production -o wide
+    ```
+
+---
+
 ## 9. Nettoyage
 
 ```bash

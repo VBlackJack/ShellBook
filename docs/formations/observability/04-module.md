@@ -776,24 +776,239 @@ PERFORMANCE
 
 ---
 
-## 7. Exercice Pratique
+## 7. Exercice : À Vous de Jouer
 
-### Tâches
+!!! example "Mise en Pratique"
+    **Objectif** : Créer un dashboard Grafana professionnel avec variables, transformations et provisioning
 
-1. Créer un dashboard avec 6 panels
-2. Ajouter des variables (instance, intervalle)
-3. Utiliser des transformations
-4. Exporter en JSON
-5. Configurer le provisioning
+    **Contexte** : Votre équipe a besoin d'un dashboard unifié pour monitorer tous les serveurs de l'infrastructure. Le dashboard doit être réutilisable pour n'importe quel serveur grâce aux variables, et doit être versionné via le provisioning as code.
 
-### Checklist
+    **Tâches à réaliser** :
 
-- [ ] Panel Stat : Uptime
-- [ ] Panel Gauge : CPU Usage
-- [ ] Panel Time Series : Memory over time
-- [ ] Panel Table : Disk usage par mountpoint
-- [ ] Panel Bar Gauge : Network traffic
-- [ ] Variable instance fonctionnelle
+    1. Créer un dashboard "Infrastructure Overview" avec 6 panels différents
+    2. Ajouter une variable `instance` pour filtrer par serveur
+    3. Ajouter une variable `interval` pour ajuster la fenêtre temporelle
+    4. Utiliser des transformations sur au moins un panel
+    5. Configurer des seuils colorés (vert/jaune/rouge) sur les panels
+    6. Exporter le dashboard en JSON
+    7. Configurer le provisioning pour charger automatiquement le dashboard au démarrage
+
+    **Critères de validation** :
+
+    - [ ] Panel Stat affiche l'uptime du serveur
+    - [ ] Panel Gauge affiche le CPU avec seuils colorés
+    - [ ] Panel Time Series affiche l'évolution de la mémoire
+    - [ ] Panel Table affiche l'utilisation disque par partition
+    - [ ] Panel Bar Gauge affiche le trafic réseau
+    - [ ] Panel Graph affiche la charge système (load average)
+    - [ ] Les variables fonctionnent et filtrent correctement
+    - [ ] Le dashboard est provisionné automatiquement
+
+??? quote "Solution"
+    **1. Structure du provisioning**
+
+    ```bash
+    grafana/
+    ├── provisioning/
+    │   ├── datasources/
+    │   │   └── datasources.yml
+    │   └── dashboards/
+    │       ├── default.yml
+    │       └── dashboards/
+    │           └── infrastructure.json
+    ```
+
+    **2. Configuration datasource**
+
+    ```yaml
+    # grafana/provisioning/datasources/datasources.yml
+    apiVersion: 1
+
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: false
+    ```
+
+    **3. Configuration dashboard provider**
+
+    ```yaml
+    # grafana/provisioning/dashboards/default.yml
+    apiVersion: 1
+
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: 'Infrastructure'
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        allowUiUpdates: true
+        options:
+          path: /etc/grafana/provisioning/dashboards/dashboards
+    ```
+
+    **4. Panels à créer dans l'interface Grafana**
+
+    **Panel 1 - Stat : Uptime**
+
+    ```json
+    {
+      "type": "stat",
+      "title": "Uptime",
+      "targets": [{
+        "expr": "(time() - node_boot_time_seconds{instance=~\"$instance\"}) / 86400"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "d",
+          "decimals": 1,
+          "thresholds": {
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 1, "color": "yellow"},
+              {"value": 7, "color": "green"}
+            ]
+          }
+        }
+      }
+    }
+    ```
+
+    **Panel 2 - Gauge : CPU Usage**
+
+    ```promql
+    100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle",instance=~"$instance"}[$interval])) * 100)
+    ```
+
+    Configuration :
+    - Unit: percent (0-100)
+    - Thresholds: 70 (yellow), 90 (red)
+    - Display mode: Gradient
+
+    **Panel 3 - Time Series : Memory**
+
+    ```promql
+    100 * (1 - node_memory_MemAvailable_bytes{instance=~"$instance"} / node_memory_MemTotal_bytes{instance=~"$instance"})
+    ```
+
+    Configuration :
+    - Unit: percent
+    - Legend: {{instance}}
+    - Fill opacity: 10
+
+    **Panel 4 - Table : Disk Usage**
+
+    Queries multiples :
+    ```promql
+    # Query A - Filesystem
+    node_filesystem_size_bytes{instance=~"$instance",fstype!~"tmpfs|overlay"}
+
+    # Query B - Used
+    node_filesystem_size_bytes{instance=~"$instance",fstype!~"tmpfs|overlay"} - node_filesystem_avail_bytes{instance=~"$instance",fstype!~"tmpfs|overlay"}
+
+    # Query C - Available
+    node_filesystem_avail_bytes{instance=~"$instance",fstype!~"tmpfs|overlay"}
+    ```
+
+    Transformations :
+    - Merge
+    - Organize fields (renommer les colonnes)
+    - Add field from calculation (calcul du pourcentage)
+
+    **Panel 5 - Bar Gauge : Network Traffic**
+
+    ```promql
+    rate(node_network_receive_bytes_total{instance=~"$instance",device!~"lo|veth.*"}[$interval]) / 1024 / 1024
+    ```
+
+    Configuration :
+    - Unit: MBps
+    - Orientation: Horizontal
+    - Display mode: Gradient
+
+    **Panel 6 - Graph : Load Average**
+
+    ```promql
+    node_load1{instance=~"$instance"}
+    node_load5{instance=~"$instance"}
+    node_load15{instance=~"$instance"}
+    ```
+
+    Configuration :
+    - Legend: Load 1m, 5m, 15m
+    - Threshold line au nombre de CPUs
+
+    **5. Variables à configurer**
+
+    **Variable : datasource**
+    - Type: Datasource
+    - Query: prometheus
+
+    **Variable : instance**
+    - Type: Query
+    - Query: `label_values(node_cpu_seconds_total, instance)`
+    - Multi-value: true
+    - Include All: true
+    - Refresh: On Dashboard Load
+
+    **Variable : interval**
+    - Type: Interval
+    - Values: 1m,5m,10m,30m,1h
+    - Auto: false
+
+    **6. Export et sauvegarde**
+
+    Une fois le dashboard créé dans l'UI :
+
+    1. Cliquer sur l'icône Share (⬆)
+    2. Onglet "Export"
+    3. "Save to file"
+    4. Sauvegarder dans `grafana/provisioning/dashboards/dashboards/infrastructure.json`
+
+    **7. Docker Compose avec provisioning**
+
+    ```yaml
+    grafana:
+      image: grafana/grafana:latest
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./grafana/provisioning:/etc/grafana/provisioning
+        - grafana_data:/var/lib/grafana
+      environment:
+        - GF_SECURITY_ADMIN_PASSWORD=admin123
+        - GF_USERS_ALLOW_SIGN_UP=false
+    ```
+
+    **Validation complète :**
+
+    ```bash
+    # Démarrer la stack
+    docker-compose up -d
+
+    # Attendre que Grafana démarre
+    sleep 10
+
+    # Vérifier que le datasource est provisionné
+    curl -u admin:admin123 http://localhost:3000/api/datasources | jq .
+
+    # Vérifier que le dashboard est provisionné
+    curl -u admin:admin123 http://localhost:3000/api/search | jq .
+
+    # Accéder à Grafana
+    open http://localhost:3000
+    ```
+
+    **Points importants :**
+
+    - Utilisez toujours `instance=~"$instance"` pour filtrer par la variable
+    - Utilisez `$interval` dans les fonctions rate() pour la flexibilité
+    - Configurez `"editable": true` dans le JSON pour permettre les modifications
+    - Testez le dashboard avec différentes sélections de variables
 
 ---
 

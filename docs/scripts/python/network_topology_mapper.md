@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - network
+  - discovery
+  - infrastructure
+---
+
 # Network Topology Mapper
 
 Script Python de découverte et cartographie automatique de topologie réseau.

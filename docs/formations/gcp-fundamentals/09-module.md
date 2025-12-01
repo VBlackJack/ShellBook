@@ -731,6 +731,222 @@ echo -e "\n=== Audit Complete ==="
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Sécuriser une infrastructure GCP avec Cloud Armor, Secret Manager et un audit de sécurité complet
+
+    **Contexte** : Vous devez sécuriser une application web exposée publiquement. L'application doit être protégée contre les attaques OWASP Top 10, les secrets doivent être gérés de manière sécurisée, et vous devez effectuer un audit de sécurité complet pour identifier les vulnérabilités.
+
+    **Tâches à réaliser** :
+
+    1. Créer une security policy Cloud Armor `prod-security-policy` avec :
+        - Protection contre SQL Injection
+        - Protection contre XSS
+        - Rate limiting : 100 requêtes/minute par IP
+        - Blocage géographique (Chine et Russie)
+    2. Créer 3 secrets dans Secret Manager :
+        - `db-password` : mot de passe de base de données
+        - `api-key` : clé API externe
+        - `jwt-secret` : secret pour JWT
+    3. Créer un Service Account `app-sa` avec accès aux secrets
+    4. Configurer la rotation automatique des secrets (via notification Pub/Sub)
+    5. Effectuer un audit de sécurité complet :
+        - Lister tous les Service Accounts avec des clés
+        - Identifier les buckets publics
+        - Identifier les règles firewall trop permissives
+        - Vérifier les Basic Roles
+    6. Générer un rapport d'audit en JSON
+    7. Corriger au moins 2 problèmes de sécurité identifiés
+
+    **Critères de validation** :
+
+    - [ ] Cloud Armor policy créée avec toutes les règles
+    - [ ] Les 3 secrets sont créés et accessibles
+    - [ ] Le Service Account a les permissions appropriées
+    - [ ] La notification de rotation est configurée
+    - [ ] L'audit de sécurité est complet
+    - [ ] Le rapport JSON est généré
+    - [ ] Au moins 2 problèmes corrigés
+    - [ ] Documentation des best practices appliquées
+
+??? quote "Solution"
+    ```bash
+    # Variables
+    PROJECT_ID=$(gcloud config get-value project)
+    REGION="europe-west1"
+
+    # 1. Cloud Armor Security Policy
+    gcloud compute security-policies create prod-security-policy \
+        --description="Production WAF Policy"
+
+    # SQL Injection
+    gcloud compute security-policies rules create 1000 \
+        --security-policy=prod-security-policy \
+        --expression="evaluatePreconfiguredWaf('sqli-v33-stable')" \
+        --action=deny-403 \
+        --description="Block SQL Injection"
+
+    # XSS
+    gcloud compute security-policies rules create 1001 \
+        --security-policy=prod-security-policy \
+        --expression="evaluatePreconfiguredWaf('xss-v33-stable')" \
+        --action=deny-403 \
+        --description="Block XSS"
+
+    # Rate limiting
+    gcloud compute security-policies rules create 2000 \
+        --security-policy=prod-security-policy \
+        --expression="true" \
+        --action=rate-based-ban \
+        --rate-limit-threshold-count=100 \
+        --rate-limit-threshold-interval-sec=60 \
+        --ban-duration-sec=600 \
+        --description="Rate limit 100 req/min"
+
+    # Geo-blocking
+    gcloud compute security-policies rules create 3000 \
+        --security-policy=prod-security-policy \
+        --expression="origin.region_code == 'CN' || origin.region_code == 'RU'" \
+        --action=deny-403 \
+        --description="Block CN and RU"
+
+    # Vérifier
+    gcloud compute security-policies describe prod-security-policy
+
+    # 2. Secret Manager
+    # Activer l'API
+    gcloud services enable secretmanager.googleapis.com
+
+    # Créer les secrets
+    echo -n "MySecureP@ssw0rd123!" | gcloud secrets create db-password --data-file=-
+    echo -n "sk-1234567890abcdef" | gcloud secrets create api-key --data-file=-
+    echo -n "jwt_super_secret_key_$(openssl rand -hex 32)" | gcloud secrets create jwt-secret --data-file=-
+
+    # Topic pour rotation
+    gcloud pubsub topics create secret-rotation-topic
+
+    # Configurer notification
+    gcloud secrets update db-password \
+        --topics=projects/$PROJECT_ID/topics/secret-rotation-topic
+
+    # 3. Service Account
+    gcloud iam service-accounts create app-sa \
+        --display-name="Application Service Account"
+
+    # Donner accès aux secrets
+    for SECRET in db-password api-key jwt-secret; do
+        gcloud secrets add-iam-policy-binding $SECRET \
+            --member="serviceAccount:app-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
+            --role="roles/secretmanager.secretAccessor"
+    done
+
+    # Vérifier l'accès
+    gcloud secrets versions access latest --secret=db-password \
+        --impersonate-service-account=app-sa@${PROJECT_ID}.iam.gserviceaccount.com
+
+    # 4. Audit de sécurité
+    cat > security-audit.sh << 'SCRIPT'
+    #!/bin/bash
+
+    PROJECT_ID=$(gcloud config get-value project)
+    AUDIT_FILE="security-audit-$(date +%Y%m%d-%H%M%S).json"
+
+    echo "{" > $AUDIT_FILE
+    echo '  "project": "'$PROJECT_ID'",' >> $AUDIT_FILE
+    echo '  "audit_date": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",' >> $AUDIT_FILE
+    echo '  "findings": {' >> $AUDIT_FILE
+
+    # Service Accounts avec clés
+    echo '    "service_accounts_with_keys": [' >> $AUDIT_FILE
+    gcloud iam service-accounts list --format="value(email)" | while read sa; do
+        keys=$(gcloud iam service-accounts keys list --iam-account=$sa \
+            --filter="keyType=USER_MANAGED" --format="value(name)" | wc -l)
+        if [ $keys -gt 0 ]; then
+            echo "      {\"account\": \"$sa\", \"keys_count\": $keys}," >> $AUDIT_FILE
+        fi
+    done
+    echo '      {}],' >> $AUDIT_FILE
+
+    # Buckets publics
+    echo '    "public_buckets": [' >> $AUDIT_FILE
+    for bucket in $(gsutil ls); do
+        iam=$(gsutil iam get $bucket 2>/dev/null | grep -c "allUsers\|allAuthenticatedUsers") || true
+        if [ $iam -gt 0 ]; then
+            echo "      \"$bucket\"," >> $AUDIT_FILE
+        fi
+    done
+    echo '      ""],' >> $AUDIT_FILE
+
+    # Firewall rules permissives
+    echo '    "permissive_firewall_rules": [' >> $AUDIT_FILE
+    gcloud compute firewall-rules list \
+        --filter="sourceRanges:0.0.0.0/0 AND direction=INGRESS" \
+        --format="json(name,allowed,targetTags)" >> $AUDIT_FILE
+    echo '    ],' >> $AUDIT_FILE
+
+    # Basic Roles
+    echo '    "basic_roles": [' >> $AUDIT_FILE
+    gcloud projects get-iam-policy $PROJECT_ID \
+        --flatten="bindings[]" \
+        --filter="bindings.role:(roles/owner OR roles/editor OR roles/viewer)" \
+        --format="json(bindings.members, bindings.role)" >> $AUDIT_FILE
+    echo '    ]' >> $AUDIT_FILE
+
+    echo '  }' >> $AUDIT_FILE
+    echo '}' >> $AUDIT_FILE
+
+    echo "✅ Audit terminé : $AUDIT_FILE"
+    cat $AUDIT_FILE | jq '.'
+    SCRIPT
+
+    chmod +x security-audit.sh
+    ./security-audit.sh
+
+    # 5. Corrections de sécurité
+
+    # Correction 1: Supprimer les clés de Service Account anciennes
+    echo "=== CORRECTION 1: Nettoyage des clés SA ==="
+    gcloud iam service-accounts list --format="value(email)" | while read sa; do
+        gcloud iam service-accounts keys list --iam-account=$sa \
+            --filter="keyType=USER_MANAGED AND validAfterTime<-P90D" \
+            --format="value(name)" | while read key; do
+            echo "Suppression de la clé ancienne : $key"
+            # gcloud iam service-accounts keys delete $key --iam-account=$sa --quiet
+        done
+    done
+
+    # Correction 2: Restreindre une règle firewall
+    echo ""
+    echo "=== CORRECTION 2: Restreindre firewall ==="
+    # Exemple : remplacer 0.0.0.0/0 par des ranges spécifiques
+    # gcloud compute firewall-rules update allow-ssh \
+    #     --source-ranges=35.235.240.0/20  # IAP uniquement
+
+    # 6. Validation finale
+    echo ""
+    echo "=== VALIDATION FINALE ==="
+
+    echo "1. Cloud Armor:"
+    gcloud compute security-policies describe prod-security-policy \
+        --format="table(name,rules[].priority,rules[].description)"
+
+    echo ""
+    echo "2. Secrets:"
+    gcloud secrets list --format="table(name,createTime)"
+
+    echo ""
+    echo "3. Service Account permissions:"
+    gcloud secrets get-iam-policy db-password \
+        --filter="bindings.members:app-sa" \
+        --format="table(bindings.role,bindings.members)"
+
+    echo ""
+    echo "✅ Sécurité configurée et auditée!"
+    ```
+
+---
+
 ## 7. Nettoyage
 
 ```bash

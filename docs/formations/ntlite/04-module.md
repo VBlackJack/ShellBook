@@ -1,3 +1,13 @@
+---
+tags:
+  - formation
+  - ntlite
+  - windows
+  - automation
+  - unattend
+  - module
+---
+
 # Module 4 : Automatisation - L'Installation Silencieuse
 
 ## Introduction

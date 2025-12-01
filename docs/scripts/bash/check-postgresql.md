@@ -28,6 +28,23 @@ Ce script vérifie l'état d'un serveur PostgreSQL :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Accès PostgreSQL avec privilèges de lecture sur les tables système
+- **Dépendances** : `postgresql-client`, `psql`, `nc`, `bc`
+
+---
+
+## Cas d'Usage
+
+- **Health check quotidien** : Vérification automatique de la santé des serveurs PostgreSQL
+- **Monitoring de réplication** : Surveillance du lag et de l'état des replicas streaming
+- **Audit de performance** : Détection de problèmes de connexions, vacuum, bloat et requêtes longues
+- **Validation après maintenance** : Test complet après upgrade ou modification de configuration
+
+---
+
 ## Script
 
 ```bash

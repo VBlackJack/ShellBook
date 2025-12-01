@@ -917,6 +917,274 @@ resource "aci_contract_subject" "nat_subject" {
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Configurer un L3Out pour permettre l'accès Internet à une application web
+
+    **Contexte** : Votre application web (déployée dans les modules précédents) doit être accessible depuis Internet. Vous devez créer un L3Out qui connecte le VRF de production au routeur Internet via BGP. Le L3Out doit permettre uniquement le trafic HTTPS entrant vers l'EPG Web-Frontend, tout en bloquant l'accès direct aux autres EPGs (App, DB).
+
+    **Tâches à réaliser** :
+
+    1. Créer un L3Out nommé "L3Out-Internet" dans le VRF Production
+    2. Configurer un External EPG "Internet" avec le subnet 0.0.0.0/0
+    3. Créer un Contract permettant HTTPS (port 443) depuis Internet vers Web-Frontend
+    4. Associer l'External EPG en tant que Consumer et Web-Frontend en tant que Provider
+    5. Documenter la configuration de routage BGP dans les commentaires
+
+    **Critères de validation** :
+
+    - [ ] Le L3Out est attaché au bon VRF et au domaine L3
+    - [ ] L'External EPG couvre Internet (0.0.0.0/0) avec scope "import-security"
+    - [ ] Un Contract HTTPS existe entre Internet et Web-Frontend
+    - [ ] Les autres EPGs (App, DB) ne sont pas accessibles depuis Internet
+    - [ ] La configuration BGP est documentée en commentaires HCL
+
+??? quote "Solution"
+
+    **l3out.tf**
+
+    ```hcl
+    # =============================
+    # DATA SOURCES
+    # =============================
+
+    # Domain L3 (doit exister dans l'APIC)
+    # Dans un environnement réel, ce domaine est créé par l'équipe réseau
+    data "aci_l3_domain_profile" "external" {
+      name = "L3-External-Domain"
+    }
+
+    # =============================
+    # L3OUT
+    # =============================
+
+    resource "aci_l3_outside" "internet" {
+      tenant_dn                    = aci_tenant.webapp_prod.id
+      name                         = "L3Out-Internet"
+      description                  = "L3Out pour connectivité Internet via BGP"
+      relation_l3ext_rs_ectx       = aci_vrf.production.id
+      relation_l3ext_rs_l3_dom_att = data.aci_l3_domain_profile.external.id
+
+      annotation                   = "managed-by:terraform"
+    }
+
+    # =============================
+    # EXTERNAL EPG
+    # =============================
+
+    # External EPG représentant Internet (tout le trafic externe)
+    resource "aci_external_network_instance_profile" "internet" {
+      l3_outside_dn = aci_l3_outside.internet.id
+      name          = "Internet"
+      description   = "External EPG pour le trafic Internet"
+      annotation    = "managed-by:terraform"
+    }
+
+    # Subnet : 0.0.0.0/0 = tout Internet
+    resource "aci_l3_ext_subnet" "internet_default" {
+      external_network_instance_profile_dn = aci_external_network_instance_profile.internet.id
+      ip                                   = "0.0.0.0/0"
+
+      # Scope : import-security = appliquer les contracts à ce subnet
+      scope                                = ["import-security"]
+
+      description                          = "Default route vers Internet"
+    }
+
+    # =============================
+    # LOGICAL NODE PROFILE
+    # =============================
+
+    # Configuration du Border Leaf (Leaf qui connecte au routeur externe)
+    # Note : Cette partie dépend de votre topologie physique
+
+    resource "aci_logical_node_profile" "internet_nodes" {
+      l3_outside_dn = aci_l3_outside.internet.id
+      name          = "Border-Leafs"
+      description   = "Leafs connectés au routeur Internet"
+    }
+
+    # Node spécifique : Leaf 101 (Border Leaf)
+    resource "aci_logical_node_to_fabric_node" "leaf101" {
+      logical_node_profile_dn = aci_logical_node_profile.internet_nodes.id
+      tdn                     = "topology/pod-1/node-101"
+      rtr_id                  = "10.255.255.101"  # Router ID pour BGP
+      rtr_id_loop_back        = "yes"
+    }
+
+    # =============================
+    # LOGICAL INTERFACE PROFILE
+    # =============================
+
+    resource "aci_logical_interface_profile" "internet_interfaces" {
+      logical_node_profile_dn = aci_logical_node_profile.internet_nodes.id
+      name                    = "Interface-to-ISP-Router"
+      description             = "Interface physique vers routeur ISP"
+    }
+
+    # =============================
+    # CONFIGURATION BGP (commentée)
+    # =============================
+
+    # Configuration BGP typique (à adapter selon votre environnement)
+    #
+    # BGP Peer (routeur ISP) :
+    # - Peer IP : 192.0.2.1 (IP du routeur ISP)
+    # - Local AS : 65000 (votre ASN)
+    # - Remote AS : 65001 (ASN de l'ISP)
+    # - Prefixes annoncés : 203.0.113.0/24 (votre bloc IP public)
+    #
+    # resource "aci_bgp_peer_connectivity_profile" "isp_router" {
+    #   parent_dn   = aci_logical_interface_profile.internet_interfaces.id
+    #   addr        = "192.0.2.1"
+    #   as_number   = "65001"
+    #   description = "BGP Peer vers routeur ISP"
+    # }
+
+    # =============================
+    # CONTRACT INTERNET → WEB
+    # =============================
+
+    # Filter HTTPS (réutilisé depuis Module 4)
+    resource "aci_filter" "https_internet" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "filter-https-internet"
+    }
+
+    resource "aci_filter_entry" "https_internet" {
+      filter_dn   = aci_filter.https_internet.id
+      name        = "https"
+      ether_t     = "ipv4"
+      prot        = "tcp"
+      d_from_port = "443"
+      d_to_port   = "443"
+      stateful    = "yes"
+    }
+
+    # Contract : Internet → Web-Frontend
+    resource "aci_contract" "internet_to_web" {
+      tenant_dn = aci_tenant.webapp_prod.id
+      name      = "internet-to-web"
+      scope     = "context"  # VRF scope
+      description = "Autoriser HTTPS depuis Internet vers Web-Frontend"
+    }
+
+    resource "aci_contract_subject" "internet_to_web" {
+      contract_dn   = aci_contract.internet_to_web.id
+      name          = "https-inbound"
+      rev_flt_ports = "yes"
+    }
+
+    resource "aci_contract_subject_filter" "internet_to_web_https" {
+      contract_subject_dn = aci_contract_subject.internet_to_web.id
+      filter_dn           = aci_filter.https_internet.id
+    }
+
+    # =============================
+    # CONTRACT ASSOCIATIONS
+    # =============================
+
+    # External EPG Internet : Consumer du contract
+    resource "aci_external_epg_to_contract" "internet_consumer" {
+      external_network_instance_profile_dn = aci_external_network_instance_profile.internet.id
+      contract_dn                          = aci_contract.internet_to_web.id
+      contract_type                        = "consumer"
+    }
+
+    # EPG Web-Frontend : Provider du contract
+    resource "aci_epg_to_contract" "web_provider_internet" {
+      application_epg_dn = aci_application_epg.web.id
+      contract_dn        = aci_contract.internet_to_web.id
+      contract_type      = "provider"
+    }
+    ```
+
+    **l3out-outputs.tf**
+
+    ```hcl
+    output "l3out_configuration" {
+      description = "Configuration du L3Out Internet"
+      value = {
+        l3out_name     = aci_l3_outside.internet.name
+        l3out_dn       = aci_l3_outside.internet.id
+        vrf_attached   = aci_vrf.production.name
+        external_epg   = aci_external_network_instance_profile.internet.name
+      }
+    }
+
+    output "nord_sud_flows" {
+      description = "Matrice des flux Nord-Sud autorisés"
+      value = {
+        "Internet → Web-Frontend" = {
+          contract = aci_contract.internet_to_web.name
+          protocol = "HTTPS (TCP/443)"
+          status   = "ALLOWED"
+        }
+        "Internet → App-Backend" = {
+          contract = "none"
+          protocol = "all"
+          status   = "BLOCKED (no contract)"
+        }
+        "Internet → Database" = {
+          contract = "none"
+          protocol = "all"
+          status   = "BLOCKED (no contract)"
+        }
+      }
+    }
+
+    output "bgp_summary" {
+      description = "Résumé de la configuration BGP"
+      value = {
+        protocol         = "BGP"
+        border_leaf      = "Leaf-101"
+        router_id        = "10.255.255.101"
+        note             = "Configuration BGP à compléter selon votre environnement"
+      }
+    }
+    ```
+
+    **Déploiement :**
+
+    ```bash
+    # Validation
+    terraform validate
+
+    # Plan
+    terraform plan
+
+    # Application
+    terraform apply
+
+    # Vérification des flux Nord-Sud
+    terraform output nord_sud_flows
+    ```
+
+    **Vérification sur l'APIC :**
+
+    ```bash
+    # Vérifier que le L3Out est créé
+    # Tenants > WebApp-Prod > Networking > L3Outs > L3Out-Internet
+
+    # Vérifier l'External EPG
+    # L3Out-Internet > Networks > Internet (0.0.0.0/0)
+
+    # Vérifier le Contract
+    # L3Out-Internet > Networks > Internet > Contracts
+    # → Consumer : internet-to-web
+    ```
+
+    **Résultat attendu :**
+
+    - L3Out configuré pour la connectivité Internet
+    - External EPG couvrant 0.0.0.0/0
+    - HTTPS autorisé depuis Internet vers Web-Frontend uniquement
+    - App et Database protégés (pas de contract depuis Internet)
+    - Architecture Nord-Sud sécurisée
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

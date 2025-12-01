@@ -25,6 +25,24 @@ Rapport de conformité des patchs Windows avec scoring.
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ ou Windows 10/11
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur pour analyse locale et distante
+- **Modules** : Aucun module externe requis (utilise COM Windows Update)
+
+---
+
+## Cas d'Usage
+
+- **Audit de conformité** : Rapport mensuel du niveau de patching de l'infrastructure
+- **Sécurité** : Détection des serveurs exposés à des CVE critiques avant un audit
+- **Validation WSUS/SCCM** : Vérifier que les serveurs reçoivent bien les mises à jour
+- **Intégration CI/CD** : Pipeline de validation avant déploiement en production
+
+---
+
 ## Utilisation
 
 ```powershell

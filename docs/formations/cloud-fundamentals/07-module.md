@@ -509,6 +509,47 @@ graph LR
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Concevoir l'architecture cloud hybride d'un système de paiement conforme PCI-DSS
+
+    **Contexte** : Worldline doit déployer une nouvelle plateforme de paiement e-commerce avec conformité PCI-DSS Level 1.
+
+    **Tâches à réaliser** :
+
+    1. Proposez une architecture hybride (cloud public + privé) séparant zones PCI et non-PCI
+    2. Placez correctement : HSM, Core Payment, API Gateway, Analytics, ML Fraude
+    3. Sécurisez la connexion hybride (Direct Connect/ExpressRoute)
+
+    **Critères de validation** :
+
+    - [ ] Données PAN isolées dans environnement dédié
+    - [ ] Connexion sécurisée entre cloud et on-prem
+    - [ ] Multi-région pour latence < 100ms
+
+??? quote "Solution"
+    **Répartition des composants :**
+
+    | Composant | Localisation | Justification |
+    |-----------|--------------|---------------|
+    | API Gateway | Cloud Public | Scaling élastique |
+    | Portail marchand | Cloud Public | Agilité |
+    | HSM | On-Premise | PCI-DSS, clés crypto |
+    | Core Payment | On-Premise | Données PAN |
+    | Analytics | Cloud Public | Données tokenisées |
+    | ML Fraude | Cloud Public | Scaling GPU |
+
+    **Sécurisation :**
+    ```bash
+    # Direct Connect 10Gbps + TLS 1.3 + Firewall
+    aws directconnect create-connection \
+      --location EqLD5 \
+      --bandwidth 10Gbps
+    ```
+
+---
+
 ## Navigation
 
 | Précédent | Retour au Catalogue |

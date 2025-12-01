@@ -445,6 +445,190 @@ Avec Reserved Instances 1 an : ~$200/mois (-29%)
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Analyser et optimiser la facture cloud d'une entreprise
+
+    **Contexte** : Vous recevez la facture AWS du mois dernier qui atteint 12 000€, alors que le budget prévu était de 8 000€. Le directeur financier vous demande d'analyser les dérives et de proposer un plan d'optimisation pour revenir dans le budget.
+
+    **Facture actuelle :**
+    - EC2 On-Demand (24/7) : 5 400€
+    - RDS PostgreSQL : 2 100€
+    - S3 Standard (200 To) : 4 600€
+    - Data Transfer sortant : 1 900€
+
+    **Tâches à réaliser** :
+
+    1. Identifiez les 3 principaux postes de dérives par rapport aux bonnes pratiques FinOps
+    2. Proposez des optimisations concrètes pour chaque poste avec économies estimées
+    3. Calculez le nouveau coût mensuel après optimisations
+    4. Mettez en place des alertes budgétaires pour éviter les dérives futures
+
+    **Critères de validation** :
+
+    - [ ] Identification correcte des dérives (right-sizing, storage tiering, data transfer)
+    - [ ] Optimisations chiffrées et réalistes
+    - [ ] Retour dans le budget de 8 000€
+    - [ ] Plan d'alertes et de gouvernance
+
+??? quote "Solution"
+    **1. Analyse des dérives**
+
+    **Dérive #1 : EC2 On-Demand 24/7 (5 400€)**
+    - ❌ Pas de Reserved Instances malgré usage constant
+    - ❌ Potentiellement surdimensionné (pas de right-sizing)
+    - ❌ Environnements dev/test qui tournent la nuit
+
+    **Dérive #2 : S3 Standard pour tout (4 600€)**
+    - ❌ 200 To en classe Standard alors que tout n'est pas chaud
+    - ❌ Pas de lifecycle policy
+    - ❌ Probablement des données anciennes jamais accédées
+
+    **Dérive #3 : Data Transfer élevé (1 900€)**
+    - ❌ Pas de CloudFront CDN
+    - ❌ Transferts inter-régions non optimisés
+
+    **2. Plan d'optimisation**
+
+    **Optimisation #1 : EC2 (5 400€ → 2 700€, -50%)**
+
+    ```bash
+    # 1a. Reserved Instances 1 an pour la prod (économie -40%)
+    aws ec2 purchase-reserved-instances-offering \
+      --instance-count 10 \
+      --offering-id ri-offering-xxx
+    # Économie : 5 400€ × 40% = 2 160€
+
+    # 1b. Arrêt auto des environnements dev/test
+    # Scheduler Lambda qui arrête les instances tagged "env=dev"
+    aws lambda create-function \
+      --function-name ec2-scheduler \
+      --runtime python3.9 \
+      --handler lambda_function.lambda_handler
+    # Économie supplémentaire : -65% sur dev = 540€
+
+    # 1c. Right-sizing (analyser CPU < 20%)
+    aws compute-optimizer get-ec2-instance-recommendations
+    # Potentiel : -10% supplémentaire = 270€
+
+    # Total économisé sur EC2 : 2 970€
+    # Nouveau coût : 2 430€
+    ```
+
+    **Optimisation #2 : S3 (4 600€ → 1 840€, -60%)**
+
+    ```bash
+    # 2a. S3 Intelligent-Tiering pour migration auto
+    aws s3api put-bucket-intelligent-tiering-configuration \
+      --bucket my-bucket \
+      --id auto-archive \
+      --intelligent-tiering-configuration file://tiering.json
+
+    # 2b. Lifecycle policy pour archivage
+    {
+      "Rules": [{
+        "Status": "Enabled",
+        "Transitions": [
+          {
+            "Days": 90,
+            "StorageClass": "INTELLIGENT_TIERING"
+          },
+          {
+            "Days": 365,
+            "StorageClass": "GLACIER"
+          }
+        ]
+      }]
+    }
+
+    # Estimation économies :
+    # - 150 To rarement accédés → Intelligent-Tiering
+    #   4 600€ × (150/200) × 50% = 1 725€ économisés
+    # - 50 To archives → Glacier
+    #   4 600€ × (50/200) × 80% = 920€ économisés
+    # Total économisé : 2 645€
+    # Nouveau coût S3 : 1 955€
+    ```
+
+    **Optimisation #3 : Data Transfer (1 900€ → 950€, -50%)**
+
+    ```bash
+    # 3a. CloudFront devant S3
+    aws cloudfront create-distribution \
+      --origin-domain-name mybucket.s3.amazonaws.com \
+      --default-root-object index.html
+
+    # 3b. Optimiser les régions (tout en eu-west-3)
+    # Éviter les transferts inter-régions
+
+    # Économie estimée :
+    # - CDN cache 70% du trafic : 1 900€ × 50% = 950€
+    # Nouveau coût Data Transfer : 950€
+    ```
+
+    **3. Calcul du nouveau coût mensuel**
+
+    | Poste | Avant | Après | Économie |
+    |-------|-------|-------|----------|
+    | EC2 | 5 400€ | 2 430€ | -2 970€ (-55%) |
+    | RDS | 2 100€ | 2 100€ | 0€ (déjà optimisé) |
+    | S3 | 4 600€ | 1 955€ | -2 645€ (-58%) |
+    | Data Transfer | 1 900€ | 950€ | -950€ (-50%) |
+    | **TOTAL** | **12 000€** | **7 435€** | **-4 565€ (-38%)** |
+
+    ✅ **Objectif atteint : 7 435€ < 8 000€ budget**
+
+    **4. Mise en place des alertes**
+
+    ```bash
+    # Budget AWS avec alertes à 80%, 100%, 120%
+    aws budgets create-budget \
+      --account-id 123456789012 \
+      --budget file://budget.json \
+      --notifications-with-subscribers file://notifications.json
+
+    # budget.json
+    {
+      "BudgetName": "Monthly-Cloud-Budget",
+      "BudgetLimit": {
+        "Amount": "8000",
+        "Unit": "EUR"
+      },
+      "TimeUnit": "MONTHLY",
+      "BudgetType": "COST"
+    }
+
+    # notifications.json (alerte à 80% = 6 400€)
+    {
+      "Notification": {
+        "ComparisonOperator": "GREATER_THAN",
+        "Threshold": 80,
+        "ThresholdType": "PERCENTAGE",
+        "NotificationType": "ACTUAL"
+      },
+      "Subscribers": [{
+        "Address": "finops-team@company.com",
+        "SubscriptionType": "EMAIL"
+      }]
+    }
+
+    # Tags obligatoires pour la traçabilité
+    aws organizations enable-policy-type \
+      --policy-type TAG_POLICY
+
+    # Tag Policy : Environment, Owner, CostCenter obligatoires
+    ```
+
+    **Gouvernance FinOps mise en place :**
+    - 📊 Dashboard Cout Explorer activé avec drill-down par tag
+    - 🚨 Alertes à 80%, 100%, 120% du budget
+    - 📋 Revue mensuelle des coûts par équipe
+    - 🏷️ Tagging obligatoire sur toutes les ressources
+    - 📈 Rapport hebdomadaire des Top 10 ressources coûteuses
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

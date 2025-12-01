@@ -27,6 +27,23 @@ Ce script vérifie l'état d'un serveur Nginx :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour accéder aux logs et configuration Nginx
+- **Dépendances** : `nginx`, `openssl`, `curl`, `ss` (ou `netstat`)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring web continu** : Vérification automatique de l'état des serveurs web en production
+- **Audit de certificats SSL** : Détection proactive des certificats arrivant à expiration
+- **Validation après déploiement** : Test complet après changement de configuration ou reload
+- **Troubleshooting performance** : Analyse des logs et statistiques pour identifier les problèmes
+
+---
+
 ## Script
 
 ```bash

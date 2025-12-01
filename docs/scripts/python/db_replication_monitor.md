@@ -28,6 +28,26 @@ Ce script surveille la santé de la réplication des bases de données :
 
 ---
 
+## Prérequis
+
+- **Python** : Version 3.8+
+- **Modules** : `rich`, `pyyaml`, `pymysql` (pour MySQL/MariaDB), `psycopg2-binary` (pour PostgreSQL)
+- **Système** : Linux, macOS ou Windows
+- **Permissions** : Compte utilisateur avec privilèges de monitoring sur les bases de données (REPLICATION CLIENT pour MySQL)
+- **Accès réseau** : Connectivité aux instances master et replica
+
+---
+
+## Cas d'Usage
+
+- **Monitoring production** : Surveillance continue du lag de réplication pour détecter les dégradations de performance
+- **Alertes proactives** : Notification immédiate en cas d'arrêt de la réplication ou de lag excessif
+- **Intégration Prometheus** : Export de métriques pour tableaux de bord Grafana et alerting automatisé
+- **Audit de conformité** : Vérification que les replicas sont synchronisés pour les exigences de haute disponibilité
+- **Troubleshooting** : Diagnostic rapide des problèmes de réplication (IO thread, SQL thread, GTID)
+
+---
+
 ## Dépendances
 
 ```bash

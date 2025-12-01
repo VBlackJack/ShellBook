@@ -506,28 +506,30 @@ hammer content-view version promote \
 
 ---
 
-## 🎓 Exercice : "Sync & Promote"
+## Exercice : À Vous de Jouer
 
-### 📋 Contexte
+!!! example "Mise en Pratique : Sync & Promote"
+    **Objectif** : Configurer un pipeline de gestion de contenu avec Products, Repositories et Content Views.
 
-Vous êtes administrateur système chez **LinuxCorp**, une entreprise de 200 serveurs Rocky Linux 9.
+    **Contexte** : Vous êtes administrateur système chez **LinuxCorp**. Le DSI vous demande de configurer Katello pour gérer les mises à jour de manière contrôlée. Vous devez créer un pipeline **Library → Development** pour les serveurs Dev.
 
-Le DSI vous demande de configurer Katello pour gérer les mises à jour de manière contrôlée. Vous devez créer un pipeline **Library → Development** pour les serveurs Dev.
+    **Tâches à réaliser** :
 
----
+    1. Créer un **Product** nommé "Rocky Linux 9"
+    2. Ajouter un **Repository** "Rocky-BaseOS-9" pointant vers le miroir officiel
+    3. Synchroniser le repository (télécharger les métadonnées + RPM)
+    4. Créer un **Lifecycle Environment** "Development" (après Library)
+    5. Créer une **Content View** "CV-Rocky9"
+    6. Ajouter le repository BaseOS à la Content View
+    7. Publier la **version 1.0** de la Content View
+    8. Promouvoir la version 1.0 vers **Development**
 
-### 🎯 Objectifs
+    **Critères de validation** :
 
-1. ✅ Créer un **Product** nommé "Rocky Linux 9"
-2. ✅ Ajouter un **Repository** "Rocky-BaseOS-9" pointant vers le miroir officiel
-3. ✅ Synchroniser le repository (télécharger les métadonnées + RPM)
-4. ✅ Créer un **Lifecycle Environment** "Development" (après Library)
-5. ✅ Créer une **Content View** "CV-Rocky9"
-6. ✅ Ajouter le repository BaseOS à la Content View
-7. ✅ Publier la **version 1.0** de la Content View
-8. ✅ Promouvoir la version 1.0 vers **Development**
-
----
+    - [ ] Product "Rocky Linux 9" visible dans `hammer product list`
+    - [ ] Repository synchronisé avec succès
+    - [ ] Content View publiée en version 1.0
+    - [ ] Version promue vers Development
 
 ### 📝 Travail à réaliser
 

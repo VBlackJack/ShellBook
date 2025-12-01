@@ -26,6 +26,24 @@ Ce script vérifie l'état d'un serveur IIS :
 
 ---
 
+## Prérequis
+
+- **Système** : Windows Server 2016+ avec rôle IIS
+- **PowerShell** : Version 5.1 minimum
+- **Permissions** : Droits administrateur sur le serveur IIS
+- **Modules** : `WebAdministration` (installé automatiquement avec IIS)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring web** : Surveillance quotidienne des applications pools et sites IIS
+- **Troubleshooting IIS** : Diagnostiquer les pools arrêtés ou sites inaccessibles
+- **Alertes certificats** : Détecter les certificats SSL qui vont expirer
+- **Performance analysis** : Analyser les requêtes actives et l'utilisation mémoire
+
+---
+
 ## Script
 
 ```powershell

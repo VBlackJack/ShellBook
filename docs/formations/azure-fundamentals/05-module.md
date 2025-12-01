@@ -725,7 +725,86 @@ EOF
 
 ---
 
-## 6. Exercices Pratiques
+## 6. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une application complète sur AKS avec ACR, HPA, et Workload Identity
+
+    **Contexte** : Vous devez déployer une application microservices sur Azure Kubernetes Service. L'application se compose d'un frontend React, un backend API Node.js, et utilise Azure SQL Database. L'infrastructure doit être production-ready avec autoscaling, sécurité par Managed Identity, et monitoring.
+
+    **Tâches à réaliser** :
+
+    1. Créer un Azure Container Registry Premium avec geo-replication
+    2. Builder et pusher les images Docker dans ACR
+    3. Créer un cluster AKS avec Azure CNI et multiple node pools (system, user, spot)
+    4. Configurer Workload Identity (OIDC) pour l'accès au Key Vault
+    5. Déployer l'application avec manifests Kubernetes (deployments, services, ingress)
+    6. Configurer HPA (Horizontal Pod Autoscaler) basé sur CPU et mémoire
+    7. Configurer Cluster Autoscaler pour le scaling automatique des nodes
+    8. Activer Container Insights pour le monitoring
+
+    **Critères de validation** :
+
+    - [ ] ACR est créé avec réplication dans 2 régions
+    - [ ] Les images Docker sont disponibles dans ACR
+    - [ ] Le cluster AKS a 3 node pools (system, user, spot)
+    - [ ] Workload Identity est configuré et fonctionnel
+    - [ ] L'application est déployée et accessible via Ingress
+    - [ ] HPA scale automatiquement les pods sous charge
+    - [ ] Cluster Autoscaler ajoute des nodes quand nécessaire
+    - [ ] Container Insights affiche les métriques et logs
+
+??? quote "Solution"
+
+    Voir le module complet et le TP Final (Module 6) pour une solution détaillée de ce déploiement.
+
+    **Étapes principales** :
+
+    ```bash
+    # 1. Créer ACR avec geo-replication
+    az acr create --name myacr --resource-group aks-rg --sku Premium
+    az acr replication create --registry myacr --location northeurope
+
+    # 2. Builder les images
+    az acr build --registry myacr --image frontend:v1 ./frontend
+    az acr build --registry myacr --image backend:v1 ./backend
+
+    # 3. Créer le cluster AKS
+    az aks create \
+        --resource-group aks-rg \
+        --name prod-aks \
+        --node-count 2 \
+        --enable-managed-identity \
+        --enable-workload-identity \
+        --enable-oidc-issuer \
+        --network-plugin azure \
+        --enable-cluster-autoscaler \
+        --min-count 2 \
+        --max-count 10 \
+        --attach-acr myacr \
+        --enable-addons monitoring
+
+    # 4. Ajouter node pools
+    az aks nodepool add --cluster-name prod-aks -g aks-rg --name spotpool --priority Spot
+
+    # 5. Configurer Workload Identity
+    az identity create --name backend-identity -g aks-rg
+    az identity federated-credential create --name backend-fed \
+        --identity-name backend-identity -g aks-rg \
+        --issuer $(az aks show -n prod-aks -g aks-rg --query oidcIssuerProfile.issuerUrl -o tsv) \
+        --subject system:serviceaccount:default:backend-sa
+
+    # 6. Déployer l'application
+    kubectl apply -f k8s-manifests/
+
+    # 7. Vérifier HPA
+    kubectl get hpa
+    kubectl top pods
+    ```
+
+---
+
+## 7. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Déploiement Complet
 

@@ -28,6 +28,23 @@ Ce script gère le cycle de vie complet des logs :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits d'écriture sur les répertoires de logs à gérer
+- **Dépendances** : `gzip` ou `zstd`, `aws-cli` (pour archivage S3), `bc`
+
+---
+
+## Cas d'Usage
+
+- **Gestion automatisée des logs** : Rotation, compression et archivage sans intervention manuelle
+- **Optimisation d'espace disque** : Compression et nettoyage régulier pour libérer de l'espace
+- **Archivage long terme** : Transfert automatique vers stockage froid (S3, NFS) pour conformité
+- **Complémentation logrotate** : Ajout de fonctionnalités avancées (archivage S3, multi-répertoires)
+
+---
+
 ## Script
 
 ```bash

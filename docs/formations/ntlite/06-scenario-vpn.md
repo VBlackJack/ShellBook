@@ -1,6 +1,15 @@
-# Module 6 : Cas d'Usage Avancé - ISO Sécurisé (VPN & Certificats)
+---
+tags:
+  - formation
+  - ntlite
+  - windows
+  - vpn
+  - pki
+  - enterprise
+  - module
+---
 
-`#ntlite` `#windows` `#vpn` `#globalprotect` `#pki` `#enterprise` `#post-setup`
+# Module 6 : Cas d'Usage Avancé - ISO Sécurisé (VPN & Certificats)
 
 **Durée estimée :** 4 heures
 

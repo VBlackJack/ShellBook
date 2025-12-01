@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - monitoring
+  - performance
+  - disk
+---
+
 # Disk I/O Analyzer
 
 Script Python d'analyse avancée des performances I/O disque.

@@ -467,6 +467,181 @@ openssl s_client -connect localhost:443 < /dev/null 2>/dev/null | openssl x509 -
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser la génération, la conversion et l'analyse de certificats X.509
+
+    **Contexte** : Vous êtes administrateur système et devez créer un certificat auto-signé pour un environnement de développement web. Le certificat doit supporter plusieurs noms de domaine (SANs) et être déployable sur différentes plateformes.
+
+    **Tâches à réaliser** :
+
+    1. Générez une clé privée RSA 4096 bits protégée par passphrase
+    2. Créez un certificat auto-signé valide 1 an avec Subject Alternative Names (DNS: dev.local, www.dev.local, api.dev.local, IP: 192.168.1.100)
+    3. Vérifiez les informations du certificat (subject, issuer, dates, SANs)
+    4. Convertissez le certificat du format PEM vers DER
+    5. Créez un fichier PFX (PKCS#12) contenant la clé privée et le certificat pour import Windows
+    6. Vérifiez que la clé privée correspond bien au certificat
+
+    **Critères de validation** :
+
+    - [ ] La clé privée fait 4096 bits et est protégée par passphrase
+    - [ ] Le certificat est auto-signé (Issuer = Subject)
+    - [ ] Les 3 noms DNS et l'IP sont présents dans les SANs
+    - [ ] La validité est exactement de 365 jours
+    - [ ] Les fichiers DER et PFX sont créés et valides
+    - [ ] Le modulus de la clé et du certificat correspondent
+
+??? quote "Solution"
+    **Étape 1 : Génération de la clé privée protégée**
+
+    ```bash
+    # Créer un répertoire de travail
+    mkdir -p ~/pki-lab && cd ~/pki-lab
+
+    # Générer la clé RSA 4096 bits avec passphrase
+    openssl genrsa -aes256 -out dev-server.key 4096
+    # Entrez un mot de passe fort quand demandé
+
+    # Vérifier la clé
+    openssl rsa -in dev-server.key -check
+    # Vous devrez entrer la passphrase
+    ```
+
+    **Étape 2 : Créer le certificat auto-signé avec SANs**
+
+    ```bash
+    # Créer le fichier de configuration
+    cat > dev-cert.cnf << 'EOF'
+    [req]
+    default_bits = 4096
+    distinguished_name = req_distinguished_name
+    x509_extensions = v3_req
+    prompt = no
+
+    [req_distinguished_name]
+    C = FR
+    ST = Ile-de-France
+    L = Paris
+    O = MonEntreprise Dev
+    OU = IT
+    CN = dev.local
+
+    [v3_req]
+    basicConstraints = CA:FALSE
+    keyUsage = digitalSignature, keyEncipherment
+    extendedKeyUsage = serverAuth
+    subjectAltName = @alt_names
+
+    [alt_names]
+    DNS.1 = dev.local
+    DNS.2 = www.dev.local
+    DNS.3 = api.dev.local
+    IP.1 = 192.168.1.100
+    EOF
+
+    # Générer le certificat auto-signé (365 jours)
+    openssl req -x509 -new -nodes -days 365 \
+        -key dev-server.key \
+        -out dev-server.crt \
+        -config dev-cert.cnf
+    ```
+
+    **Étape 3 : Vérifier les informations du certificat**
+
+    ```bash
+    # Afficher toutes les informations
+    openssl x509 -in dev-server.crt -text -noout
+
+    # Vérifier spécifiquement le Subject et l'Issuer
+    openssl x509 -in dev-server.crt -subject -issuer -noout
+    # Doivent être identiques (certificat auto-signé)
+
+    # Vérifier les dates
+    openssl x509 -in dev-server.crt -dates -noout
+    # Vérifier que la durée est bien 365 jours
+
+    # Vérifier les SANs
+    openssl x509 -in dev-server.crt -text -noout | grep -A1 "Subject Alternative Name"
+    # Doit afficher : DNS:dev.local, DNS:www.dev.local, DNS:api.dev.local, IP Address:192.168.1.100
+    ```
+
+    **Étape 4 : Conversion PEM vers DER**
+
+    ```bash
+    # Convertir le certificat en format DER (binaire)
+    openssl x509 -in dev-server.crt -outform DER -out dev-server.der
+
+    # Vérifier le format DER
+    file dev-server.der
+    # Doit afficher : dev-server.der: Certificate, Version=3
+
+    # Afficher le certificat DER (le reconvertir en texte)
+    openssl x509 -in dev-server.der -inform DER -text -noout | head -20
+    ```
+
+    **Étape 5 : Créer le fichier PFX (PKCS#12)**
+
+    ```bash
+    # Créer le PFX avec clé privée et certificat
+    openssl pkcs12 -export \
+        -out dev-server.pfx \
+        -inkey dev-server.key \
+        -in dev-server.crt \
+        -name "Dev Server Certificate"
+    # Entrez la passphrase de la clé, puis un mot de passe pour le PFX
+
+    # Vérifier le contenu du PFX
+    openssl pkcs12 -in dev-server.pfx -info -noout
+    # Affiche les informations sur le PFX
+    ```
+
+    **Étape 6 : Vérifier la correspondance clé/certificat**
+
+    ```bash
+    # Calculer le modulus de la clé privée
+    openssl rsa -in dev-server.key -modulus -noout | openssl md5
+    # Entrez la passphrase
+
+    # Calculer le modulus du certificat
+    openssl x509 -in dev-server.crt -modulus -noout | openssl md5
+
+    # Les deux hash MD5 doivent être IDENTIQUES
+    # Si différents, la clé ne correspond pas au certificat
+    ```
+
+    **Étape 7 : (Bonus) Tester sur un serveur web local**
+
+    ```bash
+    # Créer une configuration Nginx simple
+    sudo mkdir -p /etc/nginx/ssl
+    sudo cp dev-server.key dev-server.crt /etc/nginx/ssl/
+
+    # Créer un fichier de test
+    echo "<h1>Test SSL/TLS</h1>" | sudo tee /var/www/html/index.html
+
+    # Ajouter dans /etc/hosts
+    echo "127.0.0.1 dev.local www.dev.local api.dev.local" | sudo tee -a /etc/hosts
+
+    # Tester avec curl (ignore l'erreur certificat auto-signé)
+    curl -k https://dev.local
+    curl -k https://www.dev.local
+    curl -k https://api.dev.local
+
+    # Vérifier le certificat
+    openssl s_client -connect dev.local:443 -servername dev.local < /dev/null 2>/dev/null | openssl x509 -text -noout
+    ```
+
+    **Points clés à retenir** :
+
+    - Les **Subject Alternative Names (SANs)** sont obligatoires pour les certificats multi-domaines modernes
+    - Le format **PEM** (Base64) est lisible, le format **DER** (binaire) est compact
+    - Le format **PFX/PKCS#12** regroupe clé + certificat pour faciliter l'import/export
+    - Toujours vérifier que la clé correspond au certificat avec le test du modulus
+    - Les certificats auto-signés sont parfaits pour dev/test mais jamais pour la production
+
+---
+
 ## 9. Quiz de Validation
 
 ??? question "Question 1 : Quelle extension contient les noms de domaine alternatifs ?"

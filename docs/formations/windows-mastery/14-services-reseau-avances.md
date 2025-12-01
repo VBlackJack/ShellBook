@@ -263,6 +263,334 @@ Get-ChildItem Cert:\LocalMachine\My
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une PKI d'entreprise et configurer un serveur RADIUS pour l'authentification Wi-Fi
+
+    **Contexte** : Votre entreprise souhaite sécuriser son réseau Wi-Fi avec une authentification 802.1X basée sur RADIUS/NPS. Vous devez également déployer une PKI pour émettre les certificats nécessaires aux utilisateurs et aux équipements réseau.
+
+    **Tâches à réaliser** :
+
+    1. Installer et configurer une CA Enterprise (Root CA)
+    2. Configurer l'inscription web de certificats
+    3. Créer un template de certificat pour l'authentification utilisateur
+    4. Installer et configurer le rôle NPS (RADIUS)
+    5. Créer un client RADIUS pour le point d'accès Wi-Fi (IP: 192.168.1.100)
+    6. Configurer une politique réseau pour l'authentification 802.1X avec PEAP-MSCHAPv2
+    7. Tester l'authentification et générer un rapport de configuration
+
+    **Critères de validation** :
+
+    - [ ] CA Enterprise installée et opérationnelle
+    - [ ] Inscription web accessible via HTTPS
+    - [ ] Template de certificat utilisateur créé et publié
+    - [ ] NPS enregistré dans Active Directory
+    - [ ] Client RADIUS configuré avec secret partagé
+    - [ ] Politique réseau créée pour Wi-Fi avec groupe "Domain Users"
+    - [ ] Test d'authentification réussi (simulation ou réel)
+
+??? quote "Solution"
+    **Étape 1 : Installation de la CA Enterprise**
+
+    ```powershell
+    # Installer le rôle AD CS
+    Install-WindowsFeature -Name AD-Certificate, ADCS-Cert-Authority, ADCS-Web-Enrollment `
+        -IncludeManagementTools
+
+    # Configurer en tant que Root CA Enterprise
+    $securePassword = Read-Host "Mot de passe pour la CA" -AsSecureString
+
+    Install-AdcsCertificationAuthority `
+        -CAType EnterpriseRootCA `
+        -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" `
+        -KeyLength 4096 `
+        -HashAlgorithmName SHA256 `
+        -CACommonName "Corp Enterprise Root CA" `
+        -ValidityPeriod Years `
+        -ValidityPeriodUnits 10 `
+        -Force
+
+    Write-Host "✓ CA Enterprise installée"
+
+    # Installer l'inscription web
+    Install-AdcsWebEnrollment -Force
+    Write-Host "✓ Inscription web configurée"
+    Write-Host "URL: https://$(hostname)/certsrv"
+    ```
+
+    **Étape 2 : Création du template de certificat**
+
+    ```powershell
+    # Se connecter à la CA
+    $ca = Connect-CertificationAuthority
+
+    # Dupliquer un template existant (User) pour créer un custom template
+    # Note: Cette opération se fait généralement via certtmpl.msc (GUI)
+    # car les cmdlets PowerShell pour les templates sont limitées
+
+    # Via GUI:
+    # 1. Ouvrir certtmpl.msc
+    # 2. Dupliquer le template "User"
+    # 3. Renommer en "Corp-User-Auth"
+    # 4. Onglet Nom du modèle: "CorpUserAuth"
+    # 5. Onglet Extensions: Activer "Client Authentication"
+    # 6. Onglet Sécurité: Ajouter "Domain Users" avec permissions "Read" et "Enroll"
+    # 7. Publier le template
+
+    # Publier le template via PowerShell
+    Add-CATemplate -Name "CorpUserAuth" -Force
+    Write-Host "✓ Template de certificat publié"
+
+    # Vérifier les templates disponibles
+    Get-CATemplate | Select-Object Name, DisplayName
+    ```
+
+    **Étape 3 : Configuration de NPS/RADIUS**
+
+    ```powershell
+    # Installer NPS
+    Install-WindowsFeature -Name NPAS -IncludeManagementTools
+
+    # Enregistrer le serveur NPS dans Active Directory
+    $computer = Get-ADComputer -Identity $env:COMPUTERNAME
+    $group = Get-ADGroup "RAS and IAS Servers"
+    Add-ADGroupMember -Identity $group -Members $computer
+
+    Write-Host "✓ NPS installé et enregistré dans AD"
+
+    # Redémarrer le service NPS
+    Restart-Service IAS
+    ```
+
+    **Étape 4 : Création du client RADIUS**
+
+    ```powershell
+    # Ajouter un client RADIUS (point d'accès Wi-Fi)
+    $sharedSecret = "SuperSecret123!WiFi"
+
+    New-NpsRadiusClient -Name "WiFi-AP-01" `
+        -Address "192.168.1.100" `
+        -SharedSecret $sharedSecret `
+        -VendorName "RADIUS Standard"
+
+    Write-Host "✓ Client RADIUS WiFi-AP-01 créé"
+
+    # Vérifier les clients RADIUS
+    Get-NpsRadiusClient | Select-Object Name, Address, VendorName
+    ```
+
+    **Étape 5 : Configuration de la politique réseau**
+
+    ```powershell
+    # Note: La configuration complète des politiques NPS se fait via nps.msc
+    # Voici les paramètres à configurer:
+
+    Write-Host "`n=== CONFIGURATION DE LA POLITIQUE RÉSEAU ===" -ForegroundColor Cyan
+    Write-Host "1. Ouvrir nps.msc"
+    Write-Host "2. Naviguer vers: Policies → Network Policies"
+    Write-Host "3. Créer une nouvelle politique:"
+    Write-Host ""
+    Write-Host "Nom de la politique: WiFi-802.1X-Authentication"
+    Write-Host ""
+    Write-Host "CONDITIONS:"
+    Write-Host "  - NAS Port Type: Wireless - IEEE 802.11"
+    Write-Host "  - Windows Groups: Domain Users"
+    Write-Host ""
+    Write-Host "CONSTRAINTS (Contraintes):"
+    Write-Host "  - Authentication Methods:"
+    Write-Host "    * Microsoft: Protected EAP (PEAP)"
+    Write-Host "    * Smart Card or other certificate: NON"
+    Write-Host "    * PEAP Properties:"
+    Write-Host "      - Certificate: (Sélectionner le certificat du serveur)"
+    Write-Host "      - EAP Types: Secured password (EAP-MSCHAP v2)"
+    Write-Host ""
+    Write-Host "SETTINGS (Paramètres):"
+    Write-Host "  - RADIUS Attributes:"
+    Write-Host "    * Framed-Protocol = PPP"
+    Write-Host "    * Service-Type = Framed"
+    Write-Host "  - Encryption:"
+    Write-Host "    * Strongest (MPPE 128-bit)"
+    Write-Host ""
+
+    # Vérifier les politiques réseau
+    $policies = netsh nps show policy
+    Write-Host "Politiques configurées:"
+    $policies
+    ```
+
+    **Étape 6 : Génération de rapport**
+
+    ```powershell
+    # Script de rapport de configuration PKI/NPS
+    $reportPath = "C:\Reports\PKI-NPS-Config-$(Get-Date -Format 'yyyyMMdd').html"
+
+    $html = @"
+    <html>
+    <head>
+        <title>Rapport de Configuration PKI/NPS</title>
+        <style>
+            body { font-family: Arial; margin: 20px; }
+            h1 { color: #0066cc; }
+            h2 { color: #0099cc; }
+            table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+            th { background-color: #0066cc; color: white; padding: 10px; }
+            td { border: 1px solid #ddd; padding: 8px; }
+            .pass { color: green; }
+            .info { background-color: #f0f0f0; padding: 10px; margin: 10px 0; }
+        </style>
+    </head>
+    <body>
+        <h1>Configuration PKI et NPS</h1>
+        <p>Date: $(Get-Date -Format 'dd/MM/yyyy HH:mm')</p>
+
+        <h2>1. Certificate Authority</h2>
+        <table>
+            <tr><th>Propriété</th><th>Valeur</th></tr>
+            <tr><td>Nom de la CA</td><td>$(certutil -CAInfo name)</td></tr>
+            <tr><td>Type</td><td>Enterprise Root CA</td></tr>
+            <tr><td>Validité</td><td>10 ans</td></tr>
+            <tr><td>Longueur de clé</td><td>4096 bits</td></tr>
+        </table>
+
+        <h2>2. Templates de Certificats</h2>
+        <table>
+            <tr><th>Nom du Template</th><th>Usage</th></tr>
+"@
+
+    # Ajouter les templates
+    $templates = Get-CATemplate
+    foreach ($template in $templates) {
+        $html += "<tr><td>$($template.Name)</td><td>$($template.DisplayName)</td></tr>"
+    }
+
+    $html += @"
+        </table>
+
+        <h2>3. Clients RADIUS</h2>
+        <table>
+            <tr><th>Nom</th><th>Adresse IP</th><th>Vendor</th></tr>
+"@
+
+    # Ajouter les clients RADIUS
+    $radiusClients = Get-NpsRadiusClient
+    foreach ($client in $radiusClients) {
+        $html += "<tr><td>$($client.Name)</td><td>$($client.Address)</td><td>$($client.VendorName)</td></tr>"
+    }
+
+    $html += @"
+        </table>
+
+        <h2>4. Validation</h2>
+        <div class="info">
+            <h3>Tests à effectuer</h3>
+            <ul>
+                <li>✓ CA accessible via https://$(hostname)/certsrv</li>
+                <li>✓ Certificat utilisateur peut être demandé</li>
+                <li>✓ Client RADIUS configuré sur l'AP</li>
+                <li>✓ Politique réseau activée pour WiFi-802.1X</li>
+                <li>⚠ Test de connexion Wi-Fi avec compte domaine</li>
+            </ul>
+        </div>
+
+        <h2>5. Commandes de vérification</h2>
+        <pre>
+# Vérifier la CA
+certutil -CAInfo
+
+# Vérifier les templates
+certutil -CATemplates
+
+# Vérifier les clients RADIUS
+Get-NpsRadiusClient
+
+# Voir les logs NPS
+Get-WinEvent -LogName "Security" -MaxEvents 20 | Where-Object Id -eq 6272
+        </pre>
+    </body>
+    </html>
+"@
+
+    $html | Out-File $reportPath -Encoding UTF8
+    Write-Host "`n✓ Rapport généré: $reportPath"
+    ```
+
+    **Étape 7 : Tests et validation**
+
+    ```powershell
+    # Script de validation finale
+    function Test-PKINPSConfiguration {
+        Write-Host "`n=== VALIDATION PKI/NPS ===" -ForegroundColor Cyan
+
+        $results = @()
+
+        # Test 1: CA installée
+        $caInstalled = Get-WindowsFeature -Name ADCS-Cert-Authority
+        $results += [PSCustomObject]@{
+            Test = "CA installée"
+            Status = if ($caInstalled.Installed) { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Test 2: Inscription web
+        $webEnrollment = Get-WindowsFeature -Name ADCS-Web-Enrollment
+        $results += [PSCustomObject]@{
+            Test = "Inscription web installée"
+            Status = if ($webEnrollment.Installed) { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Test 3: NPS installé
+        $npsInstalled = Get-WindowsFeature -Name NPAS
+        $results += [PSCustomObject]@{
+            Test = "NPS installé"
+            Status = if ($npsInstalled.Installed) { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Test 4: Client RADIUS configuré
+        $radiusClient = Get-NpsRadiusClient -Name "WiFi-AP-01" -ErrorAction SilentlyContinue
+        $results += [PSCustomObject]@{
+            Test = "Client RADIUS WiFi-AP-01"
+            Status = if ($radiusClient) { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Test 5: Service NPS en cours
+        $npsService = Get-Service -Name IAS
+        $results += [PSCustomObject]@{
+            Test = "Service NPS actif"
+            Status = if ($npsService.Status -eq "Running") { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Test 6: Enregistrement AD
+        $iasGroup = Get-ADGroupMember "RAS and IAS Servers"
+        $serverInGroup = $iasGroup | Where-Object { $_.Name -eq $env:COMPUTERNAME }
+        $results += [PSCustomObject]@{
+            Test = "NPS dans groupe AD"
+            Status = if ($serverInGroup) { "✓ PASS" } else { "✗ FAIL" }
+        }
+
+        # Afficher les résultats
+        $results | Format-Table -AutoSize
+
+        $passed = ($results | Where-Object { $_.Status -like "*PASS*" }).Count
+        $total = $results.Count
+        Write-Host "`nScore: $passed/$total" -ForegroundColor $(if ($passed -eq $total) { "Green" } else { "Yellow" })
+
+        if ($passed -eq $total) {
+            Write-Host "`n✓ Configuration validée avec succès!" -ForegroundColor Green
+            Write-Host "Prochaines étapes:"
+            Write-Host "  1. Configurer le point d'accès Wi-Fi avec l'IP du serveur NPS"
+            Write-Host "  2. Utiliser le secret partagé: SuperSecret123!WiFi"
+            Write-Host "  3. Tester la connexion Wi-Fi avec un compte utilisateur du domaine"
+        } else {
+            Write-Host "`n⚠ Vérifier les tests en échec" -ForegroundColor Yellow
+        }
+    }
+
+    # Exécuter la validation
+    Test-PKINPSConfiguration
+    ```
+
+---
+
 ## Quiz
 
 1. **Quelle est la durée recommandée pour une Root CA ?**

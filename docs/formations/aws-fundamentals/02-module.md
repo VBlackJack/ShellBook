@@ -685,156 +685,273 @@ aws savingsplans describe-savings-plans
 
 ---
 
-## 9. Exercices Pratiques
+## Exercice : À Vous de Jouer
 
-### Exercice 1 : Déploiement Web Server
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une infrastructure web haute disponibilité avec Auto Scaling et optimisation des coûts
 
-!!! example "Objectif"
-    Déployer un serveur web Apache avec une page personnalisée.
+    **Contexte** : Vous devez déployer une application web pour une startup e-commerce. L'application doit être hautement disponible, scalable automatiquement selon la charge, et optimisée pour les coûts. Le trafic est variable avec des pics entre 12h-14h et 18h-20h.
 
-**Tâches :**
+    **Tâches à réaliser** :
 
-1. Lancer une instance t3.micro avec Amazon Linux 2023
-2. Configurer un Security Group (HTTP 80, SSH 22)
-3. Installer Apache via User Data
-4. Attacher un volume EBS de 20 GB pour les logs
-5. Créer une AMI de l'instance configurée
+    1. Créer un Security Group sécurisé autorisant HTTP/HTTPS depuis Internet et SSH depuis votre IP
+    2. Lancer une instance EC2 t3.micro avec Amazon Linux 2023 et installer un serveur web via User Data
+    3. Attacher un volume EBS gp3 de 20 GB pour stocker les logs applicatifs
+    4. Créer une AMI "golden" de votre instance configurée
+    5. Créer un Launch Template basé sur cette AMI avec IMDSv2 obligatoire
+    6. Déployer un Application Load Balancer dans 2 AZs minimum
+    7. Créer un Auto Scaling Group (min:2, desired:3, max:6) avec politique de scaling CPU 70%
+    8. Configurer un scaling planifié pour les heures de pointe
+    9. Analyser les coûts et proposer une optimisation avec Reserved Instances ou Savings Plans
+
+    **Critères de validation** :
+
+    - [ ] Le serveur web est accessible via l'ALB et affiche les métadonnées de l'instance
+    - [ ] Le Security Group suit le principe du moindre privilège
+    - [ ] L'AMI golden est créée avec toutes les configurations
+    - [ ] L'Auto Scaling Group maintient au moins 2 instances en permanence
+    - [ ] Le scaling automatique fonctionne lors d'un test de charge
+    - [ ] Les volumes EBS sont chiffrés
+    - [ ] IMDSv2 est obligatoire sur toutes les instances
+    - [ ] Un plan d'optimisation des coûts est documenté
 
 ??? quote "Solution"
 
+    **Étape 1 : Création du Security Group**
+
     ```bash
-    # 1. Créer le Security Group
+    # Récupérer l'ID du VPC par défaut
+    VPC_ID=$(aws ec2 describe-vpcs --filters "Name=isDefault,Values=true" --query 'Vpcs[0].VpcId' --output text)
+
+    # Créer le Security Group
     SG_ID=$(aws ec2 create-security-group \
         --group-name web-server-sg \
-        --description "Web server security group" \
-        --vpc-id vpc-0123456789abcdef0 \
+        --description "Security group for web servers" \
+        --vpc-id $VPC_ID \
         --query 'GroupId' --output text)
 
+    # Autoriser HTTP depuis Internet
     aws ec2 authorize-security-group-ingress \
         --group-id $SG_ID \
         --protocol tcp --port 80 --cidr 0.0.0.0/0
 
+    # Autoriser HTTPS depuis Internet
     aws ec2 authorize-security-group-ingress \
         --group-id $SG_ID \
-        --protocol tcp --port 22 --cidr $(curl -s ifconfig.me)/32
+        --protocol tcp --port 443 --cidr 0.0.0.0/0
 
-    # 2. User Data script
+    # Autoriser SSH depuis votre IP uniquement
+    MY_IP=$(curl -s ifconfig.me)
+    aws ec2 authorize-security-group-ingress \
+        --group-id $SG_ID \
+        --protocol tcp --port 22 --cidr ${MY_IP}/32
+
+    echo "✅ Security Group créé : $SG_ID"
+    ```
+
+    **Étape 2 : Script User Data**
+
+    ```bash
     cat > userdata.sh << 'EOF'
     #!/bin/bash
+    # Mise à jour du système
     dnf update -y
-    dnf install -y httpd
-    systemctl enable --now httpd
 
-    # Page personnalisée
-    INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-    AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+    # Installation Apache et outils
+    dnf install -y httpd php amazon-cloudwatch-agent
+
+    # Configuration Apache
+    systemctl enable httpd
+    systemctl start httpd
+
+    # Page web avec métadonnées
+    TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+    INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
+    AZ=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
+    INSTANCE_TYPE=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-type)
 
     cat > /var/www/html/index.html << HTMLEOF
     <!DOCTYPE html>
     <html>
-    <head><title>AWS EC2 Web Server</title></head>
+    <head>
+        <title>E-Commerce Platform</title>
+        <style>
+            body { font-family: Arial; margin: 50px; background: #f0f0f0; }
+            .info { background: white; padding: 20px; border-radius: 8px; }
+            h1 { color: #ff9900; }
+        </style>
+    </head>
     <body>
-        <h1>Hello from EC2!</h1>
-        <p>Instance ID: $INSTANCE_ID</p>
-        <p>Availability Zone: $AZ</p>
-        <p>Deployed: $(date)</p>
+        <div class="info">
+            <h1>🚀 E-Commerce Platform - Running on AWS</h1>
+            <h3>Instance Metadata:</h3>
+            <ul>
+                <li><strong>Instance ID:</strong> $INSTANCE_ID</li>
+                <li><strong>Availability Zone:</strong> $AZ</li>
+                <li><strong>Instance Type:</strong> $INSTANCE_TYPE</li>
+                <li><strong>Deployed:</strong> $(date)</li>
+            </ul>
+        </div>
     </body>
     </html>
     HTMLEOF
 
-    # Monter le volume pour les logs
+    # Préparer le montage du volume de logs
     while [ ! -e /dev/xvdf ]; do sleep 1; done
     mkfs -t xfs /dev/xvdf
-    mkdir /var/log/httpd-archive
-    mount /dev/xvdf /var/log/httpd-archive
-    echo "/dev/xvdf /var/log/httpd-archive xfs defaults,nofail 0 2" >> /etc/fstab
-    EOF
+    mkdir /var/log/app-logs
+    mount /dev/xvdf /var/log/app-logs
+    echo "/dev/xvdf /var/log/app-logs xfs defaults,nofail 0 2" >> /etc/fstab
 
-    # 3. Récupérer la dernière AMI Amazon Linux 2023
+    # Configuration CloudWatch Agent
+    cat > /opt/aws/amazon-cloudwatch-agent/etc/config.json << 'CWEOF'
+    {
+        "metrics": {
+            "namespace": "WebApp",
+            "metrics_collected": {
+                "mem": {
+                    "measurement": [{"name": "mem_used_percent"}]
+                },
+                "disk": {
+                    "measurement": [{"name": "disk_used_percent"}],
+                    "resources": ["*"]
+                }
+            }
+        }
+    }
+    CWEOF
+
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+        -a fetch-config -m ec2 -s \
+        -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json
+    EOF
+    ```
+
+    **Étape 3 : Lancer l'instance avec EBS chiffré**
+
+    ```bash
+    # Obtenir la dernière AMI Amazon Linux 2023
     AMI_ID=$(aws ec2 describe-images \
         --owners amazon \
         --filters "Name=name,Values=al2023-ami-2023*-x86_64" \
         --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
         --output text)
 
-    # 4. Lancer l'instance
+    # Obtenir un subnet dans la première AZ
+    SUBNET_ID=$(aws ec2 describe-subnets \
+        --filters "Name=vpc-id,Values=$VPC_ID" \
+        --query 'Subnets[0].SubnetId' --output text)
+
+    # Lancer l'instance
     INSTANCE_ID=$(aws ec2 run-instances \
         --image-id $AMI_ID \
         --instance-type t3.micro \
         --key-name my-key \
         --security-group-ids $SG_ID \
-        --subnet-id subnet-0123456789abcdef0 \
+        --subnet-id $SUBNET_ID \
         --user-data file://userdata.sh \
-        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=web-server-demo}]' \
+        --metadata-options "HttpTokens=required,HttpPutResponseHopLimit=1,HttpEndpoint=enabled" \
+        --block-device-mappings '[{"DeviceName":"/dev/xvda","Ebs":{"VolumeSize":8,"VolumeType":"gp3","Encrypted":true,"DeleteOnTermination":true}}]' \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=web-server-golden}]' \
         --query 'Instances[0].InstanceId' --output text)
 
-    echo "Instance ID: $INSTANCE_ID"
-
-    # 5. Créer et attacher le volume EBS
-    VOLUME_ID=$(aws ec2 create-volume \
-        --availability-zone $(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].Placement.AvailabilityZone' --output text) \
-        --size 20 \
-        --volume-type gp3 \
-        --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=web-logs}]' \
-        --query 'VolumeId' --output text)
+    echo "✅ Instance lancée : $INSTANCE_ID"
 
     # Attendre que l'instance soit running
     aws ec2 wait instance-running --instance-ids $INSTANCE_ID
+
+    # Créer et attacher le volume EBS chiffré pour les logs
+    AZ=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID \
+        --query 'Reservations[0].Instances[0].Placement.AvailabilityZone' --output text)
+
+    VOLUME_ID=$(aws ec2 create-volume \
+        --availability-zone $AZ \
+        --size 20 \
+        --volume-type gp3 \
+        --iops 3000 \
+        --encrypted \
+        --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=app-logs}]' \
+        --query 'VolumeId' --output text)
+
+    # Attendre que le volume soit disponible
+    aws ec2 wait volume-available --volume-ids $VOLUME_ID
 
     aws ec2 attach-volume \
         --volume-id $VOLUME_ID \
         --instance-id $INSTANCE_ID \
         --device /dev/xvdf
 
-    # 6. Récupérer l'IP publique
-    PUBLIC_IP=$(aws ec2 describe-instances \
-        --instance-ids $INSTANCE_ID \
-        --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
-
-    echo "Web server available at: http://$PUBLIC_IP"
-
-    # 7. Créer l'AMI (après quelques minutes pour que tout soit configuré)
-    sleep 120
-    aws ec2 create-image \
-        --instance-id $INSTANCE_ID \
-        --name "web-server-golden-$(date +%Y%m%d)" \
-        --description "Golden AMI with Apache configured"
+    echo "✅ Volume EBS attaché : $VOLUME_ID"
     ```
 
-### Exercice 2 : Auto Scaling avec Load Balancer
-
-!!! example "Objectif"
-    Configurer un Auto Scaling Group derrière un Application Load Balancer.
-
-**Tâches :**
-
-1. Créer un Launch Template basé sur votre AMI
-2. Créer un Application Load Balancer
-3. Créer un Auto Scaling Group (min: 2, max: 4)
-4. Configurer une Target Tracking Policy sur CPU 70%
-5. Tester le scaling avec stress
-
-??? quote "Solution"
+    **Étape 4 : Créer l'AMI Golden**
 
     ```bash
-    # Variables
-    VPC_ID="vpc-0123456789abcdef0"
-    SUBNET_A="subnet-aaaaa"
-    SUBNET_B="subnet-bbbbb"
-    AMI_ID="ami-golden123"  # Votre AMI du TP1
+    # Attendre que le serveur web soit configuré (2 minutes)
+    sleep 120
 
-    # 1. Launch Template
+    # Créer l'AMI
+    AMI_GOLDEN=$(aws ec2 create-image \
+        --instance-id $INSTANCE_ID \
+        --name "web-server-golden-$(date +%Y%m%d-%H%M)" \
+        --description "Golden AMI with Apache, CloudWatch Agent, and app logs volume" \
+        --no-reboot \
+        --query 'ImageId' --output text)
+
+    echo "✅ AMI Golden créée : $AMI_GOLDEN"
+
+    # Attendre que l'AMI soit disponible
+    aws ec2 wait image-available --image-ids $AMI_GOLDEN
+    ```
+
+    **Étape 5 : Launch Template**
+
+    ```bash
     aws ec2 create-launch-template \
-        --launch-template-name web-lt \
+        --launch-template-name web-app-lt \
+        --version-description "v1.0 - Initial release" \
         --launch-template-data '{
-            "ImageId": "'$AMI_ID'",
+            "ImageId": "'$AMI_GOLDEN'",
             "InstanceType": "t3.micro",
             "KeyName": "my-key",
             "SecurityGroupIds": ["'$SG_ID'"],
-            "MetadataOptions": {"HttpTokens": "required"}
+            "IamInstanceProfile": {"Name": "EC2-CloudWatch-Role"},
+            "BlockDeviceMappings": [{
+                "DeviceName": "/dev/xvda",
+                "Ebs": {
+                    "VolumeSize": 8,
+                    "VolumeType": "gp3",
+                    "Encrypted": true,
+                    "DeleteOnTermination": true
+                }
+            }],
+            "MetadataOptions": {
+                "HttpTokens": "required",
+                "HttpPutResponseHopLimit": 1,
+                "HttpEndpoint": "enabled"
+            },
+            "Monitoring": {"Enabled": true},
+            "TagSpecifications": [{
+                "ResourceType": "instance",
+                "Tags": [
+                    {"Key": "Name", "Value": "web-app-asg"},
+                    {"Key": "Environment", "Value": "production"}
+                ]
+            }]
         }'
 
-    # 2. ALB Security Group
+    echo "✅ Launch Template créé"
+    ```
+
+    **Étape 6-7 : ALB et Auto Scaling Group**
+
+    ```bash
+    # Obtenir les subnets dans au moins 2 AZs
+    SUBNETS=$(aws ec2 describe-subnets \
+        --filters "Name=vpc-id,Values=$VPC_ID" \
+        --query 'Subnets[0:2].SubnetId' --output text | tr '\t' ',')
+
+    # Security Group pour ALB
     ALB_SG=$(aws ec2 create-security-group \
         --group-name alb-sg \
         --description "ALB security group" \
@@ -845,49 +962,56 @@ aws savingsplans describe-savings-plans
         --group-id $ALB_SG \
         --protocol tcp --port 80 --cidr 0.0.0.0/0
 
-    # 3. Créer l'ALB
+    # Créer l'ALB
     ALB_ARN=$(aws elbv2 create-load-balancer \
-        --name web-alb \
-        --subnets $SUBNET_A $SUBNET_B \
+        --name web-app-alb \
+        --subnets ${SUBNETS//,/ } \
         --security-groups $ALB_SG \
         --scheme internet-facing \
         --type application \
         --query 'LoadBalancers[0].LoadBalancerArn' --output text)
 
-    # 4. Target Group
+    # Target Group
     TG_ARN=$(aws elbv2 create-target-group \
-        --name web-tg \
+        --name web-app-tg \
         --protocol HTTP \
         --port 80 \
         --vpc-id $VPC_ID \
         --health-check-path "/" \
         --health-check-interval-seconds 30 \
         --healthy-threshold-count 2 \
+        --unhealthy-threshold-count 3 \
         --query 'TargetGroups[0].TargetGroupArn' --output text)
 
-    # 5. Listener
+    # Listener
     aws elbv2 create-listener \
         --load-balancer-arn $ALB_ARN \
         --protocol HTTP \
         --port 80 \
         --default-actions Type=forward,TargetGroupArn=$TG_ARN
 
-    # 6. Auto Scaling Group
+    # Auto Scaling Group
     aws autoscaling create-auto-scaling-group \
-        --auto-scaling-group-name web-asg \
-        --launch-template LaunchTemplateName=web-lt,Version='$Latest' \
+        --auto-scaling-group-name web-app-asg \
+        --launch-template LaunchTemplateName=web-app-lt,Version='$Latest' \
         --min-size 2 \
-        --max-size 4 \
-        --desired-capacity 2 \
-        --vpc-zone-identifier "$SUBNET_A,$SUBNET_B" \
+        --max-size 6 \
+        --desired-capacity 3 \
+        --vpc-zone-identifier "$SUBNETS" \
         --target-group-arns $TG_ARN \
         --health-check-type ELB \
         --health-check-grace-period 300
 
-    # 7. Scaling Policy
+    echo "✅ ALB et ASG créés"
+    ```
+
+    **Étape 8 : Scaling Policies**
+
+    ```bash
+    # Target Tracking - CPU 70%
     aws autoscaling put-scaling-policy \
-        --auto-scaling-group-name web-asg \
-        --policy-name cpu-tracking \
+        --auto-scaling-group-name web-app-asg \
+        --policy-name cpu-target-tracking \
         --policy-type TargetTrackingScaling \
         --target-tracking-configuration '{
             "PredefinedMetricSpecification": {
@@ -896,76 +1020,130 @@ aws savingsplans describe-savings-plans
             "TargetValue": 70.0
         }'
 
-    # 8. Test de charge (sur une instance)
-    # SSH sur une instance et exécuter:
-    # sudo amazon-linux-extras install epel -y
-    # sudo yum install stress -y
-    # stress --cpu 4 --timeout 300
+    # Scheduled Scaling - Peak hours (12h-14h)
+    aws autoscaling put-scheduled-update-group-action \
+        --auto-scaling-group-name web-app-asg \
+        --scheduled-action-name lunch-peak \
+        --recurrence "0 11 * * *" \
+        --min-size 4 \
+        --max-size 8 \
+        --desired-capacity 6
 
-    # Observer le scaling
-    watch -n 10 "aws autoscaling describe-auto-scaling-groups \
-        --auto-scaling-group-names web-asg \
-        --query 'AutoScalingGroups[0].[MinSize,DesiredCapacity,MaxSize,Instances[].InstanceId]'"
+    # Scheduled Scaling - Evening peak (18h-20h)
+    aws autoscaling put-scheduled-update-group-action \
+        --auto-scaling-group-name web-app-asg \
+        --scheduled-action-name evening-peak \
+        --recurrence "0 17 * * *" \
+        --min-size 4 \
+        --max-size 8 \
+        --desired-capacity 6
+
+    # Scheduled Scaling - Off-peak
+    aws autoscaling put-scheduled-update-group-action \
+        --auto-scaling-group-name web-app-asg \
+        --scheduled-action-name off-peak \
+        --recurrence "0 21 * * *" \
+        --min-size 2 \
+        --max-size 6 \
+        --desired-capacity 3
+
+    echo "✅ Policies de scaling configurées"
     ```
 
-### Exercice 3 : Optimisation des Coûts
+    **Étape 9 : Analyse des coûts**
 
-!!! example "Objectif"
-    Analyser et optimiser les coûts EC2 d'un environnement.
+    ```bash
+    cat > cost-analysis.md << 'EOF'
+    # Analyse d'Optimisation des Coûts
 
-**Scénario :**
-Vous avez :
-- 10 instances `m5.xlarge` en production (24/7)
-- 5 instances `c5.large` pour batch jobs (8h/jour, weekdays)
-- 20 instances `t3.medium` pour dev/test (10h/jour)
+    ## Configuration Actuelle (On-Demand)
 
-**Calculer les économies potentielles avec Spot et Savings Plans.**
+    - Instances : t3.micro
+    - Moyenne : 3 instances en permanence
+    - Pics : 6 instances pendant 4h/jour
+    - Coût t3.micro eu-west-1 : $0.0104/h
 
-??? quote "Solution"
+    ### Calcul mensuel (730h)
+    - Base : 3 × $0.0104 × 730h = $22.78/mois
+    - Pics : 3 × $0.0104 × 120h = $3.74/mois
+    - **TOTAL : $26.52/mois**
 
-    ```text
-    === Analyse des coûts actuels (On-Demand, eu-west-1) ===
+    ## Optimisation Proposée
 
-    Production (m5.xlarge) : 10 × $0.192/h × 730h = $1,401.60/mois
-    Batch (c5.large)       : 5 × $0.085/h × 176h = $74.80/mois
-    Dev/Test (t3.medium)   : 20 × $0.0416/h × 220h = $183.04/mois
+    ### Option 1 : Savings Plans (Compute, 1 an, No Upfront)
+    - Réduction : ~40%
+    - Nouveau coût : $26.52 × 0.60 = $15.91/mois
+    - **Économie : $10.61/mois ($127/an)**
 
-    TOTAL On-Demand: $1,659.44/mois
+    ### Option 2 : Reserved Instances (1 an, Partial Upfront)
+    - Upfront : $55 (pour 2 instances)
+    - Mensuel : 2 × $0.0063 × 730h = $9.20/mois
+    - Pics (On-Demand) : $3.74/mois
+    - **Total Year 1 : $55 + $155 = $210 vs $318 On-Demand**
+    - **Économie : $108/an (34%)**
 
-    === Optimisation proposée ===
+    ### Option 3 : Spot Instances pour pics
+    - Base : 2 Reserved (comme Option 2)
+    - Pic : Spot à ~$0.003/h
+    - Pics (Spot) : 3 × $0.003 × 120h = $1.08/mois
+    - **Total : $55 upfront + $9.20 + $1.08 = $177/an**
+    - **Économie : $141/an (44%)**
 
-    1. Production → Compute Savings Plan (3 ans, All Upfront)
-       Réduction: ~60%
-       Nouveau coût: $1,401.60 × 0.40 = $560.64/mois
+    ## Recommandation
 
-    2. Batch → Spot Instances (c5.large ~$0.025/h)
-       Réduction: ~70%
-       Nouveau coût: 5 × $0.025 × 176h = $22.00/mois
+    **Stratégie Hybride Option 3 :**
+    1. Réserver 2 instances t3.micro (1 an, Partial Upfront)
+    2. Utiliser Spot pour les instances de pic
+    3. Implémenter graceful shutdown sur Spot interruption
 
-    3. Dev/Test → Spot + arrêt automatique
-       Réduction: ~80% (Spot + pas de gaspillage)
-       Nouveau coût: 20 × $0.012 × 150h = $36.00/mois
+    ### Actions
+    ```bash
+    # Acheter les RIs
+    aws ec2 purchase-reserved-instances-offering \
+        --reserved-instances-offering-id xxx \
+        --instance-count 2
 
-    === Résumé ===
+    # Modifier l'ASG pour utiliser Spot en priorité
+    aws autoscaling update-auto-scaling-group \
+        --auto-scaling-group-name web-app-asg \
+        --mixed-instances-policy '{
+            "InstancesDistribution": {
+                "OnDemandBaseCapacity": 2,
+                "OnDemandPercentageAboveBaseCapacity": 0,
+                "SpotAllocationStrategy": "lowest-price"
+            },
+            "LaunchTemplate": {
+                "LaunchTemplateSpecification": {
+                    "LaunchTemplateName": "web-app-lt",
+                    "Version": "$Latest"
+                },
+                "Overrides": [
+                    {"InstanceType": "t3.micro"},
+                    {"InstanceType": "t3a.micro"}
+                ]
+            }
+        }'
+    ```
+    EOF
 
-    Avant: $1,659.44/mois
-    Après: $618.64/mois
+    cat cost-analysis.md
+    ```
 
-    ÉCONOMIES: $1,040.80/mois (63%)
-              $12,489.60/an
+    **Vérification finale :**
 
-    === Actions à implémenter ===
+    ```bash
+    # Récupérer l'URL de l'ALB
+    ALB_DNS=$(aws elbv2 describe-load-balancers \
+        --load-balancer-arns $ALB_ARN \
+        --query 'LoadBalancers[0].DNSName' --output text)
 
-    1. Acheter Compute Savings Plan 3 ans ($20,182 upfront)
-       → Amortissement: 16 mois
-
-    2. Migrer batch vers Spot Fleet avec diversification
-       - c5.large, c5a.large, c5n.large
-       - Interruption handler dans le code
-
-    3. Script d'arrêt automatique dev/test
-       - Lambda + CloudWatch Events
-       - Arrêt 19h, démarrage 9h
+    echo "=== ✅ Déploiement Terminé ==="
+    echo "Application URL : http://$ALB_DNS"
+    echo "Security Group : $SG_ID"
+    echo "AMI Golden : $AMI_GOLDEN"
+    echo "ASG : web-app-asg"
+    echo ""
+    echo "Testez avec : curl http://$ALB_DNS"
     ```
 
 ---

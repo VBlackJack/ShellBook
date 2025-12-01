@@ -28,6 +28,23 @@ Ce script vérifie l'état d'un serveur Postfix :
 
 ---
 
+## Prérequis
+
+- **Système** : Linux (RHEL/Debian)
+- **Permissions** : Droits root ou sudo pour accéder aux queues et logs Postfix
+- **Dépendances** : `postfix`, `postconf`, `mailq`, `openssl`, `nc`, `ss` (ou `netstat`)
+
+---
+
+## Cas d'Usage
+
+- **Monitoring quotidien mail** : Vérification automatique de l'état du serveur mail avec alertes
+- **Surveillance des queues** : Détection précoce de messages en attente ou bloqués
+- **Audit de configuration** : Validation des paramètres de sécurité et TLS après modifications
+- **Diagnostic de panne** : Identification rapide de la cause d'un problème d'envoi/réception email
+
+---
+
 ## Script
 
 ```bash

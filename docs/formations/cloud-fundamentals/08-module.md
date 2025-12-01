@@ -543,6 +543,67 @@ graph TB
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une application microservices sur Kubernetes dans le cloud
+
+    **Contexte** : Vous devez containeriser et déployer une API de paiement composée de 3 services (auth, payment, notification) sur un cluster Kubernetes managé (EKS/AKS/GKE).
+
+    **Tâches à réaliser** :
+
+    1. Choisissez entre ECS/Fargate (AWS), AKS (Azure), ou GKE (GCP) et justifiez
+    2. Décrivez l'architecture Kubernetes : pods, services, ingress
+    3. Configurez le scaling automatique (HPA) basé sur CPU et mémoire
+    4. Proposez une stratégie de déploiement sans downtime (rolling update)
+
+    **Critères de validation** :
+
+    - [ ] Service Kubernetes managé sélectionné avec justification
+    - [ ] Architecture avec 3 microservices isolés
+    - [ ] HPA configuré correctement
+    - [ ] Rolling update pour déploiement zero-downtime
+
+??? quote "Solution"
+    **1. Choix : GKE (Google Kubernetes Engine)**
+    - Kubernetes natif de Google (créateurs de K8s)
+    - Auto-scaling cluster intégré
+    - Bonne intégration avec services GCP
+
+    **2. Architecture Kubernetes :**
+    ```bash
+    # Déploiement des 3 microservices
+    kubectl create deployment auth-service --image=auth:v1 --replicas=3
+    kubectl create deployment payment-service --image=payment:v1 --replicas=5
+    kubectl create deployment notif-service --image=notif:v1 --replicas=2
+
+    # Services internes
+    kubectl expose deployment auth-service --port=8080
+    kubectl expose deployment payment-service --port=8081
+    kubectl expose deployment notif-service --port=8082
+
+    # Ingress pour exposition HTTPS
+    kubectl apply -f ingress.yaml
+    ```
+
+    **3. HPA (Horizontal Pod Autoscaler) :**
+    ```bash
+    kubectl autoscale deployment payment-service \
+      --cpu-percent=70 \
+      --min=5 --max=50
+    ```
+
+    **4. Rolling update zero-downtime :**
+    ```bash
+    kubectl set image deployment/payment-service \
+      payment=payment:v2 \
+      --record
+
+    # Stratégie : 25% max unavailable, 25% max surge
+    ```
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -443,7 +443,434 @@ az network private-endpoint dns-zone-group create \
 
 ---
 
-## 7. Exercices Pratiques
+## 7. Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une architecture réseau complète 3-tier avec Load Balancer et VPN Gateway
+
+    **Contexte** : Vous êtes architecte réseau pour une entreprise qui migre vers Azure. Vous devez créer une architecture 3-tier sécurisée (Web, Application, Database) avec un Load Balancer pour la haute disponibilité et une connexion VPN vers le datacenter on-premise. L'architecture doit respecter le principe du moindre privilège réseau.
+
+    **Tâches à réaliser** :
+
+    1. Créer un VNet avec 4 subnets (Web, App, Database, Gateway)
+    2. Créer des NSG pour chaque tier avec les règles appropriées
+    3. Créer des Application Security Groups (ASG) pour faciliter la gestion
+    4. Déployer un Azure Load Balancer Standard avec 2 VMs web
+    5. Configurer un VNet Peering vers un second VNet (simulation multi-region)
+    6. Déployer un Private Endpoint pour un Storage Account
+    7. Créer un VPN Gateway pour la connexion on-premise
+    8. Configurer une Route Table personnalisée pour forcer le trafic sortant
+
+    **Critères de validation** :
+
+    - [ ] Le VNet est créé avec les 4 subnets et les ranges IP appropriés
+    - [ ] Les NSG autorisent uniquement les flux nécessaires (Web→Internet, App→Web, DB→App)
+    - [ ] Les ASG sont correctement associés aux NICs des VMs
+    - [ ] Le Load Balancer distribue le trafic HTTP sur les VMs web
+    - [ ] Le VNet Peering est établi et fonctionnel (ping entre VNets)
+    - [ ] Le Storage Account est accessible uniquement via Private Endpoint
+    - [ ] Le VPN Gateway est créé (même si non connecté)
+    - [ ] La Route Table force le trafic sortant via une appliance virtuelle
+
+??? quote "Solution"
+
+    **Étape 1 : Créer le VNet et les subnets**
+
+    ```bash
+    # Variables
+    LOCATION="westeurope"
+    RG_NAME="network-3tier-rg"
+    VNET_NAME="enterprise-vnet"
+
+    # Créer le resource group
+    az group create --name $RG_NAME --location $LOCATION
+
+    # Créer le VNet
+    az network vnet create \
+        --resource-group $RG_NAME \
+        --name $VNET_NAME \
+        --address-prefix 10.0.0.0/16 \
+        --location $LOCATION
+
+    # Créer les subnets
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name web-subnet \
+        --address-prefix 10.0.1.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name app-subnet \
+        --address-prefix 10.0.2.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name database-subnet \
+        --address-prefix 10.0.3.0/24
+
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name GatewaySubnet \
+        --address-prefix 10.0.255.0/27
+    ```
+
+    **Étape 2 : Créer les NSG avec règles de sécurité**
+
+    ```bash
+    # NSG pour le tier Web
+    az network nsg create \
+        --resource-group $RG_NAME \
+        --name web-nsg
+
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name web-nsg \
+        --name Allow-HTTP-Internet \
+        --priority 100 \
+        --direction Inbound \
+        --access Allow \
+        --protocol Tcp \
+        --source-address-prefixes Internet \
+        --destination-port-ranges 80 443
+
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name web-nsg \
+        --name Allow-SSH-Management \
+        --priority 110 \
+        --direction Inbound \
+        --access Allow \
+        --protocol Tcp \
+        --source-address-prefixes 10.0.254.0/24 \
+        --destination-port-ranges 22
+
+    # NSG pour le tier App
+    az network nsg create \
+        --resource-group $RG_NAME \
+        --name app-nsg
+
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name app-nsg \
+        --name Allow-From-Web \
+        --priority 100 \
+        --direction Inbound \
+        --access Allow \
+        --protocol Tcp \
+        --source-address-prefixes 10.0.1.0/24 \
+        --destination-port-ranges 8080
+
+    # NSG pour le tier Database
+    az network nsg create \
+        --resource-group $RG_NAME \
+        --name database-nsg
+
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name database-nsg \
+        --name Allow-From-App \
+        --priority 100 \
+        --direction Inbound \
+        --access Allow \
+        --protocol Tcp \
+        --source-address-prefixes 10.0.2.0/24 \
+        --destination-port-ranges 5432
+
+    # Associer les NSG aux subnets
+    az network vnet subnet update \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name web-subnet \
+        --network-security-group web-nsg
+
+    az network vnet subnet update \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name app-subnet \
+        --network-security-group app-nsg
+
+    az network vnet subnet update \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name database-subnet \
+        --network-security-group database-nsg
+    ```
+
+    **Étape 3 : Créer les Application Security Groups**
+
+    ```bash
+    # Créer les ASG
+    az network asg create \
+        --resource-group $RG_NAME \
+        --name web-servers-asg \
+        --location $LOCATION
+
+    az network asg create \
+        --resource-group $RG_NAME \
+        --name app-servers-asg \
+        --location $LOCATION
+
+    az network asg create \
+        --resource-group $RG_NAME \
+        --name db-servers-asg \
+        --location $LOCATION
+
+    # Ajouter une règle NSG utilisant les ASG
+    az network nsg rule create \
+        --resource-group $RG_NAME \
+        --nsg-name app-nsg \
+        --name Allow-Web-to-App-ASG \
+        --priority 110 \
+        --direction Inbound \
+        --access Allow \
+        --protocol Tcp \
+        --source-asgs web-servers-asg \
+        --destination-asgs app-servers-asg \
+        --destination-port-ranges 8080
+    ```
+
+    **Étape 4 : Déployer le Load Balancer avec VMs**
+
+    ```bash
+    # Créer l'IP publique
+    az network public-ip create \
+        --resource-group $RG_NAME \
+        --name web-lb-pip \
+        --sku Standard \
+        --allocation-method Static
+
+    # Créer le Load Balancer
+    az network lb create \
+        --resource-group $RG_NAME \
+        --name web-lb \
+        --sku Standard \
+        --public-ip-address web-lb-pip \
+        --frontend-ip-name web-frontend \
+        --backend-pool-name web-backend
+
+    # Health probe
+    az network lb probe create \
+        --resource-group $RG_NAME \
+        --lb-name web-lb \
+        --name http-probe \
+        --protocol Http \
+        --port 80 \
+        --path /health
+
+    # Load balancing rule
+    az network lb rule create \
+        --resource-group $RG_NAME \
+        --lb-name web-lb \
+        --name http-rule \
+        --protocol Tcp \
+        --frontend-port 80 \
+        --backend-port 80 \
+        --frontend-ip-name web-frontend \
+        --backend-pool-name web-backend \
+        --probe-name http-probe
+
+    # Créer 2 VMs web
+    for i in 1 2; do
+        az vm create \
+            --resource-group $RG_NAME \
+            --name web-vm-${i} \
+            --image Ubuntu2204 \
+            --size Standard_B2s \
+            --vnet-name $VNET_NAME \
+            --subnet web-subnet \
+            --nsg "" \
+            --public-ip-address "" \
+            --admin-username azureuser \
+            --generate-ssh-keys
+
+        # Associer au backend pool du LB
+        NIC_ID=$(az vm show -g $RG_NAME -n web-vm-${i} --query 'networkProfile.networkInterfaces[0].id' -o tsv)
+        NIC_NAME=$(basename $NIC_ID)
+
+        az network nic ip-config address-pool add \
+            --resource-group $RG_NAME \
+            --nic-name $NIC_NAME \
+            --ip-config-name ipconfig1 \
+            --lb-name web-lb \
+            --address-pool web-backend
+
+        # Associer l'ASG
+        az network nic ip-config update \
+            --resource-group $RG_NAME \
+            --nic-name $NIC_NAME \
+            --name ipconfig1 \
+            --application-security-groups web-servers-asg
+    done
+    ```
+
+    **Étape 5 : Créer un VNet Peering**
+
+    ```bash
+    # Créer un second VNet (simulation autre région)
+    az network vnet create \
+        --resource-group $RG_NAME \
+        --name secondary-vnet \
+        --address-prefix 10.1.0.0/16 \
+        --subnet-name default \
+        --subnet-prefix 10.1.0.0/24
+
+    # Créer le peering bidirectionnel
+    az network vnet peering create \
+        --resource-group $RG_NAME \
+        --name enterprise-to-secondary \
+        --vnet-name $VNET_NAME \
+        --remote-vnet secondary-vnet \
+        --allow-vnet-access \
+        --allow-forwarded-traffic
+
+    az network vnet peering create \
+        --resource-group $RG_NAME \
+        --name secondary-to-enterprise \
+        --vnet-name secondary-vnet \
+        --remote-vnet $VNET_NAME \
+        --allow-vnet-access \
+        --allow-forwarded-traffic
+    ```
+
+    **Étape 6 : Créer un Private Endpoint pour Storage**
+
+    ```bash
+    # Créer un Storage Account
+    STORAGE_NAME="stprivate$(openssl rand -hex 4)"
+    az storage account create \
+        --resource-group $RG_NAME \
+        --name $STORAGE_NAME \
+        --sku Standard_LRS \
+        --allow-blob-public-access false \
+        --public-network-access Disabled
+
+    # Créer le subnet pour private endpoints
+    az network vnet subnet create \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name private-endpoints-subnet \
+        --address-prefix 10.0.4.0/24 \
+        --disable-private-endpoint-network-policies true
+
+    # Créer le Private Endpoint
+    STORAGE_ID=$(az storage account show -g $RG_NAME -n $STORAGE_NAME --query id -o tsv)
+
+    az network private-endpoint create \
+        --resource-group $RG_NAME \
+        --name storage-private-endpoint \
+        --vnet-name $VNET_NAME \
+        --subnet private-endpoints-subnet \
+        --private-connection-resource-id $STORAGE_ID \
+        --group-id blob \
+        --connection-name storage-connection
+
+    # Créer la Private DNS Zone
+    az network private-dns zone create \
+        --resource-group $RG_NAME \
+        --name privatelink.blob.core.windows.net
+
+    az network private-dns link vnet create \
+        --resource-group $RG_NAME \
+        --zone-name privatelink.blob.core.windows.net \
+        --name storage-dns-link \
+        --virtual-network $VNET_NAME \
+        --registration-enabled false
+
+    az network private-endpoint dns-zone-group create \
+        --resource-group $RG_NAME \
+        --endpoint-name storage-private-endpoint \
+        --name storage-dns-group \
+        --private-dns-zone privatelink.blob.core.windows.net \
+        --zone-name privatelink.blob.core.windows.net
+    ```
+
+    **Étape 7 : Créer le VPN Gateway**
+
+    ```bash
+    # Créer l'IP publique pour le VPN Gateway
+    az network public-ip create \
+        --resource-group $RG_NAME \
+        --name vpn-gw-pip \
+        --allocation-method Static \
+        --sku Standard
+
+    # Créer le VPN Gateway (cette commande prend environ 45 minutes)
+    echo "Création du VPN Gateway (environ 45 min)..."
+    az network vnet-gateway create \
+        --resource-group $RG_NAME \
+        --name enterprise-vpn-gw \
+        --vnet $VNET_NAME \
+        --public-ip-addresses vpn-gw-pip \
+        --gateway-type Vpn \
+        --vpn-type RouteBased \
+        --sku VpnGw1 \
+        --generation Generation1 \
+        --no-wait
+    ```
+
+    **Étape 8 : Créer une Route Table**
+
+    ```bash
+    # Créer la Route Table
+    az network route-table create \
+        --resource-group $RG_NAME \
+        --name app-route-table
+
+    # Ajouter une route pour forcer le trafic sortant vers une appliance
+    az network route-table route create \
+        --resource-group $RG_NAME \
+        --route-table-name app-route-table \
+        --name to-internet-via-firewall \
+        --address-prefix 0.0.0.0/0 \
+        --next-hop-type VirtualAppliance \
+        --next-hop-ip-address 10.0.254.4
+
+    # Associer la route table au subnet app
+    az network vnet subnet update \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name app-subnet \
+        --route-table app-route-table
+    ```
+
+    **Validation**
+
+    ```bash
+    # Vérifier le Load Balancer
+    LB_IP=$(az network public-ip show -g $RG_NAME -n web-lb-pip --query ipAddress -o tsv)
+    echo "Load Balancer IP: http://$LB_IP"
+
+    # Vérifier le VNet Peering
+    az network vnet peering show \
+        --resource-group $RG_NAME \
+        --vnet-name $VNET_NAME \
+        --name enterprise-to-secondary \
+        --query peeringState
+
+    # Vérifier le Private Endpoint
+    az network private-endpoint show \
+        --resource-group $RG_NAME \
+        --name storage-private-endpoint \
+        --query 'customDnsConfigs[0].fqdn'
+
+    # Lister toutes les ressources réseau
+    echo "=== NSGs ==="
+    az network nsg list -g $RG_NAME --output table
+
+    echo "=== Subnets ==="
+    az network vnet subnet list -g $RG_NAME --vnet-name $VNET_NAME --output table
+
+    echo "=== Route Tables ==="
+    az network route-table list -g $RG_NAME --output table
+    ```
+
+---
+
+## 8. Exercices Pratiques Additionnels
 
 ### Exercice 1 : Architecture 3-Tier
 

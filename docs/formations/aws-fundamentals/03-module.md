@@ -866,197 +866,454 @@ aws logs start-query \
 
 ---
 
-## 8. Exercices Pratiques
+## Exercice : À Vous de Jouer
 
-### Exercice 1 : Architecture 3-Tier
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une architecture réseau 3-tier hautement disponible et sécurisée
 
-!!! example "Objectif"
-    Créer un VPC complet avec subnets publics, privés et database.
+    **Contexte** : Votre entreprise lance une nouvelle application web critique nécessitant une architecture réseau robuste. L'application comprend un frontend web (niveau public), une couche applicative (niveau privé), et une base de données (niveau database). L'architecture doit être multi-AZ pour la haute disponibilité, avec des mesures de sécurité strictes et des VPC Endpoints pour minimiser les coûts de transfert de données.
 
-**Architecture :**
+    **Tâches à réaliser** :
 
-```text
-Internet
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│            Internet Gateway              │
-└─────────────────────────────────────────┘
-    │
-    ├─────────────────┬─────────────────┐
-    ▼                 ▼                 ▼
-┌─────────┐     ┌─────────┐       ┌─────────┐
-│ Public  │     │ Public  │       │ Public  │
-│ AZ-A    │     │ AZ-B    │       │ AZ-C    │
-│10.0.1.0 │     │10.0.2.0 │       │10.0.3.0 │
-└────┬────┘     └────┬────┘       └────┬────┘
-     │               │                 │
-     └───────┬───────┴─────────────────┘
-             │
-         NAT Gateway
-             │
-    ├─────────────────┬─────────────────┐
-    ▼                 ▼                 ▼
-┌─────────┐     ┌─────────┐       ┌─────────┐
-│ Private │     │ Private │       │ Private │
-│ AZ-A    │     │ AZ-B    │       │ AZ-C    │
-│10.0.10.0│     │10.0.11.0│       │10.0.12.0│
-└────┬────┘     └────┬────┘       └────┬────┘
-     │               │                 │
-    ├─────────────────┬─────────────────┐
-    ▼                 ▼                 ▼
-┌─────────┐     ┌─────────┐       ┌─────────┐
-│Database │     │Database │       │Database │
-│ AZ-A    │     │ AZ-B    │       │ AZ-C    │
-│10.0.20.0│     │10.0.21.0│       │10.0.22.0│
-└─────────┘     └─────────┘       └─────────┘
-```
+    1. Créer un VPC avec CIDR 10.0.0.0/16 et activer DNS hostnames et DNS resolution
+    2. Créer 9 subnets répartis sur 3 AZs : 3 publics (/24), 3 privés (/24), 3 database (/24)
+    3. Déployer un Internet Gateway et l'attacher au VPC
+    4. Créer 3 NAT Gateways (un par AZ) pour la haute disponibilité
+    5. Configurer les route tables appropriées pour chaque tier
+    6. Déployer des VPC Endpoints pour S3 et DynamoDB (Gateway type)
+    7. Créer des NACLs personnalisées pour le tier database (deny all par défaut)
+    8. Configurer VPC Flow Logs vers CloudWatch pour l'audit
+    9. Créer un VPC Peering avec un VPC de management et configurer le routage
+
+    **Critères de validation** :
+
+    - [ ] Le VPC couvre 3 AZs avec 9 subnets correctement taggés
+    - [ ] Les subnets publics peuvent accéder à Internet via IGW
+    - [ ] Les subnets privés peuvent accéder à Internet via NAT Gateway
+    - [ ] Les subnets database n'ont aucun accès Internet direct
+    - [ ] Les VPC Endpoints sont fonctionnels (testez avec S3)
+    - [ ] Les NACLs du tier database bloquent tout sauf le trafic depuis le tier privé
+    - [ ] Les Flow Logs sont actifs et envoient les données à CloudWatch
+    - [ ] Le VPC Peering fonctionne et le routage est correct
+    - [ ] L'architecture respecte les best practices de sécurité AWS
 
 ??? quote "Solution"
+
+    **Étape 1 : Création du VPC**
 
     ```bash
     #!/bin/bash
-    # create-3tier-vpc.sh
+    # Script: create-3tier-vpc.sh
+    # Description: Déploiement d'un VPC 3-tier hautement disponible
+
+    set -e
 
     REGION="eu-west-1"
     VPC_CIDR="10.0.0.0/16"
-    VPC_NAME="prod-vpc"
+    VPC_NAME="production-vpc"
 
-    # Créer VPC
+    echo "=== Création du VPC ==="
+
+    # Créer le VPC
     VPC_ID=$(aws ec2 create-vpc \
         --cidr-block $VPC_CIDR \
-        --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=$VPC_NAME}]" \
+        --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=$VPC_NAME},{Key=Environment,Value=production}]" \
         --query 'Vpc.VpcId' --output text)
 
+    # Activer DNS
     aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-hostnames '{"Value":true}'
+    aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-support '{"Value":true}'
 
-    echo "VPC Created: $VPC_ID"
+    echo "✅ VPC créé : $VPC_ID"
+    ```
 
-    # Internet Gateway
-    IGW_ID=$(aws ec2 create-internet-gateway \
-        --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=prod-igw}]' \
-        --query 'InternetGateway.InternetGatewayId' --output text)
+    **Étape 2 : Création des Subnets (9 subnets sur 3 AZs)**
 
-    aws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
-
-    # Subnets
+    ```bash
     declare -A SUBNETS
+    AZS=("a" "b" "c")
 
-    # Public Subnets
-    for i in 1 2 3; do
-        AZ="${REGION}$(echo $i | tr '123' 'abc')"
-        CIDR="10.0.$i.0/24"
-        NAME="pub-subnet-$(echo $i | tr '123' 'abc')"
+    echo "=== Création des Subnets ==="
+
+    # Subnets Publics (10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24)
+    for i in "${!AZS[@]}"; do
+        az_letter=${AZS[$i]}
+        cidr_octet=$((i+1))
 
         SUBNET_ID=$(aws ec2 create-subnet \
             --vpc-id $VPC_ID \
-            --cidr-block $CIDR \
-            --availability-zone $AZ \
-            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=$NAME},{Key=Tier,Value=public}]" \
+            --cidr-block "10.0.${cidr_octet}.0/24" \
+            --availability-zone "${REGION}${az_letter}" \
+            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-${az_letter}},{Key=Tier,Value=public},{Key=AZ,Value=${az_letter}}]" \
             --query 'Subnet.SubnetId' --output text)
 
         aws ec2 modify-subnet-attribute --subnet-id $SUBNET_ID --map-public-ip-on-launch
-        SUBNETS["pub_$i"]=$SUBNET_ID
-        echo "Created Public Subnet: $NAME ($SUBNET_ID)"
+        SUBNETS["public_$az_letter"]=$SUBNET_ID
+        echo "✅ Public Subnet ${az_letter}: $SUBNET_ID"
     done
 
-    # Private Subnets
-    for i in 1 2 3; do
-        AZ="${REGION}$(echo $i | tr '123' 'abc')"
-        CIDR="10.0.$((i+9)).0/24"
-        NAME="priv-subnet-$(echo $i | tr '123' 'abc')"
+    # Subnets Privés (10.0.10.0/24, 10.0.11.0/24, 10.0.12.0/24)
+    for i in "${!AZS[@]}"; do
+        az_letter=${AZS[$i]}
+        cidr_octet=$((i+10))
 
         SUBNET_ID=$(aws ec2 create-subnet \
             --vpc-id $VPC_ID \
-            --cidr-block $CIDR \
-            --availability-zone $AZ \
-            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=$NAME},{Key=Tier,Value=private}]" \
+            --cidr-block "10.0.${cidr_octet}.0/24" \
+            --availability-zone "${REGION}${az_letter}" \
+            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=private-${az_letter}},{Key=Tier,Value=private},{Key=AZ,Value=${az_letter}}]" \
             --query 'Subnet.SubnetId' --output text)
 
-        SUBNETS["priv_$i"]=$SUBNET_ID
-        echo "Created Private Subnet: $NAME ($SUBNET_ID)"
+        SUBNETS["private_$az_letter"]=$SUBNET_ID
+        echo "✅ Private Subnet ${az_letter}: $SUBNET_ID"
     done
 
-    # Database Subnets
-    for i in 1 2 3; do
-        AZ="${REGION}$(echo $i | tr '123' 'abc')"
-        CIDR="10.0.$((i+19)).0/24"
-        NAME="db-subnet-$(echo $i | tr '123' 'abc')"
+    # Subnets Database (10.0.20.0/24, 10.0.21.0/24, 10.0.22.0/24)
+    for i in "${!AZS[@]}"; do
+        az_letter=${AZS[$i]}
+        cidr_octet=$((i+20))
 
         SUBNET_ID=$(aws ec2 create-subnet \
             --vpc-id $VPC_ID \
-            --cidr-block $CIDR \
-            --availability-zone $AZ \
-            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=$NAME},{Key=Tier,Value=database}]" \
+            --cidr-block "10.0.${cidr_octet}.0/24" \
+            --availability-zone "${REGION}${az_letter}" \
+            --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=database-${az_letter}},{Key=Tier,Value=database},{Key=AZ,Value=${az_letter}}]" \
             --query 'Subnet.SubnetId' --output text)
 
-        SUBNETS["db_$i"]=$SUBNET_ID
-        echo "Created Database Subnet: $NAME ($SUBNET_ID)"
+        SUBNETS["database_$az_letter"]=$SUBNET_ID
+        echo "✅ Database Subnet ${az_letter}: $SUBNET_ID"
     done
-
-    # Route Tables
-    # Public Route Table
-    PUB_RT=$(aws ec2 create-route-table \
-        --vpc-id $VPC_ID \
-        --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=pub-rt}]' \
-        --query 'RouteTable.RouteTableId' --output text)
-
-    aws ec2 create-route --route-table-id $PUB_RT --destination-cidr-block 0.0.0.0/0 --gateway-id $IGW_ID
-
-    for i in 1 2 3; do
-        aws ec2 associate-route-table --subnet-id ${SUBNETS["pub_$i"]} --route-table-id $PUB_RT
-    done
-
-    # NAT Gateway (in AZ-A)
-    EIP_ID=$(aws ec2 allocate-address --domain vpc --query 'AllocationId' --output text)
-    NAT_GW=$(aws ec2 create-nat-gateway \
-        --subnet-id ${SUBNETS["pub_1"]} \
-        --allocation-id $EIP_ID \
-        --tag-specifications 'ResourceType=natgateway,Tags=[{Key=Name,Value=nat-gw}]' \
-        --query 'NatGateway.NatGatewayId' --output text)
-
-    echo "Waiting for NAT Gateway to become available..."
-    aws ec2 wait nat-gateway-available --nat-gateway-ids $NAT_GW
-
-    # Private Route Table
-    PRIV_RT=$(aws ec2 create-route-table \
-        --vpc-id $VPC_ID \
-        --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=priv-rt}]' \
-        --query 'RouteTable.RouteTableId' --output text)
-
-    aws ec2 create-route --route-table-id $PRIV_RT --destination-cidr-block 0.0.0.0/0 --nat-gateway-id $NAT_GW
-
-    for i in 1 2 3; do
-        aws ec2 associate-route-table --subnet-id ${SUBNETS["priv_$i"]} --route-table-id $PRIV_RT
-        aws ec2 associate-route-table --subnet-id ${SUBNETS["db_$i"]} --route-table-id $PRIV_RT
-    done
-
-    # VPC Endpoints
-    aws ec2 create-vpc-endpoint \
-        --vpc-id $VPC_ID \
-        --service-name com.amazonaws.$REGION.s3 \
-        --route-table-ids $PRIV_RT
-
-    echo "=== VPC Created Successfully ==="
-    echo "VPC ID: $VPC_ID"
-    echo "Public Subnets: ${SUBNETS[pub_1]}, ${SUBNETS[pub_2]}, ${SUBNETS[pub_3]}"
-    echo "Private Subnets: ${SUBNETS[priv_1]}, ${SUBNETS[priv_2]}, ${SUBNETS[priv_3]}"
-    echo "Database Subnets: ${SUBNETS[db_1]}, ${SUBNETS[db_2]}, ${SUBNETS[db_3]}"
     ```
 
-### Exercice 2 : VPC Peering Multi-Comptes
+    **Étape 3-4 : Internet Gateway et NAT Gateways**
 
-!!! example "Objectif"
-    Connecter deux VPCs de comptes différents via VPC Peering.
+    ```bash
+    echo "=== Création Internet Gateway ==="
 
-??? quote "Solution"
+    # Internet Gateway
+    IGW_ID=$(aws ec2 create-internet-gateway \
+        --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=production-igw}]' \
+        --query 'InternetGateway.InternetGatewayId' --output text)
 
-    Voir section 6.1 pour les commandes détaillées. Points clés :
+    aws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
+    echo "✅ Internet Gateway: $IGW_ID"
 
-    1. Créer la demande de peering depuis le compte initiateur
-    2. Accepter depuis le compte cible
-    3. Mettre à jour les route tables des deux côtés
-    4. Configurer les Security Groups pour autoriser le trafic cross-VPC
+    echo "=== Création des NAT Gateways (3 AZs) ==="
+
+    declare -A NAT_GWS
+    declare -A EIPs
+
+    for az_letter in "${AZS[@]}"; do
+        # Allouer une Elastic IP
+        EIP_ID=$(aws ec2 allocate-address \
+            --domain vpc \
+            --tag-specifications "ResourceType=elastic-ip,Tags=[{Key=Name,Value=nat-eip-${az_letter}}]" \
+            --query 'AllocationId' --output text)
+        EIPs[$az_letter]=$EIP_ID
+
+        # Créer NAT Gateway
+        NAT_GW=$(aws ec2 create-nat-gateway \
+            --subnet-id ${SUBNETS["public_$az_letter"]} \
+            --allocation-id $EIP_ID \
+            --tag-specifications "ResourceType=natgateway,Tags=[{Key=Name,Value=nat-${az_letter}}]" \
+            --query 'NatGateway.NatGatewayId' --output text)
+
+        NAT_GWS[$az_letter]=$NAT_GW
+        echo "✅ NAT Gateway ${az_letter}: $NAT_GW (EIP: $EIP_ID)"
+    done
+
+    echo "⏳ Attente de disponibilité des NAT Gateways..."
+    for nat_gw in "${NAT_GWS[@]}"; do
+        aws ec2 wait nat-gateway-available --nat-gateway-ids $nat_gw
+    done
+    echo "✅ Tous les NAT Gateways sont disponibles"
+    ```
+
+    **Étape 5 : Configuration des Route Tables**
+
+    ```bash
+    echo "=== Configuration des Route Tables ==="
+
+    # Route Table Publique (commune à tous les subnets publics)
+    PUBLIC_RT=$(aws ec2 create-route-table \
+        --vpc-id $VPC_ID \
+        --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=public-rt}]' \
+        --query 'RouteTable.RouteTableId' --output text)
+
+    aws ec2 create-route \
+        --route-table-id $PUBLIC_RT \
+        --destination-cidr-block 0.0.0.0/0 \
+        --gateway-id $IGW_ID
+
+    # Associer tous les subnets publics
+    for az_letter in "${AZS[@]}"; do
+        aws ec2 associate-route-table \
+            --subnet-id ${SUBNETS["public_$az_letter"]} \
+            --route-table-id $PUBLIC_RT
+    done
+
+    echo "✅ Route Table publique configurée"
+
+    # Route Tables Privées (une par AZ avec son NAT Gateway)
+    for az_letter in "${AZS[@]}"; do
+        PRIVATE_RT=$(aws ec2 create-route-table \
+            --vpc-id $VPC_ID \
+            --tag-specifications "ResourceType=route-table,Tags=[{Key=Name,Value=private-rt-${az_letter}}]" \
+            --query 'RouteTable.RouteTableId' --output text)
+
+        aws ec2 create-route \
+            --route-table-id $PRIVATE_RT \
+            --destination-cidr-block 0.0.0.0/0 \
+            --nat-gateway-id ${NAT_GWS[$az_letter]}
+
+        # Associer subnet privé
+        aws ec2 associate-route-table \
+            --subnet-id ${SUBNETS["private_$az_letter"]} \
+            --route-table-id $PRIVATE_RT
+
+        echo "✅ Route Table privée ${az_letter} configurée"
+    done
+
+    # Route Table Database (isolée, pas de route vers Internet)
+    DATABASE_RT=$(aws ec2 create-route-table \
+        --vpc-id $VPC_ID \
+        --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=database-rt}]' \
+        --query 'RouteTable.RouteTableId' --output text)
+
+    for az_letter in "${AZS[@]}"; do
+        aws ec2 associate-route-table \
+            --subnet-id ${SUBNETS["database_$az_letter"]} \
+            --route-table-id $DATABASE_RT
+    done
+
+    echo "✅ Route Table database configurée (isolée)"
+    ```
+
+    **Étape 6 : VPC Endpoints**
+
+    ```bash
+    echo "=== Création des VPC Endpoints ==="
+
+    # Collecter toutes les route tables privées pour les endpoints
+    PRIVATE_RTS=$(aws ec2 describe-route-tables \
+        --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-rt-*" \
+        --query 'RouteTables[].RouteTableId' --output text)
+
+    # VPC Endpoint S3
+    S3_ENDPOINT=$(aws ec2 create-vpc-endpoint \
+        --vpc-id $VPC_ID \
+        --service-name com.amazonaws.${REGION}.s3 \
+        --route-table-ids $PRIVATE_RTS $DATABASE_RT \
+        --tag-specifications 'ResourceType=vpc-endpoint,Tags=[{Key=Name,Value=s3-endpoint}]' \
+        --query 'VpcEndpoint.VpcEndpointId' --output text)
+
+    echo "✅ S3 VPC Endpoint: $S3_ENDPOINT"
+
+    # VPC Endpoint DynamoDB
+    DDB_ENDPOINT=$(aws ec2 create-vpc-endpoint \
+        --vpc-id $VPC_ID \
+        --service-name com.amazonaws.${REGION}.dynamodb \
+        --route-table-ids $PRIVATE_RTS $DATABASE_RT \
+        --tag-specifications 'ResourceType=vpc-endpoint,Tags=[{Key=Name,Value=dynamodb-endpoint}]' \
+        --query 'VpcEndpoint.VpcEndpointId' --output text)
+
+    echo "✅ DynamoDB VPC Endpoint: $DDB_ENDPOINT"
+    ```
+
+    **Étape 7 : NACLs pour Database Tier**
+
+    ```bash
+    echo "=== Configuration NACLs Database Tier ==="
+
+    # Créer NACL personnalisée pour database
+    DB_NACL=$(aws ec2 create-network-acl \
+        --vpc-id $VPC_ID \
+        --tag-specifications 'ResourceType=network-acl,Tags=[{Key=Name,Value=database-nacl}]' \
+        --query 'NetworkAcl.NetworkAclId' --output text)
+
+    # Autoriser trafic entrant depuis les subnets privés (port PostgreSQL 5432)
+    RULE_NUMBER=100
+    for i in "${!AZS[@]}"; do
+        cidr_octet=$((i+10))
+        aws ec2 create-network-acl-entry \
+            --network-acl-id $DB_NACL \
+            --rule-number $RULE_NUMBER \
+            --protocol tcp \
+            --port-range From=5432,To=5432 \
+            --cidr-block "10.0.${cidr_octet}.0/24" \
+            --rule-action allow \
+            --ingress
+        ((RULE_NUMBER+=10))
+    done
+
+    # Autoriser réponses sortantes (ephemeral ports)
+    aws ec2 create-network-acl-entry \
+        --network-acl-id $DB_NACL \
+        --rule-number 100 \
+        --protocol tcp \
+        --port-range From=1024,To=65535 \
+        --cidr-block "10.0.0.0/16" \
+        --rule-action allow \
+        --egress
+
+    # Associer aux subnets database
+    for az_letter in "${AZS[@]}"; do
+        # D'abord, trouver l'association actuelle
+        ASSOC_ID=$(aws ec2 describe-network-acls \
+            --filters "Name=association.subnet-id,Values=${SUBNETS[database_$az_letter]}" \
+            --query 'NetworkAcls[0].Associations[?SubnetId==`'${SUBNETS[database_$az_letter]}'`].NetworkAclAssociationId' \
+            --output text)
+
+        # Remplacer l'association
+        aws ec2 replace-network-acl-association \
+            --association-id $ASSOC_ID \
+            --network-acl-id $DB_NACL
+    done
+
+    echo "✅ NACLs database configurées (deny all par défaut)"
+    ```
+
+    **Étape 8 : VPC Flow Logs**
+
+    ```bash
+    echo "=== Configuration VPC Flow Logs ==="
+
+    # Créer un log group CloudWatch
+    LOG_GROUP="/aws/vpc/flowlogs/${VPC_NAME}"
+    aws logs create-log-group --log-group-name $LOG_GROUP
+
+    # Créer le rôle IAM pour Flow Logs
+    cat > flow-logs-trust-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": {"Service": "vpc-flow-logs.amazonaws.com"},
+            "Action": "sts:AssumeRole"
+        }]
+    }
+    EOF
+
+    FLOW_LOGS_ROLE=$(aws iam create-role \
+        --role-name VPCFlowLogsRole \
+        --assume-role-policy-document file://flow-logs-trust-policy.json \
+        --query 'Role.Arn' --output text)
+
+    # Policy pour écrire dans CloudWatch
+    cat > flow-logs-policy.json << 'EOF'
+    {
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams"
+            ],
+            "Resource": "*"
+        }]
+    }
+    EOF
+
+    aws iam put-role-policy \
+        --role-name VPCFlowLogsRole \
+        --policy-name VPCFlowLogsPolicy \
+        --policy-document file://flow-logs-policy.json
+
+    # Attendre que le rôle se propage
+    sleep 10
+
+    # Activer Flow Logs
+    aws ec2 create-flow-logs \
+        --resource-type VPC \
+        --resource-ids $VPC_ID \
+        --traffic-type ALL \
+        --log-destination-type cloud-watch-logs \
+        --log-group-name $LOG_GROUP \
+        --deliver-logs-permission-arn $FLOW_LOGS_ROLE \
+        --tag-specifications 'ResourceType=vpc-flow-log,Tags=[{Key=Name,Value=production-flow-logs}]'
+
+    echo "✅ VPC Flow Logs activés vers CloudWatch"
+    ```
+
+    **Étape 9 : VPC Peering (optionnel)**
+
+    ```bash
+    echo "=== Configuration VPC Peering ==="
+
+    # Supposons un VPC de management existant
+    MGMT_VPC_ID="vpc-management123"  # À remplacer
+    MGMT_VPC_CIDR="10.1.0.0/16"
+
+    # Créer la connexion peering
+    PEERING_ID=$(aws ec2 create-vpc-peering-connection \
+        --vpc-id $VPC_ID \
+        --peer-vpc-id $MGMT_VPC_ID \
+        --tag-specifications 'ResourceType=vpc-peering-connection,Tags=[{Key=Name,Value=prod-to-mgmt}]' \
+        --query 'VpcPeeringConnection.VpcPeeringConnectionId' --output text)
+
+    # Accepter la connexion (si même compte)
+    aws ec2 accept-vpc-peering-connection --vpc-peering-connection-id $PEERING_ID
+
+    # Ajouter routes dans les route tables privées vers le VPC management
+    for rt_id in $PRIVATE_RTS; do
+        aws ec2 create-route \
+            --route-table-id $rt_id \
+            --destination-cidr-block $MGMT_VPC_CIDR \
+            --vpc-peering-connection-id $PEERING_ID
+    done
+
+    echo "✅ VPC Peering configuré avec VPC management"
+    ```
+
+    **Vérification finale :**
+
+    ```bash
+    cat << EOF
+
+    ===========================================
+    ✅ Déploiement VPC 3-Tier Terminé
+    ===========================================
+
+    VPC ID: $VPC_ID
+    CIDR: $VPC_CIDR
+
+    Subnets Publics:
+      - AZ-A: ${SUBNETS[public_a]}
+      - AZ-B: ${SUBNETS[public_b]}
+      - AZ-C: ${SUBNETS[public_c]}
+
+    Subnets Privés:
+      - AZ-A: ${SUBNETS[private_a]}
+      - AZ-B: ${SUBNETS[private_b]}
+      - AZ-C: ${SUBNETS[private_c]}
+
+    Subnets Database:
+      - AZ-A: ${SUBNETS[database_a]}
+      - AZ-B: ${SUBNETS[database_b]}
+      - AZ-C: ${SUBNETS[database_c]}
+
+    NAT Gateways:
+      - AZ-A: ${NAT_GWS[a]}
+      - AZ-B: ${NAT_GWS[b]}
+      - AZ-C: ${NAT_GWS[c]}
+
+    VPC Endpoints:
+      - S3: $S3_ENDPOINT
+      - DynamoDB: $DDB_ENDPOINT
+
+    Flow Logs: $LOG_GROUP
+
+    ========================================= ==
+
+    # Test de connectivité S3 via VPC Endpoint
+    echo "Test: Listez vos buckets S3 depuis une instance dans un subnet privé"
+    echo "aws s3 ls  # Ne devrait PAS passer par Internet"
+
+    EOF
+    ```
 
 ---
 

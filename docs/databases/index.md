@@ -1,3 +1,11 @@
+---
+tags:
+  - databases
+  - postgresql
+  - mysql
+  - nosql
+---
+
 # Bases de Données
 
 Administration, optimisation et haute disponibilité des bases de données.

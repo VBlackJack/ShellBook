@@ -1,3 +1,12 @@
+---
+tags:
+  - script
+  - python
+  - cloud
+  - finops
+  - optimization
+---
+
 # Infrastructure Cost Analyzer
 
 Script Python d'analyse et optimisation des coûts d'infrastructure cloud.

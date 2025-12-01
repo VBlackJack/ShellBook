@@ -1,3 +1,12 @@
+---
+tags:
+  - formation
+  - ntlite
+  - windows
+  - customization
+  - module
+---
+
 # Module 2 : Le Grand Nettoyage (Debloating)
 
 ## Introduction

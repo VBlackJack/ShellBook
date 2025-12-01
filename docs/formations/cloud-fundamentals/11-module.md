@@ -647,6 +647,76 @@ graph LR
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Planifier la migration d'un datacenter vers le cloud
+
+    **Contexte** : Une entreprise doit migrer 50 applications de son datacenter vers AWS. Budget : 500K€. Délai : 12 mois.
+
+    **Inventaire simplifié :**
+    - 20 apps web (PHP/Java) sur VMs
+    - 15 bases de données (MySQL, Oracle, SQL Server)
+    - 10 applications batch (scripts Python/Shell)
+    - 5 applications legacy (COBOL, mainframe)
+
+    **Tâches à réaliser** :
+
+    1. Appliquez les stratégies 6R à chaque type d'application
+    2. Définissez 4 vagues de migration (quick wins d'abord)
+    3. Estimez le TCO sur 3 ans (cloud vs on-premise)
+    4. Créez le runbook de migration pour la vague 1
+
+    **Critères de validation** :
+
+    - [ ] Stratégie 6R justifiée pour chaque type d'app
+    - [ ] Vagues de migration logiques et progressives
+    - [ ] TCO 3 ans calculé avec optimisations
+    - [ ] Runbook détaillé avec rollback plan
+
+??? quote "Solution"
+    **1. Application des 6R :**
+
+    | Type | Stratégie | Justification |
+    |------|-----------|---------------|
+    | Apps web | Replatform | → ECS/App Service (PaaS) |
+    | MySQL | Replatform | → RDS MySQL (managé) |
+    | Oracle | Rehost puis Replatform | → EC2 puis RDS Oracle |
+    | Batch | Refactor | → Lambda/Cloud Functions |
+    | Legacy COBOL | Retain | Reste on-prem (coût refonte trop élevé) |
+
+    **2. Vagues de migration (12 mois) :**
+
+    | Vague | Durée | Applications | Objectif |
+    |-------|-------|--------------|----------|
+    | 1 | Mois 1-2 | 5 apps batch → Lambda | Quick win, apprendre |
+    | 2 | Mois 3-5 | 10 apps web simples | Valider replatform |
+    | 3 | Mois 6-9 | 10 apps web + 10 DB | Production critique |
+    | 4 | Mois 10-12 | Reste (sauf legacy) | Finalisation |
+
+    **3. TCO 3 ans :**
+    - On-premise : 1,5M€ (500K€/an)
+    - Cloud initial : 1,2M€ (400K€/an)
+    - Cloud optimisé : 900K€ (300K€/an avec RI + Savings Plans)
+    - **Économie : 600K€ sur 3 ans**
+
+    **4. Runbook Vague 1 (Batch → Lambda) :**
+    ```bash
+    # 1. Discovery
+    aws application-discovery start-data-collection
+
+    # 2. Migration scripts
+    aws lambda create-function \
+      --function-name batch-job-1 \
+      --runtime python3.9
+
+    # 3. Tests parallèles (2 semaines)
+    # 4. Cutover (weekend)
+    # 5. Monitoring (1 semaine)
+    ```
+
+---
+
 ## Navigation
 
 | Précédent | Retour au Catalogue |

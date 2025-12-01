@@ -405,47 +405,86 @@ docker-compose ps
 
 ---
 
-## 6. Exercices
+## 6. Exercice : À Vous de Jouer
 
-### Exercice 1 : Explorer les Métriques
+!!! example "Mise en Pratique"
+    **Objectif** : Maîtriser les requêtes PromQL de base et explorer les métriques Prometheus
 
-```promql
-# 1. Afficher toutes les métriques disponibles
-# → Aller sur http://localhost:9090/metrics
+    **Contexte** : Vous venez de déployer la stack Prometheus + Node Exporter. Vous devez analyser les métriques système pour comprendre l'état de votre serveur.
 
-# 2. Trouver le nombre de CPUs
-count(node_cpu_seconds_total{mode="idle"})
+    **Tâches à réaliser** :
 
-# 3. Calculer l'uptime du node exporter
-(time() - node_boot_time_seconds) / 3600
-# Résultat en heures
-```
+    1. Explorer les métriques disponibles via l'interface Prometheus (http://localhost:9090)
+    2. Calculer le nombre de CPUs du système
+    3. Calculer l'uptime du serveur en heures
+    4. Afficher le pourcentage d'utilisation CPU
+    5. Afficher le pourcentage de mémoire disponible
+    6. Lister l'espace disque disponible par partition
 
-### Exercice 2 : Requêtes CPU
+    **Critères de validation** :
 
-```promql
-# 1. CPU idle par CPU
-node_cpu_seconds_total{mode="idle"}
+    - [ ] L'interface Prometheus est accessible
+    - [ ] Les requêtes retournent des résultats cohérents
+    - [ ] Vous savez différencier counter, gauge, et histogram
+    - [ ] Vous comprenez la différence entre instant vector et range vector
 
-# 2. Taux d'utilisation CPU (tous modes sauf idle)
-sum by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[5m]))
+??? quote "Solution"
+    **1. Explorer les métriques**
 
-# 3. Pourcentage CPU utilisé
-100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
-```
+    Accédez à http://localhost:9090/graph et utilisez l'auto-complétion pour découvrir les métriques `node_*`.
 
-### Exercice 3 : Requêtes Mémoire et Disque
+    **2. Nombre de CPUs**
 
-```promql
-# 1. Mémoire totale en GB
-node_memory_MemTotal_bytes / 1024 / 1024 / 1024
+    ```promql
+    count(node_cpu_seconds_total{mode="idle"})
+    ```
 
-# 2. Mémoire disponible en %
-node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100
+    **3. Uptime en heures**
 
-# 3. Espace disque disponible par mountpoint
-node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"}
-```
+    ```promql
+    (time() - node_boot_time_seconds) / 3600
+    ```
+
+    Explication : `time()` retourne le timestamp Unix actuel, `node_boot_time_seconds` est le timestamp du démarrage.
+
+    **4. Pourcentage CPU utilisé**
+
+    ```promql
+    100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+    ```
+
+    Explication : On calcule le taux de CPU idle sur 5 minutes, puis on soustrait de 100 pour obtenir l'utilisation.
+
+    **5. Pourcentage mémoire disponible**
+
+    ```promql
+    node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100
+    ```
+
+    **6. Espace disque par partition**
+
+    ```promql
+    node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"}
+    ```
+
+    Pour l'afficher en GB :
+
+    ```promql
+    node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / 1024 / 1024 / 1024
+    ```
+
+    **Requêtes bonus :**
+
+    ```promql
+    # Mémoire utilisée en %
+    100 * (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
+
+    # Taux d'utilisation CPU par mode
+    sum by (mode) (rate(node_cpu_seconds_total[5m]))
+
+    # Network traffic en MB/s
+    rate(node_network_receive_bytes_total[5m]) / 1024 / 1024
+    ```
 
 ---
 

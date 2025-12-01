@@ -384,6 +384,76 @@ pie title Parts de Marché Cloud IaaS (Q3 2024)
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Analyser un cas concret et identifier les caractéristiques NIST du cloud
+
+    **Contexte** : Votre entreprise utilise actuellement un datacenter on-premise pour héberger son application web. Le directeur technique souhaite comprendre concrètement ce que le cloud pourrait apporter. Vous devez présenter les bénéfices en termes des 5 caractéristiques essentielles du NIST.
+
+    **Tâches à réaliser** :
+
+    1. Pour chaque caractéristique NIST, donnez un exemple concret de bénéfice pour l'entreprise
+    2. Identifiez quel modèle de déploiement (public, privé, hybride) serait le plus adapté pour une application de paiement
+    3. Comparez les parts de marché des 3 principaux cloud providers et expliquez pourquoi AWS est leader
+
+    **Critères de validation** :
+
+    - [ ] Les 5 caractéristiques NIST sont expliquées avec des exemples concrets
+    - [ ] Le choix du modèle de déploiement est justifié
+    - [ ] La comparaison des providers inclut au moins 3 critères de différenciation
+
+??? quote "Solution"
+    **1. Exemples concrets des caractéristiques NIST :**
+
+    - **Self-Service à la demande** : Un développeur peut créer un environnement de test complet en 5 minutes via une console web, sans attendre l'équipe infrastructure (vs plusieurs jours en on-premise)
+
+    - **Accès réseau universel** : Les équipes peuvent travailler de n'importe où (télétravail, agences internationales) et accéder aux environnements via des APIs standard HTTPS
+
+    - **Mutualisation des ressources** : Les coûts d'infrastructure sont partagés entre des milliers de clients, permettant des économies d'échelle impossibles en on-premise
+
+    - **Élasticité rapide** : Lors du Black Friday, l'application peut automatiquement passer de 10 à 100 serveurs en quelques minutes, puis redescendre après le pic
+
+    - **Service mesuré** : Facturation précise basée sur l'usage réel (par heure/seconde), avec des dashboards montrant exactement où va chaque euro dépensé
+
+    **2. Modèle de déploiement pour une application de paiement :**
+
+    **Recommandation : Cloud Hybride**
+
+    ```
+    ┌─────────────────────────┐     ┌─────────────────────────┐
+    │   Cloud Privé/On-Prem   │     │     Cloud Public        │
+    │                         │     │                         │
+    │  • HSM (clés crypto)    │◄───►│  • API Gateway          │
+    │  • Données PAN          │     │  • Portails web         │
+    │  • Core Banking         │     │  • Analytics            │
+    │  • Legacy               │     │  • Dev/Test             │
+    └─────────────────────────┘     └─────────────────────────┘
+             (Sécurité max)              (Agilité, scaling)
+    ```
+
+    **Justification :**
+    - Données sensibles (numéros de carte) restent dans un environnement hautement sécurisé
+    - Conformité PCI-DSS facilitée avec périmètre restreint
+    - Applications non-critiques bénéficient de l'agilité du cloud public
+    - Migration progressive possible
+
+    **3. Comparaison des cloud providers :**
+
+    | Critère | AWS (31%) | Azure (25%) | GCP (11%) |
+    |---------|-----------|-------------|-----------|
+    | **Maturité** | Leader depuis 2006, le plus d'expérience | Lancé en 2010, rattrape rapidement | Plus récent, focus innovation |
+    | **Étendue services** | 200+ services, le plus complet | 100+ services, excellente intégration Microsoft | Services ciblés, excellents en data/ML |
+    | **Entreprise** | Toute taille, tous secteurs | Fort sur clients Microsoft (Active Directory, Office 365) | Startups tech, data scientists |
+
+    **Pourquoi AWS est leader ?**
+    - Premier arrivé (2006) : 4 ans d'avance sur Azure
+    - Écosystème mature : plus de documentation, formations, expertise disponible
+    - Innovation continue : souvent premier à lancer de nouveaux services
+    - Effet réseau : beaucoup d'entreprises l'utilisent déjà
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -506,6 +506,146 @@ mindmap
 
 ---
 
+## Exercice : À Vous de Jouer
+
+!!! example "Mise en Pratique"
+    **Objectif** : Concevoir une architecture haute disponibilité avec stratégie DR
+
+    **Contexte** : Une application critique de paiement en ligne nécessite un SLA de 99.99% et des objectifs RPO=15min / RTO=1h. L'application traite 10 000 transactions/jour en temps normal, mais jusqu'à 100 000 lors des soldes.
+
+    **Tâches à réaliser** :
+
+    1. Calculez le SLA composite de l'architecture : ALB (99.99%) + App servers (99.99%) + RDS (99.95%)
+    2. Proposez une architecture multi-AZ pour garantir la haute disponibilité
+    3. Définissez la stratégie DR adaptée (Backup/Pilot Light/Warm/Hot) pour respecter RPO/RTO
+    4. Configurez l'auto-scaling pour gérer les pics de charge (x10)
+
+    **Critères de validation** :
+
+    - [ ] SLA composite calculé correctement
+    - [ ] Architecture multi-AZ avec failover automatique
+    - [ ] Stratégie DR justifiée avec RPO/RTO respectés
+    - [ ] Configuration auto-scaling adaptée aux pics
+
+??? quote "Solution"
+    **1. Calcul du SLA composite**
+
+    ```
+    SLA composite = SLA1 × SLA2 × SLA3
+    SLA = 99.99% × 99.99% × 99.95%
+    SLA = 0.9999 × 0.9999 × 0.9995
+    SLA = 0.9993 = 99.93%
+
+    Downtime annuel = (1 - 0.9993) × 365 × 24 × 60
+    Downtime = 6.13 heures/an ≈ 30 minutes/mois
+    ```
+
+    **⚠️ Le SLA de 99.93% ne respecte pas l'objectif 99.99%**
+    → Solution : Dupliquer les composants critiques
+
+    **2. Architecture multi-AZ haute disponibilité**
+
+    ```bash
+    # Auto Scaling Group multi-AZ
+    aws autoscaling create-auto-scaling-group \
+      --auto-scaling-group-name payment-api-asg \
+      --launch-template payment-api-template \
+      --min-size 4 \
+      --max-size 40 \
+      --desired-capacity 6 \
+      --availability-zones eu-west-3a eu-west-3b eu-west-3c \
+      --target-group-arns arn:aws:elasticloadbalancing:xxx
+
+    # RDS Multi-AZ avec read replicas
+    aws rds create-db-instance \
+      --db-instance-identifier payment-db \
+      --multi-az \
+      --backup-retention-period 7
+    ```
+
+    **Architecture :**
+    ```
+    ┌─────────────────────────────────────────────────┐
+    │           Region: eu-west-3 (Paris)             │
+    ├─────────────┬─────────────┬─────────────────────┤
+    │   Zone A    │   Zone B    │       Zone C        │
+    ├─────────────┼─────────────┼─────────────────────┤
+    │  App x2     │  App x2     │      App x2         │
+    │  RDS        │  RDS        │                     │
+    │  Primary    │  Standby    │   Read Replica      │
+    └─────────────┴─────────────┴─────────────────────┘
+    ```
+
+    **3. Stratégie DR : Warm Standby**
+
+    **Justification :**
+    - RPO 15min → Réplication continue nécessaire
+    - RTO 1h → Infrastructure pré-déployée mais réduite
+    - Warm Standby = meilleur compromis coût/performance
+
+    ```bash
+    # Région DR (eu-central-1 Frankfurt)
+    # Infra réduite : 2 instances (vs 6 en prod)
+    aws autoscaling create-auto-scaling-group \
+      --auto-scaling-group-name payment-api-dr \
+      --min-size 2 \
+      --max-size 40 \
+      --region eu-central-1
+
+    # RDS avec réplication cross-region
+    aws rds create-db-instance-read-replica \
+      --db-instance-identifier payment-db-dr \
+      --source-db-instance-identifier payment-db \
+      --region eu-central-1
+
+    # Route 53 health check et failover
+    aws route53 change-resource-record-sets \
+      --hosted-zone-id Z123 \
+      --change-batch file://failover-config.json
+    ```
+
+    **En cas de disaster :**
+    1. Route 53 détecte la panne (healthcheck KO)
+    2. Bascule DNS automatique vers DR (2-3 min)
+    3. ASG scale up en DR (5-10 min)
+    4. RDS replica promoted en primary (5 min)
+    → **RTO total : 15-20 min** ✅ (objectif : 1h)
+
+    **4. Configuration auto-scaling (pics x10)**
+
+    ```bash
+    # Policy: Scale up si CPU > 70%
+    aws autoscaling put-scaling-policy \
+      --auto-scaling-group-name payment-api-asg \
+      --policy-name scale-up \
+      --scaling-adjustment 3 \
+      --adjustment-type ChangeInCapacity
+
+    # CloudWatch alarm trigger
+    aws cloudwatch put-metric-alarm \
+      --alarm-name high-cpu \
+      --metric-name CPUUtilization \
+      --threshold 70 \
+      --comparison-operator GreaterThanThreshold \
+      --evaluation-periods 2 \
+      --alarm-actions arn:aws:autoscaling:xxx:policy/scale-up
+
+    # Policy: Scale down si CPU < 30%
+    aws autoscaling put-scaling-policy \
+      --policy-name scale-down \
+      --scaling-adjustment -1 \
+      --adjustment-type ChangeInCapacity \
+      --cooldown 300
+    ```
+
+    **Paramètres pour gérer x10 :**
+    - Normal : 6 instances (10 000 tx/jour = ~417 tx/h/instance)
+    - Pic : jusqu'à 40 instances (100 000 tx/jour)
+    - Scaling progressif : +3 instances toutes les 2 min si besoin
+    - Warmup period : 180s (le temps que l'app démarre)
+
+---
+
 ## Navigation
 
 | Précédent | Suivant |

@@ -380,135 +380,424 @@ journalctl --user -u nginx.service -o cat | grep -E "(Started|Stopped|Failed)"
 
 ---
 
-## 7. Exercice Pratique
+## Exercice : À Vous de Jouer
 
-### Objectif
+!!! example "Mise en Pratique"
+    **Objectif** : Déployer une stack applicative complète avec Quadlet pour une gestion déclarative et une intégration native avec systemd
 
-Déployer une stack complète avec Quadlet : nginx + API + PostgreSQL.
+    **Contexte** : Vous devez mettre en place une application web en production avec une approche moderne et déclarative. L'application comprend un frontend Nginx, une API backend, et une base de données PostgreSQL. Tous les services doivent démarrer automatiquement au boot, se redémarrer en cas de crash, et être gérés par systemd. Vous utiliserez Quadlet pour définir l'infrastructure de manière déclarative.
 
-### Fichiers à Créer
+    **Tâches à réaliser** :
 
-```bash
-# Créer le répertoire
-mkdir -p ~/.config/containers/systemd/
+    1. Créer un réseau dédié pour l'application avec Quadlet
+    2. Définir un volume persistant pour PostgreSQL
+    3. Déployer PostgreSQL avec health checks
+    4. Déployer l'API avec dépendances sur PostgreSQL
+    5. Déployer Nginx en frontend avec auto-update activé
+    6. Configurer les dépendances entre services
+    7. Activer tous les services au boot
+    8. Tester le fonctionnement et consulter les logs journald
+    9. Vérifier l'auto-update
+    10. Nettoyer l'environnement
 
-# 1. Network
-cat > ~/.config/containers/systemd/myapp-network.network << 'EOF'
-[Network]
-Subnet=10.90.0.0/24
-EOF
+    **Critères de validation** :
 
-# 2. Volume PostgreSQL
-cat > ~/.config/containers/systemd/postgres-data.volume << 'EOF'
-[Volume]
-EOF
+    - [ ] Les fichiers Quadlet sont dans ~/.config/containers/systemd/
+    - [ ] Les services systemd sont générés automatiquement
+    - [ ] PostgreSQL démarre avant l'API (dépendances respectées)
+    - [ ] Les services redémarrent automatiquement en cas d'échec
+    - [ ] Les logs sont disponibles via journalctl
+    - [ ] Les services sont activés au boot
 
-# 3. PostgreSQL
-cat > ~/.config/containers/systemd/postgres.container << 'EOF'
-[Unit]
-Description=PostgreSQL for MyApp
+??? quote "Solution"
+    Voici la solution complète pour déployer une stack avec Quadlet :
 
-[Container]
-Image=docker.io/library/postgres:15-alpine
-Network=myapp-network.network
-Volume=postgres-data.volume:/var/lib/postgresql/data:Z
-Environment=POSTGRES_USER=myapp
-Environment=POSTGRES_PASSWORD=secret123
-Environment=POSTGRES_DB=myapp
-HealthCmd=pg_isready -U myapp -d myapp
-HealthInterval=10s
-HealthStartPeriod=30s
+    **1. Créer la structure Quadlet**
 
-[Service]
-Restart=always
+    ```bash
+    # Créer le répertoire Quadlet
+    mkdir -p ~/.config/containers/systemd/
+    cd ~/.config/containers/systemd/
 
-[Install]
-WantedBy=default.target
-EOF
+    # Vérifier le support Quadlet
+    ls -la ~/.config/containers/systemd/
+    ```
 
-# 4. API (httpbin comme exemple)
-cat > ~/.config/containers/systemd/api.container << 'EOF'
-[Unit]
-Description=API Server
-After=postgres.service
-Requires=postgres.service
+    **2. Définir le réseau dédié**
 
-[Container]
-Image=docker.io/kennethreitz/httpbin:latest
-Network=myapp-network.network
-Environment=DATABASE_URL=postgres://myapp:secret123@postgres:5432/myapp
+    ```bash
+    cat > ~/.config/containers/systemd/myapp-network.network << 'EOF'
+    # Réseau isolé pour l'application
+    [Network]
+    # Subnet IPv4 dédié
+    Subnet=10.90.0.0/24
+    Gateway=10.90.0.1
 
-[Service]
-Restart=always
+    # Labels pour identification
+    Label=app=myapp
+    Label=env=production
 
-[Install]
-WantedBy=default.target
-EOF
+    [Install]
+    WantedBy=default.target
+    EOF
+    ```
 
-# 5. Nginx (frontend)
-cat > ~/.config/containers/systemd/nginx.container << 'EOF'
-[Unit]
-Description=Nginx Frontend
-After=api.service
+    **3. Créer le volume PostgreSQL**
 
-[Container]
-Image=docker.io/library/nginx:alpine
-Network=myapp-network.network
-PublishPort=8080:80
-AutoUpdate=registry
+    ```bash
+    cat > ~/.config/containers/systemd/postgres-data.volume << 'EOF'
+    # Volume persistant pour PostgreSQL
+    [Volume]
+    # Driver par défaut (local)
+    Driver=local
 
-[Service]
-Restart=always
+    # Labels
+    Label=app=myapp
+    Label=component=database
 
-[Install]
-WantedBy=default.target
-EOF
-```
+    [Install]
+    WantedBy=default.target
+    EOF
+    ```
 
-### Déployer et Tester
+    **4. Déployer PostgreSQL avec health checks**
 
-```bash
-# Recharger systemd
-systemctl --user daemon-reload
+    ```bash
+    cat > ~/.config/containers/systemd/postgres.container << 'EOF'
+    [Unit]
+    Description=PostgreSQL Database for MyApp
+    Documentation=https://www.postgresql.org/docs/
+    After=myapp-network.service
+    Requires=myapp-network.service
 
-# Voir les unités générées
-systemctl --user list-unit-files | grep -E "(postgres|api|nginx|myapp)"
+    [Container]
+    # Image officielle PostgreSQL
+    Image=docker.io/library/postgres:15-alpine
 
-# Démarrer la stack (dans l'ordre grâce aux dépendances)
-systemctl --user start nginx.service
+    # Réseau dédié
+    Network=myapp-network.network
 
-# Vérifier le status
-echo "=== Services Status ==="
-systemctl --user status postgres.service --no-pager
-systemctl --user status api.service --no-pager
-systemctl --user status nginx.service --no-pager
+    # Volume persistant
+    Volume=postgres-data.volume:/var/lib/postgresql/data:Z
 
-# Vérifier les conteneurs
-echo "=== Containers ==="
-podman ps
+    # Configuration PostgreSQL
+    Environment=POSTGRES_USER=myapp
+    Environment=POSTGRES_PASSWORD=SecureP@ssw0rd123
+    Environment=POSTGRES_DB=myapp
+    Environment=POSTGRES_INITDB_ARGS=--encoding=UTF8 --locale=en_US.UTF-8
 
-# Tester
-echo "=== Testing ==="
-curl -s http://localhost:8080 | head -20
+    # Health check
+    HealthCmd=pg_isready -U myapp -d myapp
+    HealthInterval=10s
+    HealthTimeout=5s
+    HealthRetries=3
+    HealthStartPeriod=30s
 
-# Logs
-echo "=== Logs ==="
-journalctl --user -u postgres.service --since "5 min ago" --no-pager | tail -10
+    # Sécurité
+    NoNewPrivileges=true
+    ReadOnlyTmpfs=true
 
-# Activer au boot
-systemctl --user enable postgres.service api.service nginx.service
+    # Labels
+    Label=app=myapp
+    Label=component=database
+    Label=version=15
 
-# Test auto-update
-podman auto-update --dry-run
+    [Service]
+    Restart=always
+    RestartSec=10
+    TimeoutStartSec=120
 
-# Cleanup
-systemctl --user stop nginx.service api.service postgres.service
-systemctl --user disable nginx.service api.service postgres.service
-rm ~/.config/containers/systemd/{postgres,api,nginx}.container
-rm ~/.config/containers/systemd/{myapp-network.network,postgres-data.volume}
-systemctl --user daemon-reload
-podman volume rm systemd-postgres-data
-```
+    [Install]
+    WantedBy=default.target
+    EOF
+    ```
+
+    **5. Déployer l'API backend**
+
+    ```bash
+    cat > ~/.config/containers/systemd/api.container << 'EOF'
+    [Unit]
+    Description=API Backend Server
+    After=postgres.service
+    Requires=postgres.service
+    BindsTo=postgres.service
+
+    [Container]
+    # API de test (httpbin)
+    Image=docker.io/kennethreitz/httpbin:latest
+
+    # Réseau commun avec PostgreSQL
+    Network=myapp-network.network
+
+    # Variables d'environnement
+    Environment=DATABASE_URL=postgres://myapp:SecureP@ssw0rd123@10.90.0.2:5432/myapp
+    Environment=API_ENV=production
+    Environment=LOG_LEVEL=info
+
+    # Health check
+    HealthCmd=curl -f http://localhost:8080/health || exit 1
+    HealthInterval=30s
+    HealthTimeout=10s
+
+    # Sécurité
+    NoNewPrivileges=true
+
+    # Labels
+    Label=app=myapp
+    Label=component=api
+
+    [Service]
+    Restart=always
+    RestartSec=5
+
+    [Install]
+    WantedBy=default.target
+    EOF
+    ```
+
+    **6. Déployer Nginx frontend**
+
+    ```bash
+    cat > ~/.config/containers/systemd/nginx.container << 'EOF'
+    [Unit]
+    Description=Nginx Frontend Reverse Proxy
+    After=api.service
+    Wants=api.service
+
+    [Container]
+    # Nginx Alpine
+    Image=docker.io/library/nginx:alpine
+
+    # Réseau et port exposé
+    Network=myapp-network.network
+    PublishPort=8080:80
+
+    # Auto-update activé
+    AutoUpdate=registry
+
+    # Sécurité
+    NoNewPrivileges=true
+    ReadOnly=true
+    Tmpfs=/var/cache/nginx
+    Tmpfs=/var/run
+
+    # Labels
+    Label=app=myapp
+    Label=component=frontend
+    Label=io.containers.autoupdate=registry
+
+    [Service]
+    Restart=always
+    RestartSec=5
+    TimeoutStartSec=60
+
+    [Install]
+    WantedBy=default.target
+    EOF
+    ```
+
+    **7. Activer et démarrer les services**
+
+    ```bash
+    # Recharger systemd pour découvrir les nouveaux fichiers Quadlet
+    echo "=== Reloading systemd ==="
+    systemctl --user daemon-reload
+
+    # Lister les unités générées par Quadlet
+    echo "=== Generated Units ==="
+    systemctl --user list-unit-files | grep -E "(postgres|api|nginx|myapp)"
+
+    # Vérifier les fichiers de service générés
+    ls -la ~/.config/systemd/user/
+
+    # Démarrer les services (les dépendances démarreront automatiquement)
+    echo "=== Starting Services ==="
+    systemctl --user start nginx.service
+
+    # Attendre le démarrage complet
+    sleep 10
+
+    # Vérifier le statut de chaque service
+    echo "=== Services Status ==="
+    systemctl --user status postgres.service --no-pager -l
+    systemctl --user status api.service --no-pager -l
+    systemctl --user status nginx.service --no-pager -l
+    systemctl --user status myapp-network.service --no-pager -l
+
+    # Activer au boot
+    echo "=== Enabling Services at Boot ==="
+    systemctl --user enable postgres.service
+    systemctl --user enable api.service
+    systemctl --user enable nginx.service
+    systemctl --user enable myapp-network.service
+
+    # Vérifier que le linger est activé
+    loginctl show-user $USER | grep Linger
+    # Si "Linger=no", activer avec:
+    # sudo loginctl enable-linger $USER
+    ```
+
+    **8. Vérifier et tester**
+
+    ```bash
+    # Lister les conteneurs actifs
+    echo "=== Running Containers ==="
+    podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+    # Vérifier le réseau
+    echo "=== Network Info ==="
+    podman network inspect systemd-myapp-network | jq '.[0].containers'
+
+    # Tester l'application
+    echo "=== Testing Application ==="
+    curl -s http://localhost:8080 | head -20
+
+    # Tester les health checks
+    echo "=== Health Checks ==="
+    podman healthcheck run systemd-postgres
+    # Devrait retourner "healthy"
+
+    # Vérifier les volumes
+    echo "=== Volumes ==="
+    podman volume ls
+    podman volume inspect systemd-postgres-data | jq '.[0].Mountpoint'
+    ```
+
+    **9. Consulter les logs avec journalctl**
+
+    ```bash
+    # Logs PostgreSQL
+    echo "=== PostgreSQL Logs ==="
+    journalctl --user -u postgres.service -n 50 --no-pager
+
+    # Logs de l'API
+    journalctl --user -u api.service -n 30 --no-pager
+
+    # Logs Nginx
+    journalctl --user -u nginx.service -n 20 --no-pager
+
+    # Suivre les logs en temps réel
+    journalctl --user -u postgres.service -f
+    # Ctrl+C pour arrêter
+
+    # Logs depuis une date
+    journalctl --user -u nginx.service --since "10 minutes ago"
+
+    # Logs avec niveau de priorité
+    journalctl --user -u postgres.service -p err
+    ```
+
+    **10. Tester l'auto-update**
+
+    ```bash
+    # Vérifier la configuration auto-update
+    echo "=== Auto-Update Status ==="
+    podman auto-update --dry-run
+
+    # Activer le timer auto-update
+    systemctl --user enable --now podman-auto-update.timer
+
+    # Vérifier le timer
+    systemctl --user list-timers --all | grep podman-auto-update
+
+    # Forcer une vérification manuelle
+    systemctl --user start podman-auto-update.service
+    journalctl --user -u podman-auto-update.service -n 20
+    ```
+
+    **11. Test de résilience**
+
+    ```bash
+    # Tuer un conteneur pour tester le restart
+    echo "=== Testing Auto-Restart ==="
+    podman kill systemd-nginx
+
+    # Observer le redémarrage
+    watch -n 1 "systemctl --user status nginx.service | grep Active"
+
+    # Vérifier les restart count
+    systemctl --user show nginx.service -p NRestarts
+    ```
+
+    **12. Cleanup**
+
+    ```bash
+    # Arrêter tous les services
+    echo "=== Stopping Services ==="
+    systemctl --user stop nginx.service
+    systemctl --user stop api.service
+    systemctl --user stop postgres.service
+    systemctl --user stop myapp-network.service
+
+    # Désactiver les services
+    systemctl --user disable nginx.service
+    systemctl --user disable api.service
+    systemctl --user disable postgres.service
+    systemctl --user disable myapp-network.service
+
+    # Supprimer les fichiers Quadlet
+    rm ~/.config/containers/systemd/postgres.container
+    rm ~/.config/containers/systemd/api.container
+    rm ~/.config/containers/systemd/nginx.container
+    rm ~/.config/containers/systemd/myapp-network.network
+    rm ~/.config/containers/systemd/postgres-data.volume
+
+    # Recharger systemd
+    systemctl --user daemon-reload
+
+    # Nettoyer les volumes et réseaux
+    podman volume rm systemd-postgres-data
+    podman network rm systemd-myapp-network
+
+    echo "✓ Cleanup completed!"
+    ```
+
+    !!! success "Avantages de Quadlet"
+        - **Déclaratif** : Infrastructure as Code avec des fichiers simples
+        - **Intégration systemd** : Gestion native, logs journald, dépendances
+        - **Rootless friendly** : Fonctionne parfaitement en mode utilisateur
+        - **Auto-update** : Mises à jour automatiques des images
+        - **Production ready** : Restart automatique, health checks, monitoring
+
+    !!! tip "Bonnes pratiques Quadlet"
+        **Organisation des fichiers** :
+        ```
+        ~/.config/containers/systemd/
+        ├── app-network.network
+        ├── app-data.volume
+        ├── database.container
+        ├── api.container
+        └── frontend.container
+        ```
+
+        **Gestion des secrets** :
+        ```bash
+        # Utiliser des secrets Podman
+        podman secret create db_password /path/to/secret
+        ```
+
+        **Monitoring** :
+        ```bash
+        # Créer des alertes systemd
+        systemctl --user edit postgres.service
+        # Ajouter [Unit] OnFailure=notify-failure@%n.service
+        ```
+
+    !!! note "Différences avec docker-compose"
+        | Feature | docker-compose | Quadlet |
+        |---------|---------------|---------|
+        | Format | YAML | INI (systemd) |
+        | Daemon | Oui (dockerd) | Non (systemd) |
+        | Logs | docker logs | journalctl |
+        | Auto-restart | Dans le YAML | systemd natif |
+        | Boot | Extra config | systemd enable |
+        | Rootless | Limité | Natif |
+
+    !!! warning "Points d'attention"
+        - Les chemins de fichiers dans Quadlet doivent être absolus
+        - Le reload systemd est nécessaire après chaque modification
+        - Les volumes et réseaux sont préfixés par "systemd-"
+        - Le linger doit être activé pour les services rootless au boot
 
 ---
 
