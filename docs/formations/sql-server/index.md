@@ -1,3 +1,12 @@
+---
+tags:
+  - formation
+  - sql-server
+  - database
+  - dba
+  - windows
+---
+
 # Formation : SQL Server DBA
 
 ## Vue d'ensemble
