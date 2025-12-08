@@ -26,6 +26,8 @@ Ce module couvre les fondamentaux d'Active Directory :
 
 ## 1. Architecture Active Directory
 
+![Structure Forest Active Directory](../../assets/diagrams/ad-forest-structure.jpeg)
+
 ### 1.1 Concepts Fondamentaux
 
 ```

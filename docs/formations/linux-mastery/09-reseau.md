@@ -28,6 +28,8 @@ tags:
 
 ## 1. Modèle TCP/IP
 
+![Modèle TCP/IP Layers](../../assets/diagrams/tcp-ip-model-layers.jpeg)
+
 ```mermaid
 graph TD
     subgraph "Modèle TCP/IP"

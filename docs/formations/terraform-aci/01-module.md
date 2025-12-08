@@ -83,6 +83,8 @@ graph TB
 
 ## 2. Concepts Fondamentaux Terraform
 
+![Cycle Workflow Terraform](../../assets/diagrams/terraform-workflow-cycle.jpeg)
+
 ### 2.1 Architecture Terraform
 
 ```mermaid

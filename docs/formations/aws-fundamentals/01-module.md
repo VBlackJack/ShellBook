@@ -119,6 +119,8 @@ graph TD
 
 ### 2.2 Service Control Policies (SCPs)
 
+![Flux d'Autorisation IAM](../../assets/diagrams/aws-iam-authorization-flow.jpeg)
+
 Les SCPs définissent les permissions maximales pour les comptes d'une OU :
 
 ```json

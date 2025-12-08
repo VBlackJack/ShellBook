@@ -121,6 +121,8 @@ mindmap
 
 ## 3. Évolution Historique
 
+![Évolution vers le Cloud](../../assets/diagrams/cloud-evolution-timeline.jpeg)
+
 ### 3.1 Timeline
 
 ```mermaid

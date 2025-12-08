@@ -131,6 +131,8 @@ ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-snapshot.db \
 
 ![Kubernetes Worker Node Architecture](../../assets/diagrams/k8s-worker-node-architecture.jpeg)
 
+![Kubernetes Worker Node Components](../../assets/diagrams/k8s-worker-node-components.jpeg)
+
 ### 3.2 Structure d'un Pod
 
 ![Kubernetes Pod Structure](../../assets/diagrams/formation-k8s-pod-structure.jpeg)

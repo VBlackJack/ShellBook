@@ -59,6 +59,9 @@ Vos VMs doivent être en **Réseau Host-Only** (Privé hôte) ou **NAT Network**
 *   **Script Kiddie** : Débutant qui lance des outils sans comprendre.
 
 ### Le Cycle d'Attaque (Kill Chain)
+
+![Cyber Kill Chain](../../assets/diagrams/cyber-kill-chain.jpeg)
+
 1.  **Reconnaissance** (OSINT, Scan).
 2.  **Weaponization** (Préparer l'exploit/payload).
 3.  **Delivery** (Envoyer le mail, accéder au port).

@@ -63,6 +63,8 @@ graph TD
 
 ### 1.2 Familles d'Instances
 
+![Familles d'Instances EC2](../../assets/diagrams/ec2-instance-families.jpeg)
+
 ```mermaid
 graph LR
     subgraph "Instance Families"

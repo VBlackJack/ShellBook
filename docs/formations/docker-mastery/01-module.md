@@ -23,6 +23,8 @@ tags:
 
 ![Docker Architecture](../../assets/diagrams/formation-docker-architecture.jpeg)
 
+![VM vs Containers Architecture](../../assets/diagrams/vm-vs-containers-architecture.jpeg)
+
 | Aspect | VM | Container |
 |--------|-----|-----------|
 | **Startup** | Minutes | Secondes |

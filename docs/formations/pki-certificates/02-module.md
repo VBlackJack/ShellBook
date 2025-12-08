@@ -77,6 +77,8 @@ graph TD
 
 ![PKI Certificate Hierarchy](../../assets/diagrams/security-pki-hierarchy.jpeg)
 
+![PKI Certificate Trust Chain](../../assets/diagrams/pki-certificate-trust-chain.jpeg)
+
 ### Pourquoi des Intermédiaires ?
 
 - **Sécurité** : La Root CA reste offline (air-gapped)

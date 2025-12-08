@@ -17,6 +17,8 @@ La solution n'est pas de réentraîner le modèle (trop cher), mais de lui donne
 
 ## 1. Le Principe du RAG
 
+![Architecture Pipeline RAG](../../assets/diagrams/rag-pipeline-architecture.jpeg)
+
 C'est comme donner un livre ouvert à un étudiant pendant l'examen.
 1.  **Question** : "Comment configurer Postfix ?"
 2.  **Recherche** : Le script cherche dans votre documentation les paragraphes qui parlent de Postfix.
