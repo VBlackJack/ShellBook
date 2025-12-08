@@ -11,6 +11,8 @@ tags:
 
 Référence complète pour la séquence de boot Linux et la gestion des services.
 
+![Linux Boot Process](../assets/infographics/linux/linux-boot-process.jpeg)
+
 ---
 
 ## Le Processus de Boot (Vue d'ensemble)

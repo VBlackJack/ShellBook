@@ -10,6 +10,8 @@ tags:
 
 SSH n'est pas qu'un outil pour ouvrir un shell à distance. C'est un "couteau suisse" réseau capable de chiffrer et transporter n'importe quel flux TCP. C'est souvent la seule façon d'accéder à un service interne sans VPN.
 
+![SSH Tunneling Types](../assets/infographics/linux/ssh-tunneling-types.jpeg)
+
 ## 1. Local Forwarding (`-L`)
 
 **Cas d'usage** : Accéder à un service distant (bloqué par un firewall) depuis ma machine locale.

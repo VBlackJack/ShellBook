@@ -8,6 +8,8 @@ tags:
 
 # Docker Mastery
 
+![Docker Multi-Stage Build](../../assets/infographics/devops/docker-multistage-build.jpeg)
+
 ## Informations Générales
 
 | Élément | Description |

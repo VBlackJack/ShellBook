@@ -9,6 +9,8 @@ tags:
 
 # Kubernetes Mastery
 
+![Kubernetes Service Types](../../assets/infographics/kubernetes/kubernetes-service-types.jpeg)
+
 ## Informations Générales
 
 | Élément | Description |

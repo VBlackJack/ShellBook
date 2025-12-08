@@ -9,6 +9,8 @@ tags:
 
 # Kustomize : Configuration Management
 
+![Helm vs Kustomize](../assets/infographics/kubernetes/helm-vs-kustomize.jpeg)
+
 ## Kustomize : Configuration sans Template
 
 **Kustomize** est un outil de gestion de configuration Kubernetes natif (intégré à `kubectl`). Contrairement à Helm qui utilise des **templates**, Kustomize fonctionne par **overlays** (superposition de patchs).

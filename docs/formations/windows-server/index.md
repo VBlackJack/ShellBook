@@ -9,6 +9,8 @@ tags:
 
 # Formation : Windows Server Mastery
 
+![Active Directory Architecture](../../assets/infographics/windows/active-directory-architecture.jpeg)
+
 **Maîtrisez l'administration moderne des serveurs Windows en environnement d'entreprise.**
 
 ---

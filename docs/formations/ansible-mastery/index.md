@@ -9,6 +9,8 @@ tags:
 
 # Ansible : De Zéro à l'Indus - Introduction & Programme
 
+![Ansible Execution Flow](../../assets/infographics/devops/ansible-execution-flow.jpeg)
+
 ## Objectifs de cette Formation
 
 À l'issue de ce parcours, vous serez capable de :

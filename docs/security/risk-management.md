@@ -9,6 +9,8 @@ tags:
 
 La sécurité informatique ne se limite pas aux outils techniques. Elle commence par une analyse rigoureuse des risques et des menaces qui pèsent sur le Système d'Information (SI).
 
+![Risk Assessment Matrix](../assets/infographics/security/risk-assessment-matrix.jpeg)
+
 ## Les 3 Familles de Vulnérabilités
 
 La sécurité est une chaîne dont la solidité dépend du maillon le plus faible.

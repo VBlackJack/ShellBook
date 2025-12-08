@@ -10,6 +10,8 @@ tags:
 
 Guide de démarrage rapide pour les ingénieurs DevOps et Cloud.
 
+![DevOps Learning Path](../assets/infographics/learning/devops-learning-path.jpeg)
+
 ## Votre Boîte à Outils Essentielle
 
 ### Cheatsheets Indispensables

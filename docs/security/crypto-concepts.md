@@ -9,6 +9,8 @@ tags:
 
 Maîtriser les concepts avant les commandes.
 
+![TLS Handshake](../assets/infographics/security/tls-handshake.jpeg)
+
 ---
 
 !!! important "Le Vocabulaire (Terminologie Française)"

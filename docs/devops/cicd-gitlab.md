@@ -11,6 +11,8 @@ tags:
 
 L'usine logicielle souveraine. Du code au déploiement sans sortir du réseau.
 
+![CI/CD Pipeline Stages](../assets/infographics/devops/cicd-pipeline-stages.jpeg)
+
 ---
 
 ## Architecture & Runners : L'Infrastructure

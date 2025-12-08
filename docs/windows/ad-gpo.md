@@ -10,6 +10,8 @@ tags:
 
 Les GPO permettent de configurer et sécuriser de manière centralisée les postes et utilisateurs d'un domaine Active Directory.
 
+![GPO Processing Order](../assets/infographics/windows/gpo-processing-order.jpeg)
+
 ## Architecture des GPO
 
 ### Hiérarchie d'Application

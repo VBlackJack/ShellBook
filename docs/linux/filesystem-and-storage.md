@@ -11,6 +11,8 @@ tags:
 
 Organisation des fichiers et gestion avancée du stockage.
 
+![Linux Filesystem Hierarchy](../assets/infographics/linux/linux-filesystem-hierarchy.jpeg)
+
 ---
 
 ## Filesystem Hierarchy Standard (FHS)

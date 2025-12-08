@@ -9,6 +9,8 @@ tags:
 
 Retours d'expérience concrets sur la réussite de l'examen Certified Kubernetes Administrator.
 
+![Kubernetes Deployment Strategies](../assets/infographics/kubernetes/kubernetes-deployment-strategies.jpeg)
+
 ---
 
 ## La Réalité de l'Examen CKA

@@ -10,6 +10,8 @@ tags:
 
 Pratiques DevOps, conteneurisation, orchestration et Infrastructure as Code.
 
+![DevOps 6 Pillars](../assets/infographics/devops/devops-6-pillars.jpeg)
+
 ---
 
     - 🛠️ Méthodologie:

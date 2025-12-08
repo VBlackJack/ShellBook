@@ -10,6 +10,8 @@ tags:
 
 Administration, optimisation et haute disponibilité des bases de données.
 
+![Database Decision Tree](../assets/infographics/databases/database-decision-tree.jpeg)
+
 ---
 
 ## PostgreSQL

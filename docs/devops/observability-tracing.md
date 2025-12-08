@@ -12,6 +12,8 @@ tags:
 "Pourquoi c'est lent ?" est la question la plus difficile en microservices.
 Les logs disent "Il y a une erreur". Les métriques disent "C'est lent". Le **Tracing** dit **OÙ**.
 
+![Observability 3 Pillars](../assets/infographics/devops/observability-3-pillars.jpeg)
+
 ## 1. Les 3 Piliers de l'Observabilité
 
 1.  **Logs** (Événements) : "Une erreur s'est produite à 10:00." (Elasticsearch, Loki).

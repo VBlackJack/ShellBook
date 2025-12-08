@@ -11,6 +11,8 @@ tags:
 
 La source de vérité est Git. Le cluster se synchronise tout seul. Fini les `kubectl apply` manuels.
 
+![GitOps Push vs Pull](../assets/infographics/devops/gitops-push-vs-pull.jpeg)
+
 ---
 
 ## Concepts GitOps : La Théorie
