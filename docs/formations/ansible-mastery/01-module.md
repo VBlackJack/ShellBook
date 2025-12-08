@@ -107,21 +107,7 @@ ansible all -m shell -a "df -h /"
 
 **Architecture en Image :**
 
-```mermaid
-flowchart LR
-    A[💻 Control Node<br/>Ansible installé<br/>localhost] -->|SSH 22| B[🖥️ Managed Node 1<br/>web1.company.com]
-    A -->|SSH 22| C[🖥️ Managed Node 2<br/>web2.company.com]
-    A -->|SSH 22| D[🖥️ Managed Node 3<br/>db1.company.com]
-
-    A -->|1. Lit| I[📋 Inventory<br/>hosts.ini]
-    A -->|2. Exécute| M[⚙️ Module<br/>apt/copy/service]
-    A -->|3. Logs| L[📊 Résultats<br/>SUCCESS/FAILED]
-
-    style A fill:#e1f5ff
-    style I fill:#fff9c4
-    style M fill:#c8e6c9
-    style L fill:#ffccbc
-```
+![Ansible Architecture - Agentless](../../assets/diagrams/formation-ansible-architecture.jpeg)
 
 **Flux d'exécution typique :**
 

@@ -33,12 +33,7 @@ Terraform permet de décrire l'infrastructure sous forme de code déclaratif (HC
 
 ### Workflow Terraform
 
-```mermaid
-graph LR
-    A[Write] --> B[Plan]
-    B --> C[Apply]
-    C --> D[Destroy]
-```
+![Terraform Workflow](../../assets/diagrams/formation-terraform-workflow.jpeg)
 
 ---
 

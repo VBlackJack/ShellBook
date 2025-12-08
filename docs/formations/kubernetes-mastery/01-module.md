@@ -131,7 +131,11 @@ ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-snapshot.db \
 
 ![Kubernetes Worker Node Architecture](../../assets/diagrams/k8s-worker-node-architecture.jpeg)
 
-### 3.2 Kubelet
+### 3.2 Structure d'un Pod
+
+![Kubernetes Pod Structure](../../assets/diagrams/formation-k8s-pod-structure.jpeg)
+
+### 3.3 Kubelet
 
 ```bash
 # Configuration kubelet
@@ -160,7 +164,7 @@ ls /etc/kubernetes/manifests/
 # etcd.yaml
 ```
 
-### 3.3 Container Runtime
+### 3.4 Container Runtime
 
 ```bash
 # containerd est le runtime par défaut depuis K8s 1.24

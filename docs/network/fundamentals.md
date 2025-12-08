@@ -181,15 +181,7 @@ Déboguer les problèmes réseau couche par couche, de bas en haut.
 
 ### Flux de Débogage Rapide
 
-```
-ping échoue ?     → Vérifier routage, firewall, état de l'hôte
-  ↓ fonctionne
-nc port échoue ?  → Vérifier service, règles firewall, binding
-  ↓ fonctionne
-curl échoue ?     → Vérifier logs app, config, certificats SSL
-  ↓ fonctionne
-Le problème est ailleurs (DNS, côté client, etc.)
-```
+![Network Troubleshooting Flowchart](../assets/diagrams/devops-network-troubleshooting-workflow.jpeg)
 
 ---
 
@@ -210,6 +202,8 @@ Le problème est ailleurs (DNS, côté client, etc.)
 - Isole le LAN des attaques directes depuis Internet
 
 ### Schéma Conceptuel
+
+![DMZ Architecture](../assets/diagrams/security-dmz-architecture.jpeg)
 
 ```mermaid
 flowchart TD

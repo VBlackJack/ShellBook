@@ -75,15 +75,7 @@ graph TD
 
 ### Hiérarchie PKI
 
-```mermaid
-graph TD
-    A[Root CA<br/>Auto-signé<br/>Validité: 20-30 ans] --> B[Intermediate CA<br/>Signé par Root<br/>Validité: 5-10 ans]
-    B --> C[End-Entity Certificate<br/>Signé par Intermediate<br/>Validité: 1-2 ans]
-
-    style A fill:#ff6b6b
-    style B fill:#ffd93d
-    style C fill:#6bcb77
-```
+![PKI Certificate Hierarchy](../../assets/diagrams/security-pki-hierarchy.jpeg)
 
 ### Pourquoi des Intermédiaires ?
 

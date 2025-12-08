@@ -12,6 +12,10 @@ Sécurité offensive et défensive, cryptographie, conformité et outils d'audit
 
 ![Incident Response Workflow](../assets/infographics/security/incident-response-workflow.jpeg)
 
+## Zero Trust Security
+
+![Zero Trust Security Model](../assets/diagrams/security-zero-trust-model.jpeg)
+
 ---
 
 ## Concepts & Audit

@@ -70,6 +70,10 @@ graph TB
 | **PaaS** | Pizza à emporter | Plateforme prête, vous déployez votre app |
 | **SaaS** | Restaurant | Application prête à utiliser |
 
+### 1.2 Modèle de Responsabilité Partagée
+
+![Cloud Shared Responsibility Model](../../assets/diagrams/formation-cloud-shared-responsibility.jpeg)
+
 ---
 
 ## 2. Définitions Détaillées
