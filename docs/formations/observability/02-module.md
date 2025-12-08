@@ -9,6 +9,8 @@ tags:
 
 # Module 2 : Prometheus - Déploiement et Configuration
 
+![Architecture de Scraping Prometheus](../../assets/diagrams/prometheus-scrape-architecture.jpeg)
+
 ## Objectifs du Module
 
 - Installer Prometheus sur différentes plateformes

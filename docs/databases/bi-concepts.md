@@ -16,6 +16,8 @@ Avant de manipuler des Big Data, il faut comprendre l'architecture qui permet de
 
 La distinction fondamentale en gestion de données.
 
+![OLTP vs OLAP Comparison](../assets/diagrams/oltp-vs-olap.jpeg)
+
 | Caractéristique | OLTP (Online Transaction Processing) | OLAP (Online Analytical Processing) |
 |-----------------|--------------------------------------|-------------------------------------|
 | **Objectif** | Gérer l'opérationnel au quotidien | Analyser, décider, prévoir |
@@ -58,30 +60,7 @@ C'est le cerveau de la BI. Il centralise toutes les données de l'entreprise (CR
 
 ### Architecture en couches
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  COUCHE PRÉSENTATION (Presentation Layer)               │
-│  - Data Marts métiers (Ventes, Marketing, RH)          │
-│  - Cubes OLAP pour analyses rapides                     │
-└─────────────────────────────────────────────────────────┘
-                          ↑
-┌─────────────────────────────────────────────────────────┐
-│  COUCHE INTÉGRATION (Integration Layer)                 │
-│  - Modèles dimensionnels (Star/Snowflake)              │
-│  - Tables de faits et dimensions                        │
-└─────────────────────────────────────────────────────────┘
-                          ↑
-┌─────────────────────────────────────────────────────────┐
-│  COUCHE STAGING (Staging Layer)                         │
-│  - Données brutes copiées depuis les sources            │
-│  - Zone temporaire pour transformation                  │
-└─────────────────────────────────────────────────────────┘
-                          ↑
-┌─────────────────────────────────────────────────────────┐
-│  SOURCES DE DONNÉES                                      │
-│  - ERP, CRM, Logs, API, Fichiers plats                 │
-└─────────────────────────────────────────────────────────┘
-```
+![Data Warehouse - Architecture 4 Couches](../assets/diagrams/data-warehouse-layers.jpeg)
 
 ### Data Mart
 Un sous-ensemble du Data Warehouse, spécialisé pour un métier précis (ex: Data Mart Marketing, Data Mart RH).
@@ -89,6 +68,8 @@ Un sous-ensemble du Data Warehouse, spécialisé pour un métier précis (ex: Da
 ## 3. Schéma en Étoile (Star Schema)
 
 Le plus simple et le plus performant pour les requêtes analytiques.
+
+![Star Schema - Modèle en Étoile](../assets/diagrams/star-schema-bi.jpeg)
 
 ### Exemple SQL : E-commerce
 
@@ -268,15 +249,23 @@ CREATE TABLE dim_marque (
 
 **Verdict** : Privilégiez le Star Schema. Le stockage est devenu peu coûteux, mais le temps CPU reste précieux.
 
-## 5. ETL vs ELT
+## 5. Slowly Changing Dimensions (SCD)
+
+Comment gérer les changements dans les dimensions au fil du temps ?
+
+![SCD Types - Slowly Changing Dimensions](../assets/diagrams/scd-types.jpeg)
+
+- **Type 1** : Écrasement - On perd l'historique (corrections d'erreurs)
+- **Type 2** : Ajout de ligne - Historique complet préservé (analyses temporelles)
+- **Type 3** : Ajout de colonne - Historique limité (avant/après)
+
+## 6. ETL vs ELT
+
+![ETL vs ELT Pipeline Comparison](../assets/diagrams/etl-vs-elt-pipeline.jpeg)
 
 ### ETL (Extract, Transform, Load)
 
 **Flux classique** : Transformation avant chargement
-
-```
-Sources → [Outil ETL: Talend, Informatica] → Transformation → Data Warehouse
-```
 
 1.  **Extract** : On aspire les données des sources (Bases de prod, API, Fichiers CSV).
 2.  **Transform** : Le gros du travail.

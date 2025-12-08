@@ -59,7 +59,11 @@ Un Pod = 1+ containers qui :
 - Ont le même cycle de vie
 ```
 
-### 1.2 Manifest Pod Simple
+### 1.2 Pod Lifecycle
+
+![Kubernetes Pod Lifecycle](../../assets/diagrams/kubernetes-pod-lifecycle.jpeg)
+
+### 1.3 Manifest Pod Simple
 
 ```yaml
 # pod-simple.yaml

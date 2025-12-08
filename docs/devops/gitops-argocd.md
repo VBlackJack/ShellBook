@@ -80,6 +80,10 @@ flowchart TB
 3. **Pull automatique** : Un agent dans le cluster synchronise l'état
 4. **Réconciliation continue** : Correction automatique de la dérive
 
+### Boucle de Synchronisation GitOps
+
+![GitOps Sync Loop - ArgoCD](../assets/diagrams/gitops-sync-loop.jpeg)
+
 ---
 
 ## Packaging avec Helm : Ne Réinventez pas la Roue

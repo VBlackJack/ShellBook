@@ -20,37 +20,7 @@ tags:
 
 ## 1. Network Drivers
 
-```
-DOCKER NETWORK DRIVERS
-══════════════════════
-
-bridge (défaut)
-───────────────
-- Réseau isolé sur l'host
-- NAT pour accès externe
-- DNS interne
-
-host
-────
-- Partage le réseau de l'host
-- Pas d'isolation
-- Performance maximale
-
-none
-────
-- Pas de réseau
-- Container isolé
-
-overlay
-───────
-- Multi-host (Swarm)
-- Chiffrement optionnel
-
-macvlan
-───────
-- Adresse MAC dédiée
-- Apparaît comme device physique
-```
+![Docker Networking Modes](../../assets/diagrams/docker-networking-modes.jpeg)
 
 ---
 

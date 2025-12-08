@@ -210,6 +210,8 @@ ansible-playbook --syntax-check playbook.yml
 
 ### Anatomie d'un Playbook
 
+![Ansible Playbook Execution Flow](../../assets/diagrams/ansible-playbook-flow.jpeg)
+
 **Structure minimale d'un playbook :**
 
 ```yaml
