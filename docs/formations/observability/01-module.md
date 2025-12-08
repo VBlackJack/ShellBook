@@ -174,30 +174,7 @@ histogram_quantile(0.95,
 
 ### 4.1 Stack Prometheus/Grafana
 
-```
-COMPOSANTS DE L'ÉCOSYSTÈME
-══════════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                    GRAFANA LABS STACK                       │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Métriques    │  Prometheus  │  Mimir (long-term storage)  │
-│  Logs         │  Loki        │  + Promtail (agent)         │
-│  Traces       │  Tempo       │  + OpenTelemetry            │
-│  Profiling    │  Pyroscope   │  Continuous profiling       │
-│  Visualisation│  Grafana     │  Dashboards + Alerting      │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-
-ALTERNATIVES
-────────────
-
-Métriques : InfluxDB, TimescaleDB, VictoriaMetrics, Datadog
-Logs      : Elasticsearch (ELK), Splunk, Datadog
-Traces    : Jaeger, Zipkin, Datadog APM
-All-in-one: Datadog, New Relic, Dynatrace (SaaS payants)
-```
+![Grafana Labs Stack - Écosystème Observabilité](../../assets/diagrams/grafana-labs-stack.jpeg)
 
 ### 4.2 Comparaison
 

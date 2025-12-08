@@ -117,17 +117,7 @@ ASCII → [Hex] → Chaîne hexadécimale
 
 **Une clé secrète partagée** pour le chiffrement et le déchiffrement.
 
-```
-        ┌─────────────┐
-        │  Même Clé   │
-        └──────┬──────┘
-               │
-    ┌──────────┴──────────┐
-    ▼                     ▼
-[Encrypt]             [Decrypt]
-    │                     │
-Plaintext → Ciphertext → Plaintext
-```
+![Chiffrement Symétrique](../assets/diagrams/crypto-symmetric-encryption.jpeg)
 
 | Avantages | Inconvénients |
 |------|------|
@@ -149,52 +139,17 @@ Plaintext → Ciphertext → Plaintext
 
 **Paire de clés :** Clé publique + Clé privée
 
-```
-┌─────────────────────────────────────────────────┐
-│                  PAIRE DE CLÉS                   │
-├─────────────────────┬───────────────────────────┤
-│    Clé Publique     │     Clé Privée            │
-│    (partageable)    │     (SECRET !)            │
-└─────────────────────┴───────────────────────────┘
-```
-
 #### Pour Encryption (Confidentialité)
 
 **Clé publique chiffre → Clé privée déchiffre**
 
-```
-Alice veut envoyer un secret à Bob :
-
-1. Bob partage sa clé PUBLIQUE avec Alice
-2. Alice chiffre le message avec la clé PUBLIQUE de Bob
-3. Seule la clé PRIVÉE de Bob peut le déchiffrer
-
-    Alice                           Bob
-      │                              │
-      │ ◄── Clé Publique de Bob ────┤
-      │                              │
-      ├─── Message Chiffré ─────────► │
-      │    (seul Bob peut lire)      │
-```
+![Chiffrement Asymétrique - Confidentialité](../assets/diagrams/crypto-asymmetric-confidentiality.jpeg)
 
 #### Pour Signatures (Authentification)
 
 **Clé privée signe → Clé publique vérifie**
 
-```
-Bob veut prouver qu'il a écrit un message :
-
-1. Bob signe le message avec sa clé PRIVÉE
-2. N'importe qui avec la clé PUBLIQUE de Bob peut vérifier
-3. Seul Bob a pu créer cette signature
-
-    Bob                            N'importe qui
-      │                              │
-      ├─── Message + Signature ─────► │
-      │                              │
-      │ ◄── Vérifier avec Clé Publique ──┤
-      │    "Oui, Bob a signé ceci"   │
-```
+![Chiffrement Asymétrique - Signatures Numériques](../assets/diagrams/crypto-asymmetric-signatures.jpeg)
 
 | Avantages | Inconvénients |
 |------|------|
@@ -210,23 +165,7 @@ Bob veut prouver qu'il a écrit un message :
 
 Les systèmes modernes combinent les deux : **asymétrique pour l'échange de clé, symétrique pour les données.**
 
-```
-Handshake TLS/HTTPS :
-
-1. Client & Serveur utilisent la crypto ASYMÉTRIQUE
-   pour échanger de manière sécurisée une clé de session
-
-2. Toute communication ultérieure utilise l'encryption SYMÉTRIQUE
-   avec cette clé de session (rapide !)
-
-┌──────────────────────────────────────────┐
-│  Asymétrique (RSA/ECDH)                  │
-│  └─► Échanger la clé symétrique          │
-│                                          │
-│  Symétrique (AES-256-GCM)                │
-│  └─► Chiffrer tout le trafic (rapide)   │
-└──────────────────────────────────────────┘
-```
+![Chiffrement Hybride - TLS Handshake](../assets/diagrams/crypto-hybrid-tls.jpeg)
 
 ---
 

@@ -23,28 +23,10 @@ tags:
 
 ### 1.1 Qu'est-ce que Kubernetes ?
 
-```
-KUBERNETES - ORCHESTRATEUR DE CONTAINERS
-════════════════════════════════════════
-
-Problématique                    Solution Kubernetes
-─────────────                    ──────────────────
-
-┌─────────────────┐              ┌─────────────────────────────┐
-│ 100s de         │              │ Orchestration automatique   │
-│ containers      │     →        │ - Scheduling                │
-│ à gérer         │              │ - Self-healing              │
-│                 │              │ - Scaling                   │
-└─────────────────┘              │ - Rolling updates           │
-                                 │ - Service discovery         │
-┌─────────────────┐              │ - Load balancing            │
-│ Multi-serveurs  │     →        │ - Storage orchestration     │
-│ à coordonner    │              │ - Secret management         │
-└─────────────────┘              └─────────────────────────────┘
+![Kubernetes - Problème et Solution](../../assets/diagrams/k8s-problem-solution.jpeg)
 
 Kubernetes = "K8s" (K + 8 lettres + s)
 Origine: Google Borg → Kubernetes (2014, CNCF)
-```
 
 ### 1.2 Concepts Clés
 
@@ -115,39 +97,7 @@ ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-snapshot.db \
 
 ### 2.4 Scheduler
 
-```
-SCHEDULER - ALGORITHME DE PLACEMENT
-═══════════════════════════════════
-
-1. FILTRAGE (Predicates)
-   ────────────────────
-   Exclure les nodes non viables :
-   - Resources insuffisantes
-   - NodeSelector non matching
-   - Taints non tolérées
-   - Affinity/Anti-affinity non respectée
-
-2. SCORING (Priorities)
-   ────────────────────
-   Classer les nodes restants :
-   - Équilibrage des resources
-   - Préférences d'affinité
-   - Spread des pods
-   - Image déjà présente
-
-3. BINDING
-   ────────────────────
-   Assigner le pod au node choisi
-   (Mise à jour dans etcd via API Server)
-
-
-   Pod créé                   Pod schedulé
-      │                           │
-      ▼                           ▼
-┌──────────┐    Filter    ┌──────────────┐    Score    ┌────────┐
-│ Pending  │ ───────────▶ │ Nodes viables│ ──────────▶ │ Binding│
-└──────────┘              └──────────────┘             └────────┘
-```
+![Kubernetes Scheduler - Algorithme de Placement](../../assets/diagrams/k8s-scheduler-algorithm-flow.jpeg)
 
 ### 2.5 Controller Manager
 

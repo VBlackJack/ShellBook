@@ -532,39 +532,7 @@ curl http://10.0.1.21:8008/health
 
 **Galera = Tous les nœuds sont des "Masters" (peuvent recevoir des écritures).**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│              RÉPLICATION ASYNCHRONE TRADITIONNELLE           │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Master  →  Replica                                         │
-│                                                              │
-│  1. Client écrit sur Master                                 │
-│  2. Master commit la transaction                            │
-│  3. Master envoie le binlog au Replica (async)              │
-│  4. Replica rejoue la transaction (délai ~100ms)            │
-│                                                              │
-│  Problème : Le Replica est toujours "en retard"             │
-│             Si Master crash avant la réplication,           │
-│             les dernières transactions sont PERDUES         │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│              RÉPLICATION SYNCHRONE GALERA                    │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Node1 ↔ Node2 ↔ Node3 (tous égaux)                        │
-│                                                              │
-│  1. Client écrit sur Node1                                  │
-│  2. Node1 envoie la transaction à Node2 et Node3            │
-│  3. Node2 et Node3 valident (certification)                 │
-│  4. Si majorité OK → COMMIT sur les 3 nœuds                 │
-│  5. Client reçoit la confirmation                           │
-│                                                              │
-│  Garantie : Si commit OK, la donnée est sur TOUS les nœuds  │
-│             Zéro perte de données (même si Node1 crash)     │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Galera vs Réplication Asynchrone](../assets/diagrams/galera-vs-async-replication.jpeg)
 
 **Architecture Galera :**
 
@@ -839,23 +807,7 @@ mysql -u root -e "SHOW STATUS LIKE 'wsrep_local_cert_failures';"
 
 **PITR = Restaurer la base de données à une seconde précise dans le passé.**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  SCÉNARIO CATASTROPHE                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  2024-01-15 14:00:00  Backup complet (nuit dernière)        │
-│  2024-01-15 14:30:00  Transactions normales (WAL archivés)  │
-│  2024-01-15 14:45:23  Développeur : DROP TABLE orders;      │
-│  2024-01-15 14:45:24  ☠️ PANIC : 10 000 commandes perdues   │
-│                                                              │
-│  Solution PITR :                                            │
-│  1. Restaurer le backup de 14:00:00                        │
-│  2. Rejouer les WAL jusqu'à 14:45:22 (1 seconde avant DROP)│
-│  3. Base de données restaurée avec toutes les commandes    │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![PITR - Scénario de Disaster Recovery](../assets/diagrams/pitr-disaster-scenario.jpeg)
 
 **Architecture pgBackRest :**
 

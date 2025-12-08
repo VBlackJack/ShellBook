@@ -101,26 +101,7 @@ Concepts réseau essentiels que tout DevOps et SysAdmin doit connaître.
 | **Cas d'usage** | Database, services TCP | Applications web, API gateways |
 | **Exemples** | HAProxy (mode TCP), NLB | Nginx, HAProxy (HTTP), ALB |
 
-### Load Balancer L4
-
-```
-Client → [L4 LB] → Serveur
-         ↓
-    Route par IP:Port
-    Ne peut pas voir le contenu HTTP
-    SSL passthrough
-```
-
-### Load Balancer L7
-
-```
-Client → [L7 LB] → Serveur
-         ↓
-    SSL Termination
-    Inspecte les headers HTTP
-    Route par URL : /api → backend-api
-                    /web → backend-web
-```
+![Load Balancer L4 vs L7](../assets/diagrams/load-balancer-l4-vs-l7.jpeg)
 
 !!! example "Quand utiliser lequel ?"
     - **L4 :** MySQL, Redis, TCP brut, quand vous avez besoin de SSL passthrough

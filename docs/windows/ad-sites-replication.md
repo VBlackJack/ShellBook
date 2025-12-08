@@ -150,24 +150,7 @@ Get-ADReplicationSiteLink -Filter * | Select-Object Options
 
 ### Types de Réplication
 
-```
-RÉPLICATION INTRA-SITE VS INTER-SITE
-══════════════════════════════════════════════════════════
-
-INTRA-SITE (même site)
-──────────────────────
-• Déclenchée immédiatement (notification)
-• Non compressée
-• Toutes les 15 secondes après un changement
-• Utilise RPC over IP
-
-INTER-SITE (entre sites)
-────────────────────────
-• Planifiée (selon schedule)
-• Compressée (≈85% réduction)
-• Intervalle minimum 15 minutes
-• Utilise RPC over IP ou SMTP (rare)
-```
+![Types de Réplication AD - Intra-Site vs Inter-Site](../assets/diagrams/ad-intra-vs-inter-site-replication.jpeg)
 
 ### KCC (Knowledge Consistency Checker)
 
@@ -230,24 +213,7 @@ Sync-ADObject -Object "CN=User1,OU=Users,DC=corp,DC=local" -Source DC01 -Destina
 
 ### Structure SYSVOL
 
-```
-SYSVOL
-══════════════════════════════════════════════════════════
-
-C:\Windows\SYSVOL\
-├── domain\
-│   ├── Policies\          ← GPO (GUID folders)
-│   │   ├── {31B2F340-...}
-│   │   └── {6AC1786C-...}
-│   ├── scripts\           ← Logon scripts
-│   └── StarterGPOs\
-└── sysvol\
-    └── corp.local\        ← Partagé en \\corp.local\SYSVOL
-
-Réplication :
-• DFS-R (depuis 2008 R2+)
-• FRS (legacy, obsolète)
-```
+![Structure SYSVOL Windows](../assets/diagrams/ad-sysvol-structure.jpeg)
 
 ### Vérifier DFS-R
 
