@@ -121,7 +121,7 @@ nav:
     - 📊 Scripts par Use Case:
       - 🔍 Audit & Discovery:
         - server-discovery.sh (God Script): scripts/bash/server-discovery-audit.md
-        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
+        - Invoke-ServerAudit.ps1 (God Script): scripts/powershell/Invoke-ServerAudit.md
         - system_info.py: scripts/python/system_info.md
         - config-drift-checker.sh: scripts/bash/config-drift-checker.md
         - compliance-checker.sh: scripts/bash/compliance-checker.md
