@@ -40,7 +40,7 @@ theme:
     - search.suggest
     - search.highlight
   announcement:
-    content: 'Nouveau : Apprenez à contribuer avec le guide <a href="/ShellBook/devops/docs-as-code/">Docs-as-Code</a> ! 🚀'
+    content: '🆕 Navigation repensée pour une meilleure UX ! <a href="/ShellBook/quick-start/">Commencez ici</a>'
 
 plugins:
   - search:
@@ -76,98 +76,123 @@ nav:
   - 🏠 Accueil: index.md
 
   # ══════════════════════════════════════════════════════════════
-  # ONGLET 1 : OPS CENTER (CLI + Playbooks + Pipelines + Scripts)
+  # TAB 1: QUICK START - Entry points by role
   # ══════════════════════════════════════════════════════════════
-  - 🚀 Ops Center:
-    - 🛠️ CLI ShellBook:
-      - Guide CLI (sb): cli/index.md
+  - 🚀 Quick Start:
+    - Vue d'ensemble: quick-start/index.md
+    - 👤 Par Rôle:
+      - Linux SysAdmin: quick-start/linux-sysadmin.md
+      - Windows Admin: quick-start/windows-admin.md
+      - DevOps Engineer: quick-start/devops-engineer.md
+      - Security Analyst: quick-start/security-analyst.md
+    - 📋 Toutes les Cheatsheets:
+      - Linux:
+        - Systemd: linux/cheatsheet-systemd.md
+        - SSH: linux/cheatsheet-ssh.md
+        - Sed & Awk: linux/cheatsheet-sed-awk.md
+        - Networking: linux/cheatsheet-networking.md
+      - DevOps:
+        - Kubectl: devops/cheatsheet-kubectl.md
+        - Docker: devops/cheatsheet-docker.md
+        - PromQL: devops/cheatsheet-promql.md
+        - Ansible: devops/ansible/cheatsheet-ansible.md
+        - Terraform: devops/terraform/cheatsheet-terraform.md
+        - Git: devops/git-cheatsheet-visual.md
+      - Security:
+        - OpenSSL: security/cheatsheet-openssl.md
+        - Red Team: security/red-team-cheatsheet.md
+      - Windows:
+        - PowerShell: windows/powershell-cheatsheet.md
     - 🔥 Playbooks:
       - Vue d'ensemble: playbooks/index.md
       - Réponse Incident: playbooks/incident-response.md
+
+  # ══════════════════════════════════════════════════════════════
+  # TAB 2: OPS CENTER - Scripts & Pipelines (reorganized by use case)
+  # ══════════════════════════════════════════════════════════════
+  - 🛠️ Ops Center:
+    - Vue d'ensemble: scripts/index.md
+    - 🛠️ CLI ShellBook: cli/index.md
     - 🚀 Pipelines CI/CD:
       - Vue d'ensemble: devops/pipelines/index.md
       - GitLab CI Ultimate: devops/pipelines/gitlab-ci-ultimate.md
       - GitHub Actions: devops/pipelines/github-actions-workflow.md
       - Dockerfile Golden: devops/pipelines/dockerfile-golden.md
-    - 📜 Bibliothèque Scripts:
-      - Vue d'ensemble: scripts/index.md
-    - 📜 Scripts Bash:
-      - Index: scripts/bash/index.md
-      - God Script:
-        - server-discovery.sh: scripts/bash/server-discovery-audit.md
-      - Système:
-        - check-disk-space.sh: scripts/bash/check-disk-space.md
-        - cleanup-system.sh: scripts/bash/cleanup-system.md
-        - logs-extractor.sh: scripts/bash/logs-extractor.md
-        - monitor-resources.sh: scripts/bash/monitor-resources.md
-        - system-info.sh: scripts/bash/system-info.md
-        - capacity-planner.sh: scripts/bash/capacity-planner.md
-      - Réseau:
-        - check-connectivity.sh: scripts/bash/check-connectivity.md
-        - port-scanner.sh: scripts/bash/port-scanner.md
-        - dns-lookup.sh: scripts/bash/dns-lookup.md
-      - Fichiers:
+    - 📊 Scripts par Use Case:
+      - 🔍 Audit & Discovery:
+        - server-discovery.sh (God Script): scripts/bash/server-discovery-audit.md
+        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
+        - system_info.py: scripts/python/system_info.md
+        - config-drift-checker.sh: scripts/bash/config-drift-checker.md
+        - compliance-checker.sh: scripts/bash/compliance-checker.md
+      - 💾 Backup & Files:
         - backup-directory.sh: scripts/bash/backup-directory.md
         - backup-validation.sh: scripts/bash/backup-validation.md
+        - backup_manager.py: scripts/python/backup_manager.md
+        - backup_validator.py: scripts/python/backup_validator.md
+        - Backup-Directory.ps1: scripts/powershell/Backup-Directory.md
         - sync-folders.sh: scripts/bash/sync-folders.md
         - find-large-files.sh: scripts/bash/find-large-files.md
-      - Sécurité:
+        - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
+      - 🖥️ System & Performance:
+        - check-disk-space.sh: scripts/bash/check-disk-space.md
+        - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
+        - cleanup-system.sh: scripts/bash/cleanup-system.md
+        - monitor-resources.sh: scripts/bash/monitor-resources.md
+        - system-info.sh: scripts/bash/system-info.md
+        - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
+        - capacity-planner.sh: scripts/bash/capacity-planner.md
+        - disk_io_analyzer.py: scripts/python/disk_io_analyzer.md
+        - system_tuning_advisor.py: scripts/python/system_tuning_advisor.md
+      - 🌐 Network & Connectivity:
+        - check-connectivity.sh: scripts/bash/check-connectivity.md
+        - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
+        - port-scanner.sh: scripts/bash/port-scanner.md
+        - dns-lookup.sh: scripts/bash/dns-lookup.md
+        - network_topology_mapper.py: scripts/python/network_topology_mapper.md
+      - 🔐 Security & Compliance:
         - security-audit.sh: scripts/bash/security-audit.md
         - check-permissions.sh: scripts/bash/check-permissions.md
-        - log-analyzer.sh: scripts/bash/log-analyzer.md
-        - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
-        - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
         - secret-scanner.sh: scripts/bash/secret-scanner.md
         - secrets-rotation.sh: scripts/bash/secrets-rotation.md
         - certificate-renewal.sh: scripts/bash/certificate-renewal.md
-      - Services:
-        - service-manager.sh: scripts/bash/service-manager.md
-        - health-check.sh: scripts/bash/health-check.md
-        - logrotate-builder.sh: scripts/bash/logrotate-builder.md
-        - cron-watchdog.sh: scripts/bash/cron-watchdog.md
-        - log-rotation-manager.sh: scripts/bash/log-rotation-manager.md
-      - Conteneurs:
-        - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
-        - container-net-debug.sh: scripts/bash/container-net-debug.md
-      - Bases de Données:
-        - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
-      - Conformité & Audit:
-        - config-drift-checker.sh: scripts/bash/config-drift-checker.md
-        - compliance-checker.sh: scripts/bash/compliance-checker.md
-      - Infrastructure Linux:
-        - check-ldap.sh: scripts/bash/check-ldap.md
-        - check-bind.sh: scripts/bash/check-bind.md
-        - check-mysql.sh: scripts/bash/check-mysql.md
-        - check-postgresql.sh: scripts/bash/check-postgresql.md
-        - check-nginx.sh: scripts/bash/check-nginx.md
-        - check-postfix.sh: scripts/bash/check-postfix.md
-    - 📜 Scripts PowerShell:
-      - Index: scripts/powershell/index.md
-      - God Script:
-        - Invoke-ServerAudit.ps1: scripts/powershell/Invoke-ServerAudit.md
-      - Système:
-        - Get-SystemInfo.ps1: scripts/powershell/Get-SystemInfo.md
-        - Test-DiskSpace.ps1: scripts/powershell/Test-DiskSpace.md
-        - Get-PendingReboot.ps1: scripts/powershell/Get-PendingReboot.md
-        - Export-EventLogs.ps1: scripts/powershell/Export-EventLogs.md
-      - Réseau:
-        - Test-NetworkConnectivity.ps1: scripts/powershell/Test-NetworkConnectivity.md
-      - Fichiers:
-        - Backup-Directory.ps1: scripts/powershell/Backup-Directory.md
-        - Find-LargeFiles.ps1: scripts/powershell/Find-LargeFiles.md
-      - Services:
-        - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
-      - Sécurité & Certificats:
+        - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
         - Audit-LocalAdmins.ps1: scripts/powershell/Audit-LocalAdmins.md
         - Test-SSLCertificates.ps1: scripts/powershell/Test-SSLCertificates.md
-      - Active Directory:
+        - cert_checker.py: scripts/python/cert_checker.md
+        - compliance_report_generator.py: scripts/python/compliance_report_generator.md
+      - ⚙️ Services & Health:
+        - service-manager.sh: scripts/bash/service-manager.md
+        - health-check.sh: scripts/bash/health-check.md
+        - Get-ServiceStatus.ps1: scripts/powershell/Get-ServiceStatus.md
+        - health_checker.py: scripts/python/health_checker.md
+        - api_health_monitor.py: scripts/python/api_health_monitor.md
+      - 📝 Logs & Monitoring:
+        - logs-extractor.sh: scripts/bash/logs-extractor.md
+        - log-analyzer.sh: scripts/bash/log-analyzer.md
+        - logrotate-builder.sh: scripts/bash/logrotate-builder.md
+        - log-rotation-manager.sh: scripts/bash/log-rotation-manager.md
+        - Export-EventLogs.ps1: scripts/powershell/Export-EventLogs.md
+        - log_anomaly_detector.py: scripts/python/log_anomaly_detector.md
+        - cron-watchdog.sh: scripts/bash/cron-watchdog.md
+      - 🐳 Containers & K8s:
+        - k8s-pod-inspector.sh: scripts/bash/k8s-pod-inspector.md
+        - container-net-debug.sh: scripts/bash/container-net-debug.md
+        - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
+        - docker_health.py: scripts/python/docker_health.md
+        - kubernetes_health.py: scripts/python/kubernetes_health.md
+      - 🗄️ Databases:
+        - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
+        - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
+        - redis_key_auditor.py: scripts/python/redis_key_auditor.md
+        - db_replication_monitor.py: scripts/python/db_replication_monitor.md
+      - 🪟 Windows Infrastructure:
+        - Get-PendingReboot.ps1: scripts/powershell/Get-PendingReboot.md
         - New-BulkUsers.ps1: scripts/powershell/New-BulkUsers.md
-      - Patch Management:
         - Get-WindowsUpdateStatus.ps1: scripts/powershell/Get-WindowsUpdateStatus.md
         - Invoke-PrePatchPreparation.ps1: scripts/powershell/Invoke-PrePatchPreparation.md
         - Repair-WindowsUpdate.ps1: scripts/powershell/Repair-WindowsUpdate.md
         - Get-PatchCompliance.ps1: scripts/powershell/Get-PatchCompliance.md
-      - Infrastructure Windows:
         - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
         - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
         - Test-DNSServer.ps1: scripts/powershell/Test-DNSServer.md
@@ -175,87 +200,27 @@ nav:
         - Test-SQLServer.ps1: scripts/powershell/Test-SQLServer.md
         - Test-IISHealth.ps1: scripts/powershell/Test-IISHealth.md
         - Test-PKIHealth.ps1: scripts/powershell/Test-PKIHealth.md
-    - 📜 Scripts Python:
-      - Index: scripts/python/index.md
-      - Système:
-        - system_info.py: scripts/python/system_info.md
-      - Monitoring:
-        - health_checker.py: scripts/python/health_checker.md
-        - api_health_monitor.py: scripts/python/api_health_monitor.md
-      - Fichiers:
-        - backup_manager.py: scripts/python/backup_manager.md
-        - backup_validator.py: scripts/python/backup_validator.md
-      - Conteneurs:
-        - docker_cleaner_pro.py: scripts/python/docker_cleaner_pro.md
-        - docker_health.py: scripts/python/docker_health.md
-        - kubernetes_health.py: scripts/python/kubernetes_health.md
-      - Bases de Données:
-        - redis_key_auditor.py: scripts/python/redis_key_auditor.md
-        - db_replication_monitor.py: scripts/python/db_replication_monitor.md
-      - Système & Performance:
-        - patch_compliance_report.py: scripts/python/patch_compliance_report.md
-        - system_tuning_advisor.py: scripts/python/system_tuning_advisor.md
-        - disk_io_analyzer.py: scripts/python/disk_io_analyzer.md
-        - log_anomaly_detector.py: scripts/python/log_anomaly_detector.md
-      - Réseau & Sécurité:
-        - network_topology_mapper.py: scripts/python/network_topology_mapper.md
-        - compliance_report_generator.py: scripts/python/compliance_report_generator.md
-      - FinOps & Cloud:
+      - 🐧 Linux Infrastructure:
+        - check-ldap.sh: scripts/bash/check-ldap.md
+        - check-bind.sh: scripts/bash/check-bind.md
+        - check-mysql.sh: scripts/bash/check-mysql.md
+        - check-postgresql.sh: scripts/bash/check-postgresql.md
+        - check-nginx.sh: scripts/bash/check-nginx.md
+        - check-postfix.sh: scripts/bash/check-postfix.md
+      - 💰 FinOps & Generators:
         - infrastructure_cost_analyzer.py: scripts/python/infrastructure_cost_analyzer.md
-      - Générateurs:
         - systemd_generator.py: scripts/python/systemd_generator.md
-      - DevOps & Cloud:
-        - cert_checker.py: scripts/python/cert_checker.md
         - git_repo_cleaner.py: scripts/python/git_repo_cleaner.md
+    - 📜 Index par Langage:
+      - Bash: scripts/bash/index.md
+      - PowerShell: scripts/powershell/index.md
+      - Python: scripts/python/index.md
 
   # ══════════════════════════════════════════════════════════════
-  # ONGLET 2 : LINUX
+  # TAB 3: LINUX (cleaned - no formations)
   # ══════════════════════════════════════════════════════════════
   - 🐧 Linux:
     - Accueil: linux/index.md
-    - 🎓 Formation Linux Mastery (150h):
-      - Programme: formations/linux-mastery/index.md
-      - Niveau 1 - Fondations (30h):
-        - Module 01 - Découverte: formations/linux-mastery/01-decouverte.md
-        - Module 02 - Navigation: formations/linux-mastery/02-navigation.md
-        - Module 03 - Permissions: formations/linux-mastery/03-permissions.md
-        - Module 04 - Éditeurs: formations/linux-mastery/04-editeurs.md
-        - Module 05 - Shell Intro: formations/linux-mastery/05-shell-intro.md
-      - Niveau 2 - Administration (35h):
-        - Module 06 - Paquets: formations/linux-mastery/06-paquets.md
-        - Module 07 - Services: formations/linux-mastery/07-services.md
-        - Module 08 - Stockage: formations/linux-mastery/08-stockage.md
-        - Module 09 - Réseau: formations/linux-mastery/09-reseau.md
-        - Module 10 - Automatisation: formations/linux-mastery/10-automatisation.md
-      - Niveau 3 - Ingénierie (40h):
-        - Module 11 - Sécurité: formations/linux-mastery/11-securite.md
-        - Module 12 - Services Réseau: formations/linux-mastery/12-services-reseau.md
-        - Module 13 - Performance: formations/linux-mastery/13-performance.md
-        - Module 14 - Scripting Avancé: formations/linux-mastery/14-scripting-avance.md
-        - Module 15 - Backup: formations/linux-mastery/15-backup.md
-      - Niveau 4 - Expert (45h):
-        - Module 16 - Haute Dispo: formations/linux-mastery/16-haute-disponibilite.md
-        - Module 17 - Conteneurs: formations/linux-mastery/17-conteneurs.md
-        - Module 18 - Kubernetes: formations/linux-mastery/18-kubernetes.md
-        - Module 19 - IaC: formations/linux-mastery/19-iac.md
-        - Module 20 - Projet Final: formations/linux-mastery/20-projet-final.md
-      - Ressources:
-        - Glossaire: formations/linux-mastery/glossaire.md
-        - Cheatsheet Commandes: formations/linux-mastery/cheatsheet-commandes.md
-        - Cheatsheet Vim: formations/linux-mastery/cheatsheet-vim.md
-        - Checklist Hardening: formations/linux-mastery/checklist-hardening.md
-    - 🎓 Formation Hardening Linux (10h):
-      - Programme: formations/linux-hardening/index.md
-      - Module 01 - SSH: formations/linux-hardening/01-module.md
-      - Module 02 - Users: formations/linux-hardening/02-module.md
-      - Module 03 - Firewall: formations/linux-hardening/03-module.md
-      - Module 04 - Audit: formations/linux-hardening/04-module.md
-      - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
-    - 📋 Cheatsheets:
-      - Systemd: linux/cheatsheet-systemd.md
-      - SSH: linux/cheatsheet-ssh.md
-      - Sed & Awk: linux/cheatsheet-sed-awk.md
-      - Networking: linux/cheatsheet-networking.md
     - 🚀 Démarrage:
       - Clés SSH: linux/ssh-keys.md
       - Productivité: linux/productivity.md
@@ -263,32 +228,24 @@ nav:
       - Outils Modernes: linux/modern-tools.md
       - Bash Wizardry: linux/bash-wizardry.md
       - Traitement Texte: linux/text-processing.md
-    - 🎓 Certification:
-      - LPI Certification: linux/lpi-certification.md
     - 🖥️ Système:
       - Boot & Services: linux/boot-and-services.md
       - Filesystem & Stockage: linux/filesystem-and-storage.md
       - Hardware: linux/hardware.md
+      - Systemd Avancé: linux/systemd-advanced.md
     - 👥 Administration:
       - Users & Permissions: linux/users-and-permissions.md
       - Gestion Paquets: linux/package-management.md
       - Automatisation Cron: linux/automation-cron.md
-      - Systemd Avancé: linux/systemd-advanced.md
       - Data Processing: linux/data-processing-advanced.md
       - Standards Scripting: linux/scripting-standards.md
-    - 🔴 RHEL & Sécurité:
-      - SELinux: linux/rhel-security-selinux.md
-      - Networking RHEL: linux/rhel-networking.md
-      - Packages RHEL: linux/rhel-package-management.md
-      - OpenSCAP: linux/rhel-openscap-compliance.md
-      - Audit Ops: linux/rhel-ops-audit.md
     - 🌐 Réseau & Services:
       - Network Management: linux/network-management.md
       - SSH Tunnels: linux/ssh-tunnels.md
-      - Architecture Email: linux/email-systems-basics.md
       - SSH Hardening: linux/ssh-hardening.md
       - Firewall UFW: linux/firewall-ufw.md
       - VPN WireGuard: linux/vpn-wireguard.md
+      - Architecture Email: linux/email-systems-basics.md
     - 🗄️ Services & Données:
       - Web Servers: linux/web-servers.md
       - Database Admin: linux/database-admin.md
@@ -296,94 +253,28 @@ nav:
       - Postfix Relay: linux/postfix-relay.md
       - Échange Fichiers: linux/secure-file-exchange.md
       - KVM: linux/virtualization-kvm.md
+    - 🔴 RHEL & Sécurité:
+      - SELinux: linux/rhel-security-selinux.md
+      - Networking RHEL: linux/rhel-networking.md
+      - Packages RHEL: linux/rhel-package-management.md
+      - OpenSCAP: linux/rhel-openscap-compliance.md
+      - Audit Ops: linux/rhel-ops-audit.md
     - 🔧 Dépannage:
       - Debugging: linux/debugging.md
-      - Kernel Debugging (Crash/Panic): linux/kernel-debugging.md
+      - Kernel Debugging: linux/kernel-debugging.md
       - Performance: linux/performance-analysis.md
       - Logs: linux/logs-management.md
       - Backup & Transfert: linux/backup-transfer.md
       - Archives: linux/archives-compression.md
+    - 🎓 Certification:
+      - LPI Certification: linux/lpi-certification.md
 
   # ══════════════════════════════════════════════════════════════
-  # ONGLET 3 : WINDOWS
+  # TAB 4: WINDOWS (cleaned - no formations)
   # ══════════════════════════════════════════════════════════════
   - 🪟 Windows:
     - Accueil: windows/index.md
     - Cartes Mentales: windows/windows-mindmaps.md
-    - 🎓 Formation Windows Mastery (150h):
-      - Programme: formations/windows-mastery/index.md
-      - Niveau 1 - Fondations (30h):
-        - Module 01 - Découverte: formations/windows-mastery/01-decouverte.md
-        - Module 02 - PowerShell: formations/windows-mastery/02-powershell-basics.md
-        - Module 03 - Users & NTFS: formations/windows-mastery/03-utilisateurs-ntfs.md
-        - Module 04 - Outils Admin: formations/windows-mastery/04-outils-administration.md
-        - Module 05 - Scripting Intro: formations/windows-mastery/05-scripting-intro.md
-      - Niveau 2 - Administration (35h):
-        - Module 06 - Rôles: formations/windows-mastery/06-roles-features.md
-        - Module 07 - Services: formations/windows-mastery/07-services-processus.md
-        - Module 08 - Stockage: formations/windows-mastery/08-stockage-disques.md
-        - Module 09 - DNS & DHCP: formations/windows-mastery/09-reseau-dns-dhcp.md
-        - Module 10 - Automatisation: formations/windows-mastery/10-automatisation-basique.md
-      - Niveau 3 - Ingénierie (40h):
-        - Module 11 - Active Directory: formations/windows-mastery/11-active-directory-core.md
-        - Module 12 - GPO: formations/windows-mastery/12-gpo-configuration.md
-        - Module 13 - Sécurité: formations/windows-mastery/13-securite-hardening.md
-        - Module 14 - PKI & RADIUS: formations/windows-mastery/14-services-reseau-avances.md
-        - Module 15 - Backup & DR: formations/windows-mastery/15-backup-disaster-recovery.md
-      - Niveau 4 - Expert (45h):
-        - Module 16 - Haute Dispo: formations/windows-mastery/16-haute-disponibilite.md
-        - Module 17 - Conteneurs: formations/windows-mastery/17-conteneurs-windows.md
-        - Module 18 - Hybrid Cloud: formations/windows-mastery/18-hybrid-cloud.md
-        - Module 19 - IaC & DSC: formations/windows-mastery/19-infrastructure-as-code.md
-        - Module 20 - Projet Final: formations/windows-mastery/20-projet-final.md
-      - Ressources:
-        - Glossaire: formations/windows-mastery/glossaire.md
-        - Cheatsheet PowerShell: formations/windows-mastery/cheatsheet-powershell.md
-        - Cheatsheet AD: formations/windows-mastery/cheatsheet-active-directory.md
-        - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
-    - 🎓 Formation Hardening Windows (10h):
-      - Programme: formations/windows-hardening/index.md
-      - Module 01 - Baselines: formations/windows-hardening/01-module.md
-      - Module 02 - Services: formations/windows-hardening/02-module.md
-      - Module 03 - Firewall: formations/windows-hardening/03-module.md
-      - Module 04 - AD: formations/windows-hardening/04-module.md
-      - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
-    - 🎓 Formations Écosystème Microsoft:
-      - ♻️ Windows Patching (12h):
-        - Programme: formations/windows-patching/index.md
-        - Module 01 - Architecture: formations/windows-patching/01-module.md
-        - Module 02 - Gestion: formations/windows-patching/02-module.md
-        - Module 03 - Clients: formations/windows-patching/03-module.md
-        - Module 04 - Maintenance: formations/windows-patching/04-module.md
-        - Module 05 - TP Final: formations/windows-patching/05-tp-final.md
-      - 🍫 Chocolatey Factory (12h):
-        - Programme: formations/chocolatey/index.md
-        - Module 01 - Client CLI: formations/chocolatey/01-module.md
-        - Module 02 - Packaging: formations/chocolatey/02-module.md
-        - Module 03 - Serveur: formations/chocolatey/03-module.md
-        - Module 04 - Déploiement: formations/chocolatey/04-module.md
-        - Module 05 - TP Final: formations/chocolatey/05-tp-final.md
-      - 💿 NTLite Mastery (18h):
-        - Programme: formations/ntlite/index.md
-        - Module 01 - Bases: formations/ntlite/01-module.md
-        - Module 02 - Debloating: formations/ntlite/02-module.md
-        - Module 03 - Intégration: formations/ntlite/03-module.md
-        - Module 04 - Automatisation: formations/ntlite/04-module.md
-        - Module 05 - TP Final: formations/ntlite/05-tp-final.md
-        - Module 06 - Cas VPN: formations/ntlite/06-scenario-vpn.md
-      - 🛢️ SQL Server DBA (22h):
-        - Programme: formations/sql-server/index.md
-        - Module 01 - Architecture: formations/sql-server/01-module.md
-        - Module 02 - Sécurité: formations/sql-server/02-module.md
-        - Module 03 - Maintenance: formations/sql-server/03-module.md
-        - Module 04 - Automatisation: formations/sql-server/04-module.md
-        - Module 05 - TP Final: formations/sql-server/05-tp-final.md
-      - 🪟 Windows Server (20h):
-        - Programme: formations/windows-server/index.md
-        - Module 01 - Fondamentaux: formations/windows-server/01-module.md
-        - Module 02 - Active Directory: formations/windows-server/02-module.md
-        - Module 03 - Services Réseau: formations/windows-server/03-module.md
-        - Module 04 - TP Final: formations/windows-server/04-tp-final.md
     - 🚀 Démarrage:
       - Productivité: windows/productivity.md
       - PowerShell Bases: windows/powershell-foundations.md
@@ -428,55 +319,138 @@ nav:
       - Diagnostic Réseau: windows/network-troubleshooting.md
       - Netsh: windows/netsh-troubleshooting.md
     - 💻 PowerShell Avancé:
-      - Survival Guide: windows/powershell-cheatsheet.md
       - Workshop Best Practices: windows/powershell-workshop.md
-      - Execution Policy & Launcher: windows/powershell-execution.md
+      - Execution Policy: windows/powershell-execution.md
       - Remoting & WinRM: windows/powershell-remoting.md
       - DSC: windows/powershell-dsc.md
       - Modules: windows/powershell-modules.md
       - WMI & CIM: windows/wmi-cim.md
 
   # ══════════════════════════════════════════════════════════════
-  # ONGLET 4 : DEVOPS & CLOUD (Fusion DevOps + Cloud + Python)
+  # TAB 5: DEVOPS & PLATFORMS (cleaned - no formations)
   # ══════════════════════════════════════════════════════════════
   - ☁️ DevOps & Cloud:
     - Accueil: devops/index.md
     - 🐍 Python SysOps:
       - Accueil: python/index.md
-      - 🎓 Formation Python SysOps (35h):
-        - Programme: formations/python-sysops/index.md
-        - Niveau 1 - Fondations (10h):
-          - Module 01 - Environnement: formations/python-sysops/01-environnement.md
-          - Module 02 - Syntaxe: formations/python-sysops/02-syntaxe.md
-          - Module 03 - Structures: formations/python-sysops/03-structures.md
-          - Module 04 - Fonctions: formations/python-sysops/04-fonctions.md
-        - Niveau 2 - Système (10h):
-          - Module 05 - Fichiers: formations/python-sysops/05-fichiers.md
-          - Module 06 - Formats: formations/python-sysops/06-formats.md
-          - Module 07 - Subprocess: formations/python-sysops/07-subprocess.md
-          - Module 08 - Regex: formations/python-sysops/08-regex.md
-          - Module 09 - Erreurs: formations/python-sysops/09-erreurs.md
-        - Niveau 3 - Réseau (8h):
-          - Module 10 - Réseau: formations/python-sysops/10-reseau.md
-          - Module 11 - APIs REST: formations/python-sysops/11-api-rest.md
-          - Module 12 - SSH: formations/python-sysops/12-ssh.md
-        - Niveau 4 - Production (7h):
-          - Module 13 - CLI: formations/python-sysops/13-cli.md
-          - Module 14 - Cloud: formations/python-sysops/14-cloud.md
-          - Module 15 - Tests: formations/python-sysops/15-tests.md
-          - Module 16 - TP Final: formations/python-sysops/16-tp-final.md
-        - Ressources:
-          - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
-          - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
-          - Glossaire: formations/python-sysops/glossaire.md
-      - 📚 Documentation:
-        - Fondamentaux: python/fundamentals.md
-        - Fichiers & Données: python/files-data.md
-        - API & Réseau: python/api-network.md
-        - Cloud & AWS: python/cloud-aws.md
-        - Tests & Qualité: python/testing.md
-    - 🎓 Formations DevOps:
-      - 🚀 Le Socle DevOps (6h):
+      - Fondamentaux: python/fundamentals.md
+      - Fichiers & Données: python/files-data.md
+      - API & Réseau: python/api-network.md
+      - Cloud & AWS: python/cloud-aws.md
+      - Tests & Qualité: python/testing.md
+    - 🧠 Stratégie & Gouvernance:
+      - SRE (Site Reliability): devops/sre-concepts.md
+      - FinOps (Coûts Cloud): devops/finops-basics.md
+      - Green IT (GreenOps): devops/green-it.md
+      - Platform Engineering: devops/platform-engineering.md
+      - Lean & Agile: devops/methodologies.md
+      - Gestion de Projet: devops/project-management.md
+      - Soft Skills: devops/soft-skills.md
+    - 🛠️ Engineering & Outils:
+      - Embedded Linux (Yocto): devops/embedded-linux.md
+      - Git SysOps: devops/git-sysops.md
+      - Docs-as-Code: devops/docs-as-code.md
+      - Outils IT: devops/productivity-it-tools.md
+    - 🐳 Conteneurs:
+      - Docker Avancé: devops/docker-advanced.md
+      - Podman: devops/podman-containers.md
+    - ☸️ Kubernetes:
+      - Survival Guide: devops/kubernetes-survival.md
+      - Networking: devops/kubernetes-networking.md
+      - CKA Prep: devops/kubernetes-cka.md
+      - Helm: devops/kubernetes-helm.md
+      - Kustomize: devops/kubernetes-kustomize.md
+      - Operators: devops/kubernetes-operators.md
+      - GitOps ArgoCD: devops/gitops-argocd.md
+    - 📦 Infrastructure as Code:
+      - 💠 Ansible:
+        - Vue d'ensemble: devops/ansible/index.md
+        - Fundamentals: devops/ansible/fundamentals.md
+        - Playbooks: devops/ansible/playbooks.md
+        - Industrialization: devops/ansible/industrialization.md
+        - Advanced Patterns: devops/ansible/advanced-patterns.md
+        - Cloud Integrations: devops/ansible/cloud-integrations.md
+        - Testing Molecule: devops/ansible/testing-molecule.md
+      - 🔧 Terraform:
+        - Vue d'ensemble: devops/terraform/index.md
+        - Fundamentals: devops/terraform/fundamentals.md
+    - 🔄 CI/CD:
+      - GitLab CI: devops/cicd-gitlab.md
+      - GitHub Actions: devops/cicd-github-actions.md
+    - 📊 Observabilité:
+      - Stack Observabilité: devops/observability-stack.md
+      - Observabilité Avancée: devops/observability-advanced.md
+      - Tracing Distribué: devops/observability-tracing.md
+      - Loki Logging: devops/loki-logging.md
+    - 🏗️ Architecture & HA:
+      - Networking Moderne: devops/modern-networking.md
+      - Load Balancing: devops/load-balancing.md
+    - 🛠️ Labs Pratiques:
+      - Index: devops/labs/index.md
+      - Docker Mail Server: devops/labs/docker-mail-server.md
+
+  # ══════════════════════════════════════════════════════════════
+  # TAB 6: DATA & INFRASTRUCTURE (NEW)
+  # ══════════════════════════════════════════════════════════════
+  - 🗄️ Data & Infra:
+    - 🗄️ Bases de Données:
+      - Accueil: databases/index.md
+      - Concepts BI & Data: databases/bi-concepts.md
+      - 🐘 PostgreSQL:
+        - Guide: databases/postgresql.md
+        - Cheatsheet: databases/postgresql-cheatsheet.md
+      - 🐬 MariaDB/MySQL:
+        - Guide: databases/mariadb.md
+        - Cheatsheet: databases/mariadb-cheatsheet.md
+      - 🍃 MongoDB:
+        - Guide: databases/mongodb.md
+        - Cheatsheet: databases/mongodb-cheatsheet.md
+      - 🔴 Redis:
+        - Guide: databases/redis.md
+        - Cheatsheet: databases/redis-cheatsheet.md
+      - 🔄 Haute Disponibilité: databases/high-availability.md
+    - 🌐 Réseau:
+      - Accueil: network/index.md
+      - Fondamentaux: network/fundamentals.md
+
+  # ══════════════════════════════════════════════════════════════
+  # TAB 7: SECURITY & COMPLIANCE (NEW - extracted from Encyclopédie)
+  # ══════════════════════════════════════════════════════════════
+  - 🔒 Sécurité:
+    - Accueil: security/index.md
+    - 🔐 Cryptographie & PKI:
+      - Concepts Crypto: security/crypto-concepts.md
+      - Certificats X.509: security/certificates.md
+      - OpenSSL CLI: security/openssl-cli.md
+    - 📋 Conformité & Gouvernance:
+      - Gestion des Risques: security/risk-management.md
+      - Secrets en GitOps: security/gitops-secrets.md
+      - SecNumCloud: security/secnumcloud.md
+      - Guides ANSSI: security/anssi-guides.md
+      - Checklist Audit: security/audit-checklist.md
+    - 🛡️ Défense & Investigation:
+      - Digital Forensics: security/digital-forensics.md
+      - OSINT: security/osint.md
+      - CrowdStrike EDR: security/crowdstrike-edr.md
+      - HashiCorp Vault: security/hashicorp-vault.md
+    - 🔴 Offensive Security:
+      - Guide CTF: security/ctf-guide.md
+      - WiFi Hacking: security/wifi-hacking.md
+      - Stéganographie: security/steganography.md
+      - Buffer Overflow: security/buffer-overflow.md
+      - Exegol: security/exegol.md
+      - Outils Essentiels: security/essential-tools.md
+
+  # ══════════════════════════════════════════════════════════════
+  # TAB 8: LEARNING PATHS (ALL formations consolidated)
+  # ══════════════════════════════════════════════════════════════
+  - 🎓 Formations:
+    - Catalogue: formations/index.md
+    - 📘 Guidelines:
+      - Style Guide: formations/_guidelines/style-guide.md
+      - Template Module: formations/_guidelines/module-template.md
+    - 🏛️ Fondations:
+      - 🚀 DevOps Foundation (6h):
         - Programme: formations/devops-foundation/index.md
         - Module 01 - Git: formations/devops-foundation/01-module.md
         - Module 02 - Branches: formations/devops-foundation/02-module.md
@@ -487,8 +461,144 @@ nav:
           - Glossaire: formations/devops-foundation/glossaire.md
           - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
           - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
-          - Memo Conventional Commits: formations/devops-foundation/memo-conventional-commits.md
-          - Memo ShellCheck: formations/devops-foundation/memo-shellcheck.md
+      - ☁️ Cloud Fundamentals (35h):
+        - Programme: formations/cloud-fundamentals/index.md
+        - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
+        - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
+        - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
+        - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
+        - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
+        - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
+        - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
+        - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
+        - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
+        - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
+        - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
+        - Module 12 - TP Final: formations/cloud-fundamentals/12-tp-final.md
+        - Ressources:
+          - Glossaire: formations/cloud-fundamentals/glossaire.md
+          - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
+      - 🔐 PKI & Certificats (16h):
+        - Programme: formations/pki-certificates/index.md
+        - Module 01 - Crypto: formations/pki-certificates/01-module.md
+        - Module 02 - X.509: formations/pki-certificates/02-module.md
+        - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
+        - Module 04 - Automatisation: formations/pki-certificates/04-module.md
+        - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
+    - 🐧 Parcours Linux:
+      - 🐧 Linux Mastery (150h):
+        - Programme: formations/linux-mastery/index.md
+        - Niveau 1 - Fondations:
+          - Module 01 - Découverte: formations/linux-mastery/01-decouverte.md
+          - Module 02 - Navigation: formations/linux-mastery/02-navigation.md
+          - Module 03 - Permissions: formations/linux-mastery/03-permissions.md
+          - Module 04 - Éditeurs: formations/linux-mastery/04-editeurs.md
+          - Module 05 - Shell Intro: formations/linux-mastery/05-shell-intro.md
+        - Niveau 2 - Administration:
+          - Module 06 - Paquets: formations/linux-mastery/06-paquets.md
+          - Module 07 - Services: formations/linux-mastery/07-services.md
+          - Module 08 - Stockage: formations/linux-mastery/08-stockage.md
+          - Module 09 - Réseau: formations/linux-mastery/09-reseau.md
+          - Module 10 - Automatisation: formations/linux-mastery/10-automatisation.md
+        - Niveau 3 - Ingénierie:
+          - Module 11 - Sécurité: formations/linux-mastery/11-securite.md
+          - Module 12 - Services Réseau: formations/linux-mastery/12-services-reseau.md
+          - Module 13 - Performance: formations/linux-mastery/13-performance.md
+          - Module 14 - Scripting Avancé: formations/linux-mastery/14-scripting-avance.md
+          - Module 15 - Backup: formations/linux-mastery/15-backup.md
+        - Niveau 4 - Expert:
+          - Module 16 - Haute Dispo: formations/linux-mastery/16-haute-disponibilite.md
+          - Module 17 - Conteneurs: formations/linux-mastery/17-conteneurs.md
+          - Module 18 - Kubernetes: formations/linux-mastery/18-kubernetes.md
+          - Module 19 - IaC: formations/linux-mastery/19-iac.md
+          - Module 20 - Projet Final: formations/linux-mastery/20-projet-final.md
+        - Ressources:
+          - Glossaire: formations/linux-mastery/glossaire.md
+          - Cheatsheet Commandes: formations/linux-mastery/cheatsheet-commandes.md
+          - Cheatsheet Vim: formations/linux-mastery/cheatsheet-vim.md
+          - Checklist Hardening: formations/linux-mastery/checklist-hardening.md
+      - 🛡️ Linux Hardening (10h):
+        - Programme: formations/linux-hardening/index.md
+        - Module 01 - SSH: formations/linux-hardening/01-module.md
+        - Module 02 - Users: formations/linux-hardening/02-module.md
+        - Module 03 - Firewall: formations/linux-hardening/03-module.md
+        - Module 04 - Audit: formations/linux-hardening/04-module.md
+        - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
+    - 🪟 Parcours Windows:
+      - 🪟 Windows Mastery (150h):
+        - Programme: formations/windows-mastery/index.md
+        - Niveau 1 - Fondations:
+          - Module 01 - Découverte: formations/windows-mastery/01-decouverte.md
+          - Module 02 - PowerShell: formations/windows-mastery/02-powershell-basics.md
+          - Module 03 - Users & NTFS: formations/windows-mastery/03-utilisateurs-ntfs.md
+          - Module 04 - Outils Admin: formations/windows-mastery/04-outils-administration.md
+          - Module 05 - Scripting Intro: formations/windows-mastery/05-scripting-intro.md
+        - Niveau 2 - Administration:
+          - Module 06 - Rôles: formations/windows-mastery/06-roles-features.md
+          - Module 07 - Services: formations/windows-mastery/07-services-processus.md
+          - Module 08 - Stockage: formations/windows-mastery/08-stockage-disques.md
+          - Module 09 - DNS & DHCP: formations/windows-mastery/09-reseau-dns-dhcp.md
+          - Module 10 - Automatisation: formations/windows-mastery/10-automatisation-basique.md
+        - Niveau 3 - Ingénierie:
+          - Module 11 - Active Directory: formations/windows-mastery/11-active-directory-core.md
+          - Module 12 - GPO: formations/windows-mastery/12-gpo-configuration.md
+          - Module 13 - Sécurité: formations/windows-mastery/13-securite-hardening.md
+          - Module 14 - PKI & RADIUS: formations/windows-mastery/14-services-reseau-avances.md
+          - Module 15 - Backup & DR: formations/windows-mastery/15-backup-disaster-recovery.md
+        - Niveau 4 - Expert:
+          - Module 16 - Haute Dispo: formations/windows-mastery/16-haute-disponibilite.md
+          - Module 17 - Conteneurs: formations/windows-mastery/17-conteneurs-windows.md
+          - Module 18 - Hybrid Cloud: formations/windows-mastery/18-hybrid-cloud.md
+          - Module 19 - IaC & DSC: formations/windows-mastery/19-infrastructure-as-code.md
+          - Module 20 - Projet Final: formations/windows-mastery/20-projet-final.md
+        - Ressources:
+          - Glossaire: formations/windows-mastery/glossaire.md
+          - Cheatsheet PowerShell: formations/windows-mastery/cheatsheet-powershell.md
+          - Cheatsheet AD: formations/windows-mastery/cheatsheet-active-directory.md
+          - Checklist Hardening: formations/windows-mastery/checklist-hardening.md
+      - 🛡️ Windows Hardening (10h):
+        - Programme: formations/windows-hardening/index.md
+        - Module 01 - Baselines: formations/windows-hardening/01-module.md
+        - Module 02 - Services: formations/windows-hardening/02-module.md
+        - Module 03 - Firewall: formations/windows-hardening/03-module.md
+        - Module 04 - AD: formations/windows-hardening/04-module.md
+        - Module 05 - TP Final: formations/windows-hardening/05-tp-final.md
+      - ♻️ Windows Patching (12h):
+        - Programme: formations/windows-patching/index.md
+        - Module 01 - Architecture: formations/windows-patching/01-module.md
+        - Module 02 - Gestion: formations/windows-patching/02-module.md
+        - Module 03 - Clients: formations/windows-patching/03-module.md
+        - Module 04 - Maintenance: formations/windows-patching/04-module.md
+        - Module 05 - TP Final: formations/windows-patching/05-tp-final.md
+      - 🍫 Chocolatey Factory (12h):
+        - Programme: formations/chocolatey/index.md
+        - Module 01 - Client CLI: formations/chocolatey/01-module.md
+        - Module 02 - Packaging: formations/chocolatey/02-module.md
+        - Module 03 - Serveur: formations/chocolatey/03-module.md
+        - Module 04 - Déploiement: formations/chocolatey/04-module.md
+        - Module 05 - TP Final: formations/chocolatey/05-tp-final.md
+      - 💿 NTLite Mastery (18h):
+        - Programme: formations/ntlite/index.md
+        - Module 01 - Bases: formations/ntlite/01-module.md
+        - Module 02 - Debloating: formations/ntlite/02-module.md
+        - Module 03 - Intégration: formations/ntlite/03-module.md
+        - Module 04 - Automatisation: formations/ntlite/04-module.md
+        - Module 05 - TP Final: formations/ntlite/05-tp-final.md
+        - Module 06 - Cas VPN: formations/ntlite/06-scenario-vpn.md
+      - 🛢️ SQL Server DBA (22h):
+        - Programme: formations/sql-server/index.md
+        - Module 01 - Architecture: formations/sql-server/01-module.md
+        - Module 02 - Sécurité: formations/sql-server/02-module.md
+        - Module 03 - Maintenance: formations/sql-server/03-module.md
+        - Module 04 - Automatisation: formations/sql-server/04-module.md
+        - Module 05 - TP Final: formations/sql-server/05-tp-final.md
+      - 🪟 Windows Server (20h):
+        - Programme: formations/windows-server/index.md
+        - Module 01 - Fondamentaux: formations/windows-server/01-module.md
+        - Module 02 - Active Directory: formations/windows-server/02-module.md
+        - Module 03 - Services Réseau: formations/windows-server/03-module.md
+        - Module 04 - TP Final: formations/windows-server/04-tp-final.md
+    - 🚀 Parcours DevOps:
       - 🐳 Docker Mastery (15h):
         - Programme: formations/docker-mastery/index.md
         - Module 01 - Fondamentaux: formations/docker-mastery/01-module.md
@@ -563,42 +673,34 @@ nav:
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
         - Ressources:
           - Glossaire: formations/terraform-aci/glossaire.md
-    - 🎓 Formations:
-      - 🧠 AI Engineering for Ops (35h):
-        - Programme: formations/ai-engineering/index.md
-        - Module 01 - Fondations: formations/ai-engineering/01-module.md
-        - Module 02 - Prompting: formations/ai-engineering/02-module.md
-        - Module 03 - Local Ops: formations/ai-engineering/03-module.md
-        - Module 04 - RAG: formations/ai-engineering/04-module.md
-        - Module 05 - Projet Final: formations/ai-engineering/05-tp-final.md
-      - 🏴‍☠️ Ethical Hacking Mastery (40h):
-        - Programme: formations/hacking-mastery/index.md
-        - Module 01 - Setup & Légalité: formations/hacking-mastery/01-module.md
-        - Module 02 - Reconnaissance: formations/hacking-mastery/02-module.md
-        - Module 03 - Web Hacking: formations/hacking-mastery/03-module.md
-        - Module 04 - Active Directory: formations/hacking-mastery/04-module.md
-        - Module 05 - Post-Exploitation: formations/hacking-mastery/05-module.md
-        - Module 06 - Projet Final: formations/hacking-mastery/06-tp-final.md
-      - ☁️ Cloud Fundamentals (35h):
-        - Programme: formations/cloud-fundamentals/index.md
-        - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
-        - Module 02 - IaaS/PaaS/SaaS: formations/cloud-fundamentals/02-module.md
-        - Module 03 - Infrastructure: formations/cloud-fundamentals/03-module.md
-        - Module 04 - Sécurité: formations/cloud-fundamentals/04-module.md
-        - Module 05 - Architecture: formations/cloud-fundamentals/05-module.md
-        - Module 06 - FinOps: formations/cloud-fundamentals/06-module.md
-        - Module 07 - Cas Worldline: formations/cloud-fundamentals/07-module.md
-        - Module 08 - Conteneurs: formations/cloud-fundamentals/08-module.md
-        - Module 09 - DevOps CI/CD: formations/cloud-fundamentals/09-module.md
-        - Module 10 - Data & IA: formations/cloud-fundamentals/10-module.md
-        - Module 11 - Migration: formations/cloud-fundamentals/11-module.md
-        - Module 12 - TP Final: formations/cloud-fundamentals/12-tp-final.md
+    - 🐍 Parcours Python:
+      - 🐍 Python SysOps (35h):
+        - Programme: formations/python-sysops/index.md
+        - Niveau 1 - Fondations:
+          - Module 01 - Environnement: formations/python-sysops/01-environnement.md
+          - Module 02 - Syntaxe: formations/python-sysops/02-syntaxe.md
+          - Module 03 - Structures: formations/python-sysops/03-structures.md
+          - Module 04 - Fonctions: formations/python-sysops/04-fonctions.md
+        - Niveau 2 - Système:
+          - Module 05 - Fichiers: formations/python-sysops/05-fichiers.md
+          - Module 06 - Formats: formations/python-sysops/06-formats.md
+          - Module 07 - Subprocess: formations/python-sysops/07-subprocess.md
+          - Module 08 - Regex: formations/python-sysops/08-regex.md
+          - Module 09 - Erreurs: formations/python-sysops/09-erreurs.md
+        - Niveau 3 - Réseau:
+          - Module 10 - Réseau: formations/python-sysops/10-reseau.md
+          - Module 11 - APIs REST: formations/python-sysops/11-api-rest.md
+          - Module 12 - SSH: formations/python-sysops/12-ssh.md
+        - Niveau 4 - Production:
+          - Module 13 - CLI: formations/python-sysops/13-cli.md
+          - Module 14 - Cloud: formations/python-sysops/14-cloud.md
+          - Module 15 - Tests: formations/python-sysops/15-tests.md
+          - Module 16 - TP Final: formations/python-sysops/16-tp-final.md
         - Ressources:
-          - Glossaire: formations/cloud-fundamentals/glossaire.md
-          - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
-      - 🛠️ Ateliers Pratiques (Labs):
-        - Index: devops/labs/index.md
-        - Docker Mail Server: devops/labs/docker-mail-server.md
+          - Cheatsheet Python: formations/python-sysops/cheatsheet-python.md
+          - Cheatsheet Libs: formations/python-sysops/cheatsheet-libs.md
+          - Glossaire: formations/python-sysops/glossaire.md
+    - ☁️ Parcours Cloud:
       - 🟠 AWS Fundamentals (35h):
         - Programme: formations/aws-fundamentals/index.md
         - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
@@ -635,65 +737,28 @@ nav:
         - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
         - Module 09 - Security: formations/gcp-fundamentals/09-module.md
         - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
-    - 🧠 Stratégie & Gouvernance:
-      - SRE (Site Reliability): devops/sre-concepts.md
-      - FinOps (Coûts Cloud): devops/finops-basics.md
-      - Green IT (GreenOps): devops/green-it.md
-      - Platform Eng. (IDP): devops/platform-engineering.md
-      - Lean & Agile: devops/methodologies.md
-      - Gestion de Projet: devops/project-management.md
-      - Soft Skills: devops/soft-skills.md
-    - 📋 Cheatsheets:
-      - Kubectl: devops/cheatsheet-kubectl.md
-      - Docker: devops/cheatsheet-docker.md
-      - PromQL: devops/cheatsheet-promql.md
-      - Ansible: devops/ansible/cheatsheet-ansible.md
-      - Terraform: devops/terraform/cheatsheet-terraform.md
-    - 🛠️ Engineering & Outils:
-      - Embedded Linux (Yocto): devops/embedded-linux.md
-      - Git SysOps: devops/git-sysops.md
-      - Git Cheatsheet: devops/git-cheatsheet-visual.md
-      - Docs-as-Code: devops/docs-as-code.md
-      - Outils IT: devops/productivity-it-tools.md
-    - 🐳 Conteneurs:
-      - Docker Avancé: devops/docker-advanced.md
-      - Podman: devops/podman-containers.md
-    - ☸️ Kubernetes:
-      - Survival Guide: devops/kubernetes-survival.md
-      - Networking: devops/kubernetes-networking.md
-      - CKA Prep: devops/kubernetes-cka.md
-      - Helm: devops/kubernetes-helm.md
-      - Kustomize: devops/kubernetes-kustomize.md
-      - Operators: devops/kubernetes-operators.md
-      - GitOps ArgoCD: devops/gitops-argocd.md
-    - 📦 Infrastructure as Code:
-      - 💠 Ansible:
-        - Vue d'ensemble: devops/ansible/index.md
-        - Fundamentals: devops/ansible/fundamentals.md
-        - Playbooks: devops/ansible/playbooks.md
-        - Industrialization: devops/ansible/industrialization.md
-        - Advanced Patterns: devops/ansible/advanced-patterns.md
-        - Cloud Integrations: devops/ansible/cloud-integrations.md
-        - Testing Molecule: devops/ansible/testing-molecule.md
-      - 🔧 Terraform:
-        - Vue d'ensemble: devops/terraform/index.md
-        - Fundamentals: devops/terraform/fundamentals.md
-    - 🔄 CI/CD:
-      - GitLab CI: devops/cicd-gitlab.md
-      - GitHub Actions: devops/cicd-github-actions.md
-    - 📊 Observabilité:
-      - Stack Observabilité: devops/observability-stack.md
-      - Observabilité Avancée: devops/observability-advanced.md
-      - Tracing Distribué: devops/observability-tracing.md
-      - Loki Logging: devops/loki-logging.md
-    - 🏗️ Architecture & HA:
-      - Networking Moderne: devops/modern-networking.md
-      - Load Balancing: devops/load-balancing.md
+    - 🔒 Parcours Sécurité:
+      - 🏴‍☠️ Ethical Hacking (40h):
+        - Programme: formations/hacking-mastery/index.md
+        - Module 01 - Setup & Légalité: formations/hacking-mastery/01-module.md
+        - Module 02 - Reconnaissance: formations/hacking-mastery/02-module.md
+        - Module 03 - Web Hacking: formations/hacking-mastery/03-module.md
+        - Module 04 - Active Directory: formations/hacking-mastery/04-module.md
+        - Module 05 - Post-Exploitation: formations/hacking-mastery/05-module.md
+        - Module 06 - Projet Final: formations/hacking-mastery/06-tp-final.md
+    - 🧠 Parcours Avancé:
+      - 🧠 AI Engineering (35h):
+        - Programme: formations/ai-engineering/index.md
+        - Module 01 - Fondations: formations/ai-engineering/01-module.md
+        - Module 02 - Prompting: formations/ai-engineering/02-module.md
+        - Module 03 - Local Ops: formations/ai-engineering/03-module.md
+        - Module 04 - RAG: formations/ai-engineering/04-module.md
+        - Module 05 - Projet Final: formations/ai-engineering/05-tp-final.md
 
   # ══════════════════════════════════════════════════════════════
-  # ONGLET 5 : ENCYCLOPÉDIE (Fondamentaux + BDD + Sécurité)
+  # TAB 9: CONCEPTS & REFERENCE (simplified Encyclopédie)
   # ══════════════════════════════════════════════════════════════
-  - 📚 Encyclopédie:
+  - 📚 Concepts:
     - 🏛️ Fondamentaux:
       - Accueil: concepts/index.md
       - Architecture Patterns: concepts/architecture-patterns.md
@@ -708,63 +773,6 @@ nav:
       - Algorithmes Génétiques: ai/genetic-algos.md
       - Logique Floue: ai/fuzzy-logic.md
       - Pathfinding: ai/pathfinding.md
-    - 🌐 Réseau:
-      - Accueil: network/index.md
-      - Fondamentaux: network/fundamentals.md
-    - 🗄️ Bases de Données:
-      - Accueil: databases/index.md
-      - Concepts BI & Data: databases/bi-concepts.md
-      - 🐘 PostgreSQL:
-        - Guide: databases/postgresql.md
-        - Cheatsheet: databases/postgresql-cheatsheet.md
-      - 🐬 MariaDB/MySQL:
-        - Guide: databases/mariadb.md
-        - Cheatsheet: databases/mariadb-cheatsheet.md
-      - 🍃 MongoDB:
-        - Guide: databases/mongodb.md
-        - Cheatsheet: databases/mongodb-cheatsheet.md
-      - 🔴 Redis:
-        - Guide: databases/redis.md
-        - Cheatsheet: databases/redis-cheatsheet.md
-      - 🔄 Haute Disponibilité: databases/high-availability.md
-    - 🛡️ Sécurité:
-      - Accueil: security/index.md
-      - 🎓 Formation PKI & Certificats (16h):
-        - Programme: formations/pki-certificates/index.md
-        - Module 01 - Crypto: formations/pki-certificates/01-module.md
-        - Module 02 - X.509: formations/pki-certificates/02-module.md
-        - Module 03 - PKI Entreprise: formations/pki-certificates/03-module.md
-        - Module 04 - Automatisation: formations/pki-certificates/04-module.md
-        - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
-      - 📋 Conformité:
-        - Gestion des Risques: security/risk-management.md
-        - Secrets en GitOps: security/gitops-secrets.md
-        - SecNumCloud: security/secnumcloud.md
-        - Guides ANSSI: security/anssi-guides.md
-        - Checklist Audit: security/audit-checklist.md
-      - 🔐 Cryptographie & PKI:
-        - Concepts Crypto: security/crypto-concepts.md
-        - Certificats: security/certificates.md
-        - OpenSSL CLI: security/openssl-cli.md
-        - Cheatsheet OpenSSL: security/cheatsheet-openssl.md
-      - 🛡️ Défense & EDR:
-        - Digital Forensics (Réponse Incident): security/digital-forensics.md
-        - OSINT (Renseignement): security/osint.md
-        - CrowdStrike EDR: security/crowdstrike-edr.md
-        - HashiCorp Vault: security/hashicorp-vault.md
-      - 🔴 Red Team & Audit:
-        - Guide CTF: security/ctf-guide.md
-        - Cheatsheet Red Team: security/red-team-cheatsheet.md
-        - WiFi Hacking: security/wifi-hacking.md
-        - Stéganographie: security/steganography.md
-        - Intro Buffer Overflow: security/buffer-overflow.md
-        - Exegol: security/exegol.md
-        - Outils Essentiels: security/essential-tools.md
-
-  # ══════════════════════════════════════════════════════════════
-  # ONGLET 6 : CATALOGUE FORMATIONS
-  # ══════════════════════════════════════════════════════════════
-  - 🎓 Formations: formations/index.md
 
 extra:
   social:
