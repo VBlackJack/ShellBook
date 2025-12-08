@@ -101,12 +101,14 @@ nav:
         - logs-extractor.sh: scripts/bash/logs-extractor.md
         - monitor-resources.sh: scripts/bash/monitor-resources.md
         - system-info.sh: scripts/bash/system-info.md
+        - capacity-planner.sh: scripts/bash/capacity-planner.md
       - Réseau:
         - check-connectivity.sh: scripts/bash/check-connectivity.md
         - port-scanner.sh: scripts/bash/port-scanner.md
         - dns-lookup.sh: scripts/bash/dns-lookup.md
       - Fichiers:
         - backup-directory.sh: scripts/bash/backup-directory.md
+        - backup-validation.sh: scripts/bash/backup-validation.md
         - sync-folders.sh: scripts/bash/sync-folders.md
         - find-large-files.sh: scripts/bash/find-large-files.md
       - Sécurité:
@@ -116,6 +118,8 @@ nav:
         - mysql-security-audit.sh: scripts/bash/mysql-security-audit.md
         - ssl-csr-wizard.sh: scripts/bash/ssl-csr-wizard.md
         - secret-scanner.sh: scripts/bash/secret-scanner.md
+        - secrets-rotation.sh: scripts/bash/secrets-rotation.md
+        - certificate-renewal.sh: scripts/bash/certificate-renewal.md
       - Services:
         - service-manager.sh: scripts/bash/service-manager.md
         - health-check.sh: scripts/bash/health-check.md
@@ -129,6 +133,7 @@ nav:
         - pg-bloat-check.sh: scripts/bash/pg-bloat-check.md
       - Conformité & Audit:
         - config-drift-checker.sh: scripts/bash/config-drift-checker.md
+        - compliance-checker.sh: scripts/bash/compliance-checker.md
       - Infrastructure Linux:
         - check-ldap.sh: scripts/bash/check-ldap.md
         - check-bind.sh: scripts/bash/check-bind.md
@@ -246,6 +251,11 @@ nav:
       - Module 03 - Firewall: formations/linux-hardening/03-module.md
       - Module 04 - Audit: formations/linux-hardening/04-module.md
       - Module 05 - TP Final: formations/linux-hardening/05-tp-final.md
+    - 📋 Cheatsheets:
+      - Systemd: linux/cheatsheet-systemd.md
+      - SSH: linux/cheatsheet-ssh.md
+      - Sed & Awk: linux/cheatsheet-sed-awk.md
+      - Networking: linux/cheatsheet-networking.md
     - 🚀 Démarrage:
       - Clés SSH: linux/ssh-keys.md
       - Productivité: linux/productivity.md
@@ -587,6 +597,7 @@ nav:
           - Glossaire: formations/cloud-fundamentals/glossaire.md
           - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
       - 🛠️ Ateliers Pratiques (Labs):
+        - Index: devops/labs/index.md
         - Docker Mail Server: devops/labs/docker-mail-server.md
       - 🟠 AWS Fundamentals (35h):
         - Programme: formations/aws-fundamentals/index.md
@@ -632,6 +643,12 @@ nav:
       - Lean & Agile: devops/methodologies.md
       - Gestion de Projet: devops/project-management.md
       - Soft Skills: devops/soft-skills.md
+    - 📋 Cheatsheets:
+      - Kubectl: devops/cheatsheet-kubectl.md
+      - Docker: devops/cheatsheet-docker.md
+      - PromQL: devops/cheatsheet-promql.md
+      - Ansible: devops/ansible/cheatsheet-ansible.md
+      - Terraform: devops/terraform/cheatsheet-terraform.md
     - 🛠️ Engineering & Outils:
       - Embedded Linux (Yocto): devops/embedded-linux.md
       - Git SysOps: devops/git-sysops.md
@@ -729,6 +746,7 @@ nav:
         - Concepts Crypto: security/crypto-concepts.md
         - Certificats: security/certificates.md
         - OpenSSL CLI: security/openssl-cli.md
+        - Cheatsheet OpenSSL: security/cheatsheet-openssl.md
       - 🛡️ Défense & EDR:
         - Digital Forensics (Réponse Incident): security/digital-forensics.md
         - OSINT (Renseignement): security/osint.md

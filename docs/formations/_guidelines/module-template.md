@@ -1,8 +1,8 @@
 ---
 tags:
   - formation
-  - [domaine]
-  - [sujet]
+  - template
+  - guidelines
 ---
 
 # Module X : Titre du Module
