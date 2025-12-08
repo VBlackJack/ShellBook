@@ -13,37 +13,7 @@ Fondamentaux et guides réseau pour l'administration système.
 
 ## Vue d'Ensemble
 
-```
-NETWORK STACK
-═════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                    APPLICATION LAYER                         │
-│  HTTP, DNS, SSH, SMTP, FTP, DHCP                            │
-│  → Ce que l'utilisateur voit                                │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    TRANSPORT LAYER                           │
-│  TCP (fiable, ordonné) │ UDP (rapide, best-effort)          │
-│  → Ports, connexions, contrôle de flux                      │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    NETWORK LAYER                             │
-│  IP, ICMP, Routing, NAT                                     │
-│  → Adressage logique, acheminement                          │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   DATA LINK + PHYSICAL                       │
-│  Ethernet, Wi-Fi, ARP, MAC addresses                        │
-│  → Connexion physique, transmission                         │
-└─────────────────────────────────────────────────────────────┘
-```
+![Network Stack](../assets/diagrams/network-stack-layers.jpeg)
 
 ---
 

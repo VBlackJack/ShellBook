@@ -17,36 +17,9 @@ Fonctionnalités avancées de systemd : timers, sockets, targets, hardening, et 
 
 ## Architecture Systemd
 
-```
-HIÉRARCHIE DES UNITS SYSTEMD
-══════════════════════════════════════════════════════════════════════
+![Systemd Units Hierarchy](../assets/diagrams/linux-systemd-units-hierarchy.jpeg)
 
-                         ┌─────────────────┐
-                         │  systemd (PID 1)│
-                         └────────┬────────┘
-                                  │
-        ┌─────────────┬───────────┼───────────┬─────────────┐
-        ▼             ▼           ▼           ▼             ▼
-   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐
-   │ .service│  │ .timer  │  │ .socket │  │ .target │  │ .mount  │
-   └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘
-        │             │           │           │             │
-   Services      Planification  Activation  Groupement   Montages
-   classiques    temporelle     à la        de units     de FS
-                               demande
-
-Types de Units:
-├── .service   → Processus/démons
-├── .socket    → Sockets IPC/réseau (activation à la demande)
-├── .timer     → Planification (remplace cron)
-├── .target    → Groupement logique de units
-├── .mount     → Points de montage
-├── .automount → Montage automatique
-├── .path      → Surveillance de fichiers/répertoires
-├── .slice     → Hiérarchie de cgroups
-├── .scope     → Processus externes (non démarrés par systemd)
-└── .swap      → Espaces d'échange
-```
+![Systemd Architecture](../assets/diagrams/linux-systemd-architecture.jpeg)
 
 ---
 
@@ -565,22 +538,7 @@ systemctl status config-reload.path
 
 ### Hiérarchie des Slices
 
-```
-HIÉRARCHIE CGROUPS
-══════════════════════════════════════════════════════════════════════
-
--.slice (root)
-├── user.slice
-│   ├── user-1000.slice
-│   │   └── user@1000.service
-│   └── user-1001.slice
-├── system.slice (services système)
-│   ├── sshd.service
-│   ├── nginx.service
-│   └── postgresql.service
-└── machine.slice (conteneurs/VMs)
-    └── docker-xxx.scope
-```
+![Systemd Cgroups Hierarchy](../assets/diagrams/linux-systemd-cgroups-hierarchy.jpeg)
 
 ### Créer une Slice Personnalisée
 

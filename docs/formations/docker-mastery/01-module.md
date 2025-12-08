@@ -21,33 +21,14 @@ tags:
 
 ## 1. Containers vs VMs
 
-```
-CONTAINERS vs MACHINES VIRTUELLES
-═════════════════════════════════
+![Docker Architecture](../../assets/diagrams/formation-docker-architecture.jpeg)
 
-VM                              CONTAINER
-──                              ─────────
-
-┌─────────────────────┐        ┌─────────────────────┐
-│       App A         │        │       App A         │
-├─────────────────────┤        ├─────────────────────┤
-│   Guest OS (GB)     │        │    Bins/Libs        │
-├─────────────────────┤        ├─────────────────────┤
-│       App B         │        │       App B         │
-├─────────────────────┤        ├─────────────────────┤
-│   Guest OS (GB)     │        │    Bins/Libs        │
-├─────────────────────┤        ├─────────────────────┤
-│     Hypervisor      │        │   Container Engine  │
-├─────────────────────┤        ├─────────────────────┤
-│      Host OS        │        │      Host OS        │
-├─────────────────────┤        ├─────────────────────┤
-│    Infrastructure   │        │    Infrastructure   │
-└─────────────────────┘        └─────────────────────┘
-
-Startup: Minutes               Startup: Secondes
-Size: GB                       Size: MB
-Isolation: Forte               Isolation: Processus
-```
+| Aspect | VM | Container |
+|--------|-----|-----------|
+| **Startup** | Minutes | Secondes |
+| **Size** | GB | MB |
+| **Isolation** | Forte (OS complet) | Processus (kernel partagé) |
+| **Overhead** | Élevé (Guest OS) | Minimal (Bins/Libs) |
 
 ---
 

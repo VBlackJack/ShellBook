@@ -176,20 +176,7 @@ Ingress gère le routage HTTP/HTTPS (Layer 7) basé sur :
 - **Host** : `api.example.com` vs `app.example.com`
 - **Path** : `/api/*` vs `/admin/*`
 
-```
-                    ┌─────────────────────────────┐
-                    │      Ingress Controller     │
-  Internet ──────►  │    (Nginx, Traefik...)      │
-                    └─────────────────────────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              │                │                │
-              ▼                ▼                ▼
-       ┌──────────┐     ┌──────────┐     ┌──────────┐
-       │  /api/*  │     │    /     │     │ /admin/* │
-       │ api-svc  │     │ web-svc  │     │admin-svc │
-       └──────────┘     └──────────┘     └──────────┘
-```
+![Kubernetes Ingress Routing](../assets/diagrams/k8s-ingress-routing.jpeg)
 
 ### Ingress Controller (Prérequis)
 

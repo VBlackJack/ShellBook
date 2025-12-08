@@ -16,26 +16,7 @@ Protocoles fondamentaux et routage réseau.
 
 ## Modèle OSI vs TCP/IP
 
-```
-OSI Model                    TCP/IP Model
-═════════                    ════════════
-
-┌─────────────┐
-│ Application │   7         ┌─────────────┐
-├─────────────┤             │ Application │  HTTP, DNS, SSH
-│ Presentation│   6         │             │
-├─────────────┤             └──────┬──────┘
-│   Session   │   5                │
-├─────────────┤             ┌──────┴──────┐
-│  Transport  │   4         │  Transport  │  TCP, UDP
-├─────────────┤             └──────┬──────┘
-│   Network   │   3         ┌──────┴──────┐
-├─────────────┤             │   Internet  │  IP, ICMP
-│  Data Link  │   2         └──────┬──────┘
-├─────────────┤             ┌──────┴──────┐
-│  Physical   │   1         │Network Access│ Ethernet, Wi-Fi
-└─────────────┘             └─────────────┘
-```
+![OSI vs TCP/IP Model](../assets/diagrams/network-osi-vs-tcpip.jpeg)
 
 ---
 
@@ -53,22 +34,7 @@ OSI Model                    TCP/IP Model
 
 ### Three-Way Handshake
 
-```
-Client                    Server
-   |                         |
-   |   SYN (seq=100)         |
-   |------------------------>|
-   |                         |
-   |   SYN-ACK (seq=300,     |
-   |           ack=101)      |
-   |<------------------------|
-   |                         |
-   |   ACK (seq=101,         |
-   |        ack=301)         |
-   |------------------------>|
-   |                         |
-   |   Connexion établie     |
-```
+![TCP Three-Way Handshake](../assets/diagrams/network-tcp-three-way-handshake.jpeg)
 
 ### États TCP
 
@@ -87,24 +53,7 @@ FIN_WAIT_2  # Reçu ACK de FIN, attend FIN distant
 
 ### Fermeture de Connexion (4-Way)
 
-```
-Client                    Server
-   |                         |
-   |   FIN                   |
-   |------------------------>|
-   |                         |
-   |   ACK                   |
-   |<------------------------|
-   |                         |
-   |   FIN                   |
-   |<------------------------|
-   |                         |
-   |   ACK                   |
-   |------------------------>|
-   |                         |
-   |   TIME_WAIT (2*MSL)     |
-   |   puis CLOSED           |
-```
+![TCP Four-Way Close](../assets/diagrams/network-tcp-four-way-close.jpeg)
 
 ---
 
@@ -249,22 +198,7 @@ ip route get 8.8.8.8
 
 ### Types de NAT
 
-```
-SNAT (Source NAT)
-─────────────────
-Réseau Privé → Routeur NAT → Internet
-192.168.1.100:54321 → 203.0.113.1:12345 → 8.8.8.8:53
-
-DNAT (Destination NAT) / Port Forwarding
-────────────────────────────────────────
-Internet → Routeur NAT → Réseau Privé
-Client:80 → 203.0.113.1:80 → 192.168.1.50:80
-
-PAT (Port Address Translation)
-───────────────────────────────
-Multiple clients internes partagent une IP publique
-avec différents ports source.
-```
+![NAT Types](../assets/diagrams/devops-nat-types.jpeg)
 
 ### Configuration iptables
 

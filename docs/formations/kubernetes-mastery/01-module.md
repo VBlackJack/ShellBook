@@ -88,34 +88,7 @@ CONFIGURATION
 
 ### 2.1 Vue d'Ensemble
 
-```
-CONTROL PLANE ARCHITECTURE
-══════════════════════════
-
-┌─────────────────────────────────────────────────────────────────┐
-│                        CONTROL PLANE                             │
-│                                                                  │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                      API SERVER                             │ │
-│  │  - Point d'entrée unique (REST API)                        │ │
-│  │  - Authentification / Autorisation                         │ │
-│  │  - Validation des manifests                                │ │
-│  │  - Communication avec etcd                                 │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│         │              │              │              │           │
-│         ▼              ▼              ▼              ▼           │
-│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────────┐ │
-│  │   etcd   │   │Scheduler │   │Controller│   │ Cloud        │ │
-│  │          │   │          │   │ Manager  │   │ Controller   │ │
-│  │ Key-Value│   │ Assigne  │   │          │   │ Manager      │ │
-│  │ Store    │   │ Pods aux │   │ Boucles  │   │ (optionnel)  │ │
-│  │ (source  │   │ Nodes    │   │ de       │   │              │ │
-│  │ of truth)│   │          │   │ contrôle │   │ Intégration  │ │
-│  │          │   │          │   │          │   │ cloud        │ │
-│  └──────────┘   └──────────┘   └──────────┘   └──────────────┘ │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+![Kubernetes Control Plane Architecture](../../assets/diagrams/k8s-control-plane-architecture.jpeg)
 
 ### 2.2 API Server
 
@@ -238,53 +211,7 @@ SCHEDULER - ALGORITHME DE PLACEMENT
 
 ### 3.1 Composants
 
-```
-WORKER NODE ARCHITECTURE
-════════════════════════
-
-┌─────────────────────────────────────────────────────────────────┐
-│                        WORKER NODE                               │
-│                                                                  │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                       KUBELET                               │ │
-│  │  - Agent principal sur chaque node                         │ │
-│  │  - Reçoit les PodSpecs de l'API Server                    │ │
-│  │  - Gère le cycle de vie des containers                    │ │
-│  │  - Rapporte le status au Control Plane                    │ │
-│  │  - Exécute les probes (liveness, readiness)               │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                  CONTAINER RUNTIME                          │ │
-│  │  - containerd (défaut depuis K8s 1.24)                     │ │
-│  │  - CRI-O                                                    │ │
-│  │  - (Docker via dockershim - deprecated)                    │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                              │                                   │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                      KUBE-PROXY                             │ │
-│  │  - Gère les règles réseau (iptables/IPVS)                 │ │
-│  │  - Permet la communication Service → Pod                   │ │
-│  │  - Load balancing interne                                  │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                                                                  │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │                         CNI                                 │ │
-│  │  - Plugin réseau (Calico, Cilium, Flannel, Weave)         │ │
-│  │  - Assigne les IPs aux pods                                │ │
-│  │  - Gère le routage inter-pods                              │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                        PODS                               │   │
-│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │   │
-│  │  │ Pod A   │  │ Pod B   │  │ Pod C   │  │ Pod D   │     │   │
-│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘     │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+![Kubernetes Worker Node Architecture](../../assets/diagrams/k8s-worker-node-architecture.jpeg)
 
 ### 3.2 Kubelet
 

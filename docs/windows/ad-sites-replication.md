@@ -15,36 +15,9 @@ La topologie de sites AD optimise l'authentification et contrôle la réplicatio
 
 ### Qu'est-ce qu'un Site AD ?
 
-```
-SITES ACTIVE DIRECTORY
-══════════════════════════════════════════════════════════
-
 Un site = un ensemble de sous-réseaux bien connectés (LAN)
 
-┌─────────────────────────────────────────────────────────┐
-│                    SITE PARIS                           │
-│                                                         │
-│   Subnet: 10.10.0.0/16                                 │
-│   ┌─────────┐  ┌─────────┐  ┌─────────┐               │
-│   │  DC-01  │  │  DC-02  │  │ Clients │               │
-│   │         │◄─►│         │  │         │               │
-│   └─────────┘  └─────────┘  └─────────┘               │
-│        Réplication intra-site (rapide, non compressée)  │
-└────────────────────────┬────────────────────────────────┘
-                         │
-              WAN Link (lent, coûteux)
-                         │
-┌────────────────────────┴────────────────────────────────┐
-│                    SITE LYON                            │
-│                                                         │
-│   Subnet: 10.20.0.0/16                                 │
-│   ┌─────────┐  ┌─────────┐                             │
-│   │  DC-03  │  │ Clients │                             │
-│   │         │  │         │                             │
-│   └─────────┘  └─────────┘                             │
-│        Réplication inter-site (planifiée, compressée)   │
-└─────────────────────────────────────────────────────────┘
-```
+![AD Sites Topology](../assets/diagrams/windows-ad-sites-topology.jpeg)
 
 ### Avantages des Sites
 
@@ -109,31 +82,9 @@ echo %LOGONSERVER%
 
 ### Concept
 
-```
-SITE LINKS
-══════════════════════════════════════════════════════════
-
 Un Site Link connecte 2+ sites pour la réplication.
 
-     PARIS                    LYON
-    ┌─────┐                  ┌─────┐
-    │DC-01│                  │DC-03│
-    └──┬──┘                  └──┬──┘
-       │                        │
-       └────────┬───────────────┘
-                │
-         ┌──────┴──────┐
-         │ PARIS-LYON  │
-         │ Cost: 100   │
-         │ Interval:15m│
-         │ Schedule:24h│
-         └─────────────┘
-
-Paramètres :
-• Cost      : Priorité (plus bas = préféré)
-• Interval  : Fréquence de réplication (min 15 min)
-• Schedule  : Heures de disponibilité
-```
+![AD Site Link](../assets/diagrams/windows-ad-site-link.jpeg)
 
 ### Configurer les Site Links
 
@@ -176,23 +127,9 @@ $siteLink = [ADSI]"LDAP://CN=PARIS-LYON,CN=IP,CN=Inter-Site Transports,CN=Sites,
 
 ## Site Link Bridges
 
-```
-SITE LINK BRIDGES
-══════════════════════════════════════════════════════════
-
 Permettent la transitivité entre site links.
 
-Sans bridge (Bridge All Site Links = Off) :
-  PARIS ─── Link1 ─── LYON ─── Link2 ─── MARSEILLE
-  PARIS ne peut PAS répliquer directement vers MARSEILLE
-
-Avec bridge :
-  PARIS ◄─────────── Bridge ───────────► MARSEILLE
-  La réplication transite via LYON
-
-Par défaut : "Bridge All Site Links" est ACTIVÉ
-(tous les site links sont bridgés automatiquement)
-```
+![AD Site Link Bridge](../assets/diagrams/windows-ad-site-link-bridge.jpeg)
 
 ```powershell
 # Créer un bridge explicite (si Bridge All désactivé)

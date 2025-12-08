@@ -45,31 +45,15 @@ MONITORING TRADITIONNEL          OBSERVABILITÉ MODERNE
 
 ### 1.2 Les 3 Piliers
 
-```
-LES 3 PILIERS DE L'OBSERVABILITÉ
-════════════════════════════════
+![Observability Pillars](../../assets/diagrams/formation-observability-pillars.jpeg)
 
-     MÉTRIQUES              LOGS                 TRACES
-   ┌───────────┐        ┌───────────┐        ┌───────────┐
-   │           │        │           │        │           │
-   │  Chiffres │        │  Texte    │        │  Chemin   │
-   │  agrégés  │        │  structuré│        │  requête  │
-   │           │        │           │        │           │
-   │  Quoi ?   │        │  Détails  │        │  Où ?     │
-   │  Combien ?│        │  Contexte │        │  Durée ?  │
-   │           │        │           │        │           │
-   └───────────┘        └───────────┘        └───────────┘
-        │                    │                    │
-        │   Prometheus       │   Loki             │   Tempo/Jaeger
-        │   InfluxDB         │   Elasticsearch    │   Zipkin
-        └────────────────────┴────────────────────┘
-                             │
-                    ┌────────────────┐
-                    │    Grafana     │
-                    │  Visualisation │
-                    │  Corrélation   │
-                    └────────────────┘
-```
+| Pilier | Question | Outils |
+|--------|----------|--------|
+| **Métriques** | Quoi ? Combien ? | Prometheus, InfluxDB |
+| **Logs** | Détails, Contexte | Loki, Elasticsearch |
+| **Traces** | Où ? Durée ? | Tempo, Jaeger, Zipkin |
+
+Tous visualisés et corrélés dans **Grafana**.
 
 ### 1.3 Quand Utiliser Quoi ?
 

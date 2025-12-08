@@ -208,18 +208,9 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg   # RHEL/CentOS
 
 ### Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        SYSTEMD                               │
-├─────────────────────────────────────────────────────────────┤
-│  systemctl     │  Gestion Service/Unit                       │
-│  journalctl    │  Gestion des logs                           │
-│  systemd-analyze │  Analyse de performance                   │
-│  hostnamectl   │  Gestion du hostname                        │
-│  timedatectl   │  Gestion heure/timezone                     │
-│  loginctl      │  Gestion des sessions                       │
-└─────────────────────────────────────────────────────────────┘
-```
+![Systemd Architecture](../assets/diagrams/linux-systemd-architecture.jpeg)
+
+![Linux Boot Process Flow](../assets/diagrams/linux-boot-process-flow.jpeg)
 
 ---
 

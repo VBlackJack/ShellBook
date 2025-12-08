@@ -21,43 +21,14 @@ La source de vérité est Git. Le cluster se synchronise tout seul. Fini les `ku
 
 **GitOps = Réconciliation continue entre Git (source de vérité) et Kubernetes (réalité).**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    AVANT : CLICKOPS                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Dev → kubectl apply -f deployment.yaml                     │
-│        │                                                     │
-│        └──→ Cluster K8s                                     │
-│                                                              │
-│  Problèmes :                                                │
-│  ❌ Qui a fait quoi ?                                       │
-│  ❌ Impossible de rollback                                  │
-│  ❌ Pas d'audit trail                                       │
-│  ❌ État réel != État documenté                             │
-│  ❌ "Dérive de configuration" (drift)                       │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│                   APRÈS : GITOPS                             │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Dev → Git Commit → Push                                    │
-│           │                                                  │
-│           └──→ ArgoCD (Pull) ──→ Cluster K8s                │
-│                      ▲               │                       │
-│                      │               │                       │
-│                      └───── Sync ────┘                       │
-│                        (toutes les 3min)                     │
-│                                                              │
-│  Avantages :                                                │
-│  ✅ Git = Source de vérité unique                           │
-│  ✅ Historique complet (git log)                            │
-│  ✅ Rollback trivial (git revert)                           │
-│  ✅ Audit natif (qui a commit quoi)                         │
-│  ✅ Self-healing automatique                                │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![GitOps Flow](../assets/diagrams/devops-gitops-flow.jpeg)
+
+| Avant (ClickOps) | Après (GitOps) |
+|------------------|----------------|
+| ❌ Qui a fait quoi ? | ✅ Git = Source de vérité unique |
+| ❌ Impossible de rollback | ✅ Rollback trivial (git revert) |
+| ❌ Pas d'audit trail | ✅ Audit natif (git log) |
+| ❌ État réel ≠ documenté | ✅ Self-healing automatique |
 
 ---
 

@@ -90,41 +90,14 @@ kubectl get pods -n kube-system | grep -E "calico|cilium|flannel|weave"
 
 ### 2.1 Types de Services
 
-```
-TYPES DE SERVICES
-═════════════════
+![Kubernetes Services Overview](../../assets/diagrams/k8s-services-overview.jpeg)
 
-ClusterIP (défaut)
-──────────────────
-┌─────────────────────────────────────────┐
-│ Accessible uniquement dans le cluster   │
-│ IP virtuelle stable                     │
-│ Load balancing vers les pods           │
-└─────────────────────────────────────────┘
-
-NodePort
-────────
-┌─────────────────────────────────────────┐
-│ ClusterIP + port sur chaque node        │
-│ Port: 30000-32767                       │
-│ Accessible: <NodeIP>:<NodePort>        │
-└─────────────────────────────────────────┘
-
-LoadBalancer
-────────────
-┌─────────────────────────────────────────┐
-│ NodePort + Load Balancer externe        │
-│ Cloud provider ou MetalLB (bare metal)  │
-│ IP externe attribuée                    │
-└─────────────────────────────────────────┘
-
-ExternalName
-────────────
-┌─────────────────────────────────────────┐
-│ Alias DNS vers un service externe       │
-│ Pas de proxy, juste CNAME              │
-└─────────────────────────────────────────┘
-```
+| Type | Description |
+|------|-------------|
+| **ClusterIP** | Accessible uniquement dans le cluster, IP virtuelle stable |
+| **NodePort** | ClusterIP + port sur chaque node (30000-32767) |
+| **LoadBalancer** | NodePort + Load Balancer externe (cloud/MetalLB) |
+| **ExternalName** | Alias DNS vers un service externe (CNAME) |
 
 ### 2.2 Service ClusterIP
 
@@ -237,39 +210,9 @@ nslookup db-headless
 
 ### 3.1 Concept
 
-```
-INGRESS - ROUTAGE HTTP/HTTPS
-════════════════════════════
+![Kubernetes Ingress Routing](../../assets/diagrams/k8s-ingress-routing.jpeg)
 
-                    Internet
-                        │
-                        ▼
-              ┌─────────────────┐
-              │  Load Balancer  │
-              │   (cloud/LB)    │
-              └────────┬────────┘
-                       │
-                       ▼
-┌──────────────────────────────────────────────────────────────┐
-│                    INGRESS CONTROLLER                         │
-│              (nginx, traefik, haproxy...)                    │
-│                                                               │
-│   Rules:                                                      │
-│   ┌───────────────────────────────────────────────────────┐  │
-│   │ shop.example.com    → service: shop-frontend:80       │  │
-│   │ api.example.com     → service: api-backend:8080       │  │
-│   │ example.com/api/*   → service: api-backend:8080       │  │
-│   │ example.com/*       → service: default-backend:80     │  │
-│   └───────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-   ┌─────────┐   ┌─────────┐   ┌─────────┐
-   │  shop   │   │   api   │   │ default │
-   │ service │   │ service │   │ service │
-   └─────────┘   └─────────┘   └─────────┘
-```
+L'Ingress Controller reçoit le trafic via un Load Balancer et route vers les services selon les règles (host/path).
 
 ### 3.2 Installation Ingress Controller
 

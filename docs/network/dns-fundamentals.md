@@ -18,26 +18,7 @@ Le DNS (Domain Name System) traduit les noms de domaine en adresses IP.
 
 ### Hiérarchie DNS
 
-```
-                    ┌─────────────┐
-                    │   . (root)  │
-                    └──────┬──────┘
-           ┌───────────────┼───────────────┐
-           ▼               ▼               ▼
-      ┌────────┐      ┌────────┐      ┌────────┐
-      │  .com  │      │  .org  │      │  .fr   │
-      └───┬────┘      └────────┘      └────────┘
-          │
-    ┌─────┴─────┐
-    ▼           ▼
-┌─────────┐ ┌─────────┐
-│ example │ │ google  │
-└────┬────┘ └─────────┘
-     │
-┌────┴────┐
-│  www    │
-└─────────┘
-```
+![DNS Hierarchy](../assets/diagrams/network-dns-hierarchy.jpeg)
 
 ### Types d'Enregistrements
 
