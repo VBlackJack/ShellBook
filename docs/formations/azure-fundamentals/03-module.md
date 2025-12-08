@@ -943,3 +943,13 @@ az network private-endpoint dns-zone-group create \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 2 : VMs & Compute](02-module.md) | [Module 4 : Storage & Databases →](04-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Virtual Machines & Compute](02-module.md) | [Module 4 : Storage & Databases →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -897,3 +897,13 @@ az vm auto-shutdown \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 1 : Portail & IAM](01-module.md) | [Module 3 : Virtual Network →](03-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Portail Azure, Subscriptio...](01-module.md) | [Module 3 : Virtual Network & Networking →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -914,3 +914,13 @@ Rendez-vous au **Module 2 : Création de Paquets (Packaging)** pour apprendre à
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Création de Paquets - Deve... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -66,3 +66,13 @@ Vos VMs doivent être en **Réseau Host-Only** (Privé hôte) ou **NAT Network**
 5.  **Installation** (Persistance, Backdoor).
 6.  **C2 (Command & Control)** : Prendre le contrôle à distance.
 7.  **Actions** : Vol de données, chiffrement.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Reconnaissance & Réseau →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

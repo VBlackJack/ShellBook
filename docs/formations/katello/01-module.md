@@ -716,3 +716,13 @@ Rendez-vous au **Module 2 : Gestion du Contenu (Content Views)** pour apprendre 
 
 !!! quote "Citation du formateur"
     *"Installer Katello, c'est comme construire une usine : ça prend 1 jour, mais ça optimise 10 ans de gestion des patchs."* — ShellBook Training
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Gestion du Contenu - Le Pi... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

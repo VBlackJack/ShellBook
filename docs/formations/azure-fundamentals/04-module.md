@@ -1214,3 +1214,13 @@ az storage account update \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 3 : Virtual Network](03-module.md) | [Module 5 : AKS & Containers →](05-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Virtual Network & Networking](03-module.md) | [Module 5 : AKS & Containers →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

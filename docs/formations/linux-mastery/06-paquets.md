@@ -565,3 +565,13 @@ Vous maîtrisez la gestion des paquets. Le prochain module couvre les processus 
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Introduction au Shell Scri...](05-shell-intro.md) | [Module 7 : Processus & Services →](07-services.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -748,3 +748,13 @@ docker exec -it postgres psql -U techshop -c "SELECT pg_sleep(10);" &
 **Précédent :** [Module 5 - Alerting](05-module.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Alerting et Notifications](05-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

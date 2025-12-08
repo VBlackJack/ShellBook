@@ -721,3 +721,13 @@ Move-ClusterGroup -Name "CLUSTERFS" -Node "NODE2"
 **Précédent :** [Module 15 : Backup & Disaster Recovery](15-backup-disaster-recovery.md)
 
 **Suivant :** [Module 17 : Conteneurs Windows](17-conteneurs-windows.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 15 : Backup & Disaster Recovery](15-backup-disaster-recovery.md) | [Module 17 : Conteneurs Windows →](17-conteneurs-windows.md) |
+
+[Retour au Programme](index.md){ .md-button }

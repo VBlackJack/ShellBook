@@ -393,3 +393,13 @@ Start-Process "http://localhost:8080"
 **Précédent :** [Module 05 : Introduction au Scripting](05-scripting-intro.md)
 
 **Suivant :** [Module 07 : Services & Processus](07-services-processus.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 05 : Introduction au Scripting](05-scripting-intro.md) | [Module 07 : Services & Processus →](07-services-processus.md) |
+
+[Retour au Programme](index.md){ .md-button }

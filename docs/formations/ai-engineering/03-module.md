@@ -126,3 +126,13 @@ services:
     if __name__ == "__main__":
         benchmark_model()
     ```
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Prompt Engineering & Struc...](02-module.md) | [Module 4 : RAG (Chat with your Data) →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -486,3 +486,13 @@ servers = [
 
 - [Module 07 - Sous-processus](07-subprocess.md)
 - [Python Fichiers & Données](../../python/files-data.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 05 - Fichiers & I/O](05-fichiers.md) | [Module 07 - Sous-processus & Commande... →](07-subprocess.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1389,3 +1389,13 @@ Dans le **Module 4 : Déploiement Automatisé**, vous allez apprendre à :
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Création de Paquets - Deve...](02-module.md) | [Module 4 : Déploiement de Masse - Ind... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

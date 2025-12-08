@@ -699,3 +699,13 @@ Vous maîtrisez maintenant la gestion des utilisateurs et des permissions. Le pr
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Navigation & Fichiers](02-navigation.md) | [Module 4 : Éditeurs & Traitement de T... →](04-editeurs.md) |
+
+[Retour au Programme](index.md){ .md-button }

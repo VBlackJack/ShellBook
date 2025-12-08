@@ -655,3 +655,13 @@ spec:
 **Précédent :** [Module 6 - Sécurité](06-module.md)
 
 **Suivant :** [Module 8 - Observabilité](08-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : Sécurité et RBAC](06-module.md) | [Module 8 : Observabilité →](08-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

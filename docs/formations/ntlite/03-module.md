@@ -614,3 +614,13 @@ Dans le **Module 4**, nous verrons :
 - 🔑 **OOBE Tweaks** : Désactiver les écrans de bienvenue, créer un compte local par défaut
 
 Rendez-vous au prochain module pour créer une **expérience utilisateur sur mesure** !
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Le Grand Nettoyage (Debloa...](02-module.md) | [Module 4 : Automatisation - L'Install... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

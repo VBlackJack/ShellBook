@@ -248,3 +248,13 @@ crackmapexec smb 192.168.1.20 -u Administrator -H <HASH_NTLM>
        - Modèle de tiering (Tier 0 = DC, Tier 1 = Serveurs, Tier 2 = Workstations)
        - Principe du moindre privilège strictement appliqué
        - Rotation régulière des mots de passe des comptes privilégiés
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Web Hacking](03-module.md) | [Module 5 : Post-Exploitation & PrivEsc →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

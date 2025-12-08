@@ -901,3 +901,13 @@ Rendez-vous au **Module 4 : Maintenance & Dépannage** pour apprendre à :
 
 !!! quote "Citation du formateur"
     *"Une GPO bien configurée transforme 50 serveurs en 0 minute de travail manuel. Une GPO mal configurée transforme 50 serveurs en 50 tickets d'incident."* — ShellBook Training
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Approbation & Ciblage - La...](02-module.md) | [Module 4 : Maintenance & Dépannage - ... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

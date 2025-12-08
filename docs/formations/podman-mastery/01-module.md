@@ -354,3 +354,13 @@ podman info | grep rootless
 ---
 
 **Suivant :** [Module 2 - Conteneurs Rootless](02-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Conteneurs Rootless →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

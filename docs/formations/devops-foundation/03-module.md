@@ -517,3 +517,13 @@ git push
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Branches & Pull Requests](02-module.md) | [Module 4 : Qualité de Code & Linting →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

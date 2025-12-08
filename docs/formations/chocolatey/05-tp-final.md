@@ -990,3 +990,13 @@ Vous avez déployé une **Chocolatey Factory complète** pour DevStartup avec :
 - [Chocolatey Documentation](https://docs.chocolatey.org/)
 - [Chocolatey Server Setup](https://docs.chocolatey.org/en-us/guides/organizations/set-up-chocolatey-server)
 - [NuGet Package Creation](https://docs.microsoft.com/en-us/nuget/create-packages/creating-a-package)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Déploiement de Masse - Ind...](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

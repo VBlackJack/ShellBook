@@ -972,3 +972,13 @@ Rendez-vous au **Module 5 : TP Final - Infrastructure Multi-Sites** pour :
 
 !!! quote "Citation du formateur"
     *"Un WSUS bien entretenu est invisible. Un WSUS mal entretenu devient le sujet de toutes les réunions d'incident."* — ShellBook Training
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Configuration Clients - GP...](03-module.md) | [Module 5 : TP Final - L'Usine de Mise... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

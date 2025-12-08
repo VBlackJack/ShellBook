@@ -1257,3 +1257,13 @@ Vous êtes maintenant prêt à passer au **Module 2 : Active Directory** où vou
 ---
 
 **[← Retour à l'Introduction](index.md)** | **[Continuer vers Module 2 : Active Directory →](02-module.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Active Directory & GPO - L... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

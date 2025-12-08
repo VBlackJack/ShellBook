@@ -1264,3 +1264,13 @@ Dans le **Module 3 : Repository Interne**, vous allez apprendre à :
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Les Fondamentaux & CLI](01-module.md) | [Module 3 : Serveur Privé - L'Usine Lo... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1097,3 +1097,13 @@ gcloud builds triggers list --format="value(id)" | \
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : TP Final - Infrastructure ...](06-tp-final.md) | [Module 8 : Serverless - Cloud Functio... →](08-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

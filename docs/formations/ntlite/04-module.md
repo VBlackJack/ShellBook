@@ -828,3 +828,13 @@ Dans le **Module 5 (TP Final)**, nous verrons :
 - 📦 **Déploiement MDT/WDS** : Intégrer l'image dans une infrastructure de déploiement
 
 Rendez-vous au TP Final pour mettre en pratique **tous les modules** dans un projet réel !
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Intégration - Drivers & Up...](03-module.md) | [Module 5 : TP Final - L'Image Master ... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

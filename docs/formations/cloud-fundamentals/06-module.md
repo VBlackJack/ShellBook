@@ -634,3 +634,13 @@ Avec Reserved Instances 1 an : ~$200/mois (-29%)
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 5 : Architecture Cloud](05-module.md) | [Module 7 : Cas d'Usage Worldline →](07-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Architecture Cloud (HA, DR...](05-module.md) | [Module 7 : Cas d'Usage Worldline →](07-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

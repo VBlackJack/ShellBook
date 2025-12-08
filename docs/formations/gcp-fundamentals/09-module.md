@@ -983,3 +983,13 @@ gcloud iam service-accounts delete secret-reader@$PROJECT_ID.iam.gserviceaccount
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Serverless - Cloud Functio...](08-module.md) | [Module 10 : Observability - Monitorin... →](10-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

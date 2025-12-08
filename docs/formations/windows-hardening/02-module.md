@@ -440,3 +440,13 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 **Précédent :** [Module 1 - Security Baselines](01-module.md)
 
 **Suivant :** [Module 3 - Réseau & Firewall](03-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Security Baselines](01-module.md) | [Module 3 : Réseau & Firewall →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

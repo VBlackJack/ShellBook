@@ -658,3 +658,13 @@ graph TB
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 1 : Qu'est-ce que le Cloud ?](01-module.md) | [Module 3 : Infrastructure Cloud →](03-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Qu'est-ce que le Cloud ?](01-module.md) | [Module 3 : Infrastructure Cloud (Comp... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

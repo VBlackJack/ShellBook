@@ -643,3 +643,13 @@ graph LR
 | Précédent | Suivant |
 |-----------|---------|
 | [Module 9 : DevOps & CI/CD](09-module.md) | [Module 11 : Migration Cloud](11-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 9 : DevOps & CI/CD pour Débutants](09-module.md) | [Module 11 : Migration Cloud →](11-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

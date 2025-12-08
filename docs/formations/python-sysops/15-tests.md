@@ -844,3 +844,13 @@ class TestSSHClient:
 - [Module 14 - Cloud & AWS](14-cloud.md)
 - [Programme de la formation](index.md)
 - [Cheatsheet Bibliothèques](cheatsheet-libs.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 14 - Cloud & AWS avec Python](14-cloud.md) | [TP Final : Infrastructure Health Repo... →](16-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

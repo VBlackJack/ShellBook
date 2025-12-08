@@ -608,3 +608,13 @@ sudo mount -t glusterfs node1:/gv0 /mnt/gluster
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 15 : Backup & Disaster Recovery](15-backup.md) | [Module 17 : Conteneurisation →](17-conteneurs.md) |
+
+[Retour au Programme](index.md){ .md-button }

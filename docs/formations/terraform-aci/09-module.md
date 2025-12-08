@@ -1386,3 +1386,13 @@ resource "mso_schema_template_deploy" "common" {
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 8 : Flux Est-Ouest](08-module.md) | [Module 10 : TP Final →](10-tp-final.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Flux Est-Ouest](08-module.md) | [Module 10 : TP Final - Infrastructure... →](10-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

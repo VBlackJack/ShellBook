@@ -725,3 +725,13 @@ graph LR
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 3 : Infrastructure Cloud](03-module.md) | [Module 5 : Architecture Cloud →](05-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Infrastructure Cloud (Comp...](03-module.md) | [Module 5 : Architecture Cloud (HA, DR... →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -555,3 +555,13 @@ graph LR
 | Précédent | Retour au Catalogue |
 |-----------|---------------------|
 | [← Module 6 : FinOps & Coûts](06-module.md) | [Catalogue des Formations](../index.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : FinOps & Coûts Cloud](06-module.md) | [Module 8 : Introduction aux Conteneur... →](08-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

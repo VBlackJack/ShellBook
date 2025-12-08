@@ -1167,3 +1167,13 @@ aws savingsplans describe-savings-plans
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 1 : Console & IAM](01-module.md) | [Module 3 : VPC & Networking →](03-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Console AWS, Comptes & IAM](01-module.md) | [Module 3 : VPC & Networking →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

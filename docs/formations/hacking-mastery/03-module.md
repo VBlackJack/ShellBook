@@ -231,3 +231,13 @@ Injecter du JavaScript qui s'exécute dans le navigateur de la victime.
        - Implémenter Content Security Policy (CSP)
        - Valider les entrées côté serveur
        - Utiliser le flag HttpOnly pour les cookies de session
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Reconnaissance & Réseau](02-module.md) | [Module 4 : Active Directory Hacking →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

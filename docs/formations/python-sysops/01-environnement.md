@@ -513,3 +513,13 @@ chmod +x hello_sysops.py
 
 - [Module 02 - Syntaxe de Base](02-syntaxe.md)
 - [Python Fondamentaux](../../python/fundamentals.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 02 - Syntaxe de Base →](02-syntaxe.md) |
+
+[Retour au Programme](index.md){ .md-button }

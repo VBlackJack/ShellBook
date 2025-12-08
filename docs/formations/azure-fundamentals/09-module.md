@@ -905,3 +905,13 @@ az policy state list \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 8 : Serverless](08-module.md) | [Module 10 : Observability →](10-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Serverless - Azure Functio...](08-module.md) | [Module 10 : Observability - Azure Mon... →](10-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

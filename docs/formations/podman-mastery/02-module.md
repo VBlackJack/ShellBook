@@ -462,3 +462,13 @@ Volumes:
 **Précédent :** [Module 1 - Fondamentaux](01-module.md)
 
 **Suivant :** [Module 3 - Buildah & Construction](03-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Fondamentaux & Architecture](01-module.md) | [Module 3 : Buildah & Construction d'I... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

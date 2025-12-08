@@ -342,3 +342,13 @@ Si réalisé en groupe, préparez une présentation de 15 minutes :
 **Précédent :** [Module 11 - Migration Cloud](11-module.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 11 : Migration Cloud](11-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1262,3 +1262,13 @@ gcloud compute firewall-rules delete allow-http --quiet
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Console GCP, Projets & IAM](01-module.md) | [Module 3 : Networking - VPC & Connect... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

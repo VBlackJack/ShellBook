@@ -926,3 +926,13 @@ Vous maîtrisez maintenant :
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Éditeurs & Traitement de T...](04-editeurs.md) | [Module 6 : Gestion des Paquets →](06-paquets.md) |
+
+[Retour au Programme](index.md){ .md-button }

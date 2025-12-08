@@ -85,3 +85,13 @@ print(response.choices[0].message.content)
 ```
 
 **Exercice** : Exécutez ce script et modifiez le "System Prompt" pour que l'IA réponde comme un pirate.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Prompt Engineering & Struc... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

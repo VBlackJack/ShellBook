@@ -1019,3 +1019,13 @@ RÉSEAU
 **Précédent :** [Module 10 - GitOps](10-module.md)
 
 **Suivant :** [TP Final](12-tp-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 10 : GitOps et CI/CD](10-module.md) | [TP Final : Plateforme Production →](12-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

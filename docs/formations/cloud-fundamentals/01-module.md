@@ -459,3 +459,13 @@ pie title Parts de Marché Cloud IaaS (Q3 2024)
 | Précédent | Suivant |
 |-----------|---------|
 | [← Introduction](index.md) | [Module 2 : Modèles de Service →](02-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Les Modèles de Service (Ia... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

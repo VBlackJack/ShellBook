@@ -773,3 +773,13 @@ graph TB
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 5 : EKS](05-module.md) | [Module 7 : CI/CD →](07-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : EKS & Containers](05-module.md) | [Module 7 : CI/CD avec CodePipeline & ... →](07-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

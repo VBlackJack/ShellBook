@@ -800,3 +800,13 @@ New-AzResourceGroup -Name "app-prod-rg" -Location "West Europe" -Tag @{Environme
 | Précédent | Suivant |
 |-----------|---------|
 | [↩️ Introduction](index.md) | [Module 2 : VMs & Compute →](02-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Virtual Machines & Compute →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

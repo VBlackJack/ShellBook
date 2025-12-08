@@ -1331,3 +1331,13 @@ aws dynamodb delete-item \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 3 : VPC & Networking](03-module.md) | [Module 5 : EKS & Containers →](05-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : VPC & Networking](03-module.md) | [Module 5 : EKS & Containers →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

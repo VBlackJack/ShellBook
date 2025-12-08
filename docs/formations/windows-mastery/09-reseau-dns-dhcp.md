@@ -388,3 +388,13 @@ Get-DhcpServerv4Scope
 **Précédent :** [Module 08 : Stockage & Disques](08-stockage-disques.md)
 
 **Suivant :** [Module 10 : Automatisation Basique](10-automatisation-basique.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 08 : Stockage & Disques](08-stockage-disques.md) | [Module 10 : Automatisation Basique →](10-automatisation-basique.md) |
+
+[Retour au Programme](index.md){ .md-button }

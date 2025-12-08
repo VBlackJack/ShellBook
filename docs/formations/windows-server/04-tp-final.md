@@ -1382,3 +1382,13 @@ Vous êtes maintenant qualifié pour :
 ---
 
 **[← Retour au Module 3](03-module.md)** | **[Retour à l'Introduction](index.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Sécurité & Hardening - Déf...](03-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

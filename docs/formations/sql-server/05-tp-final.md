@@ -1188,3 +1188,13 @@ Write-Host ""
 ---
 
 **Bravo ! Vous maîtrisez maintenant l'administration SQL Server !** 🎉
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Automatisation - La Puissa...](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

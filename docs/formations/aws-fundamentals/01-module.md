@@ -945,3 +945,13 @@ aws accessanalyzer list-findings \
 | Précédent | Suivant |
 |-----------|---------|
 | [↩️ Introduction](index.md) | [Module 2 : EC2 - Compute →](02-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : EC2 - Compute dans le Cloud →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

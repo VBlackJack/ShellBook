@@ -561,3 +561,13 @@ if ($alerts.Count -gt 0) {
 **Fin du Niveau 2 - Administration**
 
 Vous maîtrisez maintenant l'administration quotidienne de Windows Server. Le Niveau 3 approfondit Active Directory, la sécurité et les services réseau avancés.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 09 : Réseau & DNS/DHCP](09-reseau-dns-dhcp.md) | [Module 11 : Active Directory Core →](11-active-directory-core.md) |
+
+[Retour au Programme](index.md){ .md-button }

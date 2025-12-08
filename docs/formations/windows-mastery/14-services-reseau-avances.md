@@ -610,3 +610,13 @@ Get-WinEvent -LogName "Security" -MaxEvents 20 | Where-Object Id -eq 6272
 **Précédent :** [Module 13 : Sécurité & Hardening](13-securite-hardening.md)
 
 **Suivant :** [Module 15 : Backup & Disaster Recovery](15-backup-disaster-recovery.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 13 : Sécurité & Hardening](13-securite-hardening.md) | [Module 15 : Backup & Disaster Recovery →](15-backup-disaster-recovery.md) |
+
+[Retour au Programme](index.md){ .md-button }

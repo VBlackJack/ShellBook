@@ -847,3 +847,13 @@ az portal dashboard create \
 | Précédent | Retour au Catalogue |
 |-----------|---------------------|
 | [← Module 9 : Security](09-module.md) | [Catalogue des Formations](../index.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 9 : Security - Key Vault, Defe...](09-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

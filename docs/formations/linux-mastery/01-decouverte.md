@@ -489,3 +489,13 @@ Vous savez maintenant ce qu'est Linux et comment l'installer. Dans le prochain m
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Navigation & Fichiers →](02-navigation.md) |
+
+[Retour au Programme](index.md){ .md-button }

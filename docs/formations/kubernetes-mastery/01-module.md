@@ -679,3 +679,13 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<SERVER_IP>:6443 K3S_TOKEN=<TOKEN
 ---
 
 **Suivant :** [Module 2 - Workloads](02-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Workloads Fondamentaux →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -554,3 +554,13 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
 
 Vous avez terminé la formation Ethical Hacking Mastery.
 N'oubliez jamais : **With great power comes great responsibility.**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Post-Exploitation & PrivEsc](05-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

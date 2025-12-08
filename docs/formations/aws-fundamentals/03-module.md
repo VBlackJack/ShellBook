@@ -1339,3 +1339,13 @@ aws logs start-query \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 2 : EC2](02-module.md) | [Module 4 : Storage & Databases →](04-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : EC2 - Compute dans le Cloud](02-module.md) | [Module 4 : Storage & Databases →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

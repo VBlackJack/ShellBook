@@ -860,3 +860,13 @@ main "$@"
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 13 : Performance & Troubleshoo...](13-performance.md) | [Module 15 : Backup & Disaster Recovery →](15-backup.md) |
+
+[Retour au Programme](index.md){ .md-button }

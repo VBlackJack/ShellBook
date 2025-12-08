@@ -889,3 +889,13 @@ Rendez-vous au **Module 3 : Enregistrement des Hôtes** pour apprendre à :
 
 !!! quote "Citation du formateur"
     *"Un serveur de production qui suit l'upstream, c'est comme une voiture sans frein : ça va vite, mais ça finit mal."* — ShellBook Training
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Architecture & Installatio...](01-module.md) | [Module 3 : Gestion des Hôtes - L'Enrô... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -835,3 +835,13 @@ jobs:
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 18 : Kubernetes](18-kubernetes.md) | [Module 20 : Projet Final Expert →](20-projet-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -542,3 +542,13 @@ nginx.restart()
 
 - [Module 08 - Expressions Régulières](08-regex.md)
 - [Module 12 - SSH & Automatisation](12-ssh.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 06 - Formats de Données](06-formats.md) | [Module 08 - Expressions Régulières →](08-regex.md) |
+
+[Retour au Programme](index.md){ .md-button }

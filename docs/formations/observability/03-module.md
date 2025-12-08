@@ -1022,3 +1022,13 @@ docker run -d \
 **Précédent :** [Module 2 - Prometheus Configuration](02-module.md)
 
 **Suivant :** [Module 4 - Grafana Dashboards](04-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Prometheus - Déploiement e...](02-module.md) | [Module 4 : Grafana - Dashboards Avancés →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

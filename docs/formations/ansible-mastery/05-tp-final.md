@@ -400,3 +400,13 @@ ansible-lint site.yml
 **Précédent :** [Module 4 - Ansible Vault](04-module.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Sécurité & Secrets - Ansib...](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1501,3 +1501,13 @@ ansible-playbook playbook.yml
 **Félicitations ! Vous maîtrisez les playbooks Ansible et pouvez automatiser des workflows complets en mode Infrastructure as Code.** 🎉
 
 **Prochaine étape : Module 3 - Roles & Templates pour une architecture production-ready !**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Architecture & Premiers Pas](01-module.md) | [Module 3 : Roles & Templates - L'Indu... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

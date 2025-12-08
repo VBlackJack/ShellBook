@@ -1080,3 +1080,13 @@ ansible all -m ping -vvv
 **Félicitations ! Vous maîtrisez les fondamentaux d'Ansible et pouvez gérer des serveurs avec des commandes ad-hoc.** 🎉
 
 **Prochaine étape : Module 2 - Playbooks pour automatiser des workflows complets !**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Playbooks - L'Art de l'Aut... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

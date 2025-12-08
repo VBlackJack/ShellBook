@@ -1210,3 +1210,13 @@ N'hésitez pas à partager vos créations et à contribuer à la communauté !
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Automatisation - L'Install...](04-module.md) | [Module 6 : Cas d'Usage Avancé - ISO S... →](06-scenario-vpn.md) |
+
+[Retour au Programme](index.md){ .md-button }

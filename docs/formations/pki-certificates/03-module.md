@@ -831,3 +831,13 @@ Déployer une PKI 2-tiers complète avec OpenSSL.
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Certificats X.509 en Pratique](02-module.md) | [Module 4 : Automatisation & DevOps →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -511,3 +511,13 @@ Manipuler les différents concepts avec OpenSSL.
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Certificats X.509 en Pratique →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

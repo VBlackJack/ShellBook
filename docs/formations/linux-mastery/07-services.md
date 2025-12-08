@@ -406,3 +406,13 @@ systemd-analyze critical-chain
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : Gestion des Paquets](06-paquets.md) | [Module 8 : Stockage & Filesystems →](08-stockage.md) |
+
+[Retour au Programme](index.md){ .md-button }

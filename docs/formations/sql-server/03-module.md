@@ -1480,3 +1480,13 @@ Dans le **Module 4**, nous verrons :
 - 📧 **Notifications** : Alertes email automatiques sur échecs
 
 Rendez-vous au prochain module pour **automatiser et surveiller** votre infrastructure SQL Server ! 🚀
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Sécurité & Configuration -...](02-module.md) | [Module 4 : Automatisation - La Puissa... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

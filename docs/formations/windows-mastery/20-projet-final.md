@@ -357,3 +357,13 @@ Vous êtes maintenant un **Expert Windows Server** !
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 19 : Infrastructure as Code](19-infrastructure-as-code.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

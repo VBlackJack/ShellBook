@@ -535,3 +535,13 @@ services:
 **Précédent :** [Module 5 - Volumes](05-module.md)
 
 **Suivant :** [TP Final](07-tp-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Volumes et Persistance](05-module.md) | [TP Final : Application Production-Ready →](07-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

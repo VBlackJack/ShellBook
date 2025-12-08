@@ -850,3 +850,13 @@ def main(config):
 - [Module 12 - SSH & Automatisation](12-ssh.md)
 - [Module 14 - Cloud & AWS](14-cloud.md)
 - [Cheatsheet Bibliothèques](cheatsheet-libs.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 12 - SSH & Automatisation Dist...](12-ssh.md) | [Module 14 - Cloud & AWS avec Python →](14-cloud.md) |
+
+[Retour au Programme](index.md){ .md-button }

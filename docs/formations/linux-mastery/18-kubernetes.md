@@ -726,3 +726,13 @@ kubectl port-forward svc/prometheus-grafana 3000:80
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 17 : Conteneurisation](17-conteneurs.md) | [Module 19 : Infrastructure as Code →](19-iac.md) |
+
+[Retour au Programme](index.md){ .md-button }

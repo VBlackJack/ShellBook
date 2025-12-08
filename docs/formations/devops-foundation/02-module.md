@@ -524,3 +524,13 @@ git push origin --delete nom  # Supprimer une branche remote
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Comprendre Git](01-module.md) | [Module 3 : Mon Premier Pipeline CI/CD →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

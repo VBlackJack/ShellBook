@@ -980,3 +980,13 @@ kubectl label pods nginx-pod tier-
 **Précédent :** [Module 1 - Architecture](01-module.md)
 
 **Suivant :** [Module 3 - Configuration](03-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Architecture et Concepts](01-module.md) | [Module 3 : Configuration et Secrets →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

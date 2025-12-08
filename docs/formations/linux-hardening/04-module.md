@@ -884,3 +884,13 @@ sudo aureport -x --summary | grep -E "nc|ncat|socat"
 ---
 
 **Félicitations ! Vous maîtrisez maintenant l'audit système Linux pour la conformité SecNumCloud.** 🎓
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Firewall - La Forteresse R...](03-module.md) | [Module 5 : TP Final - Le Hardening Ch... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -999,3 +999,13 @@ spec:
 **Précédent :** [Module 8 - Observabilité](08-module.md)
 
 **Suivant :** [Module 10 - GitOps](10-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Observabilité](08-module.md) | [Module 10 : GitOps et CI/CD →](10-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

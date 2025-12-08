@@ -137,3 +137,13 @@ while True:
 ---
 
 Félicitations ! Vous avez construit un moteur de recherche sémantique privé. Vous êtes maintenant un **AI Engineer**.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : RAG (Chat with your Data)](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

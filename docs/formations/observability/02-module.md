@@ -871,3 +871,13 @@ scrape_configs:
 **Précédent :** [Module 1 - Fondamentaux](01-module.md)
 
 **Suivant :** [Module 3 - Exporters](03-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Fondamentaux de l'Observab...](01-module.md) | [Module 3 : Exporters et Instrumentation →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

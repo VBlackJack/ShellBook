@@ -492,3 +492,13 @@ aws guardduty create-threat-intel-set \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 8 : Serverless](08-module.md) | [Module 10 : Observability →](10-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Serverless - Lambda & Fargate](08-module.md) | [Module 10 : Observability - CloudWatc... →](10-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

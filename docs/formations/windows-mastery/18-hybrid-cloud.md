@@ -920,3 +920,13 @@ Start-ADSyncSyncCycle -PolicyType Initial
 **Précédent :** [Module 17 : Conteneurs Windows](17-conteneurs-windows.md)
 
 **Suivant :** [Module 19 : Infrastructure as Code](19-infrastructure-as-code.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 17 : Conteneurs Windows](17-conteneurs-windows.md) | [Module 19 : Infrastructure as Code →](19-infrastructure-as-code.md) |
+
+[Retour au Programme](index.md){ .md-button }

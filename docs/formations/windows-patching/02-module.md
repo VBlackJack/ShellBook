@@ -742,3 +742,13 @@ Rendez-vous au **Module 3 : Configuration des Clients (GPO)** pour apprendre à 
 
 !!! quote "Citation du formateur"
     *"Patch Tuesday est le jour le plus dangereux du mois... si vous n'avez pas de stratégie de Deployment Rings. Avec des anneaux, c'est le jour le plus sûr."* — ShellBook Training
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Architecture & Installatio...](01-module.md) | [Module 3 : Configuration Clients - GP... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

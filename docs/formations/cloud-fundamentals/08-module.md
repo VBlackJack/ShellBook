@@ -609,3 +609,13 @@ graph TB
 | Précédent | Suivant |
 |-----------|---------|
 | [Module 7 : Cas d'Usage Worldline](07-module.md) | [Module 9 : DevOps & CI/CD](09-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7 : Cas d'Usage Worldline](07-module.md) | [Module 9 : DevOps & CI/CD pour Débutants →](09-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

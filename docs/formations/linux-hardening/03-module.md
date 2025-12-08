@@ -1065,3 +1065,13 @@ sudo tail -f /var/log/fail2ban.log
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Utilisateurs & Sudo - Le M...](02-module.md) | [Module 4 : Audit & Conformité - La Pr... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

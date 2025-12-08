@@ -639,3 +639,13 @@ def non_blocking_server(host, port):
 
 - [Module 11 - APIs REST](11-api-rest.md)
 - [Module 12 - SSH & Automatisation](12-ssh.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 09 - Gestion des Erreurs & Log...](09-erreurs.md) | [Module 11 - APIs REST & HTTP →](11-api-rest.md) |
+
+[Retour au Programme](index.md){ .md-button }

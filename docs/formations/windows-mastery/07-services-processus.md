@@ -533,3 +533,13 @@ foreach ($svc in $criticalServices) {
 **Précédent :** [Module 06 : Rôles & Features](06-roles-features.md)
 
 **Suivant :** [Module 08 : Stockage & Disques](08-stockage-disques.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 06 : Rôles & Features](06-roles-features.md) | [Module 08 : Stockage & Disques →](08-stockage-disques.md) |
+
+[Retour au Programme](index.md){ .md-button }

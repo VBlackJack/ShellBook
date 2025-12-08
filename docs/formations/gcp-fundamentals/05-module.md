@@ -1002,3 +1002,13 @@ gcloud artifacts repositories delete my-repo \
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Storage & Databases](04-module.md) | [Module 6 : TP Final - Infrastructure ... →](06-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -829,3 +829,13 @@ journalctl --user -u nginx.service -o cat | grep -E "(Started|Stopped|Failed)"
 **Précédent :** [Module 5 - Pods](05-module.md)
 
 **Suivant :** [Module 7 - TP Final](07-tp-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Pods & Multi-Conteneurs](05-module.md) | [TP Final : Stack Production Rootless →](07-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

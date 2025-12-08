@@ -680,3 +680,13 @@ graph TB
 | Précédent | Suivant |
 |-----------|---------|
 | [Module 8 : Conteneurs & Kubernetes](08-module.md) | [Module 10 : Data & IA/ML Cloud](10-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Introduction aux Conteneur...](08-module.md) | [Module 10 : Data & IA/ML dans le Cloud →](10-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

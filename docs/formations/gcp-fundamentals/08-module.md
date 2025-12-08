@@ -1101,3 +1101,13 @@ gcloud scheduler jobs delete daily-job --location=europe-west1 --quiet
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7 : CI/CD avec Cloud Build & A...](07-module.md) | [Module 9 : Sécurité - Cloud Armor, Se... →](09-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1036,3 +1036,13 @@ PERFORMANCE
 **Précédent :** [Module 3 - Exporters](03-module.md)
 
 **Suivant :** [Module 5 - Alerting](05-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Exporters et Instrumentation](03-module.md) | [Module 5 : Alerting et Notifications →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

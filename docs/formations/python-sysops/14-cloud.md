@@ -862,3 +862,13 @@ def scale_down(asg_name, count=1):
 - [Module 13 - Outils CLI](13-cli.md)
 - [Module 15 - Tests & Qualité](15-tests.md)
 - [Cheatsheet Bibliothèques](cheatsheet-libs.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 13 - Création d'Outils CLI](13-cli.md) | [Module 15 - Tests & Qualité du Code →](15-tests.md) |
+
+[Retour au Programme](index.md){ .md-button }

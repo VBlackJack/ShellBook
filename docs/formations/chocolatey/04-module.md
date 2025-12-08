@@ -1370,3 +1370,13 @@ ansible-playbook -i inventory.ini migrate_pdf.yml
 - [Ansible - win_chocolatey](https://docs.ansible.com/ansible/latest/collections/chocolatey/chocolatey/win_chocolatey_module.html)
 - [Microsoft Intune Documentation](https://learn.microsoft.com/en-us/mem/intune/)
 - [Chocolatey Deployment](https://docs.chocolatey.org/en-us/guides/organizations/organizational-deployment-guide)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Serveur Privé - L'Usine Lo...](03-module.md) | [Module 5 : TP Final - La Chocolatey F... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

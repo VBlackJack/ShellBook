@@ -505,3 +505,13 @@ ports_services = [(22, "ssh"), (80, "http"), (443, "https"), (3306, "mysql")]
 
 - [Module 04 - Fonctions](04-fonctions.md)
 - [Python Fondamentaux](../../python/fundamentals.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 02 - Syntaxe de Base](02-syntaxe.md) | [Module 04 - Fonctions →](04-fonctions.md) |
+
+[Retour au Programme](index.md){ .md-button }

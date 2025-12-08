@@ -633,3 +633,13 @@ LogLevel VERBOSE
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Utilisateurs & Sudo - Le M... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1013,3 +1013,13 @@ groups:
 **Précédent :** [Module 4 - Grafana Dashboards](04-module.md)
 
 **Suivant :** [TP Final - Stack Complète](06-tp-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Grafana - Dashboards Avancés](04-module.md) | [TP Final : Stack d'Observabilité Comp... →](06-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -1030,3 +1030,13 @@ graph TB
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Compute Engine - VMs dans ... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

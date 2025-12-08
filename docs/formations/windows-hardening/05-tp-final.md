@@ -540,3 +540,13 @@ if ($AllPassed) {
 **Précédent :** [Module 4 - Active Directory](04-module.md)
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Active Directory](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

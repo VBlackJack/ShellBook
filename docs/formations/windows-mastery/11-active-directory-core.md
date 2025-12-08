@@ -685,3 +685,13 @@ netdom trust corp.local /domain:partner.com /verify
 **Précédent :** [Module 10 : Automatisation Basique](10-automatisation-basique.md)
 
 **Suivant :** [Module 12 : GPO & Configuration](12-gpo-configuration.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 10 : Automatisation Basique](10-automatisation-basique.md) | [Module 12 : GPO & Configuration →](12-gpo-configuration.md) |
+
+[Retour au Programme](index.md){ .md-button }

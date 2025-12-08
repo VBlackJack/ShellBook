@@ -916,3 +916,13 @@ Vous êtes maintenant prêt à passer au **Module 3 : Sécurité & Hardening AD*
 ---
 
 **[← Retour au Module 1](01-module.md)** | **[Continuer vers Module 3 : Sécurité & Hardening →](03-module.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Modern Admin - Le Serveur ...](01-module.md) | [Module 3 : Sécurité & Hardening - Déf... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

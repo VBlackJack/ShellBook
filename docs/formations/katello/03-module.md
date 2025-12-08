@@ -1352,3 +1352,13 @@ Dans le **Module 4 : Patch Management & Errata**, vous allez apprendre à :
 - [Katello Activation Keys](https://docs.theforeman.org/nightly/Managing_Content/index-katello.html#Managing_Activation_Keys_content-management)
 - [subscription-manager Man Page](https://access.redhat.com/documentation/en-us/red_hat_subscription_management/)
 - [Host Collections](https://docs.theforeman.org/nightly/Managing_Hosts/index-katello.html#Managing_Host_Collections_managing-hosts)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Gestion du Contenu - Le Pi...](02-module.md) | [Module 4 : Patch Management & Errata ... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -880,3 +880,13 @@ dism /Unmount-Wim /MountDir:"C:\Mount" /Discard
 ---
 
 **Besoin d'aide ?** Consultez les [forums NTLite](https://www.ntlite.com/community/) ou ouvrez une [issue GitHub](https://github.com/VBlackJack/ShellBook/issues).
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Le Grand Nettoyage (Debloa... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

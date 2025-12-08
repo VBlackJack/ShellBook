@@ -529,3 +529,13 @@ servers = [
 
 - [Module 03 - Structures de Données](03-structures.md)
 - [Module 04 - Fonctions](04-fonctions.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 01 - Environnement Python](01-environnement.md) | [Module 03 - Structures de Données →](03-structures.md) |
+
+[Retour au Programme](index.md){ .md-button }

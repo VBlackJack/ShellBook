@@ -828,3 +828,13 @@ gcloud compute networks delete webapp-vpc --quiet
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Compute Engine - VMs dans ...](02-module.md) | [Module 4 : Storage & Databases →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

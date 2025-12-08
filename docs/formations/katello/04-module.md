@@ -1350,3 +1350,13 @@ Dans le **Module 5 : TP Final**, vous allez mettre en pratique tout ce que vous 
 - [CVE Database](https://cve.mitre.org/)
 - [Katello Content View Filters](https://docs.theforeman.org/nightly/Managing_Content/index-katello.html#Creating_a_Content_View_Filter_content-management)
 - [Incremental Updates](https://docs.theforeman.org/nightly/Managing_Content/index-katello.html#Updating_a_Content_View_Version_content-management)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Gestion des Hôtes - L'Enrô...](03-module.md) | [Module 5 : TP Final - L'Usine Logicie... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

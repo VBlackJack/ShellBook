@@ -722,3 +722,13 @@ graph LR
 | Précédent | Retour au Catalogue |
 |-----------|---------------------|
 | [Module 10 : Data & IA/ML](10-module.md) | [Catalogue des Formations](../index.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 10 : Data & IA/ML dans le Cloud](10-module.md) | [TP Final : Étude de Cas - Migration C... →](12-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

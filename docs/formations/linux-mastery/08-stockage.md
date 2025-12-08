@@ -358,3 +358,13 @@ free -h
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7 : Processus & Services](07-services.md) | [Module 9 : Réseau Fondamental →](09-reseau.md) |
+
+[Retour au Programme](index.md){ .md-button }

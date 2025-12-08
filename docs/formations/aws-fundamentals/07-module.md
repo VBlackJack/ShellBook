@@ -464,3 +464,13 @@ spec:
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 6 : TP Final](06-tp-final.md) | [Module 8 : Serverless →](08-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : TP Final - Infrastructure ...](06-tp-final.md) | [Module 8 : Serverless - Lambda & Fargate →](08-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

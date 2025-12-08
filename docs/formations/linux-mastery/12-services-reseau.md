@@ -375,3 +375,13 @@ ldapadd -x -D "cn=Directory Manager" -W -f alice.ldif
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 11 : Sécurité & Hardening](11-securite.md) | [Module 13 : Performance & Troubleshoo... →](13-performance.md) |
+
+[Retour au Programme](index.md){ .md-button }

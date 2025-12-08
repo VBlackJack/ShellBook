@@ -749,3 +749,13 @@ send_slack_message(
 - [Module 10 - Programmation Réseau](10-reseau.md)
 - [Module 12 - SSH & Automatisation](12-ssh.md)
 - [Cheatsheet Bibliothèques](cheatsheet-libs.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 10 - Programmation Réseau](10-reseau.md) | [Module 12 - SSH & Automatisation Dist... →](12-ssh.md) |
+
+[Retour au Programme](index.md){ .md-button }

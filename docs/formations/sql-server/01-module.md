@@ -1129,3 +1129,13 @@ Dans le **Module 2**, nous verrons :
 - 🛡️ **Hardening** : Désactiver `sa`, chiffrement TLS, audit
 
 Rendez-vous au prochain module pour **sécuriser et optimiser** votre instance SQL Server ! 🚀
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Sécurité & Configuration -... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

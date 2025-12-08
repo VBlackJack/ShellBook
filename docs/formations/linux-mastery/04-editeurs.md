@@ -679,3 +679,13 @@ Vous maîtrisez maintenant l'édition et le traitement de texte. Le prochain mod
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Utilisateurs & Permissions](03-permissions.md) | [Module 5 : Introduction au Shell Scri... →](05-shell-intro.md) |
+
+[Retour au Programme](index.md){ .md-button }

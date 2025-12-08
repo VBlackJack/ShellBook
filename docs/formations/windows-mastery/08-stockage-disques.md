@@ -536,3 +536,13 @@ Get-Volume -DriveLetter $partition.DriveLetter
 **Précédent :** [Module 07 : Services & Processus](07-services-processus.md)
 
 **Suivant :** [Module 09 : Réseau & DNS/DHCP](09-reseau-dns-dhcp.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 07 : Services & Processus](07-services-processus.md) | [Module 09 : Réseau & DNS/DHCP →](09-reseau-dns-dhcp.md) |
+
+[Retour au Programme](index.md){ .md-button }

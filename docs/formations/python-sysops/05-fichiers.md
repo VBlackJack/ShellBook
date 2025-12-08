@@ -484,3 +484,13 @@ def rotate_logs(log_dir, pattern="*.log", keep=5):
 
 - [Module 06 - Formats de Données](06-formats.md)
 - [Python Fichiers & Données](../../python/files-data.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 04 - Fonctions](04-fonctions.md) | [Module 06 - Formats de Données →](06-formats.md) |
+
+[Retour au Programme](index.md){ .md-button }

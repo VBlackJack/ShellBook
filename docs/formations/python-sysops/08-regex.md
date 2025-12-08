@@ -509,3 +509,13 @@ LOG_LEVEL = r'\b(DEBUG|INFO|WARNING|ERROR|CRITICAL)\b'
 
 - [Module 09 - Gestion des Erreurs](09-erreurs.md)
 - [Linux Text Processing](../../linux/text-processing.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 07 - Sous-processus & Commande...](07-subprocess.md) | [Module 09 - Gestion des Erreurs & Log... →](09-erreurs.md) |
+
+[Retour au Programme](index.md){ .md-button }

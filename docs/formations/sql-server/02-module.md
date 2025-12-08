@@ -1095,3 +1095,13 @@ Dans le **Module 3**, nous verrons :
 - 🎖️ **Ola Hallengren Scripts** : Le standard de l'industrie pour la maintenance SQL Server
 
 Rendez-vous au prochain module pour **sauvegarder et maintenir** vos bases de données ! 🚀
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Architecture & Installation](01-module.md) | [Module 3 : Maintenance & Backups - Le... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

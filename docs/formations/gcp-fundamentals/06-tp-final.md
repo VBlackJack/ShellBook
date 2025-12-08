@@ -819,3 +819,13 @@ rm -rf k8s/ .env.db
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : GKE - Kubernetes sur GCP](05-module.md) | [Module 7 : CI/CD avec Cloud Build & A... →](07-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

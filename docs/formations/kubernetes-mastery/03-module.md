@@ -643,3 +643,13 @@ spec:
 **Précédent :** [Module 2 - Workloads](02-module.md)
 
 **Suivant :** [Module 4 - Networking](04-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Workloads Fondamentaux](02-module.md) | [Module 4 : Networking →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

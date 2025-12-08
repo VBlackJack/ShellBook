@@ -1096,3 +1096,13 @@ Dans le **Module 5 (TP Final)**, nous verrons :
 - 🚀 **Mise en production** : Checklist et best practices finales
 
 Rendez-vous au TP Final pour **mettre en pratique** toutes vos compétences DBA ! 🎓
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Maintenance & Backups - Le...](03-module.md) | [Module 5 : TP Final - Mission DBA (Pr... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

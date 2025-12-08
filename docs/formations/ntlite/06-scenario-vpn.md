@@ -1170,3 +1170,13 @@ Créer une ISO complète pour votre entreprise incluant :
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : TP Final - L'Image Master ...](05-tp-final.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

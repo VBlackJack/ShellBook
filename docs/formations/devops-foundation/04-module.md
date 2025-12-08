@@ -800,3 +800,13 @@ shellcheck --format=diff script.sh | git apply
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Mon Premier Pipeline CI/CD](03-module.md) | [Module 5 : TP Final - Le Projet Ops-T... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

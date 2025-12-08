@@ -80,6 +80,7 @@ nav:
   # ══════════════════════════════════════════════════════════════
   - 🚀 Quick Start:
     - Vue d'ensemble: quick-start/index.md
+    - 🏷️ Index des Tags: tags-index.md
     - 👤 Par Rôle:
       - Linux SysAdmin: quick-start/linux-sysadmin.md
       - Windows Admin: quick-start/windows-admin.md
@@ -298,13 +299,14 @@ nav:
       - PKI & Certificats: windows/certificate-services.md
       - NPS RADIUS 802.1X: windows/nps-radius.md
     - 🛡️ Sécurité:
-      - Vue d'ensemble: windows/windows-security.md
+      - Vue d'ensemble: windows/security/index.md
+      - Firewall & Defender: windows/security/firewall-defender.md
+      - LAPS: windows/security/laps.md
+      - BitLocker: windows/security/bitlocker.md
+      - PKI Bootstrap: windows/security/pki-bootstrap.md
+      - Hardening ANSSI: windows/security/hardening-anssi.md
       - Credential Guard: windows/credential-guard.md
-      - Windows Firewall: windows/windows-firewall.md
-      - BitLocker: windows/bitlocker.md
       - AppLocker & WDAC: windows/applocker.md
-      - LAPS: windows/laps.md
-      - Windows Defender: windows/windows-defender.md
     - 🔧 Opérations:
       - Updates & WSUS: windows/update-management.md
       - Task Scheduler: windows/scheduled-tasks.md
@@ -412,6 +414,8 @@ nav:
     - 🌐 Réseau:
       - Accueil: network/index.md
       - Fondamentaux: network/fundamentals.md
+      - TCP/IP & Routing: network/tcp-ip-routing.md
+      - DNS Fundamentals: network/dns-fundamentals.md
 
   # ══════════════════════════════════════════════════════════════
   # TAB 7: SECURITY & COMPLIANCE (NEW - extracted from Encyclopédie)

@@ -903,3 +903,13 @@ spec:
 **Précédent :** [Module 3 - Configuration](03-module.md)
 
 **Suivant :** [Module 5 - Stockage](05-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Configuration et Secrets](03-module.md) | [Module 5 : Stockage →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

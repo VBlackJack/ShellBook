@@ -702,3 +702,13 @@ $report | Export-Csv C:\Temp\permission-report.csv -NoTypeInformation
 **Précédent :** [Module 02 : PowerShell Basics](02-powershell-basics.md)
 
 **Suivant :** [Module 04 : Outils d'Administration](04-outils-administration.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 02 : PowerShell Basics](02-powershell-basics.md) | [Module 04 : Outils d'Administration →](04-outils-administration.md) |
+
+[Retour au Programme](index.md){ .md-button }

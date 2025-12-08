@@ -786,3 +786,13 @@ Get-ChildItem -Path C:\Windows\Logs -Filter *.log -Recurse -ErrorAction Silently
 **Précédent :** [Module 01 : Découverte Windows Server](01-decouverte.md)
 
 **Suivant :** [Module 03 : Utilisateurs & NTFS](03-utilisateurs-ntfs.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 01 : Découverte Windows Server](01-decouverte.md) | [Module 03 : Utilisateurs & NTFS →](03-utilisateurs-ntfs.md) |
+
+[Retour au Programme](index.md){ .md-button }

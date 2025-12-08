@@ -1756,3 +1756,13 @@ ansible-playbook site.yml -e "nginx_port=9000"  # Surcharge tout
 **Félicitations ! Vous maîtrisez l'industrialisation Ansible avec les rôles et templates, et pouvez gérer des infrastructures à grande échelle avec du code réutilisable et maintenable.** 🎉
 
 **Prochaine étape : Module 4 - Sécurité & Secrets pour protéger vos credentials et configurations sensibles !**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Playbooks - L'Art de l'Aut...](02-module.md) | [Module 4 : Sécurité & Secrets - Ansib... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

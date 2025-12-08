@@ -494,3 +494,13 @@ $Events | ForEach-Object {
 **Précédent :** [Module 3 - Réseau & Firewall](03-module.md)
 
 **Suivant :** [Module 5 - TP Final](05-tp-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Réseau & Firewall](03-module.md) | [Module 5 : TP Final - Audit et Remédi... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

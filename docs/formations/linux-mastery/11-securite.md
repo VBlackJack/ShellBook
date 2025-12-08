@@ -361,3 +361,13 @@ sudo sysctl --system
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 10 : Automatisation & Planific...](10-automatisation.md) | [Module 12 : Services Réseau →](12-services-reseau.md) |
+
+[Retour au Programme](index.md){ .md-button }

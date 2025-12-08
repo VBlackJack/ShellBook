@@ -653,3 +653,13 @@ rm -rf ~/production-stack
 **Précédent :** [Module 6 - Intégration Systemd](06-module.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : Intégration Systemd](06-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

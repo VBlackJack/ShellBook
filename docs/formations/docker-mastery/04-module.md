@@ -433,3 +433,13 @@ networks:
 **Précédent :** [Module 3 - Compose](03-module.md)
 
 **Suivant :** [Module 5 - Volumes](05-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Docker Compose](03-module.md) | [Module 5 : Volumes et Persistance →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

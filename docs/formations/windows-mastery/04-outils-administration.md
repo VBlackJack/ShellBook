@@ -722,3 +722,13 @@ logman delete "LabPerfMon"
 **Précédent :** [Module 03 : Utilisateurs & NTFS](03-utilisateurs-ntfs.md)
 
 **Suivant :** [Module 05 : Introduction au Scripting](05-scripting-intro.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 03 : Utilisateurs & NTFS](03-utilisateurs-ntfs.md) | [Module 05 : Introduction au Scripting →](05-scripting-intro.md) |
+
+[Retour au Programme](index.md){ .md-button }

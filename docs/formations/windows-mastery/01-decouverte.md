@@ -703,3 +703,13 @@ Invoke-Command -ComputerName DC01 -ScriptBlock { Get-ComputerInfo }
 ---
 
 **Suivant :** [Module 02 : PowerShell Basics](02-powershell-basics.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 02 : PowerShell Basics →](02-powershell-basics.md) |
+
+[Retour au Programme](index.md){ .md-button }

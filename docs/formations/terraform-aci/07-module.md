@@ -1190,3 +1190,13 @@ resource "aci_contract_subject" "nat_subject" {
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 6 : Patterns & Modules](06-module.md) | [Module 8 : Flux Est-Ouest →](08-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 6 : Patterns & Modules Terraform](06-module.md) | [Module 8 : Flux Est-Ouest →](08-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -710,3 +710,13 @@ kubectl get servicemonitors -n monitoring
 **Précédent :** [Module 11 - Troubleshooting](11-module.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 11 : Opérations et Troubleshoo...](11-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

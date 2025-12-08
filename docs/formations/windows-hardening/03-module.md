@@ -446,3 +446,13 @@ Get-NetFirewallRule -Direction Inbound |
 **Précédent :** [Module 2 - Services & Protocoles](02-module.md)
 
 **Suivant :** [Module 4 - Active Directory](04-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Services & Protocoles](02-module.md) | [Module 4 : Active Directory →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

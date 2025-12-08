@@ -295,3 +295,13 @@ cat /etc/hostname
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 8 : Stockage & Filesystems](08-stockage.md) | [Module 10 : Automatisation & Planific... →](10-automatisation.md) |
+
+[Retour au Programme](index.md){ .md-button }

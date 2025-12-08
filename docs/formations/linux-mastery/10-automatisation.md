@@ -351,3 +351,13 @@ Vous maîtrisez maintenant :
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 9 : Réseau Fondamental](09-reseau.md) | [Module 11 : Sécurité & Hardening →](11-securite.md) |
+
+[Retour au Programme](index.md){ .md-button }

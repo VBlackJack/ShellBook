@@ -680,3 +680,13 @@ Vous maîtrisez maintenant la navigation et la manipulation de fichiers. Le proc
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Découverte de Linux](01-decouverte.md) | [Module 3 : Utilisateurs & Permissions →](03-permissions.md) |
+
+[Retour au Programme](index.md){ .md-button }

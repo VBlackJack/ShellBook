@@ -1092,3 +1092,13 @@ deploy:
 **Précédent :** [Module 9 - Helm](09-module.md)
 
 **Suivant :** [Module 11 - Troubleshooting](11-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 9 : Helm et Packaging](09-module.md) | [Module 11 : Opérations et Troubleshoo... →](11-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

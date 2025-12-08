@@ -1023,3 +1023,13 @@ do {
 **Fin du Niveau 1 - Fondations**
 
 Vous avez maintenant les bases solides pour administrer Windows Server avec PowerShell. Le Niveau 2 approfondit ces compétences avec la gestion des rôles, services, stockage et réseau.
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 04 : Outils d'Administration](04-outils-administration.md) | [Module 06 : Rôles & Features →](06-roles-features.md) |
+
+[Retour au Programme](index.md){ .md-button }

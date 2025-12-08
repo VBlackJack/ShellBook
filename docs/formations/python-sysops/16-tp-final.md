@@ -591,3 +591,13 @@ flake8 src/
 **Précédent :** [Module 15 - Tests & Qualité](15-tests.md)
 
 **Retour au programme :** [Index](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 15 - Tests & Qualité du Code](15-tests.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

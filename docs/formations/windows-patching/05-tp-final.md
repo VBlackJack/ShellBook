@@ -1284,3 +1284,13 @@ Invoke-WsusServerCleanup -CleanupUnneededContentFiles
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Maintenance & Dépannage - ...](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

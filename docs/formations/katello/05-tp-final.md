@@ -1313,3 +1313,13 @@ Vous avez déployé une infrastructure Katello complète pour LinuxCorp avec :
 - [Katello Documentation](https://docs.theforeman.org/nightly/Managing_Content/index-katello.html)
 - [Hammer CLI Guide](https://docs.theforeman.org/nightly/Managing_Hammer/index.html)
 - [Rocky Linux Documentation](https://docs.rockylinux.org/)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Patch Management & Errata ...](04-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

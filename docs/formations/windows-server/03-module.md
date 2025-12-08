@@ -1131,3 +1131,13 @@ Vous êtes maintenant prêt à passer au **Module 4 : Automatisation** où vous 
 ---
 
 **[← Retour au Module 2](02-module.md)** | **[Continuer vers le TP Final →](04-tp-final.md)**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Active Directory & GPO - L...](02-module.md) | [Module 4 : TP Final - Déploiement DC ... →](04-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -675,3 +675,13 @@ docker run --security-opt no-new-privileges nginx
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 16 : Haute Disponibilité](16-haute-disponibilite.md) | [Module 18 : Kubernetes →](18-kubernetes.md) |
+
+[Retour au Programme](index.md){ .md-button }

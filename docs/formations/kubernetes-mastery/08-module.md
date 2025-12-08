@@ -637,3 +637,13 @@ helm install loki grafana/loki-stack \
 **Précédent :** [Module 7 - Scheduling](07-module.md)
 
 **Suivant :** [Module 9 - Helm](09-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7 : Scheduling Avancé](07-module.md) | [Module 9 : Helm et Packaging →](09-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

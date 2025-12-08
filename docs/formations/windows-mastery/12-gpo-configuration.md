@@ -768,3 +768,13 @@ Get-GPOReport -All -ReportType HTML -Path "C:\GPOReports\AllGPOs.html"
 **Précédent :** [Module 11 : Active Directory Core](11-active-directory-core.md)
 
 **Suivant :** [Module 13 : Sécurité & Hardening](13-securite-hardening.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 11 : Active Directory Core](11-active-directory-core.md) | [Module 13 : Sécurité & Hardening →](13-securite-hardening.md) |
+
+[Retour au Programme](index.md){ .md-button }

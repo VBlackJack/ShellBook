@@ -809,3 +809,13 @@ $report | Format-Table -AutoSize
 **Précédent :** [Module 12 : GPO & Configuration](12-gpo-configuration.md)
 
 **Suivant :** [Module 14 : Services Réseau Avancés](14-services-reseau-avances.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 12 : GPO & Configuration](12-gpo-configuration.md) | [Module 14 : Services Réseau Avancés →](14-services-reseau-avances.md) |
+
+[Retour au Programme](index.md){ .md-button }

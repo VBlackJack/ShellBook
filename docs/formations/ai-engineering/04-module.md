@@ -123,3 +123,13 @@ Le moteur a compris que "envoyer des emails" est sémantiquement lié à "MTA" e
     answer = ask_rag("Comment automatiser le déploiement ?")
     print(answer)
     ```
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Local AI & Ops](03-module.md) | [Module 5 : Projet Final - Doc-Bot →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

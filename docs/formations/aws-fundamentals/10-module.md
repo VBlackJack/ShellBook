@@ -625,3 +625,13 @@ aws synthetics start-canary --name api-health-canary
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 9 : Security](09-module.md) | [↩️ Retour au syllabus](index.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 9 : Security - WAF, Secrets Ma...](09-module.md) | [Programme →](index.md) |
+
+[Retour au Programme](index.md){ .md-button }

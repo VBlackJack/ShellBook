@@ -97,3 +97,13 @@ response = client.chat.completions.create(
     result = json.loads(response.choices[0].message.content)
     print(json.dumps(result, indent=2))
     ```
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Les Fondations Modernes](01-module.md) | [Module 3 : Local AI & Ops →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

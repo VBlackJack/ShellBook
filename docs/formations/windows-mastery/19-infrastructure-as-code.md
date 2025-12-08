@@ -1345,3 +1345,13 @@ Start-DscConfiguration -Path .\ServerHardening -Wait -Verbose
 **Précédent :** [Module 18 : Hybrid Cloud](18-hybrid-cloud.md)
 
 **Suivant :** [Module 20 : Projet Final Expert](20-projet-final.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 18 : Hybrid Cloud](18-hybrid-cloud.md) | [Module 20 : Projet Final Expert →](20-projet-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

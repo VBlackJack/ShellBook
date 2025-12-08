@@ -547,3 +547,13 @@ aws events put-targets \
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 7 : CI/CD](07-module.md) | [Module 9 : Security →](09-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 7 : CI/CD avec CodePipeline & ...](07-module.md) | [Module 9 : Security - WAF, Secrets Ma... →](09-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -594,3 +594,13 @@ Vous maîtrisez maintenant :
 ---
 
 **Retour au :** [Programme de la Formation](index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 14 : Scripting Avancé](14-scripting-avance.md) | [Module 16 : Haute Disponibilité →](16-haute-disponibilite.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -703,3 +703,13 @@ spec:
 **Précédent :** [Module 4 - Skopeo](04-module.md)
 
 **Suivant :** [Module 6 - Intégration Systemd](06-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Skopeo & Gestion des Regis...](04-module.md) | [Module 6 : Intégration Systemd →](06-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

@@ -651,3 +651,13 @@ mindmap
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 4 : Sécurité & Conformité](04-module.md) | [Module 6 : FinOps & Coûts →](06-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Sécurité & Conformité dans...](04-module.md) | [Module 6 : FinOps & Coûts Cloud →](06-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

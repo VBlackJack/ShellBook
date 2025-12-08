@@ -741,3 +741,13 @@ spec:
 **Précédent :** [Module 5 - Stockage](05-module.md)
 
 **Suivant :** [Module 7 - Scheduling](07-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 5 : Stockage](05-module.md) | [Module 7 : Scheduling Avancé →](07-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

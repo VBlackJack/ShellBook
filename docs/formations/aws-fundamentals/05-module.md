@@ -1149,3 +1149,13 @@ EOF
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 4 : Storage](04-module.md) | [Module 6 : TP Final →](06-tp-final.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Storage & Databases](04-module.md) | [Module 6 : TP Final - Infrastructure ... →](06-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

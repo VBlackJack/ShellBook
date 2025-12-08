@@ -499,3 +499,13 @@ validate_env("test")   # False
 
 - [Module 05 - Fichiers & I/O](05-fichiers.md)
 - [Python Fondamentaux](../../python/fundamentals.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 03 - Structures de Données](03-structures.md) | [Module 05 - Fichiers & I/O →](05-fichiers.md) |
+
+[Retour au Programme](index.md){ .md-button }

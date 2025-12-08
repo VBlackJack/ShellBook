@@ -299,3 +299,13 @@ git blame README.md
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Branches & Pull Requests →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

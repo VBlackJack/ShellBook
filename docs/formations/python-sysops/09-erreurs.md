@@ -748,3 +748,13 @@ if __name__ == "__main__":
 
 - [Module 10 - Programmation Réseau](10-reseau.md)
 - [Module 15 - Tests & Qualité](15-tests.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 08 - Expressions Régulières](08-regex.md) | [Module 10 - Programmation Réseau →](10-reseau.md) |
+
+[Retour au Programme](index.md){ .md-button }

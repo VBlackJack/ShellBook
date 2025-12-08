@@ -681,3 +681,13 @@ graph TB
 | Précédent | Suivant |
 |-----------|---------|
 | [← Module 2 : Modèles de Service](02-module.md) | [Module 4 : Sécurité & Conformité →](04-module.md) |
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 2 : Les Modèles de Service (Ia...](02-module.md) | [Module 4 : Sécurité & Conformité dans... →](04-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

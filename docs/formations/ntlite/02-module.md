@@ -284,3 +284,13 @@ Dans le **Module 3**, nous verrons :
 - 📦 **Unattended Setup** : Automatiser l'installation (AutoUnattend.xml)
 
 Rendez-vous au prochain module pour transformer votre image allégée en **machine de guerre configurée** !
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Prise en main & Architectu...](01-module.md) | [Module 3 : Intégration - Drivers & Up... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

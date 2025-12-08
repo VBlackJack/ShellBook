@@ -857,3 +857,13 @@ Rendez-vous au **[Module 2 : Gestion des Mises à Jour](#)** pour apprendre à :
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Approbation & Ciblage - La... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

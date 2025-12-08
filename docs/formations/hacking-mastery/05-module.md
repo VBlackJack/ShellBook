@@ -400,3 +400,13 @@ Des outils plus robustes pour créer des tunnels VPN à travers des firewalls re
        - Monitoring des connexions SSH sortantes inhabituelles
        - Détection des scans de ports internes
        - Principe du Zero Trust
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 4 : Active Directory Hacking](04-module.md) | [Module 6 : Projet Final : Audit Black... →](06-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

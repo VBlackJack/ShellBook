@@ -653,3 +653,13 @@ user ALL=(root) /sbin/reboot
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : SSH Hardening - Verrouille...](01-module.md) | [Module 3 : Firewall - La Forteresse R... →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

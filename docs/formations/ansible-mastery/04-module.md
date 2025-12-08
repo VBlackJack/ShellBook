@@ -1501,3 +1501,13 @@ secrets/
 **Félicitations ! Vous maîtrisez Ansible Vault et pouvez déployer des infrastructures sécurisées avec des secrets chiffrés, conformes aux standards DevSecOps et SecNumCloud.** 🎉🔒
 
 **La formation Ansible Mastery est maintenant complète ! Vous êtes prêt à gérer des infrastructures à grande échelle avec automatisation, réutilisabilité et sécurité.**
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Roles & Templates - L'Indu...](03-module.md) | [TP Final : Infrastructure Multi-Tier ... →](05-tp-final.md) |
+
+[Retour au Programme](index.md){ .md-button }

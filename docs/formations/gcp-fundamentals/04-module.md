@@ -838,3 +838,13 @@ graph TD
 ---
 
 **Retour au :** [Programme de la Formation](index.md) | [Catalogue des Formations](../index.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 3 : Networking - VPC & Connect...](03-module.md) | [Module 5 : GKE - Kubernetes sur GCP →](05-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

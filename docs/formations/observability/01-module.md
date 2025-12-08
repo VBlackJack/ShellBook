@@ -515,3 +515,13 @@ docker-compose ps
 ---
 
 **Suivant :** [Module 2 - Prometheus Déploiement](02-module.md)
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Programme](index.md) | [Module 2 : Prometheus - Déploiement e... →](02-module.md) |
+
+[Retour au Programme](index.md){ .md-button }

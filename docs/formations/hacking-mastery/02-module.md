@@ -179,3 +179,13 @@ msf6 > exploit
     - Désactiver FTP si non nécessaire
     - Configurer l'authentification SMB
     - Segmenter le réseau avec des règles firewall strictes
+
+---
+
+## Navigation
+
+| | |
+|:---|---:|
+| [← Module 1 : Mindset, Légalité & Lab](01-module.md) | [Module 3 : Web Hacking →](03-module.md) |
+
+[Retour au Programme](index.md){ .md-button }
