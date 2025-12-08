@@ -20,39 +20,7 @@ Transformer la couche de données en service résilient. Failover automatique et
 
 ### Deux Concepts Distincts et Complémentaires
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  HA (HIGH AVAILABILITY)                      │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Objectif : Continuité de service en cas de panne matérielle│
-│                                                              │
-│  Scénario :                                                 │
-│  1. Le serveur DB principal (Leader) tombe en panne        │
-│  2. Détection automatique (health check échoue)            │
-│  3. Promotion automatique d'un Replica en Leader           │
-│  4. L'application continue de fonctionner                   │
-│  5. Downtime : 30 secondes max (temps de bascule)          │
-│                                                              │
-│  Solutions : Patroni (PostgreSQL), Galera (MariaDB)         │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│                  DR (DISASTER RECOVERY)                      │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Objectif : Restauration après corruption/suppression       │
-│                                                              │
-│  Scénario :                                                 │
-│  1. Un développeur exécute "DROP TABLE users;" en prod     │
-│  2. La commande se réplique sur TOUS les nœuds (HA)        │
-│  3. Les backups sont la SEULE solution                     │
-│  4. Restauration PITR à 5 minutes avant la catastrophe     │
-│  5. Downtime : 15-60 minutes (restauration manuelle)       │
-│                                                              │
-│  Solutions : pgBackRest, WAL-G, Barman                      │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Database HA vs DR](../assets/diagrams/database-ha-vs-dr.jpeg)
 
 **Principe fondamental :**
 
@@ -68,29 +36,7 @@ Transformer la couche de données en service résilient. Failover automatique et
 
 ### Le Problème du Split-Brain
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  SPLIT-BRAIN SCENARIO                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Cluster 3 nœuds : Leader (A) + Replica (B) + Replica (C)│
-│  2. Panne réseau : A isolé de B+C                           │
-│  3. A pense : "B et C sont morts, je reste Leader"          │
-│  4. B+C pensent : "A est mort, promouvons B en Leader"      │
-│  5. Résultat : 2 Leaders simultanés (CATASTROPHE)           │
-│  6. Les applications écrivent sur A ET sur B                │
-│  7. Divergence des données (impossible à réconcilier)       │
-│                                                              │
-│  Solution : QUORUM (majorité stricte)                       │
-│                                                              │
-│  Cluster 3 nœuds :                                          │
-│  - A isolé (1/3) → Ne peut pas obtenir le quorum → Se tue  │
-│  - B+C ensemble (2/3) → Ont le quorum → B devient Leader   │
-│                                                              │
-│  Règle : Nombre de nœuds IMPAIR (3, 5, 7)                  │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Database Split-Brain Scenario](../assets/diagrams/database-split-brain.jpeg)
 
 !!! danger "Split-Brain = Corruption Garantie"
     Sans mécanisme de quorum, vous ALLEZ perdre des données. Les systèmes HA sans protection split-brain (anciennes versions MySQL replication, MongoDB sans replica set) sont **dangereux en production**.

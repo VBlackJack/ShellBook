@@ -182,42 +182,7 @@ docker inspect webserver --format '{{.NetworkSettings.IPAddress}}'
 
 ## 4. Cycle de Vie
 
-```
-CYCLE DE VIE D'UN CONTAINER
-═══════════════════════════
-
-         docker create
-              │
-              ▼
-┌─────────────────────────┐
-│        CREATED          │
-└───────────┬─────────────┘
-            │ docker start
-            ▼
-┌─────────────────────────┐
-│        RUNNING          │◄────────────┐
-└───────────┬─────────────┘             │
-            │                           │
-     ┌──────┴──────┐                    │
-     │             │                    │
-docker stop   docker pause              │
-     │             │                    │
-     ▼             ▼                    │
-┌─────────┐  ┌─────────────┐            │
-│ EXITED  │  │   PAUSED    │            │
-└────┬────┘  └──────┬──────┘            │
-     │              │                   │
-docker start    docker unpause          │
-     │              │                   │
-     └──────────────┴───────────────────┘
-
-docker rm
-     │
-     ▼
-┌─────────────────────────┐
-│        DELETED          │
-└─────────────────────────┘
-```
+![Docker Container Lifecycle](../../assets/diagrams/docker-container-lifecycle.jpeg)
 
 ---
 

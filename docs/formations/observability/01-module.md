@@ -24,24 +24,7 @@ tags:
 
 ### 1.1 Définitions
 
-```
-EVOLUTION DU MONITORING
-═══════════════════════
-
-MONITORING TRADITIONNEL          OBSERVABILITÉ MODERNE
-────────────────────────         ─────────────────────
-
-  "Est-ce que ça marche ?"       "Pourquoi ça ne marche pas ?"
-
-  ┌─────────────────────┐        ┌─────────────────────────────┐
-  │  Métriques simples  │        │  Métriques + Logs + Traces  │
-  │  CPU, RAM, Disk     │   →    │  + Corrélation              │
-  │  UP/DOWN            │        │  + Contexte                 │
-  └─────────────────────┘        └─────────────────────────────┘
-
-  Réactif                        Proactif + Investigatif
-  "Alert quand > 90%"            "Comprendre le comportement"
-```
+![Monitoring Evolution](../../assets/diagrams/monitoring-evolution.jpeg)
 
 ### 1.2 Les 3 Piliers
 
@@ -70,30 +53,7 @@ Tous visualisés et corrélés dans **Grafana**.
 
 ### 2.1 Vue d'Ensemble
 
-```
-ARCHITECTURE PROMETHEUS
-═══════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                         PROMETHEUS                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │  Retrieval  │  │    TSDB     │  │    HTTP Server      │ │
-│  │  (Scraping) │→ │  (Storage)  │→ │    (API + PromQL)   │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
-│        ↑                                      │             │
-└────────┼──────────────────────────────────────┼─────────────┘
-         │                                      │
-    ┌────┴────┐                           ┌─────┴─────┐
-    │ PULL    │                           │  QUERY    │
-    │ /metrics│                           │           │
-    ▼         ▼                           ▼           ▼
-┌───────┐ ┌───────┐               ┌─────────┐ ┌─────────────┐
-│Target │ │Target │               │ Grafana │ │ Alertmanager│
-│  :9100│ │  :8080│               │         │ │             │
-└───────┘ └───────┘               └─────────┘ └─────────────┘
-Node      App                     Dashboard    Notifications
-Exporter  Metrics
-```
+![Prometheus Architecture](../../assets/diagrams/prometheus-architecture.jpeg)
 
 ### 2.2 Modèle Pull vs Push
 
@@ -113,41 +73,7 @@ Exporter  Metrics
 
 ### 2.3 Types de Métriques
 
-```
-TYPES DE MÉTRIQUES PROMETHEUS
-═════════════════════════════
-
-1. COUNTER (Compteur)
-   → Valeur qui ne fait qu'augmenter
-   → Reset à 0 au redémarrage
-
-   Exemple: http_requests_total = 15234
-            │
-            └─ Total de requêtes depuis le démarrage
-
-2. GAUGE (Jauge)
-   → Valeur qui monte et descend
-
-   Exemple: node_memory_available_bytes = 4294967296
-            │
-            └─ RAM disponible actuellement
-
-3. HISTOGRAM (Histogramme)
-   → Distribution des valeurs dans des buckets
-
-   Exemple: http_request_duration_seconds_bucket{le="0.1"} = 2400
-            http_request_duration_seconds_bucket{le="0.5"} = 2850
-            http_request_duration_seconds_bucket{le="1.0"} = 2900
-            http_request_duration_seconds_sum = 542.3
-            http_request_duration_seconds_count = 2900
-
-4. SUMMARY (Résumé)
-   → Quantiles pré-calculés côté client
-
-   Exemple: http_request_duration_seconds{quantile="0.5"} = 0.12
-            http_request_duration_seconds{quantile="0.9"} = 0.45
-            http_request_duration_seconds{quantile="0.99"} = 1.2
-```
+![Prometheus Metric Types](../../assets/diagrams/prometheus-metric-types.jpeg)
 
 ---
 

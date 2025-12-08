@@ -88,47 +88,7 @@ flowchart TB
 
 **Helm = Package manager pour Kubernetes (comme apt pour Debian, yum pour RHEL).**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│              SANS HELM (Manifestes bruts)                    │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  deployment-dev.yaml                                        │
-│  deployment-staging.yaml                                    │
-│  deployment-prod.yaml                                       │
-│  service-dev.yaml                                           │
-│  service-staging.yaml                                       │
-│  service-prod.yaml                                          │
-│  ingress-dev.yaml                                           │
-│  ...                                                         │
-│                                                              │
-│  Problèmes :                                                │
-│  ❌ Duplication massive (DRY violation)                     │
-│  ❌ Erreurs de copier-coller                                │
-│  ❌ Difficile de gérer 10+ microservices                    │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│                   AVEC HELM (Chart)                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  mychart/                                                   │
-│  ├── Chart.yaml          (Métadonnées)                      │
-│  ├── values.yaml         (Config par défaut)                │
-│  ├── values-dev.yaml     (Override pour dev)                │
-│  ├── values-prod.yaml    (Override pour prod)               │
-│  └── templates/                                             │
-│      ├── deployment.yaml (Template Jinja2)                  │
-│      ├── service.yaml                                       │
-│      └── ingress.yaml                                       │
-│                                                              │
-│  Avantages :                                                │
-│  ✅ Un seul template, N environnements                      │
-│  ✅ Réutilisation (Charts publiques)                        │
-│  ✅ Rollback intégré                                        │
-│  ✅ Gestion des dépendances                                 │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Helm vs Manifests](../assets/diagrams/helm-vs-manifests.jpeg)
 
 ---
 
@@ -356,37 +316,7 @@ helm repo update
 
 **ArgoCD = Continuous Delivery pour Kubernetes via GitOps.**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    ARGOCD WORKFLOW                           │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Git Repository (Source de vérité)                       │
-│     └── manifests/                                          │
-│         ├── deployment.yaml                                 │
-│         ├── service.yaml                                    │
-│         └── ingress.yaml                                    │
-│                                                              │
-│  2. ArgoCD Application (Définition)                         │
-│     apiVersion: argoproj.io/v1alpha1                        │
-│     kind: Application                                       │
-│     spec:                                                    │
-│       source:                                               │
-│         repoURL: https://github.com/company/app.git         │
-│         path: manifests/                                    │
-│       destination:                                          │
-│         server: https://kubernetes.default.svc              │
-│         namespace: production                               │
-│                                                              │
-│  3. ArgoCD Controller (Boucle de réconciliation)            │
-│     ┌──────────────────────────────────┐                    │
-│     │  Pull Git → Compare → Sync K8s  │                    │
-│     └──────────────────────────────────┘                    │
-│                ▲              │                              │
-│                └──── Loop ────┘ (toutes les 3 min)          │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![ArgoCD Workflow](../assets/diagrams/argocd-workflow.jpeg)
 
 ---
 
@@ -663,33 +593,7 @@ cache → Application ArgoCD
 
 **Principe :** Une "Application Mère" qui pointe vers un dossier Git contenant les définitions des "Applications Filles".
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     APP OF APPS PATTERN                      │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Git Repository                                             │
-│  ├── apps/                                                  │
-│  │   ├── frontend.yaml        (Application ArgoCD)          │
-│  │   ├── backend-api.yaml     (Application ArgoCD)          │
-│  │   ├── backend-worker.yaml  (Application ArgoCD)          │
-│  │   └── database.yaml        (Application ArgoCD)          │
-│  │                                                           │
-│  └── bootstrap/                                             │
-│      └── root-app.yaml         (App of Apps)                │
-│                                                              │
-│  ArgoCD                                                     │
-│  └── Application "root" (App of Apps)                       │
-│      ├── Déploie frontend.yaml → Application "frontend"     │
-│      ├── Déploie backend-api.yaml → Application "backend"   │
-│      ├── Déploie backend-worker.yaml → Application "worker" │
-│      └── Déploie database.yaml → Application "database"     │
-│                                                              │
-│  Résultat :                                                 │
-│  1 Application ArgoCD → Gère 50 Applications                │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![ArgoCD App of Apps Pattern](../assets/diagrams/argocd-app-of-apps.jpeg)
 
 ---
 

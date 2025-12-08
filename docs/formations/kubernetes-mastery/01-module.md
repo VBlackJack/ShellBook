@@ -48,39 +48,7 @@ Origine: Google Borg → Kubernetes (2014, CNCF)
 
 ### 1.2 Concepts Clés
 
-```
-CONCEPTS FONDAMENTAUX
-═════════════════════
-
-CLUSTER
-└── Un ensemble de machines (nodes) géré par Kubernetes
-
-NODE
-├── Control Plane (Master) : Gère le cluster
-└── Worker : Exécute les workloads
-
-POD
-└── Plus petite unité déployable
-    └── 1+ containers partageant réseau et storage
-
-WORKLOADS
-├── Deployment    : Applications stateless
-├── StatefulSet   : Applications stateful
-├── DaemonSet     : Un pod par node
-├── Job/CronJob   : Tâches ponctuelles/planifiées
-└── ReplicaSet    : Assure N réplicas (géré par Deployment)
-
-SERVICES
-├── ClusterIP     : IP interne au cluster
-├── NodePort      : Expose sur un port de chaque node
-├── LoadBalancer  : Load balancer externe
-└── ExternalName  : Alias DNS
-
-CONFIGURATION
-├── ConfigMap     : Configuration non-sensible
-├── Secret        : Données sensibles
-└── PV/PVC        : Stockage persistant
-```
+![Kubernetes Objects Hierarchy](../../assets/diagrams/k8s-objects-hierarchy.jpeg)
 
 ---
 

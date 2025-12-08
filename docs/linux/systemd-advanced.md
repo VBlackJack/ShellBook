@@ -141,22 +141,7 @@ OnUnitActiveSec=1h
 
 ### Principe
 
-```
-SOCKET ACTIVATION
-══════════════════════════════════════════════════════════════════════
-
-Avantages:
-├── Démarrage plus rapide (services à la demande)
-├── Moins de ressources (services non utilisés = non démarrés)
-├── Parallélisation du boot (pas besoin d'attendre les dépendances)
-└── Redémarrage sans perte de connexion
-
-Flux:
-1. systemd écoute sur le socket
-2. Connexion entrante → systemd démarre le service
-3. Service reçoit le socket déjà ouvert (fd 3+)
-4. Service traite les connexions
-```
+![Systemd Socket Activation](../assets/diagrams/systemd-socket-activation.jpeg)
 
 ### Créer un Socket TCP
 

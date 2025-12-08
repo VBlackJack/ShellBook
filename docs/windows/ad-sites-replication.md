@@ -290,26 +290,7 @@ Get-WinEvent -LogName "DFS Replication" -MaxEvents 50 |
 
 ## Bridgehead Servers
 
-```
-BRIDGEHEAD SERVERS
-══════════════════════════════════════════════════════════
-
-DC désigné pour la réplication inter-site.
-
-     SITE PARIS                    SITE LYON
-    ┌──────────────┐              ┌──────────────┐
-    │   DC-01      │              │   DC-03      │
-    │(Bridgehead)◄─┼──── WAN ────►│(Bridgehead)  │
-    │              │              │              │
-    │   DC-02      │              │   DC-04      │
-    │              │              │              │
-    └──────────────┘              └──────────────┘
-
-Avantages :
-• Contrôle du DC qui réplique sur le WAN
-• Optimisation bande passante
-• Failover automatique
-```
+![AD Bridgehead Servers](../assets/diagrams/ad-bridgehead-servers.jpeg)
 
 ```powershell
 # Désigner un Bridgehead préféré

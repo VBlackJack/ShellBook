@@ -24,36 +24,13 @@ tags:
 
 ### 1.1 Principes Fondamentaux
 
-```
-MODÈLE RÉSEAU KUBERNETES
-════════════════════════
+![Kubernetes Pod Network Model](../../assets/diagrams/k8s-pod-network-model.jpeg)
 
-Règles fondamentales :
+**Règles fondamentales :**
+
 1. Tous les pods peuvent communiquer sans NAT
 2. Tous les nodes peuvent communiquer avec tous les pods sans NAT
 3. L'IP d'un pod est la même vue de l'intérieur et de l'extérieur
-
-┌─────────────────────────────────────────────────────────────────┐
-│                         CLUSTER                                  │
-│                                                                  │
-│   Pod Network CIDR: 10.244.0.0/16                               │
-│   Service CIDR: 10.96.0.0/12                                    │
-│                                                                  │
-│   ┌─────────────────────┐   ┌─────────────────────┐            │
-│   │      Node 1         │   │      Node 2         │            │
-│   │                     │   │                     │            │
-│   │  ┌───────┐ ┌───────┐│   │┌───────┐ ┌───────┐ │            │
-│   │  │Pod A  │ │Pod B  ││   ││Pod C  │ │Pod D  │ │            │
-│   │  │.1.5   │ │.1.6   ││   ││.2.3   │ │.2.4   │ │            │
-│   │  └───────┘ └───────┘│   │└───────┘ └───────┘ │            │
-│   │     10.244.1.0/24   │   │   10.244.2.0/24    │            │
-│   └─────────────────────┘   └─────────────────────┘            │
-│                                                                  │
-│   Pod A (10.244.1.5) ←──────────────────→ Pod C (10.244.2.3)   │
-│                     Communication directe                        │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
 
 ### 1.2 CNI Plugins
 
@@ -317,33 +294,10 @@ metadata:
 
 ### 4.1 Concept
 
-```
-NETWORK POLICIES - FIREWALL L3/L4
-═════════════════════════════════
+![Kubernetes Network Policy](../../assets/diagrams/k8s-network-policy.jpeg)
 
-Par défaut: Tout le trafic est autorisé
-Avec NetworkPolicy: Deny par défaut si appliqué
-
-┌─────────────────────────────────────────────────────────────┐
-│                      NAMESPACE: production                   │
-│                                                              │
-│   ┌─────────────┐       NetworkPolicy        ┌────────────┐ │
-│   │   frontend  │ ───────ALLOW──────────────▶│  backend   │ │
-│   │   pods      │       (port 8080)          │   pods     │ │
-│   └─────────────┘                            └─────┬──────┘ │
-│                                                    │        │
-│                                              ALLOW │ 5432   │
-│                                                    ▼        │
-│                                              ┌────────────┐ │
-│                                              │  database  │ │
-│                                              │   pods     │ │
-│                                              └────────────┘ │
-│                                                              │
-│   ┌─────────────┐                                           │
-│   │  attacker   │ ─────X DENY X──────────▶ (tous les pods) │
-│   └─────────────┘                                           │
-└─────────────────────────────────────────────────────────────┘
-```
+- **Par défaut** : Tout le trafic est autorisé
+- **Avec NetworkPolicy** : Deny par défaut si appliqué
 
 ### 4.2 Exemples Network Policies
 
