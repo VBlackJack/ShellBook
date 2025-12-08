@@ -97,6 +97,8 @@ graph TB
 !!! success "Bénéfice"
     Si une zone tombe (panne électrique, catastrophe naturelle), les autres zones continuent de fonctionner. Le service reste disponible.
 
+![Architecture VPC Multi-AZ](../../assets/diagrams/vpc-multi-az-architecture.jpeg)
+
 ### 1.4 Régions par Provider
 
 | Provider | Nb Régions | Régions France | Régions Europe |

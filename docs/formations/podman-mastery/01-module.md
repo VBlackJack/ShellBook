@@ -21,34 +21,7 @@ tags:
 
 ## 1. Docker vs Podman
 
-```
-ARCHITECTURE COMPARÉE
-═════════════════════════════════════════════════════════
-
-DOCKER                          PODMAN
-──────                          ──────
-
-┌─────────┐                    ┌─────────┐
-│ docker  │                    │ podman  │
-│   CLI   │                    │   CLI   │
-└────┬────┘                    └────┬────┘
-     │                              │
-     │ socket                       │ direct
-     ▼                              ▼
-┌─────────┐                    ┌─────────┐
-│ dockerd │ ◄── daemon         │ conmon  │ ◄── par conteneur
-│ (root)  │     permanent      │         │     fork/exec
-└────┬────┘                    └────┬────┘
-     │                              │
-     ▼                              ▼
-┌─────────┐                    ┌─────────┐
-│  runc   │                    │  crun   │
-└─────────┘                    └─────────┘
-
-Points clés :
-• Docker : daemon central, single point of failure
-• Podman : fork/exec, pas de daemon, rootless natif
-```
+![Architecture Comparée Docker vs Podman](../../assets/diagrams/docker-vs-podman-architecture.jpeg)
 
 ### Avantages Podman
 

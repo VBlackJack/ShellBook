@@ -185,42 +185,7 @@ spec:
 
 ### 3.1 Concept
 
-```
-DYNAMIC PROVISIONING
-════════════════════
-
-Sans Dynamic Provisioning:
-  Admin crée PV → User crée PVC → Binding manuel
-
-Avec Dynamic Provisioning:
-  User crée PVC avec StorageClass → PV créé automatiquement
-
-┌─────────────────────────────────────────────────────────────┐
-│                     StorageClass                             │
-│                                                              │
-│   provisioner: kubernetes.io/aws-ebs                        │
-│   parameters:                                                │
-│     type: gp3                                                │
-│     iopsPerGB: "10"                                         │
-│                                                              │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-                            │ PVC demande cette StorageClass
-                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                         PVC                                  │
-│   storageClassName: aws-gp3                                 │
-│   storage: 100Gi                                            │
-└───────────────────────────┬─────────────────────────────────┘
-                            │
-                            │ Provisioner crée automatiquement
-                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                          PV                                  │
-│   (Créé automatiquement par le provisioner)                 │
-│   AWS EBS Volume gp3 de 100Gi                               │
-└─────────────────────────────────────────────────────────────┘
-```
+![Provisionnement Dynamique](../../assets/diagrams/k8s-dynamic-provisioning.jpeg)
 
 ### 3.2 StorageClass
 
@@ -278,35 +243,7 @@ spec:
 
 ### 4.1 Architecture CSI
 
-```
-CSI - Container Storage Interface
-═════════════════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                      KUBERNETES                              │
-│                                                              │
-│   ┌──────────────────┐  ┌──────────────────┐               │
-│   │ CSI Controller   │  │ CSI Node Plugin  │               │
-│   │ (Deployment)     │  │ (DaemonSet)      │               │
-│   └────────┬─────────┘  └────────┬─────────┘               │
-│            │                     │                          │
-│            │    gRPC calls       │                          │
-│            └──────────┬──────────┘                          │
-│                       │                                     │
-│                       ▼                                     │
-│   ┌─────────────────────────────────────────────────────┐  │
-│   │                  CSI Driver                          │  │
-│   │                                                      │  │
-│   │   aws-ebs-csi-driver                                │  │
-│   │   gcp-pd-csi-driver                                 │  │
-│   │   azure-disk-csi-driver                             │  │
-│   │   csi-driver-nfs                                    │  │
-│   │   longhorn                                          │  │
-│   │   rook-ceph                                         │  │
-│   │                                                      │  │
-│   └─────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-```
+![Architecture CSI Kubernetes](../../assets/diagrams/k8s-csi-architecture.jpeg)
 
 ### 4.2 Installation AWS EBS CSI Driver
 

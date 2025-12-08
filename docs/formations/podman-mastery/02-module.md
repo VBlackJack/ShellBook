@@ -21,35 +21,7 @@ tags:
 
 ## 1. Pourquoi Rootless ?
 
-```
-SÉCURITÉ : ROOT VS ROOTLESS
-════════════════════════════════════════════════════════
-
-CONTENEUR ROOT (traditionnel)
-─────────────────────────────
-Host                    Container
-┌─────────────────┐    ┌─────────────────┐
-│ root (UID 0)    │◄───│ root (UID 0)    │
-│                 │    │ ⚠️ Si escape,   │
-│                 │    │   devient root  │
-│                 │    │   sur l'hôte!   │
-└─────────────────┘    └─────────────────┘
-
-CONTENEUR ROOTLESS
-──────────────────
-Host                    Container
-┌─────────────────┐    ┌─────────────────┐
-│ user (UID 1000) │◄───│ root (UID 0)    │
-│                 │    │ ✓ Si escape,    │
-│                 │    │   reste user    │
-│                 │    │   non privilégié│
-└─────────────────┘    └─────────────────┘
-
-User namespace mapping:
-Container UID 0  → Host UID 100000
-Container UID 1  → Host UID 100001
-...
-```
+![Sécurité Rootless Podman](../../assets/diagrams/podman-rootless-security.jpeg)
 
 ### Avantages Compliance
 

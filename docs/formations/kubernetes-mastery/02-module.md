@@ -153,35 +153,7 @@ spec:
 
 ### 2.1 Concept
 
-```
-DEPLOYMENT - GESTION DÉCLARATIVE
-════════════════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                       DEPLOYMENT                             │
-│                                                              │
-│   Strategy: RollingUpdate                                    │
-│   Replicas: 3                                                │
-│                                                              │
-│   ┌─────────────────────────────────────────────────────┐   │
-│   │                    REPLICASET                        │   │
-│   │                                                      │   │
-│   │   ┌─────────┐   ┌─────────┐   ┌─────────┐          │   │
-│   │   │  Pod 1  │   │  Pod 2  │   │  Pod 3  │          │   │
-│   │   │ nginx   │   │ nginx   │   │ nginx   │          │   │
-│   │   └─────────┘   └─────────┘   └─────────┘          │   │
-│   │                                                      │   │
-│   └─────────────────────────────────────────────────────┘   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-
-Deployment gère :
-- Création/Mise à jour des ReplicaSets
-- Rolling updates
-- Rollbacks
-- Scaling
-- Historique des révisions
-```
+![Deployment - Gestion Déclarative](../../assets/diagrams/k8s-deployment-hierarchy.jpeg)
 
 ### 2.2 Manifest Deployment
 
@@ -339,39 +311,16 @@ ROLLING UPDATE VISUALISATION
 
 ### 3.1 Concept
 
-```
-STATEFULSET - APPLICATIONS STATEFUL
-═══════════════════════════════════
+![StatefulSet avec Stockage Persistant](../../assets/diagrams/k8s-statefulset-storage.jpeg)
 
-Caractéristiques :
+**Caractéristiques :**
+
 - Identité stable (nom-0, nom-1, nom-2)
 - Stockage persistant par pod
 - Déploiement/suppression ordonnés
 - Updates ordonnés
 
-Use cases :
-- Bases de données (MySQL, PostgreSQL)
-- Systèmes distribués (Kafka, Zookeeper)
-- Applications avec état
-
-┌─────────────────────────────────────────────────────────────┐
-│                      STATEFULSET                             │
-│                                                              │
-│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │
-│   │   mysql-0   │   │   mysql-1   │   │   mysql-2   │      │
-│   │  (primary)  │   │  (replica)  │   │  (replica)  │      │
-│   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘      │
-│          │                 │                 │              │
-│   ┌──────▼──────┐   ┌──────▼──────┐   ┌──────▼──────┐      │
-│   │   PVC-0     │   │   PVC-1     │   │   PVC-2     │      │
-│   │  (unique)   │   │  (unique)   │   │  (unique)   │      │
-│   └─────────────┘   └─────────────┘   └─────────────┘      │
-│                                                              │
-│   Headless Service: mysql.default.svc.cluster.local         │
-│   DNS individuel: mysql-0.mysql.default.svc.cluster.local   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+**Use cases :** Bases de données, systèmes distribués (Kafka, Zookeeper)
 
 ### 3.2 Manifest StatefulSet
 
@@ -463,29 +412,7 @@ spec:
 
 ### 4.1 Concept
 
-```
-DAEMONSET - UN POD PAR NODE
-═══════════════════════════
-
-Use cases :
-- Agents de monitoring (node-exporter, datadog)
-- Agents de logging (fluentd, filebeat)
-- Storage drivers
-- Network plugins
-
-┌─────────────────────────────────────────────────────────────┐
-│                       DAEMONSET                              │
-│                                                              │
-│  Node 1            Node 2            Node 3                 │
-│  ┌──────────┐     ┌──────────┐     ┌──────────┐            │
-│  │fluentd-xx│     │fluentd-yy│     │fluentd-zz│            │
-│  └──────────┘     └──────────┘     └──────────┘            │
-│                                                              │
-│  → Automatiquement déployé sur chaque node                  │
-│  → Nouveaux nodes reçoivent automatiquement le pod          │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![DaemonSet - Un Pod par Node](../../assets/diagrams/k8s-daemonset-pattern.jpeg)
 
 ### 4.2 Manifest DaemonSet
 

@@ -143,6 +143,8 @@ L'inventory est le fichier qui définit **sur quels serveurs Ansible va agir**.
 
 #### Exemple d'Inventory Statique (INI)
 
+![Structure d'un Inventory Ansible](../../assets/diagrams/ansible-inventory-structure.jpeg)
+
 **Fichier `hosts.ini` :**
 
 ```ini

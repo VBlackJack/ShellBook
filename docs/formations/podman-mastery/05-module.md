@@ -21,32 +21,7 @@ tags:
 
 ## 1. Concept de Pod
 
-```
-POD : GROUPE DE CONTENEURS
-═════════════════════════════════════════════════════════
-
-┌─────────────────────────────────────────────────────┐
-│                       POD                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │
-│  │ Container 1 │  │ Container 2 │  │ Container 3 │  │
-│  │   (nginx)   │  │   (php-fpm) │  │  (redis)    │  │
-│  └─────────────┘  └─────────────┘  └─────────────┘  │
-│                                                      │
-│  Partage :                                           │
-│  ✓ Network namespace (même IP, localhost)           │
-│  ✓ IPC namespace (shared memory)                    │
-│  ✓ Volumes                                          │
-│  ✗ PID namespace (optionnel)                        │
-│                                                      │
-│  IP: 10.88.0.5                                       │
-│  Ports exposés: 80, 9000, 6379                      │
-└─────────────────────────────────────────────────────┘
-
-Avantages :
-✓ Communication localhost entre conteneurs
-✓ Déploiement atomique
-✓ Compatible Kubernetes (même concept)
-```
+![Structure d'un Pod Podman](../../assets/diagrams/podman-pod-structure.jpeg)
 
 ---
 

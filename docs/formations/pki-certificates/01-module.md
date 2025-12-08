@@ -200,14 +200,7 @@ Clair → Chiffré      Chiffré → Clair
 
 **Deux clés liées mathématiquement** : une publique, une privée.
 
-```
-┌─────────────────────────────────────────────────┐
-│                 PAIRE DE CLÉS                    │
-├─────────────────────┬───────────────────────────┤
-│    Clé Publique     │     Clé Privée            │
-│   (distribuable)    │    (SECRÈTE !)            │
-└─────────────────────┴───────────────────────────┘
-```
+![Paire de Clés Asymétriques](../../assets/diagrams/pki-asymmetric-keypair.jpeg)
 
 #### Pour le Chiffrement (Confidentialité)
 

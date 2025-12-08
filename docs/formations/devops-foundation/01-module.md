@@ -30,9 +30,11 @@ Maîtriser les concepts fondamentaux de Git (commit, push, pull) et comprendre l
 | Performance | Dépend du réseau | Ultra-rapide (local) |
 | Historique | Serveur uniquement | Chaque développeur a l'historique complet |
 
-### Les 3 Zones de Git
+### Les 4 Zones de Git
 
-Git organise le travail en **3 zones distinctes** :
+Git organise le travail en **4 zones distinctes** :
+
+![Les 4 Zones Git](../../assets/diagrams/git-workflow-zones.jpeg)
 
 ```mermaid
 flowchart LR

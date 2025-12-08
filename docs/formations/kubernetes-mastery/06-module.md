@@ -24,30 +24,7 @@ tags:
 
 ### 1.1 Méthodes d'Authentification
 
-```
-AUTHENTIFICATION KUBERNETES
-═══════════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                      API SERVER                              │
-│                                                              │
-│   Authentication Plugins (dans l'ordre):                    │
-│                                                              │
-│   1. Client Certificates (X509)                             │
-│      └─ CN=user, O=group                                    │
-│                                                              │
-│   2. Bearer Tokens                                          │
-│      ├─ Service Account Tokens                              │
-│      ├─ Bootstrap Tokens                                    │
-│      └─ OIDC Tokens                                         │
-│                                                              │
-│   3. Authentication Proxy                                   │
-│      └─ X-Remote-User header                                │
-│                                                              │
-│   4. Webhook Token Authentication                           │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Méthodes d'Authentification Kubernetes](../../assets/diagrams/k8s-authentication-methods.jpeg)
 
 ### 1.2 Créer un Utilisateur avec Certificat
 
@@ -97,31 +74,7 @@ kubectl --context=john-context get pods
 
 ### 2.1 Concept
 
-```
-RBAC - ROLE-BASED ACCESS CONTROL
-════════════════════════════════
-
-┌────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   WHO (Subject)          WHAT (Role)         WHERE (Binding)   │
-│   ─────────────          ──────────          ───────────────   │
-│                                                                 │
-│   ┌─────────┐            ┌─────────┐         ┌──────────────┐  │
-│   │  User   │◄───────────│  Role   │◄────────│ RoleBinding  │  │
-│   │  Group  │            │(namespace)│        │ (namespace)  │  │
-│   │  SA     │            └─────────┘         └──────────────┘  │
-│   └─────────┘                                                   │
-│                          ┌─────────────┐     ┌──────────────┐  │
-│                          │ClusterRole  │◄────│ClusterRole   │  │
-│                          │(cluster-wide)│     │Binding       │  │
-│                          └─────────────┘     │(cluster-wide)│  │
-│                                              └──────────────┘  │
-│                                                                 │
-│   Role = Permissions (verbs sur resources)                     │
-│   Binding = Lie un Subject à un Role                           │
-│                                                                 │
-└────────────────────────────────────────────────────────────────┘
-```
+![Modèle RBAC Kubernetes](../../assets/diagrams/k8s-rbac-model.jpeg)
 
 ### 2.2 Role et RoleBinding (Namespace-scoped)
 

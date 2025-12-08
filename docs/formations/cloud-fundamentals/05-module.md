@@ -192,6 +192,8 @@ graph TB
 
 ### 2.3 Architecture Multi-Région
 
+![Architecture RDS Multi-AZ HA](../../assets/diagrams/rds-multi-az-ha.jpeg)
+
 ```mermaid
 graph TB
     subgraph "Region: Europe (Primary)"

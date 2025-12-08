@@ -21,33 +21,7 @@ tags:
 
 ## 1. Introduction à Skopeo
 
-```
-SKOPEO - GESTION DES IMAGES
-═════════════════════════════════════════════════════════
-
-Cas d'usage :
-┌─────────────────────────────────────────────────────┐
-│                                                      │
-│  Inspecter    Copier       Supprimer    Synchroniser│
-│  ─────────    ──────       ─────────    ────────────│
-│                                                      │
-│  Registry A ──────────────► Registry B              │
-│      │                          │                   │
-│      │         Skopeo           │                   │
-│      │                          │                   │
-│      ▼                          ▼                   │
-│  [manifest]                 [manifest]              │
-│  [layers]                   [layers]                │
-│  [config]                   [config]                │
-│                                                      │
-└─────────────────────────────────────────────────────┘
-
-Avantages vs podman pull/push :
-✓ Pas de stockage local requis
-✓ Copie directe entre registries
-✓ Inspection sans téléchargement
-✓ Support multi-format (OCI, Docker v2)
-```
+![Opérations Skopeo sur Registries](../../assets/diagrams/skopeo-registry-operations.jpeg)
 
 ### Installation
 

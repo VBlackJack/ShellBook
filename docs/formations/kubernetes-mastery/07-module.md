@@ -144,33 +144,7 @@ spec:
 
 ### 4.1 Concept
 
-```
-TAINTS & TOLERATIONS
-════════════════════
-
-Taint (sur le Node)         = "Repousse" les pods
-Toleration (sur le Pod)     = "Tolère" un taint spécifique
-
-Effects:
-- NoSchedule     : Pas de scheduling de nouveaux pods
-- PreferNoSchedule : Évite le scheduling si possible
-- NoExecute      : Expulse les pods existants
-
-┌─────────────────────────────────────────────────────────────┐
-│                         NODE                                 │
-│                                                              │
-│   Taint: dedicated=gpu:NoSchedule                           │
-│                                                              │
-│   ┌─────────────┐                                           │
-│   │   Pod A     │ ← Tolère gpu:NoSchedule → Schedulé       │
-│   └─────────────┘                                           │
-│                                                              │
-│   ┌─────────────┐                                           │
-│   │   Pod B     │ ← Pas de toleration → NON Schedulé       │
-│   └─────────────┘                                           │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Taints & Tolerations](../../assets/diagrams/k8s-taints-tolerations.jpeg)
 
 ### 4.2 Configuration
 

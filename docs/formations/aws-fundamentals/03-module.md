@@ -85,6 +85,8 @@ graph TB
 
 ### 1.3 CIDR Planning
 
+![Planification CIDR VPC AWS](../../assets/diagrams/aws-vpc-cidr-planning.jpeg)
+
 ```text
 VPC: 10.0.0.0/16 (65,536 IPs)
 │

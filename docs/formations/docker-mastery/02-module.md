@@ -21,26 +21,7 @@ tags:
 
 ## 1. Anatomie d'une Image
 
-```
-LAYERS D'UNE IMAGE
-══════════════════
-
-┌─────────────────────────────────┐
-│  Layer 5: COPY app.py          │  ← Votre code (change souvent)
-├─────────────────────────────────┤
-│  Layer 4: RUN pip install      │  ← Dépendances
-├─────────────────────────────────┤
-│  Layer 3: WORKDIR /app         │
-├─────────────────────────────────┤
-│  Layer 2: RUN apt-get update   │  ← OS packages
-├─────────────────────────────────┤
-│  Layer 1: FROM python:3.11     │  ← Image de base
-└─────────────────────────────────┘
-
-Chaque instruction crée un layer
-Layers sont cachés et réutilisés
-Ordre important pour l'optimisation du cache
-```
+![Layers d'une Image Docker](../../assets/diagrams/docker-image-layers.jpeg)
 
 ---
 

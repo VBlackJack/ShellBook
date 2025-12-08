@@ -24,31 +24,7 @@ tags:
 
 ### 1.1 Concepts
 
-```
-HELM - PACKAGE MANAGER KUBERNETES
-═════════════════════════════════
-
-Chart       │ Package Helm (collection de fichiers YAML)
-Release     │ Instance d'un Chart installé
-Repository  │ Collection de Charts
-Values      │ Configuration personnalisée
-
-┌─────────────────────────────────────────────────────────────┐
-│                        CHART                                 │
-│                                                              │
-│   mychart/                                                   │
-│   ├── Chart.yaml          # Métadonnées du chart            │
-│   ├── values.yaml         # Valeurs par défaut              │
-│   ├── charts/             # Charts dépendants               │
-│   ├── templates/          # Templates Kubernetes            │
-│   │   ├── deployment.yaml                                   │
-│   │   ├── service.yaml                                      │
-│   │   ├── _helpers.tpl    # Fonctions réutilisables        │
-│   │   └── NOTES.txt       # Notes post-installation        │
-│   └── README.md                                             │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Structure d'un Chart Helm](../../assets/diagrams/helm-chart-structure.jpeg)
 
 ### 1.2 Installation
 
