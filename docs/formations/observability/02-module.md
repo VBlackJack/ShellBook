@@ -459,20 +459,7 @@ scrape_configs:
 
 ### 4.1 Concept
 
-```
-RELABELING - TRANSFORMATION DES LABELS
-══════════════════════════════════════
-
-  Avant scrape              Pendant relabel           Après scrape
-  ─────────────             ───────────────           ────────────
-
-  __address__               keep/drop                 instance
-  __meta_*                  → replace                 custom labels
-  __scheme__                   labelmap               job
-  __metrics_path__             labeldrop              ...
-  __param_*                    labelkeep
-                               hashmod
-```
+![Relabeling - Transformation des Labels](../../assets/diagrams/prometheus-relabeling-flow.jpeg)
 
 ### 4.2 Actions de Relabeling
 
@@ -575,55 +562,7 @@ scrape_configs:
 
 ### 5.1 Architecture HA
 
-```
-HAUTE DISPONIBILITÉ PROMETHEUS
-══════════════════════════════
-
-Option 1: Deux Prometheus Identiques (Simple)
-─────────────────────────────────────────────
-
-┌─────────────┐  ┌─────────────┐
-│ Prometheus  │  │ Prometheus  │
-│   Primary   │  │   Replica   │
-│   :9090     │  │   :9091     │
-└──────┬──────┘  └──────┬──────┘
-       │                │
-       │   Même config  │
-       │                │
-       └────────┬───────┘
-                │
-                ▼
-        ┌───────────────┐
-        │   Load        │
-        │   Balancer    │
-        └───────┬───────┘
-                │
-                ▼
-        ┌───────────────┐
-        │    Grafana    │
-        └───────────────┘
-
-Option 2: Thanos/Cortex (Avancé)
-────────────────────────────────
-
-┌─────────────┐  ┌─────────────┐
-│ Prometheus  │  │ Prometheus  │
-│  + Sidecar  │  │  + Sidecar  │
-└──────┬──────┘  └──────┬──────┘
-       │                │
-       └────────┬───────┘
-                │
-                ▼
-        ┌───────────────┐
-        │ Thanos Query  │ ← Déduplication
-        └───────────────┘
-                │
-                ▼
-        ┌───────────────┐
-        │ Object Store  │ ← Long-term storage
-        │   (S3/GCS)    │
-        └───────────────┘
-```
+![Comparaison d'Architecture Prometheus Haute Disponibilité](../../assets/diagrams/prometheus-ha-architecture.jpeg)
 
 ### 5.2 Configuration HA Simple
 

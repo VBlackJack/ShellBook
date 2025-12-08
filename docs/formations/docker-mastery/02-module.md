@@ -151,6 +151,8 @@ FROM gcr.io/distroless/python3  # Minimal, pas de shell
 
 ## 4. Multi-Stage Builds
 
+![Build Multi-Stage Docker](../../assets/diagrams/docker-multi-stage-build.jpeg)
+
 ### 4.1 Concept
 
 ```dockerfile

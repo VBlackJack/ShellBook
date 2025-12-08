@@ -24,40 +24,7 @@ tags:
 
 ### 1.1 Concept
 
-```
-POD - UNITÉ DE BASE
-═══════════════════
-
-┌─────────────────────────────────────────────────────────┐
-│                         POD                              │
-│                                                          │
-│   ┌───────────────┐    ┌───────────────┐                │
-│   │  Container 1  │    │  Container 2  │                │
-│   │    (app)      │    │   (sidecar)   │                │
-│   └───────┬───────┘    └───────┬───────┘                │
-│           │                    │                         │
-│           └────────┬───────────┘                         │
-│                    │                                     │
-│           ┌────────▼────────┐                           │
-│           │  Shared Network │  ← localhost:port         │
-│           │  (same IP)      │                           │
-│           └────────┬────────┘                           │
-│                    │                                     │
-│           ┌────────▼────────┐                           │
-│           │  Shared Volumes │  ← Même filesystem        │
-│           └─────────────────┘                           │
-│                                                          │
-│   IP: 10.244.1.5                                        │
-│   Namespace: default                                     │
-│   Node: worker-1                                         │
-└─────────────────────────────────────────────────────────┘
-
-Un Pod = 1+ containers qui :
-- Partagent le même réseau (localhost)
-- Partagent les mêmes volumes
-- Sont schedulés ensemble sur le même node
-- Ont le même cycle de vie
-```
+![POD - Unité de Base](../../assets/diagrams/k8s-pod-structure.jpeg)
 
 ### 1.2 Pod Lifecycle
 

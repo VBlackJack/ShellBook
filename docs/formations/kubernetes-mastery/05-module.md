@@ -24,26 +24,7 @@ tags:
 
 ### 1.1 Vue d'Ensemble
 
-```
-TYPES DE VOLUMES KUBERNETES
-═══════════════════════════
-
-ÉPHÉMÈRES                      PERSISTANTS
-───────────                    ───────────
-emptyDir                       PersistentVolume (PV)
-configMap                      PersistentVolumeClaim (PVC)
-secret                         CSI Drivers
-downwardAPI
-
-SPÉCIFIQUES
-───────────
-hostPath     │ Chemin sur le node (dev/test uniquement)
-nfs          │ Montage NFS
-iscsi        │ iSCSI
-awsEBS       │ AWS Elastic Block Store
-gcePD        │ Google Persistent Disk
-azureDisk    │ Azure Disk
-```
+![Types de Volumes Kubernetes](../../assets/diagrams/k8s-volume-types.jpeg)
 
 ### 1.2 emptyDir
 
@@ -107,49 +88,7 @@ spec:
 
 ### 2.1 Architecture
 
-```
-PV / PVC ARCHITECTURE
-═════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                         ADMIN                                │
-│                                                              │
-│   Crée les PersistentVolumes                                │
-│   ┌──────────────────────────────────────────────────────┐  │
-│   │                 PersistentVolume                      │  │
-│   │                                                       │  │
-│   │   capacity: 100Gi                                     │  │
-│   │   accessModes: ReadWriteOnce                         │  │
-│   │   persistentVolumeReclaimPolicy: Retain              │  │
-│   │   storageClassName: fast-ssd                         │  │
-│   │   nfs:                                                │  │
-│   │     server: nfs-server.local                         │  │
-│   │     path: /exports/data                              │  │
-│   └──────────────────────────────────────────────────────┘  │
-│                            │                                 │
-│                            │ Binding                         │
-│                            ▼                                 │
-│   ┌──────────────────────────────────────────────────────┐  │
-│   │              PersistentVolumeClaim                    │  │
-│   │                                                       │  │
-│   │   resources.requests.storage: 50Gi                   │  │
-│   │   accessModes: ReadWriteOnce                         │  │
-│   │   storageClassName: fast-ssd                         │  │
-│   └──────────────────────────────────────────────────────┘  │
-│                            │                                 │
-│                            │ Used by                         │
-│                            ▼                                 │
-│   ┌──────────────────────────────────────────────────────┐  │
-│   │                       POD                             │  │
-│   │                                                       │  │
-│   │   volumes:                                            │  │
-│   │     - name: data                                      │  │
-│   │       persistentVolumeClaim:                          │  │
-│   │         claimName: my-pvc                             │  │
-│   └──────────────────────────────────────────────────────┘  │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![Architecture PV/PVC Kubernetes](../../assets/diagrams/k8s-pv-pvc-architecture.jpeg)
 
 ### 2.2 PersistentVolume
 
