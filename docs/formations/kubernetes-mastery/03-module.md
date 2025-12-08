@@ -24,29 +24,7 @@ tags:
 
 ### 1.1 Concept
 
-```
-CONFIGMAP - CONFIGURATION EXTERNALISÉE
-══════════════════════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                       CONFIGMAP                              │
-│                                                              │
-│   Key-Value pairs ou fichiers de configuration              │
-│                                                              │
-│   ┌─────────────────────────────────────────────────────┐   │
-│   │  DATABASE_HOST=postgres                              │   │
-│   │  DATABASE_PORT=5432                                  │   │
-│   │  LOG_LEVEL=info                                      │   │
-│   │  nginx.conf=<contenu du fichier>                    │   │
-│   └─────────────────────────────────────────────────────┘   │
-│                                                              │
-│   Utilisations :                                             │
-│   - Variables d'environnement                               │
-│   - Arguments de commande                                   │
-│   - Fichiers de configuration montés                        │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+![ConfigMap - Configuration Externalisée](../../assets/diagrams/k8s-configmap-concept.jpeg)
 
 ### 1.2 Création de ConfigMaps
 
@@ -181,19 +159,9 @@ immutable: true  # Ne peut plus être modifié
 
 ## 2. Secrets
 
-### 2.1 Types de Secrets
+### 2.1 Concept et Types
 
-```
-TYPES DE SECRETS KUBERNETES
-═══════════════════════════
-
-Opaque                  │ Données arbitraires (défaut)
-kubernetes.io/tls       │ Certificats TLS
-kubernetes.io/dockerconfigjson │ Credentials Docker registry
-kubernetes.io/basic-auth │ Basic authentication
-kubernetes.io/ssh-auth  │ SSH credentials
-kubernetes.io/service-account-token │ Token Service Account
-```
+![Secret - Données Sensibles](../../assets/diagrams/k8s-secret-concept.jpeg)
 
 ### 2.2 Création de Secrets
 

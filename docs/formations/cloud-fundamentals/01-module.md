@@ -312,6 +312,8 @@ pie title Parts de Marché Cloud IaaS (Q3 2024)
 
 ### 6.2 Comparatif des "Big 3"
 
+![Comparaison des Hiérarchies Cloud](../../assets/diagrams/cloud-hierarchy-comparison.jpeg)
+
 | Critère | AWS | Azure | GCP |
 |---------|-----|-------|-----|
 | **Lancé en** | 2006 | 2010 | 2008 |

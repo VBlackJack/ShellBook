@@ -24,36 +24,7 @@ tags:
 
 ### 1.1 Écosystème
 
-```
-ÉCOSYSTÈME DES EXPORTERS
-════════════════════════
-
-INFRASTRUCTURE                    BASES DE DONNÉES
-─────────────────                 ────────────────
-┌─────────────────┐               ┌─────────────────┐
-│ Node Exporter   │               │ MySQL Exporter  │
-│ (Linux/Windows) │               │ PostgreSQL Exp. │
-│ cAdvisor        │               │ MongoDB Exp.    │
-│ SNMP Exporter   │               │ Redis Exporter  │
-└─────────────────┘               └─────────────────┘
-
-APPLICATIONS                      MESSAGING
-────────────                      ─────────
-┌─────────────────┐               ┌─────────────────┐
-│ Blackbox Exp.   │               │ Kafka Exporter  │
-│ JMX Exporter    │               │ RabbitMQ Exp.   │
-│ Nginx Exporter  │               │ NATS Exporter   │
-│ Apache Exporter │               └─────────────────┘
-└─────────────────┘
-
-CLOUD                             CUSTOM
-─────                             ──────
-┌─────────────────┐               ┌─────────────────┐
-│ AWS CloudWatch  │               │ Pushgateway     │
-│ Azure Monitor   │               │ Script Exporter │
-│ GCP Stackdriver │               │ Custom Exporter │
-└─────────────────┘               └─────────────────┘
-```
+![Écosystème des Exporters Prometheus](../../assets/diagrams/prometheus-exporters-ecosystem.jpeg)
 
 ### 1.2 Ports Standards
 

@@ -25,35 +25,7 @@ tags:
 
 ### 1.1 Le Problème de la Gestion Manuelle
 
-```mermaid
-graph TB
-    subgraph "Gestion Manuelle"
-        ADMIN["👤 Admin"]
-        GUI["🖥️ GUI (APIC, vCenter, Console Cloud)"]
-        INFRA["🏗️ Infrastructure"]
-
-        ADMIN -->|"Clic clic clic..."| GUI
-        GUI -->|"Changements"| INFRA
-    end
-
-    subgraph "Problèmes"
-        P1["❌ Non reproductible"]
-        P2["❌ Pas de versioning"]
-        P3["❌ Drift entre environnements"]
-        P4["❌ Pas d'audit trail"]
-        P5["❌ Lent et error-prone"]
-    end
-
-    INFRA --> P1
-    INFRA --> P2
-    INFRA --> P3
-    INFRA --> P4
-    INFRA --> P5
-
-    style P1 fill:#f44336,color:#fff
-    style P2 fill:#f44336,color:#fff
-    style P3 fill:#f44336,color:#fff
-```
+![Gestion Manuelle vs Infrastructure as Code](../../assets/diagrams/iac-vs-manual.jpeg)
 
 ### 1.2 La Solution : Infrastructure as Code
 
@@ -161,6 +133,8 @@ graph TB
 | **State** | État actuel de l'infrastructure | `terraform.tfstate` |
 
 ### 2.3 Workflow Terraform
+
+![Workflow Terraform](../../assets/diagrams/terraform-iac-workflow.jpeg)
 
 ```mermaid
 sequenceDiagram

@@ -87,6 +87,8 @@ kubectl version --client
 
 ### 2.1 Structure Organisationnelle
 
+![Structure Organisationnelle Azure](../../assets/diagrams/azure-hierarchy-structure.jpeg)
+
 ```mermaid
 graph TD
     subgraph "Microsoft Entra ID Tenant"

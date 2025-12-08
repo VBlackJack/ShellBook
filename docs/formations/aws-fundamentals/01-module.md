@@ -79,6 +79,8 @@ git --version
 
 ### 2.1 Structure Multi-Comptes
 
+![Structure Multi-Comptes AWS Organizations](../../assets/diagrams/aws-organizations-structure.jpeg)
+
 ```mermaid
 graph TD
     subgraph "AWS Organizations"

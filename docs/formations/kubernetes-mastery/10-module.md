@@ -24,51 +24,14 @@ tags:
 
 ### 1.1 Concept
 
-```
-GITOPS PRINCIPLES
-═════════════════
+![Flux GitOps](../../assets/diagrams/k8s-gitops-flux.jpeg)
 
-1. DÉCLARATIF
-   └─ L'état désiré est décrit de manière déclarative
+**Principes GitOps :**
 
-2. VERSIONNÉ
-   └─ Git comme source de vérité unique
-
-3. AUTOMATISÉ
-   └─ Changements appliqués automatiquement
-
-4. RÉCONCILIATION CONTINUE
-   └─ Agents assurent que l'état réel = état désiré
-
-
-┌─────────────────────────────────────────────────────────────┐
-│                      FLUX GITOPS                             │
-│                                                              │
-│   Developer                                                  │
-│      │                                                       │
-│      │ git push                                              │
-│      ▼                                                       │
-│   ┌─────────┐                                               │
-│   │   Git   │ ◄────────────── Source of Truth               │
-│   │  Repo   │                                               │
-│   └────┬────┘                                               │
-│        │                                                     │
-│        │ Watch/Pull                                         │
-│        ▼                                                     │
-│   ┌─────────────┐                                           │
-│   │  GitOps     │                                           │
-│   │  Operator   │  (ArgoCD / Flux)                         │
-│   └──────┬──────┘                                           │
-│          │                                                   │
-│          │ Reconcile                                        │
-│          ▼                                                   │
-│   ┌─────────────┐                                           │
-│   │ Kubernetes  │                                           │
-│   │  Cluster    │                                           │
-│   └─────────────┘                                           │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
+1. **DÉCLARATIF** : L'état désiré est décrit de manière déclarative
+2. **VERSIONNÉ** : Git comme source de vérité unique
+3. **AUTOMATISÉ** : Changements appliqués automatiquement
+4. **RÉCONCILIATION CONTINUE** : Agents assurent que l'état réel = état désiré
 
 ---
 
