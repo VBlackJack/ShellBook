@@ -274,6 +274,8 @@ nav:
       - Audit Ops: linux/rhel-ops-audit.md
     - 🌐 Réseau & Services:
       - Network Management: linux/network-management.md
+      - SSH Tunnels: linux/ssh-tunnels.md
+      - Architecture Email: linux/email-systems-basics.md
       - SSH Hardening: linux/ssh-hardening.md
       - Firewall UFW: linux/firewall-ufw.md
       - VPN WireGuard: linux/vpn-wireguard.md
@@ -286,6 +288,7 @@ nav:
       - KVM: linux/virtualization-kvm.md
     - 🔧 Dépannage:
       - Debugging: linux/debugging.md
+      - Kernel Debugging (Crash/Panic): linux/kernel-debugging.md
       - Performance: linux/performance-analysis.md
       - Logs: linux/logs-management.md
       - Backup & Transfert: linux/backup-transfer.md
@@ -416,6 +419,7 @@ nav:
       - Netsh: windows/netsh-troubleshooting.md
     - 💻 PowerShell Avancé:
       - Survival Guide: windows/powershell-cheatsheet.md
+      - Workshop Best Practices: windows/powershell-workshop.md
       - Execution Policy & Launcher: windows/powershell-execution.md
       - Remoting & WinRM: windows/powershell-remoting.md
       - DSC: windows/powershell-dsc.md
@@ -549,7 +553,22 @@ nav:
         - Module 10 - TP Final: formations/terraform-aci/10-tp-final.md
         - Ressources:
           - Glossaire: formations/terraform-aci/glossaire.md
-    - 🎓 Formations Cloud:
+    - 🎓 Formations:
+      - 🧠 AI Engineering for Ops (35h):
+        - Programme: formations/ai-engineering/index.md
+        - Module 01 - Fondations: formations/ai-engineering/01-module.md
+        - Module 02 - Prompting: formations/ai-engineering/02-module.md
+        - Module 03 - Local Ops: formations/ai-engineering/03-module.md
+        - Module 04 - RAG: formations/ai-engineering/04-module.md
+        - Module 05 - Projet Final: formations/ai-engineering/05-tp-final.md
+      - 🏴‍☠️ Ethical Hacking Mastery (40h):
+        - Programme: formations/hacking-mastery/index.md
+        - Module 01 - Setup & Légalité: formations/hacking-mastery/01-module.md
+        - Module 02 - Reconnaissance: formations/hacking-mastery/02-module.md
+        - Module 03 - Web Hacking: formations/hacking-mastery/03-module.md
+        - Module 04 - Active Directory: formations/hacking-mastery/04-module.md
+        - Module 05 - Post-Exploitation: formations/hacking-mastery/05-module.md
+        - Module 06 - Projet Final: formations/hacking-mastery/06-tp-final.md
       - ☁️ Cloud Fundamentals (35h):
         - Programme: formations/cloud-fundamentals/index.md
         - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md
@@ -567,6 +586,8 @@ nav:
         - Ressources:
           - Glossaire: formations/cloud-fundamentals/glossaire.md
           - Fiches Mémo: formations/cloud-fundamentals/fiches-memo.md
+      - 🛠️ Ateliers Pratiques (Labs):
+        - Docker Mail Server: devops/labs/docker-mail-server.md
       - 🟠 AWS Fundamentals (35h):
         - Programme: formations/aws-fundamentals/index.md
         - Module 01 - Console & IAM: formations/aws-fundamentals/01-module.md
@@ -603,8 +624,18 @@ nav:
         - Module 08 - Serverless: formations/gcp-fundamentals/08-module.md
         - Module 09 - Security: formations/gcp-fundamentals/09-module.md
         - Module 10 - Observability: formations/gcp-fundamentals/10-module.md
-    - 🛠️ Méthodologie:
+    - 🧠 Stratégie & Gouvernance:
+      - SRE (Site Reliability): devops/sre-concepts.md
+      - FinOps (Coûts Cloud): devops/finops-basics.md
+      - Green IT (GreenOps): devops/green-it.md
+      - Platform Eng. (IDP): devops/platform-engineering.md
+      - Lean & Agile: devops/methodologies.md
+      - Gestion de Projet: devops/project-management.md
+      - Soft Skills: devops/soft-skills.md
+    - 🛠️ Engineering & Outils:
+      - Embedded Linux (Yocto): devops/embedded-linux.md
       - Git SysOps: devops/git-sysops.md
+      - Git Cheatsheet: devops/git-cheatsheet-visual.md
       - Docs-as-Code: devops/docs-as-code.md
       - Outils IT: devops/productivity-it-tools.md
     - 🐳 Conteneurs:
@@ -636,6 +667,7 @@ nav:
     - 📊 Observabilité:
       - Stack Observabilité: devops/observability-stack.md
       - Observabilité Avancée: devops/observability-advanced.md
+      - Tracing Distribué: devops/observability-tracing.md
       - Loki Logging: devops/loki-logging.md
     - 🏗️ Architecture & HA:
       - Networking Moderne: devops/modern-networking.md
@@ -647,15 +679,24 @@ nav:
   - 📚 Encyclopédie:
     - 🏛️ Fondamentaux:
       - Accueil: concepts/index.md
+      - Architecture Patterns: concepts/architecture-patterns.md
       - Piliers DevOps: concepts/devops-pillars.md
       - Flux Web: concepts/web-flow.md
       - Bases de Données: concepts/databases.md
       - IA & Prompts: concepts/ai-prompting.md
+    - 🧠 Intelligence Artificielle:
+      - Accueil: ai/index.md
+      - Concepts: ai/concepts-intro.md
+      - Systèmes Experts: ai/symbolic-ai.md
+      - Algorithmes Génétiques: ai/genetic-algos.md
+      - Logique Floue: ai/fuzzy-logic.md
+      - Pathfinding: ai/pathfinding.md
     - 🌐 Réseau:
       - Accueil: network/index.md
       - Fondamentaux: network/fundamentals.md
     - 🗄️ Bases de Données:
       - Accueil: databases/index.md
+      - Concepts BI & Data: databases/bi-concepts.md
       - 🐘 PostgreSQL:
         - Guide: databases/postgresql.md
         - Cheatsheet: databases/postgresql-cheatsheet.md
@@ -679,6 +720,8 @@ nav:
         - Module 04 - Automatisation: formations/pki-certificates/04-module.md
         - Module 05 - TP Final: formations/pki-certificates/05-tp-final.md
       - 📋 Conformité:
+        - Gestion des Risques: security/risk-management.md
+        - Secrets en GitOps: security/gitops-secrets.md
         - SecNumCloud: security/secnumcloud.md
         - Guides ANSSI: security/anssi-guides.md
         - Checklist Audit: security/audit-checklist.md
@@ -687,10 +730,16 @@ nav:
         - Certificats: security/certificates.md
         - OpenSSL CLI: security/openssl-cli.md
       - 🛡️ Défense & EDR:
+        - Digital Forensics (Réponse Incident): security/digital-forensics.md
+        - OSINT (Renseignement): security/osint.md
         - CrowdStrike EDR: security/crowdstrike-edr.md
         - HashiCorp Vault: security/hashicorp-vault.md
       - 🔴 Red Team & Audit:
         - Guide CTF: security/ctf-guide.md
+        - Cheatsheet Red Team: security/red-team-cheatsheet.md
+        - WiFi Hacking: security/wifi-hacking.md
+        - Stéganographie: security/steganography.md
+        - Intro Buffer Overflow: security/buffer-overflow.md
         - Exegol: security/exegol.md
         - Outils Essentiels: security/essential-tools.md
 

@@ -12,13 +12,12 @@ Sécurité offensive et défensive, cryptographie, conformité et outils d'audit
 
 ---
 
-## Conformité & Audit
+## Concepts & Audit
 
 | Article | Description | Niveau |
 |---------|-------------|--------|
-| [SecNumCloud](secnumcloud.md) | Qualification SecNumCloud | :material-star::material-star::material-star: |
-| [ANSSI Guides](anssi-guides.md) | Guides et recommandations ANSSI | :material-star::material-star: |
-| [Audit Checklist](audit-checklist.md) | Checklist d'audit sécurité | :material-star::material-star: |
+| [Gestion des Risques](risk-management.md) | Analyse des menaces et vulnérabilités | :material-star::material-star: |
+| [Audit Checklist](audit-checklist.md) | Liste de contrôle de sécurité | :material-star::material-star: |
 
 ## Cryptographie & PKI
 

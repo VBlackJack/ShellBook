@@ -68,15 +68,20 @@ Guide complet d'administration système Linux : de la configuration initiale au 
 | [Network Management](network-management.md) | Gestion réseau avancée | :material-star::material-star: |
 | [Secure File Exchange](secure-file-exchange.md) | Transferts sécurisés | :material-star::material-star: |
 
-## Services & Données
+## Services Web
 
 | Article | Description | Niveau |
 |---------|-------------|--------|
-| [Web Servers](web-servers.md) | Configuration serveurs web | :material-star::material-star: |
-| [Database Admin](database-admin.md) | Administration bases de données | :material-star::material-star: |
-| [LDAP 389DS](ldap-389ds.md) | Serveur LDAP 389DS | :material-star::material-star::material-star: |
-| [Postfix Relay](postfix-relay.md) | Relais mail Postfix | :material-star::material-star: |
-| [Virtualization KVM](virtualization-kvm.md) | Virtualisation KVM | :material-star::material-star: |
+| [Web Servers](web-servers.md) | Apache & Nginx basics | :material-star::material-star: |
+
+## Services Email
+
+| Article | Description | Niveau |
+|---------|-------------|--------|
+| [Architecture Email](email-systems-basics.md) | Concepts MTA, SMTP, IMAP & SPF/DKIM | :material-star::material-star: |
+| [Postfix Relay](postfix-relay.md) | Configurer un relais SMTP simple | :material-star::material-star: |
+
+## Stockage & Fichiers
 
 ## Dépannage & Performance
 

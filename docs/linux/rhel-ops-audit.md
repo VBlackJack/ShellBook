@@ -367,9 +367,16 @@ systemctl disable tuned
 # Les paramètres système reviennent aux valeurs par défaut
 ```
 
-## Cockpit : Interface Web d'Administration
+## Cockpit : Interface Web d'Administration (Web Console)
 
-**Cockpit** est l'interface web officielle de RHEL pour gérer le système via navigateur (port **9090**).
+**Cockpit** est l'interface web officielle de RHEL/CentOS (port **9090**). Souvent sous-estimée, elle est pourtant indispensable pour les Ops modernes.
+
+### Pourquoi l'utiliser ?
+*   **Monitoring Temps Réel** : Graphes CPU/RAM/Disque/Réseau fluides (via PCP).
+*   **Gestion du Stockage** : Redimensionner un volume LVM ou monter un NFS en 2 clics (plus sûr que la CLI).
+*   **Session Recording** : Visualiser les sessions `tlog` comme une vidéo YouTube.
+*   **Conteneurs** : Gérer Podman (images, conteneurs) visuellement.
+*   **Terminal Web** : Un shell root d'urgence accessible même si SSH est cassé (si le service web tourne).
 
 ### Installation & Activation
 
@@ -391,35 +398,54 @@ firewall-cmd --reload
 
 ### Modules Essentiels pour les Ops
 
+Pour tirer le plein potentiel de Cockpit, installez ces plugins :
+
 ```bash
 # Métriques historiques (PCP - Performance Co-Pilot)
+# Permet de voir l'historique CPU/RAM des jours précédents
 dnf install cockpit-pcp -y
 
 # Session Recording (tlog)
+# Pour voir les replays des sessions SSH
 dnf install cockpit-session-recording -y
 
-# Gestion des machines virtuelles
+# Gestion des machines virtuelles (KVM/Libvirt)
 dnf install cockpit-machines -y
 
-# Gestion Podman
+# Gestion Podman (Conteneurs)
 dnf install cockpit-podman -y
 
-# Redémarrer Cockpit
+# Gestion des mises à jour (Kpatch, DNF)
+dnf install cockpit-packagekit -y
+
+# Redémarrer Cockpit pour prendre en compte les modules
 systemctl restart cockpit.socket
 ```
 
-### Fonctionnalités Clés pour les Ops
+### Fonctionnalités Clés en Détail
 
-| Section | Fonctionnalité | Use Case |
-|---------|----------------|----------|
-| **Logs** | Recherche temps réel dans journalctl | Debug rapide sans SSH |
-| **Terminal** | Terminal web avec sudo | Dépannage depuis mobile |
-| **Services** | Start/Stop/Restart systemd | Restart sans commande |
-| **Networking** | Voir interfaces, firewall, routes | Diagnostic réseau visuel |
-| **Storage** | Voir disques, RAID, LVM, NFS | Monitoring espace disque |
-| **Performance** | Graphs CPU/RAM/Disk/Network (via PCP) | Identifier goulots |
-| **Session Recording** | Voir et rejouer sessions tlog | Audit visuel |
-| **Updates** | Installer paquets DNF | Patch sans CLI |
+#### 1. Stockage (Storage)
+Le module le plus puissant. Il visualise :
+*   Les disques physiques
+*   Les groupes de volumes LVM (VG)
+*   Les volumes logiques (LV) et leur remplissage
+*   Les montages NFS/iSCSI
+*   Les logs d'erreurs disque (SMART)
+
+**Action typique :** Agrandir un FS à chaud.
+1.  Cliquer sur le Volume Group.
+2.  Cliquer sur le Logical Volume.
+3.  "Grow" -> Slider vers la nouvelle taille -> "Apply".
+4.  C'est fait (lvextend + resizefs automatique).
+
+#### 2. Réseau (Networking)
+*   Créer un **Bonding** (agrégation de cartes) ou un **Bridge** (pour VMs).
+*   Configurer le pare-feu **Firewalld** (ouvrir des ports) sans connaître la syntaxe riche.
+*   Voir les logs réseau en temps réel.
+
+#### 3. Diagnostic (Logs & SELinux)
+Cockpit agrège `journalctl` et `audit.log`.
+*   Si SELinux bloque quelque chose, une alerte apparaît avec un bouton "Troubleshoot" qui propose la solution (le booléen à activer). C'est `audit2why` intégré !
 
 ### Accès Distant Sécurisé
 

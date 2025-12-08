@@ -122,6 +122,51 @@ rg -c "error"                 # Compter les occurrences
 
 ---
 
+## Terminal Moderne
+
+### Warp : Le Terminal du Futur
+
+**Warp** est un émulateur de terminal moderne (écrit en Rust) qui repense l'expérience CLI.
+*   **Saisie par blocs** : Plus facile de copier/coller une commande et sa sortie.
+*   **IA intégrée** : "Comment décompresser un tar ?" -> Warp génère la commande.
+*   **Collaboration** : Partager un bloc de commande avec un collègue.
+
+### Zellij : Multiplexeur (Alternative à tmux)
+
+Zellij est plus convivial que tmux dès la première utilisation.
+*   **Panes** : Diviser l'écran facilement.
+*   **Layouts** : Définir des configurations de démarrage (ex: 1 panneau logs, 1 panneau éditeur).
+
+```bash
+# Installation
+cargo install zellij
+
+# Démarrage
+zellij
+```
+
+---
+
+## Historique & Recherche : Atuin
+
+**Atuin** remplace `CTRL+R` par une base de données SQLite synchronisée.
+*   **Synchronisation** : Retrouvez votre historique sur toutes vos machines.
+*   **Filtres** : Chercher par commande, date, code retour, répertoire.
+*   **Stats** : "Quelle commande j'utilise le plus ?"
+
+```bash
+# Installation
+bash <(curl https://setup.atuin.sh)
+
+# Import de l'historique existant
+atuin import auto
+
+# Utilisation
+# Appuyez sur CTRL+R pour ouvrir l'interface TUI
+```
+
+---
+
 ## Affichage de Fichiers : cat → bat
 
 `bat` est un clone de `cat` avec coloration syntaxique et numéros de ligne.
@@ -161,43 +206,32 @@ bat --style=plain file.txt    # Sans décorations
 
 ---
 
-## Listing de Fichiers : ls → eza/lsd
+## Listing de Fichiers : ls → eza
 
-`eza` (anciennement `exa`) et `lsd` sont des remplacements modernes de `ls` avec icônes et couleurs.
+`eza` (successeur maintenu de `exa`) est LE remplaçant moderne de `ls`.
 
 ```bash
-# Installer eza
-sudo dnf install eza          # Fedora
-cargo install eza             # Via Rust
-
-# Installer lsd
-sudo dnf install lsd          # Fedora
-sudo apt install lsd          # Debian/Ubuntu
+# Installer
+sudo dnf install eza          # Fedora 39+
+cargo install eza             # Via Rust (Universel)
 ```
 
 ```bash
-# eza
+# Utilisation
 eza                           # Liste simple
-eza -l                        # Liste longue
-eza -la                       # Avec fichiers cachés
-eza -lah                      # Avec tailles humaines
-eza --tree -L 2               # Vue arbre (2 niveaux)
-eza --git                     # Statut Git
-eza --icons                   # Avec icônes (nécessite Nerd Font)
-
-# lsd
-lsd                           # Liste avec icônes
-lsd -la                       # Liste complète
-lsd --tree                    # Vue arbre
+eza -l                        # Liste longue avec icônes (si Nerd Font)
+eza -T                        # Vue arbre (Tree)
+eza --git                     # Affiche le statut Git des fichiers
+eza --header                  # Affiche les en-têtes de colonnes
+eza -s modified               # Trier par date de modif
 ```
 
-| Tâche | ls | eza | lsd |
-|-------|-----|-----|-----|
-| Liste | `ls` | `eza` | `lsd` |
-| Liste longue | `ls -l` | `eza -l` | `lsd -l` |
-| Avec cachés | `ls -la` | `eza -la` | `lsd -la` |
-| Arbre | `tree` | `eza --tree` | `lsd --tree` |
-| Par date | `ls -lt` | `eza -l --sort=modified` | `lsd -lt` |
+| Tâche | ls | eza |
+|-------|-----|-----|
+| Liste | `ls` | `eza` |
+| Liste longue | `ls -l` | `eza -l --icons --git` |
+| Arbre | `tree` | `eza -T` |
+| Tout (cachés) | `ls -la` | `eza -la` |
 
 ---
 

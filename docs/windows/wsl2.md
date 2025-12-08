@@ -363,21 +363,33 @@ wsl
 explorer.exe .
 ```
 
-### Interopérabilité des Commandes
+### Interopérabilité des Commandes (Windows ↔ Linux)
+
+WSL 2 excelle à faire communiquer les deux systèmes de manière transparente.
 
 ```bash
 # Depuis WSL : exécuter des programmes Windows
+# La plupart des .exe sont directement dans le PATH de Linux
 notepad.exe /mnt/c/Users/julien/file.txt
 code .  # Ouvre VSCode
 explorer.exe .  # Ouvre l'explorateur
+powershell.exe -Command "Write-Host 'Hello from Windows PowerShell!'"
 
 # Passer des données entre Windows et Linux
-cat /etc/passwd | clip.exe  # Copier dans le presse-papier Windows
+# Copier le contenu d'un fichier Linux vers le presse-papier Windows
+cat /etc/passwd | clip.exe
+
+# Coller le contenu du presse-papier Windows dans un fichier Linux
+cat > ~/fichier_colle.txt << EOF
+$(powershell.exe Get-Clipboard)
+EOF
+
+# Utiliser le pipe avec les commandes Windows
 powershell.exe Get-Process | grep bash
 
-# Ouvrir une URL dans le navigateur Windows
-wslview https://github.com  # Nécessite wslu
-# ou
+# Ouvrir une URL dans le navigateur Windows par défaut
+wslview https://github.com  # Nécessite wslu (sudo apt install wslu)
+# ou (plus simple)
 explorer.exe "https://github.com"
 ```
 
@@ -392,7 +404,64 @@ Get-Process | wsl grep -i chrome
 wsl cat /var/log/syslog | Select-String "error"
 ```
 
-### VSCode + WSL
+### Gestion des Distributions (Export, Import, Customisation)
+
+WSL 2 permet une grande flexibilité dans la gestion de vos environnements Linux.
+
+#### Exporter une Distribution (Sauvegarde ou Migration)
+
+```powershell
+# Arrêter la distribution avant d'exporter
+wsl --terminate Ubuntu-22.04
+
+# Exporter vers un fichier .tar
+wsl --export Ubuntu-22.04 D:\WSL_Backups\ubuntu-backup.tar
+
+# Vous pouvez ensuite sauvegarder ce fichier .tar
+```
+
+#### Importer une Distribution
+
+```powershell
+# Importer depuis un fichier .tar
+# Syntaxe: wsl --import <Nom_Distro> <Chemin_Installation> <Fichier_Tar>
+wsl --import MonUbuntuCustom D:\WSL_Distros\MonUbuntu D:\WSL_Backups\ubuntu-backup.tar
+
+# Définir la version de WSL (1 ou 2)
+wsl --set-version MonUbuntuCustom 2
+
+# Exécuter la distribution
+wsl -d MonUbuntuCustom
+```
+
+#### Créer une Distribution Personnalisée depuis Docker
+
+C'est une méthode puissante pour créer un environnement WSL sur mesure.
+
+1.  **Préparer une image Docker :**
+    ```bash
+    # Créez un Dockerfile (ex: Debian avec quelques outils pré-installés)
+    FROM debian:stable-slim
+    RUN apt-get update && apt-get install -y git curl vim procps
+    CMD ["/bin/bash"]
+    ```
+2.  **Construire l'image Docker :**
+    ```bash
+    docker build -t custom-wsl-debian .
+    ```
+3.  **Exporter l'image Docker comme un .tar :**
+    ```bash
+    docker export $(docker create custom-wsl-debian) > custom-wsl-debian.tar
+    ```
+4.  **Importer dans WSL :**
+    ```powershell
+    wsl --import CustomDebian D:\WSL_Distros\CustomDebian custom-wsl-debian.tar
+    wsl --set-version CustomDebian 2
+    ```
+
+---
+
+## Docker avec WSL2
 
 ```bash
 # Installer l'extension "Remote - WSL" dans VSCode

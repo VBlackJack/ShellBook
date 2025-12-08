@@ -48,6 +48,33 @@ Administration, optimisation et haute disponibilité des bases de données.
 
 ---
 
+## Concepts Fondamentaux : SQL vs NoSQL
+
+Comprendre pourquoi et quand sortir du modèle relationnel classique.
+
+### Limites du Modèle Relationnel (SQL)
+Le modèle relationnel (SGBDR) existe depuis 1970 et repose sur le **Hard State** :
+*   **Intégrité stricte** (ACID) garantie par la base.
+*   **Schéma rigide** (Tables, Colonnes, Clés) difficile à faire évoluer à chaud.
+*   **Scalabilité Verticale** : Pour plus de puissance, on augmente le matériel d'un serveur unique (CPU, RAM). Cela coûte cher et a des limites physiques.
+
+### L'Approche NoSQL
+Le NoSQL ("Not Only SQL") émerge avec les géants du Web pour répondre aux **3V** (Volume, Vélocité, Variété) via le **Soft State** :
+*   **Flexibilité** : Schéma dynamique ou inexistant ("Schema-less").
+*   **Scalabilité Horizontale** : Répartition de la charge sur une multitude de petits serveurs (clusters).
+*   **Disponibilité** : Priorité souvent donnée à la disponibilité sur la cohérence immédiate (Théorème CAP).
+
+### Les 4 Familles de NoSQL
+
+| Famille | Modèle de Données | Cas d'Usage Idéal | Exemples |
+|---------|-------------------|-------------------|----------|
+| **Clé-Valeur** | Dictionnaire géant (Map) | Caching, Sessions, Panier d'achat | **Redis**, Memcached |
+| **Documents** | JSON/BSON hiérarchique | Contenu (CMS), Profils utilisateurs, Catalogues | **MongoDB**, CouchDB |
+| **Colonnes** | Familles de colonnes (BigTable) | Big Data, Analytics, Séries temporelles massives | Cassandra, HBase |
+| **Graphes** | Noeuds et Arcs | Réseaux sociaux, Recommandations, Fraude | Neo4j, OrientDB |
+
+---
+
 ## Guide de Décision Rapide
 
 ```mermaid

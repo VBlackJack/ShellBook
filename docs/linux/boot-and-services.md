@@ -17,11 +17,13 @@ Référence complète pour la séquence de boot Linux et la gestion des services
 
 ```mermaid
 flowchart LR
-    A[🔌 BIOS/UEFI] --> B[📦 GRUB2]
-    B --> C[🐧 Kernel]
-    C --> D[💾 initramfs]
-    D --> E[⚙️ Systemd]
-    E --> F[🖥️ Login]
+    A[🔌 Mise sous Tension] --> B[⚡ BIOS/UEFI<br/>POST]
+    B --> C[📦 Bootloader<br/>GRUB2]
+    C --> D[🐧 Kernel<br/>vmlinuz]
+    D --> E[💾 initramfs<br/>Drivers]
+    E --> F[⚙️ Init<br/>Systemd (PID 1)]
+    F --> G[🎯 Runlevel<br/>Target]
+    G --> H[🖥️ Login]
 ```
 
 ### Étape 1 : BIOS/UEFI

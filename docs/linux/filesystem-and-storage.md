@@ -180,6 +180,99 @@ mkfs.ext4 -N 10000000 /dev/sdb1   # 10M inodes
 
 ---
 
+### Focus : Le umask
+
+Le `umask` (user file-creation mode mask) détermine les permissions par défaut d'un fichier ou d'un répertoire lors de sa création. C'est une mesure de sécurité préventive.
+
+*   **Permissions par défaut pour les fichiers** : `666` (rw-rw-rw-)
+*   **Permissions par défaut pour les répertoires** : `777` (rwxrwxrwx)
+
+Le `umask` est un masque qui *retire* des permissions.
+
+**Calcul des permissions :**
+
+-   **Pour les fichiers** : `666 - umask` (si le résultat donne un bit d'exécution, il est ignoré pour un fichier)
+-   **Pour les répertoires** : `777 - umask`
+
+**Exemple :**
+
+-   Si `umask` est `022` :
+    -   Fichier : `666 - 022 = 644` (rw-r--r--)
+    -   Répertoire : `777 - 022 = 755` (rwxr-xr-x)
+-   Si `umask` est `077` (plus restrictif, souvent pour `root`) :
+    -   Fichier : `666 - 077 = 600` (rw-------)
+    -   Répertoire : `777 - 077 = 700` (rwx------)
+
+**Vérifier le `umask` actuel :**
+
+```bash
+umask
+
+# Output: 0022
+```
+
+**Définir le `umask` :**
+
+Le `umask` est souvent défini dans les fichiers de configuration du shell (`.bashrc`, `.profile`, `/etc/profile`, `/etc/bash.bashrc`).
+
+```bash
+# Définir un umask plus restrictif (temporaire)
+umask 077
+
+# Pour le rendre permanent (par exemple dans .bashrc)
+echo "umask 027" >> ~/.bashrc
+```
+
+---
+
+## Architecture du Stockage Linux (Storage Stack)
+
+Comprendre comment une donnée traverse le kernel pour atteindre le disque.
+
+```mermaid
+flowchart TB
+    A[Application (User Space)] -->|syscall: write| B[VFS (Virtual File System)]
+    B -->|fichier| C[Filesystem (ext4, xfs, btrfs)]
+    C -->|blocs| D[Block Layer (BIO)]
+    
+    subgraph "Block Layer"
+    D --> E[I/O Scheduler]
+    E --> F[Device Mapper (LVM, Crypt, RAID)]
+    end
+    
+    F -->|requêtes| G[Driver (SCSI, NVMe, VirtIO)]
+    G --> H[Disque Physique (Hardware)]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style H fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+### 1. VFS (Virtual File System)
+L'interface unifiée. L'application parle au VFS, qui redirige vers le bon driver (ext4, nfs, cifs). C'est ce qui permet de monter un disque USB (`vfat`) ou un partage réseau (`nfs`) sans changer le code de l'application.
+
+### 2. I/O Schedulers (Ordonnanceurs)
+Le "chef de gare" des écritures disque. Il optimise l'ordre des requêtes pour la performance.
+
+| Scheduler | Cas d'Usage | Description |
+|-----------|-------------|-------------|
+| **mq-deadline** | Serveurs Database | Priorise les lectures pour éviter la latence. Bon pour tout. |
+| **kyber** | NVMe Rapides | Optimisé pour les SSD modernes ultra-rapides. |
+| **bfq** | Desktop / Copie | Garantit une bonne réactivité interactive (évite le freeze pendant une copie). |
+| **none** | VM / Cloud | Laisse l'hyperviseur gérer. Idéal pour EC2/Azure. |
+
+**Vérifier et changer le scheduler :**
+```bash
+# Voir le scheduler actuel (celui entre crochets)
+cat /sys/block/sda/queue/scheduler
+# [mq-deadline] kyber bfq none
+
+# Changer à chaud (sans reboot)
+echo "none" > /sys/block/sda/queue/scheduler
+```
+
+---
+
 ## LVM (Logical Volume Manager)
 
 ### Architecture LVM

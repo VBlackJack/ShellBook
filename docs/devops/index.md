@@ -12,13 +12,11 @@ Pratiques DevOps, conteneurisation, orchestration et Infrastructure as Code.
 
 ---
 
-## Méthodologie & Outils
-
-| Article | Description | Niveau |
-|---------|-------------|--------|
-| [Git SysOps](git-sysops.md) | Git pour administrateurs systèmes | :material-star: |
-| [Docs-as-Code](docs-as-code.md) | Documentation comme code | :material-star::material-star: |
-| [Productivity IT Tools](productivity-it-tools.md) | Outils de productivité IT | :material-star: |
+    - 🛠️ Méthodologie:
+      - [Méthodologies (Lean/Agile)](methodologies.md)
+      - [Git SysOps](git-sysops.md)
+      - [Docs-as-Code](docs-as-code.md)
+      - [Outils IT](productivity-it-tools.md)
 
 ## Conteneurs
 

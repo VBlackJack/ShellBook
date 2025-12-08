@@ -301,7 +301,7 @@ Chaque module suit cette structure :
 
 ## Créer une Nouvelle Formation
 
-Vous êtes auteur de contenu ? Utilisez le [Template de Formation](_template/) comme base.
+Vous êtes auteur de contenu ? Suivez la structure ci-dessous et consultez le [Guide Docs-as-Code](../devops/docs-as-code.md).
 
 **Structure recommandée :**
 
@@ -363,6 +363,8 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🔷 Azure Fundamentals | 10 modules | ✅ Disponible |
 | 🔧 Terraform ACI | 10 modules | ✅ Disponible |
 | 🐧 Linux Mastery | 20 modules | ✅ Disponible |
+| 🧠 AI Engineering for Ops | 5 modules | ✅ Disponible |
+| 🏴‍☠️ Ethical Hacking Mastery | 6 modules | ✅ Disponible |
 
 ---
 

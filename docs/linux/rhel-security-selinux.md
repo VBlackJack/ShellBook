@@ -107,14 +107,43 @@ ausearch -m AVC -ts recent | audit2why
 #   tcontext=system_u:object_r:admin_home_t:s0 tclass=file permissive=0
 ```
 
-### 2. Générer une Règle de Policy
+### 2. Générer une Règle de Policy (Audit2allow)
+
+```mermaid
+flowchart LR
+    A[🚫 Denial log dans audit.log] --> B{ausearch -m AVC<br/>audit2allow -w}
+    B --> C[💡 Explication & Suggestion<br/>(Booléen ou Type)]
+    C --> D{setsebool -P<br/>ou semanage fcontext}
+    C --> E{audit2allow -M<br/>my_fix}
+    E --> F[📦 my_fix.te + my_fix.pp]
+    F --> G{semodule -i my_fix.pp}
+    G --> H[✅ Accès Autorisé]
+```
+
+**Workflow de débogage des denials :**
+
+1.  **Reproduire le problème** (lancer l'application/service qui échoue).
+2.  **Lister les denials** : `ausearch -m AVC -ts recent`.
+3.  **Obtenir l'explication et la suggestion** : `ausearch -m AVC -ts recent | audit2allow -w`.
+    *   Si un booléen est suggéré (ex: `httpd_can_network_connect`), c'est la solution la plus propre.
+    *   Si c'est un contexte de fichier, `semanage fcontext` est la solution.
+    *   Si rien, ou si c'est trop complexe, `audit2allow -M` est la solution "rapide et sale" (à éviter en production si possible).
+4.  **Implémenter la solution**.
 
 ```bash
 # Analyser les denials et proposer des solutions
 ausearch -m AVC -ts recent | audit2allow -w
 # -w = why (explication)
 
-# Générer un module de policy
+# Exemple de sortie :
+# type=AVC msg=audit(1234567890.123:456): avc: denied { write } for \
+#   pid=1234 comm="httpd" path="/var/www/html/upload.php" \
+#   scontext=system_u:system_r:httpd_t:s0 \
+#   tcontext=system_u:object_r:admin_home_t:s0 tclass=file permissive=0
+
+# Possible suggestion : "If you want to allow httpd to write to user home directories, use the boolean httpd_enable_homedirs"
+
+# Générer un module de policy (solution générique si pas de booléen ou contexte)
 ausearch -m AVC -ts recent | audit2allow -M my_httpd_fix
 # Crée : my_httpd_fix.te (source) et my_httpd_fix.pp (compilé)
 
@@ -125,8 +154,8 @@ semodule -i my_httpd_fix.pp
 semodule -l | grep my_httpd
 ```
 
-!!! warning "audit2allow : Dernier Recours"
-    `audit2allow` génère des règles permissives. Préférez toujours **corriger le contexte** ou **activer un booléen** avant de créer un module custom.
+!!! warning "audit2allow : Dernier Recours ou Debug Rapide"
+    `audit2allow` génère des règles permissives qui peuvent réduire la sécurité. Préférez toujours **corriger le contexte** ou **activer un booléen** avant de créer un module custom. Utilisez-le pour le débogage et ensuite cherchez une solution plus propre.
 
 ### 3. Gestion des Contextes SELinux
 
