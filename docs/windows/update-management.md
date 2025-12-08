@@ -11,6 +11,8 @@ tags:
 
 Gestion moderne des mises à jour Windows Server : PSWindowsUpdate, WSUS Legacy, et Hotpatching (2025).
 
+![WSUS Update Flow](../assets/infographics/windows/wsus-update-flow.jpeg)
+
 ---
 
 ## L'Outil Indispensable : PSWindowsUpdate

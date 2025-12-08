@@ -10,6 +10,8 @@ tags:
 
 Gestion des accès et principe du moindre privilège.
 
+![Linux Permission Model](../assets/infographics/linux/linux-permission-model.jpeg)
+
 ---
 
 ## Gestion Utilisateurs & Groupes

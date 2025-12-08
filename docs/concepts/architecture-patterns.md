@@ -12,6 +12,12 @@ tags:
 
 Comprendre comment les systèmes modernes communiquent est essentiel pour un ingénieur DevOps. Nous sommes passés des monolithes aux microservices via le SOA.
 
+![CQRS Pattern](../assets/infographics/architecture/cqrs-pattern.jpeg)
+
+![Event Sourcing Timeline](../assets/infographics/architecture/event-sourcing-timeline.jpeg)
+
+![Saga Pattern](../assets/infographics/devops/saga-pattern.jpeg)
+
 ## 1. L'Évolution des Architectures
 
 ```mermaid

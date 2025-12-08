@@ -11,6 +11,8 @@ tags:
 Après le DevOps ("You build it, you run it"), voici le Platform Engineering.
 Le problème du DevOps pur : la **Charge Cognitive** (Cognitive Load). On demande aux dévs de connaître Python + Docker + K8s + Terraform + AWS + Sécurité... C'est trop.
 
+![Platform Engineering IDP](../assets/infographics/devops/platform-engineering-idp.jpeg)
+
 ## 1. Qu'est-ce que le Platform Engineering ?
 
 ### Définition

@@ -11,6 +11,8 @@ tags:
 
 La stéganographie est l'art de cacher de l'information dans un autre fichier (image, audio) sans que cela soit visible à l'œil nu. Très utilisé en CTF et par certains malwares pour exfiltrer des données.
 
+![Steganography Techniques](../assets/infographics/security/steganography-techniques.jpeg)
+
 ## 1. Steghide : Le Classique
 
 Idéal pour cacher un fichier texte dans une image JPEG ou un fichier audio WAV.

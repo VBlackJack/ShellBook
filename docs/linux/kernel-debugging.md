@@ -11,6 +11,8 @@ tags:
 
 Quand `top` et `htop` ne suffisent plus. Comment analyser un système qui freeze, qui panic, ou qui ralentit sans raison visible.
 
+![Kernel Debugging Workflow](../assets/infographics/linux/kernel-debugging-workflow.jpeg)
+
 ## 1. Magic SysRq Keys : Le Kit de Survie
 
 Si le serveur est freezé (plus de SSH, plus de clavier), le noyau écoute peut-être encore. Les **Magic SysRq** permettent d'envoyer des commandes directement au kernel.

@@ -9,6 +9,8 @@ tags:
 
 # SELinux & RHEL Hardening
 
+![SELinux Modes](../assets/infographics/linux/selinux-modes.jpeg)
+
 ## SELinux : La Forteresse Invisible
 
 **Security-Enhanced Linux (SELinux)** est un système de contrôle d'accès obligatoire (MAC) développé par la NSA. Sur RHEL/CentOS/Rocky, il est activé par défaut et protège le système même si un processus est compromis.

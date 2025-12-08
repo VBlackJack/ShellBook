@@ -11,6 +11,8 @@ tags:
 
 Comment les pirates transforment un crash de programme en exécution de code.
 
+![Buffer Overflow Stack](../assets/infographics/security/buffer-overflow-stack.jpeg)
+
 ## 1. Le Concept
 
 Imaginez un verre d'eau (le Buffer) de 20cl.

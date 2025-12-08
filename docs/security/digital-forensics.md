@@ -11,6 +11,8 @@ tags:
 Vous pensez avoir été piraté. Que faire ? La panique est votre pire ennemie.
 Voici la méthodologie pour sécuriser les preuves et analyser l'intrusion.
 
+![Forensics Volatility Order](../assets/infographics/security/forensics-volatility-order.jpeg)
+
 ## 1. Les 4 Phases de la Réponse (NIST)
 
 1.  **Identification** : Détecter l'incident (Logs, Alerte SIEM, Appel utilisateur).

@@ -13,6 +13,8 @@ Fonctionnalités avancées de systemd : timers, sockets, targets, hardening, et 
 
 ![Systemd Service States](../assets/infographics/linux/systemd-service-states.jpeg)
 
+![Systemd Boot Targets](../assets/infographics/linux/systemd-boot-targets.jpeg)
+
 ## Architecture Systemd
 
 ```

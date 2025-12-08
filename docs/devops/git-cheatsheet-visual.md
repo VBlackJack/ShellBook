@@ -9,6 +9,8 @@ tags:
 
 Une référence rapide pour les commandes Git, organisée par flux de travail.
 
+![Git Branching Strategies](../assets/infographics/devops/git-branching-strategies.jpeg)
+
 ## 1. Démarrage & Configuration
 
 | Action | Commande | Description |

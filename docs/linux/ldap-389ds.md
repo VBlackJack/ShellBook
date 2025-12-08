@@ -10,6 +10,8 @@ tags:
 
 Alternative Open Source robuste à Active Directory sur Linux. Annuaire LDAP haute performance pour l'authentification centralisée.
 
+![LDAP Directory Tree](../assets/infographics/linux/ldap-directory-tree.jpeg)
+
 ---
 
 ## Qu'est-ce que 389 Directory Server ?

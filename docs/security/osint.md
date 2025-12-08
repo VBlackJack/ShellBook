@@ -9,6 +9,8 @@ tags:
 # OSINT (Open Source Intelligence)
 
 L'OSINT consiste à collecter et analyser des informations disponibles publiquement pour construire une connaissance ciblée. Pour un SysAdmin/DevOps, c'est essentiel pour :
+
+![OSINT Workflow](../assets/infographics/security/osint-workflow.jpeg)
 *   **Sécurité Défensive** : Vérifier ce que votre infrastructure expose involontairement.
 *   **Reconnaissance Attaquante** : Comprendre les techniques utilisées par les pirates.
 

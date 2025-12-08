@@ -11,6 +11,8 @@ tags:
 Ce workshop compile les meilleures techniques issues de scripts professionnels.
 *Source : Analyse des démos de formation (Thomas Boutry).*
 
+![PowerShell Error Handling](../assets/infographics/windows/powershell-error-handling.jpeg)
+
 ## 1. La Gestion des Erreurs (`ErrorAction`)
 
 En production, un script ne doit pas planter silencieusement ou afficher du rouge effrayant sans explication.

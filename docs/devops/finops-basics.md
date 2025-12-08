@@ -10,6 +10,8 @@ tags:
 
 Le Cloud n'est pas "juste l'ordinateur de quelqu'un d'autre". C'est un modèle économique (OPEX vs CAPEX) où chaque seconde de CPU est facturée. Le FinOps est l'art de maîtriser cette facture.
 
+![FinOps Lifecycle](../assets/infographics/devops/finops-lifecycle.jpeg)
+
 ## 1. Le Cycle FinOps
 
 Ce n'est pas une action "one-shot", c'est une boucle continue.

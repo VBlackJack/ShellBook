@@ -10,6 +10,12 @@ tags:
 
 Configuration réseau persistante sur Debian et Ubuntu.
 
+![DNS Resolution Process](../assets/infographics/network/dns-resolution-process.jpeg)
+
+![OSI Model Attacks](../assets/infographics/network/osi-model-attacks.jpeg)
+
+![Load Balancer L4 vs L7](../assets/infographics/network/load-balancer-l4-vs-l7.jpeg)
+
 ---
 
 ## Configuration Persistante : Le Duel

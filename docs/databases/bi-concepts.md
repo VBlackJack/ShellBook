@@ -10,6 +10,8 @@ tags:
 
 Avant de manipuler des Big Data, il faut comprendre l'architecture qui permet de transformer la donnée brute en information décisionnelle.
 
+![Modern Data Stack](../assets/infographics/databases/modern-data-stack.jpeg)
+
 ## 1. OLTP vs OLAP
 
 La distinction fondamentale en gestion de données.

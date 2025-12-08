@@ -13,6 +13,8 @@ tags:
 
 Le SRE n'est pas un nouveau nom pour "Admin Sys". C'est une discipline qui traite les opérations comme un problème logiciel.
 
+![SRE Golden Signals](../assets/infographics/devops/sre-golden-signals.jpeg)
+
 ## 1. Les Concepts Clés
 
 ### SLI, SLO, SLA : Ne plus jamais confondre

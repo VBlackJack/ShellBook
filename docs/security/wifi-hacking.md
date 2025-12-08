@@ -11,6 +11,8 @@ tags:
 
 Attaquer les réseaux sans fil pour obtenir un accès initial.
 
+![WiFi Attack Sequence](../assets/infographics/security/wifi-attack-sequence.jpeg)
+
 ## 1. Prérequis Matériel
 
 Pour attaquer le WiFi, il faut une carte réseau capable de passer en **Mode Monitor** (écouter tout le trafic) et de faire de l'**Injection de Paquets** (pour déconnecter les clients).

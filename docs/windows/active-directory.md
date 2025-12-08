@@ -11,6 +11,8 @@ tags:
 
 Administration Active Directory via PowerShell.
 
+![AD Replication Topology](../assets/infographics/windows/ad-replication-topology.jpeg)
+
 ---
 
 ## Prérequis

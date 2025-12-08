@@ -11,6 +11,8 @@ tags:
 
 Le monde de l'embarqué (IoT, Automobile, Industriel) ne s'administre pas comme des serveurs Web. Ici, on construit son propre OS sur mesure.
 
+![Yocto Build Pipeline](../assets/infographics/devops/yocto-build-pipeline.jpeg)
+
 ## 1. Concepts de l'Embarqué
 
 ### Contraintes Spécifiques

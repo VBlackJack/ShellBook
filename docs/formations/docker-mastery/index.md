@@ -10,6 +10,8 @@ tags:
 
 ![Docker Multi-Stage Build](../../assets/infographics/devops/docker-multistage-build.jpeg)
 
+![Containers vs VMs](../../assets/infographics/devops/container-vs-vm.jpeg)
+
 ## Informations Générales
 
 | Élément | Description |

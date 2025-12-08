@@ -12,6 +12,8 @@ tags:
 
 Transformer la couche de données en service résilient. Failover automatique et zéro perte de données.
 
+![Database HA Failover](../assets/infographics/databases/database-ha-failover.jpeg)
+
 ---
 
 ## Théorie : HA vs DR
