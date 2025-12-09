@@ -7,7 +7,7 @@ tags:
   - microsoft
 ---
 
-# Formation : Windows Server Mastery
+# Formation : Administration Windows Server
 
 ![Active Directory Architecture](../../assets/infographics/windows/active-directory-architecture.jpeg)
 

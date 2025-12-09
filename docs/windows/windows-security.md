@@ -5,7 +5,7 @@ tags:
   - redirect
 ---
 
-# Windows Security
+# Sécurité Windows (Ancienne page)
 
 !!! info "Page Réorganisée"
     Cette page a été réorganisée pour une meilleure navigation.
