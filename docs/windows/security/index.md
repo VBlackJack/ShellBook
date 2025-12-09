@@ -14,6 +14,8 @@ Sécurisation et audit des systèmes Windows (Blue Team).
 
 ## Vue d'Ensemble
 
+![Windows Security Stack Layers](../../assets/diagrams/windows-security-stack-layers.jpeg)
+
 ```
 WINDOWS SECURITY STACK
 ═══════════════════════

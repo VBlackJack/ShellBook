@@ -20,6 +20,8 @@ GPO de sécurité, Event Viewer et conformité SecNumCloud.
 
 **Problème :** LLMNR et NBT-NS sont des protocoles de résolution de noms legacy qui permettent le poisoning (attaque Responder).
 
+![LLMNR NBT-NS Responder Attack](../../assets/diagrams/llmnr-nbtns-responder-attack.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                  ATTAQUE RESPONDER                           │

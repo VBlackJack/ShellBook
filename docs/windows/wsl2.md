@@ -77,6 +77,8 @@ Accès Réseau:
 
 ## Architecture WSL2
 
+![WSL2 Architecture Layers](../assets/diagrams/wsl2-architecture-layers.jpeg)
+
 ```
 ARCHITECTURE WSL2
 ══════════════════════════════════════════════════════════

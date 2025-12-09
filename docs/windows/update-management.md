@@ -21,6 +21,8 @@ Gestion moderne des mises à jour Windows Server : PSWindowsUpdate, WSUS Legacy,
 
 **PSWindowsUpdate = Le module PowerShell communautaire que tout admin Windows utilise**
 
+![PSWindowsUpdate vs Traditional](../assets/diagrams/pswindowsupdate-vs-traditional.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                   POURQUOI PSWINDOWSUPDATE ?                 │
@@ -372,6 +374,8 @@ $WSUSUtil = "C:\Program Files\Update Services\Tools\wsusutil.exe"
 
 **Hotpatching = Patcher la RAM sans redémarrer le serveur**
 
+![Patching Traditional vs Hotpatching](../assets/diagrams/patching-traditional-vs-hotpatching.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              PATCHING TRADITIONNEL vs HOTPATCHING            │
@@ -515,6 +519,8 @@ az rest --method get --url \
 ### Concept : Déploiement Échelonné par Criticité
 
 **Le Pattern "36 Heures" = Déploiement progressif des patchs sur 5 groupes avec délais calculés pour garantir la continuité de service.**
+
+![Patch Management 36h Pattern](../assets/diagrams/patch-management-36h-pattern.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -721,6 +727,8 @@ Register-ScheduledTask -TaskName "Patch-Group4-Perimeter" -Trigger $Trigger -Act
 - Délai de 36h laisse le temps de tester tous les services
 
 ### Timeline Visuelle (36 Heures)
+
+![Patch Groups Timeline 36 Hours](../assets/diagrams/patch-groups-timeline-36hours.jpeg)
 
 ```
 Mardi 02:00         Mardi 06:00         Mardi 14:00         Mercredi 02:00      Mercredi 14:00

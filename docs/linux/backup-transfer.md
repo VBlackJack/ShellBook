@@ -24,6 +24,8 @@ Synchronisation et transfert sécurisé de fichiers.
     - Premier backup : 10 GB transférés
     - Backups suivants : Seulement les fichiers modifiés (quelques MB)
 
+![Rsync Delta Transfer Concept](../assets/diagrams/rsync-delta-transfer-concept.jpeg)
+
 ```
 ┌─────────────────┐                    ┌─────────────────┐
 │     SOURCE      │                    │   DESTINATION   │

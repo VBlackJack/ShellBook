@@ -105,6 +105,8 @@ Unlock-BitLocker -MountPoint "D:" -RecoveryPassword "123456-789012-..."
 
 **Network Unlock = Déverrouiller BitLocker automatiquement si le serveur est sur le réseau d'entreprise**
 
+![BitLocker Network Unlock Comparison](../../assets/diagrams/bitlocker-network-unlock-comparison.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                  PROBLÈME SANS NETWORK UNLOCK                │

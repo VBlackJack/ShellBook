@@ -13,6 +13,8 @@ Windows Exporter expose les métriques système Windows au format Prometheus. C'
 
 ## Vue d'Ensemble
 
+![Windows Exporter Architecture](../assets/diagrams/windows-exporter-architecture.jpeg)
+
 ```
 ARCHITECTURE WINDOWS EXPORTER
 ══════════════════════════════════════════════════════════════════════

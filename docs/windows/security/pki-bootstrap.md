@@ -17,6 +17,8 @@ Génération de certificats machine pour VPN/802.1X avant la jointure domaine.
 
 **Scénario classique dans les environnements SecNumCloud :**
 
+![PKI Bootstrap Chicken-Egg Problem](../../assets/diagrams/pki-bootstrap-chicken-egg-problem.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    PROBLÈME "CHICKEN & EGG"                  │
@@ -295,6 +297,8 @@ function Install-BootstrapCertificate {
 ---
 
 ## Workflow Complet
+
+![PKI Bootstrap Workflow Complete](../../assets/diagrams/pki-bootstrap-workflow-complete.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
