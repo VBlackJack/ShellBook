@@ -12,7 +12,7 @@ Création, publication et gestion des modules PowerShell.
 
 ## Concepts
 
-```
+```text
 STRUCTURE DE MODULE POWERSHELL
 ══════════════════════════════════════════════════════════
 
@@ -275,7 +275,7 @@ function Get-ServerHealth {
 
 ### Fichier d'Aide About
 
-```
+```powershell
 # en-US/about_MyModule.help.txt
 
 TOPIC

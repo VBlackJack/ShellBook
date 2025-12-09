@@ -147,7 +147,7 @@ pip install requests paramiko boto3 pyyaml pytest click rich
 
 ### Structure des Exercices
 
-```
+```text
 python-sysops-labs/
 ├── niveau1/
 │   ├── exercice01_variables.py

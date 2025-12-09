@@ -292,7 +292,7 @@ annotations:
 
 ### Format DNS Kubernetes
 
-```
+```xml
 <service>.<namespace>.svc.cluster.local
 
 # Exemples :
@@ -302,7 +302,7 @@ backend-api.default.svc.cluster.local
 
 ### Le Problème Classique
 
-```
+```text
 Mon app ne trouve pas la BDD !
 
 Error: NXDOMAIN - postgres not found
@@ -352,7 +352,7 @@ options ndots:5
 
 Avec `ndots:5`, si le nom a **moins de 5 points**, Kubernetes ajoute les suffixes de recherche AVANT de résoudre.
 
-```
+```text
 nslookup postgres
 # Essaie dans l'ordre :
 # 1. postgres.default.svc.cluster.local
@@ -363,7 +363,7 @@ nslookup postgres
 
 !!! tip "Forcer la résolution absolue"
     Ajoutez un point final pour éviter les recherches :
-    ```
+    ```text
     postgres.database.svc.cluster.local.
     ```
 

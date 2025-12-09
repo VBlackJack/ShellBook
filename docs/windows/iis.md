@@ -12,7 +12,7 @@ Configuration et administration du serveur web IIS : sites, app pools, bindings,
 
 ## Architecture
 
-```
+```text
 ARCHITECTURE IIS
 ══════════════════════════════════════════════════════════
 

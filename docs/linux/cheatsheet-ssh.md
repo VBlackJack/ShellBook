@@ -309,7 +309,7 @@ Match Host * Exec "[ $(date +%H) -ge 9 -a $(date +%H) -le 17 ]"
 
 **Concept**: Rediriger un port local vers un port sur le serveur distant.
 
-```
+```text
 [Vous] → [Port Local] → [SSH Tunnel] → [Serveur SSH] → [Port Distant]
 ```
 
@@ -352,7 +352,7 @@ ssh -L 0.0.0.0:8080:localhost:80 user@server
 
 **Concept**: Rediriger un port du serveur distant vers un port local.
 
-```
+```text
 [Serveur SSH] → [Port Distant] → [SSH Tunnel] → [Vous] → [Port Local]
 ```
 

@@ -16,7 +16,7 @@ CI/CD avec GitHub Actions pour l'automatisation Ops.
 
 ### Hiérarchie
 
-```
+```text
 Workflow (.github/workflows/deploy.yml)
 ├── Job 1 (build)
 │   ├── Step 1: Checkout code
@@ -253,7 +253,7 @@ env:
 
 ### Créer des Secrets
 
-```
+```text
 Repo → Settings → Secrets and variables → Actions → New repository secret
 ```
 
@@ -288,7 +288,7 @@ jobs:
 
 ### Configuration des Environnements
 
-```
+```text
 Repo → Settings → Environments → New environment
 ```
 

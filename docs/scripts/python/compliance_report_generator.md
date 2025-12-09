@@ -882,7 +882,7 @@ if __name__ == "__main__":
 
 ## Exemple de Sortie
 
-```
+```text
 🛡️ Compliance Report Generator
 
 Running 20 compliance checks...

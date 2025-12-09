@@ -49,14 +49,14 @@ deluser --remove-home john   # Debian
 
 **Structure de `/etc/passwd` :**
 
-```
+```yaml
 username:x:UID:GID:GECOS:home:shell
 john:x:1001:1001:John Doe:/home/john:/bin/bash
 ```
 
 **Structure de `/etc/shadow` :**
 
-```
+```yaml
 username:$hash:lastchange:min:max:warn:inactive:expire:
 john:$6$salt$hash...:19500:0:99999:7:::
 ```
@@ -129,7 +129,7 @@ groups john
 
 ### Lecture des Permissions
 
-```
+```text
 -rwxr-xr-- 1 john developers 4096 Jan 15 10:00 script.sh
 │└┬┘└┬┘└┬┘
 │ │  │  └── Others (autres)
@@ -207,7 +207,7 @@ chown -R www-data:www-data /var/www/html/
 
 ### Vue d'ensemble
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              SPECIAL BITS (4 bits supplémentaires)          │
 ├─────────────────────────────────────────────────────────────┤
@@ -226,7 +226,7 @@ Exemple  : chmod 4755 = SUID + rwxr-xr-x
 
 **Effet :** Le programme s'exécute avec les droits de son **propriétaire**, pas de l'utilisateur qui le lance.
 
-```
+```text
 -rwsr-xr-x 1 root root 59976 /usr/bin/passwd
    ^
    └── 's' au lieu de 'x' = SUID activé
@@ -277,7 +277,7 @@ find / -perm -4000 -type f 2>/dev/null
 
 **Sur un répertoire :** Les fichiers créés héritent du groupe du répertoire (pas du groupe de l'utilisateur).
 
-```
+```text
 drwxrwsr-x 2 root developers 4096 /shared/
       ^
       └── 's' sur group = SGID activé
@@ -320,7 +320,7 @@ find / -perm -2000 -type d 2>/dev/null
 - Le propriétaire du répertoire
 - root
 
-```
+```text
 drwxrwxrwt 10 root root 4096 /tmp/
          ^
          └── 't' à la fin = Sticky bit activé
@@ -398,7 +398,7 @@ sudo visudo
 
 ### Structure d'une Règle Sudo
 
-```
+```text
 user    host=(runas)    commands
 │       │    │          │
 │       │    │          └── Commandes autorisées

@@ -66,7 +66,7 @@ Cette formation vous transforme en **expert de l'écosystème Microsoft** capabl
 
 ### Le Problème
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │         L'Administration Windows en 2025                     │
 ├─────────────────────────────────────────────────────────────┤
@@ -102,12 +102,12 @@ flowchart TD
 
     Skills1 & Skills2 & Skills3 & Skills4 --> Expert[👑 Expert Windows<br/>Infrastructure Ready]
 
-    style Start fill:#0078d4,stroke:#005a9e,color:#fff
-    style M1 fill:#107c10,stroke:#0e6b0e,color:#fff
-    style M2 fill:#107c10,stroke:#0e6b0e,color:#fff
-    style M3 fill:#d13438,stroke:#a52a2a,color:#fff
-    style M4 fill:#ff8c00,stroke:#cc7000,color:#fff
-    style Expert fill:#ffd700,stroke:#b8860b,color:#000
+    style Start fill:#2196F3,stroke:#005a9e,color:#fff
+    style M1 fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style M2 fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style M3 fill:#f44336,stroke:#a52a2a,color:#fff
+    style M4 fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style Expert fill:#FF9800800800,stroke:#b8860b,color:#000
 ```
 
 ---
@@ -250,10 +250,10 @@ flowchart LR
     B --> C[🎯 Exercice<br/>Scénario réel]
     C --> D[✅ Solution<br/>Corrigé détaillé]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#107c10,stroke:#0e6b0e,color:#fff
-    style C fill:#ff8c00,stroke:#cc7000,color:#fff
-    style D fill:#d13438,stroke:#a52a2a,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style C fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style D fill:#f44336,stroke:#a52a2a,color:#fff
 ```
 
 ### 2. PowerShell First

@@ -12,7 +12,7 @@ Contrôle des applications autorisées à s'exécuter via AppLocker et WDAC.
 
 ## Concepts
 
-```
+```text
 APPLOCKER VS WDAC
 ══════════════════════════════════════════════════════════
 
@@ -96,14 +96,14 @@ $rule = New-AppLockerPolicy -RuleType FileHash -FileInformation $hash -User "Eve
 
 ### Emplacement
 
-```
+```text
 Computer Configuration > Policies > Windows Settings >
 Security Settings > Application Control Policies > AppLocker
 ```
 
 ### Configuration Recommandée
 
-```
+```bash
 1. Executable Rules :
    - [Allow] %WINDIR%\* (Everyone)
    - [Allow] %PROGRAMFILES%\* (Everyone)
@@ -156,7 +156,7 @@ Get-WinEvent -LogName "Microsoft-Windows-AppLocker/EXE and DLL" |
 
 ### Conditions de Publisher
 
-```
+```text
 PUBLISHER RULE CONDITIONS
 ══════════════════════════════════════════════════════════
 

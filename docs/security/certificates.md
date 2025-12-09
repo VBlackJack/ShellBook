@@ -173,7 +173,7 @@ flowchart LR
     B --> C[📂 IIS Server<br/>crl.mycorp.com]
     C --> D[🖥️ Clients Internes<br/>Windows/Linux]
 
-    style A fill:#ff6b6b
+    style A fill:#f44336
     style C fill:#51cf66
     style D fill:#74c0fc
 ```

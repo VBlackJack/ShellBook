@@ -26,10 +26,10 @@ graph LR
     B --> C[SOA + ESB<br/>2000-2010]
     C --> D[Microservices<br/>2010-2025]
 
-    style A fill:#ff6b6b
-    style B fill:#ffd93d
-    style C fill:#95e1d3
-    style D fill:#6bcf7f
+    style A fill:#f44336
+    style B fill:#FF9800800800
+    style C fill:#4CAF50
+    style D fill:#4CAF50
 ```
 
 ### Gen 1 : Le Monolithe (Mainframe)
@@ -172,9 +172,9 @@ graph TD
     Part2 --> C1
     Part3 --> C2[Consumer Group B]
 
-    style T1 fill:#ff6347
-    style C1 fill:#4682b4
-    style C2 fill:#4682b4
+    style T1 fill:#f44336
+    style C1 fill:#2196F3
+    style C2 fill:#2196F3
 ```
 
 ### Use Cases
@@ -238,8 +238,8 @@ graph LR
     Sync --> ReadDB[(Read DB<br/>Elasticsearch)]
     QRY --> ReadDB
 
-    style CMD fill:#e74c3c
-    style QRY fill:#3498db
+    style CMD fill:#f44336
+    style QRY fill:#2196F3
 ```
 
 ### Pourquoi ?
@@ -268,7 +268,7 @@ graph LR
 Au lieu de stocker l'**état actuel**, on stocke la **séquence d'événements** qui ont mené à cet état.
 
 **Exemple classique : Compte bancaire**
-```
+```text
 État traditionnel : Solde = 1500€
 
 Event Sourcing :
@@ -287,7 +287,7 @@ graph TD
     Projections --> ReadDB[(Read Model)]
     Events -->|Replay| Audit[Audit Trail]
 
-    style Events fill:#f39c12
+    style Events fill:#FF9800800800
 ```
 
 ### Avantages

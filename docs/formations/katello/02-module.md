@@ -81,14 +81,14 @@ flowchart LR
     TEST --> TEST
     PROD --> PROD
 
-    style UPSTREAM fill:#0078D4,color:#fff
-    style LIBRARY fill:#5C2D91,color:#fff
-    style DEV fill:#FFB900,color:#000
-    style TEST fill:#FF8C00,color:#fff
-    style PROD fill:#E81123,color:#fff
-    style DEV_NEW fill:#FFB900,color:#000,stroke-dasharray: 5 5
-    style TEST_NEW fill:#FF8C00,color:#fff,stroke-dasharray: 5 5
-    style PROD_NEW fill:#E81123,color:#fff,stroke-dasharray: 5 5
+    style UPSTREAM fill:#2196F3,color:#fff
+    style LIBRARY fill:#9C27B0,color:#fff
+    style DEV fill:#FF9800800800,color:#000
+    style TEST fill:#FF9800800800,color:#fff
+    style PROD fill:#f44336,color:#fff
+    style DEV_NEW fill:#FF9800800800,color:#000,stroke-dasharray: 5 5
+    style TEST_NEW fill:#FF9800800800,color:#fff,stroke-dasharray: 5 5
+    style PROD_NEW fill:#f44336,color:#fff,stroke-dasharray: 5 5
 ```
 
 **💡 Avantages** :
@@ -116,10 +116,10 @@ flowchart LR
     DEV -->|Promote<br/>après tests| TEST
     TEST -->|Promote<br/>après validation| PROD
 
-    style LIBRARY fill:#5C2D91,color:#fff
-    style DEV fill:#FFB900,color:#000
-    style TEST fill:#FF8C00,color:#fff
-    style PROD fill:#E81123,color:#fff
+    style LIBRARY fill:#9C27B0,color:#fff
+    style DEV fill:#FF9800800800,color:#000
+    style TEST fill:#FF9800800800,color:#fff
+    style PROD fill:#f44336,color:#fff
 ```
 
 **Détail des environnements** :
@@ -146,7 +146,7 @@ Une **Content View** est un **snapshot versionné** d'un ensemble de repositorie
 
 **Exemple** :
 
-```
+```text
 Content View: CV-Rocky9
 ├── Version 1.0 (published 2025-01-01)
 │   ├── Rocky-BaseOS (1500 RPM, kernel 5.14.0-362)
@@ -173,7 +173,7 @@ Une Content View peut contenir des **filtres** pour :
 
 **Exemple de filtre** :
 
-```
+```text
 Content View: CV-Rocky9-Prod
 ├── Repositories:
 │   ├── Rocky-BaseOS
@@ -795,7 +795,7 @@ CV="CV-Rocky9"
     ```
 
     **Output attendu** :
-    ```
+    ```text
     =========================================
       SYNC & PROMOTE - ROCKY LINUX 9 BASEOS
     =========================================

@@ -354,7 +354,7 @@ chmod +x check-connectivity.sh
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
           DIAGNOSTIC DE CONNECTIVITÉ RÉSEAU
 ═══════════════════════════════════════════════════════════

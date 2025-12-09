@@ -217,7 +217,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t myapp:multi .
 
 ## 6. .dockerignore
 
-```
+```text
 # .dockerignore
 .git
 .gitignore
@@ -351,7 +351,7 @@ docs/
 
     **Étape 4 : Créer .dockerignore**
 
-    ```
+    ```text
     # .dockerignore
     .git
     .gitignore

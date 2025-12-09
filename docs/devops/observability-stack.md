@@ -40,7 +40,7 @@ flowchart LR
 
 ### Quand utiliser quoi ?
 
-```
+```text
 Scénario : "Le site est lent !"
 
 1. MÉTRIQUES (Prometheus)
@@ -65,7 +65,7 @@ Scénario : "Le site est lent !"
 
 Contrairement à d'autres systèmes (Graphite, InfluxDB), Prometheus **va chercher** les métriques (pull).
 
-```
+```text
 ┌─────────────┐         HTTP GET /metrics         ┌──────────────┐
 │ Prometheus  │ ─────────────────────────────────► │ Application  │
 │   Server    │ ◄───────────────────────────────── │ (/metrics)   │
@@ -191,7 +191,7 @@ predict_linear(node_filesystem_free_bytes[1h], 4*3600) < 0
 
 ### Concept Clé : Pas d'Indexation Full-Text
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │          ELK Stack (Elasticsearch)          │
 │  - Indexe TOUT le texte                     │
@@ -213,7 +213,7 @@ predict_linear(node_filesystem_free_bytes[1h], 4*3600) < 0
 
 ### Architecture
 
-```
+```text
 ┌──────────────┐
 │ Application  │
 │   (stdout)   │
@@ -353,7 +353,7 @@ topk(5,
 
 Grafana ne stocke **aucune donnée**. Il se connecte à des sources externes.
 
-```
+```text
 ┌──────────────────────────────────────────┐
 │              Grafana                     │
 │                                          │
@@ -376,7 +376,7 @@ Grafana ne stocke **aucune donnée**. Il se connecte à des sources externes.
 
 ### Ajouter une Data Source (UI)
 
-```
+```text
 1. Grafana → Configuration → Data Sources
 2. Add data source
 3. Choisir "Prometheus"
@@ -457,7 +457,7 @@ curl -X POST http://admin:admin@localhost:3000/api/dashboards/import \
 
 ### Variables : Dashboards Dynamiques
 
-```
+```text
 Variable "instance" :
 Query : label_values(node_cpu_seconds_total, instance)
 

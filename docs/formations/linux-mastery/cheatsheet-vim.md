@@ -28,7 +28,7 @@ Guide de référence rapide pour l'éditeur Vim.
 
 ### Mouvements de Base
 
-```
+```text
       k
       ↑
   h ← · → l

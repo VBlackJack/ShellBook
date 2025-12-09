@@ -70,7 +70,7 @@ Avant de commencer un lab, assurez-vous d'avoir :
 Vous avez une idée de lab ? Proposez-la via une [Pull Request](https://github.com/VBlackJack/ShellBook) !
 
 Structure attendue :
-```
+```text
 docs/devops/labs/
 ├── index.md                    # Cette page
 ├── mon-lab/

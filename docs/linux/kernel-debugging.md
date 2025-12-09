@@ -232,7 +232,7 @@ sudo bpftrace -e 'profile:hz:99 { @[kstack] = count(); }'
 ```
 
 **Sortie exemple (latence read) :**
-```
+```text
 @latency_us[nginx]:
 [0]                  123 |                                                    |
 [1]                  456 |@@                                                  |
@@ -278,7 +278,7 @@ cat trace
 ```
 
 **Sortie exemple (function_graph) :**
-```
+```text
  2)               |  do_sys_open() {
  2)               |    getname() {
  2)   0.123 us    |      kmem_cache_alloc();
@@ -320,7 +320,7 @@ sudo perf script > out.perf
 ```
 
 **Sortie exemple (perf report) :**
-```
+```text
 # Overhead  Command   Shared Object      Symbol
 # ........  ........  .................  ............................
     45.23%  postgres  libc-2.31.so       [.] __memcpy_avx_unaligned
@@ -331,7 +331,7 @@ sudo perf script > out.perf
 ```
 
 **Sortie exemple (perf stat) :**
-```
+```bash
  Performance counter stats for 'system wide':
 
       8,234.56 msec cpu-clock                 #    7.998 CPUs utilized
@@ -483,7 +483,7 @@ graph TD
     S --> T
     T --> U[Correctif Code/Driver]
 
-    style C fill:#ff9999
+    style C fill:#FF9800800999
     style E fill:#99ff99
     style T fill:#9999ff
     style U fill:#ffff99

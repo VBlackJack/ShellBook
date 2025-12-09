@@ -30,7 +30,7 @@ Ce module présente les outils d'administration Windows Server :
 
 Windows Admin Center est l'interface moderne d'administration Microsoft :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              WINDOWS ADMIN CENTER                            │
 ├─────────────────────────────────────────────────────────────┤
@@ -215,7 +215,7 @@ C:\Admin\MaConsole.msc
 
 ### 3.1 Structure des Journaux
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              OBSERVATEUR D'ÉVÉNEMENTS                        │
 ├─────────────────────────────────────────────────────────────┤
@@ -464,7 +464,7 @@ sconfig  # Sur Server Core, alternative simplifiée
 
 ### 6.2 Fonctionnalités
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   SERVER MANAGER                             │
 ├─────────────────────────────────────────────────────────────┤
@@ -510,7 +510,7 @@ taskschd.msc
 
 ### 7.2 Créer une Tâche Planifiée (GUI)
 
-```
+```text
 1. Task Scheduler → Create Task
 2. General :
    - Nom de la tâche

@@ -310,7 +310,7 @@ chmod +x sync-folders.sh
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
   SYNCHRONISATION DE DOSSIERS
 ═══════════════════════════════════════════════════════════
@@ -352,7 +352,7 @@ Total bytes received: 1,234
 
 Exemple de ficyesterday `exclude.txt`:
 
-```
+```text
 # Ficyesterdays temporaires
 *.tmp
 *.temp

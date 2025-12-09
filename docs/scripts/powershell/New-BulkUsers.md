@@ -551,7 +551,7 @@ sleblanc,Sophie,Leblanc,sophie.leblanc@company.com,Finance,Comptable,Finance-Use
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
   BULK USER MANAGER
   Mode: AD

@@ -46,12 +46,12 @@ graph TD
 
     C1 -.->|Trust Bidirectionnel<br/>Transitif| C2
 
-    style A fill:#34495e,color:#fff
-    style C1 fill:#3498db,color:#fff
+    style A fill:#9C27B0,color:#fff
+    style C1 fill:#2196F3,color:#fff
     style C2 fill:#2980b9,color:#fff
-    style G1 fill:#e74c3c,color:#fff
-    style D2 fill:#2ecc71,color:#fff
-    style D1 fill:#f39c12,color:#fff
+    style G1 fill:#f44336,color:#fff
+    style D2 fill:#4CAF50,color:#fff
+    style D1 fill:#FF9800800800,color:#fff
 ```
 
 **Composants de la Hiérarchie :**
@@ -71,9 +71,9 @@ graph LR
     D1[Domain A] <-->|Trust Bidirectionnel<br/>Transitif| D2[Domain B]
     D2 -->|Trust Unidirectionnel<br/>Non-Transitif| D3[Domain External]
 
-    style D1 fill:#3498db,color:#fff
-    style D2 fill:#2ecc71,color:#fff
-    style D3 fill:#e67e22,color:#fff
+    style D1 fill:#2196F3,color:#fff
+    style D2 fill:#4CAF50,color:#fff
+    style D3 fill:#FF9800,color:#fff
 ```
 
 - **Bidirectionnel :** Les deux domaines s'authentifient mutuellement
@@ -104,11 +104,11 @@ flowchart TD
     H --> I
 
     style B fill:#95a5a6,color:#fff
-    style C fill:#3498db,color:#fff
-    style D fill:#2ecc71,color:#fff
-    style E fill:#f39c12,color:#fff
-    style G fill:#e74c3c,color:#fff
-    style I fill:#9b59b6,color:#fff
+    style C fill:#2196F3,color:#fff
+    style D fill:#4CAF50,color:#fff
+    style E fill:#FF9800800800,color:#fff
+    style G fill:#f44336,color:#fff
+    style I fill:#9C27B0,color:#fff
 ```
 
 **Règles de Précédence :**
@@ -129,9 +129,9 @@ graph TD
     E --> F[Password: 8 chars<br/>✓ OU GPO IT gagne]
     E --> G[Screen Lock: 5 min<br/>✓ Enforced gagne]
 
-    style D fill:#e74c3c,color:#fff
-    style B fill:#f39c12,color:#fff
-    style E fill:#2ecc71,color:#fff
+    style D fill:#f44336,color:#fff
+    style B fill:#FF9800800800,color:#fff
+    style E fill:#4CAF50,color:#fff
 ```
 
 **Commandes de Diagnostic :**
@@ -180,10 +180,10 @@ graph TD
     D --> D2["Get-Help <cmdlet><br/>Documentation"]
     D --> D3["Get-Member<br/>Propriétés & Méthodes"]
 
-    style A fill:#34495e,color:#fff
-    style B fill:#3498db,color:#fff
-    style C fill:#2ecc71,color:#fff
-    style D fill:#f39c12,color:#fff
+    style A fill:#9C27B0,color:#fff
+    style B fill:#2196F3,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#FF9800800800,color:#fff
 ```
 
 **Différence PowerShell vs Bash :**
@@ -214,10 +214,10 @@ flowchart LR
     C --> D["Select-Object<br/>Name, DisplayName"]
     D --> E["Format-Table<br/>Affichage"]
 
-    style A fill:#3498db,color:#fff
-    style B fill:#2ecc71,color:#fff
-    style C fill:#f39c12,color:#fff
-    style E fill:#9b59b6,color:#fff
+    style A fill:#2196F3,color:#fff
+    style B fill:#4CAF50,color:#fff
+    style C fill:#FF9800800800,color:#fff
+    style E fill:#9C27B0,color:#fff
 ```
 
 **Commandes de Découverte :**
@@ -273,10 +273,10 @@ graph LR
     D --> D2["EFS<br/>Encrypted File System"]
     D --> D3["Audit Logs<br/>Event Viewer"]
 
-    style A fill:#e74c3c,color:#fff
-    style B fill:#f39c12,color:#fff
-    style C fill:#3498db,color:#fff
-    style D fill:#2ecc71,color:#fff
+    style A fill:#f44336,color:#fff
+    style B fill:#FF9800800800,color:#fff
+    style C fill:#2196F3,color:#fff
+    style D fill:#4CAF50,color:#fff
 ```
 
 **Détail des Couches :**
@@ -366,10 +366,10 @@ flowchart TD
     D --> E[GPO s'applique<br/>Automatiquement]
     E --> F[Utilisateur Connecté<br/>Profil chargé]
 
-    style A fill:#3498db,color:#fff
-    style B fill:#2ecc71,color:#fff
-    style E fill:#f39c12,color:#fff
-    style F fill:#9b59b6,color:#fff
+    style A fill:#2196F3,color:#fff
+    style B fill:#4CAF50,color:#fff
+    style E fill:#FF9800800800,color:#fff
+    style F fill:#9C27B0,color:#fff
 ```
 
 ```powershell
@@ -412,9 +412,9 @@ flowchart TD
 
     J --> K[Vérifier avec<br/>gpresult /h report.html]
 
-    style A fill:#e74c3c,color:#fff
-    style E fill:#f39c12,color:#fff
-    style K fill:#2ecc71,color:#fff
+    style A fill:#f44336,color:#fff
+    style E fill:#FF9800800800,color:#fff
+    style K fill:#4CAF50,color:#fff
 ```
 
 ---

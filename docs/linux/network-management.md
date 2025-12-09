@@ -318,7 +318,7 @@ Le fichier `/etc/hosts` est consulté **avant** le DNS. Idéal pour :
 !!! tip "Ordre de Résolution"
     L'ordre est défini dans `/etc/nsswitch.conf` :
 
-    ```
+    ```yaml
     hosts: files dns
     ```
 

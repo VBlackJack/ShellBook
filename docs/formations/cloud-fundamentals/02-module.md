@@ -58,7 +58,7 @@ graph TB
     end
 
     style OP5 fill:#f44336,color:#fff
-    style IAAS3 fill:#ff9800,color:#fff
+    style IAAS3 fill:#FF9800800800,color:#fff
     style PAAS4 fill:#4caf50,color:#fff
     style SAAS5 fill:#2196f3,color:#fff
 ```
@@ -100,11 +100,11 @@ graph TB
         NETWORK["🌐 Réseau"]
     end
 
-    style APP fill:#ff9800,color:#fff
-    style DATA fill:#ff9800,color:#fff
-    style RUNTIME fill:#ff9800,color:#fff
-    style MIDDLEWARE fill:#ff9800,color:#fff
-    style OS fill:#ff9800,color:#fff
+    style APP fill:#FF9800800800,color:#fff
+    style DATA fill:#FF9800800800,color:#fff
+    style RUNTIME fill:#FF9800800800,color:#fff
+    style MIDDLEWARE fill:#FF9800800800,color:#fff
+    style OS fill:#FF9800800800,color:#fff
     style VIRT fill:#4caf50,color:#fff
     style SERVERS fill:#4caf50,color:#fff
     style STORAGE fill:#4caf50,color:#fff
@@ -149,8 +149,8 @@ graph TB
         NETWORK["🌐 Réseau"]
     end
 
-    style APP fill:#ff9800,color:#fff
-    style DATA fill:#ff9800,color:#fff
+    style APP fill:#FF9800800800,color:#fff
+    style DATA fill:#FF9800800800,color:#fff
     style RUNTIME fill:#4caf50,color:#fff
     style MIDDLEWARE fill:#4caf50,color:#fff
     style OS fill:#4caf50,color:#fff
@@ -199,8 +199,8 @@ graph TB
         INFRA["🏗️ Infrastructure"]
     end
 
-    style CONFIG fill:#ff9800,color:#fff
-    style USERS fill:#ff9800,color:#fff
+    style CONFIG fill:#FF9800800800,color:#fff
+    style USERS fill:#FF9800800800,color:#fff
     style APP fill:#4caf50,color:#fff
     style DATA fill:#4caf50,color:#fff
     style RUNTIME fill:#4caf50,color:#fff
@@ -258,10 +258,10 @@ graph TB
         P4["Hyperviseur"]
     end
 
-    style C1 fill:#ff9800,color:#fff
-    style C2 fill:#ff9800,color:#fff
-    style C3 fill:#ff9800,color:#fff
-    style C4 fill:#ff9800,color:#fff
+    style C1 fill:#FF9800800800,color:#fff
+    style C2 fill:#FF9800800800,color:#fff
+    style C3 fill:#FF9800800800,color:#fff
+    style C4 fill:#FF9800800800,color:#fff
     style S1 fill:#9c27b0,color:#fff
     style S2 fill:#9c27b0,color:#fff
     style S3 fill:#9c27b0,color:#fff
@@ -312,8 +312,8 @@ graph LR
         RUNTIME["⚙️ Runtime"]
     end
 
-    style FUNCTION fill:#ff9800,color:#fff
-    style CODE fill:#ff9800,color:#fff
+    style FUNCTION fill:#FF9800800800,color:#fff
+    style CODE fill:#FF9800800800,color:#fff
 ```
 
 | Provider | Service | Description |
@@ -343,8 +343,8 @@ graph LR
         NETWORK["🌐 Network"]
     end
 
-    style CONTAINER fill:#ff9800,color:#fff
-    style APP fill:#ff9800,color:#fff
+    style CONTAINER fill:#FF9800800800,color:#fff
+    style APP fill:#FF9800800800,color:#fff
     style ORCH fill:#4caf50,color:#fff
 ```
 
@@ -422,8 +422,8 @@ flowchart TD
     Q4 -->|Oui| FAAS["λ FaaS<br/>Serverless"]
     Q4 -->|Non| PAAS2["🍽️ PaaS<br/>Focus code"]
 
-    style IAAS fill:#ff9800,color:#fff
-    style IAAS2 fill:#ff9800,color:#fff
+    style IAAS fill:#FF9800800800,color:#fff
+    style IAAS2 fill:#FF9800800800,color:#fff
     style PAAS fill:#4caf50,color:#fff
     style PAAS2 fill:#4caf50,color:#fff
     style FAAS fill:#2196f3,color:#fff
@@ -465,7 +465,7 @@ graph TB
     K8S --> MONITOR
 
     style WEB fill:#4caf50,color:#fff
-    style K8S fill:#ff9800,color:#fff
+    style K8S fill:#FF9800800800,color:#fff
     style SQL fill:#4caf50,color:#fff
     style MONITOR fill:#2196f3,color:#fff
 ```
@@ -567,7 +567,7 @@ graph TB
     - Contrôle total sur l'OS et la configuration Oracle
 
     **Services cloud :**
-    ```
+    ```text
     | Composant | AWS | Azure | GCP |
     |-----------|-----|-------|-----|
     | VMs       | EC2 | Virtual Machines | Compute Engine |
@@ -629,7 +629,7 @@ graph TB
     - Accès mobile natif
 
     **Solutions SaaS recommandées :**
-    ```
+    ```text
     Leaders du marché :
     • Salesforce (leader, le plus complet)
     • HubSpot (PME, marketing intégré)

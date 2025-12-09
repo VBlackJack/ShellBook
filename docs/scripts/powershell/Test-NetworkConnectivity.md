@@ -390,7 +390,7 @@ Write-Host ("=" * 60) -ForegroundColor Cyan
 
 ## Sortie Exemple
 
-```
+```text
 ============================================================
         NETWORK CONNECTIVITY DIAGNOSTIC
 ============================================================

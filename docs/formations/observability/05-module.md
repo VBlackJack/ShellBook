@@ -499,7 +499,7 @@ inhibit_rules:
 
 ### 5.1 Design des Alertes
 
-```
+```text
 BONNES PRATIQUES ALERTING
 ═════════════════════════
 

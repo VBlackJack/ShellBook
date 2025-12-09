@@ -144,10 +144,10 @@ flowchart TD
     PROMOTE -->|4. Promote| APPLY
     APPLY -->|5. Remediate| VERIFY
 
-    style CVE fill:#faa,stroke:#333,stroke-width:2px
+    style CVE fill:#f44336,stroke:#333,stroke-width:2px
     style VENDOR fill:#fda,stroke:#333,stroke-width:2px
-    style INCREMENTAL fill:#afa,stroke:#333,stroke-width:3px
-    style APPLY fill:#bbf,stroke:#333,stroke-width:2px
+    style INCREMENTAL fill:#4CAF50,stroke:#333,stroke-width:3px
+    style APPLY fill:#2196F3,stroke:#333,stroke-width:2px
 ```
 
 **Étapes :**
@@ -236,7 +236,7 @@ hammer content-view version list \
 
 **Sortie attendue :**
 
-```
+```text
 ---|-----------|---------|
 ID | NAME      | VERSION |
 ---|-----------|---------|
@@ -431,7 +431,7 @@ hammer content-view version list \
 
 **Sortie exemple :**
 
-```
+```text
 ---|-----------|---------|-------------------|
 ID | NAME      | VERSION | LIFECYCLE ENVS    |
 ---|-----------|---------|-------------------|
@@ -449,7 +449,7 @@ hammer erratum list \
 
 **Sortie exemple :**
 
-```
+```text
 ---|------------------|------|----------|
 ID | ERRATA ID        | TYPE | TITLE    |
 ---|------------------|------|----------|
@@ -477,7 +477,7 @@ hammer content-view version incremental-update \
 
 **Sortie attendue :**
 
-```
+```sql
 Incremental update is being performed. To monitor the progress, run:
   hammer task progress --id 12345
 ```
@@ -496,7 +496,7 @@ hammer content-view version list --content-view "CV-Rocky9"
 
 **Sortie attendue :**
 
-```
+```text
 ---|-----------|---------|-------------------|
 ID | NAME      | VERSION | LIFECYCLE ENVS    |
 ---|-----------|---------|-------------------|
@@ -521,7 +521,7 @@ hammer host errata list \
 
 **Sortie exemple :**
 
-```
+```text
 ---|------------------|---------|----------|------|
 ID | ERRATA ID        | TYPE    | TITLE    | INSTALLABLE |
 ---|------------------|---------|----------|------|
@@ -550,7 +550,7 @@ hammer erratum info \
 
 **Sortie exemple :**
 
-```
+```text
 ID:                42
 Errata ID:         RHSA-2024:1234
 Type:              security
@@ -577,7 +577,7 @@ hammer host errata apply \
 
 **Sortie attendue :**
 
-```
+```text
 Errata is being applied to host web-server-01.example.com
   To monitor the progress, run:
   hammer task progress --id 67890
@@ -688,7 +688,7 @@ hammer job-invocation create \
 
 **Sortie attendue :**
 
-```
+```text
 Job invocation 123 created
   To monitor the progress, run:
   hammer job-invocation info --id 123
@@ -917,7 +917,7 @@ hammer erratum list \
 
 **Sortie attendue :**
 
-```
+```text
 ---|------------------|----------|----------|
 ID | ERRATA ID        | TYPE     | SEVERITY |
 ---|------------------|----------|----------|
@@ -947,7 +947,7 @@ hammer content-view version incremental-update \
 
 **Sortie attendue :**
 
-```
+```sql
 Incremental update is being performed. To monitor the progress, run:
   hammer task progress --id 99999
 ```
@@ -960,7 +960,7 @@ hammer content-view version list --content-view "CV-RHEL9"
 
 **Sortie attendue :**
 
-```
+```text
 ---|---------|---------|-------------------|
 ID | NAME    | VERSION | LIFECYCLE ENVS    |
 ---|---------|---------|-------------------|
@@ -980,7 +980,7 @@ hammer host-collection erratum install \
 
 **Sortie attendue :**
 
-```
+```text
 Errata is being installed on 150 hosts.
   To monitor the progress, run:
   hammer task list --search "label = Actions::RemoteExecution::RunHostsJob"
@@ -998,7 +998,7 @@ hammer host list \
 
 **Sortie attendue (après patching complet) :**
 
-```
+```text
 0 hosts found
 ```
 
@@ -1229,7 +1229,7 @@ hammer host list \
 
     **Sortie attendue :**
 
-    ```
+    ```sql
     =========================================
     🚨 ZERO-DAY PATCH AUTOMATION
     =========================================

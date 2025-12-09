@@ -29,11 +29,11 @@ flowchart LR
     C -->|Deploy| D[Production<br/>💰💰 10 000€]
     D -->|Incident| E[Downtime<br/>💰💰💰 100 000€]
 
-    style A fill:#107c10,stroke:#0b5a0d,color:#fff
-    style B fill:#ffb900,stroke:#d39300,color:#000
-    style C fill:#ff8c00,stroke:#d97400,color:#fff
-    style D fill:#e81123,stroke:#b00016,color:#fff
-    style E fill:#5c2d91,stroke:#3d1e5f,color:#fff
+    style A fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style B fill:#FF9800800800,stroke:#d39300,color:#000
+    style C fill:#FF9800800800,stroke:#d97400,color:#fff
+    style D fill:#f44336,stroke:#b00016,color:#fff
+    style E fill:#9C27B0,stroke:#3d1e5f,color:#fff
 ```
 
 **Coût croissant d'un bug :**
@@ -127,8 +127,8 @@ flowchart LR
     B -->|✅ All Green| D[Merge autorisé]
     D --> E[Deploy Staging]
 
-    style C fill:#e81123,stroke:#b00016,color:#fff
-    style D fill:#107c10,stroke:#0b5a0d,color:#fff
+    style C fill:#f44336,stroke:#b00016,color:#fff
+    style D fill:#4CAF50,stroke:#0b5a0d,color:#fff
 ```
 
 ## Les Outils du SysAdmin
@@ -207,7 +207,7 @@ shellcheck deploy.sh
 
 **Sortie :**
 
-```
+```bash
 In deploy.sh line 7:
 echo Deploying $APP_NAME to $ENV
                ^--------^ SC2086: Double quote to prevent globbing and word splitting.
@@ -329,7 +329,7 @@ yamllint playbook.yml
 
 **Sortie :**
 
-```
+```text
 playbook.yml
   10:5      error    wrong indentation: expected 2 but found 4  (indentation)
   18:7      warning  line too long (106 > 80 characters)  (line-length)
@@ -698,7 +698,7 @@ jobs:
 
     **Premier Push (Red) :**
 
-    ```
+    ```bash
     ❌ Lint & Quality
       ❌ ShellCheck (12s)
         ✅ Checkout code
@@ -717,7 +717,7 @@ jobs:
 
     **Second Push (Green) :**
 
-    ```
+    ```text
     ✅ Lint & Quality
       ✅ ShellCheck (10s)
         ✅ Checkout code

@@ -39,7 +39,7 @@ Remove-SmbShare -Name "OldShare" -Force
 
 ### Permissions SMB vs NTFS
 
-```
+```text
 PERMISSIONS SMB VS NTFS
 ══════════════════════════════════════════════════════════
 

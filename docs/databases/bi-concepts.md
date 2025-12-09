@@ -283,7 +283,7 @@ Comment gérer les changements dans les dimensions au fil du temps ?
 
 **Flux moderne** : Transformation après chargement
 
-```
+```text
 Sources → [Fivetran, Airbyte] → Data Lake/Warehouse → [dbt, SQL] → Transformation
 ```
 
@@ -307,7 +307,7 @@ Sources → [Fivetran, Airbyte] → Data Lake/Warehouse → [dbt, SQL] → Trans
 
 L'écosystème actuel privilégie l'agilité et le SQL.
 
-```
+```text
 ┌──────────────────────────────────────────────────────┐
 │  VISUALISATION                                        │
 │  Power BI, Tableau, Metabase, Superset, Looker      │
@@ -354,7 +354,7 @@ L'écosystème actuel privilégie l'agilité et le SQL.
 
 **Architecture moderne** : Les deux coexistent. Le Data Lake stocke tout en brut, le Data Warehouse expose les données prêtes à l'analyse.
 
-```
+```text
 Data Lake (S3) → ETL/ELT → Data Warehouse → BI Tools
 ```
 

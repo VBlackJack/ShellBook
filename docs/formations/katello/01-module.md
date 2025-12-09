@@ -89,16 +89,16 @@ flowchart TB
     KATELLO -.-> PULP
     KATELLO -.-> CANDLEPIN
 
-    style UPSTREAM fill:#0078D4,color:#fff
-    style KATELLO fill:#107C10,color:#fff
-    style FOREMAN fill:#FFB900,color:#000
-    style PULP fill:#FF8C00,color:#fff
-    style CANDLEPIN fill:#E81123,color:#fff
-    style LIBRARY fill:#5C2D91,color:#fff
-    style DEV fill:#FFB900,color:#000
-    style TEST fill:#FF8C00,color:#fff
-    style PROD fill:#E81123,color:#fff
-    style CLIENTS fill:#107C10,color:#fff
+    style UPSTREAM fill:#2196F3,color:#fff
+    style KATELLO fill:#4CAF50,color:#fff
+    style FOREMAN fill:#FF9800800800,color:#000
+    style PULP fill:#FF9800800800,color:#fff
+    style CANDLEPIN fill:#f44336,color:#fff
+    style LIBRARY fill:#9C27B0,color:#fff
+    style DEV fill:#FF9800800800,color:#000
+    style TEST fill:#FF9800800800,color:#fff
+    style PROD fill:#f44336,color:#fff
+    style CLIENTS fill:#4CAF50,color:#fff
 ```
 
 ---
@@ -644,7 +644,7 @@ Créez un script `install-katello.sh` qui automatise l'installation complète :
     ```
 
     **Output attendu (extrait)** :
-    ```
+    ```bash
     =========================================
       INSTALLATION KATELLO - ROCKY LINUX 9
     =========================================

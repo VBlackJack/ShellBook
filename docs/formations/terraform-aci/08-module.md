@@ -103,7 +103,7 @@ graph TB
         EPG1 -.->|"❌ Bloqué"| EPG3
     end
 
-    style VLAN1 fill:#ff9800,color:#fff
+    style VLAN1 fill:#FF9800800800,color:#fff
     style EPG1 fill:#4caf50,color:#fff
     style EPG2 fill:#2196f3,color:#fff
     style EPG3 fill:#f44336,color:#fff
@@ -349,7 +349,7 @@ graph TB
     VZANY -->|"Contract: common-services"| NTP
     MON -->|"Contract: monitoring"| VZANY
 
-    style VZANY fill:#ff9800,color:#fff
+    style VZANY fill:#FF9800800800,color:#fff
     style DNS fill:#9c27b0,color:#fff
     style NTP fill:#9c27b0,color:#fff
     style MON fill:#9c27b0,color:#fff
@@ -546,7 +546,7 @@ graph TB
     VM2 -->|"Auto-classé"| DEV
 
     style PROD fill:#4caf50,color:#fff
-    style DEV fill:#ff9800,color:#fff
+    style DEV fill:#FF9800800800,color:#fff
 ```
 
 ### Terraform : uSeg EPG
@@ -889,7 +889,7 @@ resource "aci_epg_to_contract" "card_db_taboo" {
 
     **Architecture :**
 
-    ```
+    ```text
     External → WAF → Web → API → Database
 
     Règles :

@@ -12,7 +12,7 @@ Automatisation avec le Planificateur de tâches Windows : création, triggers, e
 
 ## Concepts
 
-```
+```text
 ARCHITECTURE TASK SCHEDULER
 ══════════════════════════════════════════════════════════
 
@@ -392,7 +392,7 @@ $action = New-ScheduledTaskAction -Execute "PowerShell.exe" `
 
 ### Preferences Scheduled Tasks
 
-```
+```sql
 Computer Configuration > Preferences > Control Panel Settings > Scheduled Tasks
 
 Actions possibles :
@@ -518,7 +518,7 @@ Get-WinEvent -LogName "Microsoft-Windows-TaskScheduler/Operational" -MaxEvents 1
 
 ### Codes de Retour Courants
 
-```
+```text
 CODES DE RÉSULTAT (LastTaskResult)
 ══════════════════════════════════════════════════════════
 

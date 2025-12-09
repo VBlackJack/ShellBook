@@ -24,7 +24,7 @@ tags:
 
 ### 1.1 Concept
 
-```
+```text
 TIERING MODEL - SEPARATION DES PRIVILEGES
 ══════════════════════════════════════════
 

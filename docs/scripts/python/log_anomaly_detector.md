@@ -746,7 +746,7 @@ if __name__ == "__main__":
 
 ## Exemple de Sortie
 
-```
+```text
 🔍 Log Anomaly Detector
 
 Analyzing: /var/log/syslog

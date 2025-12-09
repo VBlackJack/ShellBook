@@ -130,5 +130,3 @@ Pour gérer des milliers d'utilisateurs, on ne crée pas des comptes Linux locau
 ### Challenge
 Essayez d'intégrer **Rspamd** (Anti-spam) à cette architecture.
 C'est le standard moderne pour filtrer les mails avant qu'ils n'arrivent à Dovecot.
-
-```

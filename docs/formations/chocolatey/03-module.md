@@ -37,7 +37,7 @@ Un **repository Chocolatey privé** est un serveur NuGet interne qui :
 
 **Cas d'usage typique :**
 
-```
+```text
 Client Chocolatey
     ↓ (Priority 1)
 Repository Interne (repo.corp.local)
@@ -139,9 +139,9 @@ flowchart LR
     REPO -->|4. choco install| CLIENT3
     INTERNET -.->|5. Fallback BLOQUÉ| REPO
 
-    style REPO fill:#f9f,stroke:#333,stroke-width:3px
-    style INTERNET fill:#faa,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5
-    style BUILD fill:#bbf,stroke:#333,stroke-width:2px
+    style REPO fill:#9C27B0,stroke:#333,stroke-width:3px
+    style INTERNET fill:#f44336,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5
+    style BUILD fill:#2196F3,stroke:#333,stroke-width:2px
 ```
 
 **Workflow :**
@@ -160,7 +160,7 @@ flowchart LR
 
 ![Chocolatey Package Deployment Flow](../../assets/diagrams/chocolatey-package-deployment-flow.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │ DMZ / Subnet Admin (VLAN 10)                       │
 │                                                     │
@@ -232,7 +232,7 @@ choco install chocolatey-server -y
 
 **Sortie attendue :**
 
-```
+```text
 Chocolatey v2.2.2
 Installing the following packages:
 chocolatey-server
@@ -271,7 +271,7 @@ Invoke-WebRequest -Uri http://localhost/chocolatey
 
 **Sortie attendue :**
 
-```
+```xml
 StatusCode        : 200
 StatusDescription : OK
 Content           : <html>...</html>
@@ -279,7 +279,7 @@ Content           : <html>...</html>
 
 **Accéder depuis un navigateur :**
 
-```
+```text
 http://localhost/chocolatey
 ```
 
@@ -348,7 +348,7 @@ $appPool.processModel.identityType
 
 **Sortie attendue :**
 
-```
+```text
 ApplicationPoolIdentity
 ```
 
@@ -383,7 +383,7 @@ Par défaut, le serveur écoute sur `http://localhost/chocolatey`.
 
 1. **Créer un enregistrement DNS :**
 
-   ```
+   ```text
    repo.corp.local → 192.168.1.100
    ```
 
@@ -448,7 +448,7 @@ choco push "C:\Chocolatey\corpapp\corpapp.1.0.0.nupkg" `
 
 **Sortie attendue :**
 
-```
+```text
 Attempting to push corpapp.1.0.0.nupkg to http://localhost/chocolatey
 corpapp 1.0.0 was pushed successfully to http://localhost/chocolatey
 ```
@@ -459,7 +459,7 @@ corpapp 1.0.0 was pushed successfully to http://localhost/chocolatey
 
 **Via navigateur :**
 
-```
+```text
 http://localhost/chocolatey/api/v2/Packages
 ```
 
@@ -479,7 +479,7 @@ Get-ChildItem "C:\tools\chocolatey-server\App_Data\Packages"
 
 **Sortie attendue :**
 
-```
+```text
 corpapp.1.0.0.nupkg
 ```
 
@@ -495,7 +495,7 @@ choco source list
 
 **Sortie attendue :**
 
-```
+```text
 Chocolatey v2.2.2
 chocolatey - https://community.chocolatey.org/api/v2/ | Priority 0|Bypass Proxy - False|Self-Service - False|Admin Only - False.
 ```
@@ -521,7 +521,7 @@ choco source add `
 
 **Sortie attendue :**
 
-```
+```text
 Added internal-repo - http://repo.corp.local/chocolatey (Priority 1)
 ```
 
@@ -533,7 +533,7 @@ choco source list
 
 **Sortie attendue :**
 
-```
+```text
 internal-repo - http://repo.corp.local/chocolatey | Priority 1
 chocolatey - https://community.chocolatey.org/api/v2/ | Priority 0
 ```
@@ -576,7 +576,7 @@ choco source list
 
 **Sortie attendue :**
 
-```
+```text
 internal-repo - http://repo.corp.local/chocolatey | Priority 0
 chocolatey - https://community.chocolatey.org/api/v2/ [Disabled] | Priority 10
 ```
@@ -591,7 +591,7 @@ choco install corpapp -y
 
 **Sortie attendue :**
 
-```
+```bash
 Installing the following packages:
 corpapp
 By installing, you accept licenses for the packages.
@@ -691,7 +691,7 @@ Set-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='c
 
 **Emplacement des logs :**
 
-```
+```text
 C:\inetpub\logs\LogFiles\W3SVC*\
 ```
 
@@ -1275,7 +1275,7 @@ choco source list
 
     **Sortie attendue :**
 
-    ```
+    ```text
     =========================================
     🍫 CHOCOLATEY SERVER SETUP
     =========================================

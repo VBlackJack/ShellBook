@@ -86,7 +86,7 @@ Contenu...
 ??? quote "Solution"
     ```bash
     # Code solution
-    ```
+    ```text
 
 ---
 
@@ -130,7 +130,7 @@ Utiliser les admonitions MkDocs Material de manière cohérente :
 ??? quote "Solution (cliquer pour révéler)"
     ```bash
     # Code de la solution
-    ```
+    ```text
 ```
 
 ---
@@ -143,12 +143,12 @@ Utiliser les admonitions MkDocs Material de manière cohérente :
 # ✅ Correct
 ```bash
 echo "Hello World"
-```
+```text
 
 # ❌ Incorrect
 ```
 echo "Hello World"
-```
+```text
 ```
 
 ### Langages courants
@@ -210,8 +210,8 @@ graph TD
 
     style A fill:#4CAF50,color:#fff
     style B fill:#2196F3,color:#fff
-    style C fill:#FF9800,color:#fff
-```
+    style C fill:#FF9800800800,color:#fff
+```text
 ```
 
 | Niveau | Couleur | Hex |

@@ -13,7 +13,7 @@ Guide complet de WSL2 : pourquoi l'utiliser, comment le configurer, et cas d'usa
 
 ## Pourquoi WSL2 ?
 
-```
+```text
 LE PROBLÈME QUE WSL2 RÉSOUT
 ══════════════════════════════════════════════════════════
 
@@ -451,7 +451,7 @@ code .
 
 ### Docker Desktop (Méthode Simple)
 
-```
+```bash
 Docker Desktop utilise WSL2 comme backend par défaut.
 
 Installation:

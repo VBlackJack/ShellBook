@@ -39,7 +39,7 @@ Formation complète sur l'écosystème Podman (Red Hat). De l'installation à la
 
 ## Programme (15 heures)
 
-```
+```text
 PODMAN MASTERY - PARCOURS
 ══════════════════════════════════════════════════════════
 

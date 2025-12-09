@@ -101,7 +101,7 @@ password = grafana_password
 
 ### 1.3 Datasources
 
-```
+```text
 DATASOURCES SUPPORTÉES
 ══════════════════════
 
@@ -131,7 +131,7 @@ SQL                         CLOUD                   AUTRES
 
 ### 2.2 Types de Panels
 
-```
+```text
 PANELS GRAFANA
 ══════════════
 
@@ -317,7 +317,7 @@ Traces         │ Visualisation de traces (Tempo)
 
 ### 3.1 Types de Variables
 
-```
+```text
 TYPES DE VARIABLES
 ══════════════════
 
@@ -420,7 +420,7 @@ rate(http_requests_total[$__rate_interval])
 
 ### 4.1 Transformations Courantes
 
-```
+```text
 TRANSFORMATIONS GRAFANA
 ═══════════════════════
 
@@ -514,7 +514,7 @@ Binary operation │ Opérations binaires
 
 ### 5.1 Structure
 
-```
+```text
 grafana/provisioning/
 ├── dashboards/
 │   ├── default.yml           # Configuration provider
@@ -723,7 +723,7 @@ groups:
 
 ### 6.2 Best Practices
 
-```
+```text
 BONNES PRATIQUES DASHBOARDS
 ═══════════════════════════
 

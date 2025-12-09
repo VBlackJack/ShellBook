@@ -12,7 +12,7 @@ Outils et techniques de monitoring des performances Windows.
 
 ## Outils Intégrés
 
-```
+```text
 OUTILS DE PERFORMANCE WINDOWS
 ══════════════════════════════════════════════════════════
 

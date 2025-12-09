@@ -99,13 +99,13 @@ graph TB
     end
 
     style L3OUT fill:#2196f3,color:#fff
-    style EXTEPG fill:#e91e63,color:#fff
+    style EXTEPG fill:#9C27B0,color:#fff
     style CONTRACT fill:#9c27b0,color:#fff
 ```
 
 ### Hiérarchie des Objets
 
-```
+```text
 L3Out (fvL3Out)
 ├── Logical Node Profile (l3extLNodeP)
 │   └── Logical Interface Profile (l3extLIfP)
@@ -137,7 +137,7 @@ graph LR
     ROUTER --> SUBNET
 
     style LEAF fill:#4caf50,color:#fff
-    style ROUTER fill:#ff9800,color:#fff
+    style ROUTER fill:#FF9800800800,color:#fff
 ```
 
 ### Terraform : L3Out Statique
@@ -265,7 +265,7 @@ graph LR
     LEAF <-->|"eBGP Peering<br/>10.0.0.0/30"| ROUTER
 
     style LEAF fill:#4caf50,color:#fff
-    style ROUTER fill:#ff9800,color:#fff
+    style ROUTER fill:#FF9800800800,color:#fff
 ```
 
 ### Terraform : L3Out BGP
@@ -507,7 +507,7 @@ graph TB
     PARTNER -->|"Contract: partner-to-api<br/>API ports"| API
 
     style INET fill:#f44336,color:#fff
-    style PARTNER fill:#ff9800,color:#fff
+    style PARTNER fill:#FF9800800800,color:#fff
     style WEB fill:#4caf50,color:#fff
 ```
 
@@ -679,7 +679,7 @@ resource "aci_contract_subject" "nat_subject" {
 
     **Scénario :**
 
-    ```
+    ```text
     ACI Fabric (AS 65001)
     ├── Border Leaf 101
     │   └── Interface eth1/49: 10.255.0.2/30
@@ -885,7 +885,7 @@ resource "aci_contract_subject" "nat_subject" {
 
     ### Composants L3Out
 
-    ```
+    ```text
     L3Out
     ├── Logical Node Profile (quels Leafs)
     │   └── Logical Interface Profile (quelles interfaces)

@@ -355,7 +355,7 @@ echo "cache/" >> exclude.txt
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
   BACKUP: documents
 ═══════════════════════════════════════════════════════════
@@ -385,7 +385,7 @@ echo "cache/" >> exclude.txt
 
 Exemple de ficyesterday `exclude.txt`:
 
-```
+```text
 # Ficyesterdays temporaires
 *.tmp
 *.temp

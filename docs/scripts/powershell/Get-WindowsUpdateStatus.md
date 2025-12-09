@@ -568,7 +568,7 @@ catch {
 
 ## Exemple de Sortie
 
-```
+```bash
 === Windows Update Status Diagnostic ===
 
 === Analyzing: SRV-PROD01 ===

@@ -34,8 +34,8 @@ graph TB
 
     AUTO --> INFRA
 
-    style TF fill:#7b42bc,color:#fff
-    style ACI fill:#049fd9,color:#fff
+    style TF fill:#9C27B0,color:#fff
+    style ACI fill:#2196F3,color:#fff
     style INFRA fill:#4caf50,color:#fff
 ```
 
@@ -59,7 +59,7 @@ graph LR
     CLICK --> SLOW
 
     style ERROR fill:#f44336,color:#fff
-    style DRIFT fill:#ff9800,color:#fff
+    style DRIFT fill:#FF9800800800,color:#fff
 ```
 
 ### La Solution : Terraform + ACI
@@ -75,7 +75,7 @@ graph LR
 
     CODE --> REVIEW --> CICD --> CONSISTENT
 
-    style CODE fill:#7b42bc,color:#fff
+    style CODE fill:#9C27B0,color:#fff
     style CONSISTENT fill:#4caf50,color:#fff
 ```
 
@@ -100,7 +100,7 @@ graph TB
 
     style NET fill:#2196f3,color:#fff
     style DEVOPS fill:#4caf50,color:#fff
-    style ARCH fill:#ff9800,color:#fff
+    style ARCH fill:#FF9800800800,color:#fff
     style SEC fill:#f44336,color:#fff
 ```
 

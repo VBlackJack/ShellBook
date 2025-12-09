@@ -120,7 +120,7 @@ Cette formation s'adresse aux **professionnels de l'automatisation IT** :
 
 **Structure d'un role :**
 
-```
+```text
 roles/nginx/
 ├── tasks/
 │   └── main.yml          # Tasks principales

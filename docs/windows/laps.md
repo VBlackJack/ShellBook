@@ -13,7 +13,7 @@ Gestion automatique des mots de passe administrateur local avec LAPS (Legacy et 
 
 ## Concepts
 
-```
+```text
 POURQUOI LAPS ?
 ══════════════════════════════════════════════════════════
 
@@ -32,7 +32,7 @@ Avec LAPS :
 
 ### Legacy LAPS vs Windows LAPS
 
-```
+```text
 COMPARAISON
 ══════════════════════════════════════════════════════════
 
@@ -109,7 +109,7 @@ Find-AdmPwdExtendedRights -Identity "OU=Workstations,DC=corp,DC=local"
 
 ### Déploiement Client (GPO)
 
-```
+```text
 1. Copier les ADMX dans le Central Store :
    \\corp.local\SYSVOL\corp.local\Policies\PolicyDefinitions\
 
@@ -221,7 +221,7 @@ Get-LapsADOrganizationalUnit -Identity "OU=Servers,DC=corp,DC=local"
 
 ### Configuration GPO
 
-```
+```bash
 Computer Configuration > Administrative Templates >
 System > LAPS :
 

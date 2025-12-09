@@ -38,7 +38,7 @@ graph LR
     C --> D[CI/CD]
     D --> E[Infrastructure]
 
-    style A fill:#f9f,stroke:#333
+    style A fill:#9C27B0,stroke:#333
     style E fill:#9f9,stroke:#333
 ```
 
@@ -78,7 +78,7 @@ ansible --version
 
 ### Structure Projet
 
-```
+```text
 ansible-project/
 ├── ansible.cfg
 ├── inventory/
@@ -292,7 +292,7 @@ terraform version
 
 ### Structure Projet
 
-```
+```text
 terraform-project/
 ├── main.tf
 ├── variables.tf
@@ -681,7 +681,7 @@ spec:
 
 ### Structure Repository GitOps
 
-```
+```text
 myapp-manifests/
 ├── base/
 │   ├── deployment.yaml
@@ -820,7 +820,7 @@ jobs:
 
 ### Workflow IaC
 
-```
+```bash
 1. Code   → Écrire l'infrastructure en code
 2. Review → Pull Request + Review
 3. Plan   → terraform plan / ansible --check

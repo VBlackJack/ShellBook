@@ -711,7 +711,7 @@ Créez un fichier `ARCHITECTURE.md` avec :
         FE --> BE
         BE --> SQL
         BE --> NAT
-    ```
+    ```text
 
     ## Ressources
 

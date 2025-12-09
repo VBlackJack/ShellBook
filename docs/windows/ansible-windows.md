@@ -21,7 +21,7 @@ Piloter Windows sans agent SSH : Configuration WinRM et modules natifs.
 
 **Sur Windows :** SSH n'est pas le standard natif. Windows utilise **WinRM** (Windows Remote Management).
 
-```
+```text
 ┌──────────────────┐            WinRM (5985/5986)           ┌──────────────────┐
 │ Ansible Control  │ ──────────────────────────────────────► │  Windows Host    │
 │    (Linux)       │            HTTP/HTTPS                   │   (WinRM enabled)│

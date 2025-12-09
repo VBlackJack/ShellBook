@@ -432,7 +432,7 @@ sudo ./check-permissions.sh -v
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
   VÉRIFICATION DES PERMISSIONS
 ═══════════════════════════════════════════════════════════

@@ -196,7 +196,7 @@ choco new corpapp
 
 **Sortie :**
 
-```
+```text
 Creating a new package specification at G:\Chocolatey\corpapp
 Generating template to a file at 'G:\Chocolatey\corpapp\corpapp.nuspec'
 Generating template to a file at 'G:\Chocolatey\corpapp\tools\chocolateyinstall.ps1'
@@ -206,7 +206,7 @@ Successfully generated corpapp package specification files
 
 **Structure créée :**
 
-```
+```text
 corpapp/
 ├── corpapp.nuspec
 ├── tools/
@@ -262,7 +262,7 @@ Get-FileHash "C:\Temp\CorpApp.msi" -Algorithm SHA256
 
 **Sortie :**
 
-```
+```text
 Algorithm       Hash                                                                   Path
 ---------       ----                                                                   ----
 SHA256          E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855       C:\Temp\CorpApp.msi
@@ -331,7 +331,7 @@ choco pack
 
 **Sortie :**
 
-```
+```sql
 Attempting to build package from 'corpapp.nuspec'.
 Successfully created package 'C:\Chocolatey\corpapp\corpapp.1.0.0.nupkg'
 ```
@@ -361,7 +361,7 @@ choco list --local-only corpapp
 
 **Sortie attendue :**
 
-```
+```text
 Chocolatey v2.2.2
 corpapp 1.0.0
 1 packages installed.
@@ -383,7 +383,7 @@ choco list --local-only corpapp
 
 **Sortie attendue :**
 
-```
+```text
 Chocolatey v2.2.2
 0 packages installed.
 ```
@@ -528,7 +528,7 @@ if ($key.Count -eq 1) {
 
 **Sortie exemple :**
 
-```
+```text
 Product Code: {12345678-1234-1234-1234-123456789012}
 ```
 
@@ -620,7 +620,7 @@ Get-FileHash -Path "C:\Temp\installer.exe" -Algorithm SHA256 | Select-Object Has
 
 **Sortie :**
 
-```
+```text
 Hash
 ----
 E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
@@ -655,7 +655,7 @@ Chocolatey utilise **SemVer** : `MAJOR.MINOR.PATCH`
 
 **Format :**
 
-```
+```text
 1.2.3
 └─┬─┘
   └─ MAJOR : Breaking changes (incompatibilité)
@@ -674,7 +674,7 @@ Chocolatey utilise **SemVer** : `MAJOR.MINOR.PATCH`
 
 **Pré-release :**
 
-```
+```text
 1.0.0-beta
 1.0.0-rc1
 1.0.0-alpha.2
@@ -682,7 +682,7 @@ Chocolatey utilise **SemVer** : `MAJOR.MINOR.PATCH`
 
 **Trier les versions :**
 
-```
+```text
 1.0.0-alpha < 1.0.0-beta < 1.0.0-rc1 < 1.0.0
 ```
 
@@ -806,7 +806,7 @@ Install-ChocolateyPackage `
 
 **Exemple :**
 
-```
+```text
 corpapp/
 ├── corpapp.nuspec
 └── tools/
@@ -943,7 +943,7 @@ choco pack
 
 **Sortie attendue :**
 
-```
+```text
 Successfully created package 'C:\...\corpapp\corpapp.1.0.0.nupkg'
 ```
 
@@ -1124,7 +1124,7 @@ choco list --local-only corpapp
 
     **Structure Finale du Package :**
 
-    ```
+    ```text
     corpapp/
     ├── corpapp.nuspec
     ├── corpapp.1.0.0.nupkg  ← Fichier généré par choco pack

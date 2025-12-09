@@ -12,7 +12,7 @@ Configuration et utilisation de PowerShell Remoting (WinRM) pour l'administratio
 
 ## Architecture
 
-```
+```text
 POWERSHELL REMOTING ARCHITECTURE
 ══════════════════════════════════════════════════════════
 
@@ -290,7 +290,7 @@ Get-PSSessionConfiguration | Where-Object { $_.RunAsVirtualAccount }
 
 ### Déploiement WinRM
 
-```
+```text
 Computer Configuration > Policies > Administrative Templates >
 Windows Components > Windows Remote Management (WinRM)
 

@@ -264,7 +264,7 @@ sudo systemctl status falcon-sensor
 
 **Output attendu :**
 
-```
+```text
 ● falcon-sensor.service - CrowdStrike Falcon Sensor
    Loaded: loaded (/usr/lib/systemd/system/falcon-sensor.service; enabled; vendor preset: disabled)
    Active: active (running) since Mon 2024-11-25 10:30:00 CET; 5s ago
@@ -349,7 +349,7 @@ sudo tail -f /var/log/messages | grep falcon
 
 **Événements attendus :**
 
-```
+```text
 Nov 25 10:30:05 hostname falcond: Sensor started successfully
 Nov 25 10:30:07 hostname falcond: Connected to CrowdStrike Cloud
 Nov 25 10:30:10 hostname falcond: Registration successful (AID: 1234567890abcdef...)
@@ -643,7 +643,7 @@ sudo journalctl -u falcon-sensor | grep -i error
 
 **Événements positifs :**
 
-```
+```sql
 Connected to CrowdStrike Cloud
 Registration successful
 Sensor update downloaded
@@ -651,7 +651,7 @@ Sensor update downloaded
 
 **Événements négatifs :**
 
-```
+```bash
 Failed to connect to cloud (timeout)
 Connection refused (port 443 blocked?)
 Invalid CID error
@@ -1064,7 +1064,7 @@ sudo systemctl restart falcon-sensor
 
 **Symptôme :**
 
-```
+```text
 Error: Invalid CID format
 Installation failed
 ```
@@ -1078,7 +1078,7 @@ Le CID fourni est incorrect (mauvaise longueur, caractères invalides).
 1. Vérifier le CID depuis la console Falcon :
    - **Support** → **Sensor Downloads** → Copier le CID exact
 2. Le CID doit contenir le suffix `-12` (ou autre chiffre) à la fin :
-   ```
+   ```text
    Format correct: 1234567890ABCDEF1234567890ABCDEF-12
    Format incorrect: 1234567890ABCDEF1234567890ABCDEF  ← Manque le suffix
    ```

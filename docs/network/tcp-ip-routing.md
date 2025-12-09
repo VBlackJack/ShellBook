@@ -87,7 +87,7 @@ FIN_WAIT_2  # Reçu ACK de FIN, attend FIN distant
 
 ### IPv4
 
-```
+```text
 IP Address:      192.168.1.100
 Subnet Mask:     255.255.255.0    (/24)
                  ────────────     ─────
@@ -115,7 +115,7 @@ Usable Hosts:    192.168.1.1 - 192.168.1.254 (254 hosts)
 
 ### IPv6
 
-```
+```text
 IPv6 Address: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 Simplified:   2001:db8:85a3::8a2e:370:7334
 
@@ -291,7 +291,7 @@ ping -c 4 -M do -s 1472 8.8.8.8
 
 ### Workflow de Diagnostic
 
-```
+```text
 1. Interface UP?
    └─ ip link show
        └─ DOWN? → ip link set eth0 up

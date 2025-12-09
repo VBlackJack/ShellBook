@@ -19,7 +19,7 @@ Définir, provisionner et gérer l'infrastructure cloud de manière déclarative
 
 **Scénario classique :**
 
-```
+```text
 Dev  : "J'ai besoin d'un serveur web avec une BDD"
 Ops  : *Clique 47 fois dans la console AWS*
 Ops  : "C'est fait, note bien l'IP : 54.123.45.67"
@@ -356,7 +356,7 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 
 **Pourquoi sauvegarder le plan ?**
-```
+```bash
 1. DevOps exécute `terraform plan -out=tfplan`
 2. Lead Architect review le plan
 3. 3 heures plus tard, quelqu'un lance `terraform apply`
@@ -512,7 +512,7 @@ Successfully configured the backend "s3"!
 ![Terraform State No Locking Danger](../../assets/diagrams/terraform-state-no-locking-danger.jpeg)
 
 **Sans Locking :**
-```
+```text
 ┌─────────────┐         ┌─────────────┐
 │  Alice      │         │    Bob      │
 │ terraform   │         │ terraform   │
@@ -528,7 +528,7 @@ Successfully configured the backend "s3"!
 ```
 
 **Avec DynamoDB Locking :**
-```
+```bash
 Alice: terraform apply
   → Acquire Lock ✅
   → Apply changes
@@ -641,7 +641,7 @@ resource "aws_db_instance" "postgres" { ... }
 
 **Solution : Modules**
 
-```
+```text
 .
 ├── main.tf
 ├── variables.tf
@@ -865,7 +865,7 @@ resource "aws_db_instance" "main" {
 ### 2. Version Pinning : Éviter les Surprises
 
 **Problème sans version fixe :**
-```
+```bash
 Dev  : "Mon code fonctionne en local"
 CI/CD: "terraform apply échoue !"
 Cause: Nouveau provider AWS 6.0 avec breaking changes
@@ -945,7 +945,7 @@ tfplan
 
 ### 4. Structure de Projet Standard
 
-```
+```text
 terraform-infrastructure/
 ├── environments/
 │   ├── dev/

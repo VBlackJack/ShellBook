@@ -29,7 +29,7 @@ ansible-galaxy init roles/nginx
 
 ### Structure de Répertoire d'un Role
 
-```
+```text
 roles/
 └── nginx/
     ├── defaults/
@@ -334,7 +334,7 @@ ssl_private_key: |
 
 Après chiffrement, le fichier contient :
 
-```
+```text
 $ANSIBLE_VAULT;1.1;AES256
 3832666538653...données chiffrées...
 ```
@@ -390,7 +390,7 @@ db_password: !vault |
 
 ### Structure de Projet
 
-```
+```text
 ansible-project/
 ├── ansible.cfg              # Config locale
 ├── inventory/

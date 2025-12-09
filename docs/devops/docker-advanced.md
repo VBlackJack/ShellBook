@@ -29,7 +29,7 @@ docker init
 
 **Exemple de sortie:**
 
-```
+```bash
 ? What application platform does your project use? Python
 ? What version of Python? 3.11
 ? What port does your server listen on? 8000

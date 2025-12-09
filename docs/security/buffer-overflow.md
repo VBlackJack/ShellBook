@@ -27,7 +27,7 @@ En informatique, si un programme attend 8 caractères pour un mot de passe, mais
 
 La pile (Stack) est organisée ainsi :
 
-```
+```text
 [ Buffer (Variable Locale) ]  <-- On écrit ici
 [ EBP (Base Pointer) ]
 [ EIP (Instruction Pointer) ] <-- Adresse de la prochaine instruction à exécuter

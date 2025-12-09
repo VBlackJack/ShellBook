@@ -115,7 +115,7 @@ info registers    # Afficher tous les registres
 
 ### Méthodologie
 
-```
+```text
 1. IDENTIFIER    →    2. CONNECTER    →    3. DÉCODER
    La puce            Logic Analyzer      Signal → Données
    (Datasheet)        (Saleae, etc.)      (CyberChef)
@@ -139,7 +139,7 @@ info registers    # Afficher tous les registres
 
 ### Étape 3 : Décoder le Signal
 
-```
+```text
 Signal Brut → Binaire → Hex → Données ASCII/Protocole
 ```
 
@@ -195,7 +195,7 @@ Signal Brut → Binaire → Hex → Données ASCII/Protocole
 
 ### Aide-mémoire Google Dorks
 
-```
+```text
 site:example.com              # Rechercher dans le domaine
 filetype:pdf confidential     # Trouver des types de fichiers spécifiques
 intitle:"index of"            # Listages de répertoires
@@ -245,7 +245,7 @@ Le côté physique du hacking, souvent présent dans les CTF sur site et les con
 
 ### La Technique (Serrures à Goupilles)
 
-```
+```text
 1. Insérer la clé de tension, appliquer une légère rotation
 2. Insérer le crochet, sentir la goupille bloquée
 3. Pousser la goupille bloquée jusqu'à la ligne de cisaillement

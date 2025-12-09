@@ -28,7 +28,7 @@ Ce module couvre les services réseau avancés Windows Server :
 
 ### 1.1 Architecture PKI
 
-```
+```text
 ARCHITECTURE PKI RECOMMANDÉE
 ────────────────────────────
 

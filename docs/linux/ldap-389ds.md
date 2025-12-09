@@ -22,7 +22,7 @@ Alternative Open Source robuste à Active Directory sur Linux. Annuaire LDAP hau
 
 ![AD vs 389DS Comparison](../assets/diagrams/ad-vs-389ds-comparison.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  POURQUOI 389 DIRECTORY SERVER ?             │
 ├─────────────────────────────────────────────────────────────┤
@@ -195,7 +195,7 @@ ldapsearch -x -H ldap://localhost:389 \
 
 ![LDAP vs LDAPS Security](../assets/diagrams/ldap-vs-ldaps-security.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  LDAP vs LDAPS                               │
 ├─────────────────────────────────────────────────────────────┤
@@ -606,7 +606,7 @@ sudo dsconf mycorp config get | grep accesslog
 
 ![389DS Multi-Master Replication](../assets/diagrams/389ds-multi-master-replication.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  ARCHITECTURE MULTI-MAÎTRE                   │
 ├─────────────────────────────────────────────────────────────┤

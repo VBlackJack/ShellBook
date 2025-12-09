@@ -94,7 +94,7 @@ Project Number: 123456789012         # Numéro interne GCP
 
 ### Éléments principaux de l'interface
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  ☰  │ Google Cloud          │ 🔍 Search │ [Project ▼] │ 🔔 👤  │
 ├─────┼───────────────────────┴───────────┴─────────────┴────────┤
@@ -246,7 +246,7 @@ graph LR
 
 #### Basic Roles (à éviter en production)
 
-```
+```text
 roles/owner    → Accès total + IAM + billing
 roles/editor   → Lecture/écriture sur toutes les ressources
 roles/viewer   → Lecture seule sur toutes les ressources

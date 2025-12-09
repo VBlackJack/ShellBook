@@ -16,7 +16,7 @@ Pourquoi chaque SysAdmin a besoin de Git, même si vous n'écrivez jamais de "vr
 ### 1. Backup
 
 !!! danger "L'Ancienne Méthode"
-    ```
+    ```text
     script.sh
     script_backup.sh
     script_final.sh
@@ -120,7 +120,7 @@ git blame nginx.conf
 
 Git est le déclencheur de l'automatisation moderne.
 
-```
+```bash
 Push vers Git → Pipeline CI/CD → Déploiement Automatisé
 
 Exemples:
@@ -164,7 +164,7 @@ sudo systemctl restart sshd
 
 ### Gérer les Playbooks Ansible
 
-```
+```text
 ansible-repo/
 ├── inventory/
 │   ├── production
@@ -215,7 +215,7 @@ terraform.lock.hcl
 
 ### Bibliothèque de Scripts
 
-```
+```text
 scripts/
 ├── backup/
 │   ├── mysql_backup.sh

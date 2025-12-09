@@ -141,7 +141,7 @@ Injecter du JavaScript qui s'exécute dans le navigateur de la victime.
     **Partie 1 : Injection SQL**
 
     **Identification** :
-    ```
+    ```text
     http://vulnerable-app.local/user?id=1'
     # Résultat : "You have an error in your SQL syntax..." -> VULNÉRABLE
     ```
@@ -169,7 +169,7 @@ Injecter du JavaScript qui s'exécute dans le navigateur de la victime.
     ```
 
     **Résultats obtenus** :
-    ```
+    ```text
     admin:5f4dcc3b5aa765d61d8327deb882cf99 (MD5 de "password")
     john:e10adc3949ba59abbe56e057f20f883e (MD5 de "123456")
     ```
@@ -214,7 +214,7 @@ Injecter du JavaScript qui s'exécute dans le navigateur de la victime.
     ```
 
     **Cookie récupéré** :
-    ```
+    ```text
     PHPSESSID=a3fWa53rs2d334; user=admin; role=administrator
     ```
 

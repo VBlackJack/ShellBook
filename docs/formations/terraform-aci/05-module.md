@@ -47,8 +47,8 @@ graph LR
     PROVIDER -->|"HTTPS"| API
     API --> APIC_DB
 
-    style PROVIDER fill:#7b42bc,color:#fff
-    style API fill:#049fd9,color:#fff
+    style PROVIDER fill:#9C27B0,color:#fff
+    style API fill:#2196F3,color:#fff
 ```
 
 ### Installation du Provider
@@ -149,7 +149,7 @@ openssl req -new -x509 -days 365 \
 
 **Étape 2 : Configurer l'utilisateur dans APIC**
 
-```
+```yaml
 Admin > AAA > Users > Create Local User
 - Username: terraform
 - Certificate: (coller le contenu de terraform.crt)
@@ -225,7 +225,7 @@ resource "aci_tenant" "london_tenant" {
 
 Les ressources Terraform ACI suivent la convention :
 
-```
+```xml
 aci_<object_type>
 ```
 
@@ -278,7 +278,7 @@ output "epg_dn" {
 
 **Structure des DNs :**
 
-```
+```text
 uni                           # Universe (root)
 └── tn-<tenant_name>          # Tenant
     ├── ctx-<vrf_name>        # VRF
@@ -705,7 +705,7 @@ terraform apply
 
 **Erreur 1 : Authentification échouée**
 
-```
+```text
 Error: Failed to authenticate with APIC
 ```
 
@@ -716,7 +716,7 @@ Error: Failed to authenticate with APIC
 
 **Erreur 2 : Objet déjà existant**
 
-```
+```text
 Error: Object already exists: uni/tn-MyTenant
 ```
 
@@ -726,7 +726,7 @@ Error: Object already exists: uni/tn-MyTenant
 
 **Erreur 3 : Référence invalide**
 
-```
+```text
 Error: Reference to undeclared resource
 ```
 
@@ -736,7 +736,7 @@ Error: Reference to undeclared resource
 
 **Erreur 4 : Version du provider**
 
-```
+```text
 Error: Provider version constraint not satisfied
 ```
 

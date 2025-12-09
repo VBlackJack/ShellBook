@@ -29,7 +29,7 @@ Ce module couvre la conteneurisation sur Windows Server :
 
 ### 1.1 Types de Conteneurs Windows
 
-```
+```text
 TYPES DE CONTENEURS WINDOWS
 ───────────────────────────
 
@@ -54,7 +54,7 @@ Images de Base
 
 ### 1.2 Compatibilité des Versions
 
-```
+```text
 MATRICE DE COMPATIBILITÉ
 ────────────────────────
 
@@ -625,7 +625,7 @@ docker rm webapp
 
     Créer `.dockerignore` :
 
-    ```
+    ```text
     bin/
     obj/
     .vs/

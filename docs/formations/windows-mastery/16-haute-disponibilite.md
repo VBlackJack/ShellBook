@@ -29,7 +29,7 @@ Ce module couvre les architectures haute disponibilité Windows Server :
 
 ### 1.1 Terminologie
 
-```
+```text
 CONCEPTS HA
 ───────────
 

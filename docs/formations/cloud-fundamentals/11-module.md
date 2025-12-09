@@ -63,9 +63,9 @@ graph TB
     end
 
     style S1 fill:#f44336,color:#fff
-    style S2 fill:#ff9800,color:#fff
-    style S3 fill:#ff9800,color:#fff
-    style S4 fill:#ff9800,color:#fff
+    style S2 fill:#FF9800800800,color:#fff
+    style S3 fill:#FF9800800800,color:#fff
+    style S4 fill:#FF9800800800,color:#fff
     style S5 fill:#f44336,color:#fff
     style S6 fill:#f44336,color:#fff
 ```
@@ -98,7 +98,7 @@ graph TB
 
     style REHOST fill:#4caf50,color:#fff
     style REFACTOR fill:#9c27b0,color:#fff
-    style RETIRE fill:#607d8b,color:#fff
+    style RETIRE fill:#9C27B0,color:#fff
 ```
 
 ### 2.2 Détail des 6R
@@ -144,7 +144,7 @@ graph TB
     APP3 --> R3
 
     style R1 fill:#4caf50,color:#fff
-    style R2B fill:#ff9800,color:#fff
+    style R2B fill:#FF9800800800,color:#fff
     style R2C fill:#9c27b0,color:#fff
     style R3 fill:#2196f3,color:#fff
 ```
@@ -170,11 +170,11 @@ flowchart TD
     Q5 -->|"Oui"| REPLATFORM["🔄 Replatform"]
     Q5 -->|"Non"| REHOST["🏗️ Rehost"]
 
-    style RETIRE fill:#607d8b,color:#fff
+    style RETIRE fill:#9C27B0,color:#fff
     style REPURCHASE fill:#2196f3,color:#fff
-    style RETAIN fill:#795548,color:#fff
+    style RETAIN fill:#FF9800,color:#fff
     style REFACTOR fill:#9c27b0,color:#fff
-    style REPLATFORM fill:#ff9800,color:#fff
+    style REPLATFORM fill:#FF9800800800,color:#fff
     style REHOST fill:#4caf50,color:#fff
 ```
 
@@ -204,7 +204,7 @@ graph TB
     end
 
     style OVER fill:#f44336,color:#fff
-    style NETWORK fill:#ff9800,color:#fff
+    style NETWORK fill:#FF9800800800,color:#fff
 ```
 
 ### 3.2 Éléments du TCO
@@ -233,9 +233,9 @@ graph TB
 
     style TRAP1 fill:#f44336,color:#fff
     style TRAP2 fill:#f44336,color:#fff
-    style TRAP3 fill:#ff9800,color:#fff
-    style TRAP4 fill:#ff9800,color:#fff
-    style TRAP5 fill:#ff9800,color:#fff
+    style TRAP3 fill:#FF9800800800,color:#fff
+    style TRAP4 fill:#FF9800800800,color:#fff
+    style TRAP5 fill:#FF9800800800,color:#fff
 ```
 
 ### 3.4 Outils de Calcul TCO
@@ -266,7 +266,7 @@ graph LR
     P1 --> P2 --> P3 --> P4 --> P5
 
     style P1 fill:#2196f3,color:#fff
-    style P3 fill:#ff9800,color:#fff
+    style P3 fill:#FF9800800800,color:#fff
     style P5 fill:#4caf50,color:#fff
 ```
 
@@ -316,7 +316,7 @@ graph TB
 
     WAVE --> ARCH --> RUNBOOK --> ROLLBACK --> TEST
 
-    style WAVE fill:#ff9800,color:#fff
+    style WAVE fill:#FF9800800800,color:#fff
 ```
 
 **Bonnes pratiques :**
@@ -363,9 +363,9 @@ graph TB
     FILES --> AB
     FILES --> TS
 
-    style MGN fill:#ff9900,color:#000
-    style AM fill:#0078d4,color:#fff
-    style MM fill:#4285f4,color:#fff
+    style MGN fill:#FF9800800900,color:#000
+    style AM fill:#2196F3,color:#fff
+    style MM fill:#2196F3,color:#fff
 ```
 
 ### 4.5 Phases 4 & 5 : Validation et Cutover
@@ -419,9 +419,9 @@ graph TB
     end
 
     style R1 fill:#f44336,color:#fff
-    style R2 fill:#ff9800,color:#fff
+    style R2 fill:#FF9800800800,color:#fff
     style R5 fill:#f44336,color:#fff
-    style R6 fill:#ff9800,color:#fff
+    style R6 fill:#FF9800800800,color:#fff
 ```
 
 ### 5.2 Erreurs Classiques
@@ -504,7 +504,7 @@ graph TB
     HYBRID --> CORE
 
     style DEV fill:#4caf50,color:#fff
-    style API fill:#ff9800,color:#fff
+    style API fill:#FF9800800800,color:#fff
     style HSM fill:#f44336,color:#fff
     style CORE fill:#f44336,color:#fff
 ```
@@ -632,7 +632,7 @@ graph LR
     ASSESS --> STRAT --> PLAN --> MIGRATE --> OPTIMIZE
 
     style ASSESS fill:#2196f3,color:#fff
-    style MIGRATE fill:#ff9800,color:#fff
+    style MIGRATE fill:#FF9800800800,color:#fff
     style OPTIMIZE fill:#4caf50,color:#fff
 ```
 

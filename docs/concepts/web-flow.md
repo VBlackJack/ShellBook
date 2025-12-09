@@ -18,7 +18,7 @@ Quand vous tapez `https://example.com`, votre navigateur doit d'abord résoudre 
 
 ### Hiérarchie de Cache
 
-```
+```text
 Browser Cache → OS Cache → Router Cache → ISP Resolver → Root DNS
      ↓              ↓            ↓              ↓             ↓
    (ms)          (ms)         (ms)          (10-50ms)    (100ms+)
@@ -32,7 +32,7 @@ Browser Cache → OS Cache → Router Cache → ISP Resolver → Root DNS
 
 ### Résolution Récursive
 
-```
+```text
 Client → Resolver → Root (.) → TLD (.com) → Authoritative (example.com)
                   ←──────────── Adresse IP ────────────────┘
 ```
@@ -113,7 +113,7 @@ sequenceDiagram
 
     **Sortie :** 1997
 
-    ```
+    ```text
     GET /index.html HTTP/1.1
     Host: example.com
     Connection: keep-alive
@@ -128,7 +128,7 @@ sequenceDiagram
     - Pas de compression des headers
 
     **Limitations :**
-    ```
+    ```text
     Requête 1 ████████░░░░░░░░ (en attente)
     Requête 2 ░░░░░░░░████████ (bloquée)
     ```
@@ -146,7 +146,7 @@ sequenceDiagram
     - **Priorisation des streams**
 
     **Visualisation du multiplexing :**
-    ```
+    ```text
     Stream 1 ██░░██░░██
     Stream 2 ░░██░░██░░  → Connexion TCP Unique
     Stream 3 ██░░░░██░░
@@ -167,14 +167,14 @@ sequenceDiagram
     - **Contrôle de congestion amélioré**
 
     **Avantage clé :**
-    ```
+    ```text
     Stream 1 ██░░██░░██  ← Paquet perdu, seul Stream 1 affecté
     Stream 2 ░░██░░██░░  ← Continue normalement
     Stream 3 ██░░░░██░░  ← Continue normalement
     ```
 
     **Établissement de connexion :**
-    ```
+    ```text
     HTTP/1.1: TCP (1.5 RTT) + TLS (2 RTT) = 3.5 RTT
     HTTP/2:   TCP (1.5 RTT) + TLS (1 RTT) = 2.5 RTT
     HTTP/3:   QUIC+TLS (1 RTT) = 1 RTT (0-RTT pour reprise)

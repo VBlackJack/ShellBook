@@ -18,7 +18,7 @@ Manipulation de texte en ligne de commande : les outils indispensables du SysOps
 
 Sed lit le texte ligne par ligne, applique des transformations, et affiche le résultat. Idéal pour les modifications chirurgicales.
 
-```
+```bash
 Input → sed 'instruction' → Output
 ```
 
@@ -108,7 +108,7 @@ sed '/DEBUG/d' app.log
 
 Awk traite le texte **colonne par colonne**. Chaque ligne est découpée en champs (`$1`, `$2`, ...). Parfait pour les rapports et calculs.
 
-```
+```text
 $0 = ligne entière
 $1 = première colonne
 $2 = deuxième colonne

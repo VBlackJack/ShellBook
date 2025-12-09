@@ -245,9 +245,9 @@ flowchart TB
     F -->|requêtes| G[Driver (SCSI, NVMe, VirtIO)]
     G --> H[Disque Physique (Hardware)]
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style H fill:#bfb,stroke:#333,stroke-width:2px
+    style A fill:#9C27B0,stroke:#333,stroke-width:2px
+    style B fill:#2196F3,stroke:#333,stroke-width:2px
+    style H fill:#4CAF50,stroke:#333,stroke-width:2px
 ```
 
 ### 1. VFS (Virtual File System)

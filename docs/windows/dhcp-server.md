@@ -86,7 +86,7 @@ Remove-DhcpServerv4Reservation -ScopeId 10.10.1.0 -IPAddress 10.10.1.150
 
 ### Configuration Haute Disponibilité
 
-```
+```text
 DHCP FAILOVER MODES
 ══════════════════════════════════════════════════════════
 

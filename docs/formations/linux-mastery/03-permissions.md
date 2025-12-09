@@ -204,7 +204,7 @@ groups alice
 
 Chaque fichier a 3 ensembles de permissions :
 
-```
+```text
 -rwxr-xr--  1 alice developers 4096 Nov 29 15:00 script.sh
  │││ │││ │││
  │││ │││ └┴┴── Autres (others) : r-- (lecture seule)

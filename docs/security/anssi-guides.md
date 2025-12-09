@@ -13,7 +13,7 @@ Synthèse des principales recommandations de l'ANSSI (Agence Nationale de la Sé
 
 ## Présentation ANSSI
 
-```
+```text
 ANSSI - AGENCE NATIONALE DE LA SÉCURITÉ DES SYSTÈMES D'INFORMATION
 ══════════════════════════════════════════════════════════════════════
 

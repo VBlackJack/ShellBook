@@ -14,7 +14,7 @@ Configuration et administration des services Bureau à distance : Session Host, 
 
 ![RDS Architecture](../assets/diagrams/rds-architecture.jpeg)
 
-```
+```text
 ARCHITECTURE RDS
 ══════════════════════════════════════════════════════════
 
@@ -85,7 +85,7 @@ Install-WindowsFeature -Name RDS-Gateway -IncludeManagementTools
 
 ### Déploiement via Server Manager (Recommandé)
 
-```
+```bash
 Server Manager > Manage > Add Roles and Features
   → Remote Desktop Services installation
   → Standard deployment ou Quick Start
@@ -441,7 +441,7 @@ mstsc /shadow:5 /v:rdsh1.corp.local /control
 
 ### GPO pour RDS
 
-```
+```text
 Computer Configuration > Policies > Administrative Templates >
 Windows Components > Remote Desktop Services
 

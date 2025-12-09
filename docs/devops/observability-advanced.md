@@ -22,7 +22,7 @@ Passer de la visualisation passive à l'action proactive. Gestion des astreintes
 
 ![AlertManager Chaos vs Intelligence](../assets/diagrams/alertmanager-chaos-vs-intelligence.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              SANS ALERTMANAGER (Chaos)                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -374,7 +374,7 @@ curl -X POST http://localhost:9093/api/v1/silences -d '{
 
 ![Blackbox Traditional vs Synthetic](../assets/diagrams/blackbox-traditional-vs-synthetic.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │           MONITORING TRADITIONNEL (Insuffisant)              │
 ├─────────────────────────────────────────────────────────────┤
@@ -602,11 +602,11 @@ scrape_configs:
     Sans le relabeling, Prometheus essaiera de scraper directement `https://myapp.com/metrics`, ce qui échouera.
 
     Le relabeling transforme :
-    ```
+    ```text
     https://myapp.com
     ```
     En :
-    ```
+    ```text
     http://blackbox-exporter:9115/probe?target=https://myapp.com&module=http_2xx
     ```
 
@@ -724,7 +724,7 @@ groups:
 
 ### Architecture ELK
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      PIPELINE ELK                            │
 ├─────────────────────────────────────────────────────────────┤
@@ -1020,7 +1020,7 @@ curl -X GET "localhost:9200/logs-*/_search?pretty"
 
 ![SRE Golden Signals Four Metrics](../assets/diagrams/sre-golden-signals-four-metrics.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   GOLDEN SIGNALS (Google)                    │
 ├─────────────────────────────────────────────────────────────┤

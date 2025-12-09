@@ -548,7 +548,7 @@ flowchart TB
 
 **Étape 1 : Structure Git**
 
-```
+```text
 ansible-pull-config/
 ├── local.yml           # Playbook principal
 ├── inventory/
@@ -656,7 +656,7 @@ ansible-pull -U git@github.com:myorg/ansible-pull-config.git \
 
 **Ansible Tower** (commercial) / **AWX** (open-source) = Interface Web + API + Orchestration
 
-```
+```text
 ┌────────────────────────────────────────┐
 │          AWX / Ansible Tower           │
 │                                        │

@@ -34,7 +34,7 @@ graph LR
 
     style A fill:#4CAF50,stroke:#2E7D32,color:#fff
     style B fill:#2196F3,stroke:#1565C0,color:#fff
-    style C fill:#FF9800,stroke:#EF6C00,color:#fff
+    style C fill:#FF9800800800,stroke:#EF6C00,color:#fff
     style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
 ```
 
@@ -341,7 +341,7 @@ flowchart LR
     A[Module 1-15<br/>SysAdmin] --> B[Module 16-19<br/>DevOps]
     B --> C[RHCE + CKA]
 
-    style C fill:#FF9800,stroke:#EF6C00,color:#fff
+    style C fill:#FF9800800800,stroke:#EF6C00,color:#fff
 ```
 
 **Durée :** 145h | **Modules :** 1-19 | **Certifications :** RHCE, CKA
@@ -460,7 +460,7 @@ Cette formation prépare aux certifications suivantes :
 
 Chaque module suit une structure cohérente :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │  1. CONCEPT (20%)                                           │
 │     Théorie, diagrammes Mermaid, cas d'usage                │

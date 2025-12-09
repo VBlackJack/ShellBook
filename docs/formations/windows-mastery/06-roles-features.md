@@ -29,7 +29,7 @@ Ce module couvre l'installation et la gestion des rôles Windows Server :
 
 ### 1.1 Concepts
 
-```
+```text
 RÔLES                          FEATURES
 ─────                          ────────
 Fonction principale            Fonctionnalité additionnelle

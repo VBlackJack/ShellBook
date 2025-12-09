@@ -247,7 +247,7 @@ sudo nano /var/lib/postgresql/14/main/pg_hba.conf
 sudo nano /etc/postgresql/14/main/pg_hba.conf
 ```
 
-```
+```dockerfile
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 local   all             postgres                                peer
 local   all             all                                     peer

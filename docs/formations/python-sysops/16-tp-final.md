@@ -31,7 +31,7 @@ Vous êtes SysOps Engineer dans une entreprise qui gère une infrastructure hybr
 
 ### Architecture de l'Infrastructure
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    INFRASTRUCTURE HYBRIDE                            │
 │                                                                      │
@@ -69,7 +69,7 @@ Vous êtes SysOps Engineer dans une entreprise qui gère une infrastructure hybr
 
 Créez la structure suivante :
 
-```
+```text
 infra-reporter/
 ├── pyproject.toml          # Configuration du projet
 ├── README.md

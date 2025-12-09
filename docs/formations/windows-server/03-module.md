@@ -22,7 +22,7 @@ tags:
 
 ![Windows Default Vulnerabilities](../../assets/diagrams/windows-default-vulnerabilities.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │         WINDOWS SERVER : INSTALLATION PAR DÉFAUT             │
 ├─────────────────────────────────────────────────────────────┤
@@ -60,10 +60,10 @@ flowchart TD
 
     DC --> Exfil[📤 Exfiltration Données<br/>500 GB en 2 heures]
 
-    style Start fill:#6c757d,stroke:#495057,color:#fff
-    style Malware fill:#ff8c00,stroke:#cc7000,color:#fff
-    style DC fill:#d13438,stroke:#a52a2a,color:#fff
-    style Exfil fill:#000,stroke:#d13438,color:#fff
+    style Start fill:#9C27B0,stroke:#495057,color:#fff
+    style Malware fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style DC fill:#f44336,stroke:#a52a2a,color:#fff
+    style Exfil fill:#000,stroke:#f44336,color:#fff
 ```
 
 **Lundi 9h00 :** Rançongiciel déployé sur toute l'infrastructure. Demande de rançon : 5 millions €.
@@ -115,9 +115,9 @@ graph TD
     T1 -.->|Gère| T2
     T2 -.->|❌ JAMAIS| T0
 
-    style T0 fill:#d13438,stroke:#a52a2a,color:#fff
-    style T1 fill:#ff8c00,stroke:#cc7000,color:#fff
-    style T2 fill:#107c10,stroke:#0e6b0e,color:#fff
+    style T0 fill:#f44336,stroke:#a52a2a,color:#fff
+    style T1 fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style T2 fill:#4CAF50,stroke:#0e6b0e,color:#fff
 ```
 
 ### Les 3 Tiers Expliqués
@@ -133,7 +133,7 @@ graph TD
 !!! danger "Règle Absolue du Tiering Model"
     **Un admin de Tier N peut gérer Tier N et Tier N+1, mais JAMAIS Tier N-1.**
 
-    ```
+    ```text
     ✅ Admin T0 peut gérer T0 et T1
     ✅ Admin T1 peut gérer T1 et T2
     ❌ Admin T0 ne doit JAMAIS se connecter sur T2
@@ -146,7 +146,7 @@ graph TD
 
 ![Pass-the-Hash Attack Without Tiering](../../assets/diagrams/attack-pass-the-hash-no-tiering.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              ATTAQUE SANS TIERING MODEL                      │
 ├─────────────────────────────────────────────────────────────┤
@@ -171,7 +171,7 @@ graph TD
 
 ![Defense with Tiering Model](../../assets/diagrams/defense-tiering-model-protection.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              DÉFENSE AVEC TIERING MODEL                      │
 ├─────────────────────────────────────────────────────────────┤
@@ -227,7 +227,7 @@ New-ADUser `
 
 #### Étape 2 : Restrictions de Connexion (GPO)
 
-```
+```text
 GPO : "Tier0 - Deny Logon to Non-PAW"
 Cible : OU=Tier0-Admins
 
@@ -273,7 +273,7 @@ Get-WinEvent -FilterHashtable @{
 
 ![LAPS Problem vs Solution](../../assets/diagrams/laps-problem-vs-solution.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     LE PROBLÈME                              │
 ├─────────────────────────────────────────────────────────────┤
@@ -329,7 +329,7 @@ Set-AdmPwdReadPasswordPermission -Identity "Computers" -AllowedPrincipals "Domai
 
 #### Configuration via GPO
 
-```
+```text
 GPO : "LAPS - Enable Password Management"
 Cible : OU=Computers
 
@@ -380,7 +380,7 @@ Get-ADComputer -Filter * -Properties ms-Mcs-AdmPwd, ms-Mcs-AdmPwdExpirationTime 
 
 **Scénario :** Un serveur est volé au datacenter (ou un disque est retiré).
 
-```
+```text
 Sans BitLocker :
   1. Attaquant retire le disque
   2. Monte le disque sur son PC Linux
@@ -544,7 +544,7 @@ Restore-MpPreference -ThreatID <ThreatID>
 
 ![SMBv1 Security Risks](../../assets/diagrams/smbv1-security-risks.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              POURQUOI DÉSACTIVER SMBv1 ?                     │
 ├─────────────────────────────────────────────────────────────┤
@@ -590,7 +590,7 @@ Restart-Computer
 
 **Via GPO (déploiement massif) :**
 
-```
+```text
 GPO : "Security - Disable SMBv1"
 Cible : OU=Servers
 
@@ -614,7 +614,7 @@ Créer une nouvelle clé :
 
 ![Responder LLMNR Poisoning Attack](../../assets/diagrams/attack-responder-llmnr-poisoning.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  ATTAQUE RESPONDER                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -658,7 +658,7 @@ Get-WmiObject Win32_NetworkAdapterConfiguration |
 
 **Via GPO :**
 
-```
+```text
 GPO : "Security - Disable LLMNR"
 Cible : OU=Computers
 
@@ -669,7 +669,7 @@ Paramètre :
 └── Turn off multicast name resolution → Enabled
 ```
 
-```
+```text
 GPO : "Security - Disable NBT-NS"
 Cible : OU=Computers
 
@@ -715,7 +715,7 @@ auditpol /get /subcategory:"Process Creation"
 
 **Via GPO :**
 
-```
+```text
 GPO : "Security - Enable Process Audit"
 Cible : OU=Servers
 
@@ -1004,7 +1004,7 @@ Vous êtes admin système chez **SecureCorp**. Votre manager vous demande d'audi
 
     **Output attendu (serveur NON conforme) :**
 
-    ```
+    ```powershell
     === Audit de Sécurité Windows Server ===
     Serveur : SRV-LEGACY-01
     Date    : 2024-01-22 15:30:00

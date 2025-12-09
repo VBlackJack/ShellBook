@@ -450,7 +450,7 @@ catch {
 
 ### Table Output
 
-```
+```text
 Endpoint           Subject                                  NotAfter            Days Status   ChainValid
 --------           -------                                  --------            ---- ------   ----------
 google.com:443     CN=*.google.com                         2024-04-15 12:00:00   89 OK       True

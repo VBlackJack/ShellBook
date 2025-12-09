@@ -458,7 +458,7 @@ sudo ./security-audit.sh -o /var/log/security-audit.txt
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
           AUDIT DE SÉCURITÉ SYSTÈME
 ═══════════════════════════════════════════════════════════

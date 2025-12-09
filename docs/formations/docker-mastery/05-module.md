@@ -21,7 +21,7 @@ tags:
 
 ## 1. Types de Stockage
 
-```
+```text
 TYPES DE STOCKAGE DOCKER
 ════════════════════════
 

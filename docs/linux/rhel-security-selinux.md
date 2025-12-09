@@ -22,10 +22,10 @@ flowchart LR
     B -->|✅ Allow| D[Accès Autorisé]
     B -->|❌ Deny| E[AVC Denial<br/>Log dans audit.log]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#d83b01,stroke:#a52a00,color:#fff
-    style C fill:#107c10,stroke:#0b5a0d,color:#fff
-    style E fill:#e81123,stroke:#b00016,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#FF9800800800,stroke:#a52a00,color:#fff
+    style C fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style E fill:#f44336,stroke:#b00016,color:#fff
 ```
 
 ## Modes SELinux

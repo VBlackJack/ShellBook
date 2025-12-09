@@ -128,7 +128,7 @@ Les firewall rules GCP sont **stateful** et s'appliquent au niveau VPC :
 
 Chaque VPC a des règles implicites (non supprimables) :
 
-```
+```text
 Priority 65534: Allow all egress          # VMs peuvent sortir
 Priority 65535: Deny all ingress          # Tout bloqué en entrée
 ```

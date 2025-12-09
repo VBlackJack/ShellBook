@@ -26,10 +26,10 @@ graph TB
     F --> G[Nouvelle Génération]
     G --> B
 
-    style A fill:#e1f5ff
-    style C fill:#ffe1e1
-    style Z fill:#e1ffe1
-    style E fill:#fff4e1
+    style A fill:#2196F3
+    style C fill:#f44336
+    style Z fill:#4CAF50
+    style E fill:#FF9800800800
 ```
 
 ### 1. Population Initiale
@@ -261,7 +261,7 @@ best_tour, log = run_ga()
 ```
 
 **Résultat typique :**
-```
+```text
 gen	nevals	min    	avg
 0  	100   	458.234	652.891
 10 	70    	312.456	398.234
@@ -362,7 +362,7 @@ genetic_algorithm()
 ```
 
 **Sortie :**
-```
+```text
 Gen 0: Meilleur x=29, f(x)=841
 Gen 10: Meilleur x=31, f(x)=961
 Gen 20: Meilleur x=31, f(x)=961

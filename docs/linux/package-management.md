@@ -16,7 +16,7 @@ Gestion des paquets sur Debian, Ubuntu et dérivés.
 
 ### Les 3 Étapes
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │                    CYCLE DE MISE À JOUR                       │
 ├──────────────────────────────────────────────────────────────┤
@@ -198,7 +198,7 @@ dpkg -l | grep nginx
 
 ### Format d'une Ligne
 
-```
+```text
 deb [options] URL distribution composants
 ```
 
@@ -260,7 +260,7 @@ sudo apt install docker-ce
 
 **Structure résultante :**
 
-```
+```text
 /etc/apt/
 ├── sources.list                 # Sources distro
 ├── sources.list.d/
@@ -352,7 +352,7 @@ grep " remove " /var/log/dpkg.log | tail -20
 
 ### Exemple de Log APT
 
-```
+```powershell
 Start-Date: 2024-01-15  10:30:00
 Commandline: apt upgrade -y
 Requested-By: admin (1000)

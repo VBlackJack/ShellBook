@@ -24,7 +24,7 @@ tags:
 
 ### 1.1 Types de Probes
 
-```
+```text
 KUBERNETES PROBES
 ═════════════════
 

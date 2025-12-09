@@ -14,7 +14,7 @@ Protection des credentials et intégrité du code via la virtualisation (VBS - V
 
 ### Concept
 
-```
+```text
 CREDENTIAL GUARD - PROTECTION DES CREDENTIALS
 ══════════════════════════════════════════════════════════
 
@@ -115,7 +115,7 @@ systeminfo | findstr /i "credential"
 
 ### Concept
 
-```
+```text
 HVCI - HYPERVISOR-PROTECTED CODE INTEGRITY
 ══════════════════════════════════════════════════════════
 
@@ -166,7 +166,7 @@ Set-RuleOption -FilePath "C:\Policies\BasePolicy.xml" -Option 3  # Audit Mode
 
 ### Déployer via GPO
 
-```
+```text
 Computer Configuration > Administrative Templates >
 System > Device Guard > Deploy Windows Defender Application Control
 → Spécifier le chemin de la policy
@@ -176,7 +176,7 @@ System > Device Guard > Deploy Windows Defender Application Control
 
 ## Remote Credential Guard
 
-```
+```text
 REMOTE CREDENTIAL GUARD
 ══════════════════════════════════════════════════════════
 

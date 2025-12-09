@@ -435,7 +435,7 @@ python backup_manager.py -l /data /backup
 
 ## Sortie Exemple
 
-```
+```bash
 2024-01-15 14:30:22 - INFO - Starting backup: /home/user/data -> /backup/data_20240115_143022.zip
 2024-01-15 14:31:15 - INFO - Verifying archive integrity...
 2024-01-15 14:31:18 - INFO - Checksum: a1b2c3d4e5f6...

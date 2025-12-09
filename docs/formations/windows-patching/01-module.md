@@ -57,11 +57,11 @@ flowchart LR
     WSUS -->|4. Après validation<br/>Deadline +7j| TEST
     WSUS -->|5. Après validation<br/>Deadline +14j| PROD
 
-    style MU fill:#0078D4,color:#fff
-    style WSUS fill:#107C10,color:#fff
-    style DEV fill:#FFB900,color:#000
-    style TEST fill:#FF8C00,color:#fff
-    style PROD fill:#E81123,color:#fff
+    style MU fill:#2196F3,color:#fff
+    style WSUS fill:#4CAF50,color:#fff
+    style DEV fill:#FF9800800800,color:#000
+    style TEST fill:#FF9800800800,color:#fff
+    style PROD fill:#f44336,color:#fff
 ```
 
 **Workflow détaillé** :
@@ -163,8 +163,8 @@ flowchart TD
     WSUS -.->|Mode 2: Metadata only| MS
     MS -.-> CLIENT
 
-    style LOCAL fill:#107C10,color:#fff
-    style MS fill:#0078D4,color:#fff
+    style LOCAL fill:#4CAF50,color:#fff
+    style MS fill:#2196F3,color:#fff
 ```
 
 **Mode 1 : Store updates locally** (Recommandé)
@@ -753,7 +753,7 @@ Créez un script `Deploy-WSUS.ps1` qui automatise les étapes suivantes :
     ```
 
     **Output attendu** :
-    ```
+    ```text
     [1/10] Installation du rôle UpdateServices...
     ✅ Rôle installé avec succès
 

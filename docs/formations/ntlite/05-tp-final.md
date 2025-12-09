@@ -41,7 +41,7 @@ Votre entreprise déploie une **infrastructure VDI (Virtual Desktop Infrastructu
 ### 1.1 Téléchargement de l'image source
 
 **Source officielle** :
-```
+```text
 Microsoft Evaluation Center
 URL : https://www.microsoft.com/en-us/evalcenter/evaluate-windows-11-enterprise
 
@@ -74,7 +74,7 @@ Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/?LinkId=691209" -OutFile
 5. **Charger l'édition** : `Windows 11 Enterprise`
 
 **Vérifications** :
-```
+```text
 ✓ Edition : Windows 11 Enterprise
 ✓ Version : 23H2 (Build 22631.xxxx)
 ✓ Architecture : x64
@@ -87,7 +87,7 @@ Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/?LinkId=691209" -OutFile
 
 **Créer un preset réutilisable** :
 
-```
+```text
 File > Save preset
 Nom : VDI-Lite-Golden-v1.0
 Description : Image optimisée pour VDI Proxmox (50 VMs, 4GB RAM)
@@ -103,7 +103,7 @@ Description : Image optimisée pour VDI Proxmox (50 VMs, 4GB RAM)
 
 **Avant toute suppression** :
 
-```
+```text
 Components > Compatibility (onglet en haut)
 ☑ Enable compatibility warnings
 ☑ Prevent removal of networking components
@@ -120,7 +120,7 @@ Components > Compatibility (onglet en haut)
 
 **Navigation** : `Components > Applications`
 
-```
+```text
 ☑ Microsoft.BingNews
 ☑ Microsoft.BingWeather
 ☑ Microsoft.GetHelp
@@ -155,7 +155,7 @@ Components > Compatibility (onglet en haut)
 
 #### Applications à CONSERVER :
 
-```
+```text
 ✓ Microsoft.WindowsCalculator (utilitaire de base)
 ✓ Microsoft.WindowsStore (peut être requis pour certaines LOB apps)
 ✓ Microsoft.WindowsTerminal (si utilisateurs avancés)
@@ -174,7 +174,7 @@ Components > Compatibility (onglet en haut)
 
 #### À supprimer (VDI sans matériel physique) :
 
-```
+```text
 ☑ Cortana
 ☑ OneDrive (si SharePoint/serveur de fichiers utilisé)
 ☑ Windows Mixed Reality
@@ -196,7 +196,7 @@ Components > Compatibility (onglet en haut)
 
 #### À CONSERVER (Critique pour VDI) :
 
-```
+```sql
 ✓ Windows Defender (sécurité de base - IMPORTANT)
 ✓ Remote Desktop Services (accès RDP si nécessaire)
 ✓ Print Spooler (impression redirigée)
@@ -215,7 +215,7 @@ Components > Compatibility (onglet en haut)
 **Problème** : Edge est intégré à Windows 11 (composants système)
 
 **Recommandation** :
-```
+```text
 ☐ NE PAS supprimer Edge via NTLite (risque de casser des composants)
 
 Alternative :
@@ -230,7 +230,7 @@ Alternative :
 
 Avant d'appliquer :
 
-```
+```text
 Pending Changes (onglet en bas)
 → Vérifier qu'aucune ligne rouge n'apparaît
 → Total supprimé : ~1.2 GB
@@ -248,7 +248,7 @@ En environnement **Proxmox/KVM**, Windows ne dispose PAS des drivers natifs pour
 - 🖥️ **QXL/VirtIO GPU** : Affichage optimisé
 
 **Sans ces drivers** :
-```
+```text
 ❌ Windows Setup affiche : "Aucun lecteur n'a été trouvé"
 ❌ Le réseau ne fonctionne pas après installation
 ❌ Les performances sont dégradées (émulation e1000)
@@ -260,7 +260,7 @@ En environnement **Proxmox/KVM**, Windows ne dispose PAS des drivers natifs pour
 
 **Source officielle** :
 
-```
+```text
 Fedora VirtIO Drivers (certifiés Microsoft)
 URL : https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md
 Lien direct ISO : https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
@@ -285,7 +285,7 @@ Dismount-DiskImage -ImagePath "C:\Downloads\virtio-win.iso"
 ```
 
 **Résultat** :
-```
+```text
 C:\Drivers\
 ├── VirtIO_Storage\
 │   ├── viostor.inf
@@ -307,13 +307,13 @@ C:\Drivers\
 
 1. **Drivers (onglet)**
 2. **Add > Insert Driver folder**
-   ```
+   ```text
    Folder : C:\Drivers
    ☑ Scan recursively
    ```
 
 3. **Résultat** :
-   ```
+   ```text
    ✓ 4 driver packages detected
    - Red Hat VirtIO SCSI controller
    - Red Hat VirtIO Ethernet Adapter
@@ -334,7 +334,7 @@ C:\Drivers\
 
 **Téléchargement** :
 
-```
+```bash
 Microsoft Update Catalog
 Rechercher : "2025-01 Cumulative Update Windows 11 Version 23H2 for x64"
 Télécharger :
@@ -344,7 +344,7 @@ Télécharger :
 
 **Intégration** :
 
-```
+```sql
 Updates (onglet)
 Add > Select files
 → Sélectionner SSU + LCU
@@ -363,7 +363,7 @@ Apply
 
 **Navigation** : `Unattended > Localization`
 
-```
+```text
 Input Locale : fr-FR
 System Locale : fr-FR
 UI Language : fr-FR
@@ -379,7 +379,7 @@ Time Zone : Romance Standard Time
 
 **Configuration** :
 
-```
+```bash
 Add > Local Account
 
 Username : VDI-User
@@ -401,7 +401,7 @@ Auto-logon count : 0 (désactivé - l'utilisateur saisit son mot de passe)
 
 **Navigation** : `Unattended > General`
 
-```
+```text
 ☑ Auto-fill defaults
 ☑ Hide account pages (compte déjà créé)
 ☑ Skip machine OOBE
@@ -410,7 +410,7 @@ Auto-logon count : 0 (désactivé - l'utilisateur saisit son mot de passe)
 
 **Navigation** : `Unattended > OOBE Extended`
 
-```
+```text
 ☑ Skip EULA
 ☑ Skip Privacy Settings
 ☑ Skip Wireless Setup
@@ -429,14 +429,14 @@ Auto-logon count : 0 (désactivé - l'utilisateur saisit son mot de passe)
 
 **Configuration** :
 
-```
+```text
 Mode : Automatic
 ☑ Wipe disk 0
 Partition scheme : UEFI (GPT)
 ```
 
 **Résultat** :
-```
+```text
 Disk 0 (60 GB) :
 ├── EFI System Partition (100 MB)
 ├── MSR (Microsoft Reserved) (16 MB)
@@ -504,7 +504,7 @@ exit 0
 
 **Structure à créer** :
 
-```
+```text
 C:\NTLite_PostSetup\
 └── $OEM$/
     └── $$\
@@ -528,7 +528,7 @@ C:\NTLite_PostSetup\
 
 **Navigation** : `Unattended > RunOnce Commands (ou First Logon Commands)`
 
-```
+```powershell
 Add Command:
 cmd.exe /c "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\""
 
@@ -544,7 +544,7 @@ Order: 1
 
 **Dans Pending Changes** :
 
-```
+```text
 ✓ $OEM$ folder will be integrated
 ✓ SetupComplete.cmd detected
 ```
@@ -558,7 +558,7 @@ Order: 1
 **Actions** :
 
 1. **Vérifier toutes les sections** :
-   ```
+   ```text
    ✓ Components : 25 apps supprimées
    ✓ Drivers : 4 VirtIO drivers intégrés
    ✓ Updates : SSU + LCU intégrés
@@ -569,7 +569,7 @@ Order: 1
 2. **Apply > Create ISO**
 
 3. **Paramètres ISO** :
-   ```
+   ```bash
    ISO Label : WIN11_VDI_LITE_v1.0
    Output path : G:\ISO\Win11_VDI_Lite_Golden_v1.0.iso
    ☑ Include ISO boot files (UEFI + BIOS)
@@ -600,7 +600,7 @@ Write-Host "Taille ISO : $SizeGB GB" -ForegroundColor $(if ($SizeGB -lt 4.0) {"G
 
 #### Configuration VM de test :
 
-```
+```text
 Nom : VDI-Lite-Test
 Type : Windows 11 (64-bit)
 CPU : 2 vCPU
@@ -616,7 +616,7 @@ Boot : ISO Win11_VDI_Lite_Golden_v1.0.iso
 
 **Phase 1 : Installation (chronométrer)**
 
-```
+```text
 1. Démarrer la VM sur l'ISO
 2. [T0] Noter l'heure de début
 3. Observer : AUCUN écran d'interaction ne doit apparaître
@@ -630,7 +630,7 @@ Boot : ISO Win11_VDI_Lite_Golden_v1.0.iso
 
 **Phase 2 : Connexion**
 
-```
+```text
 6. Connexion avec :
    - Username : VDI-User
    - Password : SecurePass!
@@ -663,7 +663,7 @@ choco --version
 
 **Phase 4 : Vérification fonctionnelle**
 
-```
+```sql
 ☐ Le réseau est fonctionnel (ping 8.8.8.8)
 ☐ Le navigateur Edge fonctionne (même si on le remplacera)
 ☐ L'explorateur de fichiers s'ouvre sans erreur
@@ -766,7 +766,7 @@ chmod +x deploy_vdi_fleet.sh
 
 **Workflow recommandé** (chaque Patch Tuesday) :
 
-```
+```text
 1. Télécharger la nouvelle LCU du mois
 2. Ouvrir le projet NTLite sauvegardé
 3. Updates > Remove old LCU > Add new LCU
@@ -782,7 +782,7 @@ chmod +x deploy_vdi_fleet.sh
 
 **Convention de nommage** :
 
-```
+```text
 Format : WIN11_VDI_LITE_vX.Y_YYYY-MM
 
 Exemples :
@@ -916,7 +916,7 @@ Pour aller plus loin :
 
 ### 1. Image de base
 
-```
+```text
 Source : Windows 11 Enterprise 23H2 (x64)
 Edition : Enterprise
 Language : fr-FR (ou en-US avec langue ajoutée)
@@ -927,7 +927,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 ### 2. Components (Module 2)
 
 **Applications supprimées (25 total)** :
-```
+```text
 ☑ Bing News, Weather
 ☑ Get Help, Get Started
 ☑ 3D Viewer
@@ -942,7 +942,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 ```
 
 **Composants système supprimés (12 total)** :
-```
+```text
 ☑ Cortana
 ☑ OneDrive
 ☑ Windows Mixed Reality
@@ -958,7 +958,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 ```
 
 **Conservés (CRITIQUE)** :
-```
+```text
 ✓ Windows Defender
 ✓ Remote Desktop Services
 ✓ Print Spooler
@@ -973,7 +973,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 ### 3. Drivers (Module 3)
 
 **VirtIO pour Proxmox/KVM** :
-```
+```text
 ✓ VirtIO Storage (viostor) → boot.wim + install.wim
 ✓ VirtIO Network (NetKVM) → boot.wim + install.wim
 ✓ VirtIO SCSI (vioscsi) → install.wim
@@ -986,7 +986,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 
 ### 4. Updates (Module 3)
 
-```
+```sql
 ✓ SSU KB5034848 (Servicing Stack Update)
 ✓ LCU KB5034843 (Cumulative Update 2025-01)
 ☑ Clean update backup (ResetBase) : Activé
@@ -997,7 +997,7 @@ Language : fr-FR (ou en-US avec langue ajoutée)
 ### 5. Unattended (Module 4)
 
 **Localization** :
-```
+```text
 Input Locale : fr-FR
 System Locale : fr-FR
 UI Language : fr-FR
@@ -1006,7 +1006,7 @@ Time Zone : Romance Standard Time
 ```
 
 **Users** :
-```
+```text
 Username : VDI-User
 Password : SecurePass!
 Groups : Users
@@ -1014,14 +1014,14 @@ Auto-logon : 0 (désactivé)
 ```
 
 **General** :
-```
+```text
 ☑ Auto-fill defaults
 ☑ Hide account pages
 ☑ Skip machine OOBE
 ```
 
 **OOBE Extended** :
-```
+```text
 ☑ Skip EULA
 ☑ Skip Privacy Settings
 ☑ Skip Wireless Setup
@@ -1033,7 +1033,7 @@ Auto-logon : 0 (désactivé)
 ```
 
 **Disk Configuration** :
-```
+```text
 Mode : Automatic
 ☑ Wipe disk 0
 Partition scheme : UEFI (GPT)
@@ -1057,7 +1057,7 @@ exit 0
 
 ### 7. ISO Creation
 
-```
+```text
 ISO Label : WIN11_VDI_LITE_v1.0
 Output : G:\ISO\Win11_VDI_Lite_Golden_v1.0.iso
 ☑ Include boot files (UEFI + BIOS)
@@ -1069,7 +1069,7 @@ Output : G:\ISO\Win11_VDI_Lite_Golden_v1.0.iso
 ### 8. Tests de validation
 
 **Métriques cibles** :
-```
+```text
 ✓ Taille ISO : < 4.0 GB (objectif : 3.75 GB)
 ✓ Temps installation : < 10 min (objectif : 8 min)
 ✓ Clics requis : 0
@@ -1079,7 +1079,7 @@ Output : G:\ISO\Win11_VDI_Lite_Golden_v1.0.iso
 ```
 
 **Tests fonctionnels** :
-```
+```text
 ☐ Réseau fonctionnel (ping, navigation web)
 ☐ Gestionnaire de périphériques : aucun point d'exclamation
 ☐ Chocolatey installé (choco --version)

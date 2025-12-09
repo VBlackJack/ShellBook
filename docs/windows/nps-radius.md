@@ -13,7 +13,7 @@ Configuration du serveur RADIUS Windows pour l'authentification réseau 802.1X e
 
 ## Concepts
 
-```
+```text
 ARCHITECTURE NPS/RADIUS
 ══════════════════════════════════════════════════════════
 
@@ -54,7 +54,7 @@ Flux RADIUS:
 
 ### Protocoles EAP
 
-```
+```text
 MÉTHODES EAP COURANTES
 ══════════════════════════════════════════════════════════
 
@@ -194,7 +194,7 @@ Import-NpsConfiguration -Path "C:\NPS\nps-config.xml"
 
 ### Structure d'une Policy
 
-```
+```text
 NETWORK POLICY STRUCTURE
 ══════════════════════════════════════════════════════════
 
@@ -269,7 +269,7 @@ NETWORK POLICY STRUCTURE
 
 ### Configuration Switch (Cisco exemple)
 
-```
+```text
 ! Configuration globale
 aaa new-model
 aaa authentication dot1x default group radius
@@ -319,7 +319,7 @@ interface GigabitEthernet0/1
 
 ### Configuration WiFi Controller
 
-```
+```text
 # Exemple sur contrôleur Cisco WLC
 
 # RADIUS Authentication Servers
@@ -548,7 +548,7 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\IAS\Parameters" 
 
 ### Problèmes Courants
 
-```
+```text
 TROUBLESHOOTING NPS
 ══════════════════════════════════════════════════════════
 

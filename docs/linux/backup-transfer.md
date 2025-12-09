@@ -65,7 +65,7 @@ rsync -av src dest/
 # Résultat : dest/src/file1.txt, dest/src/file2.txt
 ```
 
-```
+```text
 src/                          src
 ├── file1.txt                 ├── file1.txt
 └── file2.txt                 └── file2.txt
@@ -205,7 +205,7 @@ sftp -b commands.txt user@server
 
 ### Règle 3-2-1
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    RÈGLE 3-2-1                               │
 ├─────────────────────────────────────────────────────────────┤

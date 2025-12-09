@@ -116,7 +116,7 @@ for temp in [18, 22, 25, 30]:
 ```
 
 **Résultat :**
-```
+```text
 Température: 18°C → Ventilateur: 25.0%
 Température: 22°C → Ventilateur: 45.8%
 Température: 25°C → Ventilateur: 65.2%
@@ -134,9 +134,9 @@ graph TB
     E --> F[Défuzzification<br/>Centroïde/Moyenne]
     F --> G[Valeur Crisp<br/>Vitesse: 65%]
 
-    style A fill:#e1f5ff
-    style G fill:#e1ffe1
-    style D fill:#fff4e1
+    style A fill:#2196F3
+    style G fill:#4CAF50
+    style D fill:#FF9800800800
 ```
 
 ### Étapes du Processus

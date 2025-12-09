@@ -200,7 +200,7 @@ Vous êtes Cloud Engineer dans une entreprise migrant une application 3-tier ver
 
 **Architecture cible :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                        Internet                              │
 └─────────────────────────┬───────────────────────────────────┘

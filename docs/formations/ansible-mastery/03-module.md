@@ -79,7 +79,7 @@ Vous avez appris à écrire des playbooks au Module 2. Parfait pour débuter. Ma
 
 **Architecture en Rôles :**
 
-```
+```text
 ansible-project/
 ├── site.yml                    # 20 lignes (orchestration)
 ├── roles/
@@ -153,7 +153,7 @@ ansible-project/
 
 **Arborescence complète d'un rôle :**
 
-```
+```text
 roles/nginx/
 ├── tasks/
 │   └── main.yml         # Tâches principales (OBLIGATOIRE)
@@ -329,13 +329,13 @@ ansible-galaxy init roles/nginx
 
 **Sortie :**
 
-```
+```text
 - Role roles/nginx was created successfully
 ```
 
 **Structure générée automatiquement :**
 
-```
+```text
 roles/nginx/
 ├── README.md
 ├── defaults/
@@ -433,7 +433,7 @@ server_name: example.com
 
 **Fichier généré `/etc/nginx/nginx.conf` :**
 
-```
+```nginx
 server {
     listen 8080;
     server_name example.com;
@@ -570,7 +570,7 @@ backend3 ansible_host=192.168.1.12
 
 **Fichier généré :**
 
-```
+```text
 upstream backend {
     server 192.168.1.10:8080;
     server 192.168.1.11:8080;
@@ -598,7 +598,7 @@ allowed_ports:
 
 **Généré :**
 
-```
+```text
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw allow 8080/tcp
@@ -964,7 +964,7 @@ ansible-playbook site.yml
 
 **Sortie attendue :**
 
-```
+```text
 PLAY [Configuration serveurs web] *****************************************
 
 TASK [nginx : Installer Nginx] ********************************************
@@ -993,7 +993,7 @@ web1                       : ok=6    changed=3    unreachable=0    failed=0
 
 **Ouvrir un navigateur :**
 
-```
+```text
 http://localhost:8080/
 ```
 
@@ -1011,7 +1011,7 @@ ansible web -m command -a "cat /etc/nginx/nginx.conf | grep 'listen'"
 
 **Sortie :**
 
-```
+```text
 web1 | CHANGED | rc=0 >>
         listen 8080;
 ```
@@ -1130,7 +1130,7 @@ ansible all -m command -a "timedatectl | grep 'Time zone'"
 
 **Sortie attendue :**
 
-```
+```text
 web1 | CHANGED | rc=0 >>
        Time zone: Europe/Paris (CET, +0100)
 ```
@@ -1143,7 +1143,7 @@ web1 | CHANGED | rc=0 >>
 
     ### Structure du Rôle
 
-    ```
+    ```text
     roles/common/
     ├── defaults/
     │   └── main.yml
@@ -1329,7 +1329,7 @@ web1 | CHANGED | rc=0 >>
 
     **Sortie attendue :**
 
-    ```
+    ```text
     PLAY [Configuration de base (tous serveurs)] ******************************
 
     TASK [common : Mettre à jour le cache APT] ********************************
@@ -1408,7 +1408,7 @@ web1 | CHANGED | rc=0 >>
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     /usr/bin/vim
 
@@ -1437,7 +1437,7 @@ web1 | CHANGED | rc=0 >>
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
            Time zone: Europe/Paris (CET, +0100)
 
@@ -1458,7 +1458,7 @@ web1 | CHANGED | rc=0 >>
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     LANG=fr_FR.UTF-8
     ```
@@ -1473,7 +1473,7 @@ web1 | CHANGED | rc=0 >>
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     drwxr-xr-x 2 root root 4096 Nov 22 16:30 /opt/scripts
     ```
@@ -1589,7 +1589,7 @@ ansible-galaxy remove geerlingguy.nginx
 
 ### Organisation Recommandée d'un Projet
 
-```
+```text
 ansible-project/
 ├── ansible.cfg              # Configuration Ansible
 ├── inventory/
@@ -1619,7 +1619,7 @@ ansible-project/
 
 **1. Un rôle = Une fonction**
 
-```
+```text
 ✅ BON :
 roles/nginx/         # Uniquement Nginx
 roles/postgresql/    # Uniquement PostgreSQL

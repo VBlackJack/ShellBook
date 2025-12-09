@@ -238,9 +238,9 @@ flowchart TD
 
     FW2 --> LAN_Zone
 
-    style Internet fill:#ff6b6b
-    style DMZ fill:#ffd93d
-    style LAN fill:#6bcf7f
+    style Internet fill:#f44336
+    style DMZ fill:#FF9800800800
+    style LAN fill:#4CAF50
     style FW1 fill:#ff8c42
     style FW2 fill:#ff8c42
 ```
@@ -251,7 +251,7 @@ flowchart TD
 
 ![Network No DMZ Danger](../assets/diagrams/network-no-dmz-danger.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              ARCHITECTURE SANS DMZ (DANGEREUX)               │
 ├─────────────────────────────────────────────────────────────┤
@@ -272,7 +272,7 @@ flowchart TD
 
 ![Network DMZ Secure Architecture](../assets/diagrams/network-dmz-secure-architecture.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                ARCHITECTURE AVEC DMZ (SÉCURISÉE)             │
 ├─────────────────────────────────────────────────────────────┤
@@ -326,7 +326,7 @@ flowchart TD
 
 **Un seul firewall avec 3 interfaces réseau.**
 
-```
+```text
            ┌─────────────────┐
 Internet ──┤ eth0 (WAN)      │
            │                 │
@@ -350,7 +350,7 @@ LAN ───────┤ eth2 (LAN)      │
 
 **Deux firewalls séparés.**
 
-```
+```text
 Internet → [Firewall Externe] → DMZ → [Firewall Interne] → LAN
 ```
 
@@ -379,7 +379,7 @@ Internet → [Firewall Externe] → DMZ → [Firewall Interne] → LAN
 !!! danger "❌ NE JAMAIS Exposer Directement le LAN"
     **Erreur :** Ouvrir des ports depuis Internet directement vers le LAN (sans DMZ).
 
-    ```
+    ```text
     # ❌ MAUVAIS (règle firewall dangereuse)
     Source: Internet (0.0.0.0/0)
     Destination: 192.168.1.50 (Serveur SQL LAN)
@@ -394,7 +394,7 @@ Internet → [Firewall Externe] → DMZ → [Firewall Interne] → LAN
 !!! danger "❌ NE JAMAIS Permettre DMZ → LAN (Except Services Spécifiques)"
     **Erreur :** Autoriser la DMZ à se connecter librement au LAN.
 
-    ```
+    ```text
     # ❌ MAUVAIS
     Source: DMZ (toute la zone)
     Destination: LAN (toute la zone)
@@ -419,7 +419,7 @@ Internet → [Firewall Externe] → DMZ → [Firewall Interne] → LAN
 
 **Architecture complète :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   SITE WEB SÉCURISÉ                          │
 ├─────────────────────────────────────────────────────────────┤

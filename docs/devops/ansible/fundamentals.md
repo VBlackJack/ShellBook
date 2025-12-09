@@ -20,7 +20,7 @@ Infrastructure as Code sans agents.
 
 ![Ansible Agentless Architecture](../../assets/diagrams/ansible-agentless-architecture.jpeg)
 
-```
+```text
 ┌─────────────────┐         SSH          ┌─────────────────┐
 │  Control Node   │ ──────────────────►  │  Managed Node   │
 │  (Ansible)      │                      │  (Just SSH)     │
@@ -47,7 +47,7 @@ ansible-playbook deploy.yml
 
 **Pull (Puppet/Chef):** Les agents interrogent périodiquement les changements.
 
-```
+```text
 L'agent vérifie toutes les 30min → applique la dérive
 ```
 
@@ -354,7 +354,7 @@ ansible-playbook playbook.yml --check --diff
 
 ## Structure de Projet (Bonne Pratique)
 
-```
+```text
 ansible-project/
 ├── ansible.cfg
 ├── inventory/

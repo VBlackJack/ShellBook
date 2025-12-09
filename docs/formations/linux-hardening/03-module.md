@@ -64,7 +64,7 @@ sudo netstat -tulnp | grep LISTEN
 
 **Règle d'or de la sécurité réseau :**
 
-```
+```text
 DENY ALL INCOMING
 ALLOW ALL OUTGOING
 ALLOW SPECIFIC INCOMING (whitelist)
@@ -90,13 +90,13 @@ flowchart TD
     Backend -.Trafic interne.-> Cache
     HTTP -.Trafic interne.-> Backend
 
-    style Firewall fill:#ffb900,stroke:#d39300,color:#000
-    style SSH fill:#107c10,stroke:#0b5a0d,color:#fff
-    style HTTP fill:#107c10,stroke:#0b5a0d,color:#fff
-    style HTTPS fill:#107c10,stroke:#0b5a0d,color:#fff
-    style Backend fill:#e81123,stroke:#b00016,color:#fff
-    style DB fill:#e81123,stroke:#b00016,color:#fff
-    style Cache fill:#e81123,stroke:#b00016,color:#fff
+    style Firewall fill:#FF9800800800,stroke:#d39300,color:#000
+    style SSH fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style HTTP fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style HTTPS fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style Backend fill:#f44336,stroke:#b00016,color:#fff
+    style DB fill:#f44336,stroke:#b00016,color:#fff
+    style Cache fill:#f44336,stroke:#b00016,color:#fff
 ```
 
 **Résultat :**
@@ -511,10 +511,10 @@ flowchart LR
     D --> E[Firewall<br/>UFW/Firewalld]
     E -->|Bannissement<br/>10 minutes| F[❌ Connexions bloquées]
 
-    style A fill:#e81123,stroke:#b00016,color:#fff
-    style C fill:#0078d4,stroke:#005a9e,color:#fff
-    style D fill:#ffb900,stroke:#d39300,color:#000
-    style F fill:#107c10,stroke:#0b5a0d,color:#fff
+    style A fill:#f44336,stroke:#b00016,color:#fff
+    style C fill:#2196F3,stroke:#005a9e,color:#fff
+    style D fill:#FF9800800800,stroke:#d39300,color:#000
+    style F fill:#4CAF50,stroke:#0b5a0d,color:#fff
 ```
 
 **Avantages :**

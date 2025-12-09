@@ -29,7 +29,7 @@ Ce module couvre l'intégration hybride avec Azure :
 
 ### 1.1 Prérequis
 
-```
+```text
 AZURE AD CONNECT - PRÉREQUIS
 ────────────────────────────
 

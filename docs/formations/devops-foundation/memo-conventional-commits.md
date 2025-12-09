@@ -15,7 +15,7 @@ Convention de nommage des commits Git pour un historique lisible et exploitable 
 
 ## Format Standard
 
-```
+```xml
 <type>(<scope>): <description>
 
 [body]
@@ -25,7 +25,7 @@ Convention de nommage des commits Git pour un historique lisible et exploitable 
 
 ### Exemple Complet
 
-```
+```xml
 feat(auth): Ajout authentification OAuth2
 
 - Implémentation du flow Authorization Code
@@ -119,7 +119,7 @@ Le body fournit des **détails supplémentaires** :
 - Peut contenir des listes à puces
 - Limite à **72 caractères par ligne** (soft wrap)
 
-```
+```text
 feat(auth): Ajout support SAML 2.0
 
 Le SSO SAML est requis pour les clients enterprise.
@@ -138,7 +138,7 @@ Les footers contiennent des **métadonnées** :
 
 ### Breaking Changes
 
-```
+```text
 feat(api)!: Changer format de réponse /users
 
 BREAKING CHANGE: Le champ `name` est remplacé par `firstName` et `lastName`.
@@ -149,7 +149,7 @@ Les clients doivent mettre à jour leur parsing.
 
 ### Références Issues
 
-```
+```text
 fix(auth): Corriger expiration des tokens
 
 Fixes #42
@@ -159,7 +159,7 @@ Resolves #456
 
 ### Co-auteurs
 
-```
+```xml
 feat: Implémentation du nouveau dashboard
 
 Co-authored-by: Bob <bob@example.com>
@@ -172,7 +172,7 @@ Co-authored-by: Charlie <charlie@example.com>
 
 ### Nouvelle Feature
 
-```
+```text
 feat(orders): Ajouter filtrage par date
 
 - Filtres: aujourd'hui, semaine, mois, custom
@@ -184,7 +184,7 @@ Closes #234
 
 ### Bug Fix
 
-```
+```text
 fix(cart): Corriger calcul total avec réductions
 
 Le total n'incluait pas les réductions cumulées.
@@ -195,7 +195,7 @@ Fixes #567
 
 ### Documentation
 
-```
+```text
 docs: Ajouter guide de contribution
 
 - Instructions pour fork et PR
@@ -205,7 +205,7 @@ docs: Ajouter guide de contribution
 
 ### Refactoring
 
-```
+```text
 refactor(services): Extraire logique de notification
 
 Préparation pour l'ajout de notifications push.
@@ -214,7 +214,7 @@ Aucun changement fonctionnel.
 
 ### CI/CD
 
-```
+```bash
 ci(github): Ajouter cache npm pour accélérer le build
 
 Réduit le temps de build de 5min à 2min.
@@ -222,7 +222,7 @@ Réduit le temps de build de 5min à 2min.
 
 ### Breaking Change
 
-```
+```text
 feat(api)!: Migrer vers API v2
 
 BREAKING CHANGE:
@@ -235,7 +235,7 @@ Migration guide: docs/migration-v2.md
 
 ### Revert
 
-```
+```text
 revert: feat(ui): Ajouter mode sombre
 
 This reverts commit abc123def.
@@ -314,7 +314,7 @@ Mapping type → version :
 
 ## Aide-Mémoire Visuel
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │  feat(auth): Ajouter authentification OAuth2                │
 │  │     │     └── Description (impératif, < 72 chars)        │

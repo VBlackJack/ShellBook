@@ -17,7 +17,7 @@ tags:
 
 Cette formation complète vous transforme de débutant en **expert Windows Server** capable de concevoir, déployer et maintenir des infrastructures d'entreprise complexes. En 20 modules progressifs, vous maîtriserez PowerShell, Active Directory, la sécurité, le clustering, les conteneurs Windows et l'Infrastructure as Code.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────┐
 │                    WINDOWS SERVER MASTERY                       │
 │                    150 heures • 20 modules                      │
@@ -80,10 +80,10 @@ flowchart TB
     N2 --> N3
     N3 --> N4
 
-    style N1 fill:#4a90d9,stroke:#2c5aa0,color:#fff
-    style N2 fill:#107c10,stroke:#0e6b0e,color:#fff
-    style N3 fill:#ff8c00,stroke:#cc7000,color:#fff
-    style N4 fill:#d13438,stroke:#a52a2a,color:#fff
+    style N1 fill:#2196F3,stroke:#2c5aa0,color:#fff
+    style N2 fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style N3 fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style N4 fill:#f44336,stroke:#a52a2a,color:#fff
 ```
 
 ---
@@ -254,7 +254,7 @@ flowchart TB
 
 Chaque module suit cette progression :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    STRUCTURE D'UN MODULE                     │
 ├─────────────────────────────────────────────────────────────┤
@@ -339,8 +339,8 @@ flowchart LR
     E --> F[Module 06]
     F --> G[...] --> H[Module 20]
 
-    style A fill:#4a90d9,stroke:#2c5aa0,color:#fff
-    style F fill:#107c10,stroke:#0e6b0e,color:#fff
+    style A fill:#2196F3,stroke:#2c5aa0,color:#fff
+    style F fill:#4CAF50,stroke:#0e6b0e,color:#fff
 ```
 
 **Commencez par le [Module 01 : Découverte Windows Server](01-decouverte.md)**

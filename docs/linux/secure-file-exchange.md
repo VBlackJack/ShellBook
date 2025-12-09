@@ -16,7 +16,7 @@ Zone tampon sécurisée ("Sas") pour l'échange de fichiers avec scan antivirus 
 
 **Le Sas = Zone tampon isolée où les fichiers sont analysés avant distribution**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  PROBLÈME SANS SAS                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -59,7 +59,7 @@ Zone tampon sécurisée ("Sas") pour l'échange de fichiers avec scan antivirus 
 
 ### Vue d'Ensemble
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  WORKFLOW COMPLET                            │
 ├─────────────────────────────────────────────────────────────┤
@@ -89,7 +89,7 @@ Zone tampon sécurisée ("Sas") pour l'échange de fichiers avec scan antivirus 
 
 ### Structure des Répertoires
 
-```
+```text
 /DATA/
 ├── IN/              # Zone de dépôt (inotifywait actif)
 ├── OUT/             # Fichiers sains (après scan OK)

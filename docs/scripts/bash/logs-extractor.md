@@ -424,7 +424,7 @@ fi
 
 ## Sortie exemple
 
-```
+```bash
 [INFO] Extracting logs from: /var/log/auth.log
 [INFO] Time range: 08:00 - 12:00
 [INFO] Detected format: syslog

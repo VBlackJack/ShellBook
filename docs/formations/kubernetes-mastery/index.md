@@ -164,7 +164,7 @@ Chaque module inclut :
 
 ## Environnement Technique
 
-```
+```text
 ARCHITECTURE KUBERNETES
 ═══════════════════════
 

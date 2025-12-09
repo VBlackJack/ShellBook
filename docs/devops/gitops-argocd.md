@@ -578,7 +578,7 @@ kubectl apply -f application.yaml
 
 **Scénario :** Microservices avec 50 applications.
 
-```
+```text
 frontend → Application ArgoCD
 backend-api → Application ArgoCD
 backend-worker → Application ArgoCD
@@ -775,7 +775,7 @@ cd nginx-custom
 
 **Structure générée :**
 
-```
+```text
 nginx-custom/
 ├── Chart.yaml
 ├── values.yaml

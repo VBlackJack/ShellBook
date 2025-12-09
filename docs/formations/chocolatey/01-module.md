@@ -71,7 +71,7 @@ Chocolatey est construit sur **NuGet**, le gestionnaire de packages .NET.
 
 Un package Chocolatey (`.nupkg`) est un **fichier ZIP** qui contient :
 
-```
+```text
 7zip.9.20.0.nupkg  (fichier ZIP renommé)
 │
 ├── 7zip.nuspec                    # Métadonnées XML (id, version, auteurs)
@@ -152,8 +152,8 @@ flowchart LR
     SHIM -->|2. Redirige vers| REAL
     REAL -->|3. Retour output| USER
 
-    style SHIM fill:#FFB900,color:#000
-    style REAL fill:#107C10,color:#fff
+    style SHIM fill:#FF9800800800,color:#000
+    style REAL fill:#4CAF50,color:#fff
 ```
 
 **Exemple concret** :
@@ -220,8 +220,8 @@ flowchart TD
     CMP -->|Oui| INSTALL
     CMP -->|Non| ABORT
 
-    style INSTALL fill:#107C10,color:#fff
-    style ABORT fill:#E81123,color:#fff
+    style INSTALL fill:#4CAF50,color:#fff
+    style ABORT fill:#f44336,color:#fff
 ```
 
 **Exemple de validation** :
@@ -314,7 +314,7 @@ choco search git --exact
 
 !!! warning "PowerShell Administrateur obligatoire"
     Chocolatey nécessite des droits admin pour installer des logiciels. Sinon, erreur :
-    ```
+    ```text
     Access to the path 'C:\ProgramData\chocolatey' is denied.
     ```
 
@@ -793,7 +793,7 @@ Créez un script PowerShell qui automatise l'installation complète :
     ```
 
     **Output attendu** :
-    ```
+    ```bash
     =========================================
       SETUP POSTE DÉVELOPPEUR - CHOCOLATEY
     =========================================

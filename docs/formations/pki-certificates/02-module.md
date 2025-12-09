@@ -112,7 +112,7 @@ openssl s_client -connect www.example.com:443 -showcerts
 
 === "PEM (Base64)"
 
-    ```
+    ```text
     -----BEGIN CERTIFICATE-----
     MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQEL
     BQAwTzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5
@@ -122,7 +122,7 @@ openssl s_client -connect www.example.com:443 -showcerts
 
 === "DER (Binaire)"
 
-    ```
+    ```text
     Fichier binaire - non lisible en texte
     Commence généralement par les octets 0x30 0x82
     ```

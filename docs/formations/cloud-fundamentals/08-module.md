@@ -38,7 +38,7 @@ graph TB
     TEST -->|"😱 Bugs en prod !"| PROD
 
     style DEV fill:#4caf50,color:#fff
-    style TEST fill:#ff9800,color:#fff
+    style TEST fill:#FF9800800800,color:#fff
     style PROD fill:#f44336,color:#fff
 ```
 
@@ -111,8 +111,8 @@ graph TB
         C_ENGINE --> C_APP3
     end
 
-    style VM_OS1 fill:#ff9800,color:#fff
-    style VM_OS2 fill:#ff9800,color:#fff
+    style VM_OS1 fill:#FF9800800800,color:#fff
+    style VM_OS2 fill:#FF9800800800,color:#fff
     style C_ENGINE fill:#2196f3,color:#fff
 ```
 
@@ -147,7 +147,7 @@ graph LR
         CONT --> TRUCK2
     end
 
-    style TRUCK fill:#ff9800,color:#fff
+    style TRUCK fill:#FF9800800800,color:#fff
     style CONT fill:#2196f3,color:#fff
 ```
 
@@ -215,7 +215,7 @@ graph LR
 
     style IMAGE fill:#2196f3,color:#fff
     style CONTAINER fill:#4caf50,color:#fff
-    style REGISTRY fill:#ff9800,color:#fff
+    style REGISTRY fill:#FF9800800800,color:#fff
 ```
 
 ### 3.4 Exemple Concret (Sans Code)
@@ -374,7 +374,7 @@ graph TB
     MANAGED -->|"Plus d'abstraction"| SERVERLESS
 
     style SELF fill:#f44336,color:#fff
-    style MANAGED fill:#ff9800,color:#fff
+    style MANAGED fill:#FF9800800800,color:#fff
     style SERVERLESS fill:#4caf50,color:#fff
 ```
 
@@ -399,7 +399,7 @@ flowchart TD
     Q2 -->|"Non, sporadique"| SERVERLESS["λ Serverless<br/>(Cloud Run, Fargate)"]
     Q2 -->|"Oui, constant"| INSTANCES["📦 Container service simple<br/>(App Runner, Container Apps)"]
 
-    style MANAGED fill:#ff9800,color:#fff
+    style MANAGED fill:#FF9800800800,color:#fff
     style SERVERLESS fill:#4caf50,color:#fff
     style INSTANCES fill:#2196f3,color:#fff
 ```

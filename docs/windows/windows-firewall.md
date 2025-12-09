@@ -12,7 +12,7 @@ Configuration avancée du pare-feu Windows via PowerShell et GPO.
 
 ## Concepts
 
-```
+```text
 PROFILS DE FIREWALL
 ══════════════════════════════════════════════════════════
 
@@ -139,7 +139,7 @@ netsh advfirewall import "C:\firewall-backup.wfw"
 
 ### Emplacement
 
-```
+```text
 Computer Configuration > Policies > Windows Settings >
 Security Settings > Windows Defender Firewall with Advanced Security
 ```

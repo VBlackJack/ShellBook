@@ -269,7 +269,7 @@ spec:
 
 ### 4.1 Structure
 
-```
+```text
 myapp/
 ├── base/
 │   ├── kustomization.yaml

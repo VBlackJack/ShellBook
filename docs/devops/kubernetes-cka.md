@@ -63,7 +63,7 @@ Retours d'expérience concrets sur la réussite de l'examen Certified Kubernetes
 
 **Minimum pour une vraie HA en production:**
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │       Configuration HA Production        │
 ├─────────────────────────────────────────┤
@@ -87,7 +87,7 @@ Retours d'expérience concrets sur la réussite de l'examen Certified Kubernetes
     ETCD utilise le consensus Raft. Avec 3 nœuds, vous pouvez en perdre 1.
     Avec 5 nœuds, vous pouvez en perdre 2. Utilisez toujours des **nombres impairs**.
 
-    ```
+    ```text
     Nœuds | Pannes Tolérables
     ------+-------------------
       1   |        0
@@ -102,7 +102,7 @@ Retours d'expérience concrets sur la réussite de l'examen Certified Kubernetes
 
 Les incompatibilités de versions sont une source courante de pannes de cluster.
 
-```
+```text
 ┌──────────────────────────────────────────────┐
 │  Vérifier la Compatibilité AVANT l'Install   │
 ├──────────────────────────────────────────────┤

@@ -609,7 +609,7 @@ MYSQL_PWD=secret ./mysql-security-audit.sh -H db.example.com -u admin
 
 ## Exemple de Sortie
 
-```
+```sql
 ================================================================
            AUDIT DE SÉCURITÉ MySQL/MariaDB
 ================================================================

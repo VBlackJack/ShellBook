@@ -12,7 +12,7 @@ Desired State Configuration (DSC) pour la gestion de configuration déclarative.
 
 ## Concepts
 
-```
+```text
 DSC ARCHITECTURE
 ══════════════════════════════════════════════════════════
 
@@ -191,7 +191,7 @@ Set-DscLocalConfigurationManager -Path "C:\DSC\LCM" -Verbose
 
 ### Modes de Configuration
 
-```
+```text
 MODES LCM
 ══════════════════════════════════════════════════════════
 

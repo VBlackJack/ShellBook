@@ -182,7 +182,7 @@ terraform output -json > outputs.json
 
 ### Module Structure
 
-```
+```text
 modules/
 └── webserver/
     ├── main.tf
@@ -535,7 +535,7 @@ terraform import module.vpc.aws_vpc.main vpc-12345678
 
 ### Directory Structure
 
-```
+```text
 project/
 ├── main.tf              # Primary resources
 ├── variables.tf         # Variable definitions

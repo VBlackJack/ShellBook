@@ -427,7 +427,7 @@ ansible all -m shell -a "uptime" -i hosts.ini
 
 **Sortie :**
 
-```
+```text
 localhost | CHANGED | rc=0 >>
  10:23:45 up 2 days,  3:14,  1 user,  load average: 0.52, 0.58, 0.59
 
@@ -443,7 +443,7 @@ ansible all -m shell -a "df -h /" -i hosts.ini
 
 **Sortie :**
 
-```
+```text
 localhost | CHANGED | rc=0 >>
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda1        50G   28G   20G  59% /
@@ -463,7 +463,7 @@ ansible all -m file -a "path=/tmp/ansible-test state=touch" -i hosts.ini
 
 **Sortie :**
 
-```
+```text
 localhost | CHANGED => {
     "changed": true,
     "dest": "/tmp/ansible-test",
@@ -655,7 +655,7 @@ ansible all -m command -a "df -h /"
 
 **Résultat attendu :**
 
-```
+```text
 web1 | CHANGED | rc=0 >>
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda1        50G   28G   20G  59% /
@@ -966,7 +966,7 @@ which htop
 
     ### Structure Finale du Lab
 
-    ```
+    ```text
     ~/ansible-lab/
     ├── inventory.ini       ← Liste des serveurs
     ├── ansible.cfg         ← Configuration Ansible

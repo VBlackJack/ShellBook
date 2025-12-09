@@ -573,7 +573,7 @@ python git_repo_cleaner.py --json branches-report.json
 
 ## Sortie exemple
 
-```
+```sql
 Repository: /home/user/myproject
 Main branch: main
 Current branch: feature/new-ui

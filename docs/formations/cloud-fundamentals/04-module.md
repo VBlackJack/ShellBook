@@ -47,11 +47,11 @@ graph TB
     style P2 fill:#4caf50,color:#fff
     style P3 fill:#4caf50,color:#fff
     style P4 fill:#4caf50,color:#fff
-    style C1 fill:#ff9800,color:#fff
-    style C2 fill:#ff9800,color:#fff
-    style C3 fill:#ff9800,color:#fff
-    style C4 fill:#ff9800,color:#fff
-    style C5 fill:#ff9800,color:#fff
+    style C1 fill:#FF9800800800,color:#fff
+    style C2 fill:#FF9800800800,color:#fff
+    style C3 fill:#FF9800800800,color:#fff
+    style C4 fill:#FF9800800800,color:#fff
+    style C5 fill:#FF9800800800,color:#fff
 ```
 
 !!! warning "Point Clé"
@@ -91,7 +91,7 @@ graph LR
     POLICY --> STORAGE
 
     style USER fill:#2196f3,color:#fff
-    style POLICY fill:#ff9800,color:#fff
+    style POLICY fill:#FF9800800800,color:#fff
     style VM fill:#4caf50,color:#fff
 ```
 
@@ -222,7 +222,7 @@ graph LR
 
     style CLIENT fill:#4caf50,color:#fff
     style LB fill:#2196f3,color:#fff
-    style DB fill:#ff9800,color:#fff
+    style DB fill:#FF9800800800,color:#fff
 ```
 
 !!! success "Best Practices"
@@ -256,9 +256,9 @@ graph TB
     L5 --> L6
 
     style L1 fill:#f44336,color:#fff
-    style L2 fill:#ff9800,color:#fff
-    style L3 fill:#ffeb3b,color:#000
-    style L4 fill:#8bc34a,color:#fff
+    style L2 fill:#FF9800800800,color:#fff
+    style L3 fill:#FF9800,color:#000
+    style L4 fill:#4CAF50,color:#fff
     style L5 fill:#4caf50,color:#fff
     style L6 fill:#2196f3,color:#fff
 ```
@@ -360,11 +360,11 @@ graph TB
     style P1 fill:#4caf50,color:#fff
     style P2 fill:#4caf50,color:#fff
     style P3 fill:#4caf50,color:#fff
-    style C1 fill:#ff9800,color:#fff
-    style C2 fill:#ff9800,color:#fff
-    style C3 fill:#ff9800,color:#fff
-    style C4 fill:#ff9800,color:#fff
-    style C5 fill:#ff9800,color:#fff
+    style C1 fill:#FF9800800800,color:#fff
+    style C2 fill:#FF9800800800,color:#fff
+    style C3 fill:#FF9800800800,color:#fff
+    style C4 fill:#FF9800800800,color:#fff
+    style C5 fill:#FF9800800800,color:#fff
 ```
 
 **Les 12 exigences PCI-DSS :**
@@ -639,7 +639,7 @@ graph LR
     ```
 
     **Architecture réseau sécurisée :**
-    ```
+    ```text
     Internet → [WAF] → [ALB (HTTPS)] → [App Servers] → [RDS (privé)]
                🛡️        🔐               🔒              🔐
     ```

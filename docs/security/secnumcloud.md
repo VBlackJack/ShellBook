@@ -13,7 +13,7 @@ Référentiel de sécurité de l'ANSSI pour les prestataires de services cloud. 
 
 ## Présentation
 
-```
+```text
 SECNUMCLOUD - VUE D'ENSEMBLE
 ══════════════════════════════════════════════════════════════════════
 
@@ -51,7 +51,7 @@ Périmètre:
 
 ### Chapitres Principaux
 
-```
+```text
 STRUCTURE SECNUMCLOUD 3.2
 ══════════════════════════════════════════════════════════════════════
 
@@ -655,7 +655,7 @@ Guides complémentaires:
 
 ### Correspondance avec Autres Référentiels
 
-```
+```text
 MAPPING SECNUMCLOUD
 ══════════════════════════════════════════════════════════════════════
 

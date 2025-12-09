@@ -91,7 +91,7 @@ graph TB
 
     style LB fill:#2196f3,color:#fff
     style DB1 fill:#4caf50,color:#fff
-    style DB2 fill:#ff9800,color:#fff
+    style DB2 fill:#FF9800800800,color:#fff
 ```
 
 !!! success "Bénéfice"
@@ -133,7 +133,7 @@ graph TB
     SERVERLESS -.-> LOW
 
     style BARE fill:#f44336,color:#fff
-    style VM fill:#ff9800,color:#fff
+    style VM fill:#FF9800800800,color:#fff
     style CONTAINER fill:#4caf50,color:#fff
     style SERVERLESS fill:#2196f3,color:#fff
 ```
@@ -162,7 +162,7 @@ graph TB
 
 #### Exemple de Tailles
 
-```
+```text
 AWS EC2 : t3.micro → t3.small → t3.medium → t3.large → t3.xlarge → t3.2xlarge
 
          1 vCPU     2 vCPU      2 vCPU       2 vCPU      4 vCPU       8 vCPU
@@ -182,7 +182,7 @@ graph LR
 
     style OD fill:#f44336,color:#fff
     style RI fill:#4caf50,color:#fff
-    style SPOT fill:#ff9800,color:#fff
+    style SPOT fill:#FF9800800800,color:#fff
     style SAVING fill:#2196f3,color:#fff
 ```
 
@@ -262,7 +262,7 @@ graph LR
 
     APP["🌐 Application"] -->|"HTTP GET/PUT"| BUCKET
 
-    style BUCKET fill:#ff9800,color:#fff
+    style BUCKET fill:#FF9800800800,color:#fff
 ```
 
 | Provider | Service | Durabilité |
@@ -558,7 +558,7 @@ graph TB
     ```
 
     **Architecture complète :**
-    ```
+    ```text
     ┌─────────────────────────────────────────────────────────────┐
     │                    VPC 10.0.0.0/16                          │
     │                                                             │
@@ -656,7 +656,7 @@ graph TB
     - Total optimisé : **≈ 563€/mois** (**6 756€/an**)
 
     **Comparaison vs On-Premise :**
-    ```
+    ```text
     Coûts on-premise sur 3 ans :
     • Hardware (serveurs, storage, network) : 45 000€
     • Datacenter (espace, énergie) : 18 000€

@@ -49,9 +49,9 @@ graph TD
     C -->|Émet| E
     C -->|Émet| F
 
-    style A fill:#ff6b6b
-    style B fill:#ffd93d
-    style C fill:#ffd93d
+    style A fill:#f44336
+    style B fill:#FF9800800800
+    style C fill:#FF9800800800
 ```
 
 ### Rôles des Composants
@@ -370,8 +370,8 @@ graph TD
     B --> G[CRL/OCSP]
     B --> H[NDES<br/>SCEP Protocol]
 
-    style A fill:#ff6b6b
-    style B fill:#0078d4
+    style A fill:#f44336
+    style B fill:#2196F3
 ```
 
 ### Installation PowerShell
@@ -479,7 +479,7 @@ flowchart LR
     B --> C[IIS/Nginx<br/>crl.interne.com]
     C --> D[Serveurs Internes<br/>Zone sécurisée]
 
-    style A fill:#ff6b6b
+    style A fill:#f44336
     style C fill:#51cf66
 ```
 

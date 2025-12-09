@@ -59,7 +59,7 @@ openssl genrsa -out /dev/null 2048 2>/dev/null && echo "OK"
 
     Un certificat sans SAN affichera une erreur :
 
-    ```
+    ```text
     NET::ERR_CERT_COMMON_NAME_INVALID
     ```
 
@@ -581,7 +581,7 @@ main "$@"
 
 ## Exemple de Session Interactive
 
-```
+```bash
 === SSL CSR WIZARD ===
 
 Domaine principal (Common Name): example.com

@@ -56,10 +56,10 @@ graph TD
     USR --> USRBIN["/usr/bin"]
     USR --> USRLIB["/usr/lib"]
 
-    style ROOT fill:#e74c3c,stroke:#c0392b,color:#fff
-    style HOME fill:#3498db,stroke:#2980b9,color:#fff
-    style ETC fill:#f39c12,stroke:#d35400,color:#fff
-    style VAR fill:#9b59b6,stroke:#8e44ad,color:#fff
+    style ROOT fill:#f44336,stroke:#c0392b,color:#fff
+    style HOME fill:#2196F3,stroke:#2980b9,color:#fff
+    style ETC fill:#FF9800800800,stroke:#d35400,color:#fff
+    style VAR fill:#9C27B0,stroke:#9C27B0,color:#fff
 ```
 
 ### Les Répertoires Essentiels (FHS)
@@ -84,7 +84,7 @@ graph TD
 
 ### Mnémotechnique
 
-```
+```text
 /bin    → BINaires essentiels
 /etc    → Editable Text Configuration (ET Cetera)
 /home   → HOME des utilisateurs
@@ -204,7 +204,7 @@ ls -lh /var/log/     # Logs avec tailles lisibles
 
 ### Lecture de `ls -l`
 
-```
+```text
 -rw-r--r--  1 alice users  4096 Nov 29 14:30 fichier.txt
 │├──┬───┤  │   │     │      │       │          │
 ││  │   │  │   │     │      │       │          └── Nom du fichier

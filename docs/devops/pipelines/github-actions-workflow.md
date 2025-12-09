@@ -48,9 +48,9 @@ graph TD
     E --> F
     F --> G[Deploy to Production]
 
-    style A fill:#f9f
-    style F fill:#bbf
-    style G fill:#bfb
+    style A fill:#9C27B0
+    style F fill:#2196F3
+    style G fill:#4CAF50
 ```
 
 ---

@@ -29,7 +29,7 @@ Ce module couvre la sécurisation d'Active Directory et Windows Server :
 
 ### 1.1 Concept
 
-```
+```text
 TIERING MODEL - MICROSOFT
 ─────────────────────────
 

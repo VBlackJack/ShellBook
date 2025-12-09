@@ -487,7 +487,7 @@ except Exception:
 
 ### Structure de Projet
 
-```
+```text
 myapp/
 ├── myapp/
 │   ├── __init__.py

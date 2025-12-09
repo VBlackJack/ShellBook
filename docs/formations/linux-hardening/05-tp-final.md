@@ -80,7 +80,7 @@ sudo netstat -tulpn | grep LISTEN
 
 **Exemple de sortie (serveur non sécurisé) :**
 
-```
+```text
 LISTEN  0.0.0.0:22       0.0.0.0:*    users:(("sshd",pid=1234))
 LISTEN  0.0.0.0:80       0.0.0.0:*    users:(("nginx",pid=5678))
 LISTEN  0.0.0.0:3000     0.0.0.0:*    users:(("node",pid=9012))   ← ❌ EXPOSÉ!
@@ -104,7 +104,7 @@ awk -F: '$3 >= 1000 {print $1, $3, $7}' /etc/passwd
 
 **Exemple de sortie :**
 
-```
+```text
 alice 1001 /bin/bash       ← Admin actuel (OK)
 bob 1002 /bin/bash         ← Ancien admin (parti) ❌
 charlie 1003 /bin/bash     ← Stagiaire (parti) ❌
@@ -149,7 +149,7 @@ sudo grep -E '^PasswordAuthentication|^PermitRootLogin|^PubkeyAuthentication' /e
 
 **Exemple de sortie (configuration non sécurisée) :**
 
-```
+```text
 PermitRootLogin yes                    ← ❌ ROOT AUTORISÉ!
 PasswordAuthentication yes             ← ❌ BRUTE-FORCE POSSIBLE!
 PubkeyAuthentication yes               ← ✅ OK
@@ -167,7 +167,7 @@ sudo firewall-cmd --state
 
 **Exemple de sortie :**
 
-```
+```text
 Status: inactive    ← ❌ FIREWALL DÉSACTIVÉ!
 ```
 
@@ -514,7 +514,7 @@ sudo ufw status verbose
 
 **Exemple de sortie attendue :**
 
-```
+```bash
 Status: active
 Logging: on (low)
 Default: deny (incoming), allow (outgoing), disabled (routed)
@@ -902,7 +902,7 @@ done
 
 **Résultat attendu :**
 
-```
+```bash
 192.168.1.100:2222 - succeeded    ← ✅ SSH autorisé
 192.168.1.100:80 - succeeded      ← ✅ HTTP autorisé
 192.168.1.100:443 - succeeded     ← ✅ HTTPS autorisé
@@ -933,7 +933,7 @@ sudo fail2ban-client status sshd
 
 **Résultat attendu :**
 
-```
+```bash
 Status for the jail: sshd
 |- Currently banned: 1
 `- Banned IP list:   192.168.1.50
@@ -1055,7 +1055,7 @@ Au terme de ce TP Final, vous êtes capable de :
 
 ### Certification Informelle
 
-```
+```text
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
 ║              CERTIFICAT DE COMPÉTENCE                    ║

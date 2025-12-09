@@ -116,7 +116,7 @@ skopeo copy oci:./nginx-local:alpine docker://registry.lab.local:5000/nginx:alpi
 
 ### Formats Supportés
 
-```
+```text
 FORMATS DE TRANSPORT SKOPEO
 ═══════════════════════════
 

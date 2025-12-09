@@ -81,9 +81,9 @@ graph TB
     H --> K
     I --> L
 
-    style G fill:#f9a825,stroke:#f57f17
-    style H fill:#f9a825,stroke:#f57f17
-    style I fill:#f9a825,stroke:#f57f17
+    style G fill:#FF9800,stroke:#f57f17
+    style H fill:#FF9800,stroke:#f57f17
+    style I fill:#FF9800,stroke:#f57f17
 ```
 
 ### La Philosophie Unix
@@ -141,7 +141,7 @@ graph TD
     style B fill:#a93226,stroke:#641e16,color:#fff
     style C fill:#c0392b,stroke:#922b21,color:#fff
     style D fill:#1abc9c,stroke:#16a085,color:#fff
-    style E fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#4CAF50,stroke:#1e8449,color:#fff
 ```
 
 ### Comparaison des Distributions Principales
@@ -171,7 +171,7 @@ flowchart TD
 
     style B1 fill:#4CAF50,stroke:#2E7D32,color:#fff
     style C1 fill:#2196F3,stroke:#1565C0,color:#fff
-    style D1 fill:#FF9800,stroke:#EF6C00,color:#fff
+    style D1 fill:#FF9800800800,stroke:#EF6C00,color:#fff
     style E1 fill:#9C27B0,stroke:#6A1B9A,color:#fff
 ```
 
@@ -209,7 +209,7 @@ flowchart TD
 
 #### Étape 2 : Créer la VM
 
-```
+```text
 Configuration VM recommandée :
 ┌─────────────────────────────────────┐
 │  Nom : lab-rocky                    │
@@ -241,7 +241,7 @@ Configuration VM recommandée :
 
 Après le reboot, vous arrivez sur l'écran de login :
 
-```
+```text
 Rocky Linux 9.3 (Blue Onyx)
 Kernel 5.14.0-362.el9.x86_64 on an x86_64
 

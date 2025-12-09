@@ -67,9 +67,9 @@ flowchart TD
     CLIENT -->|5. Configure repos| CLIENT
     CLIENT -->|6. dnf install nginx| REPOS
 
-    style AK fill:#f9f,stroke:#333,stroke-width:2px
-    style KATELLO fill:#bbf,stroke:#333,stroke-width:2px
-    style CLIENT fill:#bfb,stroke:#333,stroke-width:2px
+    style AK fill:#9C27B0,stroke:#333,stroke-width:2px
+    style KATELLO fill:#2196F3,stroke:#333,stroke-width:2px
+    style CLIENT fill:#4CAF50,stroke:#333,stroke-width:2px
 ```
 
 ### Les Composants Clés
@@ -120,7 +120,7 @@ Une **Activation Key** est une entité Katello qui définit :
 
 **Stratégie de Naming :**
 
-```
+```xml
 ak-<os>-<role>-<env>
 ```
 
@@ -148,7 +148,7 @@ Une **Host Collection** est un **groupe logique** de serveurs pour effectuer des
 
 **Exemple de structure :**
 
-```
+```text
 Host Collections:
 ├── web-servers (50 hosts)
 │   ├── web-prod-01
@@ -208,7 +208,7 @@ hammer lifecycle-environment list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|-------------|-------------
 ID | NAME        | PRIOR
 ---|-------------|-------------
@@ -250,7 +250,7 @@ hammer activation-key list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------|-------------|-----------------|
 ID | NAME           | CONTENT VIEW| LIFECYCLE ENV   |
 ---|----------------|-------------|-----------------|
@@ -289,7 +289,7 @@ hammer activation-key subscriptions \
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------|
 ID | NAME           |
 ---|----------------|
@@ -318,7 +318,7 @@ hammer host-collection list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|-------------|---------------------|
 ID | NAME        | HOSTS               |
 ---|-------------|---------------------|
@@ -370,7 +370,7 @@ cat /etc/rhsm/rhsm.conf | grep hostname
 
 **Sortie attendue :**
 
-```
+```text
 hostname = katello.example.com
 ```
 
@@ -386,7 +386,7 @@ sudo subscription-manager register \
 
 **Sortie attendue :**
 
-```
+```text
 The system has been registered with ID: 12345678-1234-1234-1234-123456789012
 The registered system name is: web-server-01
 ```
@@ -412,7 +412,7 @@ dnf repolist
 
 **Sortie attendue :**
 
-```
+```text
 repo id                             repo name
 Default_Organization_CV-Rocky9_...  Rocky Linux 9 BaseOS
 Default_Organization_CV-Rocky9_...  Rocky Linux 9 AppStream
@@ -436,7 +436,7 @@ dnf info nginx
 
 **Sortie attendue :**
 
-```
+```text
 Name         : nginx
 Version      : 1.20.1
 Release      : 14.el9
@@ -457,7 +457,7 @@ hammer host list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|---------------|------------|-----------------|
 ID | NAME          | OS         | HOST COLLECTION |
 ---|---------------|------------|-----------------|
@@ -473,7 +473,7 @@ hammer host info --name "web-server-01"
 
 **Sortie exemple :**
 
-```
+```text
 Name:                web-server-01
 Organization:        Default Organization
 Lifecycle Env:       Development
@@ -542,7 +542,7 @@ hammer host-collection hosts \
 
 **Sortie exemple :**
 
-```
+```text
 ---|---------------|
 ID | NAME          |
 ---|---------------|
@@ -589,7 +589,7 @@ sudo subscription-manager unregister
 
 **Sortie attendue :**
 
-```
+```text
 System has been unregistered.
 ```
 
@@ -937,7 +937,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```text
     =========================================
     🔧 KATELLO ACTIVATION KEY SETUP
     =========================================
@@ -1136,7 +1136,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```bash
     =========================================
     🔧 KATELLO CLIENT ENROLLMENT
     =========================================
@@ -1230,7 +1230,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```text
     ---|----------------------|
     ID | NAME                 |
     ---|----------------------|
@@ -1245,7 +1245,7 @@ activation_keys:
 
     **Sortie exemple :**
 
-    ```
+    ```text
     Name:                     web-dev-05.linuxcorp.local
     Organization:             LinuxCorp
     Lifecycle Environment:    Development
@@ -1266,7 +1266,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```text
     nginx | 1.20.1-14.el9 | x86_64
     ```
 
@@ -1279,7 +1279,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```bash
     Package install scheduled for host web-dev-05.linuxcorp.local
     ```
 
@@ -1291,7 +1291,7 @@ activation_keys:
 
     **Sortie attendue :**
 
-    ```
+    ```text
     vim-enhanced-8.2.2637-20.el9.x86_64
     ```
 

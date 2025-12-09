@@ -56,8 +56,8 @@ graph TB
 
     style TENANT fill:#4caf50,color:#fff
     style VRF fill:#2196f3,color:#fff
-    style BD fill:#ff9800,color:#fff
-    style EPG fill:#e91e63,color:#fff
+    style BD fill:#FF9800800800,color:#fff
+    style EPG fill:#9C27B0,color:#fff
 ```
 
 ### Relations Entre Objets
@@ -75,8 +75,8 @@ graph LR
         EPG -->|"Consomme/Fournit"| CONTRACT
     end
 
-    style EPG fill:#e91e63,color:#fff
-    style BD fill:#ff9800,color:#fff
+    style EPG fill:#9C27B0,color:#fff
+    style BD fill:#FF9800800800,color:#fff
     style VRF fill:#2196f3,color:#fff
     style CONTRACT fill:#9c27b0,color:#fff
 ```
@@ -118,7 +118,7 @@ graph TB
 
     style VRF_WL fill:#4caf50,color:#fff
     style VRF_A fill:#2196f3,color:#fff
-    style SHARED fill:#ff9800,color:#fff
+    style SHARED fill:#FF9800800800,color:#fff
 ```
 
 ### Tenants Système
@@ -176,7 +176,7 @@ output "tenant_dn" {
 
 **Résultat :**
 
-```
+```text
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
@@ -317,9 +317,9 @@ graph TB
     BD --> EPG1
     BD --> EPG2
 
-    style BD fill:#ff9800,color:#fff
-    style EPG1 fill:#e91e63,color:#fff
-    style EPG2 fill:#e91e63,color:#fff
+    style BD fill:#FF9800800800,color:#fff
+    style EPG1 fill:#9C27B0,color:#fff
+    style EPG2 fill:#9C27B0,color:#fff
 ```
 
 ### Paramètres Importants du BD
@@ -441,9 +441,9 @@ graph TB
         end
     end
 
-    style EPG_WEB fill:#e91e63,color:#fff
-    style EPG_API fill:#e91e63,color:#fff
-    style EPG_DB fill:#e91e63,color:#fff
+    style EPG_WEB fill:#9C27B0,color:#fff
+    style EPG_API fill:#9C27B0,color:#fff
+    style EPG_DB fill:#9C27B0,color:#fff
     style EPG_PAY fill:#f44336,color:#fff
     style EPG_HSM fill:#f44336,color:#fff
 ```
@@ -490,10 +490,10 @@ graph TB
         DIFF_VLAN["⚠️ Peut avoir différents VLANs"]
     end
 
-    style VM1 fill:#e91e63,color:#fff
-    style VM2 fill:#e91e63,color:#fff
-    style VM3 fill:#e91e63,color:#fff
-    style BM fill:#e91e63,color:#fff
+    style VM1 fill:#9C27B0,color:#fff
+    style VM2 fill:#9C27B0,color:#fff
+    style VM3 fill:#9C27B0,color:#fff
+    style BM fill:#9C27B0,color:#fff
 ```
 
 ### EPG vs VLAN
@@ -564,7 +564,7 @@ graph TB
     EPG --> PHY
     EPG --> VMM
 
-    style EPG fill:#e91e63,color:#fff
+    style EPG fill:#9C27B0,color:#fff
     style PHY fill:#4caf50,color:#fff
     style VMM fill:#2196f3,color:#fff
 ```
@@ -659,12 +659,12 @@ graph TB
     EPG_API --> VM2
     EPG_DB --> VM3
 
-    style EPG_FE fill:#e91e63,color:#fff
-    style EPG_API fill:#e91e63,color:#fff
-    style EPG_DB fill:#e91e63,color:#fff
-    style SUBNET_WEB fill:#ff9800,color:#fff
-    style SUBNET_APP fill:#ff9800,color:#fff
-    style SUBNET_DB fill:#ff9800,color:#fff
+    style EPG_FE fill:#9C27B0,color:#fff
+    style EPG_API fill:#9C27B0,color:#fff
+    style EPG_DB fill:#9C27B0,color:#fff
+    style SUBNET_WEB fill:#FF9800800800,color:#fff
+    style SUBNET_APP fill:#FF9800800800,color:#fff
+    style SUBNET_DB fill:#FF9800800800,color:#fff
 ```
 
 ---
@@ -827,7 +827,7 @@ output "epg_dns" {
 
     **Scénario** : Créer l'infrastructure pour une application 3-tier :
 
-    ```
+    ```text
     Tenant: Lab-Formation
     └── VRF: Lab-VRF
         ├── BD: BD-Frontend (10.10.1.0/24)
@@ -1005,7 +1005,7 @@ output "epg_dns" {
 
     ### Hiérarchie des Objets
 
-    ```
+    ```text
     Tenant (isolation administrative)
     └── VRF (isolation routage)
         └── Bridge Domain (domaine L2/L3)

@@ -12,7 +12,7 @@ Chiffrement de disques avec BitLocker : configuration, TPM, et récupération.
 
 ## Prérequis
 
-```
+```text
 PRÉREQUIS BITLOCKER
 ══════════════════════════════════════════════════════════
 
@@ -159,7 +159,7 @@ Unlock-BitLocker -MountPoint "D:" -RecoveryKeyPath "E:\recovery.bek"
 
 ### Paramètres Clés
 
-```
+```text
 Computer Configuration > Administrative Templates >
 Windows Components > BitLocker Drive Encryption
 

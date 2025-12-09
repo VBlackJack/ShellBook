@@ -44,11 +44,11 @@ graph TD
     D --> G[Staging Cluster<br/>replica: 2<br/>limits: medium]
     E --> H[Prod Cluster<br/>replica: 3<br/>limits: high<br/>+ HPA]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#ffb900,stroke:#d39300,color:#000
-    style D fill:#ffb900,stroke:#d39300,color:#000
-    style E fill:#d83b01,stroke:#a52a00,color:#fff
-    style H fill:#107c10,stroke:#0b5a0d,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#FF9800800800,stroke:#d39300,color:#000
+    style D fill:#FF9800800800,stroke:#d39300,color:#000
+    style E fill:#FF9800800800,stroke:#a52a00,color:#fff
+    style H fill:#4CAF50,stroke:#0b5a0d,color:#fff
 ```
 
 ## Installation
@@ -515,7 +515,7 @@ spec:
 
 ### Structure Complète
 
-```
+```text
 myapp/
 ├── base/
 │   ├── kustomization.yaml

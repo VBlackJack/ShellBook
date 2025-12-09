@@ -184,7 +184,7 @@ Get-WUHistory | Export-Csv "Update_History.csv" -NoTypeInformation
 
 **WSUS (Windows Server Update Services) = Serveur de mises à jour local**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      ARCHITECTURE WSUS                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -279,7 +279,7 @@ Get-WsusUpdate | Where-Object { $_.KnowledgebaseArticles -contains "5034441" } |
 
 **Méthode recommandée : GPO**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Administrative Templates
           → Windows Components → Windows Update
 
@@ -433,7 +433,7 @@ azcmagent connect @ArcParams
 
 **Fonctionnement :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   CYCLE HOTPATCHING                          │
 ├─────────────────────────────────────────────────────────────┤

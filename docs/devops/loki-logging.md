@@ -15,7 +15,7 @@ Agrégation et requêtes de logs avec Grafana Loki : architecture, déploiement 
 
 ![Loki Architecture Full Stack](../assets/diagrams/loki-architecture-full-stack.jpeg)
 
-```
+```text
 ARCHITECTURE LOKI
 ══════════════════════════════════════════════════════════
 
@@ -68,7 +68,7 @@ Loki vs ELK :
 
 ![Loki Components Detailed](../assets/diagrams/loki-components-detailed.jpeg)
 
-```
+```text
 COMPOSANTS LOKI
 ══════════════════════════════════════════════════════════
 
@@ -638,7 +638,7 @@ Checklist Loki:
 
 ### Labels : À Faire / À Éviter
 
-```
+```text
 ✅ BONS LABELS (faible cardinalité):
   job: nginx
   env: production

@@ -13,7 +13,7 @@ Configuration et gestion de Windows Defender Antivirus et Microsoft Defender for
 
 ## Architecture
 
-```
+```text
 WINDOWS DEFENDER COMPONENTS
 ══════════════════════════════════════════════════════════
 
@@ -318,7 +318,7 @@ Get-MpThreatCatalog | Group-Object CategoryID
 
 ### Configuration via GPO
 
-```
+```text
 Computer Configuration > Administrative Templates >
 Windows Components > Microsoft Defender Antivirus
 

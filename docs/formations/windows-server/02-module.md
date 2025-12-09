@@ -18,7 +18,7 @@ tags:
 
 ### Le Problème
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │         GESTION IDENTITÉS : LE CERCLE VICIEUX                │
 ├─────────────────────────────────────────────────────────────┤
@@ -105,12 +105,12 @@ graph TD
     OU_Servers --> OU_Servers_DC["🖥️ Domain Controllers"]
     OU_Servers --> OU_Servers_App["🖥️ App Servers"]
 
-    style Forest fill:#107c10,stroke:#0e6b0e,color:#fff
-    style Domain1 fill:#0078d4,stroke:#005a9e,color:#fff
-    style Domain2 fill:#0078d4,stroke:#005a9e,color:#fff
-    style OU_Paris fill:#ff8c00,stroke:#cc7000,color:#fff
-    style OU_London fill:#ff8c00,stroke:#cc7000,color:#fff
-    style OU_Servers fill:#d13438,stroke:#a52a2a,color:#fff
+    style Forest fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style Domain1 fill:#2196F3,stroke:#005a9e,color:#fff
+    style Domain2 fill:#2196F3,stroke:#005a9e,color:#fff
+    style OU_Paris fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style OU_London fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style OU_Servers fill:#f44336,stroke:#a52a2a,color:#fff
 ```
 
 ### Les Composants Expliqués
@@ -129,7 +129,7 @@ graph TD
 
 **Option 1 : Par Géographie (Recommandé pour multi-sites)**
 
-```
+```text
 corp.com
 ├── Paris
 │   ├── Users
@@ -151,7 +151,7 @@ corp.com
 
 **Option 2 : Par Fonction (Recommandé pour mono-site)**
 
-```
+```text
 corp.com
 ├── IT
 │   ├── Admins
@@ -173,7 +173,7 @@ corp.com
 !!! tip "Best Practice Microsoft"
     **Ne créez pas plus de 5 niveaux d'OU.**
 
-    ```
+    ```text
     ❌ MAUVAIS : corp.com → Europe → France → Paris → IT → Admins → Senior
     ✅ BON     : corp.com → Paris → IT → Admins
     ```
@@ -186,7 +186,7 @@ corp.com
 
 **Group Policy Object (GPO) = Configuration as Code natif Windows.**
 
-```
+```text
 Une GPO peut :
 ├── Configurer le fond d'écran corporate
 ├── Désactiver les ports USB
@@ -219,13 +219,13 @@ flowchart TD
     Apply --> Result[💻 Configuration finale]
     LastWins --> Result
 
-    style Start fill:#0078d4,stroke:#005a9e,color:#fff
-    style L fill:#6c757d,stroke:#495057,color:#fff
-    style S fill:#ff8c00,stroke:#cc7000,color:#fff
-    style D fill:#107c10,stroke:#0e6b0e,color:#fff
-    style O1 fill:#d13438,stroke:#a52a2a,color:#fff
-    style O2 fill:#d13438,stroke:#a52a2a,color:#fff
-    style Result fill:#ffd700,stroke:#b8860b,color:#000
+    style Start fill:#2196F3,stroke:#005a9e,color:#fff
+    style L fill:#9C27B0,stroke:#495057,color:#fff
+    style S fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style D fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style O1 fill:#f44336,stroke:#a52a2a,color:#fff
+    style O2 fill:#f44336,stroke:#a52a2a,color:#fff
+    style Result fill:#FF9800800800,stroke:#b8860b,color:#000
 ```
 
 ### Règles de Priorité & Héritage
@@ -253,7 +253,7 @@ flowchart TD
 
 **1. Enforced (Appliqué) :**
 
-```
+```text
 GPO Domain = "No USB" [Enforced]
 GPO OU=IT = "Allow USB"
 
@@ -262,7 +262,7 @@ Résultat : USB bloqué (Enforced ignore LSDOU)
 
 **2. Block Inheritance :**
 
-```
+```text
 OU=IT [Block Inheritance = Yes]
 
 Résultat : Ignore toutes les GPO parentes (Domain, Site)
@@ -778,7 +778,7 @@ Lucas,Petit,lpetit,Paris,Marketing,Marketing Manager
 
     **Output attendu :**
 
-    ```
+    ```text
     === Onboarding Nouveaux Employés ===
     Fichier CSV : C:\Scripts\new_hires.csv
     Domaine     : DC=corp,DC=local
@@ -827,7 +827,7 @@ Lucas,Petit,lpetit,Paris,Marketing,Marketing Manager
 
     **Résultat attendu :**
 
-    ```
+    ```text
     Name         : Jean Dupont
     Department   : IT
     Title        : SysAdmin

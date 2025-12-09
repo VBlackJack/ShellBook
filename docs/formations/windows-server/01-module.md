@@ -19,7 +19,7 @@ tags:
 
 ### Le Changement de Paradigme
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │         ADMINISTRATION WINDOWS : HIER vs AUJOURD'HUI         │
 ├─────────────────────────────────────────────────────────────┤
@@ -76,11 +76,11 @@ flowchart TD
     CorePros --> Production[🏢 Production<br/>Datacenter]
     DesktopCons --> Lab[🧪 Lab<br/>Formation]
 
-    style Start fill:#0078d4,stroke:#005a9e,color:#fff
-    style Core fill:#107c10,stroke:#0e6b0e,color:#fff
-    style Desktop fill:#ff8c00,stroke:#cc7000,color:#fff
-    style Production fill:#d13438,stroke:#a52a2a,color:#fff
-    style Lab fill:#6c757d,stroke:#495057,color:#fff
+    style Start fill:#2196F3,stroke:#005a9e,color:#fff
+    style Core fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style Desktop fill:#FF9800800800,stroke:#FF9800800,color:#fff
+    style Production fill:#f44336,stroke:#a52a2a,color:#fff
+    style Lab fill:#9C27B0,stroke:#495057,color:#fff
 ```
 
 ### Comparaison Détaillée
@@ -136,7 +136,7 @@ Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' |
 
 Au démarrage de **Server Core**, vous êtes accueilli par une invite de commande. Tapez `sconfig` pour accéder à un menu de configuration interactif.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                 Server Configuration Tool                    │
 │                      (sconfig.exe)                           │
@@ -169,9 +169,9 @@ flowchart LR
     F --> G[Option 1<br/>Join Domain]
     G --> H[Option 13<br/>Restart]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#107c10,stroke:#0e6b0e,color:#fff
-    style H fill:#d13438,stroke:#a52a2a,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#4CAF50,stroke:#0e6b0e,color:#fff
+    style H fill:#f44336,stroke:#a52a2a,color:#fff
 ```
 
 ### Commandes Essentielles
@@ -228,8 +228,8 @@ flowchart LR
         B1[Get-ChildItem] -->|Objets FileInfo| B2[Where-Object] -->|Propriétés typées| B3[Select-Object]
     end
 
-    style Bash fill:#6c757d,stroke:#495057,color:#fff
-    style PowerShell fill:#0078d4,stroke:#005a9e,color:#fff
+    style Bash fill:#9C27B0,stroke:#495057,color:#fff
+    style PowerShell fill:#2196F3,stroke:#005a9e,color:#fff
 ```
 
 ### Exemple Frappant
@@ -514,7 +514,7 @@ C:\Temp\PostInstall.ps1
 
 **Windows Admin Center = La Console Web pour Server Core**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   ÉVOLUTION DE L'ADMIN                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -633,7 +633,7 @@ Set-Item WSMan:\localhost\Client\TrustedHosts -Value "wac-server.corp.local" -Fo
 
 ### Le Problème Historique
 
-```
+```bash
 Admin Linux : "ssh user@serveur"  → Connecté en 1 seconde
 Admin Windows: "Télécharger PuTTY, configurer, lancer..."
                "Ou activer WinRM/PSRemoting..."
@@ -649,9 +649,9 @@ flowchart LR
     B -->|PowerShell Session| C[💻 PowerShell CLI]
     A -->|scp file.txt| B
 
-    style A fill:#6c757d,stroke:#495057,color:#fff
-    style B fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#107c10,stroke:#0e6b0e,color:#fff
+    style A fill:#9C27B0,stroke:#495057,color:#fff
+    style B fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#4CAF50,stroke:#0e6b0e,color:#fff
 ```
 
 ### Installation & Configuration
@@ -744,7 +744,7 @@ Restart-Service sshd
 
 ### Fini les .exe et "Suivant > Suivant"
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      AVANT (2010)                            │
 │  1. Télécharger setup.exe                                   │
@@ -1147,7 +1147,7 @@ Vous disposez d'un serveur fraîchement installé avec Server Core. Vous avez ac
 
     **Résultat attendu :**
 
-    ```
+    ```text
     === Validation Configuration Server Core ===
 
     [1] INFORMATIONS SERVEUR

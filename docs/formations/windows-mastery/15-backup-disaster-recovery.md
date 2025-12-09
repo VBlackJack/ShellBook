@@ -207,7 +207,7 @@ Get-DfsReplicationGroup
 
 ### 4.1 Documentation DR
 
-```
+```text
 PLAN DE DISASTER RECOVERY
 ─────────────────────────
 
@@ -595,13 +595,13 @@ Date du rapport : $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
        ```powershell
        Get-ADObject -Filter 'isDeleted -eq $true -and Name -like "*NomUtilisateur*"' `
            -IncludeDeletedObjects -Properties whenChanged, LastKnownParent
-       ```
+       ```text
 
     2. Restaurer l'objet :
        ```powershell
        Get-ADObject -Filter 'Name -eq "NomUtilisateur"' -IncludeDeletedObjects |
            Restore-ADObject
-       ```
+       ```text
 
     ### Option 2 : Restauration Authoritative (si Corbeille non disponible)
 
@@ -615,7 +615,7 @@ Date du rapport : $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
        ```cmd
        wbadmin get versions -backuptarget:E:
        wbadmin start systemstaterecovery -version:12/01/2025-01:00 -backuptarget:E:
-       ```
+       ```text
 
     3. **Redémarrer en mode DSRM** (à nouveau)
 
@@ -627,7 +627,7 @@ Date du rapport : $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
        restore object "CN=John Doe,OU=Users,DC=corp,DC=local"
        quit
        quit
-       ```
+       ```text
 
     5. **Redémarrer normalement**
        - L'objet restauré sera répliqué vers tous les autres DC

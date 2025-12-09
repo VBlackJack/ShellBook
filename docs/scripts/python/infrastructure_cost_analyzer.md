@@ -883,7 +883,7 @@ if __name__ == "__main__":
 
 ## Exemple de Sortie
 
-```
+```text
 💰 Infrastructure Cost Analyzer
 
 Analyzing local resources...

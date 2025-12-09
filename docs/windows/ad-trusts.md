@@ -15,7 +15,7 @@ Les relations d'approbation (trusts) permettent aux utilisateurs d'un domaine d'
 
 ### Terminologie
 
-```
+```text
 VOCABULAIRE DES TRUSTS
 ══════════════════════════════════════════════════════════
 
@@ -44,7 +44,7 @@ Les utilisateurs de PARIS ne peuvent PAS accéder à LYON.
 
 ![AD Trust Directions](../assets/diagrams/ad-trust-directions.jpeg)
 
-```
+```text
 DIRECTION DES TRUSTS
 ══════════════════════════════════════════════════════════
 
@@ -75,7 +75,7 @@ Note : Un trust bidirectionnel = 2 trusts unidirectionnels
 
 ![AD Trust Transitivity](../assets/diagrams/ad-trust-transitivity.jpeg)
 
-```
+```text
 TRANSITIVITÉ DES TRUSTS
 ══════════════════════════════════════════════════════════
 
@@ -114,7 +114,7 @@ Utilisé dans : External trusts, Realm trusts
 
 ![AD Parent-Child Trust](../assets/diagrams/ad-trust-parent-child.jpeg)
 
-```
+```text
 PARENT-CHILD TRUST (Automatique)
 ══════════════════════════════════════════════════════════
 
@@ -137,7 +137,7 @@ Caractéristiques :
 
 ![AD Tree-Root Trust](../assets/diagrams/ad-trust-tree-root.jpeg)
 
-```
+```text
 TREE-ROOT TRUST
 ══════════════════════════════════════════════════════════
 
@@ -160,7 +160,7 @@ Caractéristiques :
 
 ### Forest Trust
 
-```
+```text
 FOREST TRUST
 ══════════════════════════════════════════════════════════
 
@@ -186,7 +186,7 @@ Caractéristiques :
 
 ### External Trust
 
-```
+```text
 EXTERNAL TRUST
 ══════════════════════════════════════════════════════════
 
@@ -211,7 +211,7 @@ Caractéristiques :
 
 ### Shortcut Trust
 
-```
+```text
 SHORTCUT TRUST
 ══════════════════════════════════════════════════════════
 
@@ -241,7 +241,7 @@ Caractéristiques :
 
 ### Realm Trust
 
-```
+```text
 REALM TRUST
 ══════════════════════════════════════════════════════════
 
@@ -296,7 +296,7 @@ Add-DnsServerConditionalForwarderZone `
 
 ### Créer un Forest Trust (GUI)
 
-```
+```text
 1. Active Directory Domains and Trusts (domain.msc)
 2. Clic droit sur le domaine racine → Properties
 3. Onglet "Trusts" → "New Trust..."
@@ -363,7 +363,7 @@ New-ADTrust `
 
 Le SID Filtering protège contre les attaques d'élévation de privilèges via injection de SIDs.
 
-```
+```text
 SID FILTERING
 ══════════════════════════════════════════════════════════
 
@@ -405,7 +405,7 @@ netdom trust corp.local /domain:partner.com /quarantine:yes
 
 Permet de contrôler finement quels utilisateurs de la forêt approuvée peuvent s'authentifier.
 
-```
+```text
 SELECTIVE AUTHENTICATION
 ══════════════════════════════════════════════════════════
 
@@ -518,7 +518,7 @@ Test-ComputerSecureChannel -Server "dc.partner.com"
 
 ### Problèmes Courants
 
-```
+```text
 TROUBLESHOOTING TRUSTS
 ══════════════════════════════════════════════════════════
 
@@ -598,7 +598,7 @@ Get-WinEvent -FilterHashtable @{
 
 ![AD Resource Forest Model](../assets/diagrams/ad-resource-forest-model.jpeg)
 
-```
+```text
 RESOURCE FOREST MODEL
 ══════════════════════════════════════════════════════════
 
@@ -623,7 +623,7 @@ Avantages :
 
 ### Modèle Hub-Spoke
 
-```
+```text
 HUB-SPOKE MODEL
 ══════════════════════════════════════════════════════════
 
@@ -652,7 +652,7 @@ Avantages :
 
 ### Mesh Model
 
-```
+```text
 MESH MODEL
 ══════════════════════════════════════════════════════════
 

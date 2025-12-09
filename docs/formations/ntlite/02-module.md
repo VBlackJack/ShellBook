@@ -31,7 +31,7 @@ Le debloating n'est pas du "tuning amateur" : c'est une approche professionnelle
 
 La suppression de composants n'est **PAS sans risque** :
 
-```
+```text
 Vous supprimez : "Windows Media Player"
 Conséquence cachée : Certaines applications métier utilisent ses codecs
 Résultat : L'app métier ne démarre plus ❌
@@ -80,7 +80,7 @@ Composants à surveiller pour la confidentialité :
 Les applications UWP (Universal Windows Platform) sont souvent superflues en environnement professionnel :
 
 #### Xbox Ecosystem
-```
+```text
 - Xbox Game Bar
 - Xbox Identity Provider
 - Xbox Live Services
@@ -89,7 +89,7 @@ Les applications UWP (Universal Windows Platform) sont souvent superflues en env
 **Impact** : Économie de ~200 MB + services en arrière-plan désactivés
 
 #### Bloatware Classique
-```
+```text
 - Microsoft Solitaire Collection
 - Mixed Reality Portal
 - Skype (version UWP, pas le client Pro)
@@ -105,7 +105,7 @@ Les applications UWP (Universal Windows Platform) sont souvent superflues en env
 ### System Components
 
 #### Cortana
-```
+```text
 Chemin NTLite : Components > System > Cortana
 ```
 - Économie : ~50 MB
@@ -113,7 +113,7 @@ Chemin NTLite : Components > System > Cortana
 - **Effet de bord** : La barre de recherche Windows reste fonctionnelle
 
 #### OneDrive
-```
+```text
 Chemin NTLite : Components > System > OneDrive
 ```
 ⚠️ **Décision métier** :
@@ -121,7 +121,7 @@ Chemin NTLite : Components > System > OneDrive
 - Pour un environnement on-premise pur → Supprimer
 
 #### Edge (Chromium)
-```
+```text
 Chemin NTLite : Components > Browsers > Microsoft Edge
 ```
 🚨 **DANGER** : Depuis Windows 11, Edge est intégré à plusieurs composants système
@@ -141,7 +141,7 @@ Pour gagner de l'espace sur des environnements standardisés :
 | **Infrared** | PDA années 2000 | ~3 MB |
 
 **Méthode** :
-```
+```text
 NTLite > Drivers > [Sélectionner le driver] > Remove
 ```
 
@@ -197,7 +197,7 @@ Avant d'appliquer, vérifiez :
 
 ### ✅ Composants à CONSERVER
 
-```
+```sql
 [Système]
 ✓ Print Spooler (impression)
 ✓ Remote Desktop Services (support IT)
@@ -221,7 +221,7 @@ Avant d'appliquer, vérifiez :
 
 ### ❌ Composants à SUPPRIMER
 
-```
+```text
 [UWP Apps]
 ✗ Xbox Game Bar
 ✗ Xbox Identity Provider

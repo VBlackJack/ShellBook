@@ -177,7 +177,7 @@ graph TB
 
 ### Organisation des Fichiers
 
-```
+```text
 tp-final/
 ├── modules/
 │   ├── tenant/

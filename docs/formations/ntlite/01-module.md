@@ -51,10 +51,10 @@ graph LR
     F --> G[Création<br/>Nouvelle ISO]
     G --> H[ISO Bootable<br/>Personnalisée]
 
-    style A fill:#e1f5ff
-    style C fill:#fff4e1
-    style E fill:#ffe1e1
-    style H fill:#e1ffe1
+    style A fill:#2196F3
+    style C fill:#FF9800800800
+    style E fill:#f44336
+    style H fill:#4CAF50
 ```
 
 ### Les 3 formats d'image Windows
@@ -65,7 +65,7 @@ graph LR
 
 **Contenu d'une ISO Windows :**
 
-```
+```text
 Windows11_23H2.iso (5.1 GB)
 ├── boot/              # Fichiers de démarrage (UEFI, BIOS)
 ├── efi/               # Bootloader UEFI
@@ -261,7 +261,7 @@ Invoke-WebRequest -Uri $Url -OutFile "C:\ISOs\Windows11.iso"
 1. **Démarrer NTLite** (clic droit → Exécuter en tant qu'administrateur)
 2. **Interface principale** :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ NTLite 2024.11                                     [_][□][X]│
 ├─────────────────┬───────────────────────────────────────────┤
@@ -302,7 +302,7 @@ Invoke-WebRequest -Uri $Url -OutFile "C:\ISOs\Windows11.iso"
 
 NTLite analyse l'ISO et affiche la structure :
 
-```
+```text
 Image history
 ├── 📀 Windows11_23H2_French_x64.iso
     ├── 🔧 boot.wim
@@ -336,7 +336,7 @@ Image history
 
 **Informations affichées :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ Windows 11 Pro                                              │
 ├─────────────────────────────────────────────────────────────┤
@@ -379,7 +379,7 @@ Pour modifier une image WIM, NTLite doit :
 2. Cliquer sur **"Load"** (en bas à droite)
 3. **Popup de confirmation** :
 
-```
+```text
 ┌────────────────────────────────────────────────────────┐
 │ Load image                                             │
 ├────────────────────────────────────────────────────────┤
@@ -399,7 +399,7 @@ Pour modifier une image WIM, NTLite doit :
 
 **Progression :**
 
-```
+```text
 Status: Mounting image...
 [████████████████████████████████████████] 100%
 - Extracting install.wim index 6
@@ -414,7 +414,7 @@ Time elapsed: 3m 24s
 
 L'image est maintenant **montée** et les onglets de configuration apparaissent :
 
-```
+```text
 Image history
 ├── 📀 Windows11_23H2_French_x64.iso
     └── 💿 install.wim
@@ -436,7 +436,7 @@ Une fois l'image montée, NTLite affiche plusieurs **onglets** pour personnalise
 
 **Structure :**
 
-```
+```text
 OS packages
 ├── 📦 Applications
 │   ├── ☑ 3D Viewer
@@ -475,7 +475,7 @@ OS packages
 
 **Exemple :**
 
-```
+```text
 Drivers
 ├── 📁 Add drivers folder
 └── 📂 Installed drivers
@@ -492,7 +492,7 @@ Drivers
 
 **Exemple :**
 
-```
+```text
 Updates
 ├── 📥 Add update packages
 └── 📦 Integrated updates
@@ -507,7 +507,7 @@ Updates
 
 **Exemple de configuration :**
 
-```
+```text
 Unattended
 ├── 👤 User accounts
 │   └── Create local account: "Admin" (password: P@ssw0rd)
@@ -528,7 +528,7 @@ Unattended
 
 **Options :**
 
-```
+```text
 Apply
 ├── ☑ Process
 │   └── Mode: In-place (modify existing WIM)
@@ -553,7 +553,7 @@ Pour l'instant, nous allons **démonter sans appliquer de changements** (test de
 
 **Résultat :**
 
-```
+```text
 Status: Unmounting image...
 [████████████████████████████████████████] 100%
 - Cleaning mount directory
@@ -631,7 +631,7 @@ Vous êtes technicien IT chez **InnovTech** (PME de 50 employés). Votre manager
 
     **Résultat affiché :**
 
-    ```
+    ```text
     Image history
     ├── 📀 Windows11_23H2_French_x64.iso
         ├── 🔧 boot.wim
@@ -661,7 +661,7 @@ Vous êtes technicien IT chez **InnovTech** (PME de 50 employés). Votre manager
 
     **Métadonnées affichées :**
 
-    ```
+    ```text
     ┌─────────────────────────────────────────────────────────────┐
     │ Windows 11 Pro                                              │
     ├─────────────────────────────────────────────────────────────┤
@@ -706,7 +706,7 @@ Vous êtes technicien IT chez **InnovTech** (PME de 50 employés). Votre manager
 
     **Contenu du dossier :**
 
-    ```
+    ```text
     C:\Temp\NTLite\Win11Pro_23H2\
     ├── Program Files/              # Applications installées (vide)
     ├── Program Files (x86)/        # Applications 32-bit
@@ -744,7 +744,7 @@ Vous êtes technicien IT chez **InnovTech** (PME de 50 employés). Votre manager
 
     **Vue de l'arborescence dans NTLite :**
 
-    ```
+    ```text
     Image history
     ├── 📀 Windows11_23H2_French_x64.iso
         └── 💿 install.wim
@@ -762,7 +762,7 @@ Vous êtes technicien IT chez **InnovTech** (PME de 50 employés). Votre manager
 
     **Métadonnées copiées (texte brut) :**
 
-    ```
+    ```bash
     Name: Windows 11 Pro
     Description: Pour les professionnels et les PME
     Architecture: x64

@@ -138,11 +138,11 @@ graph TD
 
     C -->|Services autorisés| G[ssh: 22/tcp<br/>samba: 445/tcp<br/>dhcp: 67/udp]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style A2 fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#107c10,stroke:#0b5a0d,color:#fff
-    style C fill:#107c10,stroke:#0b5a0d,color:#fff
-    style F fill:#e81123,stroke:#b00016,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style A2 fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style C fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style F fill:#f44336,stroke:#b00016,color:#fff
 ```
 
 ### Commandes de Base

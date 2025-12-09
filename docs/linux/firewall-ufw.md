@@ -18,7 +18,7 @@ Gestion simplifiée du pare-feu Linux avec UFW (Uncomplicated Firewall).
 
 UFW est une interface simplifiée au-dessus de netfilter/iptables :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                     Applications                         │
 ├─────────────────────────────────────────────────────────┤
@@ -246,7 +246,7 @@ sudo journalctl | grep UFW
 
 ### Exemple de Log
 
-```
+```text
 Jan 15 10:30:45 server kernel: [UFW BLOCK] IN=eth0 OUT= MAC=...
 SRC=1.2.3.4 DST=192.168.1.10 LEN=40 TOS=0x00 PROTO=TCP SPT=54321
 DPT=22 WINDOW=1024 RES=0x00 SYN URGP=0

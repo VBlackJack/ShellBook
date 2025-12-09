@@ -25,11 +25,11 @@ flowchart LR
 
     E --> F[Application<br/>Déployée]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#ffb900,stroke:#d39300,color:#000
-    style B fill:#107c10,stroke:#0b5a0d,color:#fff
-    style D fill:#d83b01,stroke:#a52a00,color:#fff
-    style F fill:#107c10,stroke:#0b5a0d,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#FF9800800800,stroke:#d39300,color:#000
+    style B fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style D fill:#FF9800800800,stroke:#a52a00,color:#fff
+    style F fill:#4CAF50,stroke:#0b5a0d,color:#fff
 ```
 
 **Concepts clés :**

@@ -47,11 +47,11 @@ graph LR
     G --> I[Smoke Tests]
     H --> I
 
-    style A fill:#f9f
-    style C fill:#bbf
-    style E fill:#fbb
-    style G fill:#bfb
-    style H fill:#bfb
+    style A fill:#9C27B0
+    style C fill:#2196F3
+    style E fill:#f44336
+    style G fill:#4CAF50
+    style H fill:#4CAF50
 ```
 
 ---

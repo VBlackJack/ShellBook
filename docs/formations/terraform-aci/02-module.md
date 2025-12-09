@@ -95,9 +95,9 @@ graph TB
         LEAF4 --> SRV4[Serveurs]
     end
 
-    style APIC fill:#049fd9,color:#fff
-    style SPINE1 fill:#7b42bc,color:#fff
-    style SPINE2 fill:#7b42bc,color:#fff
+    style APIC fill:#2196F3,color:#fff
+    style SPINE1 fill:#9C27B0,color:#fff
+    style SPINE2 fill:#9C27B0,color:#fff
     style LEAF1 fill:#4caf50,color:#fff
     style LEAF2 fill:#4caf50,color:#fff
     style LEAF3 fill:#4caf50,color:#fff
@@ -153,9 +153,9 @@ graph TB
         S3 <--> L4
     end
 
-    style S1 fill:#7b42bc,color:#fff
-    style S2 fill:#7b42bc,color:#fff
-    style S3 fill:#7b42bc,color:#fff
+    style S1 fill:#9C27B0,color:#fff
+    style S2 fill:#9C27B0,color:#fff
+    style S3 fill:#9C27B0,color:#fff
     style L1 fill:#4caf50,color:#fff
     style L2 fill:#4caf50,color:#fff
     style L3 fill:#4caf50,color:#fff
@@ -189,7 +189,7 @@ graph LR
         SP --> FUNC3["✅ IS-IS Fabric"]
     end
 
-    style SP fill:#7b42bc,color:#fff
+    style SP fill:#9C27B0,color:#fff
 ```
 
 **Caractéristiques des Spines :**
@@ -260,14 +260,14 @@ graph TB
         end
     end
 
-    style N9504 fill:#7b42bc,color:#fff
-    style N9508 fill:#7b42bc,color:#fff
-    style N9516 fill:#7b42bc,color:#fff
+    style N9504 fill:#9C27B0,color:#fff
+    style N9508 fill:#9C27B0,color:#fff
+    style N9516 fill:#9C27B0,color:#fff
     style N93180 fill:#4caf50,color:#fff
     style N9348 fill:#4caf50,color:#fff
     style N9336 fill:#4caf50,color:#fff
-    style APIC_M fill:#049fd9,color:#fff
-    style APIC_L fill:#049fd9,color:#fff
+    style APIC_M fill:#2196F3,color:#fff
+    style APIC_L fill:#2196F3,color:#fff
 ```
 
 ---
@@ -312,9 +312,9 @@ graph TB
     APIC1 -->|"Southbound<br/>(OpFlex)"| SPINE
     APIC1 -->|"Southbound<br/>(OpFlex)"| LEAF
 
-    style APIC1 fill:#049fd9,color:#fff
-    style APIC2 fill:#049fd9,color:#fff
-    style APIC3 fill:#049fd9,color:#fff
+    style APIC1 fill:#2196F3,color:#fff
+    style APIC2 fill:#2196F3,color:#fff
+    style APIC3 fill:#2196F3,color:#fff
 ```
 
 ### Haute Disponibilité APIC
@@ -349,7 +349,7 @@ graph LR
     CLI --> APIC
     APIC --> OPFLEX
 
-    style APIC fill:#049fd9,color:#fff
+    style APIC fill:#2196F3,color:#fff
     style API fill:#4caf50,color:#fff
 ```
 
@@ -404,7 +404,7 @@ graph TB
 
     style TENANT fill:#4caf50,color:#fff
     style VXLAN fill:#2196f3,color:#fff
-    style ISIS fill:#ff9800,color:#fff
+    style ISIS fill:#FF9800800800,color:#fff
 ```
 
 ### Underlay : IS-IS et TEP
@@ -432,7 +432,7 @@ graph LR
         LEAF2 <-->|"IS-IS"| SPINE
     end
 
-    style SPINE fill:#7b42bc,color:#fff
+    style SPINE fill:#9C27B0,color:#fff
     style LEAF1 fill:#4caf50,color:#fff
     style LEAF2 fill:#4caf50,color:#fff
 ```
@@ -463,7 +463,7 @@ sequenceDiagram
 
 **Structure d'un paquet VXLAN :**
 
-```
+```text
 +--------------------+
 | Outer Ethernet     | <- MAC du Spine/Leaf
 +--------------------+
@@ -627,8 +627,8 @@ graph TB
         APIC[("APIC Cluster<br/>(Gère les 2 Pods)")]
     end
 
-    style IPN fill:#ff9800,color:#fff
-    style APIC fill:#049fd9,color:#fff
+    style IPN fill:#FF9800800800,color:#fff
+    style APIC fill:#2196F3,color:#fff
 ```
 
 **Multi-Pod : Cas d'usage**
@@ -660,9 +660,9 @@ graph TB
 
     FABRIC_P <-->|"ISN<br/>(Inter-Site Network)"| FABRIC_L
 
-    style NDO fill:#e91e63,color:#fff
-    style APIC_P fill:#049fd9,color:#fff
-    style APIC_L fill:#049fd9,color:#fff
+    style NDO fill:#9C27B0,color:#fff
+    style APIC_P fill:#2196F3,color:#fff
+    style APIC_L fill:#2196F3,color:#fff
 ```
 
 **Multi-Site : Cas d'usage**
@@ -827,7 +827,7 @@ graph TB
 
     **Nombre de hops : 2**
 
-    ```
+    ```text
     VM1 → Leaf101 → Spine → Leaf102 → VM2
               (hop 1)   (hop 2)
     ```

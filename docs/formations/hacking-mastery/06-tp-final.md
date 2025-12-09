@@ -126,7 +126,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
     **D. Chaîne d'Attaque Complète (1-2 pages)**
 
     Diagramme du parcours d'attaque :
-    ```
+    ```bash
     Internet → Port Scan (Nmap)
            → Découverte Web App (Port 80)
            → SQLi dans /login.php
@@ -146,7 +146,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
     ### 2. Timeline d'Attaque
 
     Documenter le temps passé sur chaque phase :
-    ```
+    ```text
     14:00 - 14:30 : Reconnaissance (Nmap, enumération services)
     14:30 - 15:45 : Exploitation Web (SQLi, reverse shell)
     15:45 - 16:15 : Post-Exploitation (Enumération système)
@@ -302,7 +302,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
     ```
 
     **Screenshot** :
-    ```
+    ```text
     [Screenshot montrant l'exploitation réussie et l'accès root]
     ```
 
@@ -369,7 +369,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
 
     ### CHAÎNE D'ATTAQUE
 
-    ```
+    ```text
     1. Scan Nmap (10.10.10.3)
        ↓
     2. Identification : Samba 3.0.20 (Port 445)
@@ -460,7 +460,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
 
     #### Annexe A : Scan Nmap Complet
 
-    ```
+    ```bash
     # Nmap 7.94 scan initiated Mon Dec 08 14:00:00 2025
     Nmap scan report for 10.10.10.3
     Host is up (0.032s latency).
@@ -497,7 +497,7 @@ Un hacker qui ne sait pas écrire est inutile. Votre rapport doit contenir :
 
     #### Annexe C : Logs d'Exploitation
 
-    ```
+    ```text
     [*] 10.10.10.3:445 - Connecting to the server...
     [*] 10.10.10.3:445 - Sending stage (36 bytes)
     [*] Command shell session 1 opened (10.10.14.5:4444 -> 10.10.10.3:42132)

@@ -1131,7 +1131,7 @@ aws savingsplans describe-savings-plans
                 ]
             }
         }'
-    ```
+    ```bash
     EOF
 
     cat cost-analysis.md

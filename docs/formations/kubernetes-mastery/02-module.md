@@ -286,7 +286,7 @@ spec:
           image: myapp:v1
 ```
 
-```
+```text
 ROLLING UPDATE VISUALISATION
 ════════════════════════════
 

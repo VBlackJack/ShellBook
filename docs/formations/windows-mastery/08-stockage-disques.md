@@ -29,7 +29,7 @@ Ce module couvre la gestion du stockage Windows Server :
 
 ### 1.1 Concepts de Base
 
-```
+```text
 TYPES DE DISQUES
 ────────────────
 MBR (Master Boot Record)     GPT (GUID Partition Table)
@@ -87,7 +87,7 @@ Set-Partition -DriveLetter E -NewDriveLetter F
 
 ### 2.1 Concepts
 
-```
+```text
 STORAGE SPACES
 ──────────────
 • Pool de stockage virtuel sur disques physiques

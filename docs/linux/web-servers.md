@@ -16,7 +16,7 @@ Configuration de serveurs web et reverse proxy sous Linux.
 
 ### Structure des Fichiers
 
-```
+```text
 /etc/nginx/
 ├── nginx.conf              # Configuration globale
 ├── sites-available/        # Stockage des vhosts (inactifs)
@@ -194,7 +194,7 @@ location / {
 
 ![Linux Web Server Architecture](../assets/diagrams/linux-webserver-architecture.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                         Client                               │
 └─────────────────────────────────────────────────────────────┘
@@ -311,7 +311,7 @@ sudo certbot certificates
 
 ### Structure Let's Encrypt
 
-```
+```text
 /etc/letsencrypt/
 ├── live/
 │   └── myapp.example.com/

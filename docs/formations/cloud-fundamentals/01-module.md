@@ -187,7 +187,7 @@ graph TB
     end
 
     style OP_DC fill:#f44336,color:#fff
-    style COLO_DC fill:#ff9800,color:#fff
+    style COLO_DC fill:#FF9800800800,color:#fff
     style IAAS_DC fill:#4caf50,color:#fff
     style PAAS_ALL fill:#2196f3,color:#fff
 ```
@@ -240,11 +240,11 @@ graph LR
     end
 
     style I1 fill:#f44336,color:#fff
-    style I2 fill:#ff9800,color:#fff
-    style I3 fill:#ff9800,color:#fff
+    style I2 fill:#FF9800800800,color:#fff
+    style I3 fill:#FF9800800800,color:#fff
     style I4 fill:#f44336,color:#fff
-    style I5 fill:#ff9800,color:#fff
-    style I6 fill:#ff9800,color:#fff
+    style I5 fill:#FF9800800800,color:#fff
+    style I6 fill:#FF9800800800,color:#fff
 ```
 
 | Risque | Explication | Mitigation |
@@ -280,7 +280,7 @@ graph TB
     style PUBLIC fill:#4caf50,color:#fff
     style PRIVATE fill:#2196f3,color:#fff
     style HYBRID fill:#9c27b0,color:#fff
-    style MULTI fill:#ff9800,color:#000
+    style MULTI fill:#FF9800800800,color:#000
 ```
 
 | Modèle | Description | Cas d'usage |
@@ -428,7 +428,7 @@ pie title Parts de Marché Cloud IaaS (Q3 2024)
 
     **Recommandation : Cloud Hybride**
 
-    ```
+    ```text
     ┌─────────────────────────┐     ┌─────────────────────────┐
     │   Cloud Privé/On-Prem   │     │     Cloud Public        │
     │                         │     │                         │

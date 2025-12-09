@@ -76,9 +76,9 @@ graph TB
     style LOGIN2 fill:#2196F3
     style LOGIN3 fill:#F44336,stroke:#000,stroke-width:3px,color:#fff
     style USER1 fill:#9C27B0
-    style USER2 fill:#00BCD4
-    style SERVERROLE1 fill:#FF9800
-    style DBROLE1 fill:#E91E63
+    style USER2 fill:#2196F3
+    style SERVERROLE1 fill:#FF9800800800
+    style DBROLE1 fill:#9C27B0
     style DBROLE2 fill:#3F51B5
     style DBROLE3 fill:#009688
 ```
@@ -109,7 +109,7 @@ ALTER ROLE db_datawriter ADD MEMBER AppSvc;
 ```
 
 **Résultat** :
-```
+```dockerfile
 Le compte DOMAINE\AppService peut :
 ✓ Se connecter à l'instance SQL Server (LOGIN existe)
 ✓ Accéder à la base Sales (USER mappé)
@@ -142,7 +142,7 @@ CREATE LOGIN [DOMAINE\SQL_Admins] FROM WINDOWS;
 - ✅ **Révocation instantanée** : Désactiver le compte AD = perte d'accès SQL
 
 **Cas d'usage** :
-```
+```text
 Environnement : Entreprise avec Active Directory
 Utilisateurs : Employés de l'entreprise
 Recommandation : TOUJOURS utiliser ce mode si possible
@@ -168,7 +168,7 @@ CREATE LOGIN AppUser WITH PASSWORD = 'C0mpl3x!P@ssw0rd';
 - ❌ **Pas d'audit AD** : Difficile de tracer les accès
 
 **Cas d'usage JUSTIFIÉ** :
-```
+```bash
 Scenario 1 : Application Linux se connectant à SQL Server
 Scenario 2 : Service hébergé hors du domaine AD
 Scenario 3 : Environnement de développement isolé
@@ -408,7 +408,7 @@ EXEC sp_configure 'cost threshold for parallelism';
 ```
 
 **Logique** :
-```
+```text
 Seules les requêtes réellement coûteuses (> 50 secondes estimées)
 seront parallélisées.
 Les petites requêtes restent séquentielles → Moins de contention

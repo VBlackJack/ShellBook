@@ -12,7 +12,7 @@ Outils et techniques de diagnostic réseau avancé sous Windows.
 
 ## Outils de Diagnostic
 
-```
+```text
 OUTILS RÉSEAU WINDOWS
 ══════════════════════════════════════════════════════════
 
@@ -325,7 +325,7 @@ ping -f -l 1472 server01  # 1472 + 28 (headers) = 1500
 
 ### Wireshark Filters Utiles
 
-```
+```text
 FILTRES WIRESHARK COURANTS
 ══════════════════════════════════════════════════════════
 

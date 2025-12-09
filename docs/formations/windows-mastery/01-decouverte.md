@@ -35,7 +35,7 @@ Windows Server est le système d'exploitation serveur de Microsoft, conçu pour 
 - Gérer des réseaux d'entreprise
 - Fournir des services de fichiers et d'impression
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  ÉCOSYSTÈME WINDOWS SERVER                   │
 ├─────────────────────────────────────────────────────────────┤
@@ -83,8 +83,8 @@ graph TD
     DC --> DC_F[VMs illimitées<br/>Shielded VMs<br/>Storage Spaces Direct]
     ESS --> ESS_F[25 users max<br/>50 devices max<br/>1 serveur uniquement]
 
-    style WS fill:#0078d4,stroke:#005a9e,color:#fff
-    style DC fill:#107c10,stroke:#0e6b0e,color:#fff
+    style WS fill:#2196F3,stroke:#005a9e,color:#fff
+    style DC fill:#4CAF50,stroke:#0e6b0e,color:#fff
 ```
 
 | Édition | Usage | VMs Incluses | Prix Indicatif |
@@ -97,7 +97,7 @@ graph TD
 
 **Licensing par Core (Standard/Datacenter) :**
 
-```
+```text
 Règles :
 - Minimum 16 cores par serveur
 - Minimum 8 cores par CPU
@@ -109,7 +109,7 @@ Exemple : Serveur 2 CPU x 12 cores = 24 cores
 
 **CAL (Client Access License) :**
 
-```
+```text
 En plus des licences serveur :
 - CAL User : Par utilisateur (recommandé pour mobile)
 - CAL Device : Par appareil (recommandé pour postes partagés)
@@ -125,7 +125,7 @@ En plus des licences serveur :
 
 ### 3.1 Comparaison
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              SERVER CORE vs DESKTOP EXPERIENCE               │
 ├─────────────────────────────────────────────────────────────┤
@@ -230,14 +230,14 @@ Start-VM -Name "WS2022-DC01"
    - Appuyer sur une touche pour booter sur le DVD
 
 2. **Sélection de la langue**
-   ```
+   ```text
    Language: French (France)
    Time and currency: French (France)
    Keyboard: French
    ```
 
 3. **Choix de l'édition**
-   ```
+   ```text
    ✓ Windows Server 2022 Standard (Desktop Experience)
      pour le premier lab
 
@@ -246,18 +246,18 @@ Start-VM -Name "WS2022-DC01"
    ```
 
 4. **Type d'installation**
-   ```
+   ```text
    ✓ Custom: Install Windows only (advanced)
    ```
 
 5. **Partitionnement**
-   ```
+   ```text
    Sélectionner le disque → Next
    (L'installateur créera les partitions automatiquement)
    ```
 
 6. **Configuration initiale**
-   ```
+   ```text
    Mot de passe Administrator: P@ssw0rd123!
    (Utilisez un mot de passe fort en production)
    ```
@@ -282,7 +282,7 @@ Get-ComputerInfo | Select-Object WindowsProductName, OsVersion, OsBuildNumber
 
 `sconfig` est l'outil de configuration de base pour Server Core :
 
-```
+```sql
 ===============================================================================
                          Server Configuration
 ===============================================================================
@@ -309,7 +309,7 @@ Get-ComputerInfo | Select-Object WindowsProductName, OsVersion, OsBuildNumber
 
 **Configuration recommandée pour le lab :**
 
-```
+```yaml
 # Dans sconfig :
 
 # 2) Renommer le serveur
@@ -388,7 +388,7 @@ Enable-NetFirewallRule -DisplayGroup "Remote Service Management"
 
 ### 6.1 Structure du Système
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    ARCHITECTURE WINDOWS                      │
 ├─────────────────────────────────────────────────────────────┤
@@ -589,7 +589,7 @@ Computer Name: DC01
 
 **Solution avec sconfig :**
 
-```
+```text
 # Lancer sconfig
 sconfig
 

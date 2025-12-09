@@ -78,7 +78,7 @@ pytest --lf
 
 ### Structure de Projet
 
-```
+```text
 project/
 ├── src/
 │   ├── __init__.py

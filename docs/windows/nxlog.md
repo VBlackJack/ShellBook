@@ -16,7 +16,7 @@ NXLog Community Edition permet de collecter et transférer les Event Logs Window
 
 ![NXLog SecNumCloud Architecture](../assets/diagrams/nxlog-secnumcloud-architecture.jpeg)
 
-```
+```text
 CENTRALISATION DES LOGS - SECNUMCLOUD
 ══════════════════════════════════════════════════════════════════════
 
@@ -86,7 +86,7 @@ Get-Service nxlog
 
 ### Structure des Répertoires
 
-```
+```text
 C:\Program Files\nxlog\
 ├── conf\
 │   └── nxlog.conf          # Configuration principale
@@ -105,7 +105,7 @@ C:\Program Files\nxlog\
 
 ![Windows Security Events Matrix](../assets/diagrams/windows-security-events-matrix.jpeg)
 
-```
+```text
 EVENTS LOGS OBLIGATOIRES - HARDENING SECNUMCLOUD
 ══════════════════════════════════════════════════════════════════════
 
@@ -921,7 +921,7 @@ if (Test-Path $bufferFile) {
 
 ## Comparatif Linux rsyslog
 
-```
+```text
 ÉQUIVALENCE WINDOWS/LINUX
 ══════════════════════════════════════════════════════════════════════
 

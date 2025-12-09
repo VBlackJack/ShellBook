@@ -31,7 +31,7 @@ Comprendre le métal sous la virtualisation.
 
 Les serveurs de production ont des **alimentations doubles** pour la tolérance aux pannes.
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │              SERVEUR                     │
 │  ┌─────────┐           ┌─────────┐      │
@@ -109,7 +109,7 @@ ipmitool sensor | grep -i watt           # Serveurs avec IPMI
 
 Standard pour la plupart des serveurs. Les ventilateurs poussent l'air à travers les dissipateurs thermiques.
 
-```
+```text
    ENTRÉE (Froid)              ÉCHAPPEMENT (Chaud)
       │                           │
       ▼                           ▼
@@ -154,7 +154,7 @@ Utilisé pour les environnements haute densité et HPC.
 
 ### Échelle Datacenter (Allée Chaude/Froide)
 
-```
+```text
        ALLÉE FROIDE            ALLÉE CHAUDE          ALLÉE FROIDE
 ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
 │                  │    │                  │    │                  │

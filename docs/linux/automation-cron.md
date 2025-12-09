@@ -16,7 +16,7 @@ Planification de tâches sous Linux : méthode classique et moderne.
 
 ### Syntaxe de la Crontab
 
-```
+```text
 ┌───────────── minute (0 - 59)
 │ ┌───────────── hour (0 - 23)
 │ │ ┌───────────── day of month (1 - 31)
@@ -137,7 +137,7 @@ Un timer systemd nécessite **deux fichiers** :
 1. **`.service`** : Définit la tâche à exécuter
 2. **`.timer`** : Définit quand l'exécuter
 
-```
+```text
 /etc/systemd/system/
 ├── backup.service    # Quoi faire
 └── backup.timer      # Quand le faire

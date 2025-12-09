@@ -33,7 +33,7 @@ Vous êtes l'architecte infrastructure Windows pour une entreprise en croissance
 
 ### Architecture Cible
 
-```
+```text
 INFRASTRUCTURE CORP.LOCAL
 ─────────────────────────
 
@@ -103,7 +103,7 @@ AZURE (Hybrid)
 
 ### 3.1 Structure du Projet
 
-```
+```text
 projet-final/
 ├── README.md
 ├── docs/

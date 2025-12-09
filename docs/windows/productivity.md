@@ -173,7 +173,7 @@ Remapper n'importe quelle touche ou créer des raccourcis.
 
 ### Activer l'Historique du Presse-papier
 
-```
+```text
 Paramètres → Système → Presse-papiers → Historique du presse-papiers → ACTIVÉ
 ```
 
@@ -191,7 +191,7 @@ Accéder à **tous** les paramètres du Panneau de Configuration dans un seul do
 1. Créer un nouveau dossier n'importe où (Bureau recommandé)
 2. Le renommer exactement en:
 
-```
+```text
 GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
 ```
 
@@ -207,7 +207,7 @@ GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
 - Et bien plus...
 
 !!! info "Autres Dossiers Cachés"
-    ```
+    ```text
     # Programmes par Défaut
     Default.{17cd9488-1228-4b2f-88ce-4298e93e0966}
 

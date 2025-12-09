@@ -90,7 +90,7 @@ graph LR
 
     style HOUR fill:#2196f3,color:#fff
     style UNIT fill:#4caf50,color:#fff
-    style TRANS fill:#ff9800,color:#fff
+    style TRANS fill:#FF9800800800,color:#fff
 ```
 
 | Service | Unité de facturation | Exemple de prix |
@@ -112,7 +112,7 @@ graph TB
     end
 
     style OD fill:#f44336,color:#fff
-    style RI fill:#ff9800,color:#fff
+    style RI fill:#FF9800800800,color:#fff
     style RI3 fill:#4caf50,color:#fff
 ```
 
@@ -169,7 +169,7 @@ pie title Répartition Typique des Coûts Cloud
 
 ### 3.3 Exemple de Facture Détaillée
 
-```
+```text
 ╔══════════════════════════════════════════════════════════╗
 ║                    FACTURE CLOUD - Mars 2024              ║
 ╠══════════════════════════════════════════════════════════╣
@@ -272,7 +272,7 @@ graph TB
     WARM -->|"Données > 90j"| COLD
 
     style HOT fill:#f44336,color:#fff
-    style WARM fill:#ff9800,color:#fff
+    style WARM fill:#FF9800800800,color:#fff
     style COLD fill:#2196f3,color:#fff
 ```
 
@@ -326,7 +326,7 @@ graph TB
     REVIEW --> TAG
 
     style TAG fill:#2196f3,color:#fff
-    style ALERT fill:#ff9800,color:#fff
+    style ALERT fill:#FF9800800800,color:#fff
 ```
 
 **Tags essentiels à mettre en place :**
@@ -355,7 +355,7 @@ graph TB
 
 **Scénario** : Application web avec 10 000 utilisateurs
 
-```
+```text
 ╔══════════════════════════════════════════════════════════╗
 ║           ESTIMATION MENSUELLE - App Web Standard         ║
 ╠══════════════════════════════════════════════════════════╣

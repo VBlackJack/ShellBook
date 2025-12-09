@@ -12,7 +12,7 @@ Gestion et analyse des journaux d'événements Windows.
 
 ## Architecture des Logs
 
-```
+```text
 STRUCTURE DES EVENT LOGS
 ══════════════════════════════════════════════════════════
 
@@ -76,7 +76,7 @@ Get-WinEvent -LogName "System" -MaxEvents 20 |
 
 ### Event Viewer GUI
 
-```
+```text
 eventvwr.msc
 • Vues personnalisées
 • Filtres avancés

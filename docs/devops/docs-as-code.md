@@ -40,10 +40,10 @@ flowchart LR
     E --> F[🚀 Déploiement Auto<br/>GitHub Actions]
     F --> G[🌐 Site Publié<br/>vblackjack.github.io]
 
-    style A fill:#3498db,color:#fff
-    style C fill:#f39c12,color:#fff
-    style E fill:#2ecc71,color:#fff
-    style G fill:#9b59b6,color:#fff
+    style A fill:#2196F3,color:#fff
+    style C fill:#FF9800800800,color:#fff
+    style E fill:#4CAF50,color:#fff
+    style G fill:#9C27B0,color:#fff
 ```
 
 **Avantages vs Documentation Traditionnelle (Word, Confluence) :**
@@ -79,7 +79,7 @@ flowchart LR
 ```bash
 # Ceci est un commentaire
 ls -lah
-```
+```text
 ````
 
 **Rendu :**
@@ -178,19 +178,19 @@ Parfait pour afficher des variantes (Linux/Windows, Docker/Podman, etc.).
 
     ```bash
     sudo systemctl status sshd
-    ```
+    ```text
 
 === "Windows"
 
     ```powershell
     Get-Service -Name sshd
-    ```
+    ```text
 
 === "macOS"
 
     ```bash
     sudo launchctl list | grep ssh
-    ```
+    ```text
 ```
 
 **Rendu :**
@@ -225,7 +225,7 @@ graph LR
     B --> C[Server 1]
     B --> D[Server 2]
     B --> E[Server 3]
-```
+```text
 ````
 
 **Rendu :**
@@ -237,11 +237,11 @@ graph LR
     B --> D[Server 2]
     B --> E[Server 3]
 
-    style A fill:#3498db,color:#fff
-    style B fill:#e74c3c,color:#fff
-    style C fill:#2ecc71,color:#fff
-    style D fill:#2ecc71,color:#fff
-    style E fill:#2ecc71,color:#fff
+    style A fill:#2196F3,color:#fff
+    style B fill:#f44336,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#4CAF50,color:#fff
+    style E fill:#4CAF50,color:#fff
 ```
 
 **Autres Types de Diagrammes :**
@@ -306,7 +306,7 @@ Exemples pratiques...
 ```bash
 # Commande exemple
 command --option value
-```
+```text
 
 !!! tip "Astuce"
     Conseil pratique lié à cette section.
@@ -325,7 +325,7 @@ command --option value
 ```bash
 # Commande de résolution
 fix-command
-```
+```text
 
 ---
 
@@ -335,7 +335,7 @@ fix-command
 # === COMMANDES ESSENTIELLES ===
 command1 --help          # Description
 command2 -v              # Description
-```
+```text
 ```
 
 ### Checklist Avant Publication
@@ -533,7 +533,7 @@ sudo netstat -tlnp
 
 # Filtrer par port spécifique (ex: port 80)
 sudo netstat -tlnp | grep :80
-```
+```text
 
 **Explication des options :**
 
@@ -561,7 +561,7 @@ sudo netstat -tlnp | grep :80
 ```
 ssh user@server
 Permission denied (publickey).
-```
+```text
 
 **Causes possibles :**
 
@@ -581,7 +581,7 @@ chmod 600 ~/.ssh/authorized_keys
 
 # 3. Spécifier explicitement la clé privée
 ssh -i ~/.ssh/id_rsa_custom user@server
-```
+```bash
 
 !!! tip "Debugging SSH"
     Utilisez `ssh -vvv user@server` pour obtenir un log détaillé de la connexion.
@@ -617,13 +617,13 @@ Redis est une base de données clé-valeur en mémoire utilisée comme cache, me
     ```bash
     sudo apt update
     sudo apt install redis-server
-    ```
+    ```text
 
 === "RHEL/CentOS"
 
     ```bash
     sudo dnf install redis
-    ```
+    ```text
 
 ## Configuration de Base
 
@@ -637,7 +637,7 @@ port 6379                 # Port par défaut
 requirepass YourPassword  # Activer l'authentification
 maxmemory 256mb           # Limite RAM
 maxmemory-policy allkeys-lru  # Éviction LRU
-```
+```text
 
 ## Commandes Redis Essentielles
 
@@ -658,7 +658,7 @@ KEYS *
 
 # Statistiques serveur
 INFO
-```
+```text
 
 !!! warning "KEYS * en Production"
     La commande `KEYS *` bloque le serveur sur des bases volumineuses. Utilisez `SCAN` en production.
@@ -677,7 +677,7 @@ GET key                          # Récupérer valeur
 DEL key                          # Supprimer clé
 EXISTS key                       # Vérifier existence
 EXPIRE key seconds               # TTL (expiration)
-```
+```text
 ```
 
 **Ensuite :**
@@ -743,7 +743,7 @@ git push origin <nom>    # Envoyer vers GitHub
 ```bash
 sudo nginx -t                    # Valider la syntaxe
 sudo systemctl reload nginx      # Recharger sans downtime
-```
+```text
 ```
 
 ❌ **MAUVAIS :**
@@ -760,7 +760,7 @@ Vous pouvez redémarrer nginx si vous voulez.
 ```bash
 # Testé sur Ubuntu 22.04 LTS
 sudo apt install postgresql-14
-```
+```text
 ```
 
 ❌ **MAUVAIS :**
@@ -768,7 +768,7 @@ sudo apt install postgresql-14
 ```bash
 # Je pense que ça marche
 sudo apt install postgres
-```
+```text
 ```
 
 ### 3. Contexte Avant l'Action
@@ -780,14 +780,14 @@ sudo apt install postgres
 
 ```bash
 DROP DATABASE production;
-```
+```text
 ```
 
 ❌ **MAUVAIS :**
 ```markdown
 ```bash
 DROP DATABASE production;
-```
+```text
 ```
 
 ### 4. Exemples Réalistes
@@ -797,7 +797,7 @@ DROP DATABASE production;
 ```bash
 # Backup de la base "customers" avant migration
 pg_dump -U postgres -d customers > customers_backup_$(date +%Y%m%d).sql
-```
+```text
 ```
 
 ❌ **MAUVAIS :**
@@ -805,7 +805,7 @@ pg_dump -U postgres -d customers > customers_backup_$(date +%Y%m%d).sql
 ```bash
 # Backup
 pg_dump database > backup.sql
-```
+```text
 ```
 
 ---

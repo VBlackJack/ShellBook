@@ -19,7 +19,7 @@ L'outil réseau en ligne de commande ultime de Windows. Indispensable pour le tr
 
 **Évolution des outils Windows :**
 
-```
+```text
 2000-2008 : Netsh (seul outil CLI réseau)
 2012-2016 : Transition (Netsh + PowerShell coexistent)
 2019+     : PowerShell recommandé (mais Netsh reste utile)
@@ -116,7 +116,7 @@ netsh -f C:\backup\network-config.txt
 
 **Scénario classique :**
 
-```
+```text
 User : "Je n'ai plus Internet depuis ce matin"
 Admin: *ping 8.8.8.8* → Timeout
 Admin: *ipconfig /all* → Adresse APIPA (169.254.x.x)
@@ -455,7 +455,7 @@ etl2pcapng.exe C:\sql-trace.etl C:\sql-trace.pcapng
 ### Le Problème : WiFi Instable
 
 **Scénario :**
-```
+```text
 User : "Le WiFi se déconnecte toutes les 10 minutes"
 Admin: "Quel canal utilise le routeur ?"
 User : "Je ne sais pas..."
@@ -487,7 +487,7 @@ Report location: C:\ProgramData\Microsoft\Windows\WlanReport\wlan-report-latest.
 
 **Exemple de diagnostic :**
 
-```
+```sql
 Disconnect Reason: Deauthentication (802.11 frame from AP)
 Count: 47 in the last 3 days
 
@@ -507,7 +507,7 @@ netsh wlan show networks mode=bssid
 
 **Output exemple :**
 
-```
+```text
 SSID 1 : CompanyWiFi
     Network type            : Infrastructure
     Authentication          : WPA2-Personal
@@ -530,7 +530,7 @@ netsh wlan show profile name="CompanyWiFi" key=clear
 
 **Output (section Security settings) :**
 
-```
+```text
 Security settings
 -----------------
     Authentication         : WPA2-Personal

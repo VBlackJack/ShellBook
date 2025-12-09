@@ -30,7 +30,7 @@ Ce module couvre les fondamentaux d'Active Directory :
 
 ### 1.1 Concepts Fondamentaux
 
-```
+```text
 HIÉRARCHIE ACTIVE DIRECTORY
 ────────────────────────────
 
@@ -57,7 +57,7 @@ COMPOSANTS
 
 ### 1.2 Rôles FSMO
 
-```
+```text
 FSMO ROLES (Flexible Single Master Operations)
 ──────────────────────────────────────────────
 
@@ -369,7 +369,7 @@ Les trusts permettent l'authentification entre domaines et forêts.
 
 ### 7.1 Types de Trusts
 
-```
+```text
 TYPES DE TRUSTS
 ───────────────────────────────────────────────────
 

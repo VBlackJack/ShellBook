@@ -86,7 +86,7 @@ Réparation automatique des problèmes Windows Update.
 
 ## Workflow de Réparation
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                 WINDOWS UPDATE REPAIR                            │
 ├─────────────────────────────────────────────────────────────────┤
@@ -826,7 +826,7 @@ catch {
 
 ## Exemples de Sortie
 
-```
+```text
 ╔════════════════════════════════════════════════════════════╗
 ║           WINDOWS UPDATE REPAIR TOOL                       ║
 ║                   ShellBook v1.0                           ║

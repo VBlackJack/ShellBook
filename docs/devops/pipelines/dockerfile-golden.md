@@ -42,9 +42,9 @@ graph LR
     A[Stage 1: Builder<br/>~800MB] --> B[Copie des<br/>artifacts]
     B --> C[Stage 2: Runner<br/>~50MB]
 
-    style A fill:#fbb
-    style B fill:#bbf
-    style C fill:#bfb
+    style A fill:#f44336
+    style B fill:#2196F3
+    style C fill:#4CAF50
 ```
 
 | Aspect | Single-Stage | Multi-Stage |

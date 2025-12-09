@@ -13,7 +13,7 @@ Requêtes et gestion système avec WMI (Windows Management Instrumentation) et C
 
 ## Concepts
 
-```
+```text
 ARCHITECTURE WMI/CIM
 ══════════════════════════════════════════════════════════
 
@@ -46,7 +46,7 @@ Namespaces courants :
 
 ### WMI vs CIM Cmdlets
 
-```
+```text
 COMPARAISON WMI ET CIM
 ══════════════════════════════════════════════════════════
 

@@ -170,7 +170,7 @@ podman images | grep ubi
 
 ### Pourquoi UBI ?
 
-```
+```text
 AVANTAGES UBI
 ═════════════
 ✓ Gratuites (même sans subscription)

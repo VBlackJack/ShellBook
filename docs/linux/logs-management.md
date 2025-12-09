@@ -49,7 +49,7 @@ grep -i "error\|fail" /var/log/kern.log
 
 ### Structure Typique
 
-```
+```text
 /var/log/
 ├── auth.log              # Auth actuel
 ├── auth.log.1            # Rotation précédente
@@ -74,7 +74,7 @@ grep -i "error\|fail" /var/log/kern.log
 
 Logrotate gère automatiquement le cycle de vie des logs :
 
-```
+```text
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │  app.log    │ ──► │  app.log.1  │ ──► │ app.log.2.gz│ ──► │  Supprimé   │
 │  (actif)    │     │  (hier)     │     │ (compressé) │     │  (rotate 7) │

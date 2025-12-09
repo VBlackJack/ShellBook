@@ -84,7 +84,7 @@ choco install corpapp -y
 
 **Problème :** Si vous exécutez ce script **2 fois**, que se passe-t-il ?
 
-```
+```text
 1ère exécution : corpapp 1.0.0 installé ✅
 2ème exécution : "corpapp 1.0.0 is already installed" ⚠️ (mais pas d'erreur)
 3ème exécution : Idem
@@ -107,7 +107,7 @@ choco install corpapp -y
 
 **Résultat :**
 
-```
+```text
 1ère exécution : corpapp 1.0.0 installé ✅ (changed)
 2ème exécution : corpapp déjà présent ✅ (ok)
 3ème exécution : corpapp déjà présent ✅ (ok)
@@ -516,7 +516,7 @@ ansible-playbook -i inventory.ini bootstrap-chocolatey.yml
 
 **Sortie attendue :**
 
-```
+```bash
 PLAY [Bootstrap Chocolatey on Windows Hosts] ***************
 
 TASK [Check if Chocolatey is installed] ********************
@@ -868,7 +868,7 @@ ansible-playbook playbook.yml --tags packages
 
 **Structure recommandée :**
 
-```
+```text
 chocolatey-ansible/
 ├── inventory/
 │   ├── production.ini
@@ -1186,7 +1186,7 @@ ansible-playbook -i inventory.ini migrate_pdf.yml
 
     **Sortie attendue :**
 
-    ```
+    ```bash
     PLAY [Migrate from Adobe Reader to Foxit Reader] ***************
 
     TASK [Gathering Facts] ******************************************

@@ -19,7 +19,7 @@ Une suite d'outils web complète, auto-hébergée pour ne plus jamais coller de 
 
 **Scénario classique :**
 
-```
+```text
 Dev  : "Je dois décoder ce JWT pour debug"
 Dev  : *Ouvre jwt.io et colle le token*
 Lead : "Tu viens d'envoyer un token de production sur Internet ?!"
@@ -42,8 +42,8 @@ flowchart LR
     C -->|3. Result| A
     B -.->|Never Leaves Network| D[Your Infrastructure]
 
-    style B fill:#2ecc71
-    style D fill:#3498db
+    style B fill:#4CAF50
+    style D fill:#2196F3
 ```
 
 **IT-Tools = 80+ outils dans un conteneur Docker**
@@ -66,7 +66,7 @@ flowchart LR
 
 Contrairement aux outils en ligne, IT-Tools exécute tout en JavaScript dans votre navigateur :
 
-```
+```bash
 Données sensibles → Browser (IT-Tools UI) → JavaScript Processing → Résultat
                     ↓
               Jamais envoyé au serveur
@@ -98,7 +98,7 @@ $ docker run -d -p 8080:80 corentinth/it-tools
 ### 3. Centralisation : One Tool to Rule Them All
 
 **Avant IT-Tools :**
-```
+```text
 Onglet 1 : jwt.io (JWT decode)
 Onglet 2 : yamllint.com (YAML validation)
 Onglet 3 : crontab.guru (Cron syntax)
@@ -108,7 +108,7 @@ Onglet 5 : base64decode.org (Base64)
 ```
 
 **Avec IT-Tools :**
-```
+```text
 Onglet unique : http://localhost:8080
   → Search bar : "jwt" → JWT Decoder
   → Search bar : "yaml" → YAML to JSON
@@ -373,7 +373,7 @@ kubectl get pod -o json
 
 **Planification d'infrastructure AWS :**
 
-```
+```text
 Input : 10.0.0.0/16
 
 Output :
@@ -387,7 +387,7 @@ Output :
 
 **Découpage en subnets :**
 
-```
+```text
 VPC : 10.0.0.0/16
 
 Subnets :
@@ -403,7 +403,7 @@ Subnets :
 
 **Migration dual-stack :**
 
-```
+```bash
 IPv4 : 192.168.1.100
 IPv6 : ::ffff:192.168.1.100  (IPv4-mapped IPv6)
 
@@ -417,7 +417,7 @@ Compressed : 2001:db8:85a3::8a2e:370:7334
 
 **Interface visuelle pour cron :**
 
-```
+```text
 Selector:
 - Minute   : */15  (Every 15 minutes)
 - Hour     : 2     (At 2am)
@@ -448,7 +448,7 @@ Next runs:
 
 **Permissions visuelles :**
 
-```
+```bash
 User  : [✓] Read  [✓] Write  [✓] Execute  = 7
 Group : [✓] Read  [✓] Write  [ ] Execute  = 6
 Other : [✓] Read  [ ] Write  [ ] Execute  = 4
@@ -490,7 +490,7 @@ echo "API_SECRET=$API_SECRET" >> .env
 
 **Calculer des hashes sans envoyer sur Internet :**
 
-```
+```text
 Input : MySecretPassword
 
 Algorithms:
@@ -516,7 +516,7 @@ sha256sum ubuntu-22.04.3-live-server-amd64.iso
 
 **Décoder un token sans l'envoyer sur jwt.io :**
 
-```
+```text
 Token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
 Decoded Header:
@@ -537,7 +537,7 @@ Expiration: 2018-01-18 01:30:22 (EXPIRED)
 
 **Validation de signature (local) :**
 
-```
+```text
 Secret : your-256-bit-secret
 Signature Valid : ✅
 ```
@@ -566,7 +566,7 @@ echo "bXktZGF0YWJhc2UtcGFzc3dvcmQ=" | base64 -d
 
 **Query parameters :**
 
-```
+```yaml
 Original : https://api.com/search?q=Hello World&filter=name:John Doe
 
 Encoded  : https://api.com/search?q=Hello%20World&filter=name%3AJohn%20Doe
@@ -655,7 +655,7 @@ Encoded  : https://api.com/search?q=Hello%20World&filter=name%3AJohn%20Doe
 
 **Chrome / Edge / Firefox :**
 
-```
+```text
 1. Accéder à http://localhost:8080
 2. Bookmarks → Add Bookmark
 3. Name : 🔧 IT-Tools
@@ -665,7 +665,7 @@ Encoded  : https://api.com/search?q=Hello%20World&filter=name%3AJohn%20Doe
 
 **Organisation recommandée :**
 
-```
+```text
 Bookmarks Bar/
 ├─ 🔧 IT-Tools (http://localhost:8080)
 ├─ 📊 Grafana (http://monitoring.local)

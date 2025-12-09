@@ -151,7 +151,7 @@ node_uname_info
 
 ### 3.1 Concept
 
-```
+```text
 BLACKBOX EXPORTER - PROBES EXTERNES
 ═══════════════════════════════════
 
@@ -575,7 +575,7 @@ management:
 
 ### 5.1 Cas d'Usage
 
-```
+```text
 PUSHGATEWAY - JOBS BATCH ET ÉPHÉMÈRES
 ═════════════════════════════════════
 

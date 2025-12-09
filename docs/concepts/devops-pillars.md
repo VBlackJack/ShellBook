@@ -70,7 +70,7 @@ Ne vous perdez pas dans les outils. Il n'y a que **6 problèmes à résoudre**.
 
 **Étapes du Pipeline :**
 
-```
+```text
 Code → Build → Test → Security Scan → Deploy → Monitor
         ↓       ↓          ↓            ↓
       Compile  Unit    SAST/DAST    Staging → Prod
@@ -173,7 +173,7 @@ Code → Build → Test → Security Scan → Deploy → Monitor
 
 **Stacks Leaders :**
 
-```
+```text
 Prometheus + Grafana + Alertmanager    → Métriques & Alerting
 ELK (Elasticsearch + Logstash + Kibana) → Agrégation de logs
 Grafana Loki                           → Logs légers
@@ -196,7 +196,7 @@ Jaeger / Tempo                         → Tracing distribué
 ---
 
 !!! example "Vue d'Ensemble"
-    ```
+    ```text
     Code → Pipeline CI/CD → Image Container → Registry
                                     ↓
     Infrastructure Cloud ← Terraform/Ansible

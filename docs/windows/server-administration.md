@@ -4,7 +4,6 @@ tags:
   - core
   - wac
   - openssh
-  - "2025"
   - winget
   - chocolatey
 ---
@@ -21,7 +20,7 @@ Administration Windows Server moderne : Build, WAC, PowerShell et gestion des ve
 
 ![Server Core vs Desktop Experience](../assets/diagrams/server-core-vs-desktop.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │              SERVER CORE vs DESKTOP EXPERIENCE               │
 ├─────────────────────────────────────────────────────────────┤
@@ -55,7 +54,7 @@ Au démarrage de Server Core, lancez `sconfig` pour un menu de configuration rap
 
 ![sconfig Menu](../assets/diagrams/sconfig-menu.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                 Server Configuration                         │
 ├─────────────────────────────────────────────────────────────┤
@@ -186,7 +185,7 @@ Uninstall-WindowsFeature -Name Web-Server
 
 ### Fini les .exe et "Suivant > Suivant"
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      AVANT (2010)                            │
 │  1. Télécharger setup.exe                                   │
@@ -305,7 +304,7 @@ choco install nodejs --version=18.17.0 -y
 
 ### Les Termes Essentiels
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                         FOREST                               │
 │  ┌───────────────────────────────────────────────────────┐  │
@@ -335,7 +334,7 @@ choco install nodejs --version=18.17.0 -y
 
 ### GPO : Le Config Management Natif
 
-```
+```text
 GPO = Configuration as Code (mais en GUI... ou ADMX)
 
 Exemples de GPOs :
@@ -453,7 +452,7 @@ Get-CimInstance Win32_Process | Select-Object Name, ProcessId, CommandLine
 
 **Windows Admin Center = La Console Web pour Server Core**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   ÉVOLUTION DE L'ADMIN                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -634,7 +633,7 @@ New-PACertificate -Domain "web.corp.local" -AcceptTOS
 
 **Windows Server 2025 = Focus sur Cloud Hybride & Sécurité**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │           ÉVOLUTION WINDOWS SERVER                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -648,7 +647,7 @@ New-PACertificate -Domain "web.corp.local" -AcceptTOS
 
 **Le Problème :**
 
-```
+```text
 Admin   : "On patche le serveur web ce soir"
 Business: "Mais on a une vente flash cette nuit !"
 Admin   : "Tant pis, reboot obligatoire pour les updates de sécurité"
@@ -672,7 +671,7 @@ azcmagent connect --tenant-id <TENANT_ID> --subscription-id <SUB_ID>
 
 **Comment ça marche :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    HOTPATCH WORKFLOW                         │
 ├─────────────────────────────────────────────────────────────┤
@@ -703,7 +702,7 @@ azcmagent connect --tenant-id <TENANT_ID> --subscription-id <SUB_ID>
 
 **Le Problème Historique :**
 
-```
+```bash
 Admin Linux : "ssh user@serveur"  → Connecté en 1 seconde
 Admin Windows: "Télécharger PuTTY, configurer, lancer..."
                "Ou activer WinRM/PSRemoting..."
@@ -795,7 +794,7 @@ icacls C:\Users\Administrator\.ssh\authorized_keys /remove "NT AUTHORITY\Authent
 
 **Le Problème : Partages de Fichiers via Internet**
 
-```
+```text
 Scénario classique :
 - Utilisateur en télétravail veut accéder à \\fileserver\share
 - SMB (port 445) bloqué par les FAI et dangereux sur Internet
@@ -806,7 +805,7 @@ Scénario classique :
 
 **SMB over QUIC = SMB chiffré via UDP 443 (comme HTTPS)**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    SMB TRADITIONNEL                          │
 │  Client ───TCP 445──→ Serveur                               │
@@ -883,7 +882,7 @@ Get-SmbConnection | Select-Object ServerName, TransportName
 !!! warning "Attention : DNS Public Requis"
     Le serveur SMB over QUIC doit avoir un FQDN résolvable publiquement :
 
-    ```
+    ```bash
     ✓ fileserver.company.com  (DNS public + certificat Let's Encrypt)
     ✗ fileserver.local        (DNS interne uniquement)
     ```
@@ -915,7 +914,7 @@ Format-Volume -DriveLetter D -FileSystem ReFS -SetIntegrityStreams $true
 
 **Gains de Performance Mesurés (Tests Microsoft) :**
 
-```
+```text
 Scénario : Serveur Hyper-V avec VMs sur NVMe
 
 Windows Server 2022  →  2025

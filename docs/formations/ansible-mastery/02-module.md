@@ -254,7 +254,7 @@ ansible-playbook --syntax-check playbook.yml
 
 **Pourquoi :** Lors de l'exécution, Ansible affiche ce nom :
 
-```
+```text
 PLAY [Configuration complète serveur web] ********************************
 ```
 
@@ -677,7 +677,7 @@ ansible-playbook --syntax-check install_nginx.yml
 
 **En cas d'erreur :**
 
-```
+```bash
 ERROR! Syntax Error while loading YAML.
   mapping values are not allowed in this context
 
@@ -696,7 +696,7 @@ ansible-playbook install_nginx.yml --check
 
 **Sortie attendue :**
 
-```
+```text
 PLAY [Installer et configurer Nginx] **************************************
 
 TASK [Gathering Facts] ****************************************************
@@ -746,7 +746,7 @@ ansible-playbook install_nginx.yml -v
 
 **Ouvrir un navigateur et accéder à :**
 
-```
+```text
 http://localhost/       # Si simulation localhost
 http://192.168.1.10/    # IP du serveur web1
 ```
@@ -763,7 +763,7 @@ ansible-playbook install_nginx.yml
 
 **Sortie attendue (2ème exécution) :**
 
-```
+```text
 PLAY RECAP ****************************************************************
 web1                       : ok=4    changed=0    unreachable=0    failed=0
 web2                       : ok=4    changed=0    unreachable=0    failed=0
@@ -793,7 +793,7 @@ ansible-playbook install_nginx.yml
 
 **Sortie attendue :**
 
-```
+```text
 TASK [Copier page index.html personnalisée] *******************************
 changed: [web1]   ← Fichier modifié!
 
@@ -1067,7 +1067,7 @@ ls -ld /opt/app
 
     **Sortie attendue :**
 
-    ```
+    ```text
     playbook: site.yml
     ```
 
@@ -1081,7 +1081,7 @@ ls -ld /opt/app
 
     **Sortie attendue (1ère exécution) :**
 
-    ```
+    ```text
     PLAY [Configuration de base des serveurs] *********************************
 
     TASK [Gathering Facts] ****************************************************
@@ -1139,7 +1139,7 @@ ls -ld /opt/app
 
     **Sortie attendue (2ème exécution) :**
 
-    ```
+    ```text
     PLAY RECAP ****************************************************************
     web1                       : ok=5    changed=0    unreachable=0    failed=0
     web2                       : ok=5    changed=0    unreachable=0    failed=0
@@ -1163,7 +1163,7 @@ ls -ld /opt/app
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     /usr/bin/git
 
@@ -1189,7 +1189,7 @@ ls -ld /opt/app
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     uid=1001(deploy) gid=1001(deploy) groups=1001(deploy)
     ```
@@ -1204,7 +1204,7 @@ ls -ld /opt/app
 
     **Sortie :**
 
-    ```
+    ```text
     web1 | CHANGED | rc=0 >>
     drwxr-xr-x 2 deploy deploy 4096 Nov 22 15:30 /opt/app
     ```
@@ -1325,7 +1325,7 @@ ls -ld /opt/app
 
     **Sortie :**
 
-    ```
+    ```text
     playbook: site.yml
 
       play #1 (all): Configuration de base des serveurs    TAGS: []

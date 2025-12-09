@@ -184,10 +184,10 @@ graph LR
     C --> D[Module 4<br/>Automatisation]
     D --> E[Module 5<br/>TP Final]
 
-    style A fill:#e1f5ff
-    style B fill:#fff4e1
+    style A fill:#2196F3
+    style B fill:#FF9800800800
     style C fill:#ffe1f5
-    style D fill:#e1ffe1
+    style D fill:#4CAF50
     style E fill:#90EE90
 ```
 

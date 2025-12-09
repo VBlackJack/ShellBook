@@ -81,7 +81,7 @@ flowchart LR
 **Étape 1 : Obtenir le token d'enregistrement**
 
 Sur GitLab (Admin ou Projet) :
-```
+```text
 Settings → CI/CD → Runners → Expand
 → Copier le Registration Token
 ```
@@ -273,7 +273,7 @@ nom_du_job:
 
 ![GitLab Artifacts vs Cache](../assets/diagrams/gitlab-artifacts-vs-cache.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    ARTIFACTS vs CACHE                        │
 ├─────────────────────────────────────────────────────────────┤
@@ -462,7 +462,7 @@ build_image:
 
 ### Sécurité : Les Risques de DinD
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                   DOCKER-IN-DOCKER : RISQUES                 │
 ├─────────────────────────────────────────────────────────────┤
@@ -567,7 +567,7 @@ before_script:
 
 **Scénario :** Architecture microservices avec plusieurs repos Git.
 
-```
+```text
 Projet "Infrastructure" (Ansible, Terraform)
   ├── deploy.yml
   └── .gitlab-ci.yml
@@ -633,7 +633,7 @@ deploy:
 
 **Créer un token de déclenchement :**
 
-```
+```text
 Projet Infrastructure → Settings → CI/CD → Pipeline triggers
 → Add trigger
 → Copier le token
@@ -905,7 +905,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ### Variables GitLab à Définir
 
-```
+```dockerfile
 Settings → CI/CD → Variables
 
 [Protected] [Masked]

@@ -26,12 +26,12 @@ flowchart LR
         D["ls -l"] -->|Texte brut| E["grep 'Dec'"] -->|Parse texte| F["awk '{print $9}'"]
     end
 
-    style A fill:#555,stroke:#333,color:#fff
-    style B fill:#555,stroke:#333,color:#fff
-    style C fill:#555,stroke:#333,color:#fff
-    style D fill:#6c757d,stroke:#495057,color:#fff
-    style E fill:#6c757d,stroke:#495057,color:#fff
-    style F fill:#6c757d,stroke:#495057,color:#fff
+    style A fill:#9C27B0,stroke:#333,color:#fff
+    style B fill:#9C27B0,stroke:#333,color:#fff
+    style C fill:#9C27B0,stroke:#333,color:#fff
+    style D fill:#9C27B0,stroke:#495057,color:#fff
+    style E fill:#9C27B0,stroke:#495057,color:#fff
+    style F fill:#9C27B0,stroke:#495057,color:#fff
 ```
 
 **POWERSHELL : Le flux d'objets**
@@ -44,12 +44,12 @@ flowchart LR
         D[Get-ChildItem] -->|Objets FileInfo| E[Where-Object] -->|Propriétés typées| F[Select-Object]
     end
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#0078d4,stroke:#005a9e,color:#fff
-    style D fill:#2b88d8,stroke:#1a5f9e,color:#fff
-    style E fill:#2b88d8,stroke:#1a5f9e,color:#fff
-    style F fill:#2b88d8,stroke:#1a5f9e,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#2196F3,stroke:#005a9e,color:#fff
+    style D fill:#2196F3,stroke:#1a5f9e,color:#fff
+    style E fill:#2196F3,stroke:#1a5f9e,color:#fff
+    style F fill:#2196F3,stroke:#1a5f9e,color:#fff
 ```
 
 ### Exemple Frappant

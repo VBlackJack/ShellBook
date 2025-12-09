@@ -13,7 +13,7 @@ Procédures de récupération Active Directory : restauration d'objets, DSRM, fo
 
 ## Niveaux de Récupération
 
-```
+```text
 SCÉNARIOS DE RÉCUPÉRATION AD
 ══════════════════════════════════════════════════════════
 
@@ -161,7 +161,7 @@ ntdsutil
 
 ### Démarrer en Mode DSRM
 
-```
+```text
 Méthode 1 - Au boot:
 1. Redémarrer le serveur
 2. Appuyer sur F8 pendant le démarrage
@@ -215,7 +215,7 @@ shutdown /r /t 0
 
 ### Augmentation de Version
 
-```
+```text
 AUTHORITATIVE RESTORE - VERSIONING
 ══════════════════════════════════════════════════════════
 
@@ -257,7 +257,7 @@ shutdown /r /t 0
 
 ### Scénario de Disaster Recovery
 
-```
+```text
 FOREST RECOVERY PROCEDURE
 ══════════════════════════════════════════════════════════
 

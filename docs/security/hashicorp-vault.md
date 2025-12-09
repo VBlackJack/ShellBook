@@ -19,7 +19,7 @@ Centraliser, sécuriser et contrôler l'accès aux secrets. Fini les mots de pas
 
 **Scénario classique (cauchemar de sécurité) :**
 
-```
+```text
 Infrastructure typique SANS Vault :
 
 ├─ .env files                    (mots de passe en clair)
@@ -78,8 +78,8 @@ flowchart TD
     J -->|Delete User| I
 
     style B fill:#f9d71c
-    style G fill:#2ecc71
-    style H fill:#3498db
+    style G fill:#4CAF50
+    style H fill:#2196F3
 ```
 
 **Vault = "Fort Knox" pour vos secrets**
@@ -122,7 +122,7 @@ vault write transit/encrypt/my-app plaintext=$(base64 <<< "my-secret")
 ![Vault Dynamic Secrets Sequence](../assets/diagrams/vault-dynamic-secrets-sequence.jpeg)
 
 **Problème des secrets statiques :**
-```
+```text
 Database Password : "Prod2019!"
 Créé en          : 2019-03-15
 Dernière rotation : JAMAIS
@@ -184,7 +184,7 @@ username           v-token-readonly-abc123def456-1634567890
 
 ![Vault Secret Lifecycle Leasing](../assets/diagrams/vault-secret-lifecycle-leasing.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    Secret Lifecycle                      │
 ├─────────────────────────────────────────────────────────┤
@@ -230,7 +230,7 @@ vault lease revoke -prefix database/creds/readonly
 
 ![Vault Shamir Secret Sharing](../assets/diagrams/vault-shamir-secret-sharing.jpeg)
 
-```
+```text
 Master Key (déchiffre toutes les données)
     │
     ├─ Split en 5 clés (Unseal Keys)
@@ -304,7 +304,7 @@ seal "awskms" {
 
 **Évolution des backends :**
 
-```
+```text
 2015 : Consul (complexe, infrastructure supplémentaire)
 2019 : Raft Integrated Storage (simple, tout-en-un)
 2024 : Raft = Standard recommandé
@@ -854,7 +854,7 @@ password = {{ database_password }}  # Injecté depuis Vault
 
 **Architecture :**
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │               Pod                        │
 │  ┌────────────┐      ┌────────────┐     │

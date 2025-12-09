@@ -103,7 +103,7 @@ graph LR
 
     **Résultat attendu :**
 
-    ```
+    ```text
     Output attendu
     ```
 

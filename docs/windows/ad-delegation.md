@@ -15,7 +15,7 @@ La délégation permet d'accorder des permissions granulaires sans donner les dr
 
 ### Pourquoi Déléguer ?
 
-```
+```text
 PROBLÈME SANS DÉLÉGATION
 ══════════════════════════════════════════════════════════
 
@@ -41,7 +41,7 @@ Avantages :
 
 ### Niveaux de Délégation
 
-```
+```text
 NIVEAUX DE DÉLÉGATION
 ══════════════════════════════════════════════════════════
 
@@ -76,7 +76,7 @@ Niveau 4 : Administration de domaine
 
 ### Accès
 
-```
+```text
 1. Active Directory Users and Computers (dsa.msc)
 2. Clic droit sur l'OU cible
 3. "Delegate Control..."

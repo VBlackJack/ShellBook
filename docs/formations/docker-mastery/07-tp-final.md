@@ -29,7 +29,7 @@ Déployer une application web avec :
 
 ## Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                      Docker Host                         │
 │                                                          │

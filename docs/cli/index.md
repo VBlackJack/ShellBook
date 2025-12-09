@@ -13,7 +13,7 @@ Le wrapper unifié pour tous les scripts ShellBook.
 
 ## Vue d'Ensemble
 
-```
+```text
    _____ __         ____  ____              __
   / ___// /_  ___  / / / / __ )____  ____  / /__
   \__ \/ __ \/ _ \/ / / / __  / __ \/ __ \/ //_/
@@ -93,11 +93,11 @@ graph LR
     B --> D[bin/*.py]
     B --> E[bin/*.ps1]
 
-    style A fill:#4dabf7
-    style B fill:#ffd43b
-    style C fill:#69db7c
-    style D fill:#69db7c
-    style E fill:#69db7c
+    style A fill:#2196F3
+    style B fill:#FF9800800800
+    style C fill:#4CAF50
+    style D fill:#4CAF50
+    style E fill:#4CAF50
 ```
 
 ### Processus d'extraction
@@ -185,7 +185,7 @@ apt autoremove -y
 
 ## Structure du Projet
 
-```
+```text
 ShellBook/
 ├── sb                          # CLI wrapper (ce script)
 ├── bin/                        # Scripts extraits (après hydrate)
@@ -239,7 +239,7 @@ alias sb-audit='./sb audit server'
 
 ### "Script not found"
 
-```
+```sql
 [ERROR] Script not found: bin/docker_cleaner_pro.py
 [WARN] Run './sb hydrate' first to extract scripts from documentation.
 ```
@@ -248,7 +248,7 @@ alias sb-audit='./sb audit server'
 
 ### "pip not found"
 
-```
+```bash
 [ERROR] pip not found. Please install Python and pip first.
 ```
 

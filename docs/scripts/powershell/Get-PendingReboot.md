@@ -437,7 +437,7 @@ if ($rebootPending) {
 
 ### Table Output
 
-```
+```text
 ComputerName Reboot? WU CBS File Name CCM LastBoot           Error
 ------------ ------- -- --- ---- ---- --- --------           -----
 SRV-DC01     NO      -  -   -    -    -   2024-01-10 08:00

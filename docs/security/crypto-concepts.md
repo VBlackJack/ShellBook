@@ -42,7 +42,7 @@ Maîtriser les concepts avant les commandes.
 
 Transformer les données pour que seules les parties autorisées puissent les lire.
 
-```
+```text
 Plaintext + Clé → [Encryption] → Ciphertext
 Ciphertext + Clé → [Decryption] → Plaintext
 ```
@@ -60,7 +60,7 @@ Ciphertext + Clé → [Decryption] → Plaintext
 
 Transformation unidirectionnelle produisant une "empreinte" de taille fixe.
 
-```
+```text
 Données → [Fonction Hash] → Digest de taille fixe
 
 "Hello" → SHA256 → 2cf24dba5fb0a30e26e83b2ac5b9e29e...
@@ -87,7 +87,7 @@ Données → [Fonction Hash] → Digest de taille fixe
 
 Transformation de format pour le transport ou la compatibilité. **PAS de sécurité !**
 
-```
+```text
 Binaire → [Base64] → Texte ASCII
 ASCII → [Hex] → Chaîne hexadécimale
 ```

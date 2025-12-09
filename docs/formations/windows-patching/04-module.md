@@ -52,8 +52,8 @@ flowchart LR
     KB2 -->|superseded by| KB3
 
     style KB1 fill:#999,color:#fff,stroke-dasharray: 5 5
-    style KB2 fill:#FFB900,color:#000,stroke-dasharray: 5 5
-    style KB3 fill:#107C10,color:#fff
+    style KB2 fill:#FF9800800800,color:#000,stroke-dasharray: 5 5
+    style KB3 fill:#4CAF50,color:#fff
 ```
 
 **Définitions** :
@@ -901,7 +901,7 @@ Créez un script `Maintain-WSUS.ps1` qui :
     ```
 
     **Output attendu** :
-    ```
+    ```text
     [2025-11-22 02:00:15] [INFO] ========================================
     [2025-11-22 02:00:15] [INFO]   WSUS MAINTENANCE - 22/11/2025
     [2025-11-22 02:00:15] [INFO] ========================================

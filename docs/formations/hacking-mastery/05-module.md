@@ -279,7 +279,7 @@ Des outils plus robustes pour créer des tunnels VPN à travers des firewalls re
     ```
 
     **WinPEAS Output (extrait)** :
-    ```
+    ```bash
     [+] Looking for AutoLogon credentials
         DefaultDomainName    : CORP
         DefaultUserName      : administrator

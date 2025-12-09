@@ -44,11 +44,11 @@ graph LR
     C --> D[security]
     D --> E[release]
 
-    style A fill:#f9f,stroke:#333
-    style B fill:#bbf,stroke:#333
-    style C fill:#bfb,stroke:#333
-    style D fill:#fbb,stroke:#333
-    style E fill:#ff9,stroke:#333
+    style A fill:#9C27B0,stroke:#333
+    style B fill:#2196F3,stroke:#333
+    style C fill:#4CAF50,stroke:#333
+    style D fill:#f44336,stroke:#333
+    style E fill:#FF9800800,stroke:#333
 ```
 
 ---

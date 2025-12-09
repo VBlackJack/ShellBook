@@ -67,7 +67,7 @@ Vous ne suivez pas un tutoriel pas-à-pas. Vous **construisez un projet de A à 
 
 ### Architecture Finale
 
-```
+```text
 ops-tools/
 ├── .github/
 │   └── workflows/
@@ -158,7 +158,7 @@ Collection d'outils Bash pour SysAdmin.
 
 # Cleanup
 ./scripts/cleanup.sh /var/log
-```
+```text
 
 ## CI/CD
 
@@ -467,7 +467,7 @@ git push -u origin feat/backup-script
 
 **Résultat attendu :**
 
-```
+```bash
 ❌ Quality Checks
   ❌ ShellCheck - Bash Linting (15s)
     ✅ Checkout repository
@@ -597,7 +597,7 @@ git push origin feat/backup-script
 
 **Résultat attendu dans GitHub Actions :**
 
-```
+```text
 ✅ Quality Checks
   ✅ ShellCheck - Bash Linting (12s)
     ✅ Checkout repository
@@ -977,7 +977,7 @@ En complétant ce TP, vous avez mis en œuvre un **workflow DevOps professionnel
 
     ### Structure Finale du Projet
 
-    ```
+    ```text
     ops-tools/
     ├── .github/
     │   └── workflows/

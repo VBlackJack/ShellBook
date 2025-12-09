@@ -934,7 +934,7 @@ tasks:
 
 ### Structure d'un Rôle
 
-```
+```text
 roles/
   webserver/
     tasks/
@@ -1155,7 +1155,7 @@ Ansible cherche `ansible.cfg` dans cet ordre:
 
 ### Organisation des Projets
 
-```
+```text
 ansible-project/
   ansible.cfg              # Configuration
   inventory/

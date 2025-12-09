@@ -305,7 +305,7 @@ Vous êtes auteur de contenu ? Suivez la structure ci-dessous et consultez le [G
 
 **Structure recommandée :**
 
-```
+```text
 docs/formations/
 └── ma-formation/
     ├── index.md           # Syllabus (objectifs, programme)

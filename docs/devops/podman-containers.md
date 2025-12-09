@@ -30,10 +30,10 @@ graph TD
         E -->|Rootless| G[✅ Pas de daemon root<br/>Isolation totale]
     end
 
-    style B fill:#e81123,stroke:#b00016,color:#fff
-    style D fill:#e81123,stroke:#b00016,color:#fff
-    style E fill:#107c10,stroke:#0b5a0d,color:#fff
-    style G fill:#107c10,stroke:#0b5a0d,color:#fff
+    style B fill:#f44336,stroke:#b00016,color:#fff
+    style D fill:#f44336,stroke:#b00016,color:#fff
+    style E fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style G fill:#4CAF50,stroke:#0b5a0d,color:#fff
 ```
 
 ### Avantages de Podman

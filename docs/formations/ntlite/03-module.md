@@ -38,7 +38,7 @@ NTLite ne peut **PAS** injecter n'importe quoi :
 | **Driver packagé** | `.cab` | ✅ OUI | Drivers Windows Update |
 
 **Le piège classique** :
-```
+```text
 Vous téléchargez : "NVIDIA_GeForce_Setup.exe" (600 MB)
 Contenu réel : Driver (50 MB) + GeForce Experience (550 MB de bloat)
 ```
@@ -60,7 +60,7 @@ Windows utilise **deux images** pendant l'installation :
 - 🌐 **Réseau** : Si installation via PXE ou réseau
 
 **Symptôme si manquant** :
-```
+```text
 "Windows ne trouve pas de disque dur"
 "Impossible de se connecter au serveur de déploiement"
 ```
@@ -87,7 +87,7 @@ Windows utilise **deux images** pendant l'installation :
 
 Windows impose un **ordre strict** d'installation :
 
-```
+```text
 1. SSU (Servicing Stack Update)
    ↓
 2. LCU (Latest Cumulative Update)
@@ -110,7 +110,7 @@ Windows impose un **ordre strict** d'installation :
 ### Component Store Cleanup (ResetBase)
 
 **Le problème** :
-```
+```text
 Image initiale : 4.5 GB
 + LCU Janvier 2025 : +800 MB
 + LCU Février 2025 : +850 MB
@@ -127,7 +127,7 @@ NTLite peut activer l'option **"Clean update backup"** :
 - ⚠️ **Irréversible** : Impossible de désinstaller les updates après
 
 **Résultat** :
-```
+```text
 Image initiale : 4.5 GB
 + LCU Février 2025 : +200 MB (au lieu de 1.6 GB cumulé)
 Image finale : 4.7 GB ✅
@@ -156,7 +156,7 @@ Export-WindowsDriver -Path "C:\mount" -Destination C:\DriversExport
 ```
 
 **Résultat** :
-```
+```text
 C:\DriversExport\
 ├── Intel_Network\
 │   ├── e1d68x64.inf
@@ -180,7 +180,7 @@ C:\DriversExport\
 1. **Charger l'image** (celle créée aux Modules 1-2)
 
 2. **Drivers > Add > Insert Driver folder**
-   ```
+   ```text
    Chemin : C:\DriversExport
    Options : ☑ Integrate recursively
    ```
@@ -192,7 +192,7 @@ NTLite affiche un avertissement si :
 - Driver Microsoft vs Constructeur
 
 **Règle de décision** :
-```
+```text
 Driver constructeur (ex: Dell) version 2024.10.1
 VS
 Driver Microsoft (inbox) version 2022.03.5
@@ -205,7 +205,7 @@ Driver Microsoft (inbox) version 2022.03.5
    - ☑ **Boot.wim** (si drivers réseau/stockage)
 
 5. **Vérifier "Pending Changes"**
-   ```
+   ```text
    ✓ 47 drivers will be integrated
    ⚠ 3 duplicates detected (review recommended)
    ```
@@ -227,7 +227,7 @@ Driver Microsoft (inbox) version 2022.03.5
    - NTLite récupère SSU + LCU automatiquement
 
 **Structure typique** :
-```
+```text
 Downloads\
 ├── SSU-KB5034848-x64.msu          (Servicing Stack)
 ├── LCU-KB5034843-x64.msu          (Cumulative Update)
@@ -243,14 +243,14 @@ Downloads\
    - NTLite les trie automatiquement par ordre
 
 2. **Options recommandées** :
-   ```
+   ```sql
    ☑ Integrate updates
    ☑ Clean update backup (ResetBase)
    ☐ Integrate .NET updates (seulement si utilisé)
    ```
 
 3. **Vérifier l'ordre** :
-   ```
+   ```text
    1. [SSU] KB5034848 ✓
    2. [LCU] KB5034843 ✓
    3. [NET] KB5034129 ✓
@@ -259,7 +259,7 @@ Downloads\
 4. **Appliquer** (peut prendre 10-20 minutes)
 
 **Indicateur de progression** :
-```
+```text
 Processing updates... (15%)
 Integrating KB5034843... (45%)
 Cleaning component store... (78%)
@@ -365,7 +365,7 @@ Dism /Unmount-Wim /MountDir:"C:\Mount" /Discard
 ```
 
 **Résultat attendu** :
-```
+```text
 Exporting drivers...
 Successfully exported 52 driver packages to C:\DriversExport
 ```
@@ -375,20 +375,20 @@ Successfully exported 52 driver packages to C:\DriversExport
 ### 2. Intégration NTLite - Drivers
 
 **Navigation** :
-```
+```text
 NTLite > Load Image > Drivers (onglet)
 ```
 
 **Actions** :
 1. **Add > Insert Driver folder**
-   ```
+   ```text
    Folder: C:\DriversExport
    ☑ Scan recursively
    ☐ Keep folder structure (recommandé de décocher)
    ```
 
 2. **Sélectionner les drivers critiques** :
-   ```
+   ```text
    ☑ Intel(R) Ethernet Connection I219-LM
    ☑ Intel(R) Wi-Fi 6 AX201 160MHz
    ☑ Samsung NVMe Controller (si NVMe)
@@ -400,7 +400,7 @@ NTLite > Load Image > Drivers (onglet)
    - `Integrate into Boot image`
 
 4. **Gérer les doublons** :
-   ```
+   ```text
    ⚠ Duplicate detected: Intel Network Driver
      • Version 27.3.0 (Microsoft)
      • Version 28.1.0 (Intel)
@@ -413,7 +413,7 @@ NTLite > Load Image > Drivers (onglet)
 ### 3. Intégration NTLite - Updates
 
 **Téléchargement** :
-```
+```bash
 Option A : Automatique via NTLite
   Updates > Download > Latest (SSU + LCU)
 
@@ -424,7 +424,7 @@ Option B : Manuel
 ```
 
 **Intégration** :
-```
+```sql
 NTLite > Updates (onglet)
 1. Add > Select downloaded .msu files
 2. ☑ Integrate updates
@@ -433,7 +433,7 @@ NTLite > Updates (onglet)
 ```
 
 **Ordre automatique** (vérifié par NTLite) :
-```
+```text
 1. [SSU] KB5034848 - Servicing Stack Update
 2. [LCU] KB5034843 - 2025-01 Cumulative Update
 3. [NET] KB5034129 - .NET Framework 4.8.1 Update
@@ -445,7 +445,7 @@ NTLite > Updates (onglet)
 
 **Checklist avant Apply** :
 
-```
+```sql
 Drivers (install.wim) :
 ✓ 52 drivers will be integrated
 ✓ Network drivers: 3
@@ -558,7 +558,7 @@ Write-Host "Export completed: $($Metadata.DriverCount) drivers" -ForegroundColor
 
 Pour les grandes flottes :
 
-```
+```text
 D:\DriverLibrary\
 ├── Dell\
 │   ├── Latitude_5440\
@@ -592,7 +592,7 @@ Certains constructeurs proposent des **packs de drivers universels** :
 
 **Workflow conseillé** :
 
-```
+```text
 Chaque 2ème mardi du mois (Patch Tuesday) :
 1. Télécharger la nouvelle LCU
 2. Charger l'image du mois dernier

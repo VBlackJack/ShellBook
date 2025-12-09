@@ -31,7 +31,7 @@ Ce module couvre la gestion des utilisateurs locaux et les permissions NTFS :
 
 ![Windows Account Types - Local vs Domain](../../assets/diagrams/windows-account-types-local-vs-domain.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │               TYPES DE COMPTES WINDOWS                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -154,7 +154,7 @@ Remove-LocalGroup -Name "AppAdmins"
 
 ![Windows Groups Best Practices](../../assets/diagrams/windows-groups-best-practices.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │            BONNES PRATIQUES - GROUPES                        │
 ├─────────────────────────────────────────────────────────────┤
@@ -182,7 +182,7 @@ Remove-LocalGroup -Name "AppAdmins"
 
 ![NTFS Permissions - Basic vs Advanced](../../assets/diagrams/ntfs-permissions-basic-vs-advanced.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                 PERMISSIONS NTFS                             │
 ├─────────────────────────────────────────────────────────────┤
@@ -313,7 +313,7 @@ icacls C:\ /restore C:\acl_backup.txt
 
 ### 4.1 Concept d'Héritage
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    HÉRITAGE NTFS                             │
 ├─────────────────────────────────────────────────────────────┤
@@ -373,7 +373,7 @@ Set-Acl -Path C:\Temp\Sensitive -AclObject $acl
 
 ### 5.1 Calcul des Permissions Effectives
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │          CALCUL DES PERMISSIONS EFFECTIVES                   │
 ├─────────────────────────────────────────────────────────────┤
@@ -460,7 +460,7 @@ Get-Acl C:\LockedFolder | Select-Object Owner, Access
 
 ### 7.1 Différence
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │        PERMISSIONS PARTAGE vs NTFS                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -551,7 +551,7 @@ Get-LocalGroupMember -Group "Remote Desktop Users"
 
 **Structure :**
 
-```
+```text
 C:\Projects\
 ├── Shared\        (Everyone: Read, IT: Full Control)
 ├── Development\   (Developers: Modify, IT: Full Control)

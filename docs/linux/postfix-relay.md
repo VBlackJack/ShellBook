@@ -13,7 +13,7 @@ Configuration de Postfix en tant que relay SMTP pour centraliser et router les e
 
 ## Architecture Relay Mail
 
-```
+```text
 ARCHITECTURE RELAY MAIL
 ══════════════════════════════════════════════════════════════════════
 

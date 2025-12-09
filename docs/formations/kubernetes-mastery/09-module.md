@@ -832,7 +832,7 @@ spec:
 
     **Étape 8 : NOTES.txt**
 
-    ```
+    ```bash
     # templates/NOTES.txt
     🎉 BlogApp a été déployé avec succès !
 

@@ -24,7 +24,7 @@ pip install pytest pytest-cov pytest-xdist
 
 ### Structure de Projet
 
-```
+```text
 my_project/
 ├── src/
 │   ├── __init__.py

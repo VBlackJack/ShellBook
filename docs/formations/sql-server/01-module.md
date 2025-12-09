@@ -69,11 +69,11 @@ graph TB
 
     style ENGINE fill:#4CAF50
     style AGENT fill:#2196F3
-    style BROWSER fill:#FF9800
+    style BROWSER fill:#FF9800800800
     style MASTER fill:#F44336
     style MODEL fill:#9C27B0
-    style MSDB fill:#00BCD4
-    style TEMPDB fill:#FFC107
+    style MSDB fill:#2196F3
+    style TEMPDB fill:#FF9800
 ```
 
 ---
@@ -90,14 +90,14 @@ SQL Server peut être installé plusieurs fois sur le même serveur via des **in
 #### Cas d'usage :
 
 **Instance par défaut** :
-```
+```text
 Scénario : Serveur dédié à une seule application
 Exemple : Serveur SQL unique pour SharePoint
 Connexion : sqlserver.contoso.com
 ```
 
 **Instances nommées** :
-```
+```text
 Scénario : Mutualisation (DEV, TEST, PROD sur le même serveur)
 Exemples :
   - SERVEUR\DEV
@@ -152,8 +152,8 @@ classDiagram
 
     style master fill:#F44336,color:#fff
     style model fill:#9C27B0,color:#fff
-    style msdb fill:#00BCD4,color:#fff
-    style tempdb fill:#FFC107,color:#000
+    style msdb fill:#2196F3,color:#fff
+    style tempdb fill:#FF9800,color:#000
 ```
 
 #### 1. master (Cerveau de l'instance)
@@ -307,7 +307,7 @@ SQL Server s'appuie sur plusieurs services Windows :
 
 **Principe du moindre privilège** :
 
-```
+```text
 ❌ MAUVAIS : Utiliser un compte Administrateur du domaine
    → Risque : Compromission SQL = Compromission du domaine
 

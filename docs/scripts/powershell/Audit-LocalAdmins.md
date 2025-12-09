@@ -479,7 +479,7 @@ $cred = New-Object PSCredential("DOMAIN\admin", (ConvertTo-SecureString "P@ssw0r
 
 ## Sortie exemple
 
-```
+```text
 ======================================================================
   LOCAL ADMINISTRATORS AUDIT
 ======================================================================

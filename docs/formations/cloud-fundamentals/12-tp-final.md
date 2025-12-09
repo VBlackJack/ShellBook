@@ -31,7 +31,7 @@ Vous êtes consultant Cloud chez un intégrateur partenaire de Worldline. Un cli
 
 L'application "PayShop" est actuellement hébergée dans un datacenter privé :
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    DATACENTER ON-PREMISE                             │
 │                                                                      │

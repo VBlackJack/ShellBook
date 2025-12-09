@@ -21,7 +21,7 @@ tags:
 
 ## 1. Buildah vs Dockerfile
 
-```
+```text
 APPROCHES DE CONSTRUCTION
 ═════════════════════════════════════════════════════════
 
@@ -271,7 +271,7 @@ podman images | grep ubi9
 
 ### Choisir la Bonne Image
 
-```
+```text
 ARBRE DE DÉCISION UBI
 ═════════════════════════════════════════════════════════
 

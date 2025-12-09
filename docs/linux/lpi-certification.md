@@ -32,10 +32,10 @@ flowchart LR
     E -->|Lance| F[Services<br/>Userspace]
     F -->|Atteint| G[Target/Runlevel<br/>multi-user.target]
 
-    style A fill:#e74c3c,color:#fff
-    style C fill:#3498db,color:#fff
-    style E fill:#2ecc71,color:#fff
-    style G fill:#9b59b6,color:#fff
+    style A fill:#f44336,color:#fff
+    style C fill:#2196F3,color:#fff
+    style E fill:#4CAF50,color:#fff
+    style G fill:#9C27B0,color:#fff
 ```
 
 **Étapes Détaillées :**
@@ -79,10 +79,10 @@ graph TD
     D --> D3["ls - Listing Détaillé"]
     D --> D4["wc - Comptage Lignes/Mots"]
 
-    style A fill:#34495e,color:#fff
-    style B fill:#3498db,color:#fff
-    style C fill:#2ecc71,color:#fff
-    style D fill:#e67e22,color:#fff
+    style A fill:#9C27B0,color:#fff
+    style B fill:#2196F3,color:#fff
+    style C fill:#4CAF50,color:#fff
+    style D fill:#FF9800,color:#fff
 ```
 
 **Exemples Typiques LPIC-1 :**
@@ -136,10 +136,10 @@ graph TB
 
     C5 <-->|"Tunnel Chiffré<br/>(AES-256)"| S4
 
-    style S4 fill:#e74c3c,color:#fff
-    style C5 fill:#3498db,color:#fff
+    style S4 fill:#f44336,color:#fff
+    style C5 fill:#2196F3,color:#fff
     style C3 fill:#c0392b,color:#fff
-    style S2 fill:#27ae60,color:#fff
+    style S2 fill:#4CAF50,color:#fff
 ```
 
 **Flux d'Authentification :**
@@ -185,11 +185,11 @@ graph TD
     C1 -.->|memberOf| D1
     C2 -.->|memberOf| D2
 
-    style A fill:#34495e,color:#fff
-    style B1 fill:#3498db,color:#fff
-    style B2 fill:#2ecc71,color:#fff
-    style B3 fill:#e67e22,color:#fff
-    style D1 fill:#9b59b6,color:#fff
+    style A fill:#9C27B0,color:#fff
+    style B1 fill:#2196F3,color:#fff
+    style B2 fill:#4CAF50,color:#fff
+    style B3 fill:#FF9800,color:#fff
+    style D1 fill:#9C27B0,color:#fff
 ```
 
 **Composants DN (Distinguished Name) :**
@@ -238,10 +238,10 @@ flowchart LR
     C -->|Échec| A
     C -->|Réussite| D[Concept Maîtrisé]
 
-    style A fill:#3498db,color:#fff
-    style B fill:#2ecc71,color:#fff
-    style C fill:#f39c12,color:#fff
-    style D fill:#27ae60,color:#fff
+    style A fill:#2196F3,color:#fff
+    style B fill:#4CAF50,color:#fff
+    style C fill:#FF9800800800,color:#fff
+    style D fill:#4CAF50,color:#fff
 ```
 
 ### Ressources Complémentaires

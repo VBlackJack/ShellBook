@@ -45,9 +45,9 @@ graph TB
     FS --> GLOBAL
     MO --> INNOV
 
-    style MS fill:#0078d4,color:#fff
+    style MS fill:#2196F3,color:#fff
     style FS fill:#4caf50,color:#fff
-    style MO fill:#ff9800,color:#fff
+    style MO fill:#FF9800800800,color:#fff
 ```
 
 ### 1.2 Pourquoi le Cloud pour le Paiement ?
@@ -79,8 +79,8 @@ graph TB
 
     style PAN fill:#f44336,color:#fff
     style CVV fill:#f44336,color:#fff
-    style CHD fill:#ff9800,color:#fff
-    style SAD fill:#ff9800,color:#fff
+    style CHD fill:#FF9800800800,color:#fff
+    style SAD fill:#FF9800800800,color:#fff
     style TOKEN fill:#4caf50,color:#fff
     style META fill:#4caf50,color:#fff
 ```
@@ -128,7 +128,7 @@ graph TB
     style HSM fill:#f44336,color:#fff
     style CORE fill:#f44336,color:#fff
     style DB fill:#f44336,color:#fff
-    style API fill:#ff9800,color:#fff
+    style API fill:#FF9800800800,color:#fff
     style ANALYTICS fill:#4caf50,color:#fff
 ```
 
@@ -160,7 +160,7 @@ graph TB
     CORE --> HSM
 
     style HSM fill:#f44336,color:#fff
-    style CORE fill:#ff9800,color:#fff
+    style CORE fill:#FF9800800800,color:#fff
     style API fill:#4caf50,color:#fff
     style ANALYTICS fill:#4caf50,color:#fff
 ```
@@ -207,8 +207,8 @@ graph TB
     EU_DB -->|"Replication"| APAC_DB
 
     style EU_DB fill:#4caf50,color:#fff
-    style US_DB fill:#ff9800,color:#fff
-    style APAC_DB fill:#ff9800,color:#fff
+    style US_DB fill:#FF9800800800,color:#fff
+    style APAC_DB fill:#FF9800800800,color:#fff
 ```
 
 **Exigence** : Latence < 100ms pour l'autorisation
@@ -241,7 +241,7 @@ graph LR
     STREAM --> NOTIF
     STREAM --> ANALYTICS
 
-    style STREAM fill:#ff9800,color:#fff
+    style STREAM fill:#FF9800800800,color:#fff
     style FRAUD fill:#f44336,color:#fff
 ```
 
@@ -295,7 +295,7 @@ graph TB
     PORTAL --> API --> DB
     API --> BLOB
 
-    style CDN fill:#ff9800,color:#fff
+    style CDN fill:#FF9800800800,color:#fff
     style DB fill:#4caf50,color:#fff
 ```
 
@@ -401,9 +401,9 @@ graph TB
     YOU --> AZURE
     YOU --> GCP
 
-    style AWS fill:#ff9900,color:#000
-    style AZURE fill:#0078d4,color:#fff
-    style GCP fill:#4285f4,color:#fff
+    style AWS fill:#FF9800800900,color:#000
+    style AZURE fill:#2196F3,color:#fff
+    style GCP fill:#2196F3,color:#fff
 ```
 
 **Recommandations par profil :**
@@ -493,7 +493,7 @@ graph LR
     BASE --> NEXT --> EXPERT
 
     style BASE fill:#4caf50,color:#fff
-    style NEXT fill:#ff9800,color:#fff
+    style NEXT fill:#FF9800800800,color:#fff
     style EXPERT fill:#9c27b0,color:#fff
 ```
 

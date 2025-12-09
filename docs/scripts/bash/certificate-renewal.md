@@ -395,7 +395,7 @@ esac
 
 ## Exemple de Sortie
 
-```
+```text
 === Vérification des certificats ===
 
 [OK] example.com - Expire dans 85 jours (Apr 15 12:00:00 2024 GMT)

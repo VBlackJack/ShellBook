@@ -107,11 +107,11 @@ flowchart TD
     PROD --> WEB_PROD1
     PROD --> WEB_PROD2
 
-    style KATELLO fill:#bbf,stroke:#333,stroke-width:3px
+    style KATELLO fill:#2196F3,stroke:#333,stroke-width:3px
     style LIBRARY fill:#fda,stroke:#333,stroke-width:2px
-    style DEV fill:#afa,stroke:#333,stroke-width:2px
+    style DEV fill:#4CAF50,stroke:#333,stroke-width:2px
     style QA fill:#ffa,stroke:#333,stroke-width:2px
-    style PROD fill:#faa,stroke:#333,stroke-width:2px
+    style PROD fill:#f44336,stroke:#333,stroke-width:2px
 ```
 
 ---
@@ -227,7 +227,7 @@ foreman-installer --scenario katello \
 
 **Sortie attendue :**
 
-```
+```bash
   Success!
   * Katello is running at https://katello.linuxcorp.local
       Initial credentials are admin / P@ssw0rd123
@@ -252,7 +252,7 @@ hammer -u admin -p P@ssw0rd123 organization list
 
 **Sortie attendue :**
 
-```
+```text
 ---|-----------------|
 ID | NAME            |
 ---|-----------------|
@@ -409,7 +409,7 @@ hammer lifecycle-environment list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|-------------|-------------
 ID | NAME        | PRIOR
 ---|-------------|-------------
@@ -505,7 +505,7 @@ hammer content-view publish \
 
 **Sortie attendue :**
 
-```
+```text
 Content view is being published with task 12345...
 ```
 
@@ -563,7 +563,7 @@ hammer content-view version list \
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------|---------|--------------------------------
 ID | NAME           | VERSION | LIFECYCLE ENVIRONMENTS
 ---|----------------|---------|--------------------------------
@@ -651,7 +651,7 @@ sudo subscription-manager register \
 
 **Sortie attendue :**
 
-```
+```text
 The system has been registered with ID: 12345678-1234-1234-1234-123456789012
 The registered system name is: web-dev-01.linuxcorp.local
 ```
@@ -668,7 +668,7 @@ hammer host list --organization "Default Organization"
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------------|-----------|-----------------|
 ID | NAME                 | OS        | LIFECYCLE ENV   |
 ---|----------------------|-----------|-----------------|
@@ -688,7 +688,7 @@ dnf repolist
 
 **Sortie attendue :**
 
-```
+```text
 repo id                                                        repo name
 Default_Organization_CV-Rocky9-Stable_Development_Rocky-BaseOS-9    Rocky Linux 9 BaseOS
 Default_Organization_CV-Rocky9-Stable_Development_Rocky-AppStream-9 Rocky Linux 9 AppStream
@@ -704,7 +704,7 @@ dnf list kernel
 
 **Sortie attendue :**
 
-```
+```text
 Available Packages
 kernel.x86_64    5.14.0-362.el9    Default_Organization_CV-Rocky9-Stable_Development_Rocky-BaseOS-9
 ```
@@ -741,7 +741,7 @@ hammer erratum list \
 
 **Exemple de sortie :**
 
-```
+```text
 ---|----------------|-------------------------------|----------|
 ID | ERRATA ID      | TITLE                         | TYPE     |
 ---|----------------|-------------------------------|----------|
@@ -763,7 +763,7 @@ hammer host errata list \
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------|----------|-------------------------------|------|
 ID | ERRATA ID      | TYPE     | TITLE                         | INSTALLABLE |
 ---|----------------|----------|-------------------------------|------|
@@ -795,7 +795,7 @@ hammer content-view version incremental-update \
 
 **Sortie attendue :**
 
-```
+```sql
 Incremental update is being performed. To monitor the progress, run:
   hammer task progress --id 99999
 ```
@@ -811,7 +811,7 @@ hammer content-view version list \
 
 **Sortie attendue :**
 
-```
+```text
 ---|----------------|---------|--------------------------------
 ID | NAME           | VERSION | LIFECYCLE ENVIRONMENTS
 ---|----------------|---------|--------------------------------
@@ -856,7 +856,7 @@ hammer host errata list \
 
 **Sortie attendue :**
 
-```
+```text
 0 errata found
 ```
 

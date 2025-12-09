@@ -54,8 +54,8 @@ graph TB
         APIC1 -.-> SP1B
     end
 
-    style APIC1 fill:#049fd9,color:#fff
-    style IPN fill:#ff9800,color:#fff
+    style APIC1 fill:#2196F3,color:#fff
+    style IPN fill:#FF9800800800,color:#fff
 ```
 
 ```mermaid
@@ -82,9 +82,9 @@ graph TB
         FABRIC_L <--> ISN
     end
 
-    style NDO fill:#e91e63,color:#fff
-    style APIC_P fill:#049fd9,color:#fff
-    style APIC_L fill:#049fd9,color:#fff
+    style NDO fill:#9C27B0,color:#fff
+    style APIC_P fill:#2196F3,color:#fff
+    style APIC_L fill:#2196F3,color:#fff
 ```
 
 ### Comparaison
@@ -129,7 +129,7 @@ graph TB
     NDO --> SITE2
     NDO --> SITE3
 
-    style NDO fill:#e91e63,color:#fff
+    style NDO fill:#9C27B0,color:#fff
     style ND fill:#9c27b0,color:#fff
 ```
 
@@ -167,7 +167,7 @@ graph LR
 
     style TENANT fill:#4caf50,color:#fff
     style VRF fill:#2196f3,color:#fff
-    style EPG fill:#e91e63,color:#fff
+    style EPG fill:#9C27B0,color:#fff
 ```
 
 ### Types d'Objets
@@ -679,7 +679,7 @@ resource "mso_schema_template_deploy" "common" {
 
     **Architecture :**
 
-    ```
+    ```text
     NDO Orchestrator
     ├── Site Paris
     │   ├── APIC Paris
@@ -1362,7 +1362,7 @@ resource "mso_schema_template_deploy" "common" {
 
     **Vérification sur NDO :**
 
-    ```
+    ```text
     1. Se connecter au Nexus Dashboard Orchestrator
     2. Application Management > Schemas
     3. Ouvrir "Schema-MultiSite-App"

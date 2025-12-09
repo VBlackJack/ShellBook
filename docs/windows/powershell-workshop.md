@@ -646,7 +646,7 @@ Créer des modules réutilisables pour standardiser vos scripts.
 
 ### Structure d'un module
 
-```
+```text
 MonModule/
 ├── MonModule.psd1      # Manifeste (metadata)
 ├── MonModule.psm1      # Script module principal

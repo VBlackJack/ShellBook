@@ -35,7 +35,7 @@ PowerShell est :
 - Basé sur **.NET Framework**
 - **Orienté objet** (contrairement à Bash)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                 BASH vs POWERSHELL                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -95,7 +95,7 @@ winget install Microsoft.PowerShell
 
 PowerShell utilise une convention **Verbe-Nom** :
 
-```
+```powershell
 Verbe-Nom -Paramètre Valeur
 
 Exemples :
@@ -338,7 +338,7 @@ Get-Process | Where-Object CPU -gt 10 | Sort-Object CPU -Descending | Select-Obj
 # $_ représente l'objet courant dans le pipeline
 ```
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      PIPELINE                                │
 ├─────────────────────────────────────────────────────────────┤

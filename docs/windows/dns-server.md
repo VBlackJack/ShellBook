@@ -14,7 +14,7 @@ Le service DNS Windows est essentiel pour Active Directory et la résolution de 
 
 ### Intégration Active Directory
 
-```
+```text
 DNS ET ACTIVE DIRECTORY
 ══════════════════════════════════════════════════════════
 
@@ -214,7 +214,7 @@ Remove-DnsServerZone -Name "old-partner.com" -Force
 
 ### Configuration
 
-```
+```text
 DYNAMIC UPDATES
 ══════════════════════════════════════════════════════════
 
@@ -449,7 +449,7 @@ nltest /dclist:corp.local
 
 ### Configuration Recommandée
 
-```
+```text
 HAUTE DISPONIBILITÉ DNS
 ══════════════════════════════════════════════════════════
 

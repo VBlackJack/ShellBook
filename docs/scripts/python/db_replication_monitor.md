@@ -775,7 +775,7 @@ python db_replication_monitor.py -c databases.yaml --json
 
 ## Sortie Exemple
 
-```
+```text
 ╭──────────────────────────────────────────────────────────────────────╮
 │                   Database Replication Monitor                        │
 │                      2024-01-15T14:30:22.123456                       │
@@ -802,7 +802,7 @@ Summary:
 
 ## Métriques Prometheus
 
-```
+```text
 # HELP db_replication_lag_seconds Database replication lag in seconds
 # TYPE db_replication_lag_seconds gauge
 db_replication_lag_seconds{name="mysql-replica1",db_type="MySQL",role="replica"} 0.5

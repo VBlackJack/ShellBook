@@ -103,7 +103,7 @@ $$f(n) = g(n) + h(n)$$
 
 ### Pseudo-Code A*
 
-```
+```sql
 fonction A*(départ, arrivée):
     open_set = file de priorité contenant (départ)
     came_from = dictionnaire vide
@@ -281,7 +281,7 @@ for r in range(len(grid)):
 ```
 
 **Sortie :**
-```
+```text
 Chemin trouvé: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 4), (2, 4), (3, 4), (4, 4)]
 Longueur: 9 cases
 
@@ -374,7 +374,7 @@ print(f"Coût total: {total_cost}")
 ```
 
 **Sortie :**
-```
+```text
 Chemin optimal: A → C → D → E
 Coût total: 8
 ```
@@ -391,13 +391,13 @@ graph TB
     D -->|coût=1| E2[Node E<br/>g=8, h=0, f=8]
     E2 --> Goal([Arrivée])
 
-    style Start fill:#a8e6cf
-    style Goal fill:#ffd3b6
-    style C fill:#ffaaa5
-    style D fill:#ffaaa5
-    style E2 fill:#ff8b94
+    style Start fill:#4CAF50
+    style Goal fill:#FF9800800800
+    style C fill:#f44336
+    style D fill:#f44336
+    style E2 fill:#f44336
 
-    classDef explored fill:#dfe6e9
+    classDef explored fill:#2196F3
     class B,E1 explored
 ```
 
@@ -586,7 +586,7 @@ Pour très grandes cartes : découper en régions.
 
 Voici comment chaque algorithme explore un labyrinthe simple :
 
-```
+```text
 BFS: Explore en cercles concentriques
 ######################
 #S********************#

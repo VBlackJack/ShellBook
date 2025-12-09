@@ -69,12 +69,12 @@ flowchart TB
     MAINT[Scheduled Task<br/>Maintenance mensuelle<br/>1er dimanche 02:00]
     WSUS -.->|Cleanup + Report| MAINT
 
-    style MS fill:#0078D4,color:#fff
-    style WSUS fill:#107C10,color:#fff
-    style WS fill:#FFB900,color:#000
-    style DEV fill:#FF8C00,color:#fff
-    style PROD fill:#E81123,color:#fff
-    style MAINT fill:#5C2D91,color:#fff
+    style MS fill:#2196F3,color:#fff
+    style WSUS fill:#4CAF50,color:#fff
+    style WS fill:#FF9800800800,color:#000
+    style DEV fill:#FF9800800800,color:#fff
+    style PROD fill:#f44336,color:#fff
+    style MAINT fill:#9C27B0,color:#fff
 ```
 
 **Spécifications** :

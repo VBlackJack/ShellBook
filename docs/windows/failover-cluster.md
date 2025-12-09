@@ -14,7 +14,7 @@ Configuration et gestion des clusters de basculement Windows Server pour la haut
 
 ![Failover Cluster Architecture](../assets/diagrams/failover-cluster-architecture.jpeg)
 
-```
+```text
 ARCHITECTURE FAILOVER CLUSTER
 ══════════════════════════════════════════════════════════
 
@@ -55,7 +55,7 @@ Composants clés :
 
 ### Types de Quorum
 
-```
+```text
 MODÈLES DE QUORUM
 ══════════════════════════════════════════════════════════
 

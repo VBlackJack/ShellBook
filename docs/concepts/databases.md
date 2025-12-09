@@ -113,7 +113,7 @@ Un guide pratique pour choisir la bonne base de données selon votre cas d'usage
 !!! warning "Redis en Sidecar"
     Redis est typiquement utilisé comme **couche de cache** à côté d'une base de données primaire, pas comme seul stockage de données.
 
-    ```
+    ```text
     Client → Redis (cache hit ?) → PostgreSQL (si miss)
     ```
 
@@ -241,7 +241,7 @@ Un guide pratique pour choisir la bonne base de données selon votre cas d'usage
 !!! tip "BDs Vector & LLMs"
     Les bases de données vectorielles sont la colonne vertébrale du **RAG (Retrieval-Augmented Generation)**.
 
-    ```
+    ```text
     Requête Utilisateur → Embed → Vector Search → Contexte → LLM → Réponse
     ```
 
@@ -266,7 +266,7 @@ Un guide pratique pour choisir la bonne base de données selon votre cas d'usage
 !!! example "Architecture Multi-Database"
     Les systèmes modernes combinent souvent plusieurs types de bases de données :
 
-    ```
+    ```text
     PostgreSQL  → Source de vérité (utilisateurs, commandes)
          ↓
     Redis       → Couche de cache (sessions, données chaudes)

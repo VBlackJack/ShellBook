@@ -86,12 +86,12 @@ flowchart LR
     E -->|❌ Échec| G[Rollback]
     B -->|❌ Fail| H[Notification<br/>Slack/Email]
 
-    style A fill:#0078d4,stroke:#005a9e,color:#fff
-    style B fill:#107c10,stroke:#0b5a0d,color:#fff
-    style C fill:#ffb900,stroke:#d39300,color:#000
-    style D fill:#5c2d91,stroke:#3d1e5f,color:#fff
-    style F fill:#107c10,stroke:#0b5a0d,color:#fff
-    style H fill:#e81123,stroke:#b00016,color:#fff
+    style A fill:#2196F3,stroke:#005a9e,color:#fff
+    style B fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style C fill:#FF9800800800,stroke:#d39300,color:#000
+    style D fill:#9C27B0,stroke:#3d1e5f,color:#fff
+    style F fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style H fill:#f44336,stroke:#b00016,color:#fff
 ```
 
 **Explication du flux :**
@@ -129,7 +129,7 @@ flowchart LR
 
 Les workflows GitHub Actions se placent dans :
 
-```
+```text
 .github/
 └── workflows/
     ├── ci.yml              # Pipeline CI (tests, lint)
@@ -204,7 +204,7 @@ jobs:
 
 **Résultat attendu dans l'UI GitHub :**
 
-```
+```sql
 ✅ say-hello
   ✅ Checkout repository
   ✅ Say hello
@@ -368,7 +368,7 @@ jobs:
 
     ### Structure du Projet
 
-    ```
+    ```text
     mon-projet/
     ├── .github/
     │   └── workflows/
@@ -385,7 +385,7 @@ jobs:
 
     Après un push, l'interface GitHub Actions affiche :
 
-    ```
+    ```text
     ✅ CI - Lint & Quality Checks
       ✅ markdown-lint (20s)
         ✅ Checkout repository
@@ -415,7 +415,7 @@ jobs:
 
     Si un fichier Markdown contient une erreur :
 
-    ```
+    ```text
     ❌ CI - Lint & Quality Checks
       ❌ markdown-lint (22s)
         ✅ Checkout repository

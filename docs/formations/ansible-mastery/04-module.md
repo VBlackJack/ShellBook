@@ -83,7 +83,7 @@ Maîtriser Ansible Vault pour chiffrer et gérer les données sensibles (mots de
 
 **Fonctionnement :**
 
-```
+```text
 Fichier en clair          Ansible Vault              Fichier chiffré
 ─────────────────         ────────────              ────────────────
 mysql_password: Secret    ansible-vault encrypt     $ANSIBLE_VAULT;1.1;AES256
@@ -128,7 +128,7 @@ ssl_private_key: |
 
 **Après `ansible-vault encrypt secrets.yml` :**
 
-```
+```text
 $ANSIBLE_VAULT;1.1;AES256
 66386439653865343966386166373038343037643037613962613834373530373938663834353033
 3339613437663766623961393339326365303231313738330a373539656231303637383031613039
@@ -240,7 +240,7 @@ aws_secret_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 **Après sauvegarde, `cat secrets.yml` affiche :**
 
-```
+```text
 $ANSIBLE_VAULT;1.1;AES256
 66386439653865343966386166373038343037643037613962613834373530373938663834353033
 ...
@@ -649,7 +649,7 @@ ansible-playbook mysql.yml --ask-vault-pass
 
 **Organisation recommandée :**
 
-```
+```text
 ansible-project/
 ├── ansible.cfg
 ├── inventory/
@@ -843,7 +843,7 @@ ansible-playbook deploy_mysql.yml --ask-vault-pass
 
 **Sortie attendue :**
 
-```
+```text
 Vault password: ****
 
 PLAY [Déploiement MySQL sécurisé] ******************************************
@@ -932,7 +932,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie (fichier chiffré) :**
 
-    ```
+    ```text
     $ANSIBLE_VAULT;1.1;AES256
     66386439653865343966386166373038343037643037613962613834373530373938663834353033
     3339613437663766623961393339326365303231313738330a373539656231303637383031613039
@@ -1097,7 +1097,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     Vault password: ****
 
     PLAY [Déploiement MySQL sécurisé avec Vault] ******************************
@@ -1162,7 +1162,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     db1 | SUCCESS => {
         "changed": false,
         "name": "mysql",
@@ -1180,7 +1180,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     db1 | CHANGED | rc=0 >>
     +-----------+
     | VERSION() |
@@ -1199,7 +1199,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     db1 | CHANGED | rc=0 >>
     +--------------------+
     | Database           |
@@ -1222,7 +1222,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     db1 | CHANGED | rc=0 >>
     +------------------------------------------------------------+
     | Grants for app_user@%                                      |
@@ -1258,7 +1258,7 @@ mysql -u app_user -pAppSecret456 -e "USE production_db; SHOW TABLES;"
 
     **Sortie :**
 
-    ```
+    ```text
     db1 | CHANGED | rc=0 >>
     -rw------- 1 root root 45 Nov 22 17:30 /root/.my.cnf
     # ✅ Permissions 600 (owner-readable only)
@@ -1408,7 +1408,7 @@ echo "$(date) - $USER - Accessed vault" >> /var/log/vault_access.log
 
 **7. Séparer les environnements**
 
-```
+```text
 secrets/
 ├── dev_secrets.yml       # Vault password: DevPass123
 ├── staging_secrets.yml   # Vault password: StagingPass456

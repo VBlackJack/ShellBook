@@ -29,7 +29,7 @@ tags:
 
 ### Structure Recommandée
 
-```
+```text
 aci-infrastructure/
 ├── environments/
 │   ├── dev/
@@ -859,7 +859,7 @@ module "apps" {
 
     **Structure :**
 
-    ```
+    ```text
     lab6/
     ├── modules/
     │   └── epg-with-contracts/
@@ -1069,7 +1069,7 @@ module "apps" {
 
     ### Organisation Projet
 
-    ```
+    ```text
     project/
     ├── environments/     # Configs par environnement
     ├── modules/          # Modules réutilisables
@@ -1140,7 +1140,7 @@ module "apps" {
 
     **Structure du projet :**
 
-    ```
+    ```text
     terraform-aci/
     ├── modules/
     │   └── aci-3tier-app/

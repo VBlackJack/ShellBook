@@ -343,7 +343,7 @@ fi
 
 ## Exemple de Sortie
 
-```
+```text
 === Validation des backups : /backup ===
 
 [OK] db-daily-2024-01-15.sql.gz - Valide (245M)

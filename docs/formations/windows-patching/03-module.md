@@ -37,9 +37,9 @@ flowchart LR
     SRV -->|❌ Contact direct| MS
     SRV -.->|❓ Pas configuré| WSUS
 
-    style MS fill:#0078D4,color:#fff
-    style WSUS fill:#FFB900,color:#000
-    style SRV fill:#E81123,color:#fff
+    style MS fill:#2196F3,color:#fff
+    style WSUS fill:#FF9800800800,color:#000
+    style SRV fill:#f44336,color:#fff
 ```
 
 **Solution** : Configurer les clients via **Group Policy Objects (GPO)** pour :
@@ -59,8 +59,8 @@ flowchart LR
     SRV -.->|Désactivé| MS
 
     style MS fill:#999,color:#fff
-    style WSUS fill:#107C10,color:#fff
-    style SRV fill:#107C10,color:#fff
+    style WSUS fill:#4CAF50,color:#fff
+    style SRV fill:#4CAF50,color:#fff
 ```
 
 ---
@@ -244,9 +244,9 @@ flowchart TD
     CLIENT -->|Auto-assignation| WSUS
     CLIENT -->|Dimanche 03:00| WSUS
 
-    style GPO fill:#107C10,color:#fff
-    style CLIENT fill:#0078D4,color:#fff
-    style WSUS fill:#FFB900,color:#000
+    style GPO fill:#4CAF50,color:#fff
+    style CLIENT fill:#2196F3,color:#fff
+    style WSUS fill:#FF9800800800,color:#000
 ```
 
 ---
@@ -777,7 +777,7 @@ Créez un script `New-WSUS-GPO.ps1` qui :
     ```
 
     **Output attendu** :
-    ```
+    ```powershell
     ========================================
        CRÉATION GPO WSUS - PRODUCTION
     ========================================

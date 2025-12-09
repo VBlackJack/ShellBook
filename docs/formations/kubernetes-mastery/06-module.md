@@ -287,7 +287,7 @@ roleRef:
 
 ### 4.1 Niveaux de Sécurité
 
-```
+```text
 POD SECURITY STANDARDS (PSS)
 ════════════════════════════
 

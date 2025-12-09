@@ -599,7 +599,7 @@ PGPASSWORD=secret ./pg-bloat-check.sh -H db.example.com -d production -U admin
 
 ## Exemple de Sortie
 
-```
+```xml
 === ANALYSE DU BLOAT POSTGRESQL ===
 Base: myapp | Schéma: public | Seuil: 10%
 Hôte: localhost:5432 | Utilisateur: postgres

@@ -49,7 +49,7 @@ graph TD
 
 Le chiffrement transforme des données lisibles en données illisibles, réversible uniquement avec la bonne clé.
 
-```
+```text
 Texte clair + Clé → [Chiffrement] → Texte chiffré
 Texte chiffré + Clé → [Déchiffrement] → Texte clair
 ```
@@ -75,7 +75,7 @@ Texte chiffré + Clé → [Déchiffrement] → Texte clair
 
 Le hashing produit une empreinte de taille fixe, impossible à inverser.
 
-```
+```text
 Données → [Fonction Hash] → Empreinte (digest)
 
 "Hello" → SHA256 → 2cf24dba5fb0a30e26e83b2ac5b9e29e...
@@ -119,7 +119,7 @@ Données → [Fonction Hash] → Empreinte (digest)
 
 L'encodage change le format des données pour le transport. **Ce n'est PAS de la sécurité !**
 
-```
+```text
 Binaire → [Base64] → Texte ASCII
 Texte → [URL Encoding] → Texte compatible URL
 ```
@@ -148,7 +148,7 @@ Texte → [URL Encoding] → Texte compatible URL
 
 **Une seule clé secrète** pour chiffrer ET déchiffrer.
 
-```
+```text
 ┌─────────────────────────────────────┐
 │           Clé Secrète               │
 │      (partagée entre les deux)      │
@@ -261,8 +261,8 @@ flowchart LR
     B --> C[Clé de session AES]
     C --> D[Chiffrement rapide des données]
 
-    style A fill:#ff9f43
-    style B fill:#ff6b6b
+    style A fill:#FF9800800f43
+    style B fill:#f44336
     style C fill:#54a0ff
     style D fill:#5f27cd
 ```

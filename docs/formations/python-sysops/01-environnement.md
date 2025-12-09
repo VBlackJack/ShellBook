@@ -117,7 +117,7 @@ deactivate
 
 ### Structure d'un venv
 
-```
+```text
 mon_projet_venv/
 ├── bin/                    # Scripts (activate, pip, python)
 │   ├── activate
@@ -359,7 +359,7 @@ set autoindent
 
 ### Structure Minimale
 
-```
+```text
 mon_projet/
 ├── .venv/                  # Environnement virtuel (gitignore)
 ├── .gitignore
@@ -370,7 +370,7 @@ mon_projet/
 
 ### Structure Complète
 
-```
+```text
 mon_projet/
 ├── .venv/
 ├── .git/

@@ -300,7 +300,7 @@ repadmin /showrepl * /errorsonly
 
 ### Problèmes Courants
 
-```
+```text
 TROUBLESHOOTING RÉPLICATION
 ══════════════════════════════════════════════════════════
 

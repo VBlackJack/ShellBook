@@ -16,7 +16,7 @@ Archivage et compression de fichiers sous Linux.
 
 ### Concept
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                        ARCHIVAGE                             │
 │  Fichier1 + Fichier2 + Dossier → archive.tar (même taille)  │
@@ -137,7 +137,7 @@ tar tvf archive.tar.gz              # Liste détaillée
 | `bzip2` | `.bz2` | Moyen | Meilleure | Archivage long terme |
 | `xz` | `.xz` | Lent | Excellente | Distributions, sources |
 
-```
+```text
 Fichier original : 100 MB
 ├── gzip  → ~25 MB  (rapide)
 ├── bzip2 → ~20 MB  (moyen)

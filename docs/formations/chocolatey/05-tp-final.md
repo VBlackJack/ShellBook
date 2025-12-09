@@ -94,9 +94,9 @@ flowchart LR
     PACKAGES -.-> DOCKER[docker-desktop 4.26]
     PACKAGES -.-> INTERNAL[InternalTool 1.0]
 
-    style REPO fill:#f9f,stroke:#333,stroke-width:3px
-    style SCRIPT fill:#bbf,stroke:#333,stroke-width:2px
-    style WORKSTATION fill:#afa,stroke:#333,stroke-width:2px
+    style REPO fill:#9C27B0,stroke:#333,stroke-width:3px
+    style SCRIPT fill:#2196F3,stroke:#333,stroke-width:2px
+    style WORKSTATION fill:#4CAF50,stroke:#333,stroke-width:2px
 ```
 
 ---
@@ -165,7 +165,7 @@ choco install chocolatey-server -y
 
 **Sortie attendue :**
 
-```
+```bash
 Chocolatey installed 1/1 packages.
  See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
 ```
@@ -229,7 +229,7 @@ choco new InternalTool
 
 **Structure créée :**
 
-```
+```text
 InternalTool/
 ├── InternalTool.nuspec
 ├── tools/
@@ -374,7 +374,7 @@ choco pack
 
 **Sortie attendue :**
 
-```
+```text
 Successfully created package 'C:\ChocolateyPackages\InternalTool\internaltool.1.0.0.nupkg'
 ```
 
@@ -390,7 +390,7 @@ choco push internaltool.1.0.0.nupkg `
 
 **Sortie attendue :**
 
-```
+```text
 Pushing internaltool 1.0.0 to http://localhost/chocolatey...
 internaltool 1.0.0 was pushed successfully to http://localhost/chocolatey
 ```
@@ -406,7 +406,7 @@ Get-ChildItem "C:\tools\chocolatey-server\App_Data\Packages"
 
 **Sortie attendue :**
 
-```
+```text
 internaltool.1.0.0.nupkg
 ```
 
@@ -677,7 +677,7 @@ Set-Location C:\Temp
 
 **Sortie attendue :**
 
-```
+```bash
 =========================================
 🍫 DEVSTARTUP - DEVELOPER SETUP
 =========================================
@@ -769,7 +769,7 @@ internaltool
 
 **Sortie attendue pour InternalTool :**
 
-```
+```xml
 =========================================
    InternalTool v1.0.0
    DevStartup Internal CLI

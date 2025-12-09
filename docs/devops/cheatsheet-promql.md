@@ -717,7 +717,7 @@ groups:
 
 ### Naming Conventions
 
-```
+```xml
 # Metrics
 <component>_<metric>_<unit>_<type>
 

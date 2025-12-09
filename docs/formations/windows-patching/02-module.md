@@ -63,11 +63,11 @@ flowchart LR
     R1 -->|5. Validation<br/>J+10 jours| WSUS
     WSUS -->|6. Approve J+10<br/>Deadline +14j| R2
 
-    style MS fill:#0078D4,color:#fff
-    style WSUS fill:#107C10,color:#fff
-    style R0 fill:#FFB900,color:#000
-    style R1 fill:#FF8C00,color:#fff
-    style R2 fill:#E81123,color:#fff
+    style MS fill:#2196F3,color:#fff
+    style WSUS fill:#4CAF50,color:#fff
+    style R0 fill:#FF9800800800,color:#000
+    style R1 fill:#FF9800800800,color:#fff
+    style R2 fill:#f44336,color:#fff
 ```
 
 **Détail du workflow** :
@@ -620,7 +620,7 @@ Créez un script `Approve-PatchTuesday.ps1` qui :
     ```
 
     **Output attendu** :
-    ```
+    ```powershell
     ========================================
       PATCH TUESDAY AUTOMATION - 14/01/2025
     ========================================

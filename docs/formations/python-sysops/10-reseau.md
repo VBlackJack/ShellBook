@@ -27,7 +27,7 @@ Comprendre et utiliser les sockets pour la communication réseau.
 
 ### Le Modèle TCP/IP
 
-```
+```text
 Application (HTTP, SSH, DNS)
        ↓
 Transport (TCP, UDP)

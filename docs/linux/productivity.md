@@ -59,7 +59,7 @@ popd                # Retourner vers /var/log
 
 ### Recherche Inversée (CTRL+R)
 
-```
+```bash
 (reverse-i-search)`nginx': systemctl restart nginx
 ```
 

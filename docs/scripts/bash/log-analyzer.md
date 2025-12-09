@@ -419,7 +419,7 @@ sudo ./log-analyzer.sh -d /var/log/myapp
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
           ANALYSEUR DE LOGS SYSTÈME
 ═══════════════════════════════════════════════════════════

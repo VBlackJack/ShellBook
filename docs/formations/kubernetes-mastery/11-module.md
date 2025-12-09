@@ -85,7 +85,7 @@ kubectl config view
 
 ### 2.1 États des Pods
 
-```
+```text
 ÉTATS DES PODS
 ══════════════
 
@@ -312,7 +312,7 @@ velero restore describe <restore-name>
 
 ## 5. Checklist Troubleshooting
 
-```
+```text
 CHECKLIST TROUBLESHOOTING
 ═════════════════════════
 

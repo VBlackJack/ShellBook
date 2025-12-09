@@ -60,7 +60,7 @@ graph TB
     INFRA --> B4
     INFRA --> B5
 
-    style CODE fill:#7b42bc,color:#fff
+    style CODE fill:#9C27B0,color:#fff
     style B1 fill:#4caf50,color:#fff
     style B2 fill:#4caf50,color:#fff
 ```
@@ -122,8 +122,8 @@ graph TB
     PLAN --> P_AZURE --> AZURE
     PLAN <--> STATE
 
-    style TF fill:#7b42bc,color:#fff
-    style P_ACI fill:#049fd9,color:#fff
+    style TF fill:#9C27B0,color:#fff
+    style P_ACI fill:#2196F3,color:#fff
 ```
 
 ### 2.2 Concepts Clés
@@ -321,7 +321,7 @@ graph TB
     STATE --> META
     STATE --> DEPS
 
-    style STATE fill:#ff9800,color:#fff
+    style STATE fill:#FF9800800800,color:#fff
 ```
 
 ### 4.2 State Local vs Remote
@@ -439,7 +439,7 @@ terraform destroy
 
 ### 5.2 Lecture du Plan
 
-```
+```bash
 Terraform will perform the following actions:
 
   # aci_tenant.main will be created
@@ -500,7 +500,7 @@ terraform refresh
     Créez votre premier projet Terraform qui affiche un message.
 
     **Structure :**
-    ```
+    ```text
     hello-terraform/
     ├── main.tf
     ├── variables.tf
@@ -551,7 +551,7 @@ terraform refresh
     ```
 
     **Résultat attendu :**
-    ```
+    ```text
     Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 
     Outputs:
@@ -566,7 +566,7 @@ terraform refresh
 
 ### 7.1 Structure de Projet
 
-```
+```text
 projet-terraform/
 ├── main.tf           # Ressources principales
 ├── variables.tf      # Déclaration des variables

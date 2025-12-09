@@ -392,7 +392,7 @@ python system_info.py --json > system_info.json
 
 ## Sortie Exemple
 
-```
+```text
 ╭───────────────────────────────────────────────────────────╮
 │          System Information Report                        │
 │          Generated: 2024-01-15 14:30:22                   │

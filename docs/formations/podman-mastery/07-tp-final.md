@@ -38,7 +38,7 @@ Le tout doit être :
 
 ## Architecture
 
-```
+```text
 ARCHITECTURE DE LA STACK
 ═════════════════════════════════════════════════════════
 
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 ```
 
-```
+```text
 # app/requirements.txt
 flask==3.0.0
 gunicorn==21.2.0
@@ -569,7 +569,7 @@ systemctl --user list-timers podman-auto-update.timer
 
 ## Checklist de Validation
 
-```
+```text
 VALIDATION PRODUCTION
 ═════════════════════
 

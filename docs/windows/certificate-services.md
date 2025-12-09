@@ -13,7 +13,7 @@ Déploiement et gestion d'une PKI interne avec AD CS.
 
 ## Architecture PKI
 
-```
+```text
 ARCHITECTURE PKI ENTREPRISE
 ══════════════════════════════════════════════════════════
 

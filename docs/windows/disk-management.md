@@ -12,7 +12,7 @@ Configuration avancée du stockage : Storage Spaces, RAID logiciel, iSCSI, et VH
 
 ## Outils de Gestion
 
-```
+```text
 OUTILS DE STOCKAGE WINDOWS
 ══════════════════════════════════════════════════════════
 
@@ -76,7 +76,7 @@ Resize-Partition -DriveLetter C -Size 100GB
 
 ### Concepts
 
-```
+```text
 STORAGE SPACES ARCHITECTURE
 ══════════════════════════════════════════════════════════
 

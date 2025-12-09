@@ -254,7 +254,7 @@ chmod +x check-disk-space.sh
 
 ### Mode Normal
 
-```
+```text
 Vérification de l'espace disque (Warning: 80%, Critical: 90%)
 ==============================================================
 [OK] /: 45% utilisé (22G/50G)
@@ -267,7 +267,7 @@ Statut global: CRITICAL
 
 ### Mode Machine (CSV)
 
-```
+```text
 mount_point,size,used,available,usage
 /,50G,22G,28G,45%
 /home,200G,124G,76G,62%

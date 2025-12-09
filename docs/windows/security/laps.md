@@ -14,7 +14,7 @@ Rotation automatique du mot de passe Administrateur local stocké dans l'Active 
 
 ## Pourquoi LAPS ?
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     LE PROBLÈME                              │
 ├─────────────────────────────────────────────────────────────┤
@@ -98,7 +98,7 @@ Set-AdmPwdResetPasswordPermission -Identity "Computers" -AllowedPrincipals "Doma
 
 **Étape 2 : Déployer via GPO**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Administrative Templates
           → LAPS (après installation du ADMX)
 
@@ -177,7 +177,7 @@ Set-LapsADReadPasswordPermission -Identity "Computers" -AllowedPrincipals "Domai
 
 **Étape 2 : Configuration via GPO**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Administrative Templates
           → System → LAPS
 

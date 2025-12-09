@@ -457,7 +457,7 @@ TechDocs permet d'avoir la documentation technique directement dans les reposito
 
 ### Structure du projet
 
-```
+```text
 payment-service/
 ├── catalog-info.yaml
 ├── mkdocs.yml

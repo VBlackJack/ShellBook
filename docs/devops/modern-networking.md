@@ -19,7 +19,7 @@ Gérer le trafic quand les IPs changent chaque minute. Routing dynamique et Serv
 
 ### Nginx/HAProxy Classique : Le Cauchemar des Conteneurs
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  APPROCHE STATIQUE (LEGACY)                  │
 ├─────────────────────────────────────────────────────────────┤
@@ -103,8 +103,8 @@ graph TB
     Traefik -->|Route HTTP| App2[myapp-2<br/>172.18.0.6:3000]
     Traefik -->|Route HTTP| App3[blog<br/>172.18.0.7:8080]
 
-    style Traefik fill:#326ce5,stroke:#fff,stroke-width:2px,color:#fff
-    style Docker fill:#2496ed,stroke:#fff,stroke-width:2px,color:#fff
+    style Traefik fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style Docker fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 **Traefik = Reverse Proxy qui se configure automatiquement en lisant les labels Docker/K8s**
@@ -489,7 +489,7 @@ chmod 600 letsencrypt/acme.json
 
 **Consul = Registre centralisé des services disponibles + Health Checks + KV Store**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  PROBLÈME SANS SERVICE DISCOVERY             │
 ├─────────────────────────────────────────────────────────────┤
@@ -544,9 +544,9 @@ graph TB
     Client[Client] -->|DNS Query| CS1
     CS1 -->|Service IPs| Client
 
-    style CS1 fill:#ca2171,stroke:#fff,stroke-width:2px,color:#fff
-    style CS2 fill:#ca2171,stroke:#fff,stroke-width:2px,color:#fff
-    style CS3 fill:#ca2171,stroke:#fff,stroke-width:2px,color:#fff
+    style CS1 fill:#9C27B0,stroke:#fff,stroke-width:2px,color:#fff
+    style CS2 fill:#9C27B0,stroke:#fff,stroke-width:2px,color:#fff
+    style CS3 fill:#9C27B0,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 **Composants :**
@@ -855,7 +855,7 @@ while True:
 
 ### Le Problème de la Communication Microservices
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  SANS SERVICE MESH                           │
 ├─────────────────────────────────────────────────────────────┤
@@ -907,9 +907,9 @@ graph LR
     PA -->|Metrics| PROM[Prometheus]
     PB -->|Metrics| PROM
 
-    style PA fill:#00c9ff,stroke:#fff,stroke-width:2px,color:#000
-    style PB fill:#00c9ff,stroke:#fff,stroke-width:2px,color:#000
-    style CP fill:#ca2171,stroke:#fff,stroke-width:2px,color:#fff
+    style PA fill:#2196F3,stroke:#fff,stroke-width:2px,color:#000
+    style PB fill:#2196F3,stroke:#fff,stroke-width:2px,color:#000
+    style CP fill:#9C27B0,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 **Concept clé : Sidecar Proxy**

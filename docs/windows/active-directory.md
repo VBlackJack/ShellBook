@@ -346,7 +346,7 @@ Test-ComputerSecureChannel -Server dc01.corp.local
 
 **Modèle de séparation en deux domaines pour respecter le principe de moindre privilège :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  ARCHITECTURE CLASSIQUE (RISQUÉE)            │
 ├─────────────────────────────────────────────────────────────┤
@@ -492,7 +492,7 @@ Get-ADUser -Identity "admin_jdupont" -Server "admin.corp.internal"
 
 **Flux Simplifiés (Production) :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  VLAN ADMIN (10.10.1.0/24)                   │
 ├─────────────────────────────────────────────────────────────┤
@@ -710,7 +710,7 @@ gpresult /h C:\Temp\gporesult.html
 
 **Schéma de l'Architecture Cross-Domain GPO :**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │          DOMAINE ADMIN (admin.corp.internal)                 │
 ├─────────────────────────────────────────────────────────────┤

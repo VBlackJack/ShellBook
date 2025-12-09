@@ -45,10 +45,10 @@ flowchart TD
     H --> I[🛡️ RAYON D'IMPACT LIMITÉ]
     I --> J[Attaquant bloqué :<br/>- Pas de root<br/>- Pas d'install malware<br/>- Détection rapide]
 
-    style E fill:#e81123,stroke:#b00016,color:#fff
-    style F fill:#5c2d91,stroke:#3d1e5f,color:#fff
-    style I fill:#107c10,stroke:#0b5a0d,color:#fff
-    style J fill:#0078d4,stroke:#005a9e,color:#fff
+    style E fill:#f44336,stroke:#b00016,color:#fff
+    style F fill:#9C27B0,stroke:#3d1e5f,color:#fff
+    style I fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style J fill:#2196F3,stroke:#005a9e,color:#fff
 ```
 
 **Message clé :** **"Vous n'êtes pas Root. Vous êtes un Utilisateur avec des Pouvoirs Temporaires."**
@@ -189,10 +189,10 @@ flowchart LR
     E --> F[🛡️ RAYON D'IMPACT LIMITÉ]
     F --> G[www-data peut SEULEMENT :<br/>- Lire /var/www<br/>- Écrire dans /tmp<br/>- RIEN d'autre]
 
-    style C fill:#e81123,stroke:#b00016,color:#fff
-    style D fill:#5c2d91,stroke:#3d1e5f,color:#fff
-    style F fill:#107c10,stroke:#0b5a0d,color:#fff
-    style G fill:#0078d4,stroke:#005a9e,color:#fff
+    style C fill:#f44336,stroke:#b00016,color:#fff
+    style D fill:#9C27B0,stroke:#3d1e5f,color:#fff
+    style F fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style G fill:#2196F3,stroke:#005a9e,color:#fff
 ```
 
 **Principe de séparation :**
@@ -251,7 +251,7 @@ sudo visudo -f /etc/sudoers.d/junior
 
 **Format général :**
 
-```
+```text
 utilisateur hôte=(utilisateur_cible) commandes
 ```
 

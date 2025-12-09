@@ -28,7 +28,7 @@ tags:
 
 ### Syntaxe Crontab
 
-```
+```text
 ┌───────────── minute (0-59)
 │ ┌───────────── heure (0-23)
 │ │ ┌───────────── jour du mois (1-31)

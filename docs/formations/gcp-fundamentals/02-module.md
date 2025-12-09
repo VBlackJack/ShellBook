@@ -83,7 +83,7 @@ graph TD
 
 ### Nomenclature
 
-```
+```text
 e2-standard-4
 │    │       │
 │    │       └── 4 vCPUs

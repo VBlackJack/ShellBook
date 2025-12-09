@@ -48,7 +48,7 @@ mindmap
 | **PaaS** | App, Data | Tout le reste | App Service, Cloud Run |
 | **SaaS** | Configuration | Tout | Office 365, Salesforce |
 
-```
+```text
 Plus d'abstraction →
 IaaS ────────────► PaaS ────────────► SaaS
 ← Plus de contrôle
@@ -60,7 +60,7 @@ IaaS ────────────► PaaS ──────────
 
 ![Cloud IaaS PaaS SaaS Comparison](../../assets/diagrams/cloud-iaas-paas-saas-comparison.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────┐
 │              TOUJOURS CLIENT                     │
 │  • Données                                       │
@@ -109,7 +109,7 @@ IaaS ────────────► PaaS ──────────
 
 ### RPO vs RTO
 
-```
+```text
          ◄───── RPO ─────►◄───── RTO ─────►
 Dernier                                    Reprise
 Backup ──────────────── INCIDENT ──────────────── OK
@@ -192,7 +192,7 @@ CostCenter: CC-1234
 
 ### Concepts Clés
 
-```
+```text
 Cluster = Ensemble de Nodes
 Node = Machine (VM)
 Pod = 1+ Containers partageant IP
@@ -217,7 +217,7 @@ kubectl scale deployment <name> --replicas=3
 
 ### Pipeline Typique
 
-```
+```text
 Code → Build → Test → Scan → Deploy Dev → Test → Deploy Staging → Approval → Prod
 ```
 
@@ -259,7 +259,7 @@ Code → Build → Test → Scan → Deploy Dev → Test → Deploy Staging → 
 
 ### Architecture Hybride Paiement
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │           PUBLIC CLOUD                   │
 │  • Portails marchands                    │

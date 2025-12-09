@@ -167,5 +167,3 @@ ssh -L 3306:127.0.0.1:3306 user@target
 ./chisel client LHOST:8000 R:socks
 ```
 *Puis configurer `/etc/proxychains.conf` sur 1080.*
-
-```

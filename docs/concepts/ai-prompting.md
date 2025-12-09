@@ -16,7 +16,7 @@ Guide pratique des prompts et meta-prompts pour l'administration système et le 
 
 ### Définir un Rôle Expert
 
-```
+```text
 Tu es un ingénieur SysOps senior avec 15 ans d'expérience en environnements
 de production critiques (Linux, Windows, Kubernetes). Tu privilégies :
 - La sécurité et les bonnes pratiques
@@ -26,7 +26,7 @@ de production critiques (Linux, Windows, Kubernetes). Tu privilégies :
 
 ### Forcer un Format de Sortie
 
-```
+```text
 Réponds UNIQUEMENT avec :
 - Un bloc de code exécutable
 - Pas d'explications avant/après
@@ -35,7 +35,7 @@ Réponds UNIQUEMENT avec :
 
 ### Chaînage de Réflexion
 
-```
+```text
 Avant de répondre :
 1. Analyse le contexte et les contraintes
 2. Identifie les risques potentiels
@@ -50,7 +50,7 @@ Avant de répondre :
 ### Debugging & Troubleshooting
 
 **Analyse de logs**
-```
+```text
 Analyse ces logs et identifie :
 1. La cause racine probable
 2. L'impact sur le système
@@ -61,7 +61,7 @@ Analyse ces logs et identifie :
 ```
 
 **Debug service qui ne démarre pas**
-```
+```bash
 Le service [NOM] ne démarre pas sur [OS].
 Donne-moi une checklist de diagnostic dans l'ordre :
 1. Vérifications basiques (syntaxe, permissions)
@@ -71,7 +71,7 @@ Donne-moi une checklist de diagnostic dans l'ordre :
 ```
 
 **Problème de performance**
-```
+```text
 Symptôme : [DESCRIPTION]
 Système : [OS/VERSION]
 
@@ -83,7 +83,7 @@ Avec les commandes exactes à exécuter.
 ### Scripts & Automation
 
 **Génération de script**
-```
+```text
 Écris un script [bash/python/powershell] qui :
 - [OBJECTIF]
 - Gère les erreurs proprement
@@ -96,7 +96,7 @@ Contraintes :
 ```
 
 **Review de script existant**
-```
+```text
 Review ce script pour :
 1. Bugs potentiels
 2. Failles de sécurité (injection, permissions)
@@ -107,7 +107,7 @@ Review ce script pour :
 ```
 
 **Conversion de script**
-```
+```text
 Convertis ce script [SOURCE] en [CIBLE] en :
 - Gardant la même logique
 - Utilisant les idiomes natifs du langage cible
@@ -119,7 +119,7 @@ Convertis ce script [SOURCE] en [CIBLE] en :
 ### Infrastructure & Configuration
 
 **Génération de configuration**
-```
+```text
 Génère une configuration [nginx/apache/haproxy/...] pour :
 - [CAS D'USAGE]
 - Environnement : [prod/dev/staging]
@@ -129,7 +129,7 @@ Inclus les commentaires explicatifs.
 ```
 
 **Audit de configuration**
-```
+```text
 Audite cette configuration pour :
 1. Problèmes de sécurité
 2. Erreurs de syntaxe
@@ -140,7 +140,7 @@ Audite cette configuration pour :
 ```
 
 **Migration / Upgrade**
-```
+```text
 Je dois migrer de [VERSION_A] vers [VERSION_B] pour [SERVICE].
 Environnement : [DESCRIPTION]
 
@@ -154,7 +154,7 @@ Fournis :
 ### Kubernetes & Conteneurs
 
 **Génération de manifestes**
-```
+```text
 Génère les manifestes Kubernetes pour :
 - Application : [DESCRIPTION]
 - Replicas : [N]
@@ -165,14 +165,14 @@ Inclus : Deployment, Service, ConfigMap, et HPA si pertinent.
 ```
 
 **Debug pod en erreur**
-```
+```bash
 Pod en état [CrashLoopBackOff/Pending/Error].
 Donne-moi la séquence de commandes kubectl pour diagnostiquer,
 dans l'ordre de probabilité des causes.
 ```
 
 **Dockerfile optimisé**
-```
+```text
 Crée un Dockerfile pour [LANGAGE/FRAMEWORK] qui :
 - Utilise le multi-stage build
 - Minimise la taille finale
@@ -183,7 +183,7 @@ Crée un Dockerfile pour [LANGAGE/FRAMEWORK] qui :
 ### Sécurité & Conformité
 
 **Hardening checklist**
-```
+```text
 Génère une checklist de hardening pour [OS/SERVICE] :
 - Niveau : [basique/intermédiaire/avancé]
 - Référentiel : [CIS/ANSSI/NIST]
@@ -191,7 +191,7 @@ Génère une checklist de hardening pour [OS/SERVICE] :
 ```
 
 **Analyse de vulnérabilité**
-```
+```text
 CVE-[NUMERO] affecte [SERVICE/PACKAGE].
 Explique :
 1. Impact et exploitabilité
@@ -201,7 +201,7 @@ Explique :
 ```
 
 **Génération de règles firewall**
-```
+```text
 Génère les règles [iptables/nftables/ufw/Windows Firewall] pour :
 - Autoriser : [LISTE SERVICES/PORTS]
 - Bloquer : [LISTE]
@@ -212,7 +212,7 @@ Génère les règles [iptables/nftables/ufw/Windows Firewall] pour :
 ### Documentation
 
 **Documentation technique**
-```
+```text
 Documente [SCRIPT/SERVICE/PROCÉDURE] avec :
 - Synopsis / Description
 - Prérequis
@@ -222,7 +222,7 @@ Documente [SCRIPT/SERVICE/PROCÉDURE] avec :
 ```
 
 **Procédure opérationnelle**
-```
+```text
 Écris une procédure pour [OPÉRATION] :
 - Public : [junior/confirmé]
 - Format : étapes numérotées avec commandes
@@ -235,7 +235,7 @@ Documente [SCRIPT/SERVICE/PROCÉDURE] avec :
 
 ### Itération Contrôlée
 
-```
+```text
 Je vais te donner du feedback. Après chaque itération :
 1. Applique mes corrections
 2. Explique ce que tu as changé
@@ -246,7 +246,7 @@ Première version : [DEMANDE INITIALE]
 
 ### Validation Croisée
 
-```
+```text
 Après avoir généré [CONFIG/SCRIPT/COMMANDE], vérifie toi-même :
 1. Syntaxe valide ?
 2. Effets de bord possibles ?
@@ -256,7 +256,7 @@ Après avoir généré [CONFIG/SCRIPT/COMMANDE], vérifie toi-même :
 
 ### Mode Expert Critique
 
-```
+```bash
 Joue l'avocat du diable sur cette solution.
 Trouve les failles, les cas limites, les problèmes
 qui pourraient survenir en production.
@@ -264,7 +264,7 @@ qui pourraient survenir en production.
 
 ### Comparaison Structurée
 
-```
+```text
 Compare [OPTION_A] vs [OPTION_B] pour [CAS D'USAGE] :
 
 | Critère | Option A | Option B |
@@ -287,7 +287,7 @@ Techniques de prompting issues de la chaîne [Renaud Dékode](https://www.youtub
 
 Technique fondamentale pour personnaliser l'IA. À mettre dans les **Custom Instructions** ou en début de conversation.
 
-```
+```text
 Tu es un expert en [Domaine, ex: Administration Linux / DevOps].
 Je souhaite que tu me répondes de façon respectueuse, intelligente et concise.
 Je préfère que tu m'appelles [Prénom] et que tu ne me vouvoies pas.
@@ -301,7 +301,7 @@ Si tu ne connais pas la réponse, dis-le clairement au lieu d'inventer.
 
 Utiliser l'IA pour améliorer ses propres prompts avant d'exécuter la tâche.
 
-```
+```text
 Agis comme un expert en Prompt Engineering.
 Voici mon prompt initial : "[Votre prompt basique]".
 Analyse-le et propose-moi une version optimisée, plus structurée
@@ -315,7 +315,7 @@ Ne l'exécute pas tout de suite, donne-moi juste la version améliorée.
 
 Traiter l'IA comme un membre de l'équipe avec responsabilité complète.
 
-```
+```text
 Tu es mon collègue développeur Senior.
 Ta mission est de travailler sur ce projet [Nom du projet].
 Avant de proposer la moindre ligne de code, analyse l'ensemble des fichiers
@@ -330,7 +330,7 @@ d'action étape par étape pour implémenter la fonctionnalité [Nom de la featu
 
 Créer des assistants polyvalents qui routent vers le bon "expert".
 
-```
+```text
 Tu agis comme un contrôleur de mission (Dispatcher).
 Analyse la demande de l'utilisateur.
 - Si la demande concerne l'infrastructure, active l'Agent "SysAdmin".
@@ -353,7 +353,7 @@ Les 4 éléments essentiels d'un prompt efficace :
 | **Tâche** | Ce qu'il faut faire | "Audite la config Terraform" |
 | **Format** | Comment livrer | "Tableau avec criticité et remediation" |
 
-```
+```text
 [Rôle] Tu es un ingénieur SRE senior spécialisé Kubernetes.
 [Contexte] Cluster de production avec 200 pods, pic de charge à 18h.
 [Tâche] Analyse ce HPA et propose des optimisations.
@@ -364,7 +364,7 @@ Les 4 éléments essentiels d'un prompt efficace :
 
 Pour l'analyse de fichiers/images, forcer la vérification avant action.
 
-```
+```text
 Regarde attentivement ce fichier/cette image.
 Décris-moi en détail ce que tu vois et comment tu interprètes les données.
 N'invente rien, base-toi uniquement sur les éléments fournis.
@@ -439,7 +439,7 @@ claude "Génère la doc markdown pour ce script" < mon-script.sh > README.md
 
 ### Incident Production
 
-```
+```text
 URGENT - Incident en cours :
 - Symptôme : [DESCRIPTION]
 - Impact : [USERS/SERVICES AFFECTÉS]
@@ -451,7 +451,7 @@ dans l'ordre, avec les commandes exactes.
 
 ### Rollback Nécessaire
 
-```
+```text
 Je dois rollback [SERVICE/DÉPLOIEMENT] immédiatement.
 État actuel : [DESCRIPTION]
 État cible : [VERSION/CONFIG PRÉCÉDENTE]
@@ -461,7 +461,7 @@ Procédure la plus rapide et sûre, étape par étape.
 
 ### Compromission Suspectée
 
-```
+```text
 Suspicion de compromission sur [SERVEUR].
 Indices : [LISTE]
 

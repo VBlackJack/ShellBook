@@ -16,7 +16,7 @@ Les GPO permettent de configurer et sécuriser de manière centralisée les post
 
 ### Hiérarchie d'Application
 
-```
+```text
 ORDRE D'APPLICATION DES GPO (LSDOU)
 ══════════════════════════════════════════════════════════
 
@@ -39,7 +39,7 @@ RÈGLE : La dernière GPO appliquée "gagne" en cas de conflit.
 
 ### Composants d'une GPO
 
-```
+```text
 STRUCTURE D'UNE GPO
 ══════════════════════════════════════════════════════════
 
@@ -201,7 +201,7 @@ Get-WmiObject -Query "SELECT * FROM Win32_OperatingSystem WHERE Version LIKE '10
 
 ## Preferences vs Policies
 
-```
+```text
 PREFERENCES VS POLICIES
 ══════════════════════════════════════════════════════════
 
@@ -257,7 +257,7 @@ Critères de ciblage disponibles :
 
 ### Sécurité - Mot de Passe
 
-```
+```text
 Computer Configuration
 └── Policies
     └── Windows Settings
@@ -275,7 +275,7 @@ Paramètres recommandés :
 
 ### Sécurité - Verrouillage de Compte
 
-```
+```text
 Computer Configuration
 └── Policies
     └── Windows Settings
@@ -291,7 +291,7 @@ Paramètres recommandés :
 
 ### Restriction Logicielle
 
-```
+```text
 Computer Configuration
 └── Policies
     └── Windows Settings
@@ -303,7 +303,7 @@ Ou mieux : AppLocker / WDAC (voir ad-applocker.md)
 
 ### Mappage de Lecteurs (Preferences)
 
-```
+```text
 User Configuration
 └── Preferences
     └── Windows Settings
@@ -317,7 +317,7 @@ Letter: S:
 
 ### Scripts de Démarrage
 
-```
+```text
 Computer Configuration
 └── Policies
     └── Windows Settings
@@ -353,7 +353,7 @@ Set-GPLink -Name "Security-Mandatory" `
 # une OU enfant bloque l'héritage
 ```
 
-```
+```text
 HÉRITAGE ET ENFORCEMENT
 ══════════════════════════════════════════════════════════
 
@@ -378,7 +378,7 @@ Avec GPO-A Enforced :
 
 Le Loopback permet d'appliquer des GPO utilisateur selon l'ordinateur.
 
-```
+```text
 LOOPBACK PROCESSING
 ══════════════════════════════════════════════════════════
 
@@ -444,7 +444,7 @@ Get-WinEvent -FilterHashtable @{
 
 ### Problèmes Courants
 
-```
+```text
 TROUBLESHOOTING GPO
 ══════════════════════════════════════════════════════════
 
@@ -498,7 +498,7 @@ dfsrdiag pollad
 
 ### Naming Convention
 
-```
+```text
 Préfixe par type :
 • SEC-     Sécurité (SEC-Baseline-Workstations)
 • CFG-     Configuration (CFG-Office-Settings)

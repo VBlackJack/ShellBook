@@ -35,7 +35,7 @@ git config --list
 
 ## Les 3 Zones Git
 
-```
+```text
 ┌─────────────────┐    git add     ┌─────────────────┐   git commit   ┌─────────────────┐
 │ Working         │ ────────────▶  │ Staging         │ ────────────▶  │ Repository      │
 │ Directory       │                │ Area (Index)    │                │ (.git)          │

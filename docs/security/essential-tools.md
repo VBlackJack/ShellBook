@@ -92,7 +92,7 @@ Inspection et analyse approfondie des paquets. Voir exactement ce qui passe sur 
 
 **Filtres Courants :**
 
-```
+```text
 # Filtrer par IP
 ip.addr == 192.168.1.100
 
@@ -266,7 +266,7 @@ Intercepter le trafic sur un LAN en empoisonnant les tables ARP.
 
 **Comment fonctionne l'ARP Spoofing :**
 
-```
+```text
 Normal :
 Victime → Switch → Passerelle → Internet
 

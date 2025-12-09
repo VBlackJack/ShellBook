@@ -20,7 +20,7 @@ tags:
 
 Vous êtes admin système chez **GlobalCorp**, une entreprise internationale. Votre direction ouvre une **nouvelle succursale à Lyon** et vous demande de déployer l'infrastructure Active Directory pour ce site.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     CAHIER DES CHARGES                       │
 ├─────────────────────────────────────────────────────────────┤
@@ -230,7 +230,7 @@ Write-Host "WinRM Status     : $($(Get-Service WinRM).Status)" -ForegroundColor 
 
 **Résultat attendu :**
 
-```
+```text
 === Configuration Server Core ===
 Nom du serveur   : DC-BRANCH-01
 Adresse IP       : 192.168.100.10
@@ -1031,7 +1031,7 @@ C:\Scripts\Test-DC-Compliance.ps1
 
 **Résultat attendu (100% conforme) :**
 
-```
+```text
 ╔═══════════════════════════════════════════════════════════╗
 ║       VALIDATION DOMAIN CONTROLLER - BRANCH LYON         ║
 ╚═══════════════════════════════════════════════════════════╝

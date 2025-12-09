@@ -583,7 +583,7 @@ chmod +x log-rotation-manager.sh
 
 ## Sortie Exemple
 
-```
+```text
 ═══════════════════════════════════════════════════════════
   LOG ROTATION MANAGER
   Dry-run mode enabled

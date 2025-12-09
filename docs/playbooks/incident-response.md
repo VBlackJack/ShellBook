@@ -32,11 +32,11 @@ graph TD
     F --> H
     G --> H
 
-    style A fill:#ff6b6b,stroke:#c92a2a,color:#fff
-    style C fill:#4dabf7,stroke:#1971c2,color:#fff
-    style E fill:#69db7c,stroke:#2f9e44,color:#fff
-    style F fill:#69db7c,stroke:#2f9e44,color:#fff
-    style G fill:#ffd43b,stroke:#fab005,color:#000
+    style A fill:#f44336,stroke:#c92a2a,color:#fff
+    style C fill:#2196F3,stroke:#1971c2,color:#fff
+    style E fill:#4CAF50,stroke:#2f9e44,color:#fff
+    style F fill:#4CAF50,stroke:#2f9e44,color:#fff
+    style G fill:#FF9800800800,stroke:#fab005,color:#000
     style H fill:#da77f2,stroke:#9c36b5,color:#fff
 ```
 
@@ -104,11 +104,11 @@ graph TD
     H -->|Oui| I[→ Phase 2b: Debug Services]
     H -->|Non| J[→ Phase 3: Analyse Logs]
 
-    style C fill:#69db7c
-    style F fill:#69db7c
-    style G fill:#ffd43b
-    style I fill:#69db7c
-    style J fill:#ffd43b
+    style C fill:#4CAF50
+    style F fill:#4CAF50
+    style G fill:#FF9800800800
+    style I fill:#4CAF50
+    style J fill:#FF9800800800
 ```
 
 ---
@@ -170,10 +170,10 @@ graph LR
     C -->|1| E[App Error → Voir Logs]
     C -->|143| F[SIGTERM → Graceful Shutdown]
 
-    style A fill:#ff6b6b
-    style D fill:#69db7c
-    style E fill:#ffd43b
-    style F fill:#69db7c
+    style A fill:#f44336
+    style D fill:#4CAF50
+    style E fill:#FF9800800800
+    style F fill:#4CAF50
 ```
 
 ```bash
@@ -324,9 +324,9 @@ graph TD
     F --> G[Publier Post-Mortem]
     G --> H[Suivre Actions]
 
-    style A fill:#69db7c
+    style A fill:#4CAF50
     style G fill:#da77f2
-    style H fill:#4dabf7
+    style H fill:#2196F3
 ```
 
 ---

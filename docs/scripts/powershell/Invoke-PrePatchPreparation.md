@@ -105,7 +105,7 @@ Préparation complète d'un serveur avant une fenêtre de patching (WU, WSUS, SC
 
 ### Windows Update Direct
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  WINDOWS UPDATE PREPARATION                                      │
 ├─────────────────────────────────────────────────────────────────┤
@@ -121,7 +121,7 @@ Préparation complète d'un serveur avant une fenêtre de patching (WU, WSUS, SC
 
 ### WSUS
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  WSUS CLIENT PREPARATION                                         │
 ├─────────────────────────────────────────────────────────────────┤
@@ -139,7 +139,7 @@ Préparation complète d'un serveur avant une fenêtre de patching (WU, WSUS, SC
 
 ### SCCM/MECM
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  SCCM/MECM CLIENT PREPARATION                                    │
 ├─────────────────────────────────────────────────────────────────┤
@@ -1522,7 +1522,7 @@ catch {
 .\Invoke-PrePatchPreparation.ps1 -UpdateSource WU -PreDownload
 ```
 
-```
+```sql
 === PHASE 3: CACHE CLEANUP (WU) ===
 
 [*] Clearing Windows Update cache...
@@ -1540,7 +1540,7 @@ catch {
 .\Invoke-PrePatchPreparation.ps1 -UpdateSource WSUS -ResetWSUSAuth -PreDownload
 ```
 
-```
+```sql
 === PHASE 2: CONNECTIVITY ===
 
 [*] Testing connectivity to update server...
@@ -1566,7 +1566,7 @@ catch {
 .\Invoke-PrePatchPreparation.ps1 -UpdateSource SCCM -RepairCCMClient -DeepClean
 ```
 
-```
+```sql
 === PHASE 1: DETECTION & CHECKS ===
 
 [*] Detecting update source...

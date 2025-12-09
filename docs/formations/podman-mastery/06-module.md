@@ -21,7 +21,7 @@ tags:
 
 ## 1. Conteneurs et Systemd
 
-```
+```text
 INTÉGRATION SYSTEMD
 ═════════════════════════════════════════════════════════
 
@@ -124,7 +124,7 @@ sudo systemctl enable --now container-nginx.service
 
 Quadlet est la méthode moderne et déclarative pour gérer les conteneurs avec systemd.
 
-```
+```text
 QUADLET - CONTENEURS DÉCLARATIFS
 ════════════════════════════════
 
@@ -314,7 +314,7 @@ podman auto-update --dry-run
 
 ### Stratégies d'Auto-Update
 
-```
+```text
 AUTO-UPDATE STRATEGIES
 ══════════════════════
 
@@ -761,7 +761,7 @@ journalctl --user -u nginx.service -o cat | grep -E "(Started|Stopped|Failed)"
 
     !!! tip "Bonnes pratiques Quadlet"
         **Organisation des fichiers** :
-        ```
+        ```text
         ~/.config/containers/systemd/
         ├── app-network.network
         ├── app-data.volume

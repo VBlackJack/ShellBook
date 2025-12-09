@@ -513,7 +513,7 @@ db.products.aggregate([
 
 ![MongoDB Replica Set Architecture](../assets/diagrams/mongodb-replica-set-architecture.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                     Replica Set                          │
 │                                                          │

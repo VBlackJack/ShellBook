@@ -35,7 +35,7 @@ Votre mission : automatiser le déploiement complet de cette stack sur des serve
 
 ### Architecture Cible
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                         Infrastructure                               │
 │                                                                      │
@@ -61,7 +61,7 @@ Votre mission : automatiser le déploiement complet de cette stack sur des serve
 
 Créez la structure suivante :
 
-```
+```text
 fintech-infra/
 ├── ansible.cfg
 ├── site.yml

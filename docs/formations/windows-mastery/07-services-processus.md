@@ -28,7 +28,7 @@ Ce module couvre la gestion des services et processus Windows :
 
 ### 1.1 Types de Services
 
-```
+```text
 SERVICE TYPES
 ─────────────
 • Win32OwnProcess    - Processus isolé

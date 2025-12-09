@@ -78,12 +78,12 @@ graph LR
 
     TOTAL["SLA Total = ?"]
 
-    style TOTAL fill:#ff9800,color:#fff
+    style TOTAL fill:#FF9800800800,color:#fff
 ```
 
 **Formule** : SLA composite = SLA1 × SLA2 × SLA3
 
-```
+```text
 SLA = 99.99% × 99.99% × 99.95% = 99.93%
 ```
 
@@ -131,7 +131,7 @@ graph TB
     A1 -.->|"Failover"| A2
 
     style A1 fill:#4caf50,color:#fff
-    style A2 fill:#ff9800,color:#fff
+    style A2 fill:#FF9800800800,color:#fff
 ```
 
 - Un seul serveur traite le trafic
@@ -178,8 +178,8 @@ graph TB
     BACKUP --> PILOT --> WARM --> HOT
 
     style BACKUP fill:#4caf50,color:#fff
-    style PILOT fill:#8bc34a,color:#fff
-    style WARM fill:#ff9800,color:#fff
+    style PILOT fill:#4CAF50,color:#fff
+    style WARM fill:#FF9800800800,color:#fff
     style HOT fill:#f44336,color:#fff
 ```
 
@@ -216,7 +216,7 @@ graph TB
     DB1 -->|"Replication"| DB2
 
     style DB1 fill:#4caf50,color:#fff
-    style DB2 fill:#ff9800,color:#fff
+    style DB2 fill:#FF9800800800,color:#fff
 ```
 
 ---
@@ -262,7 +262,7 @@ graph LR
 
     METRIC --> POLICY --> ACTION
 
-    style POLICY fill:#ff9800,color:#fff
+    style POLICY fill:#FF9800800800,color:#fff
 ```
 
 **Métriques courantes pour le scaling :**
@@ -340,7 +340,7 @@ graph TB
 
     style WEB fill:#2196f3,color:#fff
     style APP fill:#4caf50,color:#fff
-    style DB fill:#ff9800,color:#fff
+    style DB fill:#FF9800800800,color:#fff
 ```
 
 ### 4.2 Microservices
@@ -409,7 +409,7 @@ graph LR
     BROKER --> C2
     BROKER --> C3
 
-    style BROKER fill:#ff9800,color:#fff
+    style BROKER fill:#FF9800800800,color:#fff
 ```
 
 ---
@@ -532,7 +532,7 @@ mindmap
 ??? quote "Solution"
     **1. Calcul du SLA composite**
 
-    ```
+    ```text
     SLA composite = SLA1 × SLA2 × SLA3
     SLA = 99.99% × 99.99% × 99.95%
     SLA = 0.9999 × 0.9999 × 0.9995
@@ -566,7 +566,7 @@ mindmap
     ```
 
     **Architecture :**
-    ```
+    ```text
     ┌─────────────────────────────────────────────────┐
     │           Region: eu-west-3 (Paris)             │
     ├─────────────┬─────────────┬─────────────────────┤

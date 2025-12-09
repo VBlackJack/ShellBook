@@ -41,7 +41,7 @@ graph LR
 
 Une trace est une collection de spans avec une relation parent-enfant.
 
-```
+```text
 Trace ID: abc1234
 ├── Span A (Frontend) - 500ms
 │   ├── Span B (Auth Service) - 50ms
@@ -86,6 +86,4 @@ tracer = trace.get_tracer(__name__)
 
 with tracer.start_as_current_span("operation_lourde"):
     faire_un_truc()
-```
-
 ```

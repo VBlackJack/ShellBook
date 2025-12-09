@@ -140,7 +140,7 @@ Export-PfxCertificate -Cert $Cert -FilePath "C:\WDS-NetworkUnlock.pfx" -Password
 
 **Étape 2 : Configurer via GPO**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Windows Settings
           → Security Settings → Public Key Policies → BitLocker Drive Encryption
 

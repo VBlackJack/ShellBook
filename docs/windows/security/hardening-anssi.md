@@ -24,7 +24,7 @@ GPO de sécurité, Event Viewer et conformité SecNumCloud.
 
 **GPO : Désactiver LLMNR**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Administrative Templates
           → Network → DNS Client
 
@@ -34,7 +34,7 @@ Paramètre :
 
 **GPO : Désactiver NBT-NS**
 
-```
+```text
 GPO Path: Computer Configuration → Preferences → Windows Settings
           → Registry
 
@@ -71,7 +71,7 @@ Get-WmiObject Win32_NetworkAdapterConfiguration | Select-Object Description, Tcp
 
 **Problème :** SMBv1 est un protocole obsolète avec de nombreuses vulnérabilités (EternalBlue, WannaCry, NotPetya).
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  POURQUOI DÉSACTIVER SMBv1 ?                 │
 ├─────────────────────────────────────────────────────────────┤
@@ -137,7 +137,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 **GPO :**
 
-```
+```text
 GPO Path: Computer Configuration → Policies → Windows Settings
           → Security Settings → Local Policies → Security Options
 
@@ -298,7 +298,7 @@ auditpol /get /category:"Detailed Tracking"
 
 **GPO :**
 
-```
+```text
 GPO Path 1: Computer Configuration → Policies → Windows Settings
             → Security Settings → Advanced Audit Policy Configuration
             → System Audit Policies → Detailed Tracking

@@ -98,7 +98,7 @@ Cette checklist couvre les points essentiels de hardening pour Windows Server 20
 
 **Services à désactiver si non nécessaires :**
 
-```
+```text
 RemoteRegistry
 Fax
 XboxGipSvc / XblAuthManager / XblGameSave

@@ -59,10 +59,10 @@ flowchart LR
     C -->|git push| D
     D -->|git pull| A
 
-    style A fill:#ffb900,stroke:#d39300,color:#000
-    style B fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#107c10,stroke:#0b5a0d,color:#fff
-    style D fill:#5c2d91,stroke:#3d1e5f,color:#fff
+    style A fill:#FF9800800800,stroke:#d39300,color:#000
+    style B fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style D fill:#9C27B0,stroke:#3d1e5f,color:#fff
 ```
 
 **Explication du flux :**

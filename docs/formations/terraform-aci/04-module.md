@@ -42,8 +42,8 @@ graph TB
         EPG1 -->|"❌ DENY"| EPG1
     end
 
-    style EPG1 fill:#e91e63,color:#fff
-    style EPG2 fill:#e91e63,color:#fff
+    style EPG1 fill:#9C27B0,color:#fff
+    style EPG2 fill:#9C27B0,color:#fff
 ```
 
 !!! warning "Comportement par Défaut"
@@ -597,7 +597,7 @@ graph TB
 
     VZANY -->|"Consumer"| CONTRACT
 
-    style VZANY fill:#ff9800,color:#fff
+    style VZANY fill:#FF9800800800,color:#fff
     style CONTRACT fill:#9c27b0,color:#fff
 ```
 
@@ -748,7 +748,7 @@ resource "aci_application_epg" "database" {
 
 ### Dans l'APIC GUI
 
-```
+```text
 Tenants > [Tenant] > Application Profiles > [AP] > Application EPGs > [EPG]
     └── Contracts
         ├── Consumed Contracts
@@ -757,7 +757,7 @@ Tenants > [Tenant] > Application Profiles > [AP] > Application EPGs > [EPG]
 
 ### Troubleshooting avec le Contract Viewer
 
-```
+```text
 Operations > EP Tracker
 Operations > Visibility and Troubleshooting > Contract Viewer
 ```
@@ -781,7 +781,7 @@ Operations > Visibility and Troubleshooting > Contract Viewer
 
     **Architecture :**
 
-    ```
+    ```text
     Internet → Frontend (HTTPS/443)
     Frontend → API (TCP/8080)
     API → Database (TCP/5432)
@@ -1104,7 +1104,7 @@ Operations > Visibility and Troubleshooting > Contract Viewer
 
     ### Structure Contract
 
-    ```
+    ```text
     Contract
     └── Subject (groupe logique)
         └── Filter (protocole/ports)

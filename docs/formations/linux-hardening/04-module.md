@@ -146,7 +146,7 @@ flowchart LR
     Tools -->|Rapport| Aureport[aureport<br/>Statistiques]
     Tools -->|Temps réel| SIEM[🚨 SIEM<br/>Splunk/ELK/Wazuh]
 
-    style Kernel fill:#e1f5ff
+    style Kernel fill:#2196F3
     style Audit fill:#fff9c4
     style LogFile fill:#c8e6c9
     style SIEM fill:#ffccbc
@@ -386,13 +386,13 @@ sudo ausearch -k file-deletion -ts today -i
 
 Sans `-i` :
 
-```
+```text
 type=SYSCALL msg=audit(1705328600.156:789): auid=1001 uid=0 comm="rm"
 ```
 
 Avec `-i` :
 
-```
+```text
 type=SYSCALL msg=audit(01/15/2025 14:33:20.156:789): auid=alice uid=root comm="rm"
 ```
 
@@ -455,7 +455,7 @@ sudo aureport --summary -i
 
 **Exemple de sortie `aureport -u` :**
 
-```
+```text
 User Summary Report
 ===========================
 # date time auid user total
@@ -682,7 +682,7 @@ ls -la /etc/app/secret.conf
 
     **Exemple de sortie `ausearch -k secret-file-access -i` :**
 
-    ```
+    ```sql
     ----
     type=SYSCALL msg=audit(01/22/2025 15:42:18.456:1234): arch=x86_64 syscall=unlinkat
       success=yes exit=0 a0=ffffff9c a1=55b8c9e40123 a2=0 a3=0 items=2
@@ -708,7 +708,7 @@ ls -la /etc/app/secret.conf
 
     **1. Quel utilisateur (auid) a supprimé le fichier ?**
 
-    ```
+    ```text
     auid=alice
     ```
 
@@ -718,7 +718,7 @@ ls -la /etc/app/secret.conf
 
     **2. À quelle heure exacte ?**
 
-    ```
+    ```text
     msg=audit(01/22/2025 15:42:18.456:1234)
     ```
 
@@ -728,7 +728,7 @@ ls -la /etc/app/secret.conf
 
     **3. Quel binaire a été utilisé ?**
 
-    ```
+    ```text
     exe="/usr/bin/rm"
     comm="rm"
     ```
@@ -739,7 +739,7 @@ ls -la /etc/app/secret.conf
 
     **4. Quel est l'Event ID ?**
 
-    ```
+    ```text
     msg=audit(...:1234)
     ```
 
@@ -749,7 +749,7 @@ ls -la /etc/app/secret.conf
 
     **5. Type de session (SSH ou locale) ?**
 
-    ```
+    ```text
     tty=pts0
     ses=15
     ```

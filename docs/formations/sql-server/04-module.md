@@ -117,13 +117,13 @@ graph TB
     style SMO1 fill:#9C27B0,color:#fff
     style SMO2 fill:#9C27B0,color:#fff
     style SMO3 fill:#9C27B0,color:#fff
-    style SQL1 fill:#FF9800,color:#fff
-    style SQL2 fill:#00BCD4,color:#fff
-    style SQL3 fill:#FFC107,color:#000
+    style SQL1 fill:#FF9800800800,color:#fff
+    style SQL2 fill:#2196F3,color:#fff
+    style SQL3 fill:#FF9800,color:#000
 ```
 
 **Avantages de cette architecture** :
-```
+```bash
 ✓ dbatools = Interface PowerShell simplifiée
 ✓ SMO = Couche robuste et testée (utilisée par Microsoft)
 ✓ Pas besoin de coder du T-SQL complexe
@@ -308,7 +308,7 @@ Copy-DbaLogin -Source SQL01 -Destination SQL02 -WhatIf
 ```
 
 **Ce qui est copié** :
-```
+```text
 ✓ Nom du login
 ✓ SID (Security Identifier)
 ✓ Hash du mot de passe (pour logins SQL)
@@ -338,7 +338,7 @@ Copy-DbaAgentJob -Source SQL01 -Destination SQL02 -DisableOnDestination
 ```
 
 **Cas d'usage** :
-```
+```text
 Scenario : Migration de serveur
 1. Copier les logins : Copy-DbaLogin
 2. Copier les jobs : Copy-DbaAgentJob
@@ -371,7 +371,7 @@ Start-DbaMigration -Source SQL01 -Destination SQL02 `
 ```
 
 **Ce qui est migré** :
-```
+```text
 ✓ Logins et leurs mots de passe
 ✓ Jobs SQL Agent et schedules
 ✓ Linked Servers
@@ -384,7 +384,7 @@ Start-DbaMigration -Source SQL01 -Destination SQL02 `
 ```
 
 **⚠️ ATTENTION** :
-```
+```text
 Cette commande est PUISSANTE. Toujours :
 1. Tester avec -WhatIf d'abord
 2. Vérifier les prérequis (espace disque, versions SQL)
@@ -530,7 +530,7 @@ $DiskSpaceThresholdPercent = 15 # Moins de 15% libre = alerte
 ```
 
 **Rapport** :
-```
+```text
 Format : HTML
 Sections :
   1. Connectivité (Vert si OK, Rouge si KO)

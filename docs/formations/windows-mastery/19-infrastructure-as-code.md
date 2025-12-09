@@ -1002,7 +1002,7 @@ Start-DscConfiguration -Path .\ServerHardening -Wait -Verbose
 
     Créer `.gitignore` :
 
-    ```
+    ```text
     # Terraform
     .terraform/
     *.tfstate

@@ -66,9 +66,9 @@ flowchart TD
     Q2 -->|OUI| FULL
     Q2 -->|NON| SIMPLE
 
-    style SIMPLE fill:#FFC107,color:#000
+    style SIMPLE fill:#FF9800,color:#000
     style FULL fill:#4CAF50,color:#fff
-    style BULK fill:#FF9800,color:#000
+    style BULK fill:#FF9800800800,color:#000
     style Q1 fill:#2196F3,color:#fff
     style Q2 fill:#2196F3,color:#fff
     style Q3 fill:#2196F3,color:#fff
@@ -85,7 +85,7 @@ flowchart TD
 ```
 
 **Cas d'usage** :
-```
+```text
 ✓ Bases de développement (perte acceptable)
 ✓ Bases temporaires (staging, ETL)
 ✓ Bases en lecture seule (pas de modifications)
@@ -93,7 +93,7 @@ flowchart TD
 ```
 
 **Risque** :
-```
+```text
 ❌ Perte de données = Temps écoulé depuis le dernier backup complet/différentiel
    Exemple : Full backup à minuit, incident à 11h → Perte de 11 heures
 ```
@@ -115,14 +115,14 @@ ALTER DATABASE MyDatabase SET RECOVERY SIMPLE;
 ```
 
 **Cas d'usage** :
-```
+```text
 ✓ Bases de production critiques
 ✓ Applications OLTP (transactions fréquentes)
 ✓ Conformité réglementaire (traçabilité)
 ```
 
 **Avantage clé** :
-```
+```text
 ✓ Perte de données = Intervalle entre deux backups log
    Exemple : Backup log toutes les 15 minutes → Perte maximale de 15 minutes
 ```
@@ -148,7 +148,7 @@ WITH INIT, COMPRESSION;
 ```
 
 **Cas d'usage** :
-```
+```bash
 ✓ Imports massifs ponctuels (millions de lignes)
 ✓ Reconstructions d'index volumineux
 ⚠️ Revenir en FULL après l'opération
@@ -201,13 +201,13 @@ gantt
 **Définition** : Sauvegarde **complète** de la base de données
 
 **Contenu** :
-```
+```text
 ✓ Toutes les données (tables, index, etc.)
 ✓ Une portion du transaction log (pour cohérence)
 ```
 
 **Fréquence typique** :
-```
+```text
 Production : Hebdomadaire (dimanche nuit)
 Développement : Quotidien
 Petites bases : Quotidien
@@ -232,20 +232,20 @@ WITH
 **Définition** : Sauvegarde **uniquement des changements depuis le dernier FULL**
 
 **Contenu** :
-```
+```text
 ✓ Pages de données modifiées depuis le dernier Full Backup
 ✓ Bien plus petit qu'un Full
 ```
 
 **Fréquence typique** :
-```
+```text
 Production : Quotidien (entre les Full)
 Permet de restaurer plus vite qu'avec Full + Logs
 ```
 
 **Taille** : **Variable** (augmente au fil de la semaine)
 
-```
+```text
 Dimanche : Full = 100 GB
 Lundi : Diff = 5 GB (changements du lundi)
 Mardi : Diff = 12 GB (changements lundi + mardi)
@@ -272,13 +272,13 @@ WITH
 **Définition** : Sauvegarde du **transaction log** (journal des transactions)
 
 **Contenu** :
-```
+```text
 ✓ Toutes les transactions depuis le dernier backup log
 ✓ Permet la restauration Point-in-Time
 ```
 
 **Fréquence typique** :
-```
+```text
 Production critique : Toutes les 5-15 minutes
 Production standard : Toutes les 30-60 minutes
 Développement : Selon tolérance perte
@@ -350,7 +350,7 @@ RESTORE LOG MyDatabase FROM DISK = 'D:\Backups\MyDatabase_LOG_Jeudi_1425.trn' WI
 **Définition** : Commande qui vérifie **l'intégrité physique et logique** de la base de données
 
 **Ce qui est vérifié** :
-```
+```text
 ✓ Pages de données corrompues
 ✓ Index cassés
 ✓ Liens entre tables et index
@@ -358,7 +358,7 @@ RESTORE LOG MyDatabase FROM DISK = 'D:\Backups\MyDatabase_LOG_Jeudi_1425.trn' WI
 ```
 
 **Pourquoi c'est CRITIQUE** :
-```
+```text
 ❌ Corruption silencieuse = Découverte lors d'une restauration (trop tard !)
 ❌ Backup d'une DB corrompue = Backup inutilisable
 
@@ -367,7 +367,7 @@ RESTORE LOG MyDatabase FROM DISK = 'D:\Backups\MyDatabase_LOG_Jeudi_1425.trn' WI
 ```
 
 **Fréquence recommandée** :
-```
+```text
 Production critique : QUOTIDIEN
 Production standard : HEBDOMADAIRE
 Développement : HEBDOMADAIRE
@@ -388,7 +388,7 @@ DBCC CHECKDB ('MyDatabase') WITH NO_INFOMSGS, ALL_ERRORMSGS;
 ```
 
 **Performance** :
-```
+```text
 ⚠️ CHECKDB est INTENSIF (I/O, CPU)
 → Planifier pendant les heures creuses (nuit, week-end)
 → Sur bases volumineuses (> 500 GB), peut prendre plusieurs heures
@@ -453,9 +453,9 @@ graph TB
 
     style SP1 fill:#4CAF50,color:#fff
     style SP2 fill:#2196F3,color:#fff
-    style SP3 fill:#FF9800,color:#fff
+    style SP3 fill:#FF9800800800,color:#fff
     style SP4 fill:#9C27B0,color:#fff
-    style TABLE1 fill:#00BCD4,color:#fff
+    style TABLE1 fill:#2196F3,color:#fff
 ```
 
 ---
@@ -496,7 +496,7 @@ EXECUTE dbo.DatabaseBackup
 **Rôle** : Réorganiser ou reconstruire les index fragmentés
 
 **Stratégie intelligente** :
-```
+```text
 Fragmentation < 5% → Rien faire (index OK)
 Fragmentation 5-30% → REORGANIZE (en ligne, peu impactant)
 Fragmentation > 30% → REBUILD (hors ligne, mais plus efficace)
@@ -668,7 +668,7 @@ ORDER BY name;
 SQL Server Agent permet de **planifier l'exécution automatique** des scripts.
 
 **Workflow** :
-```
+```text
 Job SQL Agent → Schedule (fréquence) → Exécution automatique → Historique
 ```
 
@@ -758,7 +758,7 @@ Vous êtes DBA d'une entreprise e-commerce. La base de données **`SalesDB`** co
 - 📈 Activité : **~500 transactions/minute** (OLTP intensif)
 
 **Politique de backup "Gold"** :
-```
+```text
 ✓ Full Backup : Hebdomadaire (dimanche 23h)
 ✓ Differential Backup : Quotidien (22h)
 ✓ Log Backup : Toutes les 15 minutes (24/7)

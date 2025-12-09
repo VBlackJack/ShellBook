@@ -160,7 +160,7 @@ graph LR
         NOTE2["Transformation dans le cloud"]
     end
 
-    style T1 fill:#ff9800,color:#fff
+    style T1 fill:#FF9800800800,color:#fff
     style T2 fill:#4caf50,color:#fff
 ```
 
@@ -199,7 +199,7 @@ graph TB
     AI --> ML --> DL --> GENAI
 
     style AI fill:#f44336,color:#fff
-    style ML fill:#ff9800,color:#fff
+    style ML fill:#FF9800800800,color:#fff
     style DL fill:#4caf50,color:#fff
     style GENAI fill:#9c27b0,color:#fff
 ```
@@ -284,7 +284,7 @@ graph TB
     AUTOML -->|"Clé en main"| PREBUILT
 
     style DIY fill:#f44336,color:#fff
-    style PLATFORM fill:#ff9800,color:#fff
+    style PLATFORM fill:#FF9800800800,color:#fff
     style AUTOML fill:#4caf50,color:#fff
     style PREBUILT fill:#2196f3,color:#fff
 ```
@@ -319,7 +319,7 @@ flowchart TD
 
     style PREBUILT fill:#2196f3,color:#fff
     style AUTOML fill:#4caf50,color:#fff
-    style PLATFORM fill:#ff9800,color:#fff
+    style PLATFORM fill:#FF9800800800,color:#fff
 ```
 
 | Cas d'Usage | Solution Recommandée |
@@ -423,7 +423,7 @@ graph TB
     SCORE -->|"> 70"| DECLINE
 
     style MODEL fill:#9c27b0,color:#fff
-    style SCORE fill:#ff9800,color:#fff
+    style SCORE fill:#FF9800800800,color:#fff
 ```
 
 **Features utilisées :**

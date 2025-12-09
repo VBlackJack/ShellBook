@@ -33,10 +33,10 @@ flowchart LR
     RR -->|pull| WD
     LR -->|checkout| WD
     
-    style WD fill:#f9f,stroke:#333,stroke-width:2px
-    style ST fill:#bbf,stroke:#333,stroke-width:2px
-    style LR fill:#bfb,stroke:#333,stroke-width:2px
-    style RR fill:#fbb,stroke:#333,stroke-width:2px
+    style WD fill:#9C27B0,stroke:#333,stroke-width:2px
+    style ST fill:#2196F3,stroke:#333,stroke-width:2px
+    style LR fill:#4CAF50,stroke:#333,stroke-width:2px
+    style RR fill:#f44336,stroke:#333,stroke-width:2px
 ```
 
 | Zone | Action | Commande |

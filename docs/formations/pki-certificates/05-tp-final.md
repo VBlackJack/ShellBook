@@ -41,8 +41,8 @@ graph TD
     B -->|Émet| F
     B --> C
 
-    style A fill:#ff6b6b
-    style B fill:#ffd93d
+    style A fill:#f44336
+    style B fill:#FF9800800800
     style C fill:#54a0ff
 ```
 

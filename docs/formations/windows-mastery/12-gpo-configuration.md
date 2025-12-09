@@ -28,7 +28,7 @@ Ce module couvre la gestion des stratégies de groupe (GPO) :
 
 ### 1.1 Ordre de Traitement (LSDOU)
 
-```
+```text
 ORDRE DE TRAITEMENT DES GPO
 ───────────────────────────
 
@@ -52,7 +52,7 @@ OPTIONS SPÉCIALES
 
 ### 1.2 Composants GPO
 
-```
+```text
 STRUCTURE D'UNE GPO
 ───────────────────
 
@@ -222,7 +222,7 @@ Set-GPRegistryValue -Name "Desktop-Standard" `
 
 ### 4.1 Avantages des Préférences
 
-```
+```text
 POLICIES vs PREFERENCES
 ───────────────────────
 
@@ -245,7 +245,7 @@ Cas d'usage Preferences:
 
 Les préférences se configurent principalement via la console GPMC :
 
-```
+```text
 Computer/User Configuration
 └── Preferences
     ├── Control Panel Settings

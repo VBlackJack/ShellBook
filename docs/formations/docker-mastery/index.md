@@ -104,7 +104,7 @@ tags:
 
 ## Environnement
 
-```
+```text
 DOCKER ARCHITECTURE
 ═══════════════════
 

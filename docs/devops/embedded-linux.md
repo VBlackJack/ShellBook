@@ -48,8 +48,8 @@ graph TB
     J[local.conf] --> B
     K[bblayers.conf] --> B
 
-    style B fill:#f9f,stroke:#333,stroke-width:4px
-    style H fill:#bbf,stroke:#333,stroke-width:2px
+    style B fill:#9C27B0,stroke:#333,stroke-width:4px
+    style H fill:#2196F3,stroke:#333,stroke-width:2px
 ```
 
 Le processus complet :

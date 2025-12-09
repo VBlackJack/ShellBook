@@ -727,7 +727,7 @@ python backup_validator.py -c policies.yaml --simple
 
 ## Sortie Exemple
 
-```
+```text
 ╭──────────────────────────────────────────────────────────────────────╮
 │                     Backup Validation Report                          │
 │                      2024-01-15T14:30:22.123456                       │

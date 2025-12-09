@@ -35,7 +35,7 @@ Vous êtes SRE chez **TechShop**, une plateforme e-commerce. Vous devez mettre e
 
 ![TechShop Observability Architecture](../../assets/diagrams/observability-techshop-architecture.jpeg)
 
-```
+```text
 ARCHITECTURE TECHSHOP
 ═════════════════════
 
@@ -576,7 +576,7 @@ Créez un dashboard avec les panels suivants :
 
 ![Grafana Dashboard Layout TechShop](../../assets/diagrams/grafana-dashboard-layout-techshop.jpeg)
 
-```
+```text
 LAYOUT DASHBOARD TECHSHOP
 ═════════════════════════
 

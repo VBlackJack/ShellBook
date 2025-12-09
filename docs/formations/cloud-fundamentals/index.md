@@ -28,10 +28,10 @@ graph LR
     CF --> AZURE
     CF --> GCP
 
-    style CF fill:#6366f1,color:#fff
-    style AWS fill:#ff9900,color:#000
-    style AZURE fill:#0078d4,color:#fff
-    style GCP fill:#4285f4,color:#fff
+    style CF fill:#9C27B0,color:#fff
+    style AWS fill:#FF9800800900,color:#000
+    style AZURE fill:#2196F3,color:#fff
+    style GCP fill:#2196F3,color:#fff
 ```
 
 ---
@@ -80,7 +80,7 @@ graph TB
     PM1 --> PM2 --> PM5 --> PM6 --> PM7
     DEV1 --> DEV3 --> DEV4 --> DEV5 --> DEV7
 
-    style ALL fill:#6366f1,color:#fff
+    style ALL fill:#9C27B0,color:#fff
 ```
 
 | Profil | Modules recommandés | Durée | Focus |

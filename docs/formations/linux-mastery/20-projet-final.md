@@ -168,7 +168,7 @@ graph TB
 
 ### 3.1 Repository Git
 
-```
+```text
 projet-final/
 ├── README.md
 ├── docs/

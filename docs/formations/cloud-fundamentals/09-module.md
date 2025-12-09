@@ -242,7 +242,7 @@ graph TB
     SCAN --> ARTIFACT --> DEPLOY_DEV --> INTEGRATION
     INTEGRATION --> DEPLOY_STAGING --> E2E --> APPROVAL --> DEPLOY_PROD
 
-    style TRIGGER fill:#ff9800,color:#fff
+    style TRIGGER fill:#FF9800800800,color:#fff
     style DEPLOY_PROD fill:#4caf50,color:#fff
 ```
 
@@ -339,7 +339,7 @@ graph TB
 
 ### 4.4 Exemple Terraform (Simplifié)
 
-```
+```bash
 # Ce que vous écrivez (déclaratif)
 "Je veux :
   - 1 VPC
@@ -419,12 +419,12 @@ graph TB
     CODE --> SECRETS --> BUILD --> SAST --> DEPS --> IMAGE
     IMAGE --> DEPLOY_DEV --> DAST --> STAGING --> PENTEST --> PROD --> MONITOR
 
-    style SECRETS fill:#ff9800,color:#fff
-    style SAST fill:#ff9800,color:#fff
-    style DEPS fill:#ff9800,color:#fff
-    style IMAGE fill:#ff9800,color:#fff
-    style DAST fill:#ff9800,color:#fff
-    style PENTEST fill:#ff9800,color:#fff
+    style SECRETS fill:#FF9800800800,color:#fff
+    style SAST fill:#FF9800800800,color:#fff
+    style DEPS fill:#FF9800800800,color:#fff
+    style IMAGE fill:#FF9800800800,color:#fff
+    style DAST fill:#FF9800800800,color:#fff
+    style PENTEST fill:#FF9800800800,color:#fff
 ```
 
 ---

@@ -54,10 +54,10 @@ flowchart TD
     B -.->|Pull Request| A
     C -.->|Merge rapide| A
 
-    style A fill:#107c10,stroke:#0b5a0d,color:#fff
-    style B fill:#0078d4,stroke:#005a9e,color:#fff
-    style C fill:#e81123,stroke:#b00016,color:#fff
-    style D fill:#5c2d91,stroke:#3d1e5f,color:#fff
+    style A fill:#4CAF50,stroke:#0b5a0d,color:#fff
+    style B fill:#2196F3,stroke:#005a9e,color:#fff
+    style C fill:#f44336,stroke:#b00016,color:#fff
+    style D fill:#9C27B0,stroke:#3d1e5f,color:#fff
 ```
 
 **Explication :**

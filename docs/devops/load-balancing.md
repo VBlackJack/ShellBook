@@ -15,7 +15,7 @@ Concepts et implémentation du load balancing : HAProxy, Nginx, et architectures
 
 ![Load Balancing Overview](../assets/diagrams/load-balancing-overview.jpeg)
 
-```
+```text
 LOAD BALANCING - VUE D'ENSEMBLE
 ══════════════════════════════════════════════════════════
 
@@ -45,7 +45,7 @@ Objectifs:
 
 ### Couches OSI
 
-```
+```text
 LOAD BALANCING PAR COUCHE
 ══════════════════════════════════════════════════════════
 
@@ -68,7 +68,7 @@ Choix:
 
 ### Algorithmes de Distribution
 
-```
+```text
 ALGORITHMES DE LOAD BALANCING
 ══════════════════════════════════════════════════════════
 
@@ -551,7 +551,7 @@ spec:
 
 ![HAProxy Keepalived HA](../assets/diagrams/haproxy-keepalived-ha.jpeg)
 
-```
+```text
 ARCHITECTURE HA
 ══════════════════════════════════════════════════════════
 

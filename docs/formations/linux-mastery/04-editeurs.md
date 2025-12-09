@@ -44,7 +44,7 @@ graph TD
 
     style A fill:#4CAF50,stroke:#2E7D32,color:#fff
     style B fill:#2196F3,stroke:#1565C0,color:#fff
-    style C fill:#FF9800,stroke:#EF6C00,color:#fff
+    style C fill:#FF9800800800,stroke:#EF6C00,color:#fff
     style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
 ```
 
@@ -75,7 +75,7 @@ ZQ          # Quitter sans sauvegarder (raccourci)
 
 ### Navigation (Mode NORMAL)
 
-```
+```text
         k
         ↑
     h ← ● → l
@@ -196,7 +196,7 @@ graph LR
 
     style I fill:#4CAF50,stroke:#2E7D32,color:#fff
     style O fill:#2196F3,stroke:#1565C0,color:#fff
-    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style E fill:#f44336,stroke:#c0392b,color:#fff
 ```
 
 | Flux | Numéro | Description |
@@ -401,7 +401,7 @@ sed -n '/START/,/END/p' fichier
 
 awk traite les fichiers **ligne par ligne** et **champ par champ**.
 
-```
+```text
 ligne : champ1  champ2  champ3  champ4
           $1      $2      $3      $4
                     $0 = ligne entière

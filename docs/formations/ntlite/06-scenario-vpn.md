@@ -38,9 +38,9 @@ graph TD
     E -->|Authentification réussie| F[Session VPN maintenue]
     F -->|Accès Ressources Entreprise| G[Bureau Windows]
 
-    style B fill:#2ecc71
-    style E fill:#f39c12
-    style F fill:#3498db
+    style B fill:#4CAF50
+    style E fill:#FF9800800800
+    style F fill:#2196F3
 ```
 
 !!! info "Terminologie : Pre-Logon"
@@ -115,7 +115,7 @@ L'ISO intègre tous les composants nécessaires et les configure automatiquement
 
 Organisation du dossier de travail pour ce scénario :
 
-```
+```text
 G:\NTLite\Projet_VPN\
 │
 ├── ISO_SOURCE\                      # ISO Windows montée/extraite
@@ -637,7 +637,7 @@ Le fichier généré par NTLite contiendra :
 2. **Process** → **Apply**
 3. Attendre la fin du traitement (15-30 minutes)
 4. **Create ISO** → Choisir la destination :
-   ```
+   ```text
    D:\NTLite\PROJET_ISO\ISO_FINALE\Windows11_Enterprise_VPN.iso
    ```
 
@@ -687,7 +687,7 @@ Le fichier généré par NTLite contiendra :
     ```
 
     **Résultat attendu :**
-    ```
+    ```text
     Subject: CN=RootCA-Entreprise, O=Entreprise, C=FR
     Thumbprint: A1B2C3D4E5F6...
     ```
@@ -703,7 +703,7 @@ Le fichier généré par NTLite contiendra :
     ```
 
     **Résultat attendu :**
-    ```
+    ```text
     SERVICE_NAME: PanGPS
     STATE       : RUNNING
 
@@ -729,7 +729,7 @@ Le fichier généré par NTLite contiendra :
     ```
 
     **Résultat attendu :**
-    ```
+    ```text
     Status   Name               DisplayName
     ------   ----               -----------
     Running  CSFalconService    CrowdStrike Falcon Sensor
@@ -951,7 +951,7 @@ net stop PanGPS && net start PanGPS
 
 **Solution :**
 
-```
+```text
 1. Ouvrir l'onglet **Updates** dans NTLite
 2. Supprimer les mises à jour dont le fichier source est manquant
 3. Réintégrer les updates depuis un cache valide
@@ -1062,7 +1062,7 @@ Vous devez créer une ISO Windows 11 Entreprise pour un client avec les spécifi
 
 **Structure de Dossiers :**
 
-```
+```text
 D:\NTLite\CLIENT_ISO\
 ├── ISO_SOURCE\
 ├── INTEGRATION\

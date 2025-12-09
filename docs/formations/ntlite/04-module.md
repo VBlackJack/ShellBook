@@ -76,10 +76,10 @@ flowchart TD
     C1[Nom de machine<br/>Domaine/Workgroup<br/>Clé produit] -.->|Contenu| C
     D1[Création de comptes<br/>Paramètres régionaux<br/>OOBE Skip] -.->|Contenu| D
 
-    style A fill:#e1f5ff
-    style B fill:#fff4e1
+    style A fill:#2196F3
+    style B fill:#FF9800800800
     style C fill:#ffe1f5
-    style D fill:#e1ffe1
+    style D fill:#4CAF50
     style E fill:#90EE90
 ```
 
@@ -92,7 +92,7 @@ flowchart TD
 - 🌐 Configuration réseau pour installation PXE
 
 **Exemple concret** :
-```
+```text
 L'utilisateur démarre → WinPE charge → Efface Disk 0 → Crée partitions → Lance l'installation
 ```
 
@@ -120,7 +120,7 @@ L'utilisateur démarre → WinPE charge → Efface Disk 0 → Crée partitions �
 - 🕐 Fuseau horaire
 
 **Exemple concret** :
-```
+```text
 Machine nommée "PC-COMPTA-01" → Rejoint le domaine "ENTREPRISE.LOCAL" → Applique la clé produit
 ```
 
@@ -135,7 +135,7 @@ Machine nommée "PC-COMPTA-01" → Rejoint le domaine "ENTREPRISE.LOCAL" → App
 - ❌ **OOBE Skip** : Désactiver les écrans de bienvenue
 
 **Exemple concret** :
-```
+```text
 Crée l'utilisateur "Stagiaire" → Configure clavier FR → Skip l'écran "Choisir sa région" → Auto-login
 ```
 
@@ -145,7 +145,7 @@ Crée l'utilisateur "Stagiaire" → Configure clavier FR → Skip l'écran "Choi
 
 ### Emplacement dans NTLite
 
-```
+```text
 NTLite > [Image chargée] > Unattended (onglet en haut)
 ```
 
@@ -167,7 +167,7 @@ L'interface est divisée en sections correspondant aux **Configuration Passes**.
 | **Express settings** | Accepte automatiquement les paramètres "rapides" | ⚠️ Problème vie privée |
 
 **Configuration recommandée** :
-```
+```text
 ☑ Auto-fill defaults
 ☑ Hide account pages (si compte créé en oobeSystem)
 ☐ Express settings (désactiver pour contrôle total)
@@ -213,7 +213,7 @@ L'interface est divisée en sections correspondant aux **Configuration Passes**.
 
 **Cas d'usage** :
 
-```
+```yaml
 Scénario 1 : Salle de formation
 → Username: Stagiaire, Password: (vide), Auto-logon: 999
 
@@ -246,7 +246,7 @@ Scénario 3 : Kiosk public
 | **Skip OneDrive** | Configuration OneDrive | ✅ Si NAS/SharePoint utilisé |
 
 **Configuration type entreprise** :
-```
+```text
 ☑ Skip EULA (après validation juridique)
 ☑ Skip Privacy Settings
 ☑ Skip Wireless Setup (déploiement filaire)
@@ -268,7 +268,7 @@ Scénario 3 : Kiosk public
 **Option** : `Automatic` ou `Custom`
 
 **Mode Automatic** :
-```
+```text
 NTLite détecte :
 - UEFI → Créer GPT (ESP + MSR + Windows)
 - BIOS → Créer MBR (System + Windows)
@@ -299,7 +299,7 @@ NTLite détecte :
 ```
 
 **🚨 RISQUE MAJEUR** :
-```
+```text
 WillWipeDisk = true → EFFACE TOUTES LES DONNÉES DU DISQUE 0
 
 Si vous démarrez accidentellement sur cette USB sur votre PC de production :
@@ -331,7 +331,7 @@ Vous devez réimager **20 PCs identiques** pour une salle de formation :
 1. Charger votre image (du Module 3)
 2. Aller dans **Unattended > Localization**
 3. Configurer :
-   ```
+   ```text
    Input Locale: fr-FR
    System Locale: fr-FR
    UI Language: fr-FR
@@ -346,7 +346,7 @@ Vous devez réimager **20 PCs identiques** pour une salle de formation :
 1. Aller dans **Unattended > Users**
 2. Cliquer **Add > Local Account**
 3. Remplir :
-   ```
+   ```yaml
    Username: Stagiaire
    Full Name: Compte Stagiaire
    Password: (laisser vide)
@@ -366,7 +366,7 @@ Avec `1`, le compte demande le mot de passe après le premier redémarrage. Cela
 
 1. Aller dans **Unattended > General**
 2. Activer :
-   ```
+   ```text
    ☑ Auto-fill defaults
    ☑ Hide account pages
    ☑ Skip machine OOBE
@@ -374,7 +374,7 @@ Avec `1`, le compte demande le mot de passe après le premier redémarrage. Cela
 
 3. Aller dans **Unattended > OOBE Extended**
 4. Activer :
-   ```
+   ```text
    ☑ Skip EULA
    ☑ Skip Privacy Settings
    ☑ Skip Wireless Setup
@@ -394,14 +394,14 @@ Avec `1`, le compte demande le mot de passe après le premier redémarrage. Cela
 1. Aller dans **Unattended > Disk Configuration**
 2. Sélectionner **Automatic**
 3. Cocher :
-   ```
+   ```text
    ☑ Wipe disk 0
    ☑ Create partitions automatically (UEFI/GPT)
    ```
 
 **Mesure de sécurité** :
 - Créer un fichier texte `DANGER_WIPE.txt` à la racine de la clé USB :
-  ```
+  ```text
   ⚠️ CETTE CLÉ USB EFFACE AUTOMATIQUEMENT LE DISQUE 0 ⚠️
   À UTILISER UNIQUEMENT SUR LES PCS DE LA SALLE B201
   ```
@@ -449,7 +449,7 @@ Avant d'appliquer, vérifier dans **Pending Changes** :
 
 ### 1. General
 
-```
+```text
 Unattended > General
 
 ☑ Auto-fill defaults
@@ -462,7 +462,7 @@ Unattended > General
 
 ### 2. Localization
 
-```
+```text
 Unattended > Localization
 
 Input Locale: fr-FR
@@ -476,7 +476,7 @@ Time Zone: Romance Standard Time
 
 ### 3. Users
 
-```
+```yaml
 Unattended > Users > Add > Local Account
 
 Username: Stagiaire
@@ -487,7 +487,7 @@ Auto-logon count: 1
 ```
 
 **Alternative avec mot de passe** :
-```
+```yaml
 Username: Admin
 Password: Formation2025!
 Groups: Administrators
@@ -498,7 +498,7 @@ Auto-logon count: 0
 
 ### 4. OOBE Extended
 
-```
+```text
 Unattended > OOBE Extended
 
 ☑ Skip EULA
@@ -515,7 +515,7 @@ Unattended > OOBE Extended
 
 ### 5. Disk Configuration (⚠️ DANGER)
 
-```
+```text
 Unattended > Disk Configuration
 
 Mode: Automatic
@@ -524,7 +524,7 @@ Partition scheme: UEFI (GPT)
 ```
 
 **Résultat** :
-```
+```text
 Disk 0 :
 ├── Partition 1 (EFI System Partition) : 100 MB
 ├── Partition 2 (Microsoft Reserved) : 16 MB
@@ -632,7 +632,7 @@ Une fois appliqué, NTLite génère `autounattend.xml` :
 
 Après création de l'ISO bootable, le fichier est ici :
 
-```
+```text
 E:\ (Clé USB)
 ├── boot/
 ├── efi/
@@ -700,7 +700,7 @@ Avant de booter les 20 PCs :
 
 Pour gérer différents scénarios :
 
-```
+```text
 NTLite > Presets > Save current settings
 → "Formation_Stagiaire.xml"
 → "Production_Admin.xml"
@@ -716,7 +716,7 @@ Presets > Load > Sélectionner le profil adapté
 
 Au lieu de nommer toutes les machines "PC-Formation" :
 
-```
+```text
 Unattended > Machine > Computer Name
 
 Format: PC-%RAND:5%
@@ -732,7 +732,7 @@ Résultat: PC-A0B1C2, PC-D3E4F5 (basé sur l'adresse MAC)
 
 Exécuter des commandes au premier démarrage :
 
-```
+```text
 Unattended > RunSynchronous > Add
 
 Command: powershell.exe -ExecutionPolicy Bypass -File C:\Setup\Configure.ps1
@@ -761,7 +761,7 @@ Set-Service wuauserv -StartupType Disabled
 
 Si vous avez plusieurs types de licences :
 
-```
+```text
 Unattended > Product Key
 
 ☑ Detect edition automatically
@@ -793,7 +793,7 @@ OU laisser vide si :
 **Cause** : Conflit entre "Hide account pages" et création manuelle
 
 **Solution** :
-```
+```text
 Unattended > General
 ☐ Hide account pages (DÉSACTIVER si création de compte)
 
@@ -810,7 +810,7 @@ Créer le compte AVANT d'activer "Hide account pages"
 **Cause** : Drivers de stockage manquants dans `boot.wim`
 
 **Solution** :
-```
+```text
 Retour au Module 3 :
 1. Drivers > Add > NVMe/SATA Controller
 2. Clic droit > Integrate into Boot image

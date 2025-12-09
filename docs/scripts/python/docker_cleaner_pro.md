@@ -567,7 +567,7 @@ python3 docker_cleaner_pro.py --all --verbose
 
 ### Mode Dry-Run
 
-```
+```bash
 ============================================================
 DOCKER CLEANER PRO
 Mode: DRY-RUN (simulation)

@@ -35,7 +35,7 @@ $ uptime
 
 ### Règle du Pouce
 
-```
+```text
 Load Average < Nombre de Coeurs = OK
 Load Average > Nombre de Coeurs = Saturation
 ```
@@ -61,7 +61,7 @@ cat /proc/loadavg
 
 ### Interpréter les Tendances
 
-```
+```text
 Load: 8.00, 4.00, 2.00
       ↑     ↑     ↑
       1min  5min  15min
@@ -102,7 +102,7 @@ Swap:          4.0Gi       100Mi       3.9Gi
 
     **Ce cache est automatiquement libéré** quand une application a besoin de mémoire.
 
-    ```
+    ```text
     Mémoire réellement disponible = free + buff/cache ≈ available
     ```
 
@@ -110,7 +110,7 @@ Swap:          4.0Gi       100Mi       3.9Gi
 
 Quand la RAM physique + Swap sont épuisées, le kernel **tue des processus** pour survivre.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     RAM PHYSIQUE                             │
 │  ████████████████████████████████████████████████ 100%      │
@@ -176,7 +176,7 @@ sudo apt install sysstat
 iostat -xz 1
 ```
 
-```
+```text
 Device   r/s   w/s  rkB/s  wkB/s  await  %util
 sda      5.0  150.0   20.0 15000.0  45.0   98.5  ← PROBLÈME
 nvme0n1  2.0   10.0   80.0   500.0   0.5    5.0  ← OK

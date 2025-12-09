@@ -574,7 +574,7 @@ python health_checker.py -t 10 -c checks.yaml
 
 ## Sortie Exemple
 
-```
+```text
               Health Check Results
 ┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━┓
 ┃ Status   ┃ Name           ┃ Type   ┃ Target            ┃ Message      ┃  Time ┃

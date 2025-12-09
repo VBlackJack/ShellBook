@@ -207,7 +207,7 @@ if __name__ == '__main__':
 
 ### Structure de Projet
 
-```
+```text
 mon_script/
 ├── __init__.py
 ├── __main__.py      # Entry point

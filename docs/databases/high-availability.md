@@ -120,13 +120,13 @@ graph TB
     P2 <-->|Health Check<br/>Leader Election| ETCD2
     P3 <-->|Health Check<br/>Leader Election| ETCD2
 
-    style PG1 fill:#336791,stroke:#fff,stroke-width:3px,color:#fff
-    style PG2 fill:#336791,stroke:#fff,stroke-width:2px,color:#fff
-    style PG3 fill:#336791,stroke:#fff,stroke-width:2px,color:#fff
-    style HAProxy fill:#ff6b35,stroke:#fff,stroke-width:2px,color:#fff
-    style ETCD1 fill:#419eda,stroke:#fff,stroke-width:2px,color:#fff
-    style ETCD2 fill:#419eda,stroke:#fff,stroke-width:2px,color:#fff
-    style ETCD3 fill:#419eda,stroke:#fff,stroke-width:2px,color:#fff
+    style PG1 fill:#2196F3,stroke:#fff,stroke-width:3px,color:#fff
+    style PG2 fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style PG3 fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style HAProxy fill:#f44336,stroke:#fff,stroke-width:2px,color:#fff
+    style ETCD1 fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style ETCD2 fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style ETCD3 fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 ### Pourquoi Patroni ?
@@ -564,10 +564,10 @@ graph TB
     LB -->|R/W| NODE2
     LB -->|R/W| NODE3
 
-    style NODE1 fill:#c0765a,stroke:#fff,stroke-width:2px,color:#fff
-    style NODE2 fill:#c0765a,stroke:#fff,stroke-width:2px,color:#fff
-    style NODE3 fill:#c0765a,stroke:#fff,stroke-width:2px,color:#fff
-    style LB fill:#ff6b35,stroke:#fff,stroke-width:2px,color:#fff
+    style NODE1 fill:#FF9800,stroke:#fff,stroke-width:2px,color:#fff
+    style NODE2 fill:#FF9800,stroke:#fff,stroke-width:2px,color:#fff
+    style NODE3 fill:#FF9800,stroke:#fff,stroke-width:2px,color:#fff
+    style LB fill:#f44336,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 ### Installation Galera Cluster
@@ -823,9 +823,9 @@ graph LR
     WAL -->|Backup Push| S3
     S3 -->|Restore| PG
 
-    style PG fill:#336791,stroke:#fff,stroke-width:2px,color:#fff
-    style S3 fill:#569a31,stroke:#fff,stroke-width:2px,color:#fff
-    style WAL fill:#ff6b35,stroke:#fff,stroke-width:2px,color:#fff
+    style PG fill:#2196F3,stroke:#fff,stroke-width:2px,color:#fff
+    style S3 fill:#4CAF50,stroke:#fff,stroke-width:2px,color:#fff
+    style WAL fill:#f44336,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 ### Pourquoi pgBackRest ?

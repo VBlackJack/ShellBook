@@ -583,7 +583,7 @@ sudo mount -t glusterfs node1:/gv0 /mnt/gluster
     6. Documenter les temps de basculement
 
     **Architecture cible :**
-    ```
+    ```text
     Client → VIP (192.168.1.100) → HAProxy → App Servers
     ```
 

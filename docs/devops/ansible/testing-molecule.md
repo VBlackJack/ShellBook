@@ -19,7 +19,7 @@ Ne testez plus en production. Validez vos rôles dans des environnements isolés
 
 **Scénario classique :**
 
-```
+```text
 Dev  : "J'ai testé le playbook sur ma VM, ça fonctionne !"
 Ops  : "Déploiement en production..."
 Ops  : "Ça plante. Pourquoi ?"
@@ -69,7 +69,7 @@ flowchart LR
 
 ![Molecule Framework Architecture](../../assets/diagrams/molecule-framework-architecture.jpeg)
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │           Molecule Framework             │
 │                                          │
@@ -533,7 +533,7 @@ verifier:
 
 ### Structure du Rôle
 
-```
+```text
 roles/nginx/
 ├── defaults/
 │   └── main.yml
@@ -750,7 +750,7 @@ Ansible role to install and configure Nginx.
 
 ```bash
 molecule test
-```
+```text
 ```
 
 ---
@@ -837,7 +837,7 @@ root@instance:/# curl http://localhost
 
 ![Molecule Lifecycle Cycle](../../assets/diagrams/molecule-lifecycle-cycle.jpeg)
 
-```
+```text
 ┌──────────┐
 │ destroy  │ ← Nettoyer
 └─────┬────┘
@@ -883,7 +883,7 @@ root@instance:/# curl http://localhost
 
 ### Structure de Fichiers
 
-```
+```text
 role/
 ├── molecule/
 │   └── default/

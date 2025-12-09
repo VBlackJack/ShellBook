@@ -677,7 +677,7 @@ Write-Host "`nTerminé! $($scripts.Count) scripts traités." -ForegroundColor Gr
 
 ### Via GPO (Domaine AD)
 
-```
+```text
 Computer Configuration
 └── Policies
     └── Administrative Templates

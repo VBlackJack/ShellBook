@@ -60,7 +60,7 @@ Collection de scripts prêts à l'emploi pour l'administration système.
 
 ### Nommage
 
-```
+```xml
 <action>-<cible>.<extension>
 ```
 
