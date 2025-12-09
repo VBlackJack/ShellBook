@@ -44,3 +44,4 @@ Thumbs.db
 .claude/
 audit_formations.txt
 audit_links.py
+temp/
