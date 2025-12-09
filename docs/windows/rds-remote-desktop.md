@@ -12,6 +12,8 @@ Configuration et administration des services Bureau à distance : Session Host, 
 
 ## Architecture
 
+![RDS Architecture](../assets/diagrams/rds-architecture.jpeg)
+
 ```
 ARCHITECTURE RDS
 ══════════════════════════════════════════════════════════

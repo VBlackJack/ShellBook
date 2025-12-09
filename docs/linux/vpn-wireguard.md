@@ -10,6 +10,8 @@ tags:
 
 VPN moderne, rapide et sécurisé sous Linux.
 
+![WireGuard VPN Architecture](../assets/diagrams/wireguard-vpn-architecture.jpeg)
+
 ---
 
 ## Pourquoi WireGuard ?

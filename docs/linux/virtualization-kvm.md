@@ -14,6 +14,8 @@ Virtualisation native Linux avec KVM et gestion via Libvirt.
 
 ## Architecture KVM
 
+![KVM Virtualization Stack](../assets/diagrams/kvm-virtualization-stack.jpeg)
+
 ### Les Briques de la Virtualisation
 
 ```

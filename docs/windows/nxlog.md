@@ -14,6 +14,8 @@ NXLog Community Edition permet de collecter et transférer les Event Logs Window
 
 ## Architecture
 
+![NXLog SecNumCloud Architecture](../assets/diagrams/nxlog-secnumcloud-architecture.jpeg)
+
 ```
 CENTRALISATION DES LOGS - SECNUMCLOUD
 ══════════════════════════════════════════════════════════════════════
@@ -100,6 +102,8 @@ C:\Program Files\nxlog\
 ## Event Logs Requis - Conformité SecNumCloud
 
 ### Matrice des Events Critiques
+
+![Windows Security Events Matrix](../assets/diagrams/windows-security-events-matrix.jpeg)
 
 ```
 EVENTS LOGS OBLIGATOIRES - HARDENING SECNUMCLOUD

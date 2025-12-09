@@ -192,6 +192,8 @@ location / {
 
 ### Architecture Commune
 
+![Linux Web Server Architecture](../assets/diagrams/linux-webserver-architecture.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                         Client                               │

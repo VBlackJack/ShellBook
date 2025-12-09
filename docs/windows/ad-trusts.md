@@ -42,6 +42,8 @@ Les utilisateurs de PARIS ne peuvent PAS accéder à LYON.
 
 ### Direction des Trusts
 
+![AD Trust Directions](../assets/diagrams/ad-trust-directions.jpeg)
+
 ```
 DIRECTION DES TRUSTS
 ══════════════════════════════════════════════════════════
@@ -70,6 +72,8 @@ Note : Un trust bidirectionnel = 2 trusts unidirectionnels
 ```
 
 ### Transitivité
+
+![AD Trust Transitivity](../assets/diagrams/ad-trust-transitivity.jpeg)
 
 ```
 TRANSITIVITÉ DES TRUSTS
@@ -108,6 +112,8 @@ Utilisé dans : External trusts, Realm trusts
 
 ### Parent-Child Trust
 
+![AD Parent-Child Trust](../assets/diagrams/ad-trust-parent-child.jpeg)
+
 ```
 PARENT-CHILD TRUST (Automatique)
 ══════════════════════════════════════════════════════════
@@ -128,6 +134,8 @@ Caractéristiques :
 ```
 
 ### Tree-Root Trust
+
+![AD Tree-Root Trust](../assets/diagrams/ad-trust-tree-root.jpeg)
 
 ```
 TREE-ROOT TRUST

@@ -10,6 +10,8 @@ tags:
 
 Alternative Open Source robuste à Active Directory sur Linux. Annuaire LDAP haute performance pour l'authentification centralisée.
 
+![LDAP 389DS Architecture](../assets/diagrams/ldap-389ds-architecture.jpeg)
+
 ![LDAP Directory Tree](../assets/infographics/linux/ldap-directory-tree.jpeg)
 
 ---

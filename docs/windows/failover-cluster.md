@@ -12,6 +12,8 @@ Configuration et gestion des clusters de basculement Windows Server pour la haut
 
 ## Concepts
 
+![Failover Cluster Architecture](../assets/diagrams/failover-cluster-architecture.jpeg)
+
 ```
 ARCHITECTURE FAILOVER CLUSTER
 ══════════════════════════════════════════════════════════

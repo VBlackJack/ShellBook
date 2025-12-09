@@ -19,6 +19,8 @@ Administration Windows Server moderne : Build, WAC, PowerShell et gestion des ve
 
 ### Server Core vs Desktop Experience : Le Choix Stratégique
 
+![Server Core vs Desktop Experience](../assets/diagrams/server-core-vs-desktop.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              SERVER CORE vs DESKTOP EXPERIENCE               │
@@ -50,6 +52,8 @@ Administration Windows Server moderne : Build, WAC, PowerShell et gestion des ve
 ### sconfig : Le Menu Magique
 
 Au démarrage de Server Core, lancez `sconfig` pour un menu de configuration rapide :
+
+![sconfig Menu](../assets/diagrams/sconfig-menu.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

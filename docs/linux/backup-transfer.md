@@ -14,6 +14,8 @@ Synchronisation et transfert sécurisé de fichiers.
 
 ## Rsync (Remote Sync)
 
+![Linux Backup Architecture](../assets/diagrams/linux-backup-architecture.jpeg)
+
 ### Pourquoi Rsync est Magique
 
 !!! tip "Delta Transfer : Ne copie que ce qui a changé"
