@@ -58,6 +58,8 @@ IaaS ────────────► PaaS ──────────
 
 ## Fiche 3 : Responsabilité Partagée
 
+![Cloud IaaS PaaS SaaS Comparison](../../assets/diagrams/cloud-iaas-paas-saas-comparison.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │              TOUJOURS CLIENT                     │

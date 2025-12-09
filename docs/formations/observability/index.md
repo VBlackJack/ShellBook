@@ -114,6 +114,8 @@ Chaque module inclut :
 
 ## Environnement Technique
 
+![Observability Stack - 3 Pillars](../../assets/diagrams/observability-stack-3-pillars.jpeg)
+
 ```
 STACK TECHNIQUE
 ═══════════════

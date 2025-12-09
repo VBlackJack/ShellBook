@@ -29,6 +29,8 @@ Ce module couvre la gestion des utilisateurs locaux et les permissions NTFS :
 
 ### 1.1 Types de Comptes
 
+![Windows Account Types - Local vs Domain](../../assets/diagrams/windows-account-types-local-vs-domain.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │               TYPES DE COMPTES WINDOWS                       │
@@ -150,6 +152,8 @@ Remove-LocalGroup -Name "AppAdmins"
 
 ### 2.3 Bonnes Pratiques
 
+![Windows Groups Best Practices](../../assets/diagrams/windows-groups-best-practices.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │            BONNES PRATIQUES - GROUPES                        │
@@ -175,6 +179,8 @@ Remove-LocalGroup -Name "AppAdmins"
 ## 3. Permissions NTFS
 
 ### 3.1 Comprendre les Permissions
+
+![NTFS Permissions - Basic vs Advanced](../../assets/diagrams/ntfs-permissions-basic-vs-advanced.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

@@ -158,6 +158,8 @@ flowchart LR
 
 **Topologie recommandée :**
 
+![Chocolatey Package Deployment Flow](../../assets/diagrams/chocolatey-package-deployment-flow.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │ DMZ / Subnet Admin (VLAN 10)                       │

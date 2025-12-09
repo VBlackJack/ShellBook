@@ -20,6 +20,8 @@ tags:
 
 ### Le Constat
 
+![Windows Default Vulnerabilities](../../assets/diagrams/windows-default-vulnerabilities.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │         WINDOWS SERVER : INSTALLATION PAR DÉFAUT             │
@@ -142,6 +144,8 @@ graph TD
 
 **Scénario de compromission sans Tiering Model :**
 
+![Pass-the-Hash Attack Without Tiering](../../assets/diagrams/attack-pass-the-hash-no-tiering.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              ATTAQUE SANS TIERING MODEL                      │
@@ -164,6 +168,8 @@ graph TD
 ```
 
 **Avec Tiering Model :**
+
+![Defense with Tiering Model](../../assets/diagrams/defense-tiering-model-protection.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -264,6 +270,8 @@ Get-WinEvent -FilterHashtable @{
 #### Qu'est-ce que LAPS ?
 
 **LAPS = Rotation automatique du mot de passe Administrateur local stocké dans Active Directory.**
+
+![LAPS Problem vs Solution](../../assets/diagrams/laps-problem-vs-solution.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -534,6 +542,8 @@ Restore-MpPreference -ThreatID <ThreatID>
 
 **Pourquoi ?**
 
+![SMBv1 Security Risks](../../assets/diagrams/smbv1-security-risks.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              POURQUOI DÉSACTIVER SMBv1 ?                     │
@@ -601,6 +611,8 @@ Créer une nouvelle clé :
 ### Désactiver LLMNR et NBT-NS (Responder Poisoning)
 
 **L'Attaque Responder :**
+
+![Responder LLMNR Poisoning Attack](../../assets/diagrams/attack-responder-llmnr-poisoning.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

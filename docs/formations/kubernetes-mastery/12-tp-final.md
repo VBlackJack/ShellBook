@@ -32,6 +32,8 @@ Vous êtes l'architecte Kubernetes chez **CloudShop**, une startup e-commerce. V
 
 ## Architecture
 
+![Kubernetes TP Microservices Architecture](../../assets/diagrams/k8s-tp-microservices-architecture.jpeg)
+
 ```
 ARCHITECTURE CLOUDSHOP
 ══════════════════════
