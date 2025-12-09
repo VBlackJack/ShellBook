@@ -465,6 +465,14 @@ nav:
           - Glossaire: formations/devops-foundation/glossaire.md
           - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
           - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
+      - 📝 MkDocs Tutorial (5h):
+        - Programme: formations/mkdocs-tutorial/index.md
+        - Module 01 - Installation: formations/mkdocs-tutorial/01-module.md
+        - Module 02 - GitHub Pages: formations/mkdocs-tutorial/02-module.md
+        - Module 03 - Mermaid: formations/mkdocs-tutorial/03-module.md
+        - Module 04 - Configuration: formations/mkdocs-tutorial/04-module.md
+        - Module 05 - TP Final: formations/mkdocs-tutorial/05-tp-final.md
+        - Cheatsheet: formations/mkdocs-tutorial/cheatsheet.md
       - ☁️ Cloud Fundamentals (35h):
         - Programme: formations/cloud-fundamentals/index.md
         - Module 01 - Concepts: formations/cloud-fundamentals/01-module.md

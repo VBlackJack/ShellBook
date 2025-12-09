@@ -248,5 +248,5 @@ ssh-keygen -lf ~/.ssh/id_ed25519.pub         # Fingerprint
 ## Voir Aussi
 
 - [SSH Tunnels](ssh-tunnels.md) - Port forwarding et tunnels
-- [SSH Hardening](../security/ssh-hardening.md) - Sécurisation serveur SSH
+- [SSH Hardening](ssh-hardening.md) - Sécurisation serveur SSH
 - [Cheatsheet SSH](cheatsheet-ssh.md) - Référence rapide complète
