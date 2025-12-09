@@ -13,6 +13,8 @@ Concepts et implémentation du load balancing : HAProxy, Nginx, et architectures
 
 ## Concepts Fondamentaux
 
+![Load Balancing Overview](../assets/diagrams/load-balancing-overview.jpeg)
+
 ```
 LOAD BALANCING - VUE D'ENSEMBLE
 ══════════════════════════════════════════════════════════
@@ -546,6 +548,8 @@ spec:
 ## Haute Disponibilité
 
 ### HAProxy + Keepalived
+
+![HAProxy Keepalived HA](../assets/diagrams/haproxy-keepalived-ha.jpeg)
 
 ```
 ARCHITECTURE HA

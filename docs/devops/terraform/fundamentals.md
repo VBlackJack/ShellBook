@@ -242,6 +242,8 @@ file_path = "./generated.txt"
 
 ### Workflow Standard
 
+![Terraform CLI Lifecycle](../../assets/diagrams/terraform-cli-lifecycle.jpeg)
+
 ```mermaid
 flowchart TD
     A[terraform init] --> B[terraform fmt]
@@ -506,6 +508,8 @@ Successfully configured the backend "s3"!
 ```
 
 ### State Locking : Éviter les Conflits
+
+![Terraform State No Locking Danger](../../assets/diagrams/terraform-state-no-locking-danger.jpeg)
 
 **Sans Locking :**
 ```

@@ -20,6 +20,8 @@ Alternative Open Source robuste à Active Directory sur Linux. Annuaire LDAP hau
 
 **389 Directory Server = Le serveur LDAP de référence pour Red Hat/CentOS**
 
+![AD vs 389DS Comparison](../assets/diagrams/ad-vs-389ds-comparison.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                  POURQUOI 389 DIRECTORY SERVER ?             │
@@ -190,6 +192,8 @@ ldapsearch -x -H ldap://localhost:389 \
 ## Sécurité : Configuration LDAPS (TLS Obligatoire)
 
 ### Pourquoi LDAPS ?
+
+![LDAP vs LDAPS Security](../assets/diagrams/ldap-vs-ldaps-security.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -599,6 +603,8 @@ sudo dsconf mycorp config get | grep accesslog
 ### Concept
 
 **Réplication multi-maître = Plusieurs serveurs LDAP synchronisés en temps réel.**
+
+![389DS Multi-Master Replication](../assets/diagrams/389ds-multi-master-replication.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

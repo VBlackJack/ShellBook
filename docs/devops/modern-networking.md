@@ -15,6 +15,8 @@ Gérer le trafic quand les IPs changent chaque minute. Routing dynamique et Serv
 
 ## Le Problème du Statique
 
+![Networking Static vs Dynamic](../assets/diagrams/networking-static-vs-dynamic.jpeg)
+
 ### Nginx/HAProxy Classique : Le Cauchemar des Conteneurs
 
 ```
@@ -89,6 +91,8 @@ graph LR
 ## Traefik (Edge Router)
 
 ### Architecture : Reverse Proxy Auto-Configurant
+
+![Traefik Edge Router Architecture](../assets/diagrams/traefik-edge-router-architecture.jpeg)
 
 ```mermaid
 graph TB
@@ -517,6 +521,8 @@ chmod 600 letsencrypt/acme.json
 
 ### Architecture : Server + Agents
 
+![Consul Service Discovery Architecture](../assets/diagrams/consul-service-discovery-arch.jpeg)
+
 ```mermaid
 graph TB
     subgraph "Consul Cluster"
@@ -880,6 +886,8 @@ while True:
 ```
 
 ### Architecture Service Mesh
+
+![Service Mesh Sidecar Architecture](../assets/diagrams/service-mesh-sidecar-architecture.jpeg)
 
 ```mermaid
 graph LR

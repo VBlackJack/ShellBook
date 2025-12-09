@@ -18,6 +18,8 @@ Infrastructure as Code sans agents.
 
 **Aucun logiciel à installer sur les cibles.** Ansible utilise SSH (Linux) ou WinRM (Windows).
 
+![Ansible Agentless Architecture](../../assets/diagrams/ansible-agentless-architecture.jpeg)
+
 ```
 ┌─────────────────┐         SSH          ┌─────────────────┐
 │  Control Node   │ ──────────────────►  │  Managed Node   │

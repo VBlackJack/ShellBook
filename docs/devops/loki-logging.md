@@ -13,6 +13,8 @@ Agrégation et requêtes de logs avec Grafana Loki : architecture, déploiement 
 
 ## Concepts
 
+![Loki Architecture Full Stack](../assets/diagrams/loki-architecture-full-stack.jpeg)
+
 ```
 ARCHITECTURE LOKI
 ══════════════════════════════════════════════════════════
@@ -63,6 +65,8 @@ Loki vs ELK :
 ```
 
 ### Composants
+
+![Loki Components Detailed](../assets/diagrams/loki-components-detailed.jpeg)
 
 ```
 COMPOSANTS LOKI

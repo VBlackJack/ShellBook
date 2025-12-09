@@ -21,6 +21,8 @@ L'usine logicielle souveraine. Du code au déploiement sans sortir du réseau.
 
 GitLab CI/CD fonctionne selon un modèle distribué où les tâches sont exécutées par des **Runners** (agents) orchestrés par le **Coordinator** (serveur GitLab).
 
+![GitLab CI Coordinator-Agent](../assets/diagrams/gitlab-ci-coordinator-agent.jpeg)
+
 ```mermaid
 flowchart LR
     A[GitLab Server<br/>Coordinator] -->|1. Poll toutes les 3s| B[Runner 1<br/>Docker]
@@ -268,6 +270,8 @@ nom_du_job:
 ---
 
 ### Artifacts vs Cache : La Différence Cruciale
+
+![GitLab Artifacts vs Cache](../assets/diagrams/gitlab-artifacts-vs-cache.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

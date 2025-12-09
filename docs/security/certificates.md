@@ -14,6 +14,8 @@ Une référence complète pour gérer les certificats X.509 dans les environneme
 
 ## Vue d'ensemble du Cycle de Vie des Certificats
 
+![Certificate Lifecycle Complete](../assets/diagrams/certificate-lifecycle-complete.jpeg)
+
 ```mermaid
 flowchart LR
     A[🔑 Private Key] --> B[📄 CSR]
@@ -150,6 +152,8 @@ flowchart LR
 ## Gestion des CRL (Certificate Revocation Lists)
 
 ### Pourquoi un Miroir CRL Interne ?
+
+![CRL Mirror Internal Architecture](../assets/diagrams/crl-mirror-internal-architecture.jpeg)
 
 Dans les infrastructures sécurisées (SecNumCloud, réseaux isolés), les serveurs **ne doivent pas** accéder directement à Internet.
 

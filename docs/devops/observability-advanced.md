@@ -20,6 +20,8 @@ Passer de la visualisation passive à l'action proactive. Gestion des astreintes
 **Prometheus = Collecte + Évaluation des alertes**
 **AlertManager = Déduplication + Groupement + Routage + Silence**
 
+![AlertManager Chaos vs Intelligence](../assets/diagrams/alertmanager-chaos-vs-intelligence.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              SANS ALERTMANAGER (Chaos)                       │
@@ -370,6 +372,8 @@ curl -X POST http://localhost:9093/api/v1/silences -d '{
 
 **Problème :** Votre serveur Nginx tourne (CPU/RAM OK), mais votre site est-il accessible ?
 
+![Blackbox Traditional vs Synthetic](../assets/diagrams/blackbox-traditional-vs-synthetic.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │           MONITORING TRADITIONNEL (Insuffisant)              │
@@ -408,6 +412,8 @@ curl -X POST http://localhost:9093/api/v1/silences -d '{
 ---
 
 ### Architecture Blackbox Exporter
+
+![Blackbox Exporter Flow](../assets/diagrams/blackbox-exporter-flow.jpeg)
 
 ```mermaid
 flowchart LR
@@ -691,6 +697,8 @@ groups:
 ---
 
 ## La Stack ELK : Elasticsearch, Logstash, Kibana
+
+![ELK Stack Pipeline Complete](../assets/diagrams/elk-stack-pipeline-complete.jpeg)
 
 ### ELK vs Loki : Quand Utiliser Quoi ?
 
@@ -1009,6 +1017,8 @@ curl -X GET "localhost:9200/logs-*/_search?pretty"
 ### Théorie Google SRE
 
 **Les 4 signaux dorés = Les 4 métriques essentielles pour monitorer n'importe quel système.**
+
+![SRE Golden Signals Four Metrics](../assets/diagrams/sre-golden-signals-four-metrics.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

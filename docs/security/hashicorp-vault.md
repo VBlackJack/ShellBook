@@ -56,6 +56,8 @@ git log --all --full-history -- "*env*"
 
 ### La Solution : HashiCorp Vault
 
+![Vault Architecture Complete](../assets/diagrams/vault-architecture-complete.jpeg)
+
 ```mermaid
 flowchart TD
     A[Application] -->|1. Authenticate| B[Vault]
@@ -116,6 +118,8 @@ vault write transit/encrypt/my-app plaintext=$(base64 <<< "my-secret")
 ```
 
 ### 2. Dynamic Secrets (Game Changer)
+
+![Vault Dynamic Secrets Sequence](../assets/diagrams/vault-dynamic-secrets-sequence.jpeg)
 
 **Problème des secrets statiques :**
 ```
@@ -178,6 +182,8 @@ username           v-token-readonly-abc123def456-1634567890
 
 **Chaque secret a un cycle de vie :**
 
+![Vault Secret Lifecycle Leasing](../assets/diagrams/vault-secret-lifecycle-leasing.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Secret Lifecycle                      │
@@ -221,6 +227,8 @@ vault lease revoke -prefix database/creds/readonly
 **Problème :** Comment protéger Vault lui-même ?
 
 **Solution : Shamir's Secret Sharing**
+
+![Vault Shamir Secret Sharing](../assets/diagrams/vault-shamir-secret-sharing.jpeg)
 
 ```
 Master Key (déchiffre toutes les données)
@@ -841,6 +849,8 @@ password = {{ database_password }}  # Injecté depuis Vault
 - ✅ Audit Vault de chaque accès
 
 ### Pattern 2 : Kubernetes Agent Injector (Sidecar)
+
+![Vault K8s Agent Injector Sidecar](../assets/diagrams/vault-k8s-agent-injector-sidecar.jpeg)
 
 **Architecture :**
 

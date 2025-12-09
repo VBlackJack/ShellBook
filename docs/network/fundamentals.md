@@ -249,6 +249,8 @@ flowchart TD
 
 **Problème sans DMZ :**
 
+![Network No DMZ Danger](../assets/diagrams/network-no-dmz-danger.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              ARCHITECTURE SANS DMZ (DANGEREUX)               │
@@ -267,6 +269,8 @@ flowchart TD
 ```
 
 **Solution avec DMZ :**
+
+![Network DMZ Secure Architecture](../assets/diagrams/network-dmz-secure-architecture.jpeg)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -317,6 +321,8 @@ flowchart TD
 ### Types de DMZ
 
 #### 1. DMZ Simple (3-Legs Firewall)
+
+![DMZ Simple Three-Legs Firewall](../assets/diagrams/dmz-simple-three-legs-firewall.jpeg)
 
 **Un seul firewall avec 3 interfaces réseau.**
 

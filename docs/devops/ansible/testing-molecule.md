@@ -67,6 +67,8 @@ flowchart LR
 
 ### Les 3 Composants
 
+![Molecule Framework Architecture](../../assets/diagrams/molecule-framework-architecture.jpeg)
+
 ```
 ┌─────────────────────────────────────────┐
 │           Molecule Framework             │
@@ -832,6 +834,8 @@ root@instance:/# curl http://localhost
 ## Référence Rapide
 
 ### Cycle de Vie Molecule
+
+![Molecule Lifecycle Cycle](../../assets/diagrams/molecule-lifecycle-cycle.jpeg)
 
 ```
 ┌──────────┐

@@ -596,6 +596,8 @@ Get-WinEvent -FilterHashtable @{
 
 ### Modèle Resource Forest
 
+![AD Resource Forest Model](../assets/diagrams/ad-resource-forest-model.jpeg)
+
 ```
 RESOURCE FOREST MODEL
 ══════════════════════════════════════════════════════════
