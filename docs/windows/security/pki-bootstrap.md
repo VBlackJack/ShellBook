@@ -19,35 +19,6 @@ Génération de certificats machine pour VPN/802.1X avant la jointure domaine.
 
 ![PKI Bootstrap Chicken-Egg Problem](../../assets/diagrams/pki-bootstrap-chicken-egg-problem.jpeg)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    PROBLÈME "CHICKEN & EGG"                  │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Nouvelle machine Windows (non jointe au domaine)        │
-│  2. Pour rejoindre le domaine → Besoin de se connecter au VPN│
-│  3. Pour se connecter au VPN → Besoin d'un certificat machine│
-│  4. Pour obtenir un certificat → Besoin de l'auto-enrollment AD│
-│  5. Pour l'auto-enrollment → Besoin d'être joint au domaine │
-│                                                              │
-│  ➜ Boucle impossible !                                      │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│                      SOLUTION : BOOTSTRAP                    │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Générer un CSR manuellement (certreq + fichier .inf)    │
-│  2. Soumettre le CSR à la CA (via processus offline)        │
-│  3. Installer le certificat signé sur la machine            │
-│  4. La machine peut maintenant se connecter au VPN           │
-│  5. Une fois connectée au VPN → Jointure au domaine         │
-│  6. Auto-enrollment activé → Rotation automatique des certs │
-│                                                              │
-│  ✓ Le certificat "bootstrap" permet l'amorçage du cycle     │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
 !!! tip "Cas d'usage typiques"
     - **Postes nomades** : Laptops devant se connecter au VPN avant la jointure domaine
     - **Serveurs DMZ** : Isolation réseau stricte (pas d'accès direct à l'AD)
@@ -299,41 +270,6 @@ function Install-BootstrapCertificate {
 ## Workflow Complet
 
 ![PKI Bootstrap Workflow Complete](../../assets/diagrams/pki-bootstrap-workflow-complete.jpeg)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   WORKFLOW BOOTSTRAP PKI                     │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  [ÉTAPE 1 : Génération CSR - Machine Offline]               │
-│  PS> New-BootstrapCSR -Hostname "WKS-01" `                  │
-│         -DomainFQDN "corp.mycorp.internal"                   │
-│                                                              │
-│  [ÉTAPE 2 : Transfert CSR - USB/Email Sécurisé]             │
-│  Copier le fichier .req vers une machine avec accès CA      │
-│                                                              │
-│  [ÉTAPE 3 : Soumission CA]                                  │
-│  PS> certreq -submit -config "srv-ca-01\MyCorp-CA" `        │
-│         WKS-01-Bootstrap.req WKS-01-Bootstrap.cer            │
-│                                                              │
-│  [ÉTAPE 4 : Transfert Certificat]                           │
-│  Copier le fichier .cer vers la machine offline             │
-│                                                              │
-│  [ÉTAPE 5 : Installation]                                   │
-│  PS> Install-BootstrapCertificate `                          │
-│         -CertificatePath "WKS-01-Bootstrap.cer"              │
-│                                                              │
-│  [ÉTAPE 6 : Configuration VPN]                              │
-│  Client VPN → Utiliser "Machine Certificate"                │
-│                                                              │
-│  [ÉTAPE 7 : Jointure Domaine]                               │
-│  PS> Add-Computer -DomainName "corp.mycorp.internal"        │
-│                                                              │
-│  [ÉTAPE 8 : Auto-Enrollment]                                │
-│  GPO appliquée → Certificats futurs gérés automatiquement   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
 
 ---
 

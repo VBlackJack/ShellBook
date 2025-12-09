@@ -16,34 +16,6 @@ Sécurisation et audit des systèmes Windows (Blue Team).
 
 ![Windows Security Stack Layers](../../assets/diagrams/windows-security-stack-layers.jpeg)
 
-```
-WINDOWS SECURITY STACK
-═══════════════════════
-
-┌─────────────────────────────────────────────────────────────┐
-│                    PROTECTION PÉRIMÉTRIQUE                   │
-├─────────────────────────────────────────────────────────────┤
-│  Windows Firewall    │  Defender Antivirus   │  AppLocker   │
-│  (NetSecurity)       │  (Real-time)          │  (Whitelist) │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    GESTION DES ACCÈS                         │
-├─────────────────────────────────────────────────────────────┤
-│  LAPS (Local Admin)  │  BitLocker (Disk)     │  PKI (Certs) │
-│  Password rotation   │  Full disk encryption │  mTLS/VPN    │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    HARDENING & AUDIT                         │
-├─────────────────────────────────────────────────────────────┤
-│  GPO Security       │  Event Logging        │  ANSSI Check  │
-│  (LLMNR, SMBv1)     │  (4624, 4625, 4688)   │  (Compliance) │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ---
 
 ## Guides de Sécurité

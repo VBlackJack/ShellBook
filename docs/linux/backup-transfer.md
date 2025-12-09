@@ -26,18 +26,6 @@ Synchronisation et transfert sécurisé de fichiers.
 
 ![Rsync Delta Transfer Concept](../assets/diagrams/rsync-delta-transfer-concept.jpeg)
 
-```
-┌─────────────────┐                    ┌─────────────────┐
-│     SOURCE      │                    │   DESTINATION   │
-├─────────────────┤     Delta Only     ├─────────────────┤
-│ file1.txt  [=]  │ ─────────────────► │ file1.txt  [=]  │
-│ file2.txt  [M]  │ ═══════════════════│ file2.txt  [M]  │  ← Modifié
-│ file3.txt  [=]  │ ─────────────────► │ file3.txt  [=]  │
-│ file4.txt  [N]  │ ═══════════════════│ file4.txt  [N]  │  ← Nouveau
-└─────────────────┘                    └─────────────────┘
-     [=] Ignoré    [M] Modifié    [N] Nouveau
-```
-
 ### Les Flags Indispensables
 
 ```bash

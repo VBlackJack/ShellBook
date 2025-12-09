@@ -22,23 +22,6 @@ GPO de sécurité, Event Viewer et conformité SecNumCloud.
 
 ![LLMNR NBT-NS Responder Attack](../../assets/diagrams/llmnr-nbtns-responder-attack.jpeg)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  ATTAQUE RESPONDER                           │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Victime cherche \\fileserver (typo, serveur down)       │
-│  2. Broadcast LLMNR/NBT-NS sur le réseau                    │
-│  3. Attaquant répond "C'est moi fileserver !"               │
-│  4. Victime envoie son hash NTLMv2 à l'attaquant            │
-│  5. Attaquant casse le hash offline (Hashcat)               │
-│  6. Attaquant récupère le mot de passe en clair             │
-│                                                              │
-│  Solution : Désactiver LLMNR/NBT-NS via GPO                 │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
 **GPO : Désactiver LLMNR**
 
 ```

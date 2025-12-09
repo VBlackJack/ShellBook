@@ -79,39 +79,6 @@ Accès Réseau:
 
 ![WSL2 Architecture Layers](../assets/diagrams/wsl2-architecture-layers.jpeg)
 
-```
-ARCHITECTURE WSL2
-══════════════════════════════════════════════════════════
-
-┌─────────────────────────────────────────────────────────┐
-│                    Windows 11/10                        │
-├─────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐  │
-│  │   Ubuntu    │  │   Debian    │  │  Autres Distros │  │
-│  │   22.04     │  │    12       │  │  (RHEL, Alpine) │  │
-│  └──────┬──────┘  └──────┬──────┘  └────────┬────────┘  │
-│         └────────────────┼──────────────────┘           │
-│                          ▼                              │
-│         ┌────────────────────────────────┐              │
-│         │    Lightweight Utility VM      │              │
-│         │    (Hyper-V, kernel Linux)     │              │
-│         └────────────────────────────────┘              │
-│                          │                              │
-│                          ▼                              │
-│         ┌────────────────────────────────┐              │
-│         │     Windows Hypervisor         │              │
-│         │     (même que Hyper-V)         │              │
-│         └────────────────────────────────┘              │
-└─────────────────────────────────────────────────────────┘
-
-Points clés:
-• Vrai kernel Linux (pas d'émulation)
-• Partage mémoire dynamique avec Windows
-• Accès fichiers Windows via /mnt/c, /mnt/d...
-• Accès fichiers Linux via \\wsl$\Ubuntu\...
-• Réseau : localhost partagé avec Windows
-```
-
 ### WSL1 vs WSL2
 
 | Aspect | WSL1 | WSL2 |

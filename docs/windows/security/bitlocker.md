@@ -107,40 +107,6 @@ Unlock-BitLocker -MountPoint "D:" -RecoveryPassword "123456-789012-..."
 
 ![BitLocker Network Unlock Comparison](../../assets/diagrams/bitlocker-network-unlock-comparison.jpeg)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  PROBLÈME SANS NETWORK UNLOCK                │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Serveur avec BitLocker + PIN au démarrage :                │
-│  1. Panne de courant                                        │
-│  2. Serveur redémarre                                       │
-│  3. Bloqué sur l'écran "Entrer le PIN BitLocker"            │
-│  4. Admin doit se déplacer physiquement au datacenter       │
-│  5. Entrer le PIN manuellement                              │
-│  6. Serveur démarre enfin                                   │
-│                                                              │
-│  Downtime : Plusieurs heures (déplacement admin)            │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│                  SOLUTION : NETWORK UNLOCK                   │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Panne de courant                                        │
-│  2. Serveur redémarre                                       │
-│  3. Serveur contacte le serveur WDS sur le LAN (DHCP)       │
-│  4. WDS fournit la clé de déverrouillage réseau             │
-│  5. BitLocker déverrouillé automatiquement                  │
-│  6. Serveur démarre normalement                             │
-│                                                              │
-│  Downtime : Quelques minutes (automatique)                  │
-│                                                              │
-│  Sécurité : Si le serveur est volé (hors LAN), le PIN       │
-│             est toujours requis                             │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ### Configuration Network Unlock
 
 **Prérequis :**

@@ -23,22 +23,6 @@ Gestion moderne des mises à jour Windows Server : PSWindowsUpdate, WSUS Legacy,
 
 ![PSWindowsUpdate vs Traditional](../assets/diagrams/pswindowsupdate-vs-traditional.jpeg)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   POURQUOI PSWINDOWSUPDATE ?                 │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  GUI Windows Update                 PSWindowsUpdate          │
-│  ───────────────                    ─────────────            │
-│  ✗ Clic manuel                      ✓ Automatisation         │
-│  ✗ Un serveur à la fois             ✓ Multi-serveurs         │
-│  ✗ Pas de filtrage                  ✓ Filtres avancés        │
-│  ✗ Pas de reporting                 ✓ Logs détaillés         │
-│  ✗ Pas de reboot contrôlé           ✓ Reboot planifié        │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ### Installation
 
 ```powershell
@@ -376,23 +360,6 @@ $WSUSUtil = "C:\Program Files\Update Services\Tools\wsusutil.exe"
 
 ![Patching Traditional vs Hotpatching](../assets/diagrams/patching-traditional-vs-hotpatching.jpeg)
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│              PATCHING TRADITIONNEL vs HOTPATCHING            │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Traditionnel                     Hotpatching                │
-│  ─────────────                    ────────────               │
-│  1. Télécharger patch             1. Télécharger patch       │
-│  2. Installer                     2. Appliquer en mémoire    │
-│  3. Redémarrer serveur (5-10min)  3. Redémarrer processus    │
-│  4. Downtime = $$$ perdu          4. Serveur reste UP        │
-│                                                              │
-│  Reboot : Mensuel                 Reboot : Trimestriel       │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ### Prérequis Hotpatching
 
 **Disponibilité :**
@@ -521,33 +488,6 @@ az rest --method get --url \
 **Le Pattern "36 Heures" = Déploiement progressif des patchs sur 5 groupes avec délais calculés pour garantir la continuité de service.**
 
 ![Patch Management 36h Pattern](../assets/diagrams/patch-management-36h-pattern.jpeg)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│               DÉPLOIEMENT STANDARD (RISQUÉ)                  │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Tous les serveurs patchés en même temps :                  │
-│  ✗ Un patch défectueux = TOUS les serveurs crashent         │
-│  ✗ Pas de rollback possible                                 │
-│  ✗ Downtime total de l'infrastructure                       │
-│                                                              │
-│  Résultat : Catastrophe si patch problématique              │
-│                                                              │
-├─────────────────────────────────────────────────────────────┤
-│               DÉPLOIEMENT ÉCHELONNÉ (PATTERN 36H)            │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Groupes successifs avec délais :                           │
-│  1. Tester sur groupe pilote (Groupe 1)                     │
-│  2. Observer 4 heures (détection problèmes)                 │
-│  3. Si OK → Continuer les autres groupes                    │
-│  4. Si KO → STOP, rollback, patcher seulement Groupe 1      │
-│                                                              │
-│  Résultat : Limitation du blast radius                      │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
 
 **Avantages :**
 - ✅ **Limitation du risque** : Si un patch pose problème, seul le Groupe 0/1 est impacté
@@ -729,23 +669,6 @@ Register-ScheduledTask -TaskName "Patch-Group4-Perimeter" -Trigger $Trigger -Act
 ### Timeline Visuelle (36 Heures)
 
 ![Patch Groups Timeline 36 Hours](../assets/diagrams/patch-groups-timeline-36hours.jpeg)
-
-```
-Mardi 02:00         Mardi 06:00         Mardi 14:00         Mercredi 02:00      Mercredi 14:00
-    │                   │                   │                    │                    │
-    ▼                   ▼                   ▼                    ▼                    ▼
-┌───────┐           ┌───────┐           ┌───────┐           ┌───────┐           ┌───────┐
-│ G0    │  +4h →    │ G1    │  +8h →    │ G2    │  +12h →   │ G3    │  +12h →   │ G4    │
-│ PDC   │           │ DC    │           │ PKI   │           │ Web   │           │ GW    │
-│       │           │ Sec   │           │ WSUS  │           │ App   │           │ VPN   │
-│ MANUAL│           │ AUTO  │           │ AUTO  │           │ AUTO  │           │ AUTO  │
-└───────┘           └───────┘           └───────┘           └───────┘           └───────┘
-    │                   │                   │                    │                    │
-    └─────── Observer ──┴──── Observer ────┴──── Observer ─────┴──── Observer ──────┘
-            (4 heures)        (8 heures)         (12 heures)         (12 heures)
-
-Délai total : 36 heures (Mardi 02:00 → Mercredi 14:00)
-```
 
 ### Script d'Automatisation Complet
 
