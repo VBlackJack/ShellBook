@@ -62,6 +62,8 @@ Transformer la couche de données en service résilient. Failover automatique et
 
 ## PostgreSQL HA : Le Standard (Patroni)
 
+![Patroni PostgreSQL HA Architecture](../assets/diagrams/patroni-postgresql-ha-architecture.jpeg)
+
 ### Architecture : Patroni + Etcd + HAProxy
 
 ```mermaid

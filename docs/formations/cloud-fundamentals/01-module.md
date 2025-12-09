@@ -260,6 +260,8 @@ graph LR
 
 ## 5. Les Modèles de Déploiement
 
+![Cloud Deployment Models](../../assets/diagrams/cloud-deployment-models.jpeg)
+
 ### 5.1 Les 4 Modèles
 
 ```mermaid
@@ -302,6 +304,8 @@ graph TB
 ## 6. Les Acteurs du Marché
 
 ### 6.1 Parts de Marché (2024)
+
+![Cloud Market Share 2024](../../assets/diagrams/cloud-market-share-2024.jpeg)
 
 ```mermaid
 pie title Parts de Marché Cloud IaaS (Q3 2024)

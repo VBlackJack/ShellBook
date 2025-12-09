@@ -23,6 +23,8 @@ tags:
 
 ## 1. Infrastructure as Code (IaC)
 
+![Infrastructure as Code Workflow](../../assets/diagrams/infrastructure-as-code-workflow.jpeg)
+
 ### 1.1 Le Problème de la Gestion Manuelle
 
 ![Gestion Manuelle vs Infrastructure as Code](../../assets/diagrams/iac-vs-manual.jpeg)
@@ -86,6 +88,8 @@ graph TB
 ![Cycle Workflow Terraform](../../assets/diagrams/terraform-workflow-cycle.jpeg)
 
 ### 2.1 Architecture Terraform
+
+![Terraform Core Architecture](../../assets/diagrams/terraform-core-architecture.jpeg)
 
 ```mermaid
 graph TB
@@ -290,6 +294,8 @@ output "tenant_dn" {
 ---
 
 ## 4. Le State Terraform
+
+![Terraform State Management](../../assets/diagrams/terraform-state-management.jpeg)
 
 ### 4.1 Qu'est-ce que le State ?
 

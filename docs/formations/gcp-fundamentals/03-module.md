@@ -24,6 +24,8 @@ tags:
 
 ## 1. VPC (Virtual Private Cloud)
 
+![GCP VPC Network Model](../../assets/diagrams/gcp-vpc-network-model.jpeg)
+
 ### Qu'est-ce qu'un VPC ?
 
 Un **VPC** est un réseau privé virtuel global dans GCP :

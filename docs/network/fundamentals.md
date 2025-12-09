@@ -187,6 +187,8 @@ Déboguer les problèmes réseau couche par couche, de bas en haut.
 
 ## Architecture de Sécurité : La DMZ
 
+![DMZ Security Architecture](../assets/diagrams/dmz-security-architecture.jpeg)
+
 ### Qu'est-ce qu'une DMZ ?
 
 **DMZ = Demilitarized Zone (Zone Démilitarisée)**

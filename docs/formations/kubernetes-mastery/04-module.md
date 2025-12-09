@@ -69,6 +69,8 @@ kubectl get pods -n kube-system | grep -E "calico|cilium|flannel|weave"
 
 ![Kubernetes Services Overview](../../assets/diagrams/k8s-services-overview.jpeg)
 
+![Kubernetes Service Types](../../assets/diagrams/k8s-service-types.jpeg)
+
 | Type | Description |
 |------|-------------|
 | **ClusterIP** | Accessible uniquement dans le cluster, IP virtuelle stable |

@@ -33,6 +33,8 @@ tags:
 
 **VPC (Virtual Private Cloud)** = Réseau virtuel isolé dans le cloud AWS.
 
+![AWS VPC Architecture with Subnets](../../assets/diagrams/aws-vpc-architecture-subnets.jpeg)
+
 ```mermaid
 graph TB
     subgraph "AWS Region: eu-west-1"

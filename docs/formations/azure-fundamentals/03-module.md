@@ -23,6 +23,8 @@ tags:
 
 ## 1. Concepts Fondamentaux VNet
 
+![Azure Virtual Network Architecture](../../assets/diagrams/azure-vnet-architecture.jpeg)
+
 ### 1.1 Architecture VNet
 
 ```mermaid

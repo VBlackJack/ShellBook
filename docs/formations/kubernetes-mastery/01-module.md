@@ -101,6 +101,8 @@ ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-snapshot.db \
 
 ### 2.5 Controller Manager
 
+![Kubernetes Controller Reconciliation Loop](../../assets/diagrams/k8s-controller-reconciliation-loop.jpeg)
+
 ```yaml
 # Le Controller Manager exécute les boucles de contrôle
 # Chaque controller surveille et réconcilie un type de ressource

@@ -33,6 +33,8 @@ tags:
 
 **EC2 (Elastic Compute Cloud)** = Machines virtuelles à la demande dans le cloud AWS.
 
+![EC2 Architecture Overview](../../assets/diagrams/ec2-architecture-overview.jpeg)
+
 ```mermaid
 graph TD
     subgraph "AWS Region: eu-west-1"
@@ -101,6 +103,8 @@ m6i.2xlarge
 ```
 
 ### 1.3 Arbre de Décision - Choix d'Instance
+
+![EC2 Instance Selection Flowchart](../../assets/diagrams/ec2-instance-selection-flowchart.jpeg)
 
 ```mermaid
 flowchart TD
@@ -472,6 +476,8 @@ aws imagebuilder create-distribution-configuration \
 ## 7. Auto Scaling
 
 ### 7.1 Architecture Auto Scaling
+
+![AWS Auto Scaling Architecture](../../assets/diagrams/aws-auto-scaling-architecture.jpeg)
 
 ```mermaid
 graph TB

@@ -34,6 +34,8 @@ La source de vérité est Git. Le cluster se synchronise tout seul. Fini les `ku
 
 ### Pull vs Push : La Différence Sécuritaire
 
+![GitOps Push vs Pull Model](../assets/diagrams/gitops-push-vs-pull-model.jpeg)
+
 ```mermaid
 flowchart TB
     subgraph "PUSH MODEL (Jenkins/GitLab CI)"

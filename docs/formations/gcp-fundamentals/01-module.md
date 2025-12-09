@@ -30,6 +30,8 @@ Google Cloud organise les ressources dans une **hiérarchie à 4 niveaux** :
 
 ![Hiérarchie des Ressources GCP](../../assets/diagrams/gcp-resource-hierarchy.jpeg)
 
+![GCP Project Hierarchy](../../assets/diagrams/gcp-project-hierarchy.jpeg)
+
 ```mermaid
 graph TD
     A[🏢 Organization<br/>example.com] --> B[📁 Folder<br/>Production]

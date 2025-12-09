@@ -12,6 +12,8 @@ Avant de manipuler des Big Data, il faut comprendre l'architecture qui permet de
 
 ![Modern Data Stack](../assets/infographics/databases/modern-data-stack.jpeg)
 
+![Modern Data Stack Architecture](../assets/diagrams/modern-data-stack-architecture.jpeg)
+
 ## 1. OLTP vs OLAP
 
 La distinction fondamentale en gestion de données.
@@ -69,7 +71,7 @@ Un sous-ensemble du Data Warehouse, spécialisé pour un métier précis (ex: Da
 
 Le plus simple et le plus performant pour les requêtes analytiques.
 
-![Star Schema - Modèle en Étoile](../assets/diagrams/star-schema-bi.jpeg)
+![Star Schema Data Warehouse](../assets/diagrams/star-schema-data-warehouse.jpeg)
 
 ### Exemple SQL : E-commerce
 
