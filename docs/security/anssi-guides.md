@@ -782,5 +782,5 @@ Checklist ANSSI:
 
 - [SecNumCloud](secnumcloud.md) - Référentiel cloud
 - [SSH Hardening](../linux/ssh-hardening.md) - Durcissement SSH
-- [Windows Defender](../windows/windows-defender.md) - Protection Windows
+- [Windows Defender](../windows/security/firewall-defender.md) - Protection Windows
 - [NXLog](../windows/nxlog.md) - Centralisation logs

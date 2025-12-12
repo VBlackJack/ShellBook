@@ -512,4 +512,4 @@ Invoke-ScriptAnalyzer -Path ".\MyModule" -ExcludeRule PSUseShouldProcessForState
 
 - [PowerShell Remoting](powershell-remoting.md) - Administration à distance
 - [PowerShell DSC](powershell-dsc.md) - Configuration as Code
-- [Windows Security](windows-security.md) - Sécurité
+- [Windows Security](security/index.md) - Sécurité

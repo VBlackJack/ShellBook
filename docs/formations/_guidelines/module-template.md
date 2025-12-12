@@ -132,9 +132,11 @@ graph LR
 ## Ressources Complémentaires
 
 - [Documentation officielle](https://example.com)
-- [Guide ShellBook associé](../../path/to/guide.md)
+- Guide ShellBook associé : `../../path/to/guide.md` *(à remplacer)*
 
 ---
 
+<!-- Navigation à adapter selon le module
 | [← Module Précédent](./XX-module.md) | [Module Suivant →](./XX-module.md) |
 |:-------------------------------------|-----------------------------------:|
+-->

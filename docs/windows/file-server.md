@@ -275,4 +275,4 @@ Checklist File Server:
 
 - [Disk Management](disk-management.md) - Gestion des disques
 - [Active Directory](active-directory.md) - Groupes et permissions
-- [Windows Security](windows-security.md) - Sécurité fichiers
+- [Windows Security](security/index.md) - Sécurité fichiers

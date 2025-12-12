@@ -257,6 +257,6 @@ Checklist Credential Guard:
 
 **Voir aussi :**
 
-- [Windows Security](windows-security.md) - Sécurité Windows
-- [BitLocker](bitlocker.md) - Chiffrement disque
+- [Windows Security](security/index.md) - Sécurité Windows
+- [BitLocker](security/bitlocker.md) - Chiffrement disque
 - [AppLocker](applocker.md) - Contrôle des applications

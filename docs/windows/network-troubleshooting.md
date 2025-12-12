@@ -479,6 +479,6 @@ Checklist Troubleshooting:
 
 **Voir aussi :**
 
-- [Windows Firewall](windows-firewall.md) - Configuration firewall
+- [Windows Firewall](security/firewall-defender.md) - Configuration firewall
 - [Event Logs](event-logs.md) - Journaux d'événements
 - [DNS Server](dns-server.md) - Configuration DNS

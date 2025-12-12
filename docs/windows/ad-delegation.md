@@ -544,4 +544,4 @@ foreach ($admin in $adminAccounts) {
 
 - [Active Directory](active-directory.md) - Fondamentaux AD
 - [AD Trusts](ad-trusts.md) - Relations d'approbation
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows

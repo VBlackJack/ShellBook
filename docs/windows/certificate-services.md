@@ -254,5 +254,5 @@ Checklist PKI:
 **Voir aussi :**
 
 - [PKI & Certificats (Formation)](../formations/pki-certificates/index.md) - Formation complète
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows
 - [OpenSSL CLI](../security/openssl-cli.md) - Outils OpenSSL

@@ -610,4 +610,4 @@ Checklist NPS:
 
 - [Certificate Services](certificate-services.md) - PKI pour certificats
 - [Active Directory](active-directory.md) - Groupes et utilisateurs
-- [Windows Firewall](windows-firewall.md) - Règles RADIUS
+- [Windows Firewall](security/firewall-defender.md) - Règles RADIUS

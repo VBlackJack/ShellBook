@@ -390,4 +390,4 @@ Checklist Remoting:
 
 - [PowerShell DSC](powershell-dsc.md) - Desired State Configuration
 - [Event Logs](event-logs.md) - Audit des actions
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows

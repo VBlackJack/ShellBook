@@ -272,6 +272,6 @@ Checklist AppLocker:
 
 **Voir aussi :**
 
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows
 - [Credential Guard](credential-guard.md) - WDAC et VBS
 - [GPO](ad-gpo.md) - Déploiement des politiques

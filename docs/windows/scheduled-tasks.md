@@ -570,4 +570,4 @@ Checklist Task Scheduler:
 
 - [PowerShell Foundations](powershell-foundations.md) - Scripting PowerShell
 - [Event Logs](event-logs.md) - Journaux d'événements
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows

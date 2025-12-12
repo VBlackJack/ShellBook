@@ -40,13 +40,13 @@ Guide complet d'administration Windows Server et Active Directory : de la config
 
 | Article | Description | Niveau |
 |---------|-------------|--------|
-| [Windows Security](windows-security.md) | Bonnes pratiques sécurité | :material-star::material-star: |
+| [Windows Security](security/index.md) | Bonnes pratiques sécurité | :material-star::material-star: |
 | [Credential Guard](credential-guard.md) | Protection des identifiants | :material-star::material-star::material-star: |
-| [BitLocker](bitlocker.md) | Chiffrement des disques | :material-star::material-star: |
+| [BitLocker](security/bitlocker.md) | Chiffrement des disques | :material-star::material-star: |
 | [AppLocker](applocker.md) | Contrôle des applications | :material-star::material-star: |
-| [LAPS](laps.md) | Gestion mots de passe admin locaux | :material-star::material-star: |
-| [Windows Defender](windows-defender.md) | Antivirus et protection | :material-star: |
-| [Windows Firewall](windows-firewall.md) | Pare-feu Windows | :material-star::material-star: |
+| [LAPS](security/laps.md) | Gestion mots de passe admin locaux | :material-star::material-star: |
+| [Windows Defender](security/firewall-defender.md) | Antivirus et protection | :material-star: |
+| [Windows Firewall](security/firewall-defender.md) | Pare-feu Windows | :material-star::material-star: |
 | [Certificate Services](certificate-services.md) | PKI et certificats | :material-star::material-star::material-star: |
 
 ## PowerShell

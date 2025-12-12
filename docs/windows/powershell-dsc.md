@@ -560,4 +560,4 @@ Checklist DSC:
 
 - [PowerShell Remoting](powershell-remoting.md) - Administration à distance
 - [PowerShell Modules](powershell-modules.md) - Création de modules
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows

@@ -596,5 +596,5 @@ Checklist IIS:
 **Voir aussi :**
 
 - [Certificate Services](certificate-services.md) - Gestion PKI
-- [Windows Firewall](windows-firewall.md) - Règles pare-feu
+- [Windows Firewall](security/firewall-defender.md) - Règles pare-feu
 - [Performance Monitoring](performance-monitoring.md) - Monitoring

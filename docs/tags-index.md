@@ -96,7 +96,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 - [Formation : Windows Server Mastery](formations/windows-mastery/index.md)
 - [Formation : Windows Server Mastery](formations/windows-server/index.md)
 - [Group Policy Objects (GPO) - Guide Complet](windows/ad-gpo.md)
-- [LAPS - Local Administrator Password Solution](windows/laps.md)
+- [LAPS - Local Administrator Password Solution](windows/security/laps.md)
 - [Module 11 : Active Directory Core](formations/windows-mastery/11-active-directory-core.md)
 - [Module 2 : Active Directory & GPO - L'Identité au Cœur](formations/windows-server/02-module.md)
 - [Module 4 : Active Directory](formations/windows-hardening/04-module.md)
@@ -217,7 +217,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `antivirus` (1)
 
-- [Windows Defender](windows/windows-defender.md)
+- [Windows Defender](windows/security/firewall-defender.md)
 
 ### `apache` (1)
 
@@ -499,7 +499,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `bitlocker` (3)
 
-- [BitLocker](windows/bitlocker.md)
+- [BitLocker](windows/security/bitlocker.md)
 - [BitLocker (Chiffrement Disque)](windows/security/bitlocker.md)
 - [Module 3 : Sécurité & Hardening - Défendre l'Empire](formations/windows-server/03-module.md)
 
@@ -1077,7 +1077,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 - [Module 3 : Sécurité & Hardening - Défendre l'Empire](formations/windows-server/03-module.md)
 - [Module 9 : Security - Key Vault, Defender & WAF](formations/azure-fundamentals/09-module.md)
-- [Windows Defender](windows/windows-defender.md)
+- [Windows Defender](windows/security/firewall-defender.md)
 - [Windows Firewall & Defender](windows/security/firewall-defender.md)
 
 ### `definitions` (2)
@@ -1317,7 +1317,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 ### `edr` (2)
 
 - [CrowdStrike Falcon : Guide EDR & Troubleshooting](security/crowdstrike-edr.md)
-- [Windows Defender](windows/windows-defender.md)
+- [Windows Defender](windows/security/firewall-defender.md)
 
 ### `eks` (1)
 
@@ -1341,7 +1341,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `encryption` (4)
 
-- [BitLocker](windows/bitlocker.md)
+- [BitLocker](windows/security/bitlocker.md)
 - [BitLocker (Chiffrement Disque)](windows/security/bitlocker.md)
 - [Clés SSH Sécurisées](linux/ssh-keys.md)
 - [Module 4 : Sécurité & Secrets - Ansible Vault](formations/ansible-mastery/04-module.md)
@@ -1491,7 +1491,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 - [Module 9 : Réseau Fondamental](formations/linux-mastery/09-reseau.md)
 - [Netsh: Network Troubleshooting & Legacy Config](windows/netsh-troubleshooting.md)
 - [Windows Firewall & Defender](windows/security/firewall-defender.md)
-- [Windows Firewall Avancé](windows/windows-firewall.md)
+- [Windows Firewall Avancé](windows/security/firewall-defender.md)
 
 ### `firewalld` (2)
 
@@ -2114,7 +2114,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `laps` (3)
 
-- [LAPS - Local Administrator Password Solution](windows/laps.md)
+- [LAPS - Local Administrator Password Solution](windows/security/laps.md)
 - [Module 3 : Sécurité & Hardening - Défendre l'Empire](formations/windows-server/03-module.md)
 - [Windows LAPS (Local Admin Password Solution)](windows/security/laps.md)
 
@@ -2481,7 +2481,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 - [Module 4 : Networking](formations/docker-mastery/04-module.md)
 - [Module 4 : Networking](formations/kubernetes-mastery/04-module.md)
 - [Network Troubleshooting Cheatsheet](linux/cheatsheet-networking.md)
-- [Windows Firewall Avancé](windows/windows-firewall.md)
+- [Windows Firewall Avancé](windows/security/firewall-defender.md)
 
 ### `nfs` (1)
 
@@ -2707,7 +2707,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `passwords` (2)
 
-- [LAPS - Local Administrator Password Solution](windows/laps.md)
+- [LAPS - Local Administrator Password Solution](windows/security/laps.md)
 - [Windows LAPS (Local Admin Password Solution)](windows/security/laps.md)
 
 ### `patch-management` (2)
@@ -3128,7 +3128,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 
 ### `redirect` (1)
 
-- [Windows Security](windows/windows-security.md)
+- [Windows Security](windows/security/index.md)
 
 ### `redis` (4)
 
@@ -3458,7 +3458,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 - [AppLocker](windows/applocker.md)
 - [Astuces & Hacks Docker Pro](devops/docker-advanced.md)
 - [Audit-LocalAdmins.ps1](scripts/powershell/Audit-LocalAdmins.md)
-- [BitLocker](windows/bitlocker.md)
+- [BitLocker](windows/security/bitlocker.md)
 - [BitLocker (Chiffrement Disque)](windows/security/bitlocker.md)
 - [cert_checker.py](scripts/python/cert_checker.md)
 - [certificate-renewal.sh](scripts/bash/certificate-renewal.md)
@@ -4160,7 +4160,7 @@ Cette page liste tous les tags utilisés dans ShellBook pour faciliter la naviga
 - [Ansible for Windows: WinRM & Automation](windows/ansible-windows.md)
 - [AppLocker](windows/applocker.md)
 - [Audit-LocalAdmins.ps1](scripts/powershell/Audit-LocalAdmins.md)
-- [BitLocker](windows/bitlocker.md)
+- [BitLocker](windows/security/bitlocker.md)
 - [Credential Guard et Device Guard](windows/credential-guard.md)
 - [CrowdStrike Falcon : Guide EDR & Troubleshooting](security/crowdstrike-edr.md)
 - [DHCP Server Windows](windows/dhcp-server.md)

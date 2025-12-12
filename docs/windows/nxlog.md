@@ -1001,6 +1001,6 @@ Checklist Centralisation Logs:
 **Voir aussi :**
 
 - [Event Logs](event-logs.md) - Journaux Windows
-- [Windows Defender](windows-defender.md) - Protection endpoint
+- [Windows Defender](security/firewall-defender.md) - Protection endpoint
 - [Loki Logging](../devops/loki-logging.md) - Stack Grafana Loki
 - [Observability Stack](../devops/observability-stack.md) - Monitoring centralisé

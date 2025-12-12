@@ -819,7 +819,7 @@ ansible-galaxy collection list | grep windows
 
     - [PowerShell Foundations](powershell-foundations.md) - Maîtriser PowerShell pour les scripts complexes
     - [Active Directory](active-directory.md) - Gérer AD avec PowerShell (peut être piloté par Ansible)
-    - [Windows Security](windows-security.md) - Hardening Windows avec Ansible
+    - [Windows Security](security/index.md) - Hardening Windows avec Ansible
     - [Ansible Advanced Patterns](../devops/ansible/advanced-patterns.md) - block/rescue, serial, performance
 
 !!! example "Parcours Recommandé"

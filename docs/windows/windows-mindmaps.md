@@ -154,7 +154,7 @@ Get-GPResultantSetOfPolicy -ReportType Html -Path C:\Temp\rsop.html
 ```
 
 !!! tip "Guide Hardening GPO"
-    → [Windows Security : GPO Hardening, BitLocker, Defender](windows-security.md)
+    → [Windows Security : GPO Hardening, BitLocker, Defender](security/index.md)
 
 ---
 
@@ -350,7 +350,7 @@ cipher /e C:\SecretData\confidential.docx
 | **Accès Non Autorisé** | - | ✅ MFA | - | ✅ NTFS ACLs + Audit |
 
 !!! tip "Guide Sécurité Windows Complet"
-    → [Windows Security : Defender, BitLocker, Event Viewer, PKI](windows-security.md)
+    → [Windows Security : Defender, BitLocker, Event Viewer, PKI](security/index.md)
 
 ---
 
@@ -510,7 +510,7 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624}  # Logons réussis
 |---------|------------------|
 | **PowerShell** | [PowerShell Foundations](powershell-foundations.md) • [Remoting](powershell-foundations.md#remote--web) |
 | **Active Directory** | [Active Directory CRUD](active-directory.md) • [Group Management](active-directory.md#gestion-des-groupes) |
-| **Sécurité** | [Windows Security](windows-security.md) • [PKI Bootstrap](windows-security.md#pki-bootstrap-certificat-offline) |
+| **Sécurité** | [Windows Security](security/index.md) • [PKI Bootstrap](security/pki-bootstrap.md) |
 | **Administration** | [Server Administration](server-administration.md) • [Update Management](update-management.md) |
 | **Automatisation** | [Ansible for Windows](ansible-windows.md) |
 

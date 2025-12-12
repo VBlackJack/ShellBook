@@ -742,5 +742,5 @@ Get-ADTrust -Filter * | Where-Object {
 **Voir aussi :**
 
 - [Active Directory](active-directory.md) - Fondamentaux AD
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows
 - [Formation Windows Mastery - Module 11](../formations/windows-mastery/11-active-directory-core.md) - AD en formation

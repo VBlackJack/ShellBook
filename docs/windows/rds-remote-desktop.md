@@ -572,4 +572,4 @@ Checklist RDS:
 
 - [Certificate Services](certificate-services.md) - PKI pour certificats
 - [Failover Cluster](failover-cluster.md) - HA Session Hosts
-- [Windows Firewall](windows-firewall.md) - Règles RDS
+- [Windows Firewall](security/firewall-defender.md) - Règles RDS

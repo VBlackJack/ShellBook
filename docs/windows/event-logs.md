@@ -317,6 +317,6 @@ Checklist Event Logs:
 
 **Voir aussi :**
 
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows
 - [Performance Monitoring](performance-monitoring.md) - Monitoring
 - [PowerShell Remoting](powershell-remoting.md) - Collecte à distance

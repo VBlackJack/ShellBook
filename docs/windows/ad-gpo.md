@@ -556,4 +556,4 @@ Bonnes pratiques GPO:
 
 - [Active Directory](active-directory.md) - Fondamentaux AD
 - [AppLocker](applocker.md) - Restriction des applications
-- [Windows Security](windows-security.md) - Sécurité Windows
+- [Windows Security](security/index.md) - Sécurité Windows
