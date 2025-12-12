@@ -283,6 +283,170 @@ Get-WinEvent -FilterHashtable @{
 
 ---
 
+## Gestion Opérationnelle
+
+### Audit et Reporting
+
+```powershell
+# Machines sans mot de passe LAPS
+Get-ADComputer -Filter * -SearchBase "OU=Servers,DC=corp,DC=local" -Properties ms-Mcs-AdmPwdExpirationTime |
+    Where-Object { $_.'ms-Mcs-AdmPwdExpirationTime' -eq $null } |
+    Select-Object Name, DistinguishedName
+
+# Mots de passe expirés (Legacy LAPS)
+$now = Get-Date
+Get-ADComputer -Filter * -Properties ms-Mcs-AdmPwdExpirationTime |
+    Where-Object {
+        $_.'ms-Mcs-AdmPwdExpirationTime' -and
+        [DateTime]::FromFileTime($_.'ms-Mcs-AdmPwdExpirationTime') -lt $now
+    } |
+    Select-Object Name, @{N='Expiration';E={[DateTime]::FromFileTime($_.'ms-Mcs-AdmPwdExpirationTime')}}
+
+# Windows LAPS - Rapport complet
+Get-ADComputer -Filter * -SearchBase "OU=Servers,DC=corp,DC=local" |
+    ForEach-Object {
+        $laps = Get-LapsADPassword -Identity $_.Name -AsPlainText -ErrorAction SilentlyContinue
+        [PSCustomObject]@{
+            ComputerName = $_.Name
+            HasPassword = [bool]$laps
+            ExpirationTime = $laps.ExpirationTimestamp
+            LastUpdate = $laps.PasswordUpdateTime
+        }
+    } | Export-Csv "C:\Reports\laps-status.csv" -NoTypeInformation
+```
+
+### Troubleshooting
+
+```powershell
+# Vérifier si LAPS est actif sur une machine
+# (Exécuter sur la machine cible)
+Get-ItemProperty "HKLM:\SOFTWARE\Policies\Microsoft Services\AdmPwd" -ErrorAction SilentlyContinue
+
+# Event logs Legacy LAPS
+Get-WinEvent -LogName "Application" -MaxEvents 100 |
+    Where-Object { $_.ProviderName -eq "AdmPwd" }
+
+# Event logs Windows LAPS
+Get-WinEvent -LogName "Microsoft-Windows-LAPS/Operational" -MaxEvents 50
+
+# Forcer le traitement GPO
+gpupdate /force
+
+# Vérifier la CSE Legacy LAPS
+Get-ChildItem "C:\Program Files\LAPS\CSE"
+
+# Tester la connectivité AD
+nltest /dsgetdc:corp.local
+```
+
+### Migration Legacy vers Windows LAPS
+
+```powershell
+# Windows LAPS peut coexister avec Legacy LAPS
+# Mais il faut migrer progressivement
+
+# 1. Déployer Windows LAPS GPO sur un groupe pilote
+# 2. Désactiver Legacy LAPS GPO pour ce groupe
+# 3. Vérifier que Windows LAPS fonctionne
+# 4. Étendre progressivement
+
+# Les attributs sont différents :
+# Legacy : ms-Mcs-AdmPwd
+# Windows LAPS : msLAPS-Password, msLAPS-EncryptedPassword
+
+# Après migration, nettoyer les anciens attributs si souhaité
+```
+
+---
+
+## Intégration avec PAM/PIM
+
+### Utilisation avec un Coffre-Fort
+
+```powershell
+# Exemple : Récupération automatisée pour CyberArk/Thycotic
+# Script à exécuter par le PAM pour récupérer les credentials
+
+param($ComputerName)
+
+Import-Module LAPS
+
+$password = Get-LapsADPassword -Identity $ComputerName -AsPlainText
+if ($password) {
+    # Retourner au format attendu par le PAM
+    [PSCustomObject]@{
+        Username = ".\Administrator"
+        Password = $password.Password
+        Expiration = $password.ExpirationTimestamp
+    } | ConvertTo-Json
+}
+```
+
+### Rotation Manuelle Sécurisée
+
+```powershell
+# Script de connexion sécurisée avec rotation post-utilisation
+function Connect-WithLaps {
+    param(
+        [Parameter(Mandatory)]
+        [string]$ComputerName,
+        [switch]$RotateAfter
+    )
+
+    $laps = Get-LapsADPassword -Identity $ComputerName -AsPlainText
+    if (-not $laps) {
+        Write-Error "No LAPS password found for $ComputerName"
+        return
+    }
+
+    $secPassword = ConvertTo-SecureString $laps.Password -AsPlainText -Force
+    $cred = New-Object PSCredential("$ComputerName\Administrator", $secPassword)
+
+    # Connexion
+    Enter-PSSession -ComputerName $ComputerName -Credential $cred
+
+    # Après déconnexion, forcer la rotation
+    if ($RotateAfter) {
+        Reset-LapsPassword -Identity $ComputerName
+        Write-Host "Password rotated for $ComputerName" -ForegroundColor Green
+    }
+}
+```
+
+---
+
+## Bonnes Pratiques
+
+```yaml
+Checklist LAPS:
+  Déploiement:
+    - [ ] Utiliser Windows LAPS si possible (chiffrement)
+    - [ ] Tester sur un groupe pilote
+    - [ ] Documenter les permissions accordées
+    - [ ] Former le helpdesk à la récupération
+
+  Sécurité:
+    - [ ] Limiter les droits de lecture au strict nécessaire
+    - [ ] Activer le chiffrement (Windows LAPS)
+    - [ ] Activer l'historique des mots de passe
+    - [ ] Auditer les accès aux mots de passe
+
+  Opérations:
+    - [ ] Monitoring des machines sans LAPS
+    - [ ] Alertes sur échecs de rotation
+    - [ ] Rotation après chaque utilisation sensible
+    - [ ] Plan de migration Legacy → Windows LAPS
+
+  Mot de passe:
+    - [ ] Longueur minimum 14-20 caractères
+    - [ ] Tous les types de caractères
+    - [ ] Rotation 30 jours (ou moins si sensible)
+```
+
+---
+
 !!! info "À lire aussi"
     - [Hardening ANSSI](hardening-anssi.md) - GPO de sécurité complètes
     - [Active Directory](../active-directory.md) - Administration AD
+    - [AD Delegation](../ad-delegation.md) - Délégation de permissions
+    - [Credential Guard](../credential-guard.md) - Protection des credentials

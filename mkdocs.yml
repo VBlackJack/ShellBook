@@ -194,6 +194,7 @@ nav:
         - Invoke-PrePatchPreparation.ps1: scripts/powershell/Invoke-PrePatchPreparation.md
         - Repair-WindowsUpdate.ps1: scripts/powershell/Repair-WindowsUpdate.md
         - Get-PatchCompliance.ps1: scripts/powershell/Get-PatchCompliance.md
+        - patch_compliance_report.py: scripts/python/patch_compliance_report.md
         - Test-WSUSHealth.ps1: scripts/powershell/Test-WSUSHealth.md
         - Test-ADHealth.ps1: scripts/powershell/Test-ADHealth.md
         - Test-DNSServer.ps1: scripts/powershell/Test-DNSServer.md
@@ -465,6 +466,8 @@ nav:
           - Glossaire: formations/devops-foundation/glossaire.md
           - Cheatsheet Git: formations/devops-foundation/cheatsheet-git.md
           - Cheatsheet GitHub Actions: formations/devops-foundation/cheatsheet-github-actions.md
+          - Mémo Conventional Commits: formations/devops-foundation/memo-conventional-commits.md
+          - Mémo ShellCheck: formations/devops-foundation/memo-shellcheck.md
       - 📝 MkDocs Tutorial (5h):
         - Programme: formations/mkdocs-tutorial/index.md
         - Module 01 - Installation: formations/mkdocs-tutorial/01-module.md
