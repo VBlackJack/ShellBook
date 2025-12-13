@@ -168,6 +168,9 @@ Processus Windows stockant les credentials des utilisateurs connectés. Cible pr
 
 ## M
 
+### MECM / SCCM (Microsoft Endpoint Configuration Manager)
+Outil de gestion de parc Microsoft (anciennement SCCM). Cible prioritaire car contient des credentials (NAA, Task Sequences) et permet le déploiement de code sur toutes les machines gérées.
+
 ### Mimikatz
 Outil de référence pour l'extraction de credentials Windows (hashes, tickets Kerberos, secrets DPAPI).
 
@@ -177,6 +180,9 @@ Framework décrivant les tactiques, techniques et procédures (TTPs) utilisées 
 ---
 
 ## N
+
+### NAA (Network Access Account)
+Compte SCCM utilisé par les clients pour accéder aux Distribution Points. Souvent sur-privilégié et extractible via DPAPI depuis les clients.
 
 ### NBT-NS (NetBIOS Name Service)
 Protocole legacy de résolution de noms. Vulnérable au poisoning comme LLMNR.

