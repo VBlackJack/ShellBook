@@ -47,6 +47,12 @@ Outil de visualisation des relations AD. Utilise Neo4j pour cartographier les ch
 ### C2 (Command & Control)
 Infrastructure de commande et contrôle permettant de piloter des machines compromises à distance.
 
+### Beacon
+Agent C2 qui communique périodiquement avec le serveur de commande. Contrairement à une session interactive, un beacon "dort" entre les check-ins pour réduire le trafic réseau et éviter la détection.
+
+### BOF (Beacon Object File)
+Code compilé en format COFF (Common Object File Format) exécutable en mémoire par un implant C2. Permet d'étendre les fonctionnalités sans déposer de fichiers sur disque.
+
 ### Certipy
 Outil Python pour l'audit et l'exploitation d'Active Directory Certificate Services (ADCS). Permet d'identifier et exploiter les vulnérabilités ESC1-ESC8.
 
@@ -100,6 +106,13 @@ Objet AD contenant des paramètres de configuration appliqués aux utilisateurs 
 
 ### gMSA (Group Managed Service Account)
 Compte de service géré automatiquement par AD avec rotation de mot de passe (240 caractères). Protection efficace contre Kerberoasting.
+
+---
+
+## H
+
+### Havoc
+Framework C2 open-source avec interface graphique Qt, inspiré de Cobalt Strike. Utilise l'agent "Demon" avec évasion avancée (indirect syscalls, sleep obfuscation).
 
 ---
 
@@ -228,6 +241,9 @@ Ticket Kerberos TGS forgé pour accéder à un service spécifique sans passer p
 
 ### Skeleton Key
 Technique de persistence injectant un mot de passe maître dans LSASS sur un Domain Controller.
+
+### Sliver
+Framework C2 open-source développé par BishopFox en Go. Supporte multiple protocoles (mTLS, HTTPS, DNS, WireGuard) et les extensions BOF/COFF.
 
 ### SMB Relay
 Attaque relayant une authentification NTLM capturée vers un autre serveur.

