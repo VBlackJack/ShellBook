@@ -92,7 +92,10 @@ Mode de récupération des Domain Controllers. Le compte DSRM peut être utilis�
 ## E
 
 ### EDR (Endpoint Detection & Response)
-Solution de sécurité avancée surveillant les endpoints pour détecter et répondre aux menaces.
+Solution de sécurité avancée surveillant les endpoints pour détecter et répondre aux menaces. Utilise API hooking, ETW, kernel callbacks et analyse comportementale.
+
+### Direct Syscall
+Technique d'évasion EDR appelant directement le noyau Windows via l'instruction `syscall` au lieu de passer par ntdll.dll (qui peut être hookée).
 
 ### EKU (Extended Key Usage)
 Extension des certificats X.509 définissant les usages autorisés (Client Authentication, Server Authentication, Code Signing, etc.). Crucial pour les attaques ADCS.
