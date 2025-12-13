@@ -770,6 +770,7 @@ nav:
         - Module 05 - Post-Exploitation: formations/windows-hacking-mastery/05-module.md
         - Module 06 - Projet Final: formations/windows-hacking-mastery/06-tp-final.md
         - Ressources:
+          - Kill Chain Infographie: formations/windows-hacking-mastery/kill-chain.md
           - Glossaire: formations/windows-hacking-mastery/glossaire.md
           - Cheatsheet Tools: formations/windows-hacking-mastery/cheatsheet-tools.md
     - 🧠 Parcours Avancé:
