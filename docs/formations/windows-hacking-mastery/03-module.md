@@ -517,6 +517,357 @@ Get-DomainForeignGroupMember -Domain external.forest
 
 ---
 
+## 6. Détection & Remédiation (Purple Team)
+
+Cette section présente les indicateurs de compromission et les mesures de remédiation pour chaque technique d'attaque. Essentiel pour les équipes Blue Team et les pentesters souhaitant fournir des recommandations concrètes.
+
+### 6.1 LLMNR/NBT-NS Poisoning
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4648 | Logon avec credentials explicites (réseau) |
+| Windows Security | 4624 (Type 3) | Logon réseau depuis IP suspecte |
+| Network | - | Trafic LLMNR (UDP 5355) ou NBT-NS (UDP 137) |
+
+**Règle Sigma :**
+
+```yaml
+title: LLMNR/NBT-NS Poisoning Detection
+status: experimental
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4624
+        LogonType: 3
+    filter:
+        IpAddress|startswith:
+            - '10.'
+            - '192.168.'
+            - '172.16.'
+    condition: selection and not filter
+```
+
+**Indicateurs réseau :**
+
+- Réponses LLMNR depuis une IP non-autorisée
+- Multiples requêtes LLMNR/NBT-NS suivies de connexions SMB
+- Trafic SMB vers des IP non-serveur
+
+#### Remédiation
+
+```powershell
+# Désactiver LLMNR via GPO
+# Computer Configuration > Administrative Templates > Network > DNS Client
+# "Turn off multicast name resolution" = Enabled
+
+# Désactiver NBT-NS via GPO (netsh ou registre)
+# HKLM\SYSTEM\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_*
+# NetbiosOptions = 2
+
+# Script PowerShell pour désactiver NBT-NS
+$adapters = Get-WmiObject Win32_NetworkAdapterConfiguration | Where-Object {$_.IPEnabled -eq $true}
+foreach ($adapter in $adapters) {
+    $adapter.SetTcpipNetbios(2)  # 2 = Disable
+}
+```
+
+!!! success "Mitigation efficace"
+    La désactivation de LLMNR et NBT-NS via GPO élimine complètement ce vecteur d'attaque.
+
+---
+
+### 6.2 SMB Relay
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4624 | Logon Type 3 depuis IP inattendue |
+| Windows Security | 4672 | Privilèges spéciaux assignés |
+| Windows Security | 4648 | Logon avec credentials explicites |
+
+**Indicateurs :**
+
+- Connexion SMB depuis une IP qui n'est pas celle de l'utilisateur légitime
+- Délai anormalement court entre authentification et action admin
+- Même utilisateur connecté simultanément depuis 2 IPs différentes
+
+#### Remédiation
+
+```powershell
+# Activer SMB Signing (OBLIGATOIRE)
+# GPO: Computer Configuration > Policies > Windows Settings > Security Settings
+# > Local Policies > Security Options
+
+# "Microsoft network server: Digitally sign communications (always)" = Enabled
+# "Microsoft network client: Digitally sign communications (always)" = Enabled
+
+# Vérifier via registre
+Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters" -Name RequireSecuritySignature
+# Doit retourner 1
+```
+
+---
+
+### 6.3 Password Spraying
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4625 | Échec d'authentification |
+| Windows Security | 4771 | Kerberos pre-auth failed |
+| Windows Security | 4776 | NTLM credential validation |
+
+**Pattern caractéristique :**
+
+- Même mot de passe testé contre N utilisateurs
+- Délai régulier entre les tentatives (évitement lockout)
+- Source IP unique avec multiples comptes ciblés
+
+**Règle Sigma :**
+
+```yaml
+title: Password Spraying Detection
+status: experimental
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4625
+    timeframe: 10m
+    condition: selection | count(TargetUserName) by IpAddress > 10
+```
+
+#### Remédiation
+
+```powershell
+# Password policy robuste
+# Minimum 14 caractères
+# Lockout après 5 tentatives
+# Durée lockout : 30 minutes
+
+# Activer Smart Lockout (Azure AD) ou Fine-Grained Password Policies
+# Implémenter MFA sur les services exposés
+
+# Monitoring des échecs d'authentification
+Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} -MaxEvents 100 |
+    Group-Object -Property {$_.Properties[5].Value} |
+    Where-Object {$_.Count -gt 5}
+```
+
+---
+
+### 6.4 Kerberoasting
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4769 | Kerberos Service Ticket Request |
+| - | - | Encryption Type = 0x17 (RC4) suspect |
+
+**Pattern caractéristique :**
+
+- Demandes TGS massives depuis un seul utilisateur
+- Demandes pour des services rarement accédés
+- Utilisation de RC4 au lieu d'AES
+
+**Règle Sigma :**
+
+```yaml
+title: Kerberoasting Detection
+status: experimental
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        TicketEncryptionType: '0x17'  # RC4
+        ServiceName|endswith: '$'  # Pas les comptes machine
+    filter:
+        ServiceName|contains:
+            - 'krbtgt'
+            - '$'
+    condition: selection and not filter
+```
+
+#### Remédiation
+
+```powershell
+# 1. Mots de passe longs (25+ caractères) pour comptes de service
+# 2. Utiliser des gMSA (Group Managed Service Accounts)
+
+# Créer un gMSA
+New-ADServiceAccount -Name "gMSA_SQL" `
+    -DNSHostName "gmsa_sql.yourcompany.local" `
+    -PrincipalsAllowedToRetrieveManagedPassword "SQL_Servers"
+
+# 3. Forcer AES pour les comptes de service
+Set-ADUser -Identity svc_backup -KerberosEncryptionType AES128,AES256
+
+# 4. Identifier les comptes Kerberoastables
+Get-ADUser -Filter {ServicePrincipalName -ne "$null"} -Properties ServicePrincipalName |
+    Select-Object Name, ServicePrincipalName
+```
+
+!!! warning "Priorité haute"
+    Kerberoasting est indétectable côté réseau. La seule protection efficace est des mots de passe très longs ou des gMSA.
+
+---
+
+### 6.5 AS-REP Roasting
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4768 | Kerberos TGT Request sans preauth |
+| - | - | Pre-Authentication Type = 0 |
+
+**Règle Sigma :**
+
+```yaml
+title: AS-REP Roasting Detection
+status: experimental
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4768
+        PreAuthType: '0'
+    condition: selection
+```
+
+#### Remédiation
+
+```powershell
+# Identifier les comptes vulnérables
+Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true} -Properties DoesNotRequirePreAuth |
+    Select-Object Name, DoesNotRequirePreAuth
+
+# Corriger : réactiver la pré-authentification
+Set-ADAccountControl -Identity "vulnerable_user" -DoesNotRequirePreAuth $false
+
+# Audit régulier
+# Créer une alerte si un compte est configuré sans preauth
+```
+
+---
+
+### 6.6 Pass-the-Hash / Pass-the-Ticket
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4624 | Logon Type 9 (NewCredentials) suspect |
+| Windows Security | 4648 | Logon avec credentials explicites |
+| Windows Security | 4672 | Privilèges spéciaux (admin) |
+
+**Indicateurs :**
+
+- Logon Type 9 inhabituel
+- Même compte connecté depuis multiples machines simultanément
+- Accès admin sans logon interactif préalable
+
+#### Remédiation
+
+```powershell
+# 1. Activer Credential Guard (Windows 10/Server 2016+)
+# Protège LSASS en isolant les secrets dans une VM
+
+# Vérifier si Credential Guard est actif
+Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard
+
+# 2. Activer Protected Users group
+Add-ADGroupMember -Identity "Protected Users" -Members "admin_sensible"
+# Les membres ne peuvent pas utiliser NTLM, delegation, etc.
+
+# 3. Restreindre les comptes admin
+# - Comptes admin dédiés (pas d'email/navigation)
+# - Tiering model (T0/T1/T2)
+# - PAW (Privileged Access Workstations)
+
+# 4. Activer LSA Protection
+# HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+# RunAsPPL = 1
+```
+
+---
+
+### 6.7 Delegation Attacks
+
+#### Détection
+
+| Source | Event ID | Description |
+|--------|----------|-------------|
+| Windows Security | 4769 | TGS request avec delegation flag |
+| Windows Security | 4768 | TGT avec FORWARDABLE flag |
+| AD Audit | - | Modification msDS-AllowedToActOnBehalfOfOtherIdentity |
+
+**Indicateurs RBCD :**
+
+- Création de compte machine suspecte
+- Modification de l'attribut msDS-AllowedToActOnBehalfOfOtherIdentity
+- S4U2Self/S4U2Proxy depuis un compte inattendu
+
+#### Remédiation
+
+```powershell
+# 1. Identifier les machines avec Unconstrained Delegation
+Get-ADComputer -Filter {TrustedForDelegation -eq $true} |
+    Select-Object Name, TrustedForDelegation
+
+# Corriger (sauf DCs)
+Set-ADComputer -Identity "SRV01" -TrustedForDelegation $false
+
+# 2. Auditer Constrained Delegation
+Get-ADObject -Filter {msDS-AllowedToDelegateTo -like "*"} -Properties msDS-AllowedToDelegateTo |
+    Select-Object Name, msDS-AllowedToDelegateTo
+
+# 3. Protéger les comptes sensibles
+Set-ADUser -Identity "Administrator" -AccountNotDelegated $true
+
+# 4. Restreindre la création de comptes machine
+# Par défaut : 10 machines par utilisateur (ms-DS-MachineAccountQuota)
+Set-ADDomain -Identity "yourcompany.local" -Replace @{"ms-DS-MachineAccountQuota"=0}
+```
+
+---
+
+### 6.8 Tableau Récapitulatif des Event IDs
+
+| Attaque | Event IDs Clés | Priorité |
+|---------|----------------|:--------:|
+| LLMNR Poisoning | 4624 (Type 3), 4648 | Haute |
+| SMB Relay | 4624, 4672, 4648 | Haute |
+| Password Spray | 4625, 4771, 4776 | Haute |
+| Kerberoasting | 4769 (RC4) | Critique |
+| AS-REP Roasting | 4768 (PreAuth=0) | Haute |
+| Pass-the-Hash | 4624 (Type 9), 4648 | Critique |
+| Delegation | 4769, 4768 | Haute |
+| DCSync | 4662 (DS-Replication) | Critique |
+
+### 6.9 Outils de Détection Recommandés
+
+| Outil | Usage | Type |
+|-------|-------|------|
+| **Microsoft Defender for Identity** | Détection comportementale AD | Commercial |
+| **Ping Castle** | Audit de sécurité AD | Gratuit |
+| **Purple Knight** | Assessment AD | Gratuit |
+| **BloodHound** | Cartographie des risques | Open Source |
+| **Sigma** | Règles de détection SIEM | Open Source |
+
+---
+
 ## Exercice Pratique
 
 !!! example "Exercice : Compromission d'un Domaine AD via 3 Chemins"

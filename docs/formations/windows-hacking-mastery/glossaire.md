@@ -99,7 +99,7 @@ Ticket Kerberos TGT forgé avec le hash krbtgt, permettant d'usurper n'importe q
 Objet AD contenant des paramètres de configuration appliqués aux utilisateurs et ordinateurs.
 
 ### gMSA (Group Managed Service Account)
-Compte de service géré par AD avec rotation automatique du mot de passe. Plus sécurisé que les comptes de service classiques.
+Compte de service géré automatiquement par AD avec rotation de mot de passe (240 caractères). Protection efficace contre Kerberoasting.
 
 ---
 
@@ -194,6 +194,9 @@ Famille d'attaques (JuicyPotato, PrintSpoofer, GodPotato) exploitant SeImpersona
 ### Privilege Escalation
 Élévation de privilèges depuis un compte limité vers un compte plus privilégié (admin local, SYSTEM, Domain Admin).
 
+### Purple Team
+Approche combinant Red Team (attaque) et Blue Team (défense) pour améliorer la sécurité. Le Purple Team valide les détections et propose des remédiations.
+
 ---
 
 ## R
@@ -213,6 +216,9 @@ Document définissant le périmètre, les contraintes et les autorisations d'un 
 
 ### SAM (Security Account Manager)
 Base de données locale Windows contenant les hashes des comptes locaux.
+
+### Sigma
+Format standardisé de règles de détection pour SIEM. Permet de définir des signatures d'attaques portables entre différentes plateformes (Splunk, ELK, etc.).
 
 ### SID (Security Identifier)
 Identifiant unique pour chaque objet de sécurité Windows (utilisateur, groupe, machine).
