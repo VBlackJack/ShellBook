@@ -780,6 +780,9 @@ nav:
           - Detection Engineering: formations/windows-hacking-mastery/detection-engineering.md
           - Pivoting & Tunneling: formations/windows-hacking-mastery/pivoting-tunneling.md
           - Password Cracking: formations/windows-hacking-mastery/password-cracking.md
+          - AD Hardening: formations/windows-hacking-mastery/ad-hardening.md
+          - OPSEC & Tradecraft: formations/windows-hacking-mastery/opsec-tradecraft.md
+          - Windows Internals: formations/windows-hacking-mastery/windows-internals.md
           - Glossaire: formations/windows-hacking-mastery/glossaire.md
           - Cheatsheet Tools: formations/windows-hacking-mastery/cheatsheet-tools.md
     - 🧠 Parcours Avancé:

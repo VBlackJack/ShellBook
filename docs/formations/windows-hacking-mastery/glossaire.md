@@ -15,6 +15,9 @@ Définitions des termes techniques utilisés dans cette formation.
 
 ## A
 
+### Access Token
+Structure de données Windows associée à un processus ou thread, contenant l'identité de sécurité (SID), les groupes et les privilèges. Base du contrôle d'accès Windows.
+
 ### ACL (Access Control List)
 Liste définissant les permissions d'accès à un objet (fichier, dossier, objet AD). Composée d'ACE (Access Control Entries).
 
@@ -227,6 +230,18 @@ Technique d'authentification utilisant un hash NTLM au lieu du mot de passe en c
 
 ### Pass-the-Ticket (PtT)
 Technique d'authentification utilisant un ticket Kerberos volé.
+
+### PAW (Privileged Access Workstation)
+Poste de travail dédié à l'administration sécurisée, isolé d'Internet et des activités utilisateur standard. Élément clé du modèle de tiering administratif.
+
+### PEB (Process Environment Block)
+Structure en mémoire contenant les informations d'environnement d'un processus (modules chargés, paramètres, variables). Accessible en user mode.
+
+### Process Injection
+Technique permettant d'exécuter du code dans l'espace mémoire d'un autre processus. Utilisé pour l'évasion et la persistence.
+
+### Protected Users
+Groupe AD spécial dont les membres bénéficient de protections supplémentaires : pas de NTLM, pas de délégation, TGT limité à 4h, AES uniquement.
 
 ### Persistence
 Mécanisme permettant de maintenir l'accès à un système après compromission initiale.
