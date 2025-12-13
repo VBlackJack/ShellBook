@@ -783,6 +783,9 @@ nav:
           - AD Hardening: formations/windows-hacking-mastery/ad-hardening.md
           - OPSEC & Tradecraft: formations/windows-hacking-mastery/opsec-tradecraft.md
           - Windows Internals: formations/windows-hacking-mastery/windows-internals.md
+          - Certifications: formations/windows-hacking-mastery/certifications.md
+          - Troubleshooting: formations/windows-hacking-mastery/troubleshooting.md
+          - Case Studies: formations/windows-hacking-mastery/case-studies.md
           - Glossaire: formations/windows-hacking-mastery/glossaire.md
           - Cheatsheet Tools: formations/windows-hacking-mastery/cheatsheet-tools.md
     - 🧠 Parcours Avancé:
