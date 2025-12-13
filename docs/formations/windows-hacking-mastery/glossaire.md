@@ -19,7 +19,7 @@ Définitions des termes techniques utilisés dans cette formation.
 Liste définissant les permissions d'accès à un objet (fichier, dossier, objet AD). Composée d'ACE (Access Control Entries).
 
 ### ADCS (Active Directory Certificate Services)
-Rôle Windows Server permettant de créer une PKI (Public Key Infrastructure). Souvent mal configuré et exploitable (ESC1-ESC8).
+Rôle Windows Server permettant de créer une PKI (Public Key Infrastructure). Souvent mal configuré et exploitable via les vulnérabilités ESC1-ESC8 (Enrollment, Template ACLs, NTLM Relay).
 
 ### AdminSDHolder
 Objet AD spécial dont les ACLs sont copiées toutes les 60 minutes sur les groupes protégés (Domain Admins, etc.). Utilisé pour la persistence.
@@ -46,6 +46,9 @@ Outil de visualisation des relations AD. Utilise Neo4j pour cartographier les ch
 
 ### C2 (Command & Control)
 Infrastructure de commande et contrôle permettant de piloter des machines compromises à distance.
+
+### Certipy
+Outil Python pour l'audit et l'exploitation d'Active Directory Certificate Services (ADCS). Permet d'identifier et exploiter les vulnérabilités ESC1-ESC8.
 
 ### Constrained Delegation
 Configuration permettant à un service de s'authentifier auprès de services spécifiques au nom d'un utilisateur.
@@ -75,6 +78,12 @@ Mode de récupération des Domain Controllers. Le compte DSRM peut être utilis�
 
 ### EDR (Endpoint Detection & Response)
 Solution de sécurité avancée surveillant les endpoints pour détecter et répondre aux menaces.
+
+### EKU (Extended Key Usage)
+Extension des certificats X.509 définissant les usages autorisés (Client Authentication, Server Authentication, Code Signing, etc.). Crucial pour les attaques ADCS.
+
+### ESC (Escalation)
+Série de vulnérabilités ADCS (ESC1-ESC8) permettant l'escalade de privilèges via les certificats. Découvertes par SpecterOps en 2021.
 
 ### ETW (Event Tracing for Windows)
 Mécanisme de logging Windows utilisé par les solutions de sécurité. Souvent bypassé par les attaquants.
@@ -175,6 +184,9 @@ Technique d'authentification utilisant un ticket Kerberos volé.
 
 ### Persistence
 Mécanisme permettant de maintenir l'accès à un système après compromission initiale.
+
+### PKINIT
+Extension Kerberos permettant l'authentification via certificat X.509 au lieu d'un mot de passe. Utilisé pour convertir un certificat en TGT ou hash NTLM.
 
 ### Potato Attacks
 Famille d'attaques (JuicyPotato, PrintSpoofer, GodPotato) exploitant SeImpersonatePrivilege pour obtenir SYSTEM.

