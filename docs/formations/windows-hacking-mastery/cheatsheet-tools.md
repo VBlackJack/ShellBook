@@ -592,4 +592,114 @@ hashcat -m 13100 kerberoast.txt wordlist.txt
 
 ---
 
+## Forensics & DFIR
+
+### Acquisition Mémoire
+
+```bash
+# WinPMEM
+winpmem_mini_x64.exe memory.raw
+
+# DumpIt
+DumpIt.exe /O memory.raw /N /Q
+
+# Magnet RAM Capture (GUI)
+MagnetRAMCapture.exe
+```
+
+### Volatility 3
+
+```bash
+# Info système
+python3 vol.py -f memory.raw windows.info
+
+# Processus
+python3 vol.py -f memory.raw windows.pslist
+python3 vol.py -f memory.raw windows.pstree
+python3 vol.py -f memory.raw windows.psscan      # Processus cachés
+
+# Réseau
+python3 vol.py -f memory.raw windows.netstat
+python3 vol.py -f memory.raw windows.netscan
+
+# Credentials
+python3 vol.py -f memory.raw windows.hashdump
+python3 vol.py -f memory.raw windows.lsadump
+
+# Malware detection
+python3 vol.py -f memory.raw windows.malfind
+python3 vol.py -f memory.raw windows.ssdt
+
+# Dump processus
+python3 vol.py -f memory.raw windows.memmap --pid 1234 --dump
+```
+
+### KAPE (Triage)
+
+```powershell
+# Collecter artefacts essentiels
+kape.exe --tsource C: --tdest E:\case001\triage --target !SANS_Triage
+
+# Parser les artefacts
+kape.exe --msource E:\case001\triage --mdest E:\case001\parsed --module !EZParser
+```
+
+### EZ Tools (Eric Zimmerman)
+
+```powershell
+# MFT
+MFTECmd.exe -f '$MFT' --csv E:\output
+
+# Prefetch
+PECmd.exe -d C:\Windows\Prefetch --csv E:\output
+
+# Registry
+RECmd.exe -d C:\Windows\System32\config --bn Kroll_Batch.reb --csv E:\output
+
+# Amcache
+AmcacheParser.exe -f Amcache.hve --csv E:\output
+
+# ShellBags
+SBECmd.exe -d UsrClass.dat --csv E:\output
+
+# SRUM
+SrumECmd.exe -f SRUDB.dat -r SOFTWARE --csv E:\output
+```
+
+### Chainsaw (Event Logs)
+
+```bash
+# Hunt avec règles Sigma
+chainsaw hunt ./logs/ -s sigma_rules/ --mapping mapping.yml
+
+# Recherche
+chainsaw search ./logs/ -e "mimikatz"
+chainsaw search ./logs/ -e "powershell" -t 'Event.System.EventID: 4104'
+
+# Timeline
+chainsaw dump ./logs/ --format csv > timeline.csv
+```
+
+### Event IDs Critiques
+
+```powershell
+# Kerberoasting (TGS avec RC4)
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4769} |
+    Where-Object { $_.Properties[5].Value -eq '0x17' }
+
+# Logons suspects
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624} |
+    Where-Object { $_.Properties[8].Value -in @(3, 10) }
+
+# PowerShell suspect
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; ID=4104} |
+    Where-Object { $_.Message -match 'encodedcommand|bypass|downloadstring' }
+
+# Log clearing
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=1102}
+Get-WinEvent -FilterHashtable @{LogName='System'; ID=104}
+```
+
+---
+
 [Retour au Programme](index.md){ .md-button }

@@ -306,6 +306,13 @@ Configuration permettant à un service de stocker le TGT des utilisateurs qui s'
 
 ---
 
+## V
+
+### Volatility
+Framework open-source d'analyse mémoire forensique. Permet d'extraire processus, connexions réseau, credentials et artefacts malware depuis un dump RAM.
+
+---
+
 ## W
 
 ### WinRM (Windows Remote Management)
@@ -313,6 +320,43 @@ Service de gestion à distance Windows utilisant le protocole WS-Management (por
 
 ### WMI (Windows Management Instrumentation)
 Infrastructure de gestion Windows. Les Event Subscriptions WMI permettent la persistence.
+
+---
+
+## Termes Forensics
+
+### Amcache
+Artefact Windows stockant l'historique des exécutables avec leurs hashes SHA1. Situé dans `C:\Windows\appcompat\Programs\Amcache.hve`.
+
+### Chainsaw
+Outil DFIR de recherche rapide dans les Event Logs Windows. Supporte les règles Sigma pour la détection de TTPs connues.
+
+### DFIR (Digital Forensics and Incident Response)
+Discipline combinant l'investigation forensique numérique et la réponse aux incidents de sécurité.
+
+### KAPE (Kroll Artifact Parser and Extractor)
+Outil de triage forensique permettant la collecte et le parsing rapide des artefacts Windows.
+
+### MFT (Master File Table)
+Table principale du système de fichiers NTFS contenant les métadonnées de tous les fichiers. Source essentielle pour les timelines forensiques.
+
+### Prefetch
+Artefact Windows optimisant le chargement des applications. Stocke l'historique d'exécution des 30 derniers jours dans `C:\Windows\Prefetch\`.
+
+### Shimcache (AppCompatCache)
+Cache de compatibilité applicative Windows. Artefact forensique indiquant qu'un exécutable a été présent sur le système (pas nécessairement exécuté).
+
+### SRUM (System Resource Usage Monitor)
+Base de données Windows enregistrant l'utilisation des ressources (réseau, CPU) par application. Utile pour détecter l'exfiltration de données.
+
+### Timeline
+Reconstruction chronologique des événements lors d'une investigation. Combine les artefacts filesystem, registry et event logs.
+
+### Timestomping
+Technique anti-forensique modifiant les timestamps des fichiers pour masquer l'activité malveillante.
+
+### USN Journal (Update Sequence Number)
+Journal NTFS enregistrant les modifications de fichiers. Permet de reconstituer l'historique même après suppression.
 
 ---
 
