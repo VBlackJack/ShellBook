@@ -761,6 +761,17 @@ nav:
         - Module 04 - Active Directory: formations/hacking-mastery/04-module.md
         - Module 05 - Post-Exploitation: formations/hacking-mastery/05-module.md
         - Module 06 - Projet Final: formations/hacking-mastery/06-tp-final.md
+      - 🪟 Windows Hacking Mastery (35-40h):
+        - Programme: formations/windows-hacking-mastery/index.md
+        - Module 01 - Setup & Lab: formations/windows-hacking-mastery/01-module.md
+        - Module 02 - Reconnaissance: formations/windows-hacking-mastery/02-module.md
+        - Module 03 - AD Compromise: formations/windows-hacking-mastery/03-module.md
+        - Module 04 - Privilege Escalation: formations/windows-hacking-mastery/04-module.md
+        - Module 05 - Post-Exploitation: formations/windows-hacking-mastery/05-module.md
+        - Module 06 - Projet Final: formations/windows-hacking-mastery/06-tp-final.md
+        - Ressources:
+          - Glossaire: formations/windows-hacking-mastery/glossaire.md
+          - Cheatsheet Tools: formations/windows-hacking-mastery/cheatsheet-tools.md
     - 🧠 Parcours Avancé:
       - 🧠 AI Engineering (35h):
         - Programme: formations/ai-engineering/index.md

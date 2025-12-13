@@ -271,6 +271,18 @@ Bienvenue dans l'espace **Formations** de ShellBook. Contrairement aux guides de
 
     [:octicons-arrow-right-24: Accéder à la Formation](observability/)
 
+-   :fontawesome-solid-shield-virus:{ .lg .middle } **Windows Hacking Mastery : AD & Post-Exploitation**
+
+    ---
+
+    Formation intensive en offensive security Windows : exploitation Active Directory, escalade de privilèges, post-exploitation et persistence. Scénarios réalistes pour pentesters et red teamers.
+
+    **Compétences :** Kerberoasting, BloodHound, Mimikatz, Pass-the-Hash, Privilege Escalation, Golden Ticket, AMSI Bypass
+    **Durée :** 5 jours (35-40h) - 6 modules + ressources
+    **Profils :** Pentesters, Red Teamers, Analystes Sécurité
+
+    [:octicons-arrow-right-24: Accéder à la Formation](windows-hacking-mastery/)
+
 </div>
 
 ## Comment Utiliser Cette Section ?
@@ -365,6 +377,7 @@ Voir le [Guide de Contribution](../devops/docs-as-code.md) pour plus de détails
 | 🐧 Linux Mastery | 20 modules | ✅ Disponible |
 | 🧠 AI Engineering for Ops | 5 modules | ✅ Disponible |
 | 🏴‍☠️ Ethical Hacking Mastery | 6 modules | ✅ Disponible |
+| 🪟 Windows Hacking Mastery | 6 modules + ressources | ✅ Disponible |
 
 ---
 
