@@ -65,6 +65,9 @@ Code compilé en format COFF (Common Object File Format) exécutable en mémoire
 ### Certipy
 Outil Python pour l'audit et l'exploitation d'Active Directory Certificate Services (ADCS). Permet d'identifier et exploiter les vulnérabilités ESC1-ESC8.
 
+### Chisel
+Outil de tunneling HTTP/HTTPS écrit en Go. Permet de créer des proxies SOCKS et des port forwards à travers des pare-feux via HTTP.
+
 ### Constrained Delegation
 Configuration permettant à un service de s'authentifier auprès de services spécifiques au nom d'un utilisateur.
 
@@ -155,6 +158,9 @@ Solution Microsoft pour gérer les mots de passe des comptes admin locaux de man
 ### Lateral Movement
 Mouvement d'une machine à une autre au sein d'un réseau après compromission initiale.
 
+### Ligolo-ng
+Outil de pivoting créant une interface TUN pour un routage réseau transparent. Élimine le besoin de proxychains pour accéder aux réseaux internes.
+
 ### LDAP (Lightweight Directory Access Protocol)
 Protocole d'accès à l'annuaire Active Directory (port 389/636).
 
@@ -224,6 +230,9 @@ Technique d'authentification utilisant un ticket Kerberos volé.
 
 ### Persistence
 Mécanisme permettant de maintenir l'accès à un système après compromission initiale.
+
+### Pivoting
+Technique utilisant une machine compromise comme point de passage pour accéder à des réseaux ou systèmes autrement inaccessibles. Utilise SSH tunnels, SOCKS proxies ou outils comme Chisel/Ligolo.
 
 ### PKINIT
 Extension Kerberos permettant l'authentification via certificat X.509 au lieu d'un mot de passe. Utilisé pour convertir un certificat en TGT ou hash NTLM.

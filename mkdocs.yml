@@ -777,6 +777,9 @@ nav:
           - Vagrant Lab Automatisé: formations/windows-hacking-mastery/vagrant-lab.md
           - Wi-Fi & Accès Physique: formations/windows-hacking-mastery/physical-wifi.md
           - Forensics & DFIR: formations/windows-hacking-mastery/forensics-dfir.md
+          - Detection Engineering: formations/windows-hacking-mastery/detection-engineering.md
+          - Pivoting & Tunneling: formations/windows-hacking-mastery/pivoting-tunneling.md
+          - Password Cracking: formations/windows-hacking-mastery/password-cracking.md
           - Glossaire: formations/windows-hacking-mastery/glossaire.md
           - Cheatsheet Tools: formations/windows-hacking-mastery/cheatsheet-tools.md
     - 🧠 Parcours Avancé:
