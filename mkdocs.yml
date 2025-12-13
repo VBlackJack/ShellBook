@@ -772,6 +772,7 @@ nav:
         - Ressources:
           - Kill Chain Infographie: formations/windows-hacking-mastery/kill-chain.md
           - Méthodologie OSCP: formations/windows-hacking-mastery/methodologie-oscp.md
+          - Templates Rapports: formations/windows-hacking-mastery/templates-rapports.md
           - Labs Interactifs: formations/windows-hacking-mastery/labs-interactifs.md
           - Vagrant Lab Automatisé: formations/windows-hacking-mastery/vagrant-lab.md
           - Glossaire: formations/windows-hacking-mastery/glossaire.md
