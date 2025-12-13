@@ -1,0 +1,57 @@
+# =============================================================================
+# ShellBook Python Scripts - Dependencies
+# =============================================================================
+# Install with: pip install -r requirements.txt
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Console UI & Utilities
+# -----------------------------------------------------------------------------
+rich>=13.0.0              # Used by: Most scripts (tables, progress, panels)
+pyyaml>=6.0               # Used by: Most scripts (configuration files)
+jinja2>=3.1.0             # Used by: compliance_report_generator.py
+
+# -----------------------------------------------------------------------------
+# System & Monitoring
+# -----------------------------------------------------------------------------
+psutil>=5.9.0             # Used by: system_info.py, disk_io_analyzer.py, infrastructure_cost_analyzer.py
+
+# -----------------------------------------------------------------------------
+# Infrastructure & Containers
+# -----------------------------------------------------------------------------
+docker>=7.0.0             # Used by: docker_cleaner_pro.py, docker_health.py
+kubernetes>=29.0.0        # Used by: kubernetes_health.py
+
+# -----------------------------------------------------------------------------
+# Database Clients
+# -----------------------------------------------------------------------------
+redis>=5.0.0              # Used by: redis_key_auditor.py
+mysql-connector-python>=8.0.0  # Used by: db_replication_monitor.py
+psycopg2-binary>=2.9.0    # Used by: db_replication_monitor.py
+
+# -----------------------------------------------------------------------------
+# Security & Certificates
+# -----------------------------------------------------------------------------
+cryptography>=42.0.0      # Used by: cert_checker.py
+
+# -----------------------------------------------------------------------------
+# Git & Version Control
+# -----------------------------------------------------------------------------
+gitpython>=3.1.0          # Used by: git_repo_cleaner.py
+
+# -----------------------------------------------------------------------------
+# Network & HTTP
+# -----------------------------------------------------------------------------
+requests>=2.31.0          # Used by: api_health_monitor.py, infrastructure_cost_analyzer.py
+
+# -----------------------------------------------------------------------------
+# Date & Time Parsing
+# -----------------------------------------------------------------------------
+python-dateutil>=2.8.0    # Used by: log_anomaly_detector.py
+
+# -----------------------------------------------------------------------------
+# Cloud Providers (Optional)
+# -----------------------------------------------------------------------------
+# boto3>=1.34.0           # Used by: infrastructure_cost_analyzer.py (AWS)
+# azure-mgmt-compute>=30.0.0  # Used by: infrastructure_cost_analyzer.py (Azure)
+# google-cloud-compute>=1.0.0  # Used by: infrastructure_cost_analyzer.py (GCP)
