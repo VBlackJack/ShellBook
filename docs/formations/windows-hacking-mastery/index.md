@@ -179,8 +179,49 @@ Audit complet en conditions réalistes avec livrable professionnel.
 
 ## Ressources de la Formation
 
+### Guides & Méthodologies
+
 | Ressource | Description |
 |-----------|-------------|
+| [Kill Chain Infographie](kill-chain.md) | Visualisation de la chaîne d'attaque |
+| [Méthodologie OSCP](methodologie-oscp.md) | Guide de préparation OSCP |
+| [Templates Rapports](templates-rapports.md) | Modèles de rapports professionnels |
+| [Certifications](certifications.md) | Préparation OSCP, CRTP, OSEP, CRTE |
+| [Interview Prep](interview-prep.md) | Questions d'entretien Pentest |
+
+### Labs & Outils
+
+| Ressource | Description |
+|-----------|-------------|
+| [Labs Interactifs](labs-interactifs.md) | Exercices guidés pas à pas |
+| [Vagrant Lab Automatisé](vagrant-lab.md) | Scripts de déploiement du lab |
+| [Quick Reference Cards](quick-reference.md) | Fiches de référence imprimables |
+| [Troubleshooting](troubleshooting.md) | Solutions aux erreurs courantes |
+
+### Techniques Avancées
+
+| Ressource | Description |
+|-----------|-------------|
+| [Wi-Fi & Accès Physique](physical-wifi.md) | Attaques réseau sans fil et physiques |
+| [Pivoting & Tunneling](pivoting-tunneling.md) | SSH, Chisel, Ligolo-ng |
+| [Password Cracking](password-cracking.md) | Hashcat, John, stratégies |
+| [Windows Internals](windows-internals.md) | Architecture sécurité Windows |
+| [OPSEC & Tradecraft](opsec-tradecraft.md) | Sécurité opérationnelle Red Team |
+
+### Défense & Analyse
+
+| Ressource | Description |
+|-----------|-------------|
+| [AD Hardening](ad-hardening.md) | Guide Blue Team durcissement AD |
+| [Detection Engineering](detection-engineering.md) | Règles Sigma, requêtes SIEM |
+| [Forensics & DFIR](forensics-dfir.md) | Analyse mémoire et disque |
+| [Case Studies](case-studies.md) | SolarWinds, NotPetya, Ryuk, ProxyLogon |
+
+### Références
+
+| Ressource | Description |
+|-----------|-------------|
+| [Community & Resources](community-resources.md) | Discord, YouTube, livres, blogs |
 | [Glossaire](glossaire.md) | Définitions des termes techniques |
 | [Cheatsheet Outils](cheatsheet-tools.md) | Commandes essentielles par outil |
 
