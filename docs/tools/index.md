@@ -24,7 +24,9 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 | [Subnet Calculator](subnet-calculator.md) | Calcul CIDR, masques, plages IP |
 | [CIDR Overlap Checker](cidr-overlap.md) | Detection chevauchements plages CIDR |
 | [MTU Calculator](mtu-calculator.md) | Calcul MTU optimal et MSS |
+| [Netplan Config Generator](netplan-generator.md) | Generateur config reseau Ubuntu |
 | [SSH Config Generator](ssh-config-generator.md) | Generateur fichier ~/.ssh/config |
+| [HAProxy Config Generator](haproxy-generator.md) | Generateur config load balancer |
 | [Whois Lookup](whois-lookup.md) | Reference commandes Whois et registres |
 | [MAC Address Lookup](mac-lookup.md) | Recherche fabricant par adresse MAC |
 | [Bandwidth Calculator](bandwidth-calculator.md) | Temps de transfert et debit |
@@ -49,6 +51,9 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 |-------|-------------|
 | [Permissions Calculator](permissions-calculator.md) | Chmod octal <-> symbolique |
 | [Sudoers Builder](sudoers-builder.md) | Generateur regles sudoers |
+| [SSHD Config Generator](sshd-config-generator.md) | Generateur sshd_config avec hardening |
+| [Rsyslog Config Generator](rsyslog-generator.md) | Generateur config rsyslog |
+| [Logrotate Config Generator](logrotate-generator.md) | Generateur config logrotate |
 | [Cron Builder](cron-builder.md) | Generateur expressions cron |
 | [Crontab Validator](crontab-validator.md) | Validateur et interpreteur cron |
 | [Exit Codes Reference](exit-codes.md) | Reference codes de sortie Unix |
@@ -64,13 +69,37 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 | [Docker Compose Generator](docker-compose-generator.md) | Generateur docker-compose.yml |
 | [Dockerfile Generator](dockerfile-generator.md) | Generateur Dockerfile multi-stage |
 | [Kubernetes Manifest Generator](k8s-generator.md) | Generateur manifestes K8s |
-| [Iptables Rule Generator](iptables-generator.md) | Generateur regles firewall |
+| [Iptables Rule Generator](iptables-generator.md) | Generateur regles iptables |
+| [nftables Rules Generator](nftables-generator.md) | Generateur regles nftables |
+| [Fail2Ban Jail Generator](fail2ban-generator.md) | Generateur jails Fail2Ban |
 | [OpenSSL Command Builder](openssl-builder.md) | Constructeur commandes OpenSSL |
 | [Git Command Builder](git-builder.md) | Constructeur commandes Git |
 | [Makefile Generator](makefile-generator.md) | Generateur Makefile |
 | [.gitignore Generator](gitignore-generator.md) | Generateur .gitignore par stack |
 | [cURL Command Builder](curl-builder.md) | Constructeur commandes cURL |
+
+## Bases de Donnees
+
+| Outil | Description |
+|-------|-------------|
+| [PostgreSQL Config Generator](postgresql-generator.md) | Generateur postgresql.conf optimise |
+| [MySQL Config Generator](mysql-generator.md) | Generateur my.cnf optimise |
+| [Redis Config Generator](redis-generator.md) | Generateur redis.conf |
+
+## Monitoring & Observabilite
+
+| Outil | Description |
+|-------|-------------|
 | [Prometheus Query Builder](promql-builder.md) | Constructeur requetes PromQL |
+| [Prometheus Alerting Rules](prometheus-alerting-generator.md) | Generateur regles d'alerte |
+| [Telegraf Config Generator](telegraf-generator.md) | Generateur config Telegraf |
+
+## Infrastructure as Code
+
+| Outil | Description |
+|-------|-------------|
+| [Ansible Playbook Generator](ansible-generator.md) | Generateur playbooks Ansible |
+| [Terraform Module Generator](terraform-generator.md) | Generateur modules Terraform |
 
 ## Virtualisation & Cloud
 

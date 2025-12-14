@@ -124,6 +124,8 @@ nav:
       - MAC Lookup: tools/mac-lookup.md
       - Bandwidth Calculator: tools/bandwidth-calculator.md
       - SSH Config Generator: tools/ssh-config-generator.md
+      - HAProxy Config Generator: tools/haproxy-generator.md
+      - Netplan Config Generator: tools/netplan-generator.md
       - Whois Lookup: tools/whois-lookup.md
       - DNS Reference: tools/dns-lookup.md
       - Port Reference: tools/port-reference.md
@@ -138,6 +140,9 @@ nav:
     - 🐧 Linux:
       - Permissions Calculator: tools/permissions-calculator.md
       - Sudoers Builder: tools/sudoers-builder.md
+      - SSHD Config Generator: tools/sshd-config-generator.md
+      - Rsyslog Generator: tools/rsyslog-generator.md
+      - Logrotate Generator: tools/logrotate-generator.md
       - Cron Builder: tools/cron-builder.md
       - Crontab Validator: tools/crontab-validator.md
       - Exit Codes Reference: tools/exit-codes.md
@@ -150,12 +155,24 @@ nav:
       - Dockerfile Generator: tools/dockerfile-generator.md
       - K8s Manifest Generator: tools/k8s-generator.md
       - Iptables Generator: tools/iptables-generator.md
+      - nftables Generator: tools/nftables-generator.md
+      - Fail2Ban Generator: tools/fail2ban-generator.md
       - OpenSSL Builder: tools/openssl-builder.md
       - Git Command Builder: tools/git-builder.md
       - Makefile Generator: tools/makefile-generator.md
       - .gitignore Generator: tools/gitignore-generator.md
       - cURL Command Builder: tools/curl-builder.md
+    - 🗄️ Bases de Données:
+      - PostgreSQL Config Generator: tools/postgresql-generator.md
+      - MySQL Config Generator: tools/mysql-generator.md
+      - Redis Config Generator: tools/redis-generator.md
+    - 📊 Monitoring & Observabilité:
       - Prometheus Query Builder: tools/promql-builder.md
+      - Prometheus Alerting Rules: tools/prometheus-alerting-generator.md
+      - Telegraf Config Generator: tools/telegraf-generator.md
+    - 🏗️ Infrastructure as Code:
+      - Ansible Playbook Generator: tools/ansible-generator.md
+      - Terraform Module Generator: tools/terraform-generator.md
     - 🖥️ Virtualisation & Cloud:
       - VM Sizing Calculator: tools/vm-calculator.md
       - Windows Licensing: tools/windows-licensing.md
