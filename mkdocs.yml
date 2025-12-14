@@ -113,38 +113,95 @@ nav:
   # ══════════════════════════════════════════════════════════════
   - 🧮 Outils:
     - Vue d'ensemble: tools/index.md
+    - ⏰ Temps & Calculs:
+      - Timezone Converter: tools/timezone-converter.md
+      - Date Calculator: tools/date-calculator.md
+      - SLA Calculator: tools/sla-calculator.md
     - 🌐 Réseau:
       - Subnet Calculator: tools/subnet-calculator.md
+      - CIDR Overlap Checker: tools/cidr-overlap.md
+      - MTU Calculator: tools/mtu-calculator.md
       - MAC Lookup: tools/mac-lookup.md
       - Bandwidth Calculator: tools/bandwidth-calculator.md
+      - SSH Config Generator: tools/ssh-config-generator.md
+      - Whois Lookup: tools/whois-lookup.md
       - DNS Reference: tools/dns-lookup.md
       - Port Reference: tools/port-reference.md
       - HTTP Status Codes: tools/http-status.md
-    - 💾 Stockage:
+    - 💾 Stockage & Performance:
       - RAID Calculator: tools/raid-calculator.md
       - Storage Converter: tools/storage-converter.md
+      - IOPS Calculator: tools/iops-calculator.md
+      - Memory Sizing Calculator: tools/memory-calculator.md
+      - Load Average Interpreter: tools/load-average.md
+      - Swap Size Calculator: tools/swap-calculator.md
     - 🐧 Linux:
       - Permissions Calculator: tools/permissions-calculator.md
       - Cron Builder: tools/cron-builder.md
+      - Crontab Validator: tools/crontab-validator.md
+      - Exit Codes Reference: tools/exit-codes.md
+      - Log Levels Reference: tools/log-levels.md
+      - ANSI Escape Codes: tools/ansi-codes.md
+    - ⚙️ Générateurs Config:
+      - Systemd Generator: tools/systemd-generator.md
+      - Nginx Generator: tools/nginx-generator.md
+      - Docker Compose Generator: tools/docker-compose-generator.md
+      - Dockerfile Generator: tools/dockerfile-generator.md
+      - K8s Manifest Generator: tools/k8s-generator.md
+      - Iptables Generator: tools/iptables-generator.md
+      - OpenSSL Builder: tools/openssl-builder.md
+      - Git Command Builder: tools/git-builder.md
+      - Makefile Generator: tools/makefile-generator.md
+      - .gitignore Generator: tools/gitignore-generator.md
+      - cURL Command Builder: tools/curl-builder.md
+      - Prometheus Query Builder: tools/promql-builder.md
     - 🖥️ Virtualisation & Cloud:
       - VM Sizing Calculator: tools/vm-calculator.md
       - Windows Licensing: tools/windows-licensing.md
       - AWS EC2 Lookup: tools/ec2-lookup.md
     - 🔒 Sécurité:
       - Password Generator: tools/password-generator.md
-      - JWT Decoder: tools/jwt-decoder.md
+      - Password Strength Meter: tools/password-strength.md
+      - JWT Builder & Decoder: tools/jwt-builder.md
       - Certificate Decoder: tools/cert-decoder.md
+      - Certificate Chain Validator: tools/cert-chain-validator.md
+      - SSL Certificate Checker: tools/ssl-checker.md
+      - RSA/ECDSA Key Generator: tools/rsa-generator.md
+      - HMAC Generator: tools/hmac-generator.md
+      - AES Encrypt/Decrypt: tools/aes-tool.md
       - Base64 & Hash: tools/base64-hash.md
       - SSH Key Fingerprint: tools/ssh-fingerprint.md
+      - Hash Identifier: tools/hash-identifier.md
+      - Bcrypt Generator: tools/bcrypt-generator.md
+      - TOTP Generator: tools/totp-generator.md
+      - CSP Builder: tools/csp-builder.md
+      - CORS Builder: tools/cors-builder.md
     - 💻 Développement:
       - Regex Tester: tools/regex-tester.md
+      - Regex Quick Reference: tools/regex-reference.md
       - JSON/YAML Formatter: tools/json-yaml.md
+      - YAML Validator: tools/yaml-validator.md
+      - TOML Formatter: tools/toml-formatter.md
+      - JSONPath Tester: tools/jsonpath-tester.md
       - SQL Formatter: tools/sql-formatter.md
+      - Semver Calculator: tools/semver-calculator.md
       - Unix Timestamp: tools/timestamp.md
       - Diff Tool: tools/diff-tool.md
       - UUID Generator: tools/uuid-generator.md
       - String Case Converter: tools/string-case.md
       - Markdown Preview: tools/markdown-preview.md
+      - Markdown Table Generator: tools/markdown-table.md
+      - Log Parser: tools/log-parser.md
+      - Lorem Ipsum Generator: tools/lorem-ipsum.md
+      - QR Code Generator: tools/qr-generator.md
+    - 🔄 Conversion & Parsing:
+      - Number Base Converter: tools/base-converter.md
+      - CSV / JSON Converter: tools/csv-json.md
+      - XML Formatter: tools/xml-formatter.md
+      - Email Header Analyzer: tools/email-header.md
+      - User Agent Parser: tools/useragent-parser.md
+      - Column Extractor: tools/column-extractor.md
+      - Text Statistics: tools/text-stats.md
     - 🔤 Encodage:
       - Unicode Lookup: tools/unicode-lookup.md
       - HTML Entities: tools/html-entities.md
@@ -152,6 +209,9 @@ nav:
       - ASCII Table: tools/ascii-table.md
     - 🎨 Design:
       - Color Converter: tools/color-converter.md
+    - 📖 Références Web:
+      - MIME Types Reference: tools/mime-types.md
+      - HTTP Headers Reference: tools/http-headers.md
 
   # ══════════════════════════════════════════════════════════════
   # TAB 3: OPS CENTER - Scripts & Pipelines (reorganized by use case)
