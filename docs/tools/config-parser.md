@@ -39,6 +39,11 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
               <option value="mysql">MySQL (my.cnf)</option>
               <option value="redis">Redis (redis.conf)</option>
             </optgroup>
+            <optgroup label="LDAP & Annuaires">
+              <option value="ldap389">389 DS (dse.ldif / cn=config)</option>
+              <option value="slapd">OpenLDAP (slapd.conf)</option>
+              <option value="ldif">LDIF generique</option>
+            </optgroup>
             <optgroup label="Systeme">
               <option value="systemd">Systemd Unit</option>
               <option value="crontab">Crontab</option>
@@ -71,6 +76,8 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
         <button onclick="loadExample('iptables')">iptables</button>
         <button onclick="loadExample('systemd')">Systemd</button>
         <button onclick="loadExample('postgresql')">PostgreSQL</button>
+        <button onclick="loadExample('ldap389')">389 DS</button>
+        <button onclick="loadExample('slapd')">OpenLDAP</button>
       </div>
     </div>
 
@@ -1392,6 +1399,438 @@ const parsers = {
       return result;
     },
     render: (data) => renderStandardConfig(data, 'PostgreSQL')
+  },
+
+  // ==================== 389 DIRECTORY SERVER ====================
+  ldap389: {
+    name: '389 Directory Server',
+    detect: (text) => text.includes('nsslapd-') || text.includes('cn=config') || (text.includes('dn:') && text.includes('objectClass') && text.includes('nsDS')),
+    parse: (text) => {
+      const result = {
+        network: [], database: [], security: [], replication: [], plugins: [], limits: [], logging: [], other: []
+      };
+
+      // Parse LDIF format
+      const entries = [];
+      let currentEntry = null;
+      let currentAttr = null;
+
+      text.split('\n').forEach(line => {
+        // New entry
+        if (line.startsWith('dn:')) {
+          if (currentEntry) entries.push(currentEntry);
+          currentEntry = { dn: line.substring(3).trim(), attrs: {} };
+          currentAttr = null;
+          return;
+        }
+
+        // Continuation line
+        if (line.startsWith(' ') && currentEntry && currentAttr) {
+          currentEntry.attrs[currentAttr] += line.substring(1);
+          return;
+        }
+
+        // Attribute
+        if (currentEntry && line.includes(':')) {
+          const colonIdx = line.indexOf(':');
+          const attr = line.substring(0, colonIdx);
+          let value = line.substring(colonIdx + 1).trim();
+          // Handle base64 (attr:: value)
+          if (value.startsWith(':')) {
+            value = '[base64]' + value.substring(1).trim();
+          }
+          currentEntry.attrs[attr] = value;
+          currentAttr = attr;
+        }
+      });
+      if (currentEntry) entries.push(currentEntry);
+
+      // Categorize directives
+      const directives = {
+        'nsslapd-port': { cat: 'network', icon: '🌐', desc: 'Port LDAP (389 par defaut)' },
+        'nsslapd-secureport': { cat: 'network', icon: '🔒', desc: 'Port LDAPS (636 par defaut)' },
+        'nsslapd-listenhost': { cat: 'network', icon: '🌐', desc: 'Adresse d\'ecoute' },
+        'nsslapd-localhost': { cat: 'network', icon: '🌐', desc: 'Hostname local' },
+        'nsslapd-security': { cat: 'security', icon: '🔒', desc: 'SSL/TLS active' },
+        'nsslapd-minssf': { cat: 'security', icon: '🔒', desc: 'Force de chiffrement minimum' },
+        'nsslapd-require-secure-binds': { cat: 'security', icon: '🔒', desc: 'Binds securises obligatoires' },
+        'nsslapd-allow-anonymous-access': { cat: 'security', icon: '🔒', desc: 'Acces anonyme autorise' },
+        'nsslapd-rootdn': { cat: 'security', icon: '👤', desc: 'DN administrateur (Directory Manager)' },
+        'nsslapd-rootpw': { cat: 'security', icon: '🔐', desc: 'Mot de passe administrateur (hashe)' },
+        'nsslapd-suffix': { cat: 'database', icon: '🗄️', desc: 'Suffixe de la base (base DN)' },
+        'nsslapd-backend': { cat: 'database', icon: '🗄️', desc: 'Nom du backend' },
+        'nsslapd-directory': { cat: 'database', icon: '📁', desc: 'Repertoire des donnees' },
+        'nsslapd-db-home-directory': { cat: 'database', icon: '📁', desc: 'Repertoire home BDB/LMDB' },
+        'nsslapd-maxconnections': { cat: 'limits', icon: '⚙️', desc: 'Nombre max de connexions' },
+        'nsslapd-timelimit': { cat: 'limits', icon: '⏱️', desc: 'Limite temps recherche (sec)' },
+        'nsslapd-sizelimit': { cat: 'limits', icon: '📊', desc: 'Limite nombre resultats' },
+        'nsslapd-idletimeout': { cat: 'limits', icon: '⏱️', desc: 'Timeout inactivite (sec)' },
+        'nsslapd-maxbersize': { cat: 'limits', icon: '📏', desc: 'Taille max BER (octets)' },
+        'nsslapd-maxdescriptors': { cat: 'limits', icon: '⚙️', desc: 'Max file descriptors' },
+        'nsslapd-accesslog': { cat: 'logging', icon: '📝', desc: 'Fichier access log' },
+        'nsslapd-errorlog': { cat: 'logging', icon: '📝', desc: 'Fichier error log' },
+        'nsslapd-auditlog': { cat: 'logging', icon: '📝', desc: 'Fichier audit log' },
+        'nsslapd-accesslog-logging-enabled': { cat: 'logging', icon: '📝', desc: 'Access log active' },
+        'nsslapd-errorlog-level': { cat: 'logging', icon: '📝', desc: 'Niveau de log erreurs' },
+        'nsds5replicahost': { cat: 'replication', icon: '🔄', desc: 'Hote replica' },
+        'nsds5replicaport': { cat: 'replication', icon: '🔄', desc: 'Port replica' },
+        'nsds5replicabinddn': { cat: 'replication', icon: '🔄', desc: 'DN de bind replication' },
+        'nsds5replicaid': { cat: 'replication', icon: '🔄', desc: 'ID du replica' },
+        'nsds5replicatype': { cat: 'replication', icon: '🔄', desc: 'Type (master/hub/consumer)' },
+        'nsslapd-pluginpath': { cat: 'plugins', icon: '🔌', desc: 'Chemin du plugin' },
+        'nsslapd-pluginenabled': { cat: 'plugins', icon: '🔌', desc: 'Plugin active' },
+      };
+
+      entries.forEach(entry => {
+        Object.entries(entry.attrs).forEach(([attr, value]) => {
+          const lowerAttr = attr.toLowerCase();
+          const info = directives[lowerAttr] || null;
+
+          if (info) {
+            let alerts = [];
+
+            // Security checks
+            if (lowerAttr === 'nsslapd-allow-anonymous-access' && value === 'on') {
+              alerts.push({ type: 'warning', text: 'Acces anonyme active - risque de fuite d\'informations' });
+            }
+            if (lowerAttr === 'nsslapd-security' && value === 'on') {
+              alerts.push({ type: 'good', text: 'SSL/TLS active' });
+            }
+            if (lowerAttr === 'nsslapd-require-secure-binds' && value === 'on') {
+              alerts.push({ type: 'good', text: 'Binds securises obligatoires' });
+            }
+            if (lowerAttr === 'nsslapd-minssf' && parseInt(value) >= 128) {
+              alerts.push({ type: 'good', text: 'Chiffrement fort requis (SSF >= 128)' });
+            }
+            if (lowerAttr === 'nsslapd-rootpw' && !value.startsWith('{')) {
+              alerts.push({ type: 'error', text: 'Mot de passe en clair! Utilisez un hash' });
+            }
+
+            result[info.cat].push({
+              key: attr,
+              value: value.length > 100 ? value.substring(0, 100) + '...' : value,
+              icon: info.icon,
+              desc: info.desc,
+              alerts,
+              dn: entry.dn
+            });
+          }
+        });
+      });
+
+      // Also extract ACIs
+      entries.forEach(entry => {
+        if (entry.attrs.aci) {
+          result.security.push({
+            key: 'aci',
+            value: entry.attrs.aci.substring(0, 80) + '...',
+            icon: '🛡️',
+            desc: 'Access Control Instruction',
+            alerts: [],
+            dn: entry.dn
+          });
+        }
+      });
+
+      return result;
+    },
+    render: (data) => {
+      const categoryNames = {
+        network: { name: 'Reseau', icon: '🌐' },
+        database: { name: 'Base de donnees', icon: '🗄️' },
+        security: { name: 'Securite & ACIs', icon: '🔒' },
+        replication: { name: 'Replication', icon: '🔄' },
+        plugins: { name: 'Plugins', icon: '🔌' },
+        limits: { name: 'Limites & Performance', icon: '⚙️' },
+        logging: { name: 'Logging', icon: '📝' },
+        other: { name: 'Autres', icon: 'ℹ️' }
+      };
+
+      let totalItems = 0;
+      let warnings = 0;
+      let goods = 0;
+
+      Object.values(data).forEach(items => {
+        totalItems += items.length;
+        items.forEach(item => {
+          if (item.alerts) {
+            item.alerts.forEach(a => {
+              if (a.type === 'warning' || a.type === 'error') warnings++;
+              if (a.type === 'good') goods++;
+            });
+          }
+        });
+      });
+
+      let html = '<div class="summary-box">';
+      html += `<div class="summary-item"><div class="summary-value">${totalItems}</div><div class="summary-label">Attributs</div></div>`;
+      html += `<div class="summary-item"><div class="summary-value" style="color:#22c55e">${goods}</div><div class="summary-label">Bonnes pratiques</div></div>`;
+      html += `<div class="summary-item"><div class="summary-value" style="color:#f59e0b">${warnings}</div><div class="summary-label">Alertes</div></div>`;
+      html += `<div class="summary-item"><div class="summary-value">${data.replication.length > 0 ? 'Oui' : 'Non'}</div><div class="summary-label">Replication</div></div>`;
+      html += '</div>';
+
+      Object.entries(data).forEach(([cat, items]) => {
+        if (items.length === 0) return;
+        const info = categoryNames[cat] || { name: cat, icon: '📄' };
+
+        html += `<div class="analysis-section"><div class="section-header">
+          <span class="section-icon">${info.icon}</span>
+          ${info.name}
+          <span class="item-badge badge-info">${items.length}</span>
+        </div>`;
+        html += '<div class="section-content">';
+
+        items.forEach(item => {
+          html += `<div class="config-item">
+            <div class="item-header">
+              <span class="section-icon">${item.icon || 'ℹ️'}</span>
+              <span class="item-directive">${item.key}</span>
+              <span class="item-value">${escapeHtml(item.value)}</span>
+            </div>
+            <div class="item-description">${item.desc || ''}</div>`;
+
+          if (item.alerts) {
+            item.alerts.forEach(a => {
+              const icon = a.type === 'error' ? '❌' : a.type === 'warning' ? '⚠️' : a.type === 'good' ? '✅' : 'ℹ️';
+              html += `<div class="item-alert alert-${a.type}">${icon} ${a.text}</div>`;
+            });
+          }
+
+          html += '</div>';
+        });
+
+        html += '</div></div>';
+      });
+
+      return html;
+    }
+  },
+
+  // ==================== OPENLDAP SLAPD.CONF ====================
+  slapd: {
+    name: 'OpenLDAP (slapd.conf)',
+    detect: (text) => text.includes('slapd') || text.includes('olcDatabase') || text.includes('olcSuffix') || (text.includes('database') && text.includes('suffix') && !text.includes('nsslapd')),
+    parse: (text) => {
+      const result = {
+        global: [], database: [], security: [], acl: [], schema: [], modules: [], other: []
+      };
+
+      const directives = {
+        'include': { cat: 'schema', icon: '📄', desc: 'Fichier schema inclus' },
+        'pidfile': { cat: 'global', icon: '⚙️', desc: 'Fichier PID' },
+        'argsfile': { cat: 'global', icon: '⚙️', desc: 'Fichier arguments' },
+        'modulepath': { cat: 'modules', icon: '🔌', desc: 'Chemin des modules' },
+        'moduleload': { cat: 'modules', icon: '🔌', desc: 'Module charge' },
+        'database': { cat: 'database', icon: '🗄️', desc: 'Type de backend (mdb, hdb, bdb)' },
+        'suffix': { cat: 'database', icon: '🗄️', desc: 'Suffixe de la base (base DN)' },
+        'rootdn': { cat: 'security', icon: '👤', desc: 'DN administrateur' },
+        'rootpw': { cat: 'security', icon: '🔐', desc: 'Mot de passe admin (hashe)' },
+        'directory': { cat: 'database', icon: '📁', desc: 'Repertoire des donnees' },
+        'index': { cat: 'database', icon: '⚡', desc: 'Index pour optimisation' },
+        'access': { cat: 'acl', icon: '🛡️', desc: 'Regle de controle d\'acces' },
+        'sizelimit': { cat: 'global', icon: '📊', desc: 'Limite nombre resultats' },
+        'timelimit': { cat: 'global', icon: '⏱️', desc: 'Limite temps recherche' },
+        'loglevel': { cat: 'global', icon: '📝', desc: 'Niveau de log' },
+        'TLSCACertificateFile': { cat: 'security', icon: '🔒', desc: 'Certificat CA' },
+        'TLSCertificateFile': { cat: 'security', icon: '🔒', desc: 'Certificat serveur' },
+        'TLSCertificateKeyFile': { cat: 'security', icon: '🔒', desc: 'Cle privee' },
+        'TLSCipherSuite': { cat: 'security', icon: '🔒', desc: 'Suites de chiffrement' },
+        'security': { cat: 'security', icon: '🔒', desc: 'Exigences de securite (ssf)' },
+        'syncrepl': { cat: 'database', icon: '🔄', desc: 'Configuration replication syncrepl' },
+        'overlay': { cat: 'modules', icon: '🔌', desc: 'Overlay active (memberof, refint...)' },
+      };
+
+      const lines = text.split('\n');
+      let currentDb = null;
+
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) return;
+
+        // Handle continuation lines
+        const parts = trimmed.split(/\s+/);
+        const directive = parts[0].toLowerCase();
+        const value = parts.slice(1).join(' ');
+
+        const info = directives[directive];
+        if (!info) {
+          if (trimmed.startsWith('access to')) {
+            result.acl.push({
+              key: 'access',
+              value: trimmed,
+              icon: '🛡️',
+              desc: 'Regle ACL',
+              alerts: []
+            });
+          }
+          return;
+        }
+
+        let alerts = [];
+
+        // Security checks
+        if (directive === 'rootpw' && !value.startsWith('{')) {
+          alerts.push({ type: 'error', text: 'Mot de passe en clair! Utilisez {SSHA} ou {ARGON2}' });
+        }
+        if (directive === 'rootpw' && value.startsWith('{SSHA}')) {
+          alerts.push({ type: 'good', text: 'Mot de passe hashe avec SSHA' });
+        }
+        if (directive === 'database' && value === 'mdb') {
+          alerts.push({ type: 'good', text: 'LMDB recommande pour les performances' });
+        }
+        if (directive === 'database' && (value === 'bdb' || value === 'hdb')) {
+          alerts.push({ type: 'warning', text: 'BDB/HDB deprecie - migrez vers MDB' });
+        }
+        if (directive === 'tlscertificatefile') {
+          alerts.push({ type: 'good', text: 'TLS configure' });
+        }
+
+        result[info.cat].push({
+          key: directive,
+          value: value.length > 80 ? value.substring(0, 80) + '...' : value,
+          icon: info.icon,
+          desc: info.desc,
+          alerts
+        });
+      });
+
+      return result;
+    },
+    render: (data) => renderStandardConfig(data, 'OpenLDAP slapd.conf')
+  },
+
+  // ==================== LDIF GENERIC ====================
+  ldif: {
+    name: 'LDIF',
+    detect: (text) => text.includes('dn:') && text.includes('objectClass'),
+    parse: (text) => {
+      const entries = [];
+      let currentEntry = null;
+      let currentAttr = null;
+
+      text.split('\n').forEach(line => {
+        // Empty line = end of entry
+        if (!line.trim()) {
+          if (currentEntry && currentEntry.dn) {
+            entries.push(currentEntry);
+          }
+          currentEntry = null;
+          currentAttr = null;
+          return;
+        }
+
+        // New entry
+        if (line.startsWith('dn:')) {
+          currentEntry = { dn: line.substring(3).trim(), attrs: {}, objectClasses: [] };
+          return;
+        }
+
+        // Continuation line
+        if (line.startsWith(' ') && currentEntry && currentAttr) {
+          if (Array.isArray(currentEntry.attrs[currentAttr])) {
+            const lastIdx = currentEntry.attrs[currentAttr].length - 1;
+            currentEntry.attrs[currentAttr][lastIdx] += line.substring(1);
+          } else {
+            currentEntry.attrs[currentAttr] += line.substring(1);
+          }
+          return;
+        }
+
+        // Attribute
+        if (currentEntry && line.includes(':')) {
+          const colonIdx = line.indexOf(':');
+          const attr = line.substring(0, colonIdx).toLowerCase();
+          let value = line.substring(colonIdx + 1).trim();
+
+          // Base64
+          if (value.startsWith(':')) {
+            value = '[base64] ' + value.substring(1).trim();
+          }
+
+          if (attr === 'objectclass') {
+            currentEntry.objectClasses.push(value);
+          }
+
+          // Multi-valued
+          if (currentEntry.attrs[attr]) {
+            if (!Array.isArray(currentEntry.attrs[attr])) {
+              currentEntry.attrs[attr] = [currentEntry.attrs[attr]];
+            }
+            currentEntry.attrs[attr].push(value);
+          } else {
+            currentEntry.attrs[attr] = value;
+          }
+          currentAttr = attr;
+        }
+      });
+
+      if (currentEntry && currentEntry.dn) {
+        entries.push(currentEntry);
+      }
+
+      return { entries };
+    },
+    render: (data) => {
+      const entries = data.entries;
+
+      let html = '<div class="summary-box">';
+      html += `<div class="summary-item"><div class="summary-value">${entries.length}</div><div class="summary-label">Entrees</div></div>`;
+
+      // Count entry types
+      const types = {};
+      entries.forEach(e => {
+        e.objectClasses.forEach(oc => {
+          types[oc] = (types[oc] || 0) + 1;
+        });
+      });
+      const topTypes = Object.entries(types).sort((a, b) => b[1] - a[1]).slice(0, 3);
+      topTypes.forEach(([type, count]) => {
+        html += `<div class="summary-item"><div class="summary-value">${count}</div><div class="summary-label">${type}</div></div>`;
+      });
+      html += '</div>';
+
+      // Display entries
+      entries.forEach((entry, idx) => {
+        const icon = entry.objectClasses.includes('organizationalUnit') ? '📁' :
+                     entry.objectClasses.includes('inetOrgPerson') || entry.objectClasses.includes('person') ? '👤' :
+                     entry.objectClasses.includes('groupOfNames') || entry.objectClasses.includes('posixGroup') ? '👥' :
+                     entry.objectClasses.includes('organization') ? '🏢' :
+                     entry.objectClasses.includes('domain') ? '🌐' : '📄';
+
+        html += `<div class="analysis-section"><div class="section-header">
+          <span class="section-icon">${icon}</span>
+          ${escapeHtml(entry.dn)}
+        </div>`;
+        html += '<div class="section-content">';
+
+        // ObjectClasses
+        html += `<div class="config-item">
+          <div class="item-header">
+            <span class="item-directive">objectClass</span>
+            <span class="item-value">${entry.objectClasses.join(', ')}</span>
+          </div>
+        </div>`;
+
+        // Other attributes
+        Object.entries(entry.attrs).forEach(([attr, value]) => {
+          if (attr === 'objectclass') return;
+
+          const displayValue = Array.isArray(value) ? value.join(', ') : value;
+          const isSensitive = ['userpassword', 'userPKCS12'].includes(attr.toLowerCase());
+
+          html += `<div class="config-item">
+            <div class="item-header">
+              <span class="item-directive">${attr}</span>
+              <span class="item-value">${isSensitive ? '[SENSIBLE]' : escapeHtml(displayValue.substring(0, 60))}${displayValue.length > 60 ? '...' : ''}</span>
+            </div>
+          </div>`;
+        });
+
+        html += '</div></div>';
+      });
+
+      return html;
+    }
   }
 };
 
@@ -1776,7 +2215,91 @@ password_encryption = scram-sha-256
 # Performance
 random_page_cost = 1.1
 effective_io_concurrency = 200
-default_statistics_target = 200`
+default_statistics_target = 200`,
+
+    ldap389: `dn: cn=config
+objectClass: top
+objectClass: extensibleObject
+objectClass: nsslapdConfig
+nsslapd-port: 389
+nsslapd-secureport: 636
+nsslapd-security: on
+nsslapd-localhost: ldap.example.com
+nsslapd-rootdn: cn=Directory Manager
+nsslapd-rootpw: {PBKDF2_SHA256}AAAgADfK...
+nsslapd-maxconnections: 1000
+nsslapd-timelimit: 3600
+nsslapd-sizelimit: 2000
+nsslapd-idletimeout: 3600
+nsslapd-allow-anonymous-access: rootdse
+nsslapd-require-secure-binds: on
+nsslapd-minssf: 128
+nsslapd-accesslog: /var/log/dirsrv/slapd-instance/access
+nsslapd-errorlog: /var/log/dirsrv/slapd-instance/errors
+nsslapd-accesslog-logging-enabled: on
+nsslapd-errorlog-level: 16384
+
+dn: cn=userRoot,cn=ldbm database,cn=plugins,cn=config
+objectClass: top
+objectClass: extensibleObject
+objectClass: nsBackendInstance
+nsslapd-suffix: dc=example,dc=com
+nsslapd-backend: userRoot
+nsslapd-directory: /var/lib/dirsrv/slapd-instance/db/userRoot
+
+dn: cn=replica,cn=dc\\=example\\,dc\\=com,cn=mapping tree,cn=config
+objectClass: top
+objectClass: nsDS5Replica
+nsDS5ReplicaId: 1
+nsDS5ReplicaType: 3
+nsDS5ReplicaBindDN: cn=replication manager,cn=config`,
+
+    slapd: `# OpenLDAP slapd.conf
+include /etc/openldap/schema/core.schema
+include /etc/openldap/schema/cosine.schema
+include /etc/openldap/schema/inetorgperson.schema
+
+pidfile /var/run/openldap/slapd.pid
+argsfile /var/run/openldap/slapd.args
+
+modulepath /usr/lib64/openldap
+moduleload back_mdb.la
+moduleload memberof.la
+moduleload refint.la
+
+loglevel stats
+
+TLSCACertificateFile /etc/pki/tls/certs/ca-bundle.crt
+TLSCertificateFile /etc/pki/tls/certs/ldap.crt
+TLSCertificateKeyFile /etc/pki/tls/private/ldap.key
+TLSCipherSuite HIGH:!aNULL:!MD5
+
+database mdb
+suffix "dc=example,dc=com"
+rootdn "cn=admin,dc=example,dc=com"
+rootpw {SSHA}xxxxxxxxxxxxxxxxxxxxxxxxxx
+directory /var/lib/openldap/openldap-data
+
+index objectClass eq
+index cn,sn,mail eq,sub
+index uid eq
+index memberOf eq
+
+overlay memberof
+overlay refint
+
+sizelimit 500
+timelimit 3600
+
+access to attrs=userPassword
+    by self write
+    by anonymous auth
+    by * none
+
+access to *
+    by self write
+    by users read
+    by * none`
   };
 
   if (examples[type]) {
@@ -1817,6 +2340,7 @@ document.addEventListener('DOMContentLoaded', parseConfig);
 | **Proxy & Web** | Squid, Nginx, Apache, HAProxy |
 | **SSH & Securite** | sshd_config, ssh_config, sudoers, iptables, nftables, Fail2Ban |
 | **Bases de donnees** | PostgreSQL, MySQL, Redis |
+| **LDAP & Annuaires** | 389 Directory Server, OpenLDAP (slapd.conf), LDIF |
 | **Systeme** | Systemd, Crontab, Logrotate, Rsyslog, fstab |
 | **Reseau** | Netplan, interfaces, resolv.conf, hosts |
 | **Conteneurs** | Dockerfile, Docker Compose, Kubernetes YAML |
