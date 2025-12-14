@@ -131,6 +131,12 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 | [CSP Builder](csp-builder.md) | Constructeur Content-Security-Policy |
 | [CORS Builder](cors-builder.md) | Constructeur configuration CORS |
 
+## Analyse & Documentation
+
+| Outil | Description |
+|-------|-------------|
+| [Config Parser & Explainer](config-parser.md) | Analyseur de fichiers de configuration avec explications |
+
 ## Developpement & Scripting
 
 | Outil | Description |

@@ -195,6 +195,8 @@ nav:
       - TOTP Generator: tools/totp-generator.md
       - CSP Builder: tools/csp-builder.md
       - CORS Builder: tools/cors-builder.md
+    - 🔍 Analyse & Documentation:
+      - Config Parser & Explainer: tools/config-parser.md
     - 💻 Développement:
       - Regex Tester: tools/regex-tester.md
       - Regex Quick Reference: tools/regex-reference.md
