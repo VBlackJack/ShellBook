@@ -233,6 +233,7 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
   flex: 1;
   padding: 15px;
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: 500px;
 }
 
@@ -271,6 +272,7 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
 
 .section-content {
   padding: 10px 15px;
+  overflow: hidden;
 }
 
 .config-item {
@@ -278,6 +280,8 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
   flex-direction: column;
   padding: 10px 0;
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  overflow: hidden;
+  min-width: 0;
 }
 
 .config-item:last-child {
@@ -289,6 +293,8 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
   align-items: center;
   gap: 10px;
   margin-bottom: 5px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .item-directive {
@@ -303,6 +309,9 @@ Analyseur de fichiers de configuration avec explications visuelles et alertes de
   padding: 2px 8px;
   border-radius: 3px;
   font-size: 0.9em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .item-badge {
