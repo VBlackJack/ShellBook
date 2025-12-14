@@ -37,18 +37,18 @@ Generateur de mots de passe securises (100% client-side).
         <h4>Modes speciaux</h4>
         <label><input type="checkbox" id="opt-cvc"> <strong>CVC</strong> - Prononcable (Consonne-Voyelle)</label>
         <label><input type="checkbox" id="opt-layout-safe"> <strong>Layout Safe</strong> - Compatible AZERTY/QWERTY</label>
-        <label><input type="checkbox" id="opt-cvc-numbers"> CVC + Chiffres intercales</label>
     </div>
 </div>
 
 <div id="cvc-info" class="info-box" style="display:none;">
     <strong>Mode CVC:</strong> Genere des mots de passe prononcables en alternant consonnes et voyelles.
-    <br>Exemple: <code>Kavupobi</code>, <code>Taf3Kun9</code>
+    <br>Les options Chiffres et Symboles sont respectees (intercales dans le mot de passe).
+    <br>Exemple: <code>Kavupobi</code>, <code>Taf3Kun9</code>, <code>Bel-Vop4</code>
 </div>
 
 <div id="layout-info" class="info-box" style="display:none;">
     <strong>Layout Safe:</strong> Utilise uniquement les caracteres identiques sur AZERTY et QWERTY.
-    <br>Evite: Q, W, Z, A, M (positions differentes) et symboles problematiques.
+    <br>Evite: Q, W, Z, A, M (positions differentes). Symboles limites a <code>. - _</code>
 </div>
 
 <div class="password-output">
@@ -323,7 +323,7 @@ function getCharacterSet() {
     return chars;
 }
 
-function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
+function generateCVCPassword(length, isLayoutSafe) {
     const consonantsUpper = isLayoutSafe ? charSets.cvc_consonants_safe_upper : charSets.consonants_upper;
     const consonantsLower = isLayoutSafe ? charSets.cvc_consonants_safe_lower : charSets.consonants_lower;
     const vowelsUpper = isLayoutSafe ? charSets.cvc_vowels_safe_upper : charSets.vowels_upper;
@@ -331,6 +331,8 @@ function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
 
     const useUpper = document.getElementById('opt-upper').checked;
     const useLower = document.getElementById('opt-lower').checked;
+    const useNumbers = document.getElementById('opt-numbers').checked;
+    const useSymbols = document.getElementById('opt-symbols').checked;
 
     let consonants = '';
     let vowels = '';
@@ -348,8 +350,12 @@ function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
         return { password: 'Activez majuscules et/ou minuscules pour le mode CVC', charsetSize: 0 };
     }
 
-    const numbers = '23456789'; // Exclus 0 et 1 (ambigus avec O et l)
-    const array = new Uint32Array(length * 2);
+    // Chiffres compatibles layout safe (evite 0/O et 1/l ambigus)
+    const numbers = '23456789';
+    // Symboles compatibles layout safe
+    const symbols = isLayoutSafe ? '.-_' : '.-_!@#';
+
+    const array = new Uint32Array(length * 3);
     crypto.getRandomValues(array);
 
     let password = '';
@@ -358,10 +364,15 @@ function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
     let charCount = 0;
 
     while (password.length < length) {
-        if (includeNumbers && charCount > 0 && charCount % 3 === 0 && password.length < length - 1) {
-            // Insere un chiffre tous les 3 caracteres
+        // Insere un chiffre tous les 3-4 caracteres si option activee
+        if (useNumbers && charCount > 0 && charCount % 3 === 0 && password.length < length - 1) {
             password += numbers[array[arrayIdx++] % numbers.length];
-        } else {
+        }
+        // Insere un symbole tous les 5-6 caracteres si option activee
+        else if (useSymbols && charCount > 0 && charCount % 5 === 0 && password.length < length - 1) {
+            password += symbols[array[arrayIdx++] % symbols.length];
+        }
+        else {
             if (isConsonant) {
                 password += consonants[array[arrayIdx++] % consonants.length];
             } else {
@@ -374,7 +385,8 @@ function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
 
     // Calcul du charset effectif pour l'entropie
     let effectiveCharset = consonants.length + vowels.length;
-    if (includeNumbers) effectiveCharset += numbers.length;
+    if (useNumbers) effectiveCharset += numbers.length;
+    if (useSymbols) effectiveCharset += symbols.length;
 
     return { password: password.substring(0, length), charsetSize: effectiveCharset };
 }
@@ -382,12 +394,11 @@ function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
 function generatePassword() {
     const length = parseInt(document.getElementById('pwd-length').value);
     const isCVC = document.getElementById('opt-cvc').checked;
-    const isCVCNumbers = document.getElementById('opt-cvc-numbers').checked;
     const isLayoutSafe = document.getElementById('opt-layout-safe').checked;
 
     // Mode CVC
-    if (isCVC || isCVCNumbers) {
-        const result = generateCVCPassword(length, isCVCNumbers, isLayoutSafe);
+    if (isCVC) {
+        const result = generateCVCPassword(length, isLayoutSafe);
         document.getElementById('password-result').value = result.password;
         if (result.charsetSize > 0) {
             updateStrength(result.password, result.charsetSize);
@@ -468,15 +479,14 @@ function generateBatch() {
     const count = parseInt(document.getElementById('batch-count').value);
     const length = parseInt(document.getElementById('pwd-length').value);
     const isCVC = document.getElementById('opt-cvc').checked;
-    const isCVCNumbers = document.getElementById('opt-cvc-numbers').checked;
     const isLayoutSafe = document.getElementById('opt-layout-safe').checked;
 
     let passwords = [];
 
     // Mode CVC
-    if (isCVC || isCVCNumbers) {
+    if (isCVC) {
         for (let i = 0; i < count; i++) {
-            const result = generateCVCPassword(length, isCVCNumbers, isLayoutSafe);
+            const result = generateCVCPassword(length, isLayoutSafe);
             if (result.charsetSize === 0) {
                 document.getElementById('batch-output').value = result.password;
                 return;
@@ -521,18 +531,6 @@ document.querySelectorAll('.option-group input').forEach(el => {
 // Toggle info boxes for special modes
 document.getElementById('opt-cvc').addEventListener('change', function() {
     document.getElementById('cvc-info').style.display = this.checked ? 'block' : 'none';
-    // Disable CVC+Numbers if CVC is unchecked
-    if (!this.checked) {
-        document.getElementById('opt-cvc-numbers').checked = false;
-    }
-});
-
-document.getElementById('opt-cvc-numbers').addEventListener('change', function() {
-    document.getElementById('cvc-info').style.display = (this.checked || document.getElementById('opt-cvc').checked) ? 'block' : 'none';
-    // Enable CVC mode when CVC+Numbers is checked
-    if (this.checked) {
-        document.getElementById('opt-cvc').checked = true;
-    }
 });
 
 document.getElementById('opt-layout-safe').addEventListener('change', function() {
