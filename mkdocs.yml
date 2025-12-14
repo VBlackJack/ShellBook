@@ -109,7 +109,52 @@ nav:
       - Réponse Incident: playbooks/incident-response.md
 
   # ══════════════════════════════════════════════════════════════
-  # TAB 2: OPS CENTER - Scripts & Pipelines (reorganized by use case)
+  # TAB 2: TOOLS - Interactive calculators & utilities
+  # ══════════════════════════════════════════════════════════════
+  - 🧮 Outils:
+    - Vue d'ensemble: tools/index.md
+    - 🌐 Réseau:
+      - Subnet Calculator: tools/subnet-calculator.md
+      - MAC Lookup: tools/mac-lookup.md
+      - Bandwidth Calculator: tools/bandwidth-calculator.md
+      - DNS Reference: tools/dns-lookup.md
+      - Port Reference: tools/port-reference.md
+      - HTTP Status Codes: tools/http-status.md
+    - 💾 Stockage:
+      - RAID Calculator: tools/raid-calculator.md
+      - Storage Converter: tools/storage-converter.md
+    - 🐧 Linux:
+      - Permissions Calculator: tools/permissions-calculator.md
+      - Cron Builder: tools/cron-builder.md
+    - 🖥️ Virtualisation & Cloud:
+      - VM Sizing Calculator: tools/vm-calculator.md
+      - Windows Licensing: tools/windows-licensing.md
+      - AWS EC2 Lookup: tools/ec2-lookup.md
+    - 🔒 Sécurité:
+      - Password Generator: tools/password-generator.md
+      - JWT Decoder: tools/jwt-decoder.md
+      - Certificate Decoder: tools/cert-decoder.md
+      - Base64 & Hash: tools/base64-hash.md
+      - SSH Key Fingerprint: tools/ssh-fingerprint.md
+    - 💻 Développement:
+      - Regex Tester: tools/regex-tester.md
+      - JSON/YAML Formatter: tools/json-yaml.md
+      - SQL Formatter: tools/sql-formatter.md
+      - Unix Timestamp: tools/timestamp.md
+      - Diff Tool: tools/diff-tool.md
+      - UUID Generator: tools/uuid-generator.md
+      - String Case Converter: tools/string-case.md
+      - Markdown Preview: tools/markdown-preview.md
+    - 🔤 Encodage:
+      - Unicode Lookup: tools/unicode-lookup.md
+      - HTML Entities: tools/html-entities.md
+      - URL Encoder/Decoder: tools/url-encoder.md
+      - ASCII Table: tools/ascii-table.md
+    - 🎨 Design:
+      - Color Converter: tools/color-converter.md
+
+  # ══════════════════════════════════════════════════════════════
+  # TAB 3: OPS CENTER - Scripts & Pipelines (reorganized by use case)
   # ══════════════════════════════════════════════════════════════
   - 🛠️ Ops Center:
     - Vue d'ensemble: scripts/index.md
@@ -447,7 +492,143 @@ nav:
       - Outils Essentiels: security/essential-tools.md
 
   # ══════════════════════════════════════════════════════════════
-  # TAB 8: LEARNING PATHS (ALL formations consolidated)
+  # ══════════════════════════════════════════════════════════════
+  # TAB 8: TUTORIALS (practical step-by-step guides)
+  # ══════════════════════════════════════════════════════════════
+  - 🔧 Tutos:
+    - Vue d'ensemble: tutos/index.md
+    - 🌐 Serveurs Web:
+      - Index: tutos/web-servers/index.md
+      - LAMP Rocky Linux 9: tutos/web-servers/lamp-rocky9.md
+      - LAMP Debian 12: tutos/web-servers/lamp-debian12.md
+      - IIS Windows Server 2022: tutos/web-servers/iis-windows2022.md
+      - LEMP Rocky 9: tutos/web-servers/lemp-rocky9.md
+      - LEMP Debian 12: tutos/web-servers/lemp-debian12.md
+      - Nginx Proxy Rocky 9: tutos/web-servers/nginx-proxy-rocky9.md
+      - Nginx Proxy Debian 12: tutos/web-servers/nginx-proxy-debian12.md
+      - HAProxy Rocky 9: tutos/web-servers/haproxy-rocky9.md
+      - HAProxy Debian 12: tutos/web-servers/haproxy-debian12.md
+    - 🗄️ Bases de Données:
+      - Index: tutos/databases/index.md
+      - MariaDB Rocky 9: tutos/databases/mariadb-rocky9.md
+      - MariaDB Debian 12: tutos/databases/mariadb-debian12.md
+      - PostgreSQL Rocky 9: tutos/databases/postgresql-rocky9.md
+      - PostgreSQL Debian 12: tutos/databases/postgresql-debian12.md
+      - Redis Rocky 9: tutos/databases/redis-rocky9.md
+      - Redis Debian 12: tutos/databases/redis-debian12.md
+    - 🌐 Réseau:
+      - Index: tutos/network/index.md
+      - DNS Bind Rocky 9: tutos/network/dns-bind-rocky9.md
+      - DNS Bind Debian 12: tutos/network/dns-bind-debian12.md
+      - DNS Windows 2022: tutos/network/dns-windows2022.md
+      - DHCP Rocky 9: tutos/network/dhcp-rocky9.md
+      - DHCP Debian 12: tutos/network/dhcp-debian12.md
+      - DHCP Windows 2022: tutos/network/dhcp-windows2022.md
+      - Chrony Rocky 9: tutos/network/chrony-rocky9.md
+      - Chrony Debian 12: tutos/network/chrony-debian12.md
+      - NTP Windows 2022: tutos/network/ntp-windows2022.md
+      - Postfix Rocky 9: tutos/network/postfix-rocky9.md
+      - Postfix Debian 12: tutos/network/postfix-debian12.md
+      - OpenLDAP Rocky 9: tutos/network/openldap-rocky9.md
+      - OpenLDAP Debian 12: tutos/network/openldap-debian12.md
+      - WireGuard Rocky 9: tutos/network/wireguard-rocky9.md
+      - WireGuard Debian 12: tutos/network/wireguard-debian12.md
+      - Squid Rocky 9: tutos/network/squid-rocky9.md
+      - Squid Debian 12: tutos/network/squid-debian12.md
+      - Gitea Rocky 9: tutos/network/gitea-rocky9.md
+      - Gitea Debian 12: tutos/network/gitea-debian12.md
+      - Nextcloud Rocky 9: tutos/network/nextcloud-rocky9.md
+      - Nextcloud Debian 12: tutos/network/nextcloud-debian12.md
+      - Ansible Rocky 9: tutos/network/ansible-rocky9.md
+      - Ansible Debian 12: tutos/network/ansible-debian12.md
+      - FreeIPA Rocky 9: tutos/network/freeipa-rocky9.md
+      - FreeIPA Debian 12: tutos/network/freeipa-debian12.md
+      - Keycloak Rocky 9: tutos/network/keycloak-rocky9.md
+      - Keycloak Debian 12: tutos/network/keycloak-debian12.md
+      - Pi-hole Rocky 9: tutos/network/pihole-rocky9.md
+      - Pi-hole Debian 12: tutos/network/pihole-debian12.md
+      - OpenVPN Rocky 9: tutos/network/openvpn-rocky9.md
+      - OpenVPN Debian 12: tutos/network/openvpn-debian12.md
+      - GLPI Rocky 9: tutos/network/glpi-rocky9.md
+      - GLPI Debian 12: tutos/network/glpi-debian12.md
+      - BookStack Rocky 9: tutos/network/bookstack-rocky9.md
+      - BookStack Debian 12: tutos/network/bookstack-debian12.md
+      - Guacamole Rocky 9: tutos/network/guacamole-rocky9.md
+      - Guacamole Debian 12: tutos/network/guacamole-debian12.md
+    - 💾 Stockage:
+      - Index: tutos/storage/index.md
+      - NFS Rocky 9: tutos/storage/nfs-rocky9.md
+      - NFS Debian 12: tutos/storage/nfs-debian12.md
+      - Samba Rocky 9: tutos/storage/samba-rocky9.md
+      - Samba Debian 12: tutos/storage/samba-debian12.md
+      - File Server Windows: tutos/storage/fileserver-windows2022.md
+      - iSCSI Rocky 9: tutos/storage/iscsi-rocky9.md
+      - iSCSI Debian 12: tutos/storage/iscsi-debian12.md
+      - Borg Rocky 9: tutos/storage/borg-rocky9.md
+      - Borg Debian 12: tutos/storage/borg-debian12.md
+      - GlusterFS Rocky 9: tutos/storage/glusterfs-rocky9.md
+      - GlusterFS Debian 12: tutos/storage/glusterfs-debian12.md
+      - MinIO Rocky 9: tutos/storage/minio-rocky9.md
+      - MinIO Debian 12: tutos/storage/minio-debian12.md
+      - Restic Rocky 9: tutos/storage/restic-rocky9.md
+      - Restic Debian 12: tutos/storage/restic-debian12.md
+      - Syncthing Rocky 9: tutos/storage/syncthing-rocky9.md
+      - Syncthing Debian 12: tutos/storage/syncthing-debian12.md
+    - 🐳 Conteneurs & Virtualisation:
+      - Index: tutos/containers/index.md
+      - Podman Rocky 9: tutos/containers/podman-rocky9.md
+      - Podman Debian 12: tutos/containers/podman-debian12.md
+      - Docker Rocky 9: tutos/containers/docker-rocky9.md
+      - Docker Debian 12: tutos/containers/docker-debian12.md
+      - Docker Windows: tutos/containers/docker-windows2022.md
+      - KVM Rocky 9: tutos/containers/kvm-rocky9.md
+      - KVM Debian 12: tutos/containers/kvm-debian12.md
+      - K3s Rocky 9: tutos/containers/k3s-rocky9.md
+      - K3s Debian 12: tutos/containers/k3s-debian12.md
+      - Traefik Rocky 9: tutos/containers/traefik-rocky9.md
+      - Traefik Debian 12: tutos/containers/traefik-debian12.md
+      - Portainer Rocky 9: tutos/containers/portainer-rocky9.md
+      - Portainer Debian 12: tutos/containers/portainer-debian12.md
+      - Proxmox VE Debian 12: tutos/containers/proxmox-debian12.md
+    - 📊 Monitoring:
+      - Index: tutos/monitoring/index.md
+      - Prometheus Grafana Rocky 9: tutos/monitoring/prometheus-grafana-rocky9.md
+      - Prometheus Grafana Debian 12: tutos/monitoring/prometheus-grafana-debian12.md
+      - ELK Rocky 9: tutos/monitoring/elk-rocky9.md
+      - ELK Debian 12: tutos/monitoring/elk-debian12.md
+      - Zabbix Rocky 9: tutos/monitoring/zabbix-rocky9.md
+      - Zabbix Debian 12: tutos/monitoring/zabbix-debian12.md
+      - Grafana Loki Rocky 9: tutos/monitoring/loki-rocky9.md
+      - Grafana Loki Debian 12: tutos/monitoring/loki-debian12.md
+      - Uptime Kuma Rocky 9: tutos/monitoring/uptimekuma-rocky9.md
+      - Uptime Kuma Debian 12: tutos/monitoring/uptimekuma-debian12.md
+      - Netdata Rocky 9: tutos/monitoring/netdata-rocky9.md
+      - Netdata Debian 12: tutos/monitoring/netdata-debian12.md
+    - 🔒 Sécurité:
+      - Index: tutos/security/index.md
+      - Firewalld Rocky 9: tutos/security/firewalld-rocky9.md
+      - UFW Debian 12: tutos/security/ufw-debian12.md
+      - Windows Firewall: tutos/security/firewall-windows2022.md
+      - Certbot Rocky 9: tutos/security/certbot-rocky9.md
+      - Certbot Debian 12: tutos/security/certbot-debian12.md
+      - Win-ACME Windows: tutos/security/winacme-windows2022.md
+      - Fail2ban Rocky 9: tutos/security/fail2ban-rocky9.md
+      - Fail2ban Debian 12: tutos/security/fail2ban-debian12.md
+      - SSH Hardening Rocky 9: tutos/security/ssh-hardening-rocky9.md
+      - SSH Hardening Debian 12: tutos/security/ssh-hardening-debian12.md
+      - CrowdSec Rocky 9: tutos/security/crowdsec-rocky9.md
+      - CrowdSec Debian 12: tutos/security/crowdsec-debian12.md
+      - Auditd Rocky 9: tutos/security/auditd-rocky9.md
+      - Auditd Debian 12: tutos/security/auditd-debian12.md
+      - Wazuh Rocky 9: tutos/security/wazuh-rocky9.md
+      - Wazuh Debian 12: tutos/security/wazuh-debian12.md
+    - 🚀 DevOps & CI/CD:
+      - Jenkins Rocky 9: tutos/devops/jenkins-rocky9.md
+      - Jenkins Debian 12: tutos/devops/jenkins-debian12.md
+      - GitLab CE Rocky 9: tutos/devops/gitlab-rocky9.md
+      - GitLab CE Debian 12: tutos/devops/gitlab-debian12.md
+
+  # TAB 9: LEARNING PATHS (ALL formations consolidated)
   # ══════════════════════════════════════════════════════════════
   - 🎓 Formations:
     - Catalogue: formations/index.md
@@ -801,7 +982,7 @@ nav:
         - Module 05 - Projet Final: formations/ai-engineering/05-tp-final.md
 
   # ══════════════════════════════════════════════════════════════
-  # TAB 9: CONCEPTS & REFERENCE (simplified Encyclopédie)
+  # TAB 10: CONCEPTS & REFERENCE (simplified Encyclopédie)
   # ══════════════════════════════════════════════════════════════
   - 📚 Concepts:
     - 🏛️ Fondamentaux:
