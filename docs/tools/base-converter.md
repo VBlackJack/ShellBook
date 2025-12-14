@@ -320,6 +320,7 @@ int('FF', 16)  # 255
 .reference-table {
     max-height: 300px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .reference-table table {
     width: 100%;

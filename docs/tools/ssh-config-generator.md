@@ -291,6 +291,7 @@ Generateur de fichier `~/.ssh/config` pour simplifier vos connexions SSH.
 .host-list {
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .host-item {

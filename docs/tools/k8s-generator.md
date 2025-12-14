@@ -166,6 +166,7 @@ Generateur de manifests Kubernetes : Deployment, Service, Ingress, ConfigMap.
     padding: 20px;
     border-radius: 4px;
     overflow-x: auto;
+    overflow-y: auto;
     font-size: 12px;
     line-height: 1.5;
     margin: 0;

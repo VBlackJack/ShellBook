@@ -316,6 +316,7 @@ Reference des commandes Whois et informations sur les registres Internet.
   gap: 10px;
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tld-item {

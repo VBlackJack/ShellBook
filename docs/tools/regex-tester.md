@@ -226,6 +226,7 @@ info@localhost</textarea>
     padding-left: 20px;
     max-height: 200px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .matches-box li {
     font-family: monospace;
@@ -233,6 +234,7 @@ info@localhost</textarea>
     padding: 3px 6px;
     background: var(--md-code-bg-color);
     border-radius: 2px;
+    word-break: break-all;
 }
 .presets-grid {
     display: flex;

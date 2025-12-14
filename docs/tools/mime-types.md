@@ -130,6 +130,7 @@ Référence complète des types MIME avec recherche interactive.
     #mime-types .table-container {
       max-height: 500px;
       overflow-y: auto;
+      overflow-x: hidden;
     }
     #mime-types .copy-toast {
       position: fixed;

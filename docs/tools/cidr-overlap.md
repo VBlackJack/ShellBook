@@ -124,6 +124,7 @@ Detecte les chevauchements entre plusieurs plages CIDR pour eviter les conflits 
 .cidr-list {
   max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-bottom: 15px;
 }
 

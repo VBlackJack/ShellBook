@@ -226,6 +226,7 @@ Subject: Test Email
 .headers-list {
     max-height: 400px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .header-item {
     padding: 10px 15px;

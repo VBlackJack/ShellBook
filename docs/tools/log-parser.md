@@ -364,6 +364,7 @@ Analyseur de logs avec extraction de patterns et statistiques.
 .filtered-results {
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
   font-family: monospace;
   font-size: 0.8em;
 }
