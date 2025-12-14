@@ -34,32 +34,32 @@ Calculez le MTU optimal pour eviter la fragmentation et optimiser les performanc
 
         <div class="form-group">
           <label>MTU de base (bytes)</label>
-          <input type="number" id="baseMtu" value="1500" min="68" max="9216" onchange="updateMTU()">
+          <input type="number" id="baseMtu" value="1500" min="68" max="9216" oninput="onManualInput()">
         </div>
 
         <div class="form-group">
           <label>Overhead supplementaire (bytes)</label>
-          <input type="number" id="overhead" value="0" min="0" max="500" onchange="updateMTU()">
+          <input type="number" id="overhead" value="0" min="0" max="500" oninput="onManualInput()">
           <span class="hint">Pour encapsulations multiples</span>
         </div>
 
         <div class="options-section">
           <h4>Options d'encapsulation</h4>
           <label class="checkbox-option">
-            <input type="checkbox" id="opt8021q" onchange="updateMTU()">
+            <input type="checkbox" id="opt8021q" onchange="calculateMTU()">
             <span>802.1Q VLAN tag (+4 bytes)</span>
           </label>
           <label class="checkbox-option">
-            <input type="checkbox" id="optQinQ" onchange="updateMTU()">
+            <input type="checkbox" id="optQinQ" onchange="calculateMTU()">
             <span>QinQ double tag (+8 bytes)</span>
           </label>
           <label class="checkbox-option">
-            <input type="checkbox" id="optMpls" onchange="updateMTU()">
+            <input type="checkbox" id="optMpls" onchange="calculateMTU()">
             <span>MPLS label (+4 bytes/label)</span>
           </label>
           <div id="mplsLabels" style="display:none; margin-left: 25px;">
             <label>Nombre de labels MPLS:</label>
-            <input type="number" id="mplsCount" value="1" min="1" max="7" onchange="updateMTU()">
+            <input type="number" id="mplsCount" value="1" min="1" max="7" onchange="calculateMTU()">
           </div>
         </div>
       </div>
@@ -387,15 +387,29 @@ const mtuPresets = {
 
 let currentTab = 'linux';
 
+// Appelé quand l'utilisateur change manuellement MTU ou overhead
+function onManualInput() {
+  // Basculer en mode custom pour ne pas écraser les valeurs
+  document.getElementById('connType').value = 'custom';
+  calculateMTU();
+}
+
+// Appelé quand le type de connexion change
 function updateMTU() {
   const connType = document.getElementById('connType').value;
   const preset = mtuPresets[connType];
 
+  // Appliquer les presets seulement si ce n'est pas custom
   if (connType !== 'custom') {
     document.getElementById('baseMtu').value = preset.mtu + preset.overhead;
     document.getElementById('overhead').value = preset.overhead;
   }
 
+  calculateMTU();
+}
+
+// Calcul des valeurs MTU
+function calculateMTU() {
   let baseMtu = parseInt(document.getElementById('baseMtu').value) || 1500;
   let overhead = parseInt(document.getElementById('overhead').value) || 0;
 
