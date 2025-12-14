@@ -406,3 +406,11 @@ kubectl set image deploy/app app=app:v2
 kubectl rollout undo deploy/app
 kubectl rollout restart deploy/app
 ```
+
+---
+
+## Voir aussi
+
+- [Helm : Package Management](kubernetes-helm.md)
+- [K8s Services & Ingress](kubernetes-networking.md)
+- [Kubectl Cheatsheet](cheatsheet-kubectl.md)

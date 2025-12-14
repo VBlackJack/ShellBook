@@ -10,6 +10,8 @@ tags:
 
 # Module 4 : Automatisation - La Puissance de dbatools
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"SQL Management Studio (SSMS) is for one server. dbatools is for the fleet."**

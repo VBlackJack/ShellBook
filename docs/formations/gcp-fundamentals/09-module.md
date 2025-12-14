@@ -10,6 +10,8 @@ tags:
 
 # Module 9 : Sécurité - Cloud Armor, Secret Manager & Binary Auth
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

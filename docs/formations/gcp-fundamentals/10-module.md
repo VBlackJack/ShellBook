@@ -10,6 +10,8 @@ tags:
 
 # Module 10 : Observability - Monitoring, Logging & Tracing
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

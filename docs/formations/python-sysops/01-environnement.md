@@ -10,6 +10,8 @@ tags:
 
 Installer et configurer un environnement Python professionnel.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

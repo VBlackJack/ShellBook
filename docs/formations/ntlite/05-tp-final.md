@@ -10,6 +10,8 @@ tags:
 
 # Module 5 : TP Final - L'Image Master "Golden ISO"
 
+**Durée estimée :** 1 heure
+
 ## Scenario : Project VDI-Lite
 
 ### Contexte Mission

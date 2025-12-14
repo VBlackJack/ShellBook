@@ -9,6 +9,8 @@ tags:
 
 # Module 1 : Qu'est-ce que le Cloud ?
 
+**Durée estimée :** 1 heure
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

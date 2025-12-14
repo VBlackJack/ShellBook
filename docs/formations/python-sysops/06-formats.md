@@ -11,6 +11,8 @@ tags:
 
 Manipuler JSON, YAML, CSV et autres formats de configuration.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

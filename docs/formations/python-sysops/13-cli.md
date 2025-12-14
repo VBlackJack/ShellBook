@@ -12,6 +12,8 @@ tags:
 
 Créer des interfaces en ligne de commande professionnelles.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

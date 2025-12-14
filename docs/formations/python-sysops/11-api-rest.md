@@ -12,6 +12,8 @@ tags:
 
 Interagir avec des APIs REST pour l'automatisation et l'intégration.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

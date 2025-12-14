@@ -1107,3 +1107,10 @@ top
 ---
 
 **🎯 Vous maîtrisez maintenant le déploiement et le troubleshooting de CrowdStrike Falcon EDR !**
+
+---
+
+## Voir aussi
+
+- [Digital Forensics & Incident Response (DFIR)](digital-forensics.md)
+- [Outils de Sécurité Essentiels](essential-tools.md)

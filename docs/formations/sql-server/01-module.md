@@ -9,6 +9,8 @@ tags:
 
 # Module 1 : Architecture & Installation
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"It's not just Next > Next > Finish"**

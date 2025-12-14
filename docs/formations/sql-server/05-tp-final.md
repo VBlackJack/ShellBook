@@ -9,6 +9,8 @@ tags:
 
 # Module 5 : TP Final - Mission DBA (Projet Phoenix)
 
+**Durée estimée :** 45 minutes
+
 ## Scenario : Projet Phoenix
 
 ### Contexte mission

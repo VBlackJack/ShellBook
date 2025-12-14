@@ -9,6 +9,8 @@ tags:
 
 # Module 7 : CI/CD avec CodePipeline & CodeBuild
 
+**Durée estimée :** 15 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

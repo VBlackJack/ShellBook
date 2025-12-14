@@ -10,6 +10,8 @@ tags:
 
 # Module 9 : Security - Key Vault, Defender & WAF
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

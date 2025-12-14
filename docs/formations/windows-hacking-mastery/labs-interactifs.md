@@ -14,6 +14,8 @@ tags:
 
 Cette page référence les meilleurs labs en ligne pour pratiquer les techniques couvertes dans la formation. Classés par module et difficulté.
 
+**Durée estimée :** 30 minutes
+
 ---
 
 ## Plateformes Recommandées

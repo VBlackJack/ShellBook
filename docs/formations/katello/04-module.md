@@ -9,6 +9,8 @@ tags:
 
 # Module 4 : Patch Management & Errata - La Chasse aux CVE
 
+**Durée estimée :** 1h30
+
 ## Introduction
 
 > **"Security is not an option."**

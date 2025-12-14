@@ -10,6 +10,8 @@ tags:
 
 # Module 5 : Architecture Cloud (HA, DR, Scalabilité)
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

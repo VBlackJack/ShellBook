@@ -13,6 +13,8 @@ tags:
 
 Cette annexe couvre les techniques avancées de cracking de mots de passe, optimisation des performances et stratégies efficaces.
 
+**Durée estimée :** 30 minutes
+
 !!! info "Légalité"
     Le cracking de mots de passe n'est légal que sur :
 

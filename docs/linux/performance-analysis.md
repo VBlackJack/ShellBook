@@ -316,3 +316,10 @@ mpstat 1                  # Par coeur
 vmstat 1                  # Synthèse
 glances                   # Dashboard complet
 ```
+
+---
+
+## Voir aussi
+
+- [Débogage Système & Logs](debugging.md)
+- [Kernel Debugging & Troubleshooting](kernel-debugging.md)

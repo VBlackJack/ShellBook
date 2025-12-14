@@ -431,3 +431,10 @@ jobs:
   if: github.ref == 'refs/heads/main'
   run: ./deploy.sh
 ```
+
+---
+
+## Voir aussi
+
+- [Git pour SysAdmins](git-sysops.md)
+- [Workflow GitHub Actions Production](pipelines/github-actions-workflow.md)

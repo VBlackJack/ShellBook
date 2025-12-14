@@ -554,3 +554,10 @@ journalctl --since "1 hour ago"    # Dernière heure
 sudo update-grub                   # Régénérer config
 dmesg -T                           # Messages kernel
 ```
+
+---
+
+## Voir aussi
+
+- [Systemd Avancé](systemd-advanced.md)
+- [Débogage Système & Logs](debugging.md)

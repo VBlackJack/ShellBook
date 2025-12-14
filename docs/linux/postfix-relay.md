@@ -828,3 +828,10 @@ Checklist Postfix Relay:
 - [SSH Hardening](ssh-hardening.md) - Sécurisation
 - [Firewall UFW](firewall-ufw.md) - Configuration firewall
 - [NXLog](../windows/nxlog.md) - Envoi de logs (alertes mail)
+
+---
+
+## Voir aussi
+
+- [Architecture & Services Email](email-systems-basics.md)
+- [OpenSSL & Gestion du Cycle de Vie des Certificats](../security/certificates.md)

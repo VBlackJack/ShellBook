@@ -12,6 +12,8 @@ tags:
 
 Cette page présente visuellement les différentes phases d'une attaque Active Directory, de la reconnaissance initiale à la compromission totale du domaine.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Vue d'Ensemble

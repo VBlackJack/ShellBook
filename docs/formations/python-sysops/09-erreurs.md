@@ -11,6 +11,8 @@ tags:
 
 Gérer les erreurs proprement et implémenter une journalisation efficace.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

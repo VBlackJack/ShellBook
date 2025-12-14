@@ -847,3 +847,10 @@ Restart-Service NTDS -Force
     Avec cette méthode, vous pouvez générer des CSR pour **n'importe quel service Windows** :
     IIS, LDAPS, RDP, SQL Server, Exchange, etc.
     Le fichier `.inf` est **entièrement personnalisable** selon vos besoins PKI.
+
+---
+
+## Voir aussi
+
+- [Active Directory PowerShell](active-directory.md)
+- [Windows Server: Build & Modern Admin](server-administration.md)

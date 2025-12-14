@@ -13,6 +13,8 @@ tags:
 
 Guide méthodologique structuré pour l'exploitation Windows/AD, inspiré de l'approche OSCP. À utiliser comme checklist lors de vos pentests et examens.
 
+**Durée estimée :** 30 minutes
+
 ---
 
 ## Vue d'Ensemble

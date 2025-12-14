@@ -569,3 +569,10 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Cryptography\OID\EncodingType 0
 !!! success "Production Ready"
     Après validation, tous les certificats de l'infrastructure peuvent être vérifiés **sans accès Internet**.
     Le miroir CRL assure la conformité SecNumCloud et réduit la dépendance aux CA externes.
+
+---
+
+## Voir aussi
+
+- [Aide-Mémoire OpenSSL CLI](openssl-cli.md)
+- [OpenSSL Cheatsheet](cheatsheet-openssl.md)

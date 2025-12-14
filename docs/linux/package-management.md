@@ -444,3 +444,10 @@ sudo apt-mark unhold package       # Débloquer
 cat /var/log/apt/history.log       # Historique
 cat /var/log/dpkg.log              # Détails
 ```
+
+---
+
+## Voir aussi
+
+- [DNF, RPM & Modules](rhel-package-management.md)
+- [Fondamentaux d'Ansible](../devops/ansible/fundamentals.md)

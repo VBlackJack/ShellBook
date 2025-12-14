@@ -11,6 +11,8 @@ tags:
 
 90% des entreprises du Fortune 500 utilisent Active Directory. Si vous tombez l'AD, vous possédez l'entreprise.
 
+**Durée estimée :** 45 minutes
+
 ## 1. Concepts Clés
 
 *   **Domain Controller (DC)** : Le serveur maître (contient la base `NTDS.dit` avec tous les mots de passe).

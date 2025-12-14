@@ -10,6 +10,8 @@ tags:
 
 # Module 7 : Cas d'Usage Worldline
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

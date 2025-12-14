@@ -8,6 +8,8 @@ tags:
 
 # Module 2 : Création de Paquets - Devenir Mainteneur
 
+**Durée estimée :** 1 heure
+
 ## Introduction
 
 > **"Don't just consume packages, create them."**

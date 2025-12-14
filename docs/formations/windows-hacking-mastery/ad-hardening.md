@@ -13,6 +13,8 @@ tags:
 
 Ce guide couvre les mesures défensives pour sécuriser Active Directory contre les attaques couvertes dans cette formation.
 
+**Durée estimée :** 30 minutes
+
 !!! tip "Perspective Purple Team"
     Comprendre les défenses aide le Red Team à :
 

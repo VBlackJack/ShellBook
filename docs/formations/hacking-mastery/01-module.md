@@ -12,6 +12,8 @@ tags:
 
 Avant de lancer la moindre commande, il faut comprendre où on met les pieds. Le hacking n'est pas un jeu, c'est une discipline encadrée.
 
+**Durée estimée :** 30 minutes
+
 ## 1. Le Cadre Légal (France)
 
 ### Articles du Code Pénal (Godet)

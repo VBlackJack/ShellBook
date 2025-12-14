@@ -9,6 +9,8 @@ tags:
 
 # Module 3 : Virtual Network & Networking
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

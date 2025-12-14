@@ -11,6 +11,8 @@ tags:
 
 "Si je disposais de huit heures pour abattre un arbre, j'en consacrerais six à affûter ma hache." (Lincoln). En hacking, c'est pareil : 80% de reconnaissance, 20% d'attaque.
 
+**Durée estimée :** 30 minutes
+
 ## 1. Reconnaissance Active : Nmap
 
 **Nmap** est le roi du scan réseau. Il répond à 3 questions :

@@ -10,6 +10,8 @@ tags:
 
 # Module 4 : Automatisation - L'Installation Silencieuse
 
+**Durée estimée :** 1 heure
+
 ## Introduction
 
 > **"Zero Touch Provisioning"**

@@ -1201,3 +1201,10 @@ argocd app sync myapp
 # 4. Vérifier
 kubectl get all -n production
 ```
+
+---
+
+## Voir aussi
+
+- [Helm : Package Management](kubernetes-helm.md)
+- [Git pour SysAdmins](git-sysops.md)

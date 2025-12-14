@@ -12,6 +12,8 @@ tags:
 
 Le Web est la plus grande surface d'attaque.
 
+**Durée estimée :** 30 minutes
+
 ## 1. OWASP Top 10
 
 La liste des 10 failles les plus critiques (mise à jour régulièrement).

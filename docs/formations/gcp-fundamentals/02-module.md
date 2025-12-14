@@ -10,6 +10,8 @@ tags:
 
 # Module 2 : Compute Engine - VMs dans le Cloud
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

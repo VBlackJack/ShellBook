@@ -11,6 +11,8 @@ tags:
 # Module 2 : Approbation & Ciblage - La Stratégie des Anneaux
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 1 heure
     - 🎯 Comprendre la stratégie des **Deployment Rings** (anneaux de déploiement)
     - 👥 Créer et gérer des **Computer Target Groups** (groupes de machines)
     - 🔍 Rechercher et filtrer les mises à jour par critères

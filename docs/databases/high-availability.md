@@ -1171,3 +1171,10 @@ pgbackrest --stanza=prod-db --type=time --target="2024-01-15 14:00:00" \
 - [pg_stat_replication](https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-REPLICATION-VIEW)
 - [Patroni REST API](https://patroni.readthedocs.io/en/latest/rest_api.html)
 - [Galera Monitoring with Prometheus](https://github.com/prometheus/mysqld_exporter)
+
+---
+
+## Voir aussi
+
+- [PostgreSQL](postgresql.md)
+- [MariaDB / MySQL](mariadb.md)

@@ -522,3 +522,11 @@ visudo                          # Éditer sudoers
 find / -perm -4000 -type f      # Binaires SUID
 find / -perm -2000 -type d      # Répertoires SGID
 ```
+
+---
+
+## Voir aussi
+
+- [Clés SSH Sécurisées](ssh-keys.md)
+- [SSH Hardening & Fail2Ban](ssh-hardening.md)
+- [Checklist d'Audit Sécurité](../security/audit-checklist.md)

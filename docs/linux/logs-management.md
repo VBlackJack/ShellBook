@@ -340,3 +340,10 @@ journalctl -fu nginx                 # Suivre service
 journalctl --since "1 hour ago"      # Par temps
 journalctl -p err                    # Par priorité
 ```
+
+---
+
+## Voir aussi
+
+- [Loki - Logging Stack](../devops/loki-logging.md)
+- [Prometheus, Loki & Grafana](../devops/observability-stack.md)

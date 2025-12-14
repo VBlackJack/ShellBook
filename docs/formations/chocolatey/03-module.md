@@ -8,6 +8,8 @@ tags:
 
 # Module 3 : Serveur Privé - L'Usine Logicielle
 
+**Durée estimée :** 1 heure
+
 ## Introduction
 
 > **"Public repos are for home. Private repos are for pros."**

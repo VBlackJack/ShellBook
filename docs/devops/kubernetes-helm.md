@@ -656,3 +656,10 @@ helm template myapp myapp/ | grep -A 3 "resources:"
 - [Artifact Hub (Charts)](https://artifacthub.io/)
 - [Helm Best Practices](https://helm.sh/docs/chart_best_practices/)
 - [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets)
+
+---
+
+## Voir aussi
+
+- [Kubectl Survival Kit](kubernetes-survival.md)
+- [Kustomize : Configuration Management](kubernetes-kustomize.md)

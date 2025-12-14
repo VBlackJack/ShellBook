@@ -10,6 +10,8 @@ tags:
 
 # Module 8 : Serverless - Azure Functions & Container Apps
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

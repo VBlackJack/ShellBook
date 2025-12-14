@@ -12,6 +12,8 @@ tags:
 
 Automatiser l'infrastructure cloud avec Python et boto3.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

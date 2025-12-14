@@ -1242,3 +1242,10 @@ build:
   script:
     - npm run build
 ```
+
+---
+
+## Voir aussi
+
+- [Git pour SysAdmins](git-sysops.md)
+- [Template GitLab CI Ultime](pipelines/gitlab-ci-ultimate.md)

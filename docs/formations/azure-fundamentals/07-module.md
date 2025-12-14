@@ -10,6 +10,8 @@ tags:
 
 # Module 7 : CI/CD avec Azure DevOps
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

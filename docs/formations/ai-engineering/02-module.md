@@ -10,6 +10,8 @@ tags:
 
 Le "Prompt Engineering" n'est pas de la magie, c'est de la **programmation en langage naturel**.
 
+**Durée estimée :** 15 minutes
+
 ## 1. Les Techniques de Prompting
 
 ### Zero-Shot (Naïf)

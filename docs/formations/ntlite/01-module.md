@@ -9,6 +9,8 @@ tags:
 
 # Module 1 : Prise en main & Architecture WIM
 
+**Durée estimée :** 1h30
+
 ## Introduction
 
 > **"Garbage In, Garbage Out."**

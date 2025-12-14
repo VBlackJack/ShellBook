@@ -12,6 +12,8 @@ tags:
 # Module 1 : Architecture & Installation Katello
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 1 heure
     - 🏗️ Comprendre l'architecture Katello (Foreman, Pulp, Candlepin, Smart Proxies)
     - 💾 Connaître les prérequis matériels et logiciels
     - 💻 Installer Katello sur Rocky Linux 9

@@ -709,3 +709,10 @@ Checklist Load Balancing:
 - [Modern Networking](modern-networking.md) - Réseau moderne
 - [Kubernetes Networking](kubernetes-networking.md) - Ingress et Services
 - [Docker Advanced](docker-advanced.md) - Networking Docker
+
+---
+
+## Voir aussi
+
+- [Nginx & Web Hosting](../linux/web-servers.md)
+- [K8s Services & Ingress](kubernetes-networking.md)

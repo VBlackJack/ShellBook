@@ -10,6 +10,8 @@ tags:
 
 # Module 4 : Déploiement de Masse - Industrialisation
 
+**Durée estimée :** 1h30
+
 ## Introduction
 
 > **"Don't run choco manually on 500 machines."**

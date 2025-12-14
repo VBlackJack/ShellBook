@@ -313,3 +313,10 @@ docker history --no-trunc myimage
 # Exécuter une commande ponctuelle dans un nouveau container
 docker run --rm -it alpine sh
 ```
+
+---
+
+## Voir aussi
+
+- [Docker Cheatsheet](cheatsheet-docker.md)
+- [Podman : Docker sans Daemon](podman-containers.md)

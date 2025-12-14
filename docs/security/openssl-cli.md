@@ -294,3 +294,10 @@ openssl rand -base64 12
 # Mot de passe hex de 32 caractères
 openssl rand -hex 16
 ```
+
+---
+
+## Voir aussi
+
+- [OpenSSL & Gestion du Cycle de Vie des Certificats](certificates.md)
+- [Fondamentaux de la Cryptographie & Vocabulaire](crypto-concepts.md)

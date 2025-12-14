@@ -10,6 +10,8 @@ tags:
 
 # Module 3 : Intégration - Drivers & Updates
 
+**Durée estimée :** 1 heure
+
 ## Introduction
 
 > **"Don't wait for Windows Update"**

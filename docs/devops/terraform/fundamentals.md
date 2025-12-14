@@ -1171,3 +1171,10 @@ resource "aws_iam_role_policy_attachment" "app" { ... }
 - [Terraform Workspaces](https://developer.hashicorp.com/terraform/language/state/workspaces) : Gérer plusieurs environnements (dev/staging/prod)
 - [Terraform Cloud](https://cloud.hashicorp.com/products/terraform) : Remote execution & collaboration
 - [Terragrunt](https://terragrunt.gruntwork.io/) : DRY Terraform (éviter la duplication de code)
+
+---
+
+## Voir aussi
+
+- [Terraform Cheatsheet](cheatsheet-terraform.md)
+- [GitOps: ArgoCD & Helm](../gitops-argocd.md)

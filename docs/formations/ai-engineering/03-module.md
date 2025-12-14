@@ -10,6 +10,8 @@ tags:
 # Module 3 : Local AI & Ops
 
 Le Cloud c'est bien, mais envoyer des données sensibles (mots de passe, code source privé) à OpenAI est souvent interdit.
+
+**Durée estimée :** 15 minutes
 La solution : **Local LLM**.
 
 ## 1. La Révolution Ollama

@@ -11,6 +11,8 @@ tags:
 
 Fiches condensées pour utilisation rapide en exam ou sur le terrain. Imprimables en format A4.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Card 1: Enumeration AD

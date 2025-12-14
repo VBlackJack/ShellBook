@@ -486,3 +486,10 @@ iptables -P FORWARD DROP
     Si vous voyez des ports LAN ouverts depuis Internet, **votre DMZ est mal configurée**.
 
 ---
+
+---
+
+## Voir aussi
+
+- [DNS Fundamentals](dns-fundamentals.md)
+- [TCP/IP & Routing](tcp-ip-routing.md)

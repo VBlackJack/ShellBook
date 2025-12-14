@@ -12,6 +12,8 @@ tags:
 # Module 2 : Gestion du Contenu - Le Pipeline RPM
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 45 minutes
     - 🔄 Comprendre les **Lifecycle Environments** (Library → Dev → Test → Prod)
     - 📦 Synchroniser des repositories upstream (Rocky Linux, EPEL)
     - 📸 Créer des **Content Views** (snapshots versionnés)

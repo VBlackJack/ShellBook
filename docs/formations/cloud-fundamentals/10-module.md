@@ -11,6 +11,8 @@ tags:
 
 # Module 10 : Data & IA/ML dans le Cloud
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 A la fin de ce module, vous serez capable de :

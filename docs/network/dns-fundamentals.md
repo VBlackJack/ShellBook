@@ -311,3 +311,10 @@ ipconfig /flushdns                   # Windows
 !!! info "À lire aussi"
     - [Network Fundamentals](fundamentals.md) - CIDR, Load Balancing, DMZ
     - [Linux Network Management](../linux/network-management.md) - Configuration réseau
+
+---
+
+## Voir aussi
+
+- [Kit de Survie Réseau](fundamentals.md)
+- [Network Configuration & DNS](../linux/network-management.md)

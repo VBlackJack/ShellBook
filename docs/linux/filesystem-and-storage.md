@@ -605,3 +605,10 @@ mkswap /swapfile                   # Formater
 swapon /swapfile                   # Activer
 swapon --show                      # Vérifier
 ```
+
+---
+
+## Voir aussi
+
+- [Rsync & Secure Transfer](backup-transfer.md)
+- [Principes Fondamentaux du Matériel Serveur](hardware.md)

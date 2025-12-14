@@ -801,3 +801,11 @@ Get-ADDomain | Select-Object PDCEmulator, RIDMaster, InfrastructureMaster
 Get-ADReplicationPartnerMetadata -Target dc01
 repadmin /replsummary
 ```
+
+---
+
+## Voir aussi
+
+- [Group Policy Objects (GPO) - Guide Complet](ad-gpo.md)
+- [Active Directory : Relations d'Approbation (Trusts)](ad-trusts.md)
+- [Délégation d'Administration Active Directory](ad-delegation.md)

@@ -13,6 +13,8 @@ tags:
 
 Cette annexe couvre les techniques d'investigation forensique Windows, essentielles pour comprendre ce que les défenseurs recherchent et comment les attaques sont détectées.
 
+**Durée estimée :** 30 minutes
+
 !!! info "Perspective Purple Team"
     Comprendre le forensics aide à :
 

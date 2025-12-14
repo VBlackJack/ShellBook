@@ -304,3 +304,10 @@ pip install pwntools pycryptodome requests
     4. **Googlez les messages d'erreur** - quelqu'un d'autre l'a probablement résolu
     5. **Faites des pauses** - des yeux frais trouvent les flags plus vite
     6. **Documentez tout** - prenez des notes au fur et à mesure
+
+---
+
+## Voir aussi
+
+- [Red Team Cheatsheet](red-team-cheatsheet.md)
+- [OSINT (Open Source Intelligence)](osint.md)

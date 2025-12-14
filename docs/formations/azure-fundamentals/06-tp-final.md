@@ -9,6 +9,8 @@ tags:
 
 # Module 6 : TP Final - Infrastructure Production-Ready
 
+**Durée estimée :** 30 minutes
+
 ## Objectifs du TP
 
 Mettre en pratique l'ensemble des compétences acquises en déployant une **infrastructure de production complète** sur Azure :

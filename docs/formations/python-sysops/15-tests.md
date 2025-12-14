@@ -12,6 +12,8 @@ tags:
 
 Écrire des tests robustes et maintenir un code de qualité.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

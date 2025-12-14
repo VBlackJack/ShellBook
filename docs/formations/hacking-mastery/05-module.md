@@ -11,6 +11,8 @@ tags:
 
 Vous avez un shell ? Bravo. Mais vous êtes probablement `www-data` ou `user`. L'objectif maintenant : devenir `root` ou `SYSTEM`.
 
+**Durée estimée :** 45 minutes
+
 ## 1. Linux Privilege Escalation
 
 ### Méthodologie

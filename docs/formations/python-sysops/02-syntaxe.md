@@ -10,6 +10,8 @@ tags:
 
 Maîtriser les fondamentaux de la syntaxe Python.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

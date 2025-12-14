@@ -13,6 +13,8 @@ tags:
 
 Cette annexe couvre les techniques avancées de pivot et tunneling pour accéder aux réseaux internes depuis une machine compromise.
 
+**Durée estimée :** 30 minutes
+
 !!! warning "Prérequis"
     Avant le pivoting, vous devez avoir :
 

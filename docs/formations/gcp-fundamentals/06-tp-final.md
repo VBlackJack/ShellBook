@@ -9,6 +9,8 @@ tags:
 
 # Module 6 : TP Final - Infrastructure Production-Ready
 
+**Durée estimée :** 45 minutes
+
 ## Contexte du Projet
 
 Vous êtes **Cloud Engineer** chez TechStartup Inc. L'entreprise migre son application web vers Google Cloud Platform. Votre mission : déployer une infrastructure **production-ready** en appliquant les best practices apprises dans cette formation.

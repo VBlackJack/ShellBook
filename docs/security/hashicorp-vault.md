@@ -1141,3 +1141,10 @@ vault operator step-down              # Forcer l'élection d'un nouveau leader
 - Migrer tous les secrets statiques vers Vault
 - Activer l'audit logging (fichier + Splunk/ELK)
 - Mettre en place des Control Groups (approbation multi-parties)
+
+---
+
+## Voir aussi
+
+- [Secrets Management en GitOps](gitops-secrets.md)
+- [OpenSSL & Gestion du Cycle de Vie des Certificats](certificates.md)

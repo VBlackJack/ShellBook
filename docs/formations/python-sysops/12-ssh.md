@@ -12,6 +12,8 @@ tags:
 
 Automatiser l'administration de serveurs distants via SSH.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

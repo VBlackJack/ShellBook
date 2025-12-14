@@ -674,3 +674,10 @@ Grafana → Explore → Choisir Prometheus → Metrics browser
 # Vérifier les logs Grafana
 docker logs grafana
 ```
+
+---
+
+## Voir aussi
+
+- [Loki - Logging Stack](loki-logging.md)
+- [Observabilité : Le Tracing Distribué](observability-tracing.md)

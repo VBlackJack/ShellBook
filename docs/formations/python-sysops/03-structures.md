@@ -10,6 +10,8 @@ tags:
 
 Maîtriser les collections Python essentielles pour le SysOps.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

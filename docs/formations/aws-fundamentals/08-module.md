@@ -9,6 +9,8 @@ tags:
 
 # Module 8 : Serverless - Lambda & Fargate
 
+**Durée estimée :** 15 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

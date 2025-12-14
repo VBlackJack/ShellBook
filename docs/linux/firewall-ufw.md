@@ -296,3 +296,10 @@ sudo ufw allow 'Nginx Full'
 sudo ufw logging on
 tail -f /var/log/ufw.log
 ```
+
+---
+
+## Voir aussi
+
+- [Network Configuration & DNS](network-management.md)
+- [SSH Hardening & Fail2Ban](ssh-hardening.md)

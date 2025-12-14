@@ -12,6 +12,8 @@ tags:
 
 Comprendre et utiliser les sockets pour la communication réseau.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

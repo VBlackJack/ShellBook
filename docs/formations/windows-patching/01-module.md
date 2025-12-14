@@ -11,6 +11,8 @@ tags:
 # Module 1 : Architecture & Installation WSUS
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 1 heure
     - 🏗️ Comprendre l'architecture WSUS et les flux de synchronisation
     - 💾 Choisir entre WID et SQL Server pour la base de données
     - 📦 Maîtriser la stratégie de stockage (Content vs Metadata)

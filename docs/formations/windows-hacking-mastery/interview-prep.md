@@ -11,6 +11,8 @@ tags:
 
 Questions d'entretien courantes pour les postes de pentester et red teamer, avec réponses détaillées.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## 1. Questions Techniques Fondamentales

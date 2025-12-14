@@ -9,6 +9,8 @@ tags:
 
 # Module 3 : VPC & Networking
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

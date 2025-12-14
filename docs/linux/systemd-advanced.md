@@ -988,3 +988,10 @@ Checklist Systemd:
 - [Boot & Services](boot-and-services.md) - Bases systemd
 - [Performance Analysis](performance-analysis.md) - Gestion des processus
 - [Automation Cron](automation-cron.md) - Alternative aux timers
+
+---
+
+## Voir aussi
+
+- [Processus de Boot & Systemd](boot-and-services.md)
+- [Cron & Systemd Timers](automation-cron.md)

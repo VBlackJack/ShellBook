@@ -9,6 +9,8 @@ tags:
 
 # Module 5 : TP Final - L'Usine Logicielle RHEL
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"La théorie, c'est bien. La pratique, c'est mieux."**

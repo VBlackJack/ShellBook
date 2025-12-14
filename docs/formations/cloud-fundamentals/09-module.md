@@ -10,6 +10,8 @@ tags:
 
 # Module 9 : DevOps & CI/CD pour Débutants
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 A la fin de ce module, vous serez capable de :

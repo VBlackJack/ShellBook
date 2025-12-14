@@ -10,6 +10,8 @@ tags:
 
 # Module 1 : Console GCP, Projets & IAM
 
+**Durée estimée :** 1 heure
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

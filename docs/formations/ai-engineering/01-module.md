@@ -11,6 +11,8 @@ tags:
 
 Oubliez les réseaux de neurones complexes. Aujourd'hui, l'IA est une **API** ou un **Binaire** que l'on appelle.
 
+**Durée estimée :** 15 minutes
+
 ## 1. Concepts Clés (Le Jargon)
 
 Avant de coder, il faut parler le langage.

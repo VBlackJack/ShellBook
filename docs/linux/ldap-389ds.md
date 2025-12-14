@@ -811,3 +811,10 @@ sudo find /var/log/dirsrv/slapd-mycorp/ -name "*.log.*" -mtime +30 -delete
 # Configurer la rotation
 sudo dsconf mycorp config replace nsslapd-accesslog-maxlogsperdir=5
 ```
+
+---
+
+## Voir aussi
+
+- [Users, Groups & Permissions](users-and-permissions.md)
+- [OpenSSL & Gestion du Cycle de Vie des Certificats](../security/certificates.md)

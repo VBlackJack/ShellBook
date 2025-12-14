@@ -297,3 +297,10 @@ git remote -v          # Afficher les remotes
     2. `git init`
     3. En faire une habitude: changement → commit → push
     4. Se remercier dans 6 mois
+
+---
+
+## Voir aussi
+
+- [GitLab CI : Le Standard On-Premise](cicd-gitlab.md)
+- [GitHub Actions for Ops](cicd-github-actions.md)

@@ -9,6 +9,8 @@ tags:
 
 # Module 2 : Le Grand Nettoyage (Debloating)
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"Less is More"**

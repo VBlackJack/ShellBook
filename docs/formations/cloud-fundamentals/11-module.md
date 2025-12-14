@@ -10,6 +10,8 @@ tags:
 
 # Module 11 : Migration Cloud
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 A la fin de ce module, vous serez capable de :

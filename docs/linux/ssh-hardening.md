@@ -267,3 +267,11 @@ sudo fail2ban-client set sshd unbanip IP
 sudo nano /etc/issue.net        # Pré-connexion
 sudo nano /etc/motd             # Post-connexion
 ```
+
+---
+
+## Voir aussi
+
+- [Clés SSH Sécurisées](ssh-keys.md)
+- [Firewalling with UFW](firewall-ufw.md)
+- [Checklist d'Audit Sécurité](../security/audit-checklist.md)

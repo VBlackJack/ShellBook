@@ -11,6 +11,8 @@ tags:
 # Module 5 : TP Final - L'Usine de Mises à Jour
 
 !!! info "Objectifs du TP"
+
+**Durée estimée :** 45 minutes
     - 🏗️ Consolider les **4 modules** précédents en un déploiement complet
     - 🚀 Déployer WSUS sur **Server Core** en production
     - 👥 Créer une stratégie de groupes (Workstations, Srv-Dev, Srv-Prod)

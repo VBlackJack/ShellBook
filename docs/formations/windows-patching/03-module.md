@@ -11,6 +11,8 @@ tags:
 # Module 3 : Configuration Clients - GPO & Ciblage
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 1 heure
     - 🎯 Comprendre le **Client-Side Targeting** via GPO
     - 📋 Maîtriser les **4 politiques critiques** pour WSUS
     - 💻 Créer des GPO via **PowerShell** (Infrastructure as Code)

@@ -11,6 +11,8 @@ tags:
 # Module 1 : Les Fondamentaux & CLI
 
 !!! info "Objectifs du module"
+
+**Durée estimée :** 45 minutes
     - 🍫 Comprendre l'architecture de Chocolatey (NuGet, Shims, Checksums)
     - 💻 Installer Chocolatey sur Windows
     - 🔍 Maîtriser les commandes CLI essentielles

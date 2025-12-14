@@ -9,6 +9,8 @@ tags:
 
 # Module 5 : TP Final - PKI SecNumCloud
 
+**Durée estimée :** 45 minutes
+
 ## Contexte
 
 Vous êtes **Security Engineer** chez **CloudSecure**, un hébergeur en cours de qualification **SecNumCloud**. L'audit ANSSI approche et vous devez déployer une infrastructure PKI complète pour sécuriser tous les services internes.

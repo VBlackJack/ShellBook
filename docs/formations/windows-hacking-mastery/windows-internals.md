@@ -13,6 +13,8 @@ tags:
 
 Cette référence couvre les concepts fondamentaux de l'architecture de sécurité Windows, essentiels pour comprendre les techniques offensives et défensives.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Vue d'Ensemble - Architecture Sécurité

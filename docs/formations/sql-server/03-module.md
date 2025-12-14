@@ -10,6 +10,8 @@ tags:
 
 # Module 3 : Maintenance & Backups - Le Standard Ola Hallengren
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"Friends don't let friends use Maintenance Plans"**

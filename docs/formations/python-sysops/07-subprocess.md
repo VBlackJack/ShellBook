@@ -10,6 +10,8 @@ tags:
 
 Exécuter des commandes système et interagir avec le shell.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

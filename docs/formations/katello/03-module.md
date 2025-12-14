@@ -8,6 +8,8 @@ tags:
 
 # Module 3 : Gestion des Hôtes - L'Enrôlement
 
+**Durée estimée :** 1 heure
+
 ## Introduction
 
 > **"Connecting the fleet."**

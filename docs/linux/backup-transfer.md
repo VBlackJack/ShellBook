@@ -316,3 +316,10 @@ sftp user@host                            # Interactif
 # === BACKUP CHIFFRÉ ===
 tar czf - /data | openssl enc -aes-256-cbc -salt -pbkdf2 > backup.enc
 ```
+
+---
+
+## Voir aussi
+
+- [Storage & Filesystem Hierarchy](filesystem-and-storage.md)
+- [Archives (Tar) & Compression](archives-compression.md)

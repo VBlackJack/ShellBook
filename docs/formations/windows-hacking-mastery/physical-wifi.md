@@ -13,6 +13,8 @@ tags:
 
 Cette annexe couvre les techniques d'accès initial qui précèdent l'exploitation réseau : attaques Wi-Fi entreprise, accès physique, et dispositifs malveillants.
 
+**Durée estimée :** 30 minutes
+
 !!! warning "Cadre Légal"
     Ces techniques nécessitent une autorisation explicite incluant :
 

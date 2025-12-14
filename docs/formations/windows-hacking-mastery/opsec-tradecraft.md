@@ -13,6 +13,8 @@ tags:
 
 Ce guide couvre les bonnes pratiques de sécurité opérationnelle (OPSEC) pour les opérations Red Team, permettant de rester discret et d'éviter la détection.
 
+**Durée estimée :** 30 minutes
+
 !!! warning "Usage Éthique"
     Ces techniques sont destinées aux tests d'intrusion autorisés.
     L'objectif est de simuler des adversaires réalistes pour améliorer les défenses.

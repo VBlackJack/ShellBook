@@ -10,6 +10,8 @@ tags:
 
 # Module 8 : Introduction aux Conteneurs & Kubernetes
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 A la fin de ce module, vous serez capable de :

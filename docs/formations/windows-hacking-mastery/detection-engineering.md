@@ -14,6 +14,8 @@ tags:
 
 Cette annexe couvre la création de règles de détection pour les techniques offensives de la formation. Perspective Purple Team essentielle.
 
+**Durée estimée :** 15 minutes
+
 !!! tip "Objectif Purple Team"
     Pour chaque technique offensive, savoir :
 

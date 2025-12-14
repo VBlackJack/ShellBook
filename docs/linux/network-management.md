@@ -481,3 +481,11 @@ ip route
 ss -tulpn
 ping -c 4 8.8.8.8
 ```
+
+---
+
+## Voir aussi
+
+- [Firewalling with UFW](firewall-ufw.md)
+- [Kit de Survie Réseau](../network/fundamentals.md)
+- [WireGuard VPN](vpn-wireguard.md)

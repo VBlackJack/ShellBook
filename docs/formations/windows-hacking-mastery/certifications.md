@@ -13,6 +13,8 @@ tags:
 
 Guide des certifications offensives pour planifier votre parcours professionnel et préparer efficacement les examens.
 
+**Durée estimée :** 30 minutes
+
 ---
 
 ## Vue d'Ensemble - Progression

@@ -10,6 +10,8 @@ tags:
 
 Manipuler des fichiers et répertoires avec Python.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

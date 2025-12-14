@@ -10,6 +10,8 @@ tags:
 
 Parser et valider des données avec les expressions régulières.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

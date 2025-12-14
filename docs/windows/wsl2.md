@@ -873,3 +873,10 @@ alias myip="hostname -I | awk '{print \$1}'"
 - [PowerShell Foundations](powershell-foundations.md) - PowerShell de base
 - [Docker Advanced](../devops/docker-advanced.md) - Docker avancé
 - [SSH Keys](../linux/ssh-keys.md) - Gestion des clés SSH
+
+---
+
+## Voir aussi
+
+- [Caractères Spéciaux Bash & Redirections](../linux/bash-wizardry.md)
+- [PowerShell for Linux Admins](powershell-foundations.md)

@@ -10,6 +10,8 @@ tags:
 
 # Module 3 : Infrastructure Cloud (Compute, Storage, Network)
 
+**Durée estimée :** 45 minutes
+
 ## Objectifs du Module
 
 À la fin de ce module, vous serez capable de :

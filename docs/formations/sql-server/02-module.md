@@ -10,6 +10,8 @@ tags:
 
 # Module 2 : Sécurité & Configuration - Fortifier l'Instance
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"Default settings are not Production settings"**

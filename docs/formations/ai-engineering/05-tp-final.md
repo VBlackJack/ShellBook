@@ -10,6 +10,8 @@ tags:
 
 Il est temps d'assembler les pièces. Vous allez construire `sb-bot`, l'assistant CLI de ShellBook.
 
+**Durée estimée :** 15 minutes
+
 ## Cahier des Charges
 
 Le script doit :

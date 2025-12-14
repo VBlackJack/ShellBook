@@ -10,6 +10,8 @@ tags:
 # Module 4 : RAG (Chat with your Data)
 
 Les LLM ont deux défauts majeurs :
+
+**Durée estimée :** 30 minutes
 1.  **Hallucination** : Ils inventent quand ils ne savent pas.
 2.  **Obsolescence** : Ils ne connaissent pas vos données privées ni l'actualité récente.
 

@@ -9,6 +9,8 @@ tags:
 
 # Module 5 : TP Final - La Chocolatey Factory
 
+**Durée estimée :** 45 minutes
+
 ## Introduction
 
 > **"De startup à scale-up : automatiser ou mourir."**

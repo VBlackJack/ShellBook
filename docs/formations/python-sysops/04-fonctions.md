@@ -10,6 +10,8 @@ tags:
 
 Créer des fonctions modulaires et réutilisables.
 
+**Durée estimée :** 15 minutes
+
 ---
 
 ## Objectifs du Module

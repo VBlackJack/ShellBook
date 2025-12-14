@@ -375,3 +375,10 @@ ansible-project/
     ├── nginx/
     └── postgresql/
 ```
+
+---
+
+## Voir aussi
+
+- [Maîtriser les Playbooks](playbooks.md)
+- [Ansible Advanced Patterns & Optimization](advanced-patterns.md)
