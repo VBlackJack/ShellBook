@@ -211,6 +211,11 @@ Une fois la formation complétée, vous pouvez valider vos compétences avec le 
 - [Pre-commit Framework](https://pre-commit.com/)
 - [Guide CI/CD ShellBook](../../devops/cicd-gitlab.md)
 
+### Outils de Test
+
+- [Mockaroo](https://mockaroo.com/) - Générateur de données de test réalistes (CSV, JSON, SQL, Excel). Idéal pour remplir des BDD de dev, tests de charge, et prototypage. 1000 lignes gratuites, API REST disponible.
+- [GenerateData](https://generatedata.com/) - Générateur open source (GPL 3) avec 30+ types de données et 12+ formats d'export. Self-hostable (PHP/MySQL) ou version web gratuite.
+
 ## Support
 
 **Questions ou problèmes ?**
