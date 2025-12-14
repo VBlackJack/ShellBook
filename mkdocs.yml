@@ -125,6 +125,7 @@ nav:
       - Bandwidth Calculator: tools/bandwidth-calculator.md
       - SSH Config Generator: tools/ssh-config-generator.md
       - HAProxy Config Generator: tools/haproxy-generator.md
+      - Squid Proxy Generator: tools/squid-generator.md
       - Netplan Config Generator: tools/netplan-generator.md
       - Whois Lookup: tools/whois-lookup.md
       - DNS Reference: tools/dns-lookup.md

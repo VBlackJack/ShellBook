@@ -27,6 +27,7 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 | [Netplan Config Generator](netplan-generator.md) | Generateur config reseau Ubuntu |
 | [SSH Config Generator](ssh-config-generator.md) | Generateur fichier ~/.ssh/config |
 | [HAProxy Config Generator](haproxy-generator.md) | Generateur config load balancer |
+| [Squid Proxy Generator](squid-generator.md) | Generateur config proxy Squid |
 | [Whois Lookup](whois-lookup.md) | Reference commandes Whois et registres |
 | [MAC Address Lookup](mac-lookup.md) | Recherche fabricant par adresse MAC |
 | [Bandwidth Calculator](bandwidth-calculator.md) | Temps de transfert et debit |
