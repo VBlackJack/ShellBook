@@ -48,6 +48,7 @@ Outils interactifs pour les taches d'administration systeme quotidiennes.
 | Outil | Description |
 |-------|-------------|
 | [Permissions Calculator](permissions-calculator.md) | Chmod octal <-> symbolique |
+| [Sudoers Builder](sudoers-builder.md) | Generateur regles sudoers |
 | [Cron Builder](cron-builder.md) | Generateur expressions cron |
 | [Crontab Validator](crontab-validator.md) | Validateur et interpreteur cron |
 | [Exit Codes Reference](exit-codes.md) | Reference codes de sortie Unix |

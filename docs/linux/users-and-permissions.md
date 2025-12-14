@@ -527,6 +527,7 @@ find / -perm -2000 -type d      # Répertoires SGID
 
 ## Voir aussi
 
+- [Sudoers Builder](../tools/sudoers-builder.md) - Générateur interactif de règles sudoers
 - [Clés SSH Sécurisées](ssh-keys.md)
 - [SSH Hardening & Fail2Ban](ssh-hardening.md)
 - [Checklist d'Audit Sécurité](../security/audit-checklist.md)

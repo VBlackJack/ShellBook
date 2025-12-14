@@ -137,6 +137,7 @@ nav:
       - Swap Size Calculator: tools/swap-calculator.md
     - 🐧 Linux:
       - Permissions Calculator: tools/permissions-calculator.md
+      - Sudoers Builder: tools/sudoers-builder.md
       - Cron Builder: tools/cron-builder.md
       - Crontab Validator: tools/crontab-validator.md
       - Exit Codes Reference: tools/exit-codes.md
