@@ -33,6 +33,22 @@ Generateur de mots de passe securises (100% client-side).
         <label><input type="checkbox" id="opt-brackets"> Inclure brackets ()[]{}</label>
         <label><input type="checkbox" id="opt-extended"> Symboles etendus</label>
     </div>
+    <div class="option-group">
+        <h4>Modes speciaux</h4>
+        <label><input type="checkbox" id="opt-cvc"> <strong>CVC</strong> - Prononcable (Consonne-Voyelle)</label>
+        <label><input type="checkbox" id="opt-layout-safe"> <strong>Layout Safe</strong> - Compatible AZERTY/QWERTY</label>
+        <label><input type="checkbox" id="opt-cvc-numbers"> CVC + Chiffres intercales</label>
+    </div>
+</div>
+
+<div id="cvc-info" class="info-box" style="display:none;">
+    <strong>Mode CVC:</strong> Genere des mots de passe prononcables en alternant consonnes et voyelles.
+    <br>Exemple: <code>Kavupobi</code>, <code>Taf3Kun9</code>
+</div>
+
+<div id="layout-info" class="info-box" style="display:none;">
+    <strong>Layout Safe:</strong> Utilise uniquement les caracteres identiques sur AZERTY et QWERTY.
+    <br>Evite: Q, W, Z, A, M (positions differentes) et symboles problematiques.
 </div>
 
 <div class="password-output">
@@ -227,6 +243,23 @@ Entropie par caractere: ~6.5 bits
     color: var(--md-default-fg-color);
     resize: vertical;
 }
+.info-box {
+    background: var(--md-primary-fg-color--light);
+    color: var(--md-primary-bg-color);
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    border-left: 4px solid var(--md-primary-fg-color);
+}
+.info-box code {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+.option-group strong {
+    color: var(--md-primary-fg-color);
+}
 </style>
 
 <script>
@@ -237,18 +270,49 @@ const charSets = {
     symbols: '!@#$%^&*_+-=|;:,.<>?',
     brackets: '()[]{}',
     extended: '~`\'"\\/',
-    ambiguous: '0O1lI'
+    ambiguous: '0O1lI',
+    // CVC mode character sets
+    consonants_upper: 'BCDFGHJKLNPRSTVXY',
+    consonants_lower: 'bcdfghjklnprstvxy',
+    vowels_upper: 'AEIOU',
+    vowels_lower: 'aeiou',
+    // Layout Safe: caracteres identiques AZERTY/QWERTY (meme position physique)
+    // Exclus: Q, W, Z, A, M (positions differentes entre layouts)
+    layout_safe_upper: 'BCDEFGHIJKLNOPRSTUVXY',
+    layout_safe_lower: 'bcdefghijklnoprstuvxy',
+    layout_safe_numbers: '0123456789',  // attention: sur AZERTY necessite Shift
+    layout_safe_symbols: '.-_',  // symboles surs sur les deux layouts
+    // CVC Layout Safe (sans Q, W, Z, A, M)
+    cvc_consonants_safe_upper: 'BCDFGHJKLNPRSTVXY',
+    cvc_consonants_safe_lower: 'bcdfghjklnprstvxy',
+    cvc_vowels_safe_upper: 'EIOU',  // A exclu pour layout safe
+    cvc_vowels_safe_lower: 'eiou'
 };
 
 function getCharacterSet() {
+    const isLayoutSafe = document.getElementById('opt-layout-safe').checked;
+    const isCVC = document.getElementById('opt-cvc').checked;
+
     let chars = '';
 
-    if (document.getElementById('opt-upper').checked) chars += charSets.upper;
-    if (document.getElementById('opt-lower').checked) chars += charSets.lower;
-    if (document.getElementById('opt-numbers').checked) chars += charSets.numbers;
-    if (document.getElementById('opt-symbols').checked) chars += charSets.symbols;
-    if (document.getElementById('opt-brackets').checked) chars += charSets.brackets;
-    if (document.getElementById('opt-extended').checked) chars += charSets.extended;
+    if (isCVC) {
+        // En mode CVC, on n'utilise pas ce charset standard
+        return chars;
+    }
+
+    if (isLayoutSafe) {
+        if (document.getElementById('opt-upper').checked) chars += charSets.layout_safe_upper;
+        if (document.getElementById('opt-lower').checked) chars += charSets.layout_safe_lower;
+        if (document.getElementById('opt-numbers').checked) chars += charSets.layout_safe_numbers;
+        if (document.getElementById('opt-symbols').checked) chars += charSets.layout_safe_symbols;
+    } else {
+        if (document.getElementById('opt-upper').checked) chars += charSets.upper;
+        if (document.getElementById('opt-lower').checked) chars += charSets.lower;
+        if (document.getElementById('opt-numbers').checked) chars += charSets.numbers;
+        if (document.getElementById('opt-symbols').checked) chars += charSets.symbols;
+        if (document.getElementById('opt-brackets').checked) chars += charSets.brackets;
+        if (document.getElementById('opt-extended').checked) chars += charSets.extended;
+    }
 
     if (document.getElementById('opt-ambiguous').checked) {
         for (const c of charSets.ambiguous) {
@@ -259,8 +323,79 @@ function getCharacterSet() {
     return chars;
 }
 
+function generateCVCPassword(length, includeNumbers, isLayoutSafe) {
+    const consonantsUpper = isLayoutSafe ? charSets.cvc_consonants_safe_upper : charSets.consonants_upper;
+    const consonantsLower = isLayoutSafe ? charSets.cvc_consonants_safe_lower : charSets.consonants_lower;
+    const vowelsUpper = isLayoutSafe ? charSets.cvc_vowels_safe_upper : charSets.vowels_upper;
+    const vowelsLower = isLayoutSafe ? charSets.cvc_vowels_safe_lower : charSets.vowels_lower;
+
+    const useUpper = document.getElementById('opt-upper').checked;
+    const useLower = document.getElementById('opt-lower').checked;
+
+    let consonants = '';
+    let vowels = '';
+
+    if (useUpper) {
+        consonants += consonantsUpper;
+        vowels += vowelsUpper;
+    }
+    if (useLower) {
+        consonants += consonantsLower;
+        vowels += vowelsLower;
+    }
+
+    if (consonants.length === 0 || vowels.length === 0) {
+        return { password: 'Activez majuscules et/ou minuscules pour le mode CVC', charsetSize: 0 };
+    }
+
+    const numbers = '23456789'; // Exclus 0 et 1 (ambigus avec O et l)
+    const array = new Uint32Array(length * 2);
+    crypto.getRandomValues(array);
+
+    let password = '';
+    let arrayIdx = 0;
+    let isConsonant = true;
+    let charCount = 0;
+
+    while (password.length < length) {
+        if (includeNumbers && charCount > 0 && charCount % 3 === 0 && password.length < length - 1) {
+            // Insere un chiffre tous les 3 caracteres
+            password += numbers[array[arrayIdx++] % numbers.length];
+        } else {
+            if (isConsonant) {
+                password += consonants[array[arrayIdx++] % consonants.length];
+            } else {
+                password += vowels[array[arrayIdx++] % vowels.length];
+            }
+            isConsonant = !isConsonant;
+            charCount++;
+        }
+    }
+
+    // Calcul du charset effectif pour l'entropie
+    let effectiveCharset = consonants.length + vowels.length;
+    if (includeNumbers) effectiveCharset += numbers.length;
+
+    return { password: password.substring(0, length), charsetSize: effectiveCharset };
+}
+
 function generatePassword() {
     const length = parseInt(document.getElementById('pwd-length').value);
+    const isCVC = document.getElementById('opt-cvc').checked;
+    const isCVCNumbers = document.getElementById('opt-cvc-numbers').checked;
+    const isLayoutSafe = document.getElementById('opt-layout-safe').checked;
+
+    // Mode CVC
+    if (isCVC || isCVCNumbers) {
+        const result = generateCVCPassword(length, isCVCNumbers, isLayoutSafe);
+        document.getElementById('password-result').value = result.password;
+        if (result.charsetSize > 0) {
+            updateStrength(result.password, result.charsetSize);
+        }
+        return;
+    }
+
+    // Mode standard
     const chars = getCharacterSet();
 
     if (chars.length === 0) {
@@ -332,6 +467,27 @@ function copyPassword() {
 function generateBatch() {
     const count = parseInt(document.getElementById('batch-count').value);
     const length = parseInt(document.getElementById('pwd-length').value);
+    const isCVC = document.getElementById('opt-cvc').checked;
+    const isCVCNumbers = document.getElementById('opt-cvc-numbers').checked;
+    const isLayoutSafe = document.getElementById('opt-layout-safe').checked;
+
+    let passwords = [];
+
+    // Mode CVC
+    if (isCVC || isCVCNumbers) {
+        for (let i = 0; i < count; i++) {
+            const result = generateCVCPassword(length, isCVCNumbers, isLayoutSafe);
+            if (result.charsetSize === 0) {
+                document.getElementById('batch-output').value = result.password;
+                return;
+            }
+            passwords.push(result.password);
+        }
+        document.getElementById('batch-output').value = passwords.join('\n');
+        return;
+    }
+
+    // Mode standard
     const chars = getCharacterSet();
 
     if (chars.length === 0) {
@@ -339,7 +495,6 @@ function generateBatch() {
         return;
     }
 
-    let passwords = [];
     for (let i = 0; i < count; i++) {
         const array = new Uint32Array(length);
         crypto.getRandomValues(array);
@@ -361,6 +516,32 @@ document.getElementById('pwd-length').addEventListener('input', function() {
 
 document.querySelectorAll('.option-group input').forEach(el => {
     el.addEventListener('change', generatePassword);
+});
+
+// Toggle info boxes for special modes
+document.getElementById('opt-cvc').addEventListener('change', function() {
+    document.getElementById('cvc-info').style.display = this.checked ? 'block' : 'none';
+    // Disable CVC+Numbers if CVC is unchecked
+    if (!this.checked) {
+        document.getElementById('opt-cvc-numbers').checked = false;
+    }
+});
+
+document.getElementById('opt-cvc-numbers').addEventListener('change', function() {
+    document.getElementById('cvc-info').style.display = (this.checked || document.getElementById('opt-cvc').checked) ? 'block' : 'none';
+    // Enable CVC mode when CVC+Numbers is checked
+    if (this.checked) {
+        document.getElementById('opt-cvc').checked = true;
+    }
+});
+
+document.getElementById('opt-layout-safe').addEventListener('change', function() {
+    document.getElementById('layout-info').style.display = this.checked ? 'block' : 'none';
+    // Disable incompatible options in layout safe mode
+    if (this.checked) {
+        document.getElementById('opt-brackets').checked = false;
+        document.getElementById('opt-extended').checked = false;
+    }
 });
 
 // Initial generation
