@@ -23,12 +23,13 @@ Calculateur de dimensionnement memoire pour applications et services.
           <option value="database">Base de donnees</option>
           <option value="cache">Cache (Redis/Memcached)</option>
           <option value="container">Container generique</option>
+          <option value="custom">Personnalise</option>
         </select>
       </div>
 
       <div class="form-group">
         <label>Memoire de base (MB)</label>
-        <input type="number" id="baseMem" value="256" min="32" oninput="calculate()">
+        <input type="number" id="baseMem" value="256" min="32" oninput="onManualMemInput()">
         <span class="hint">Empreinte memoire de base de l'application</span>
       </div>
 
@@ -39,7 +40,7 @@ Calculateur de dimensionnement memoire pour applications et services.
 
       <div class="form-group">
         <label>Memoire par connexion (MB)</label>
-        <input type="number" id="memPerConn" value="2" min="0.1" step="0.1" oninput="calculate()">
+        <input type="number" id="memPerConn" value="2" min="0.1" step="0.1" oninput="onManualMemInput()">
       </div>
 
       <div class="form-group">
@@ -422,8 +423,18 @@ const presets = {
   kafka: { base: 4096, conn: 100, memPerConn: 5, type: 'container' }
 };
 
+// Appelé quand l'utilisateur modifie manuellement la mémoire
+function onManualMemInput() {
+  document.getElementById('appType').value = 'custom';
+  calculate();
+}
+
 function updateDefaults() {
   const appType = document.getElementById('appType').value;
+  // Ne pas écraser les valeurs en mode custom
+  if (appType === 'custom') {
+    return;
+  }
   const defaults = {
     web: { base: 256, memPerConn: 2 },
     java: { base: 512, memPerConn: 8 },

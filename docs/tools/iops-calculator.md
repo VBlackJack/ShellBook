@@ -30,12 +30,12 @@ Calculateur d'IOPS et de throughput pour le dimensionnement du stockage.
 
       <div class="form-group">
         <label>IOPS par disque</label>
-        <input type="number" id="iopsPerDisk" value="100000" oninput="calculate()">
+        <input type="number" id="iopsPerDisk" value="100000" oninput="onManualStorageInput()">
       </div>
 
       <div class="form-group">
         <label>Throughput par disque (MB/s)</label>
-        <input type="number" id="throughputPerDisk" value="3500" oninput="calculate()">
+        <input type="number" id="throughputPerDisk" value="3500" oninput="onManualStorageInput()">
       </div>
 
       <div class="form-group">
@@ -407,10 +407,20 @@ const raidFactors = {
   'raid10': { iopsRead: 1, iopsWrite: 0.5, capacity: 0.5 }
 };
 
+// Appelé quand l'utilisateur modifie manuellement IOPS ou throughput
+function onManualStorageInput() {
+  document.getElementById('storageType').value = 'custom';
+  calculate();
+}
+
 function updateStorageDefaults() {
   const type = document.getElementById('storageType').value;
+  // Ne pas écraser les valeurs en mode custom
+  if (type === 'custom') {
+    calculate();
+    return;
+  }
   const spec = storageSpecs[type];
-
   document.getElementById('iopsPerDisk').value = spec.iops;
   document.getElementById('throughputPerDisk').value = spec.throughput;
 }
